@@ -254,4 +254,105 @@ the companion code blocks them (an item would be one more interaction on the
 companion node and one more pair-moment kind). **The build identifier**
 reads `LCH · i025 · DEV` (and `TEST` on the release commit).
 
-RESULTS_PLACEHOLDER
+## Tests and results
+
+All on Linux (Godot 4.7.2; headless, screenshots and benchmark with Xvfb
+and software OpenGL). Not Windows acceptance.
+
+- **Full regression** on the TEST checkpoint `8184bd8` (82 suites):
+  **5310 checks passed, 0 failed, no script errors**. On the way: the new
+  suite left the old-save fixture in slot 3, which made `test_gameplay_flow`
+  (it expects empty slots) fail in the full run; it now removes it. The
+  rendered dock frames revealed the mirrored-companion bug (above), and the
+  rendered laptop frame a doubled note when two companions of the same name
+  were called aboard ("Both are back aboard." now).
+- **New suite** `test_more_room_aboard` (about 115 checks): a new game
+  alone (cabin, deck, sleep, wheel, laptop, save as an empty list); the real
+  pre-I024 save and an I024 save keep their companion exactly, no adoption
+  invented, the old field still written; encounter odds over 40 simulated
+  careers (one in about four arrivals, never more than ten apart; the same
+  arrival always gives the same answer; damaged data → safe defaults);
+  trust, adoption (kind, name, gender, time, harbour), no renown; a second
+  Pug with the same name (two ids), no third; saving while it follows and
+  loading; casting off leaves it on its dock, never back after loading;
+  declining; two-companion lines; Danish; in the game: the box, the animal
+  at it (the conure on the rim), the gestures, following along the pontoon,
+  the companionway question (Esc decides nothing), naming and the welcome
+  (once), the girl for all three kinds (the conure on her shoulder), two
+  companions side by side on one spot, a pair moment, both by the berth,
+  two conures ashore, the departure refused and both called back, the
+  laptop's *Aboard* line.
+- **Updated suites** (behaviour changed on purpose, not weakened): New Game
+  without a companion (`test_company_we_keep`, `test_companion_art`,
+  `test_life_aboard`, `test_gameplay_flow`), companion counts that now
+  count visible companions (`test_vessels`, `test_companion_art`), the first
+  companion node by name (`test_anchor_life`), the cabin windows on every
+  boat and then as plain glass (`test_cabin_windows`).
+- **Saves:** `SAVE_VERSION` 12 unchanged; new fields optional; the save
+  suites, the pre-I024 fixture and an I024-shaped save pass.
+- **Content checker:** 31/31 PASS, 0 FAIL. **Languages:** 2899 messages,
+  all in Danish, 0 errors. **Guides:** 328 scripts reviewed; **links:** 0
+  broken.
+- **Performance:** register #12 in
+  [PERFORMANCE_OPPORTUNITIES.md](../../technical/PERFORMANCE_OPPORTUNITIES.md)
+  (same session: before / live windows / plain glass). The plain-glass
+  windows are 4-7 % cheaper in the cabin than the live views; the faded sea
+  round the hull is most of I025's cabin cost on a CPU rasterizer (+25-40 %),
+  to be read on the Captain's GPU. Two companions add lightweight nodes and
+  no per-frame scans (pair moments every 80-180 s; following re-plans at
+  most every 0.45 s).
+
+**Release checklist** ([RELEASE_READINESS.md](../../technical/RELEASE_READINESS.md)):
+1 content 0 FAIL ✓ · 2 English/Danish ✓ · 3 assets (checker, import) ✓ ·
+4 saves ✓ · 5 full regression ✓ · 6 same-session performance ✓ · 7 guides
+and links, report, index and Captain's Orders ✓ · 8 Windows acceptance
+written, **pending** · 9 `iteration/i025` from the recorded start and
+`release/i025` at the final commit, verified remotely, nothing
+force-pushed ✓ · 10 limitations below ✓
+
+## Screenshots and motion
+
+From the running game at the TEST checkpoint (the corner reads
+`LCH · i025 · TEST · 8184bd8`), in [`docs/screenshots/i025/`](../../screenshots/i025/):
+01 the Captain alone at a new game · 02-04 the Ragdoll, the Pug and the
+conure at the box · 05 the decision at the companionway (05b naming) · 06
+a newly adopted conure exploring the cabin · 07 two companions greeting ·
+08 two resting side by side (08b by the berth) · 09 the girl with the cat
+· 10 the girl leaving with the Pug · 11 the conure on her shoulder · 12 two
+companions ashore · 13 cabin realism (13b, 13c other boats) · 14 a harbour
+before/after (Naples) · 15 neighbouring boats at scale (Kiel) · 16 the
+cabin windows as plain glass by day and night · 17 the faded water
+outside the cabin · 18 the laptop with the *Aboard* history · 19 the
+build identifier. More harbours and boats before/after, and every cabin
+before/after, in `visual/`. Motion (`motion/`): frame strips of the girl's
+three resolutions (the conure's flight to her shoulder), the welcome home
+and a pair moment; reproducible by running `test_more_room_aboard` with
+`--screenshots=DIR` and `tools/qa/film_strip.py`.
+
+## Windows acceptance
+
+**Pending** (the Captain's own trial): [WINDOWS_ACCEPTANCE_25.md](WINDOWS_ACCEPTANCE_25.md),
+sections A (adoption), B (two companions), C (visual realism), D (existing
+functionality).
+
+## Known limitations and deferred
+
+- **Pet toys** are not built (as ordered); a toy would be one more
+  interaction on the companion node and one more pair-moment kind.
+- One pair moment from the brief is not there: one companion gently taking
+  the other's favourite spot. They visit, watch each other and nap together.
+- The dock animals and the girl are seen at the deck's camera distance, so
+  they are small on screen; the encounter reads best when the Captain walks
+  up to it.
+- The faded sea round the hull is the main cabin cost on a software
+  renderer (register #12); a Windows reading decides whether to make it
+  cheaper.
+- The harbour's true scale has no automated test, only the rendered
+  evidence; the HUD panels cover much of the far side, and on the Petrel 36
+  and Halcyon 40 little of the far side or the town shows.
+- At night the faded sea is very faint.
+- New Game no longer offers a companion; `App.start_new_game()` and
+  `GameSession.start_new_session()` still default to the cat for tools and
+  tests.
+- Small dead data left in place: `DockEncounters.recent` (kept in saves,
+  read by nothing), and the older `HarbourDressing.STYLES` keys.
