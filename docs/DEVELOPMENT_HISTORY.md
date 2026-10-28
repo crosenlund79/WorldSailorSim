@@ -19,7 +19,7 @@ and are never merged back into one chain.
 | I022 The Captain's Other Life | 0.109a | both | `release/i022` = `2baa01034fbaa956018c58e013b555be8213d77d` |
 | I023 Steady Hands & Golden Harbours | 0.109a | original only | `release/i023` = `d4e2e7e56206b220f8839323186e0c06d2a4c589`; original integration head `claude/friendly-fermat-dey23f` = `81d2526655352b6172d9941ce532f620d5d5050b` (I023 + docs) |
 | Real Horizon visual conversion (not numbered) | 0.109a | WorldSailorSim | built on `ec84cfa`; conversion tip `bbdadfadf17fc50a56a1a2e389ba2c92b8c2ff1d` |
-| Great Handover (Operation New Horizon, not numbered) | 0.109a | WorldSailorSim | merge of `81d2526` into Real Horizon: `9b3c44f650ad9d7e887e7832c8c3ab9899da2845`; final handover commit recorded in the handover report below |
+| Great Handover (Operation New Horizon, not numbered) | 0.109a | WorldSailorSim | merge of `81d2526` into Real Horizon: `9b3c44f650ad9d7e887e7832c8c3ab9899da2845`; the handover ends at the head of `claude/friendly-fermat-dey23f` after its fast-forward (this commit or the next docs-only one) |
 | I024 | — | WorldSailorSim | next major iteration, not yet commissioned |
 
 ## The Great Handover (2026-10-28)
@@ -49,7 +49,7 @@ volume, boat prices and ownership, difficulty settings, postcards, the game
 developer pastime, the Captain's Academy and Handbook, cabin windows (Starling
 33), softer water, Steady Hands UI fixes (Trip Details, fit-to-screen windows,
 Esc, Danish layout sweep, dusk readability) and the Golden Harbour moment. The
-full regression result is in the handover report.
+full regression result is under Results below.
 
 **Deliberate differences from the original.** The look (Real Horizon). The
 loading screen shows the menu's painted title scene instead of a navy
