@@ -39,6 +39,9 @@ signal anchor_requested
 signal cooking_requested
 ## The trophy board in the cabin (Iteration 13) was used.
 signal trophies_requested
+## I026: a cabin object was used (CabinObject: logbook, VHF set, systems
+## panel, sea chest, postcard); App opens its focused view.
+signal cabin_object_requested(kind: StringName)
 signal message_requested(text: String)
 ## Prompt text for the focused interactable, or "" when nothing is in range.
 signal interaction_prompt_changed(prompt: String)
@@ -111,6 +114,7 @@ func _ready() -> void:
 	_place_player()
 	player.focus_changed.connect(_on_player_focus_changed)
 	_setup_second_companion()  # I025: a node for a second companion (before the connections below)
+	_setup_cabin_objects()  # I026: the logbook, the VHF set, ... (before the connections below)
 	for node in find_children("*", "Interactable", true, false):
 		(node as Interactable).interacted.connect(_on_interacted)
 	AudioManager.play_ambience(ambience)
@@ -457,6 +461,18 @@ func _setup_laptop() -> void:
 	LaptopProp.place(self, station)
 
 
+## The things a sailor uses below (I026, CabinObject), placed from this
+## cabin's own furniture.
+func _setup_cabin_objects() -> void:
+	if area_id != SessionState.AREA_INTERIOR:
+		return
+	CabinObject.place_all(self)
+
+
+func get_cabin_object(kind: StringName) -> CabinObject:
+	return get_node_or_null(NodePath("CabinObject_%s" % kind)) as CabinObject
+
+
 func get_laptop() -> LaptopProp:
 	return get_node_or_null(^"Laptop") as LaptopProp
 
@@ -678,6 +694,8 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 			trophies_requested.emit()
 		&"hat":
 			message_requested.emit(GameSession.use_hat_hook())
+		&"logbook", &"vhf", &"systems", &"keepsakes", &"postcard":
+			cabin_object_requested.emit(interactable.interaction_id)
 		&"cup_holder", &"coffee_table":
 			if GameSession.is_carrying_coffee() and interactable.interaction_id == &"cup_holder":
 				message_requested.emit(GameSession.put_coffee_down())

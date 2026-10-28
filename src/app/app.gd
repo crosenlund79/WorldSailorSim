@@ -906,6 +906,7 @@ func open_sleep_menu() -> void:
 	var menu := sleep_menu_scene.instantiate() as SleepMenu
 	menu.sleep_requested.connect(sleep_for)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.TEAK)  # I026: by the berth
 
 
 ## Sleeps by advancing the normal simulation; stops early on arrival or a
@@ -1115,6 +1116,7 @@ func open_provisions() -> void:
 	var menu := provisions_menu_scene.instantiate() as ProvisionsMenu
 	menu.grocery_requested.connect(open_grocery)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.TEAK)  # I026: the locker, opened
 
 
 ## The harbour grocery store (on top of whatever menu asked for it). In
@@ -1268,6 +1270,7 @@ func open_cooking() -> CookingMenu:
 	menu.cooked.connect(_on_meal_cooked)
 	menu.coffee_made.connect(func(result: Dictionary) -> void: Simulation.spend_time_aboard(float(result.minutes), true))
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.STEEL)  # I026: at the stove
 	SessionLog.write("galley_open", {"refusal": GameSession.cooking_refusal(), "fish": GameSession.get_fishing().hold.size()})
 	return menu
 
@@ -1333,7 +1336,9 @@ func _on_anchor_alarm(alarm: Dictionary) -> void:
 func open_trophies() -> void:
 	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
 		return
-	modals.push(TrophyMenu.new())
+	var board := TrophyMenu.new()
+	modals.push(board)
+	FocusFrame.attach(board, FocusFrame.Kind.TEAK)  # I026: the board, up close
 
 
 ## A harbour service that is not offered here (Iteration 12): say so, log it.
@@ -1524,6 +1529,7 @@ func _on_traffic_alert(info: Dictionary) -> void:
 func _on_vhf_call(call: Dictionary) -> void:
 	AudioManager.play_sfx(FishingSounds.bite(), FishingSounds.DB)
 	_pending_vhf = call
+	_update_vhf_lamp()
 	if not GameSession.is_asleep() and GameSession.get_time_scale() > 1 and not is_instance_valid(voyage_map):
 		GameSession.set_time_scale(1)
 
@@ -1760,7 +1766,58 @@ func open_captains_log() -> CaptainsLogMenu:
 	menu.name = "CaptainsLogMenu"
 	menu.publish_requested.connect(open_publish_menu)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.BOOK)  # I026: the logbook (L opens the same book)
 	return menu
+
+
+# --- The things a sailor uses below (I026, CabinObject) -----------------------------
+
+## A cabin object was used (BoatArea.cabin_object_requested): its focused view.
+func open_cabin_object(kind: StringName) -> ModalPanel:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	match kind:
+		CabinObject.LOGBOOK:
+			return open_captains_log()
+		CabinObject.VHF:
+			return open_vhf_set()
+		CabinObject.SYSTEMS:
+			var systems := SystemsView.new()
+			systems.name = "SystemsView"
+			modals.push(systems)
+			FocusFrame.attach(systems, FocusFrame.Kind.ELECTRIC)
+			return systems
+		CabinObject.CHEST:
+			return open_cabin_home()
+		CabinObject.POSTCARD:
+			var scrapbook := ScrapbookMenu.new()
+			scrapbook.name = "ScrapbookMenu"
+			modals.push(scrapbook)
+			FocusFrame.attach(scrapbook, FocusFrame.Kind.TEAK)
+			return scrapbook
+	return null
+
+
+## The VHF set at the nav station: channel 16, a call waiting (answered here
+## with the same dialog), the weather broadcast.
+func open_vhf_set() -> VhfSetView:
+	var view := VhfSetView.new(_pending_vhf)
+	view.name = "VhfSetView"
+	view.answer_requested.connect(func(call: Dictionary) -> void:
+		_pending_vhf = {}
+		_update_vhf_lamp()
+		show_vhf_dialog.call_deferred(call))
+	modals.push(view)
+	FocusFrame.attach(view, FocusFrame.Kind.RADIO)
+	return view
+
+
+## The VHF set's lamp blinks while a call waits.
+func _update_vhf_lamp() -> void:
+	var area := router.current_screen as BoatArea
+	var radio := area.get_cabin_object(CabinObject.VHF) if area else null
+	if radio:
+		radio.call_waiting = not _pending_vhf.is_empty()
 
 
 ## The travel-update dialog (from the Captain's Log or the work station), on
@@ -1964,6 +2021,8 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.trophies_requested.connect(open_trophies)
 	area.cooking_requested.connect(open_cooking)
 	area.anchor_requested.connect(open_anchor)
+	area.cabin_object_requested.connect(func(kind: StringName) -> void: open_cabin_object(kind))
+	_update_vhf_lamp.call_deferred()
 
 
 func _connect_world_map(map: WorldMap) -> void:
