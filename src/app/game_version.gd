@@ -11,8 +11,8 @@ extends RefCounted
 ##
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
-const DISPLAY := "0.110a"
-const MACHINE := "0.110.1"
+const DISPLAY := "0.111a"
+const MACHINE := "0.111.1"
 
 ## The development build identity (the label in the window's bottom-right
 ## corner, BuildLabel): which major iteration this checkpoint belongs to, an
@@ -26,7 +26,7 @@ const MACHINE := "0.110.1"
 ##   CHANNEL DEV        work in progress; TEST = the verified snapshot that a
 ##                      release/iNNN branch points at
 const PROJECT_CODE := "LCH"
-const ITERATION := "i024"
+const ITERATION := "i025"
 const STAGE := ""
 const CHANNEL := "DEV"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
