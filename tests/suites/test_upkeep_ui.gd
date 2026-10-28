@@ -580,8 +580,8 @@ func _test_companion_overlap() -> void:
 	area.player.position = companion.position + Vector2(40, 10)
 	area.player.set_facing((companion.position - area.player.position).normalized())
 	await t.physics_frames(3)
-	t.check(area.player.get_focused_interactable() == companion.interactable and app.hud.get_prompt() == "Pet cat",
-		"[companion] a step over, facing the cat, the prompt says 'Pet cat' (%s)" % app.hud.get_prompt())
+	t.check(area.player.get_focused_interactable() == companion.interactable and app.hud.get_prompt() == "Pet the cat",
+		"[companion] a step over, facing the cat, the prompt says 'Pet the cat' (%s)" % app.hud.get_prompt())
 	await t.press_action(&"interact")
 	await t.frames(2)
 	t.check(companion.is_reacting(), "[companion] and E pets the cat")

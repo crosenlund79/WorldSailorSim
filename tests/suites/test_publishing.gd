@@ -218,10 +218,9 @@ func _test_dialogs() -> void:
 	await t.screenshot("113_log_after_publishing")
 	app.modals.clear()
 	await t.frames(2)
-	# The work station offers it too.
-	app.open_work_menu()
+	# The work station (on the laptop since I024) offers it too.
+	var work: WorkMenu = app.open_work_menu()
 	await t.frames(3)
-	var work := app.modals.get_top() as WorkMenu
 	var work_publish: Button = work.find_child("PublishButton", true, false) if work else null
 	t.check(work_publish != null and work_publish.disabled, "[publish ui] the work dialog has 'Publish travel update…' (disabled: nothing to publish)")
 	app.modals.clear()

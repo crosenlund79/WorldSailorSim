@@ -86,6 +86,9 @@ func _walk_out(deck: BoatArea, companion: ShipCompanion) -> Array:
 	var started := Time.get_ticks_msec()
 	while companion.is_walking() and Time.get_ticks_msec() - started < 30000:
 		await t.frames(1)
+		# I024: it walks at its stride's own (slower, real) pace; run its walk on
+		# a little faster, still checking every step.
+		companion._process(0.05)
 		frames += 1
 		if companion.visible and not spots.is_safe(companion.position, false):
 			unsafe += 1

@@ -154,16 +154,16 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Purpose:** The game's main "conductor": it connects the menus, the screens and the game systems so they all work together.
-- **What it does:** Shows the main menu, starts and loads games, opens every window (pause menu, sleep, fishing rod, anchor, boatyard, shops, Captain's Log and more) and turns game events into short on-screen messages and sounds. It is the one place that handles Esc and the hotkeys (F5 quicksave, F9 quickload, H hat, L log, R reel in), so two windows never react to the same key press. On arrival (I021) it shows the arrival card: the harbour's picture, "Arrived in …" and one sentence about the place. Since I022 it asks before buying a boat at the boatyard, starts new games at the chosen difficulty and opens the Difficulty dialog from the pause menu. I022: hours-long tasks aboard (remote work, a postcard, a session on the little game) pass on the one clock through `pass_time`: a fade to black, the simulation run once while the clock counts, a line if something interrupted it, and back in at ×1; the cabin's Q wheel offers Write a postcard and Work on your little game. I022 Academy: it holds the Academy card on its own layer, offers the First Voyage once on the first new game on this computer, and opens the Captain's Handbook with F1 or from the pause menu. Steady Hands: each button gets its click sound once, also when it is moved to another parent. Golden Harbours: the first arrival in a harbour that has a picture shows the Golden Harbour Moment (the harbour's picture lit for the hour, with the Captain's Log line on it) instead of the small card and a separate Log message; a known harbour keeps the small card. Renown messages now show the milestone names in the chosen language.
+- **What it does:** Shows the main menu, starts and loads games, opens every window (pause menu, sleep, fishing rod, anchor, boatyard, shops, Captain's Log and more) and turns game events into short on-screen messages and sounds. It is the one place that handles Esc and the hotkeys (F5 quicksave, F9 quickload, H hat, L log, R reel in), so two windows never react to the same key press. On arrival (I021) it shows the arrival card: the harbour's picture, "Arrived in …" and one sentence about the place. Since I022 it asks before buying a boat at the boatyard, starts new games at the chosen difficulty and opens the Difficulty dialog from the pause menu. I022: hours-long tasks aboard (remote work, a postcard, a session on the little game) pass on the one clock through `pass_time`: a fade to black, the simulation run once while the clock counts, a line if something interrupted it, and back in at ×1; the cabin's Q wheel offers Write a postcard and Work on your little game. I022 Academy: it holds the Academy card on its own layer, offers the First Voyage once on the first new game on this computer, and opens the Captain's Handbook with F1 or from the pause menu. Steady Hands: each button gets its click sound once, also when it is moved to another parent. Golden Harbours: the first arrival in a harbour that has a picture shows the Golden Harbour Moment (the harbour's picture lit for the hour, with the Captain's Log line on it) instead of the small card and a separate Log message; a known harbour keeps the small card. Renown messages now show the milestone names in the chosen language. I024: the work station and the cabin wheel's Laptop item open the Captain's laptop (`open_laptop`, `LaptopView`), where postcards, travel updates, remote work, the little game and the achievements now live (`open_work_menu`, `open_postcards` and `open_game_dev` open it on the right app). Moored, the companion follows the Captain ashore down the gangplank and sometimes lingers on the pontoon; casting off first asks to call it aboard (`recall_companion`, also on the wheel). After a real sleep a small line may say where the companion is found, and on long passages the Captain now and then talks to it (`_update_passage_talk`: timed on the voyage's clock, only in quiet moments, never a flood after fast time or a reload).
 - **Works with:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`.
-- **Keeps:** Only screen bookkeeping: whether the rescue report is open, a VHF call or anchorage question waiting to be shown, the seconds left before a hooked fish gets away, and when the companion next follows you between cabin and deck. The game itself lives in `GameSession`.
+- **Keeps:** Only screen bookkeeping: whether the rescue report is open, a VHF call or anchorage question waiting to be shown, the seconds left before a hooked fish gets away, when the companion next follows you between cabin, deck and shore, and when the Captain next talks to it on a long passage. The game itself lives in `GameSession`.
 - **When it runs:** Always: it is the main scene that starts with the game.
 - **If you change it:** Almost every flow can be affected: which windows open where, when the game pauses behind a menu, what the player is told after sleeping or arriving, the engine sound, quicksave rules.
 
 ### `src/app/game_version.gd`
 
 **Purpose:** Holds the game's version number in one place.
-- **What it does:** Gives the version shown to players (for example "0.108a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found.
+- **What it does:** Gives the version shown to players (for example "0.110a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found.
 - **Works with:** `SessionLog` (writes the version at start-up), the main menu (shows it), `tools/write_build_info.py` (writes `build_info.json`).
 - **Keeps:** The build's commit code, read once and remembered.
 - **When it runs:** Whenever something asks for the version (start-up log, main menu).
@@ -195,6 +195,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** The data file, read once.
 - **When it runs:** When a page, step or tip is shown, and when the progress changes.
 - **If you change it:** Add new texts to the data file with `{action}` placeholders; `test_academy` fails on an unknown placeholder or a missing Danish text.
+
+### `src/core/achievement_catalog.gd`
+
+**Purpose:** The achievement collection shown on the cabin laptop (I024).
+- **What it does:** Reads `data/progression/achievements.json`: a smaller set of meaningful achievements in seven categories (voyages, seamanship, sailing performance, life aboard, companionship, discoveries, reputation). An achievement is a view on the renown records the game already keeps, never a second account: it is unlocked when one of its records is completed (or enough records of one kind), and renown is still paid once by the record itself, so nothing is paid twice and an older save's achievements show at once. It tells when, where (a harbour or a position at sea) and on which boat one was unlocked, and says "Location not recorded" or "Previously unlocked" when an older save does not know. A hidden secret shows only its hint and the secret badge.
+- **Works with:** `ObjectiveProgress` (the records), `ObjectiveCatalog` (the far-harbour goals), `PortCatalog`, `VesselCatalog`, `Simulation` (dates), `Loc`, `LaptopView` (shows it); badges in `assets/achievements/`.
+- **Keeps:** The data file, read once (read-only).
+- **When it runs:** When the laptop shows achievements.
+- **If you change it:** What the collection shows, never what is paid. Achievement ids are stable: never rename one.
 
 ### `src/core/anchor_state.gd`
 
@@ -253,9 +262,9 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/game_session.gd`
 
 **Purpose:** The keeper of the running game: the only place where the game's state is changed.
-- **What it does:** Starts, ends and loads games, and offers every game action: planning a course, setting sail, arriving, rescue, money, provisions, boat care, fishing, cooking, the anchor, the captain's hat, companion moves, renown and travel updates. It announces each change with signals (messages other parts of the game listen for) and never touches screens. Since I022 boats are bought (`buy_vessel`, once, at a boatyard, never below zero money) and only boats you own can be sailed; it also keeps the difficulty, which scales food and water use, wear, boat care and provisions prices and the rescue fee. I022 pastimes: it keeps the postcard being made (time spent kept when interrupted, thrown away on request), puts a finished card in the scrapbook with renown the first time for each subject, and counts the little game's sessions for the hours actually worked, with a milestone renown once each and the first sales when it is released.
+- **What it does:** Starts, ends and loads games, and offers every game action: planning a course, setting sail, arriving, rescue, money, provisions, boat care, fishing, cooking, the anchor, the captain's hat, companion moves, renown and travel updates. It announces each change with signals (messages other parts of the game listen for) and never touches screens. Since I022 boats are bought (`buy_vessel`, once, at a boatyard, never below zero money) and only boats you own can be sailed; it also keeps the difficulty, which scales food and water use, wear, boat care and provisions prices and the rescue fee. I022 pastimes: it keeps the postcard being made (time spent kept when interrupted, thrown away on request), puts a finished card in the scrapbook with renown the first time for each subject, and counts the little game's sessions for the hours actually worked, with a milestone renown once each and the first sales when it is released. I024: the companion may go ashore while moored, but is never left behind: casting off is refused until it is called aboard (`recall_companion`). Shore visits in 5 harbours and in 3 countries and a week at sea together earn companion achievements; on waking it is found by the berth, now and then with a small line (`wake_companion`). Sustained speed under sail is measured on the simulation's own steps (`note_sailing`: best hour and best 24 hours, milestones for 7, 9 and 12 knots over an hour and a 150-mile day), and every renown record now notes where and on which boat it was earned.
 - **Works with:** `SessionState` (the data it owns), `Simulation` (moves time forward and calls back into it), `SaveManager`, `App`, the HUD and menus, many catalogues (`PortCatalog`, `SeaRouter`, `VesselCatalog`, `ObjectiveCatalog`, `BoatCare`, `FishingCatalog`).
-- **Keeps:** The current `SessionState`, whether there are unsaved changes, and a few things that are not saved (a fish on the line, whether the captain is asleep, whether the boat is settled at anchor).
+- **Keeps:** The current `SessionState`, whether there are unsaved changes, and a few things that are not saved (a fish on the line, whether the captain is asleep, whether the boat is settled at anchor, the current unbroken stretch under sail for the speed records).
 - **When it runs:** Always (an autoload: a script Godot starts automatically and that always exists).
 - **If you change it:** Nearly all gameplay rules and what ends up in saves. Change with great care.
 
@@ -289,8 +298,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/objective_catalog.gd`
 
 **Purpose:** The list of sailing goals and achievements that earn renown.
-- **What it does:** Reads the goals from `data/progression/objectives.json`, adds a few "far horizons" goals for distant harbours, and checks which goals a finished voyage or a hat event has completed. It also knows how many euros a travel update pays per renown point. Secret achievements stay hidden until found.
-- **Works with:** `GameSession` (asks it after a voyage or hat event), `CaptainsLog`, `ObjectiveProgress`, `HatState`, `PortCatalog`, the Captain's Log menu.
+- **What it does:** Reads the goals from `data/progression/objectives.json`, adds a few "far horizons" goals for distant harbours, and checks which goals a finished voyage or a hat event has completed. It also knows how many euros a travel update pays per renown point. Secret achievements stay hidden until found. I024: a goal marked "retired" is left out of the achievement collection and the Log's list of goals, but still pays its small renown as before.
+- **Works with:** `GameSession` (asks it after a voyage or hat event), `CaptainsLog`, `ObjectiveProgress`, `HatState`, `PortCatalog`, the Captain's Log menu, `AchievementCatalog` and the laptop.
 - **Keeps:** The loaded goals (read-only).
 - **When it runs:** When a voyage ends, when the hat is lost or bought, and when the log shows goals.
 - **If you change it:** Which achievements exist, how much renown they give, and how much travel updates pay.
@@ -298,8 +307,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/objective_progress.gd`
 
 **Purpose:** Your renown and which goals you have completed.
-- **What it does:** Keeps lifetime renown (never goes down), renown not yet published, each completed goal and when, the latest rewards, and the travel updates published. It makes sure no voyage is ever paid twice.
-- **Works with:** `SessionState`, `GameSession` (the only writer), `ObjectiveCatalog`, the Captain's Log menu, Go Ashore events.
+- **What it does:** Keeps lifetime renown (never goes down), renown not yet published, each completed goal and when, the latest rewards, and the travel updates published. It makes sure no voyage is ever paid twice. Since I024 it also remembers where and on which boat a goal was first reached and what it paid (older records simply have no place), personal records such as the best hour and the best day under sail, and when lifetime renown passed 250 and 1,000.
+- **Works with:** `SessionState`, `GameSession` (the only writer), `ObjectiveCatalog`, `AchievementCatalog`, the Captain's Log menu, the laptop, Go Ashore events.
 - **Keeps:** All of the above.
 - **When it runs:** When renown is earned or published; saving and loading.
 - **If you change it:** Renown, travel-update income, and the "progress" part of saves.
@@ -334,7 +343,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/session_state.gd`
 
 **Purpose:** The complete saved picture of one game, as plain data.
-- **What it does:** Holds everything a save needs (where you are aboard, the clock, the boat and its position, the voyage, money, provisions, condition per boat, the log, renown, the hat, fishing, galley, anchor, boat care, home) and turns it into save data and back, checking every part. Since I022 it also keeps which boats the captain owns and the difficulty; saves from before I022 own every boat and are Standard. I022: it also saves the pastimes (the scrapbook, a card being made, the little game).
+- **What it does:** Holds everything a save needs (where you are aboard, the clock, the boat and its position, the voyage, money, provisions, condition per boat, the log, renown, the hat, fishing, galley, anchor, boat care, home) and turns it into save data and back, checking every part. Since I022 it also keeps which boats the captain owns and the difficulty; saves from before I022 own every boat and are Standard. I022: it also saves the pastimes (the scrapbook, a card being made, the little game). I024: a new game passes the companion's chosen name and gender on.
 - **Works with:** `GameSession` (owns and changes it), `SaveManager` (writes and reads it), all the smaller state records in `src/core/`.
 - **Keeps:** The whole game state.
 - **When it runs:** At new game, every save and load, and as the data behind all of play.
@@ -343,7 +352,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/simulation.gd`
 
 **Purpose:** The game clock and the engine that moves the boat through time.
-- **What it does:** Every frame turns real time into game time (1 real second = 1 game minute at 1×) and moves the boat along its course, choosing sail or engine from the wind. It checks the weather, the hat, fish bites, the anchor, traffic and VHF radio calls on a fixed time grid, so the result is the same at any speed, while sleeping or during a Long Passage. Since I022 weather damage is scaled by the difficulty (the weather itself is not). I022: remote work also reports what stopped it early, so the time-passing screen can say so.
+- **What it does:** Every frame turns real time into game time (1 real second = 1 game minute at 1×) and moves the boat along its course, choosing sail or engine from the wind. It checks the weather, the hat, fish bites, the anchor, traffic and VHF radio calls on a fixed time grid, so the result is the same at any speed, while sleeping or during a Long Passage. Since I022 weather damage is scaled by the difficulty (the weather itself is not). I022: remote work also reports what stopped it early, so the time-passing screen can say so. I024: after every step it tells `GameSession` how fast the boat went and whether under sail, for the sustained speed records.
 - **Works with:** `GameSession` (reads and updates the game), `WeatherModel`, `PropulsionController`, `WeatherDamage`, `HatConfig`, `FishingCatalog`, `TrafficModel`, `VhfRadio`; `App` listens to its warnings.
 - **Keeps:** Not saved: the Long Passage speed, a cached arrival estimate, and whether the captain is below deck.
 - **When it runs:** Always (an autoload); it stops while the game is paused.
@@ -743,8 +752,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat/boat_area.gd`
 
 **Purpose:** The heart of each deck and cabin scene: it places the Captain, sets up everything aboard and turns "pressing E at something" into requests for the game.
-- **What it does:** On load it applies the boat's art, adds lighting, weather, water life, anchor signs, the companion on deck, the fishing rod, windlass, stove, trophy board, coffee spots and cabin decor. It handles the camera (wider underway, turned to the course, following you ashore), the walk onto the pontoon in harbour and the short docking arrival. When you use a station it sends a request (open chart, sleep, cook…) for the app to handle; it never opens menus itself. Petting the companion shows the occasional kind word (`CompanionRemarks`), or a friendly look when your hands are full. I022: the deck's water takes its softer colour from WaterLook with a faint sea bed in shallow water (ShallowWater), and the Starling 33's cabin gets its windows (CabinWindows), shown with the illustrated art only.
-- **Works with:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `App` (which listens to its requests).
+- **What it does:** On load it applies the boat's art, adds lighting, weather, water life, anchor signs, the companion on deck, the fishing rod, windlass, stove, trophy board, coffee spots and cabin decor. It handles the camera (wider underway, turned to the course, following you ashore), the walk onto the pontoon in harbour and the short docking arrival. When you use a station it sends a request (open chart, sleep, cook…) for the app to handle; it never opens menus itself. Petting the companion shows the occasional kind word (`CompanionRemarks`), or a friendly look when your hands are full. I022: the deck's water takes its softer colour from WaterLook with a faint sea bed in shallow water (ShallowWater), and the Starling 33's cabin gets its windows (CabinWindows), shown with the illustrated art only. I024: it puts the Captain's laptop (`LaptopProp`) on the cabin table by the work station, whose prompt becomes "Use the laptop".
+- **Works with:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `LaptopProp`, `App` (which listens to its requests).
 - **Keeps:** Camera settings, the shore stations and the docking animation; it writes the Captain's position back to the game state.
 - **When it runs:** Whenever you are on deck or in the cabin.
 - **If you change it:** Almost everything aboard can be affected: where the Captain appears after loading, which stations exist and what they do, the camera and the harbour arrival.
@@ -794,6 +803,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** A memory of the fenders found per picture, for the rest of the run.
 - **When it runs:** On deck, when the art is applied and when the boat leaves or reaches harbour.
 - **If you change it:** Whether fenders show correctly; a mistake could erase other white parts of the deck art.
+
+### `src/boat/laptop_prop.gd`
+
+**Purpose:** The Captain's laptop, drawn open on the cabin table (I024).
+- **What it does:** Draws a small graphite laptop with a keyboard and a softly lit screen facing the work station, seen from above like the rest of the cabin, in the Real Horizon colours (the screen a little brighter at night). `place()` puts one on the table nearest the work station in every cabin.
+- **Works with:** `BoatArea` (places it and gives the work station its "Use the laptop" prompt), `BoatFixture` (the tables), `App.open_laptop()` (what the station opens).
+- **Keeps:** Only how brightly the screen glows.
+- **When it runs:** Whenever the cabin is on screen.
+- **If you change it:** Only how the laptop looks and where it sits; the work station itself stays where it was.
 
 ### `src/boat/provision_display.gd`
 
@@ -1069,39 +1087,39 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/companion/companion_pose_art.gd`
 
-**Purpose:** Describes one pose picture of the cat or dog (resting, sleeping, alert, stretching).
-- **What it does:** Holds the pose name, the PNG file to show, and small adjustments: shift, size and mirror. It is a building block of a `CompanionVisualSet`.
+**Purpose:** Describes one pose or animated clip of a companion (resting, sleeping, walking, flying and more).
+- **What it does:** Holds the pose name, the PNG file to show, and small adjustments: shift, size and mirror. Since I024 a pose can be a clip: more frames after the first, frames per second, and whether it loops or plays once and holds its last frame. It is a building block of a `CompanionVisualSet`.
 - **Works with:** `CompanionVisualSet` (which lists the poses) and, through it, `ShipCompanion`.
 - **Keeps:** Just those settings, edited in the Godot inspector or the `.tres` file.
 - **When it runs:** When the companion's pictures are loaded.
-- **If you change it:** Which picture shows for a pose and how it is placed; a missing file simply makes that pose fall back.
+- **If you change it:** Which picture shows for a pose and how it is placed; a missing file simply makes that pose fall back, and a Sprite Workshop replacement replaces the whole clip with its one picture.
 
 ### `src/companion/companion_remarks.gd`
 
-**Purpose:** The kind words the Captain says when petting the ship's cat or dog.
-- **What it does:** Holds a few short remarks for a cat and for a dog ("What a lovely little purr."), picks the next one so the same line never comes twice in a row, and translates it into the current language. It is ready for a companion with a name and a gender: then it uses lines with the name ("Who's a good girl, Freja?"), with the name put in exactly as written. Also gives the "your hands are full" line.
-- **Works with:** `CompanionState` (who the companion is), `Loc` (English or Danish), `ShipCompanion` (which asks for a remark when petted) and `BoatArea` (which shows it).
-- **Keeps:** Nothing; the lines are fixed in the script.
-- **When it runs:** When you pet the companion (at most one remark every 15 seconds) or try to with your hands full.
-- **If you change it:** What the Captain says when petting; new lines need a Danish translation in `locale/da.po`.
+**Purpose:** Everything the ship's companion "says" or that is said about it, in one place.
+- **What it does:** Holds short petting remarks for the cat, the dog and the parrot ("What a lovely little purr."), picks the next one so the same line never comes twice in a row, and translates it into the current language. With the name and gender the player chose it uses lines with the name ("Who's a good girl, Freja?"), put in exactly as written; without a name it says "the cat". Since I024 it also gives the pet prompt, the lines for going ashore and being called aboard (also why the boat cannot cast off yet), the occasional line on waking by the berth, and the Captain's talk on long passages in three stages (the first days, after two days, after five) with the animal's response (a line and the clip to play). Also gives the "your hands are full" line.
+- **Works with:** `CompanionState` (who the companion is), `Loc` (English or Danish), `ShipCompanion` (which asks for a remark when petted), `BoatArea` (which shows it), `GameSession` (shore, waking, achievements) and `App` (departure question, passage talk).
+- **Keeps:** Nothing; the lines are fixed in the script and the callers decide when to use them.
+- **When it runs:** When you pet the companion (at most one remark every 15 seconds) or try to with your hands full, go ashore or cast off, wake up, or sail a long passage.
+- **If you change it:** What the Captain says to and about the companion; new lines need a Danish translation in `locale/da.po`.
 
 ### `src/companion/companion_state.gd`
 
-**Purpose:** The saved facts about the ship's companion: cat or dog, where it is resting, and whether it is in the cabin or on deck.
-- **What it does:** Every 2–5 game hours the companion moves to another resting spot in the cabin (settee, chart table, bunk for the cat; floor, companionway, seating for the dog). The choice is worked out from the game clock, not luck, so it is the same at any speed and after loading. It can also be on deck at one of three places.
-- **Works with:** `SessionState` (owns it and saves it), `GameSession` (the only one that changes it), `ShipCompanion` (shows it), `SaveManager` (gives old saves a cat).
-- **Keeps:** Kind, resting spot, time of the next move, number of moves, area (cabin/deck) and deck place.
+**Purpose:** The saved facts about the ship's companion: which animal, its name, where it is resting, and whether it is in the cabin, on deck or ashore.
+- **What it does:** Every 2–5 game hours the companion moves to another resting spot in the cabin (settee, chart table, bunk for the cat; floor, companionway, seating for the dog). The choice is worked out from the game clock, not luck, so it is the same at any speed and after loading. It can also be on deck at one of three places. Since I024 there are three kinds (saved as `cat` for the Ragdoll, `dog` for the Pug and `parrot` for the green-cheeked conure, which perches at the chart table, settee, berth and steps), an optional name (one line, at most 20 characters, never made up) and gender, and an ashore area while moored. On waking it is found by the berth (`wake_by_berth`). A save never loads with it ashore: it is back aboard.
+- **Works with:** `SessionState` (owns it and saves it), `GameSession` (the only one that changes it), `ShipCompanion` (shows it), `NewGameMenu` (the choice), `CompanionRemarks`, `SaveManager` (gives old saves a cat).
+- **Keeps:** Kind, name, gender, resting spot, time of the next move, number of moves, area (cabin/deck/shore) and its place on deck or the pontoon.
 - **When it runs:** All the time in a game, as the clock moves forward.
-- **If you change it:** Where the cat or dog turns up, and saved games (wrong names or numbers make a save fail to load).
+- **If you change it:** Where the companion turns up, and saved games (wrong names or numbers make a save fail to load).
 
 ### `src/companion/companion_visual_set.gd`
 
 **Purpose:** The picture set for one companion kind: its poses, size, placement and idle timing.
-- **What it does:** Loads each pose picture, shrinks it to save memory, and cuts away a plain paper background if the drawing has none. It works out where to draw the picture on the resting spot. It also holds how long the animal rests, naps, stretches and looks up. A Sprite Workshop replacement picture is used when one exists.
-- **Works with:** `CompanionPoseArt` (each pose), `ArtworkResolver` (replacement art), `ShipCompanion` (draws it); sets live in `data/companions/cat_visuals.tres` and `dog_visuals.tres`.
+- **What it does:** Loads each pose picture, shrinks it to save memory, and cuts away a plain paper background if the drawing has none. It works out where to draw the picture on the resting spot. It also holds how long the animal rests, naps, stretches and looks up. A Sprite Workshop replacement picture is used when one exists. Since I024 each pose can be an animated clip (`get_frames`, with its own speed and looping), there are many more clips (walk, turn, sit, lie down, wake, groom, settle, and the parrot's hop, takeoff, flight, landing, ruffle and preen), and the set gives the walking and flying speeds that match the stride so the feet do not slide.
+- **Works with:** `CompanionPoseArt` (each pose), `ArtworkResolver` (replacement art), `ShipCompanion` (draws it); sets live in `data/companions/cat_visuals.tres`, `dog_visuals.tres` and `parrot_visuals.tres`.
 - **Keeps:** Its settings, plus a shared memory (cache) of prepared pictures.
 - **When it runs:** When a companion appears in the cabin, on deck, or in the New Game preview.
-- **If you change it:** How the cat and dog look and behave when idle; without a usable resting picture the game draws a simple built-in animal instead.
+- **If you change it:** How the companions look, move and behave when idle; without a usable resting picture the game draws a simple built-in animal instead.
 
 ### `src/companion/deck_companion_spots.gd`
 
@@ -1114,10 +1132,10 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/companion/ship_companion.gd`
 
-**Purpose:** The cat or dog you see and can pet, in the cabin or on deck.
-- **What it does:** Shows the companion at its resting spot, with pose pictures (resting, napping, stretching, looking up) or a simple drawn animal if no pictures exist. Pressing E pets it: a purr and hearts for the cat, panting and a wagging tail for the dog, and now and then (at most every 15 seconds) a kind word from the Captain, chosen by `CompanionRemarks`. When it changes between cabin and deck while you watch, it walks there. At a quiet anchorage it curls up for long naps.
-- **Works with:** `GameSession` and `CompanionState` (where it should be), `CompanionVisualSet` (pictures), `DeckCompanionSpots` (deck places and paths), `AudioManager` (sounds), `Interactable` and `HighlightResolver` (petting and glow), `SessionLog`. Placed in each cabin scene and built on deck by `BoatArea`; also used as a preview in the New Game menu.
-- **Keeps:** Only how it looks right now (pose, walk, reaction); nothing is saved.
+**Purpose:** The cat, dog or parrot you see and can pet, in the cabin, on deck or on the pontoon.
+- **What it does:** Shows the companion at its resting spot, with pose pictures (resting, napping, stretching, looking up) or a simple drawn animal if no pictures exist. Pressing E pets it: a purr and hearts for the cat, panting and a wagging tail for the dog, and now and then (at most every 15 seconds) a kind word from the Captain, chosen by `CompanionRemarks`. When it changes between cabin and deck while you watch, it walks there. At a quiet anchorage it curls up for long naps. I024: the poses are animated clips, with short transitions in between (lying down, waking, turning, settling); it faces where it goes and walks at its stride's own speed, also when its schedule moves it while you watch. The parrot flies between its perches (takeoff, flight, landing) and hops short distances. Moored, it follows the Captain down the gangplank to a place on the pontoon, and on long passages it answers the Captain's words with a small clip (`respond`).
+- **Works with:** `GameSession` and `CompanionState` (where it should be), `CompanionVisualSet` (pictures), `DeckCompanionSpots` (deck places and paths), `ShoreAccess` (the gangplank and pontoon), `CompanionRemarks` (prompt and remarks), `AudioManager` (sounds), `Interactable` and `HighlightResolver` (petting and glow), `SessionLog`. Placed in each cabin scene and built on deck by `BoatArea`; also used as a preview in the New Game menu.
+- **Keeps:** Only how it looks right now (pose, clip and frame, facing, walk or flight, reaction); nothing is saved.
 - **When it runs:** Whenever the cabin or deck is on screen.
 - **If you change it:** How the companion looks, moves and reacts to petting.
 
@@ -1477,7 +1495,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/captains_log_menu.gd`
 
 **Purpose:** The Captain's Log (press L): your statistics, renown, passages, harbours, objectives and the boat's condition.
-- **What it does:** Four tabs: Log (stats, renown, a "Publish travel update" button, recent passages and notable moments), Harbours (grouped by country, with filters), Objectives (open, completed and secret achievements, which stay hidden until found) and Boat (condition and boatyard history).
+- **What it does:** Four tabs: Log (stats, renown, a "Publish travel update" button, recent passages and notable moments), Harbours (grouped by country, with filters), Objectives (open, completed and secret achievements, which stay hidden until found) and Boat (condition and boatyard history). I024: goals retired from the achievement collection are no longer offered, and a line points to the laptop, where the achievements are.
 - **Works with:** `GameSession`, `CaptainsLog`, `PortCatalog`, `ObjectiveCatalog`, `VesselCatalog`, `BoatCareView`, `BoatCare`, `Simulation`, `App` (opens it and the publish dialog).
 - **Keeps:** Only the harbour filter and which countries are open, for as long as the game runs (not saved).
 - **When it runs:** When you press L, or open it from the pause menu or action wheel.
@@ -1672,6 +1690,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Only the first time the game starts, before a language has been chosen.
 - **If you change it:** The first-launch experience changes. A bug here could block the main menu at first launch.
 
+### `src/ui/laptop/laptop_view.gd`
+
+**Purpose:** The Captain's laptop, opened up close (I024): the one home of renown and publications.
+- **What it does:** Dims the cabin and draws the illustrated laptop (lid, bezel, keyboard) filling the view; everything happens on its screen. Four apps in tabs: Home (renown, remote work, the little game), Publications (postcards, the scrapbook and travel updates), Achievements (the collection by category, unlocked first; locked badges greyed by a small shader, `greyed_badge.gdshader`, with a lock; when, where and on which boat) and Voyage history (totals, best hour and best 24 hours under sail, recent passages, earlier honours). The existing dialogs are reused unchanged and shown on the screen (`SimplePanel.embedded`), so their rules, time and rewards stay theirs. Esc closes an open task, then the laptop.
+- **Works with:** `App` (opens it and does what takes game time or money when it asks), `AchievementCatalog`, `GameSession`, `CaptainsLog`, `ObjectiveCatalog`, `PostcardMenu`, `ScrapbookMenu`, `PublishMenu`, `WorkMenu`, `GameDevMenu`, `Loc`.
+- **Keeps:** Only the open app, the open task and the chosen achievement category (not saved).
+- **When it runs:** When you use the work station at the cabin table or choose Laptop on the action wheel.
+- **If you change it:** Where players find their achievements, publications and remote work; tests find its parts by node name.
+
 ### `src/ui/loading_screen.gd`
 
 **Purpose:** The game's own loading screen with the logo over a calm sea.
@@ -1719,12 +1746,12 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/new_game_menu.gd`
 
-**Purpose:** The new-game dialog where you choose your companion, the cat or the dog.
-- **What it does:** Shows a preview and a short description of the chosen companion (the cat is preselected) and reports Start with the choice. Since I022 it also asks how forgiving the sea should be (the difficulty).
+**Purpose:** The new-game dialog where you choose your companion: a Ragdoll cat, a Pug or a small parrot.
+- **What it does:** Shows a preview and a short description of the chosen companion (the cat is preselected) and reports Start with the choice. Since I022 it also asks how forgiving the sea should be (the difficulty). I024: you may give the companion a name and say whether it is a she or a he; both are optional, and no name is ever made up.
 - **Works with:** `CompanionState`, `ShipCompanion` (the preview), `App` (starts the game).
-- **Keeps:** The chosen companion kind until you press Start.
+- **Keeps:** The chosen companion, name and gender until you press Start.
 - **When it runs:** When you press New game on the title screen.
-- **If you change it:** Who lives in your cabin at the start of a new game.
+- **If you change it:** Who lives aboard at the start of a new game.
 
 ### `src/ui/passage_panel.gd`
 
@@ -1864,8 +1891,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/simple_panel.gd`
 
 **Purpose:** A building kit for simple dialogs: a title, some text and a row of buttons.
-- **What it does:** Builds a centred panel over a dimmed background in code and provides quick ways to add labels and buttons.
-- **Works with:** `ModalPanel` (it builds on it), and many dialogs that use it (work, grocery, haul-out, trade shops, VHF and others).
+- **What it does:** Builds a centred panel over a dimmed background in code and provides quick ways to add labels and buttons. I024: it can also be shown embedded on the laptop's screen, without backdrop or frame.
+- **Works with:** `ModalPanel` (it builds on it), and many dialogs that use it (work, grocery, haul-out, trade shops, VHF and others), and `LaptopView`, which shows some of them on its screen.
 - **Keeps:** Only references to its box and button row.
 - **When it runs:** Whenever one of those dialogs is open.
 - **If you change it:** The look and layout of many dialogs at once.
@@ -2046,11 +2073,11 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Purpose:** Checks the game's name, version number, fonts, save folder, and copying old Next Harbor saves.
-- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.108a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that headings and display text use Barlow Condensed (Real Horizon) and Barlow everything else; Patrick Hand stays bundled with its licence. It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
+- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.110a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that headings and display text use Barlow Condensed (Real Horizon) and Barlow everything else; Patrick Hand stays bundled with its licence. It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
 - **Works with:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Keeps:** Nothing of its own (it makes a temporary pretend Next Harbor folder and removes it).
 - **When it runs:** Only in tests.
-- **If you change it:** Only the checks change. It checks the exact version ("0.108a", "0.108.1") and save format 12, so a new release means updating this test.
+- **If you change it:** Only the checks change. It checks the exact version ("0.110a", "0.110.1") and save format 12, so a new release means updating this test.
 
 ### `tests/suites/test_cabin_windows.gd`
 
@@ -2073,7 +2100,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_captains_other_life.gd`
 
 **Purpose:** Checks I022, The Captain's Other Life.
-- **What it does:** Checks boat prices, that a new game owns only the starter boat, buying a boat (never twice, never below zero money, only at a boatyard), that old saves keep every boat, the three difficulty levels (starting money, food, costs, Danish names), changing the level during a game, and the New Game and pause menus that offer it. I022 pastimes: postcards (real subjects, two hours, kept when interrupted, renown once), the little game (2 to 4 hour sessions, points for the share worked, milestones, release, no repeated rewards), saves and old saves, the one clock through App (two hours of the world pass, an arrival interrupts a card and it is finished later) and the menus.
+- **What it does:** Checks boat prices, that a new game owns only the starter boat, buying a boat (never twice, never below zero money, only at a boatyard), that old saves keep every boat, the three difficulty levels (starting money, food, costs, Danish names), changing the level during a game, and the New Game and pause menus that offer it. I022 pastimes: postcards (real subjects, two hours, kept when interrupted, renown once), the little game (2 to 4 hour sessions, points for the share worked, milestones, release, no repeated rewards), saves and old saves, the one clock through App (two hours of the world pass, an arrival interrupts a card and it is finished later) and the menus. I024: the cabin's wheel offers the laptop, where both pastimes now are.
 - **Works with:** `GameSession`, `SessionState`, `VesselCatalog`, `Difficulty`, `NewGameMenu`, `DifficultyMenu`, `App`.
 - **Keeps:** Nothing.
 - **When it runs:** With the other suites (`test_runner.tscn`).
@@ -2145,7 +2172,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_companion_art.gd`
 
 **Purpose:** Checks the cat and dog pictures and how they behave (Iteration 004b, with new art since Iteration 13).
-- **What it does:** It checks the pose images (resting, sleeping, alert, stretching) for cat and dog, and that the owner's original cat drawings in `Visuals/Cat/` are never changed. It checks that white paper backgrounds are removed, and that the poses change now and then without flickering. It also checks walking up to and petting the pet (glow outline, purr), fallbacks when an image is missing, swapping in a new image through data only, all boats, and that poses are not saved.
+- **What it does:** It checks the pose images (resting, sleeping, alert, stretching) for cat and dog, and that the owner's original cat drawings in `Visuals/Cat/` are never changed. It checks that white paper backgrounds are removed, and that the poses change now and then without flickering. It also checks walking up to and petting the pet (glow outline, purr), fallbacks when an image is missing, swapping in a new image through data only, all boats, and that poses are not saved. Since I024 each pose is an animated clip of several frames, and the picture's ground point sits on the resting spot.
 - **Works with:** `CompanionVisualSet`, `ShipCompanion`, `NewGameMenu`, `CompanionState`, `AudioManager`, `SaveManager`, the walkability test helper.
 - **Keeps:** Nothing of its own (it writes a temporary test picture and deletes it again).
 - **When it runs:** Only in tests.
@@ -2168,6 +2195,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** Nothing.
 - **When it runs:** In the test runner (`--only=companion_remarks`).
 - **If you change it:** Only the test; the remarks' wording is checked by its English keys.
+
+### `tests/suites/test_company_we_keep.gd`
+
+**Purpose:** Checks I024, The Company We Keep.
+- **What it does:** Checks the three companions with an optional name and gender (none made up) and that older saves keep theirs; the lines in English and Danish; the animated clips (walking, turning, sleeping, waking, petting) and the parrot's takeoff, flight and landing; following the Captain ashore, a boat that will not cast off while the companion is ashore, calling it aboard, and that loading never leaves it ashore; waking by the berth; talk on long passages that never floods, not even after a reload; the sustained sailing speed records and milestones; the achievement collection (order, greyed locked badges, when, where and which boat, honest fallbacks, nothing paid twice); and the laptop on every cabin table with its apps, Esc, postcards and remote work.
+- **Works with:** the app scene, `CompanionState`, `CompanionRemarks`, `CompanionVisualSet`, `ShipCompanion`, `NewGameMenu`, `GameSession`, `Simulation`, `SessionState`, `ObjectiveProgress`, `AchievementCatalog`, `LaptopView`, `SettingsManager`, `WeatherFixtures`.
+- **Keeps:** Nothing of its own.
+- **When it runs:** Only in tests (it saves `i024_*` screenshots when asked).
+- **If you change it:** Only the checks change; if it fails, the companions, the achievements or the laptop may misbehave.
 
 ### `tests/suites/test_cozy_patch.gd`
 
@@ -2221,7 +2257,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Works with:** `SessionLog`, `GameSession`, `SaveManager`, `GameVersion`, `Simulation`.
 - **Keeps:** Nothing of its own (it uses its own temporary log folder and cleans it).
 - **When it runs:** Only in tests.
-- **If you change it:** Only the checks change. It checks the exact game version ("0.108a") and save format (12), so a new version number means updating this test.
+- **If you change it:** Only the checks change. It checks the exact game version ("0.110a") and save format (12), so a new version number means updating this test.
 
 ### `tests/suites/test_eight_directions.gd`
 
@@ -2325,7 +2361,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_life_aboard.gd`
 
 **Purpose:** Checks everyday life aboard: the cat or dog, sleeping, the chart panel and the sails.
-- **What it does:** Checks choosing a cat or dog for a new game, where it rests, its schedule and petting it (with sound). It also checks the sleep dialog from the berth and the chart, waking early for a weather warning or on arrival, and that the chart panel stays still. Finally it checks the helm's sail check, gentle sail motion, the spinnaker's shape, and saving the companion, including in old saves.
+- **What it does:** Checks choosing a cat or dog for a new game, where it rests, its schedule and petting it (with sound). It also checks the sleep dialog from the berth and the chart, waking early for a weather warning or on arrival, and that the chart panel stays still. Finally it checks the helm's sail check, gentle sail motion, the spinnaker's shape, and saving the companion, including in old saves. I024: when its time comes the companion walks to its new spot, and the prompt says "Pet the cat".
 - **Works with:** `NewGameMenu`, `SleepMenu`, `WorldMap`, `SailRig`, `ShipCompanion`, `CompanionState`, `AudioManager`, `GameSession`, `SaveManager`, `WeatherFixtures`, the app scene.
 - **Keeps:** Nothing of its own.
 - **When it runs:** Only in tests (it boards the Wing 33, `starling_33`, because its walks were written for that cabin).
@@ -2343,8 +2379,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_living.gd`
 
 **Purpose:** Checks earning and spending money: remote work and the grocery store.
-- **What it does:** Checks remote work in harbour (1–8 hours, €25 per hour, refused at sea) and grocery prices (€10 for each missing day of food plus water, the same in every harbour). It also checks that repairs cost their quote, that money and stores survive save/load, and that the work station and grocery store open on every boat.
-- **Works with:** `GameSession`, `Simulation`, `SaveManager`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures`, the app scene.
+- **What it does:** Checks remote work in harbour (1–8 hours, €25 per hour, refused at sea) and grocery prices (€10 for each missing day of food plus water, the same in every harbour). It also checks that repairs cost their quote, that money and stores survive save/load, that every boat's cabin has its laptop at the work station (since I024 remote work is opened on the laptop), and that the grocery store opens on every boat.
+- **Works with:** `GameSession`, `Simulation`, `SaveManager`, `LaptopView`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures`, the app scene.
 - **Keeps:** Nothing of its own.
 - **When it runs:** Only in tests.
 - **If you change it:** Nothing in the game changes; changes to pay, prices, starting money or station positions may make it fail.
@@ -2397,7 +2433,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_objectives.gd`
 
 **Purpose:** Checks sailing objectives and renown (ry).
-- **What it does:** Checks the list of objectives (including the generated ones) and that renown is paid once when a voyage ends. Repeatable objectives pay again only on a new voyage. A lost boat earns only for its miles, and saving, loading and old saves never pay twice. It also checks the Objectives tab in the Captain's Log.
+- **What it does:** Checks the list of objectives (including the generated ones) and that renown is paid once when a voyage ends. Repeatable objectives pay again only on a new voyage. A lost boat earns only for its miles, and saving, loading and old saves never pay twice. It also checks the Objectives tab in the Captain's Log. I024: a goal retired from the collection is no longer offered there.
 - **Works with:** `ObjectiveCatalog`, `ObjectiveProgress`, `CaptainsLog`, `CaptainsLogMenu`, `GameSession`, `Simulation`, `SaveManager`, `WeatherFixtures`, the app scene.
 - **Keeps:** A list of the renown awards it has seen during the run.
 - **When it runs:** Only in tests.
@@ -2415,7 +2451,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_publishing.gd`
 
 **Purpose:** Checks that publishing a travel update turns renown into money correctly.
-- **What it does:** Checks that unpublished renown is paid out at the set rate (€2 per renown by default) in harbour only, never twice, that lifetime renown is kept, that it survives save and load, and that remote work and buying provisions still work. Then it clicks through the publish buttons in the Captain's Log and the work dialog in the real game.
+- **What it does:** Checks that unpublished renown is paid out at the set rate (€2 per renown by default) in harbour only, never twice, that lifetime renown is kept, that it survives save and load, and that remote work and buying provisions still work. Then it clicks through the publish buttons in the Captain's Log and the work dialog (on the laptop since I024) in the real game.
 - **Works with:** `GameSession`, `Simulation`, `SaveManager`, `ObjectiveCatalog`, `CaptainsLogMenu`, `PublishMenu`, `WorkMenu`.
 - **Keeps:** Nothing of its own; it uses save slot 2 briefly and deletes it.
 - **When it runs:** Only in tests.
@@ -2586,7 +2622,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_upkeep_ui.gd`
 
 **Purpose:** Checks the screens for boat condition, provisions, the boatyard and rescue in the real game.
-- **What it does:** Checks that the HUD (the on-screen info bar) shows hull condition, money, food and water; that the provisions station in every cabin opens the provisions panel and leads to the grocery store; that the food and water crates empty as time passes; that damage marks grow as the boat wears and vanish after repair; that the boatyard panel keeps its size and offers repair and restocking; and that the rescue report appears and pauses the game. It also checks the developer test panel (F10) and that players never see it, and that the ship's cat never blocks a station.
+- **What it does:** Checks that the HUD (the on-screen info bar) shows hull condition, money, food and water; that the provisions station in every cabin opens the provisions panel and leads to the grocery store; that the food and water crates empty as time passes; that damage marks grow as the boat wears and vanish after repair; that the boatyard panel keeps its size and offers repair and restocking; and that the rescue report appears and pauses the game. It also checks the developer test panel (F10) and that players never see it, and that the ship's cat never blocks a station (its prompt says "Pet the cat").
 - **Works with:** the app scene, `ProvisionsMenu`, `GroceryMenu`, `ProvisionDisplay`, `BoatyardMenu`, `BoatCareMenu`, `RescueDialog`, `DevTools`, `DevTestPanel`, `ShipCompanion`, `InteractionSensor`, `TestWalkability`, `GameSession`.
 - **Keeps:** Nothing of its own.
 - **When it runs:** Only in tests (it saves screenshots when asked).
@@ -2747,6 +2783,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Only by hand, with a screen: `xvfb-run godot --path . --rendering-driver opengl3 --resolution 1600x900 res://tests/cabin_light_18.tscn -- --out=DIR --label=before`.
 - **If you change it:** Nothing in the game changes.
 
+### `tests/companion_animation_preview.gd`
+
+**Purpose:** Shows every companion clip playing side by side, as evidence of the I024 animation sets.
+- **What it does:** One row per kind (cat, dog, parrot) and one cell per clip, each a small preview companion at game scale enlarged; a clip that plays once starts again every two seconds. With `--out` it saves a few moments of the grid as pictures and quits.
+- **Works with:** `CompanionState`, `CompanionVisualSet`, `ShipCompanion` (in preview mode).
+- **Keeps:** Nothing; it writes PNG files when asked.
+- **When it runs:** Only by hand: in the editor (F6), or rendered with `res://tests/companion_animation_preview.tscn -- --out=DIR`.
+- **If you change it:** Nothing in the game changes.
+
 ### `tests/helpers/art_fixtures.gd`
 
 **Purpose:** Makes loud pink-and-yellow test pictures to stand in for real artwork during Sprite Workshop tests.
@@ -2873,6 +2918,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Only by hand, with a real screen or Xvfb: `res://tests/screenshots_i021.tscn -- --out=DIR`.
 - **If you change it:** Only the screenshots change.
 
+### `tests/screenshots_i024.gd`
+
+**Purpose:** Takes the pictures for the I024 report from the running game.
+- **What it does:** Photographs the three companions aboard, the parrot perched and in flight, a companion ashore and the departure that waits for it, waking with the companion by the berth, the Captain talking on a long passage, and the cabin laptop: on the table, open on Home, the achievements with locked badges, a detail with when and where, the postcard composer, a category, the voyage history and the achievements in Danish. Most pictures also get a close-up.
+- **Works with:** The app scene, `GameSession`, `CompanionState`, `ShipCompanion`, `LaptopView`, `UiTheme`, `SettingsManager`, `WindField`.
+- **Keeps:** Nothing; it writes PNG files (test saves and settings only, never the player's own).
+- **When it runs:** Only by hand, with a real screen or Xvfb: `res://tests/screenshots_i024.tscn -- --out=DIR [--only=PREFIX]`.
+- **If you change it:** Only the screenshots change.
+
 ### `tests/one_clock_sea_trial.gd`
 
 **Purpose:** A five-minute "sea trial" that measures where the time goes when the clock runs faster than 1x, especially at dawn, dusk, at night and in harbour (Operation One Clock).
@@ -2884,8 +2938,8 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Purpose:** The game's automatic test runner: it runs all 74 test suites and says how many checks passed.
-- **What it does:** Moves saves, settings and logs to scratch test files, turns off the sleep/dawn animations, sets English and calm wind, and runs each suite in turn. It also gives the suites shared tools: checks, waiting, pressing keys, clicking, boarding a boat, setting the wind, planning routes and screenshots. Since I021 it also runs the wider-world suite. Since I022 it runs the I022 suite and lets the suites sail every boat without buying it. I022: it turns the Academy's offer and tips off for the other suites. It also runs the cabin windows suite. It also runs the Steady Hands interface suite. It also runs the Golden Harbours suite.
+**Purpose:** The game's automatic test runner: it runs all 80 test suites and says how many checks passed.
+- **What it does:** Moves saves, settings and logs to scratch test files, turns off the sleep/dawn animations, sets English and calm wind, and runs each suite in turn. It also gives the suites shared tools: checks, waiting, pressing keys, clicking, boarding a boat, setting the wind, planning routes and screenshots. Since I021 it also runs the wider-world suite. Since I022 it runs the I022 suite and lets the suites sail every boat without buying it. I022: it turns the Academy's offer and tips off for the other suites. It also runs the cabin windows suite. It also runs the Steady Hands interface suite. It also runs the Golden Harbours suite. I024: it also runs The Company We Keep suite.
 - **Works with:** Every suite in `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Keeps:** The pass/fail counts and the list of failures.
 - **When it runs:** By hand or in automation: `godot --headless --path . res://tests/test_runner.tscn` (options after `--`: `--only=name`, `--skip=name`, `--screenshots=DIR`).

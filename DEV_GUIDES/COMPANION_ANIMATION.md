@@ -3,48 +3,57 @@
 How the ship's cat is drawn in the game, and how you change, add or prepare
 companion artwork. The general sprite rules are in [SPRITES.md](SPRITES.md).
 
-## What the game does with the cat and the dog
+## What the game does with the companions (I024)
 
-Since Iteration 13 both companions show **illustrated art in the game's own
-style**: seen from above like the boats and the sailor, warm ink outlines over
-soft colour washes. The images are painted by a script,
-`tools/companions/paint_companions.py`, into `assets/companions/cat/` and
-`assets/companions/dog/` (256 × 256 px, transparent, the animal in the same
-place on every pose). The owner's original cat drawings stay in
-`Visuals/Cat/`, unchanged, and can be switched back in through data (§3).
+Since I024 (The Company We Keep) there are three companions, chosen at New
+Game with an optional name and gender: a **Ragdoll cat** (kind `cat`), a
+**Pug** (`dog`) and a **green-cheeked conure**, a small parrot (`parrot`).
+Older saves keep their cat or dog, now drawn as the Ragdoll and the Pug.
 
-Each companion uses four images, each one **pose**:
+The art is painted in the Real Horizon style by one command,
+`python3 tools/companions/paint_companion_clips.py` (`paint_companions.py`
+runs it): short **animated clips**, every frame on the same 256 × 256 px
+transparent canvas, facing right, the animal's ground point at the same place
+(cat and dog (128, 160), parrot perch (128, 176)). Frames are
+`assets/companions/<kind>/<clip>_<NN>.png`; the old single images
+(`resting.png`, …) are kept as copies of frame 00. The owner's original cat
+drawings stay in `Visuals/Cat/`, unchanged.
 
-| Pose | Cat | Dog | When it shows |
-|---|---|---|---|
-| `resting` | `assets/companions/cat/resting.png` | `assets/companions/dog/resting.png` | most of the time (idle) |
-| `sleeping` | `assets/companions/cat/sleeping.png` | `assets/companions/dog/sleeping.png` | now and then, for 1–2.5 minutes |
-| `alert` | `assets/companions/cat/alert.png` | `assets/companions/dog/alert.png` | when petted (with hearts and the purr or panting), and briefly when you walk up to it while it rests |
-| `stretching` | `assets/companions/cat/stretching.png` | `assets/companions/dog/stretching.png` | a few seconds, before or after a nap |
+| Kind | Clips (frames @ fps, *once* = plays once and holds) |
+|---|---|
+| cat (Ragdoll) | resting 8@6, walk 8@10, turn 4@10 once, sit 6@5, lie_down 4@8 once, sleeping 6@3, wake 4@6 once, stretching 6@6 once, groom 8@8, alert 4@4 (looks at the Captain), pet 6@6 (petting response), settle 6@6 once (circles and lies down by the berth) |
+| dog (Pug) | resting 8@5, walk 8@10, turn 4@10 once, sit 6@5, lie_down 4@8 once, sleeping 6@3, wake 4@6 once, stretching 6@6 once (play bow), tail_wag 6@12, alert 6@6 (head tilt), pet 6@8, settle 6@6 once |
+| parrot | resting 6@4, blink 3@10 once, head_turn 6@6 once, hop 6@10 once, takeoff 4@12 once, fly 6@12, land 4@12 once, ruffle 6@10 once (feather settling), preen 8@8, sleeping 4@2, wake 4@6 once, alert 6@8 (interaction response) |
 
-The sets are `data/companions/cat_visuals.tres` (drawn 100 units across) and
-`data/companions/dog_visuals.tres` (116 units). The companions do not walk:
-they move between their resting spots, as before.
+The sets are `data/companions/<kind>_visuals.tres`: one `CompanionPoseArt`
+per clip (`image_path` = frame 00, `frames` = the rest, `fps`, `loop`), the
+`display_size` (cat 66, dog 56, parrot 50 scene units for the canvas side -
+smaller than before, the Captain is about 40 across), the `pivot` (the ground
+point) and the movement speeds matched to the drawn stride so the feet do
+not slide (`walk_speed`: cat 20.5, dog 11 units/s; `fly_speed` parrot 110).
 
-**Highlight.** When the captain can pet it, the animal glows around its own
-silhouette (the outline of the pose shown), like every station since
-Iteration 12: no tint, no circle. Stations nearby still win the focus unless
-the captain stands clearly closer to the animal.
+**Behaviour** (`ShipCompanion`, presentation only, never saved): the logical
+pose chooses the clip; short transitions play in between (lie down after a
+walk, wake after a nap, settle into a nap by the berth). Between rests the
+cat grooms, sits or stretches, the dog wags or sits, the parrot preens,
+ruffles, turns its head and blinks. Walking it turns first when it reverses
+(the turn clip faces the viewer at its middle, where the drawing is
+mirrored) and faces the way it goes. The parrot takes off, flies a little
+above the cabin or deck and lands at its perch, or hops a short way.
+Petting plays the pet clip; walking up to it plays the alert look. Each clip
+change is a short cross-fade.
 
-**Behaviour.**
-- The cat rests for 25–60 s (real time). Then it usually naps (60%) or stretches.
-- After a nap it often stretches before resting again.
-- Each change is a 0.25 s cross-fade with a very small breathing movement. The cat
-  is never rotated or distorted.
-- Petting (E) works in any pose: it shows `alert` for 2 s with hearts and the purr,
-  then the cat goes back to resting. One press is enough.
-- Approaching while it **sleeps** does not wake it. Petting does.
+**Ashore and asleep.** Moored in a harbour the companion follows the Captain
+down the gangplank to a place on the pontoon (the parrot flies); the boat
+cannot cast off while it is ashore. After sleeping it is found by the berth.
 
-**Where it rests** does not change: the cat still moves between its resting spots
-(settee, nav station, berth) every few game hours, on every boat. Poses are
-presentation only and are never saved. The procedural drawings in
+**Replacing art.** A Sprite Workshop replacement of a pose (`<workshop_id>.<pose>`,
+e.g. `pet.snovs.resting`, `pet.dog.resting`, `pet.parrot.resting`) replaces
+that whole clip with the one drawing (shown still, with the small breathing
+swell); the Captain's drawing always wins. The procedural drawings in
 `src/companion/ship_companion.gd` remain only as the fallback when a set's
-resting image is missing.
+resting image is missing. To see every clip playing, open
+`tests/companion_animation_preview.tscn`.
 
 ## 1. Where to draw and export
 

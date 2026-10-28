@@ -116,9 +116,11 @@ func _test_companion_spots_and_schedule() -> void:
 	var before := GameSession.get_companion()
 	Simulation.advance(before.next_move_time - GameSession.get_game_time() + 1.0)
 	await t.frames(1)
+	# I024: in view it walks there (no pop); out of view it is simply there.
+	await t.wait_until(func() -> bool: return not _companion().is_walking(), 20.0)
 	t.check(GameSession.get_companion().spot != before.spot and _companion().spot == GameSession.get_companion().spot
 		and _companion().position.is_equal_approx(_companion().get_spot_position(GameSession.get_companion().spot)),
-		"[companion] when its time comes it is found resting somewhere else")
+		"[companion] when its time comes it walks over and is found resting somewhere else")
 	_set_companion(CompanionState.KIND_CAT, &"settee")
 
 
@@ -129,7 +131,7 @@ func _test_petting(kind: StringName) -> void:
 	await _move_player_to(_free_spot_near(companion.position))
 	var focused := area.player.get_focused_interactable()
 	t.check(focused != null and focused.interaction_id == &"pet", "[companion] the %s can be reached on foot" % name)
-	t.check_eq(app.hud.get_prompt(), "Pet %s" % name, "[companion] approaching shows 'Pet %s'" % name)
+	t.check_eq(app.hud.get_prompt(), "Pet the %s" % name, "[companion] approaching shows 'Pet the %s' (I024 wording; a named one: 'Pet <name>')" % name)
 	var petted := [false]
 	var on_petted := func(_kind: StringName) -> void: petted[0] = true
 	companion.petted.connect(on_petted)

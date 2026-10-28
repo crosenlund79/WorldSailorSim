@@ -12,8 +12,8 @@ entry in [docs/technical/GDSCRIPT_ARCHITECTURE.md](docs/technical/GDSCRIPT_ARCHI
    `crosenlund79/LittleCaptainsHat` is read-only history; never edit it.
 2. **Branch.** Ongoing development and integration: `claude/friendly-fermat-dey23f`.
    Small adjustments, hotfixes and documentation are committed there.
-3. **Next major iteration: I024.** The Real Horizon conversion and the handover
-   were not numbered iterations. History: [docs/DEVELOPMENT_HISTORY.md](docs/DEVELOPMENT_HISTORY.md).
+3. **Latest iteration: I024** (The Company We Keep, 0.110a). The next one,
+   I025, starts only when commissioned. History: [docs/DEVELOPMENT_HISTORY.md](docs/DEVELOPMENT_HISTORY.md).
 4. **Major iterations** develop on `iteration/iNNN`, created at a recorded,
    remotely verified starting SHA, and end with `release/iNNN` at the final
    tested SHA. Release and backup branches are never moved, rewritten or

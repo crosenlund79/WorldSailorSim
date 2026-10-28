@@ -505,7 +505,7 @@ merged back).
 
 - **Integration branch:** `claude/friendly-fermat-dey23f` in WorldSailorSim
   (as before). It holds Real Horizon merged with everything through I023.
-- **Next major iteration: I024**, on `iteration/i024` / `release/i024` in
+- **Major iterations** from I024 on use `iteration/iNNN` / `release/iNNN` in
   WorldSailorSim, following *Major iteration branches*.
 - **Historical branches are not duplicated.** `release/i021`, `release/i022`,
   `iteration/i022` and the `backup/…` branches came across with the import and
@@ -631,4 +631,13 @@ Two; the wording was again not found in the repository in Iteration 18.
   development moved to `crosenlund79/WorldSailorSim`. See
   `docs/iterations/real_horizon/REAL_HORIZON_REPORT.md` and
   `docs/DEVELOPMENT_HISTORY.md`.
-- **Next numbered major iteration: I024.**
+- **Iteration 24, The Company We Keep**, version 0.110a, save format 12
+  (unchanged): three companions (a Ragdoll, a Pug, a green-cheeked conure)
+  with optional name and gender, smaller and animated in clips; shore visits
+  with a departure guard; the companion by the berth on waking; the Captain
+  talking to it on long passages; a curated achievement collection of 35 in
+  seven categories with when, where and which boat, sustained sailing-speed
+  milestones; the cabin laptop as the home of renown, publications and the
+  achievements. See `docs/iterations/i024/ITERATION_24_REPORT.md`. Branches
+  `iteration/i024` and recovery branch `release/i024`.
+- **Next numbered major iteration: I025** (not yet commissioned).

@@ -212,14 +212,17 @@ func _test_work_station() -> void:
 		await _show(SessionState.AREA_INTERIOR, &"start")
 		var area := app.router.current_screen as BoatArea
 		var station := _station(area, &"work")
-		t.check(station != null and station.prompt == "Work remotely", "[work] the %s's cabin has a work station" % id)
-		t.check(await _use(&"work") and app.modals.get_top() is WorkMenu, "[work] on the %s it opens the work dialog" % id)
+		t.check(station != null and station.prompt == "Use the laptop" and area.get_laptop() != null, "[work] the %s's cabin has its laptop on the table" % id)
+		t.check(await _use(&"work") and app.modals.get_top() is LaptopView, "[work] on the %s it opens the laptop" % id)
 		app.modals.clear()
 		await t.frames(2)
 	GameSession.switch_vessel(&"starling_33")
 	await _show(SessionState.AREA_INTERIOR, &"start")
 	await _use(&"work")
-	var menu := app.modals.get_top() as WorkMenu
+	var laptop := app.modals.get_top() as LaptopView
+	await t.click(laptop.get_content().find_child("WorkButton", true, false) as Button)
+	await t.frames(2)
+	var menu := laptop.task as WorkMenu
 	if not t.check(menu != null, "[work] the dialog is open"):
 		return
 	t.check_eq(menu.hours, WorkMenu.DEFAULT_HOURS, "[work] it suggests 4 hours")
@@ -243,11 +246,11 @@ func _test_work_station() -> void:
 	GameSession.plan_route_to(&"kiel")
 	GameSession.depart()
 	await _settle()
-	await _use(&"work")
+	app.open_work_menu()
 	var refused := false
 	for message in app.toasts.get_messages():
 		refused = refused or message.contains("moor in a harbour")
-	t.check(not (app.modals.get_top() is WorkMenu) and refused, "[work] at sea there is no remote work")
+	t.check(app.open_work_menu() == null and refused, "[work] at sea there is no remote work")
 
 
 func _test_grocery_store() -> void:

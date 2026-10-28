@@ -351,9 +351,11 @@ func _test_objectives_view() -> void:
 	t.check_eq(menu.get_current_tab_name(), "Objectives", "[objectives ui] the Objectives tab")
 	t.check((menu.find_child("RenownSummary", true, false) as Label).text.contains("100 earned in all, 100 not yet published"),
 		"[objectives ui] renown at the top")
-	var harbours: Control = menu.find_child("Objective_harbours_5", true, false)
-	t.check(harbours != null and (harbours.get_node("Detail") as Label).text.contains("Progress: 2 of 5.")
-		and (harbours.get_node("Title") as Label).text.contains("30 renown"), "[objectives ui] open objective: requirement, progress and reward")
+	# I024: 'Harbour hopper' (5) is retired as a goal; 'Well travelled' (10) remains.
+	t.check(menu.find_child("Objective_harbours_5", true, false) == null, "[objectives ui] a goal retired from the collection is no longer offered")
+	var harbours: Control = menu.find_child("Objective_harbours_10", true, false)
+	t.check(harbours != null and (harbours.get_node("Detail") as Label).text.contains("Progress: 2 of 10.")
+		and (harbours.get_node("Title") as Label).text.contains("50 renown"), "[objectives ui] open objective: requirement, progress and reward")
 	var repeat: Control = menu.find_child("Objective_new_harbour", true, false)
 	t.check(repeat != null and (repeat.get_node("Title") as Label).text.contains("repeatable")
 		and (repeat.get_node("Detail") as Label).text.contains("Completed 1 time"), "[objectives ui] a repeatable objective shows how often it was completed")

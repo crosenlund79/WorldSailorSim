@@ -53,14 +53,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "1e6879cde2fa9b86",
+   "sha": "ae9f7990116101e5",
    "reviewed": "2026-10-28",
-   "note": "Golden Harbours: show_harbour_moment on first arrival with a picture; renown titles via Loc.t"
+   "note": "I024: open_laptop, companion shore following and recall before departure, wake line, passage talk timing, Laptop wheel item"
   },
   "src/app/game_version.gd": {
-   "sha": "ee3547eb8d0e13de",
-   "reviewed": "2026-10-27",
-   "note": "I022 version 0.109a"
+   "sha": "09aa73deb2a67365",
+   "reviewed": "2026-10-28",
+   "note": "I024: version 0.110a / 0.110.1"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -98,9 +98,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/boat_area.gd": {
-   "sha": "63da22503fd000f0",
+   "sha": "c5500753b4aaa8f4",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I024: _setup_laptop / get_laptop, work station prompt 'Use the laptop'"
   },
   "src/boat/boat_fixture.gd": {
    "sha": "cb427e4ff17e7ac7",
@@ -126,6 +126,11 @@
    "sha": "315aff909bba2830",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/boat/laptop_prop.gd": {
+   "sha": "62cc482f78b9c8a3",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entry, the laptop drawn on the cabin table"
   },
   "src/boat/provision_display.gd": {
    "sha": "5bb0e05cf0dfaa45",
@@ -193,24 +198,24 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/companion/companion_pose_art.gd": {
-   "sha": "f3d35333b11baa07",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "05b9b9fcd4bc622c",
+   "reviewed": "2026-10-28",
+   "note": "I024: animated clips (frames/fps/loop, get_frames), clip constants, walk/fly speed, parrot set"
   },
   "src/companion/companion_remarks.gd": {
-   "sha": "af263476051a94c8",
-   "reviewed": "2026-10-27",
-   "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
+   "sha": "71c0b09c7173022e",
+   "reviewed": "2026-10-28",
+   "note": "I024: the one dialogue place: pet prompt, shore/recall, wake lines, passage talk stages and responses"
   },
   "src/companion/companion_state.gd": {
-   "sha": "d574f0be431fa89e",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "cbcfcc71e85419d1",
+   "reviewed": "2026-10-28",
+   "note": "I024: parrot, name/gender, AREA_SHORE, WAKE_SPOT/wake_by_berth, clean_name, optional save fields"
   },
   "src/companion/companion_visual_set.gd": {
-   "sha": "43f1cbbad71c947c",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "0c183e657a65421a",
+   "reviewed": "2026-10-28",
+   "note": "I024: animated clips (frames/fps/loop, get_frames), clip constants, walk/fly speed, parrot set"
   },
   "src/companion/deck_companion_spots.gd": {
    "sha": "b4b42d42349b4243",
@@ -218,14 +223,19 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/companion/ship_companion.gd": {
-   "sha": "707ab304a7f62f35",
+   "sha": "4e27dd0ddf3c39df",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I024: header comment refreshed (walking, no instant moves in view)"
   },
   "src/core/academy.gd": {
    "sha": "382366535e0b01c1",
    "reviewed": "2026-10-27",
    "note": "I022 Captain's Academy"
+  },
+  "src/core/achievement_catalog.gd": {
+   "sha": "d648fdebbd12e050",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entry, curated achievement collection over renown records"
   },
   "src/core/anchor_state.gd": {
    "sha": "fca549a2299f57e0",
@@ -258,9 +268,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "a0281da6473765bb",
-   "reviewed": "2026-10-27",
-   "note": "I022 pastimes and the one clock for hours-long tasks"
+   "sha": "4b6c115c829c2501",
+   "reviewed": "2026-10-28",
+   "note": "I024: AchievementCatalog cache cleared on exit too"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -278,14 +288,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/objective_catalog.gd": {
-   "sha": "bffd72952cee339b",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "e534ba3528fe36a8",
+   "reviewed": "2026-10-28",
+   "note": "I024: retired flag"
   },
   "src/core/objective_progress.gd": {
-   "sha": "8019337ae4e9eb5d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "06ec55cb9c722575",
+   "reviewed": "2026-10-28",
+   "note": "I024: at/r per record, personal records, renown milestones"
   },
   "src/core/pastimes.gd": {
    "sha": "b7a1a203b29d646a",
@@ -303,14 +313,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/session_state.gd": {
-   "sha": "ab8482ced3e0e636",
-   "reviewed": "2026-10-27",
-   "note": "I022 pastimes and the one clock for hours-long tasks"
+   "sha": "fb31986f902d33f6",
+   "reviewed": "2026-10-28",
+   "note": "I024: create_new passes companion name and gender"
   },
   "src/core/simulation.gd": {
-   "sha": "6d28ea07e681de6d",
-   "reviewed": "2026-10-27",
-   "note": "I022 pastimes and the one clock for hours-long tasks"
+   "sha": "259e92048e594bf1",
+   "reviewed": "2026-10-28",
+   "note": "I024: note_sailing each step"
   },
   "src/core/vessel_condition.gd": {
    "sha": "d1e2f8e4ae1d2c4b",
@@ -673,9 +683,9 @@
    "note": "Steady Hands (UI reliability)"
   },
   "src/ui/captains_log_menu.gd": {
-   "sha": "abac252a9a9a60ba",
+   "sha": "8bee5eb0a050c5b1",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I024: retired goals hidden, laptop hint"
   },
   "src/ui/catch_badge.gd": {
    "sha": "1fef5190dc61a0c4",
@@ -787,6 +797,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/ui/laptop/laptop_view.gd": {
+   "sha": "8d2f8899db6468b7",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entry, the cabin laptop view (greyed_badge.gdshader mentioned)"
+  },
   "src/ui/loading_screen.gd": {
    "sha": "a19337a583a9a6ae",
    "reviewed": "2026-10-28",
@@ -813,9 +828,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/new_game_menu.gd": {
-   "sha": "bea652a299c0ece2",
-   "reviewed": "2026-10-27",
-   "note": "I022 boats and difficulty"
+   "sha": "44261776cd039058",
+   "reviewed": "2026-10-28",
+   "note": "I024: three companions, name field, gender picker"
   },
   "src/ui/passage_panel.gd": {
    "sha": "f70ca42a7c40c5c3",
@@ -893,9 +908,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/simple_panel.gd": {
-   "sha": "c2f4b9e2faf0cc4e",
+   "sha": "2715b69383f8089a",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I024: embedded mode for the laptop screen"
   },
   "src/ui/sleep_menu.gd": {
    "sha": "736d30f7a51f9fb6",
@@ -1037,6 +1052,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "tests/companion_animation_preview.gd": {
+   "sha": "ecfb2a72e0098472",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entries, animation preview grid and I024 screenshots"
+  },
   "tests/helpers/art_fixtures.gd": {
    "sha": "fd5f381f9ed9821d",
    "reviewed": "2026-10-27",
@@ -1117,6 +1137,11 @@
    "reviewed": "2026-10-27",
    "note": "I021 screenshots"
   },
+  "tests/screenshots_i024.gd": {
+   "sha": "cba45eae2aa4263a",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entries, animation preview grid and I024 screenshots"
+  },
   "tests/suites/test_academy.gd": {
    "sha": "001e7e3769747ff6",
    "reviewed": "2026-10-28",
@@ -1153,9 +1178,9 @@
    "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "bb5cce0d78ad1e3b",
+   "sha": "bcd50f40033adf22",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I024: version 0.110a / 0.110.1"
   },
   "tests/suites/test_cabin_windows.gd": {
    "sha": "9ce202d5cda1ec1f",
@@ -1168,9 +1193,9 @@
    "note": "Log line may be inside the moment card"
   },
   "tests/suites/test_captains_other_life.gd": {
-   "sha": "c1d8621324dc258d",
+   "sha": "48879046a0b73037",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands (UI reliability)"
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_captains_watch.gd": {
    "sha": "a511747240a65668",
@@ -1208,9 +1233,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_companion_art.gd": {
-   "sha": "b6fc6e8eab29583f",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "8a7772f99e6c248f",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_companion_deck.gd": {
    "sha": "67c1710da370c26f",
@@ -1221,6 +1246,11 @@
    "sha": "2dd480dabf28b0e4",
    "reviewed": "2026-10-27",
    "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
+  },
+  "tests/suites/test_company_we_keep.gd": {
+   "sha": "bc36a765b765e7b2",
+   "reviewed": "2026-10-28",
+   "note": "I024: new entry, The Company We Keep suite"
   },
   "tests/suites/test_cozy_patch.gd": {
    "sha": "129afee3a93726c5",
@@ -1248,9 +1278,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_diagnostics.gd": {
-   "sha": "85e1c8b0085b1e52",
-   "reviewed": "2026-10-27",
-   "note": "I022 version 0.109a"
+   "sha": "0fad347d2c9c4c6c",
+   "reviewed": "2026-10-28",
+   "note": "I024: version 0.110a / 0.110.1"
   },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",
@@ -1308,9 +1338,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_life_aboard.gd": {
-   "sha": "51482aecc674ece8",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "b8c75b46eb2ecf49",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_lighting.gd": {
    "sha": "c814d41a4d0f35a0",
@@ -1318,9 +1348,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_living.gd": {
-   "sha": "78129dd3de9bef86",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "43d14e81d46b46c6",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_living_world.gd": {
    "sha": "fa00656f95c862c3",
@@ -1348,9 +1378,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_objectives.gd": {
-   "sha": "18ce94a29a9524cf",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "0ebd844eb46fcadd",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_presentation.gd": {
    "sha": "3be19d117d7ba4f7",
@@ -1358,9 +1388,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_publishing.gd": {
-   "sha": "7f8cc890fbcf0e42",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "756c920f6881fa49",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_reassessment.gd": {
    "sha": "7f806adc99482b6e",
@@ -1453,9 +1483,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_upkeep_ui.gd": {
-   "sha": "b26b0e826d90afee",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "cc72f2cd965b76d0",
+   "reviewed": "2026-10-28",
+   "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_vessels.gd": {
    "sha": "901413d9f3302546",
@@ -1513,9 +1543,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/test_runner.gd": {
-   "sha": "fad9a74e380e4164",
+   "sha": "97e99e43297d1714",
    "reviewed": "2026-10-28",
-   "note": "Registers test_golden_harbours"
+   "note": "I024: test_company_we_keep in SUITES (80 suites)"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",

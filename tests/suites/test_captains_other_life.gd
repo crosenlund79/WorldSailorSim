@@ -298,7 +298,7 @@ func _test_pastime_menus() -> void:
 	app._on_area_change_requested(&"interior", &"from_deck")
 	await _settle()
 	var wheel: Array = app.get_wheel_actions().map(func(a: Dictionary) -> StringName: return a.id)
-	t.check(wheel.has(&"postcards") and wheel.has(&"game_dev") and wheel.has(&"log"), "[menus] the cabin's Q wheel offers both pastimes")
+	t.check(wheel.has(&"laptop") and wheel.has(&"log"), "[menus] the cabin's Q wheel offers the laptop, where both pastimes are (I024)")
 	var menu: PostcardMenu = app.open_postcards()
 	if not t.check(menu != null, "[menus] Postcards from the Sea opens (gameplay %s, busy %s, modals %d %s, screen %s)" % [app.is_in_gameplay(),
 			app.router.is_busy(), app.modals.depth(), app.modals.get_top(), app.router.current_screen]):
@@ -317,7 +317,7 @@ func _test_pastime_menus() -> void:
 	await t.frames(2)
 	await t.click(menu.find_child("ScrapbookButton", true, false))
 	await t.frames(3)
-	var book := app.modals.get_top() as ScrapbookMenu
+	var book := (app.modals.get_top() as LaptopView).task as ScrapbookMenu
 	t.check(book != null and book.view.visible and book.view.card == GameSession.get_pastimes().postcards.back(), "[menus] the scrapbook opens on the newest card")
 	await t.screenshot("i022_scrapbook")
 	app.modals.clear()

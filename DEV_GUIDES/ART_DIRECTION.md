@@ -88,6 +88,9 @@ the same paths, canvases and ids. See [SPRITES.md](SPRITES.md) and
 | Sea surface | `src/water/sea_surface.gd` + `src/water/sea_surface.gdshader` (runtime) |
 | Harbour quays and towns | `src/harbour/harbour_dressing.gd` (runtime, regional archetypes) |
 | Harbour looks and special harbours (I021) | `tools/harbours/paint_harbour_looks.py`, `tools/harbours/paint_copenhagen_landmark.py` |
-| Fish, cat and dog | `tools/fishing/paint_fish.py`, `tools/companions/paint_companions.py` |
+| Fish | `tools/fishing/paint_fish.py` |
+| Companions (Ragdoll, Pug, parrot; animated clips, I024) | `tools/companions/paint_companion_clips.py` |
+| Achievement badges (I024) | `tools/achievements/paint_badges.py` |
+| Cabin laptop (I024) | `src/boat/laptop_prop.gd`, `src/ui/laptop/laptop_view.gd` (drawn at runtime) |
 | Title scene and logo | `tools/branding/paint_title_scene.py`, `tools/branding/make_horizon_branding.py` |
 | UI | `src/ui/theme/ui_theme.gd` (role palette) |

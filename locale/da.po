@@ -8510,3 +8510,724 @@ msgstr "Første besøg"
 
 msgid "✦ Special harbour"
 msgstr "✦ Særlig havn"
+
+# I024 The Company We Keep
+msgid "A 150-mile day"
+msgstr "En dag på 150 sømil"
+
+msgid "A name on the water"
+msgstr "Et navn på vandet"
+
+msgid "A quiet evening at anchor, with fresh fish of your own catching for supper."
+msgstr "En stille aften for anker med frisk fisk, du selv har fanget, til aftensmad."
+
+msgid "Across the Atlantic"
+msgstr "Over Atlanten"
+
+msgid "Answer a call for assistance on the radio."
+msgstr "Besvar et kald om assistance på radioen."
+
+msgid "Arrive after a passage of 7 days or more at sea, with your companion aboard."
+msgstr "Kom frem efter en overfart på 7 dage eller mere til søs med din ledsager om bord."
+
+msgid "Average 12 knots under sail for a full hour. Only the Frogleap 36 trimaran is fast enough."
+msgstr "Sejl 12 knob i gennemsnit for sejl i en hel time. Kun trimaranen Frogleap 36 er hurtig nok."
+
+msgid "Average 7 knots under sail for a full hour. Every boat can, in a fresh breeze on a good point of sail."
+msgstr "Sejl 7 knob i gennemsnit for sejl i en hel time. Alle både kan, i frisk vind på en god kurs."
+
+msgid "Average 9 knots under sail for a full hour. Beyond the Arctic Wanderer 26; the larger boats can, in a strong wind."
+msgstr "Sejl 9 knob i gennemsnit for sejl i en hel time. Ikke for Arctic Wanderer 26; de større både kan, i hård vind."
+
+msgid "Bad weather, good grip."
+msgstr "Dårligt vejr, godt greb."
+
+msgid "Catch 8 different species of fish."
+msgstr "Fang 8 forskellige fiskearter."
+
+msgid "Catch your first fish."
+msgstr "Fang din første fisk."
+
+msgid "Channel 16"
+msgstr "Kanal 16"
+
+msgid "Companionship"
+msgstr "Selskab"
+
+msgid "Cross the Atlantic from one side to the other in a single voyage."
+msgstr "Kryds Atlanten fra den ene side til den anden på én rejse."
+
+msgid "Discoveries & Collections"
+msgstr "Opdagelser og samlinger"
+
+msgid "Earn 1,000 renown in all."
+msgstr "Optjen 1.000 omdømme i alt."
+
+msgid "Earn 250 renown in all."
+msgstr "Optjen 250 omdømme i alt."
+
+msgid "Far from land, a gift to the ocean."
+msgstr "Langt fra land, en gave til havet."
+
+msgid "Far horizons"
+msgstr "Fjerne horisonter"
+
+msgid "Field guide"
+msgstr "Felthåndbog"
+
+msgid "Finish and release your little game, made in the cabin between passages."
+msgstr "Gør dit lille spil færdigt og udgiv det, lavet i kahytten mellem overfarterne."
+
+msgid "First fish"
+msgstr "Første fisk"
+
+msgid "Flying"
+msgstr "Flyvende"
+
+msgid "Go ashore together with your companion in 3 different countries."
+msgstr "Gå i land sammen med din ledsager i 3 forskellige lande."
+
+msgid "Go ashore together with your companion in 5 different harbours."
+msgstr "Gå i land sammen med din ledsager i 5 forskellige havne."
+
+msgid "Go on five different outings ashore."
+msgstr "Tag på fem forskellige udflugter i land."
+
+msgid "Going public"
+msgstr "Ud i offentligheden"
+
+msgid "Holding fast"
+msgstr "Det holder"
+
+msgid "Into the Pacific"
+msgstr "Ind i Stillehavet"
+
+msgid "Just the two of us"
+msgstr "Bare os to"
+
+msgid "Known in every harbour"
+msgstr "Kendt i hver en havn"
+
+msgid "Land an exceptional fish."
+msgstr "Land en helt særlig fisk."
+
+msgid "Life Aboard"
+msgstr "Livet om bord"
+
+msgid "Local knowledge"
+msgstr "Lokalkendskab"
+
+msgid "Moor in a harbour of the Pacific."
+msgstr "Fortøj i en havn i Stillehavet."
+
+msgid "Nine knots under canvas"
+msgstr "Ni knob for sejl"
+
+msgid "One for the log"
+msgstr "En til logbogen"
+
+msgid "Ports of call"
+msgstr "Anløbshavne"
+
+msgid "Postcards from the sea"
+msgstr "Postkort fra havet"
+
+msgid "Publish postcards of 5 different subjects."
+msgstr "Udgiv postkort med 5 forskellige motiver."
+
+msgid "Publish your first travel update from the cabin laptop."
+msgstr "Udgiv din første rejseopdatering fra laptoppen i kahytten."
+
+msgid "Reach French Polynesia or New Zealand."
+msgstr "Nå Fransk Polynesien eller New Zealand."
+
+msgid "Reach one of the distant harbours named in the Captain's Log."
+msgstr "Nå en af de fjerne havne, der står i kaptajnens logbog."
+
+msgid "Reach your first destination outside Europe."
+msgstr "Nå dit første mål uden for Europa."
+
+msgid "Reputation & Publications"
+msgstr "Omdømme og udgivelser"
+
+msgid "Sail 150 nautical miles under sail within 24 hours, without the engine."
+msgstr "Sejl 150 sømil for sejl inden for 24 timer, uden motor."
+
+msgid "Sailing Performance"
+msgstr "Sejlpræstationer"
+
+msgid "Seamanship"
+msgstr "Sømandskab"
+
+msgid "Seven knots, sustained"
+msgstr "Syv knob, holdt"
+
+msgid "Shore leave"
+msgstr "Landlov"
+
+msgid "Some things are worth keeping."
+msgstr "Nogle ting er værd at passe på."
+
+msgid "Something precious, and the wind."
+msgstr "Noget dyrebart, og vinden."
+
+msgid "Spend a whole night swinging to your own anchor."
+msgstr "Lig en hel nat og sving for dit eget anker."
+
+msgid "Stop the anchor dragging before the boat comes to harm."
+msgstr "Stop ankeret i at slæbe, før båden tager skade."
+
+msgid "The far side of the world"
+msgstr "Den anden side af jorden"
+
+msgid "The perfect evening"
+msgstr "Den perfekte aften"
+
+msgid "The wider world"
+msgstr "Den store verden"
+
+msgid "Tiny Lighthouse 1.0"
+msgstr "Tiny Lighthouse 1.0"
+
+msgid "Voyages & Exploration"
+msgstr "Rejser og udforskning"
+
+msgid "Laptop"
+msgstr "Laptop"
+
+msgid "Use the laptop"
+msgstr "Brug laptoppen"
+
+msgid "The parrot gets a friendly look: your hands are full (hat and coffee)."
+msgstr "Papegøjen får et venligt blik: du har hænderne fulde (hat og kaffe)."
+
+msgid "The dog"
+msgstr "Hunden"
+
+msgid "The parrot"
+msgstr "Papegøjen"
+
+msgid "The cat"
+msgstr "Katten"
+
+msgid "Pet the dog"
+msgstr "Ae hunden"
+
+msgid "Say hello to the parrot"
+msgstr "Sig hej til papegøjen"
+
+msgid "Pet the cat"
+msgstr "Ae katten"
+
+msgid "Wait! %s is still ashore."
+msgstr "Vent! %s er stadig i land."
+
+msgid "Wait! The dog is still ashore."
+msgstr "Vent! Hunden er stadig i land."
+
+msgid "Wait! The parrot is still ashore."
+msgstr "Vent! Papegøjen er stadig i land."
+
+msgid "Wait! The cat is still ashore."
+msgstr "Vent! Katten er stadig i land."
+
+msgid "%s is still exploring the harbour."
+msgstr "%s er stadig på opdagelse i havnen."
+
+msgid "%s is still exploring the pontoon."
+msgstr "%s er stadig på opdagelse på broen."
+
+msgid "Call %s aboard"
+msgstr "Kald %s om bord"
+
+msgid "Call the dog aboard"
+msgstr "Kald hunden om bord"
+
+msgid "Call the parrot aboard"
+msgstr "Kald papegøjen om bord"
+
+msgid "Call the cat aboard"
+msgstr "Kald katten om bord"
+
+msgid "%s trots back up the gangplank."
+msgstr "%s trisser op ad landgangen igen."
+
+msgid "%s flutters back aboard."
+msgstr "%s flagrer om bord igen."
+
+msgid "%s strolls back up the gangplank."
+msgstr "%s spadserer op ad landgangen igen."
+
+msgid "%s snuggled up against you."
+msgstr "%s havde krøbet sig ind til dig."
+
+msgid "%s was curled up at the end of the berth."
+msgstr "%s lå krøllet sammen for enden af køjen."
+
+msgid "%s kneaded the blanket until you opened your eyes."
+msgstr "%s trådte dejen på dynen, til du slog øjnene op."
+
+msgid "A quiet purr came from the end of the berth."
+msgstr "En stille spinden kom fra enden af køjen."
+
+msgid "%s licked your nose."
+msgstr "%s slikkede dig på næsen."
+
+msgid "%s was curled up beside your feet."
+msgstr "%s lå krøllet sammen ved dine fødder."
+
+msgid "%s's tail thumped the blanket as you stirred."
+msgstr "%s dunkede med halen mod dynen, da du rørte dig."
+
+msgid "A small snore came from the foot of the berth."
+msgstr "En lille snorken kom fra fodenden af køjen."
+
+msgid "%s greeted the morning with a little chirp."
+msgstr "%s hilste morgenen med et lille kvidder."
+
+msgid "%s was perched nearby when you opened your eyes."
+msgstr "%s sad tæt ved, da du slog øjnene op."
+
+msgid "%s whistled softly, just like the kettle."
+msgstr "%s fløjtede stille, ligesom kedlen."
+
+msgid "A cheerful chirp came from the perch by the berth."
+msgstr "Et muntert kvidder kom fra pinden ved køjen."
+
+msgid "Good sailing weather, isn't it, %s?"
+msgstr "Godt sejlervejr, ikke, %s?"
+
+msgid "Comfortable there?"
+msgstr "Har du det godt der?"
+
+msgid "Let's see what the wind does."
+msgstr "Lad os se, hvad vinden gør."
+
+msgid "Settled in already, %s?"
+msgstr "Allerede faldet til, %s?"
+
+msgid "Nice and steady, this."
+msgstr "Dejligt roligt, det her."
+
+msgid "Another tack or two and we're well on our way."
+msgstr "Et slag eller to mere, så er vi godt på vej."
+
+msgid "Keep an eye on things for me, %s."
+msgstr "Hold øje med tingene for mig, %s."
+
+msgid "Not a bad start, is it?"
+msgstr "Ikke nogen dårlig start, vel?"
+
+msgid "Think we'll find a good breakfast in the next harbour?"
+msgstr "Tror du, vi finder en god morgenmad i næste havn?"
+
+msgid "You've got the best seat on this boat."
+msgstr "Du har den bedste plads på båden."
+
+msgid "I wonder what everyone back home is doing."
+msgstr "Gad vide, hvad de laver derhjemme."
+
+msgid "Another day of blue, %s."
+msgstr "Endnu en blå dag, %s."
+
+msgid "You've found your sea legs, haven't you?"
+msgstr "Du har fået søben, hva?"
+
+msgid "I could get used to this, couldn't you?"
+msgstr "Det her kunne jeg vænne mig til. Kunne du ikke?"
+
+msgid "Fresh bread. That's what I'd like. Fresh bread."
+msgstr "Friskt brød. Det er, hvad jeg kunne tænke mig. Friskt brød."
+
+msgid "We've come a fair way together, %s."
+msgstr "Vi er kommet et godt stykke sammen, %s."
+
+msgid "Same old sea, different every hour."
+msgstr "Det samme gamle hav, anderledes hver time."
+
+msgid "Don't tell anyone I talk to you this much."
+msgstr "Sig ikke til nogen, at jeg snakker så meget med dig."
+
+msgid "Funny how familiar the sound of the sea becomes."
+msgstr "Sjovt, hvor velkendt havets lyd bliver."
+
+msgid "I suppose it's just you and me out here."
+msgstr "Det er vel bare dig og mig herude."
+
+msgid "You're not much help with the navigation, are you?"
+msgstr "Du er ikke den store hjælp med navigationen, vel?"
+
+msgid "I think we've discussed the weather quite enough."
+msgstr "Jeg tror, vi har talt rigeligt om vejret."
+
+msgid "Do you dream about land, %s?"
+msgstr "Drømmer du om land, %s?"
+
+msgid "I've stopped counting the waves. You?"
+msgstr "Jeg er holdt op med at tælle bølgerne. Og du?"
+
+msgid "Whatever happens, %s, we're in this together."
+msgstr "Hvad der end sker, %s, så er vi sammen om det."
+
+msgid "You're better company than most people I know."
+msgstr "Du er bedre selskab end de fleste, jeg kender."
+
+msgid "I'll miss these quiet watches when we're ashore."
+msgstr "Jeg kommer til at savne de stille vagter, når vi er i land."
+
+msgid "Remember the last harbour? Feels like a month ago."
+msgstr "Kan du huske den sidste havn? Det føles som en måned siden."
+
+msgid "Tell me honestly, %s: am I talking to myself?"
+msgstr "Sig mig ærligt, %s: taler jeg med mig selv?"
+
+msgid "One day we'll tell stories about this passage."
+msgstr "En dag fortæller vi historier om denne overfart."
+
+msgid "Don't shed on the charts, please."
+msgstr "Lad være med at fælde på søkortene, tak."
+
+msgid "You've claimed that cushion for good, haven't you?"
+msgstr "Den hynde har du taget for altid, hva?"
+
+msgid "Nine lives, and you chose to spend this one at sea."
+msgstr "Ni liv, og du valgte at bruge dette til søs."
+
+msgid "No, there are no squirrels out here."
+msgstr "Nej, der er ingen egern herude."
+
+msgid "Snoring again? You and the bilge pump both."
+msgstr "Snorker du igen? Du og lænsepumpen begge to."
+
+msgid "Best first mate a captain could ask for."
+msgstr "Den bedste styrmand, en kaptajn kan ønske sig."
+
+msgid "Was that you, or the winch?"
+msgstr "Var det dig eller spillet?"
+
+msgid "Watch the halyards, little one."
+msgstr "Pas på faldene, lille ven."
+
+msgid "You've learnt every sound on this boat, haven't you?"
+msgstr "Du har lært hver eneste lyd på båden, hva?"
+
+msgid "Good girl, %s."
+msgstr "God pige, %s."
+
+msgid "Good lad, %s."
+msgstr "God dreng, %s."
+
+msgid "%s gives you a slow blink."
+msgstr "%s blinker langsomt til dig."
+
+msgid "%s answers with a small meow."
+msgstr "%s svarer med et lille miav."
+
+msgid "%s purrs."
+msgstr "%s spinder."
+
+msgid "The tip of %s's tail twitches."
+msgstr "%s trækker lidt i halespidsen."
+
+msgid "%s ignores you completely."
+msgstr "%s ignorerer dig fuldstændig."
+
+msgid "%s tilts a curious head."
+msgstr "%s lægger nysgerrigt hovedet på skrå."
+
+msgid "%s's tail thumps the cabin sole."
+msgstr "%s dunker med halen mod dørken."
+
+msgid "%s gives a small, approving woof."
+msgstr "%s giver et lille, anerkendende vov."
+
+msgid "%s sighs and settles down again."
+msgstr "%s sukker og lægger sig til rette igen."
+
+msgid "%s chirps back."
+msgstr "%s kvidrer tilbage."
+
+msgid "%s whistles a little tune."
+msgstr "%s fløjter en lille melodi."
+
+msgid "%s fluffs up and settles."
+msgstr "%s puster fjerene op og falder til ro."
+
+msgid "%s turns to look at you."
+msgstr "%s vender sig og ser på dig."
+
+msgid "%s clicks, exactly like the winch."
+msgstr "%s klikker, præcis som spillet."
+
+msgid "“%s”"
+msgstr "»%s«"
+
+msgid "Hello, little lookout."
+msgstr "Hej, lille udkig."
+
+msgid "Those are very fine feathers."
+msgstr "Det er nogle meget fine fjer."
+
+msgid "Easy there, bright eyes."
+msgstr "Rolig nu, lyse øjne."
+
+msgid "Hello, %s. Keeping watch?"
+msgstr "Hej, %s. Holder du vagt?"
+
+msgid "Very fine feathers today, %s."
+msgstr "Meget fine fjer i dag, %s."
+
+msgid "There's my little lookout, %s."
+msgstr "Der er mit lille udkig, %s."
+
+msgid "Who's a clever girl, %s?"
+msgstr "Hvem er en klog pige, %s?"
+
+msgid "Who's a clever boy, %s?"
+msgstr "Hvem er en klog dreng, %s?"
+
+msgid "Pug"
+msgstr "Mops"
+
+msgid "Green-cheeked conure"
+msgstr "Grønkindet parakit"
+
+msgid "Ragdoll cat"
+msgstr "Ragdoll-kat"
+
+msgid "Secret achievement"
+msgstr "Hemmelig bedrift"
+
+msgid "Not described: you will know it when you find it."
+msgstr "Ikke beskrevet: du ved det, når du finder den."
+
+msgid "Previously unlocked"
+msgstr "Låst op tidligere"
+
+msgid "Location not recorded"
+msgstr "Stedet er ikke registreret"
+
+msgid "In %s"
+msgstr "I %s"
+
+msgid "In %s, %s"
+msgstr "I %s, %s"
+
+msgid "At sea, %s"
+msgstr "Til søs, %s"
+
+msgid "unknown category '%s'"
+msgstr "ukendt kategori '%s'"
+
+msgid "no unlock rule (records, prefix or generated)"
+msgstr "ingen regel for oplåsning (records, prefix eller generated)"
+
+msgid "Just the two of us: %d days at sea"
+msgstr "Bare os to: %d dage til søs"
+
+msgid "Shore leave: ashore with %s in %d harbours"
+msgstr "Landlov: i land med %s i %d havne"
+
+msgid "Ports of call: ashore with %s in %d countries"
+msgstr "Anløbshavne: i land med %s i %d lande"
+
+msgid "Seven knots under sail for an hour"
+msgstr "Syv knob for sejl i en time"
+
+msgid "Nine knots under sail for an hour"
+msgstr "Ni knob for sejl i en time"
+
+msgid "Twelve knots under sail for an hour"
+msgstr "Tolv knob for sejl i en time"
+
+msgid "A 150-mile day: %d nm under sail in 24 hours"
+msgstr "En dag på 150 sømil: %d sm for sejl på 24 timer"
+
+msgid "Your achievements, with when and where you earned them, are on the laptop at the cabin table."
+msgstr "Dine bedrifter, med hvornår og hvor du opnåede dem, ligger på laptoppen ved bordet i kahytten."
+
+msgid "Close the laptop (Esc)"
+msgstr "Luk laptoppen (Esc)"
+
+msgid "Harbour Wi-Fi"
+msgstr "Havnens wi-fi"
+
+msgid "No connection"
+msgstr "Ingen forbindelse"
+
+msgid "Offline at sea"
+msgstr "Offline til søs"
+
+msgid "Home"
+msgstr "Hjem"
+
+msgid "at sea, %s"
+msgstr "til søs, %s"
+
+msgid "in %s"
+msgstr "i %s"
+
+msgid "%d not yet published"
+msgstr "%d endnu ikke udgivet"
+
+msgid "unlocked"
+msgstr "låst op"
+
+msgid "Publications"
+msgstr "Udgivelser"
+
+msgid "%d postcards, %d travel updates"
+msgstr "%d postkort, %d rejseopdateringer"
+
+msgid "Recent achievements"
+msgstr "Seneste bedrifter"
+
+msgid "None yet. Your first passage will be one."
+msgstr "Ingen endnu. Din første overfart bliver én."
+
+msgid "Recent postcards"
+msgstr "Seneste postkort"
+
+msgid "No postcards yet: make one under Publications."
+msgstr "Ingen postkort endnu: lav et under Udgivelser."
+
+msgid "Achievements"
+msgstr "Bedrifter"
+
+msgid "Voyage history"
+msgstr "Rejsehistorik"
+
+msgid "Remote work…"
+msgstr "Fjernarbejde …"
+
+msgid "Your little game…"
+msgstr "Dit lille spil …"
+
+msgid "Postcards from the Sea and travel updates are how the world hears of your voyages. A postcard of a new subject earns renown once; a travel update turns your unpublished renown into income."
+msgstr "Postkort fra havet og rejseopdateringer er, hvordan verden hører om dine rejser. Et postkort med et nyt motiv giver omdømme én gang; en rejseopdatering gør dit ikke-udgivne omdømme til indtægt."
+
+msgid "Make a postcard…"
+msgstr "Lav et postkort …"
+
+msgid "Travel update… (%d renown)"
+msgstr "Rejseopdatering … (%d omdømme)"
+
+msgid "Published so far"
+msgstr "Udgivet indtil nu"
+
+msgid "%d postcards in the scrapbook. %d travel updates, %d renown shared, %s earned."
+msgstr "%d postkort i scrapbogen. %d rejseopdateringer, %d omdømme delt, %s tjent."
+
+msgid "%d of %d unlocked. Unlocked achievements come first, the most recent at the top."
+msgstr "%d af %d låst op. Låste op bedrifter står først, de nyeste øverst."
+
+msgid "All"
+msgstr "Alle"
+
+msgid "Choose an achievement to see it here."
+msgstr "Vælg en bedrift for at se den her."
+
+msgid "%d renown"
+msgstr "%d omdømme"
+
+msgid "Not yet unlocked."
+msgstr "Endnu ikke låst op."
+
+msgid "Unlocked: %s"
+msgstr "Låst op: %s"
+
+msgid "Aboard the %s"
+msgstr "Om bord på %s"
+
+msgid "%.0f nm"
+msgstr "%.0f sm"
+
+msgid "none yet"
+msgstr "ingen endnu"
+
+msgid "Best hour under sail"
+msgstr "Bedste time for sejl"
+
+msgid "Best 24 hours under sail"
+msgstr "Bedste døgn for sejl"
+
+msgid "%d, %s earned"
+msgstr "%d, %s tjent"
+
+msgid "Travel updates"
+msgstr "Rejseopdateringer"
+
+msgid "Speeds are averages under sail alone, over a whole hour or day without the engine, as the log measured them."
+msgstr "Farterne er gennemsnit for sejl alene, over en hel time eller et døgn uden motor, som loggen målte dem."
+
+msgid "No passages yet."
+msgstr "Ingen overfarter endnu."
+
+msgid "Earlier honours"
+msgstr "Tidligere hædersbevisninger"
+
+msgid "not yet measured"
+msgstr "endnu ikke målt"
+
+msgid "Parrot"
+msgstr "Papegøje"
+
+msgid "Name (optional)"
+msgstr "Navn (valgfrit)"
+
+msgid "Name"
+msgstr "Navn"
+
+msgid "Female"
+msgstr "Hun"
+
+msgid "Male"
+msgstr "Han"
+
+msgid "Not said"
+msgstr "Ikke angivet"
+
+msgid "A Pug: compact, cheerful and always close by. Naps on the cabin sole, by the steps or next to the settee, and comes ashore with you."
+msgstr "En mops: kompakt, glad og altid tæt ved. Sover på dørken, ved trappen eller ved sofaen og går med dig i land."
+
+msgid "A green-cheeked conure: a small parrot, free aboard, never caged. Flies between favourite perches, chirps and whistles, and comes ashore with you."
+msgstr "En grønkindet parakit: en lille papegøje, fri om bord, aldrig i bur. Flyver mellem yndlingspladser, kvidrer og fløjter og går med dig i land."
+
+msgid "A Ragdoll cat: calm, soft and blue-eyed. Likes the settee, the chart table and your berth, purrs when petted, and comes ashore with you."
+msgstr "En ragdoll-kat: rolig, blød og blåøjet. Holder af sofaen, kortbordet og din køje, spinder når den bliver aet, og går med dig i land."
+
+msgid "Optional"
+msgstr "Valgfrit"
+
+msgid "Animation"
+msgstr "Animation"
+
+msgid "Movement"
+msgstr "Bevægelse"
+
+msgid "Below deck: things that light up can be used with {interact}. The laptop on the table holds your achievements, postcards and travel updates."
+msgstr "Under dæk: ting, der lyser op, kan bruges med {interact}. Laptoppen på bordet rummer dine bedrifter, postkort og rejseopdateringer."
+
+msgid "In harbour the laptop at the cabin table offers remote work for pay by the hour. Voyages, new harbours, objectives, postcards and your little game earn renown; publish a travel update from the laptop to share it, which also earns a little money."
+msgstr "I havn tilbyder laptoppen ved bordet i kahytten fjernarbejde med timeløn. Rejser, nye havne, mål, postkort og dit lille spil giver omdømme; udgiv en rejseopdatering fra laptoppen for at dele det, og det giver også lidt penge."
+
+msgid "On the laptop, choose Your little game. Pick a task (2 to 4 hours), answer its small question and work; milestones fill the devlog and earn renown, and the release brings the first sales. An interrupted session keeps the hours worked."
+msgstr "På laptoppen vælger du Dit lille spil. Vælg en opgave (2 til 4 timer), svar på dens lille spørgsmål og arbejd; milepæle fylder udviklerdagbogen og giver omdømme, og udgivelsen bringer det første salg. En afbrudt arbejdsøkt beholder de arbejdede timer."
+
+msgid "On the laptop, open Publications and make a postcard. Pick what it shows (harbours, catches, your companion, voyages, weather and evening light), the words and the layout, then make and publish it: it takes about two hours. Each subject earns renown once; every card goes in the scrapbook."
+msgstr "På laptoppen åbner du Udgivelser og laver et postkort. Vælg, hvad det viser (havne, fangster, din ledsager, rejser, vejr og aftenlys), ordene og layoutet, og lav og udgiv det: det tager omkring to timer. Hvert motiv giver omdømme én gang; hvert kort kommer i scrapbogen."
+
+msgid "The cabin has your berth (sleep), the navigation table (the chart), the provisions locker, your laptop on the table, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board. Things you can use light up when you are close; press {interact}."
+msgstr "Kahytten har din køje (søvn), navigationsbordet (søkortet), proviantskabet, din laptop på bordet, komfuret, kaffebordet, hattekrogen, det indrammede verdenskort og trofætavlen. Ting, du kan bruge, lyser op, når du er tæt på; tryk {interact}."
+
+msgid "The laptop and your achievements"
+msgstr "Laptoppen og dine bedrifter"
+
+msgid "Your companion - a Ragdoll cat, a Pug or a small parrot, with the name you gave it - lives aboard, follows you between cabin and deck and naps where it likes; the parrot flies between its favourite perches. Walk up and press {interact} to pet it. In harbour it comes ashore with you; the boat cannot cast off while it is still ashore, so call it aboard (the wheel, or when you set sail). It is by the berth when you wake, and on long passages you will find yourself talking to it now and then."
+msgstr "Din ledsager - en ragdoll-kat, en mops eller en lille papegøje, med det navn du gav den - bor om bord, følger dig mellem kahyt og dæk og tager en lur, hvor den har lyst; papegøjen flyver mellem sine yndlingspladser. Gå hen og tryk {interact} for at kæle for den. I havn går den med dig i land; båden kan ikke kaste los, mens den stadig er i land, så kald den om bord (hjulet, eller når du sætter sejl). Den er ved køjen, når du vågner, og på lange overfarter kommer du til at snakke lidt med den en gang imellem."
+
+msgid "Your laptop sits on the cabin table: use it with {interact} (or Laptop on the wheel). Home shows your renown and what you did lately; Publications holds postcards and travel updates; Achievements is your collection, in categories, the unlocked ones first and newest at the top, each with when, where and on which boat you earned it (older ones say \"Previously unlocked\"); Voyage history shows your records, among them your best hour and best day under sail. Speed achievements count only a whole hour (or day) under sail, never the engine. Esc closes the laptop."
+msgstr "Din laptop står på bordet i kahytten: brug den med {interact} (eller Laptop på hjulet). Hjem viser dit omdømme og hvad du har lavet for nylig; Udgivelser rummer postkort og rejseopdateringer; Bedrifter er din samling, i kategorier, de låste op først og de nyeste øverst, hver med hvornår, hvor og på hvilken båd du opnåede den (ældre siger \"Låst op tidligere\"); Rejsehistorik viser dine rekorder, blandt dem din bedste time og bedste døgn for sejl. Fartbedrifter tæller kun en hel time (eller et døgn) for sejl, aldrig motoren. Esc lukker laptoppen."
+
+msgid "{action_wheel} opens a wheel with what makes sense where you are: in the cabin sleep, the world map, the chart table, provisions and the laptop; on deck the charts, the fishing rod and, underway, the chart plotter, sailing details, radar, sail trim and anchor. On/off items show a check mark."
+msgstr "{action_wheel} åbner et hjul med det, der giver mening, hvor du er: i kahytten søvn, verdenskortet, kortbordet, proviant og laptoppen; på dæk søkortene, fiskestangen og, under sejlads, kortplotteren, sejldetaljer, radar, sejltrim og anker. Tænd/sluk-punkter viser et flueben."

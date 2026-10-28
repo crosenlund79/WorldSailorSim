@@ -78,20 +78,26 @@ func _test_files_and_mapping() -> void:
 	var set := CompanionVisualSet.for_kind(&"cat")
 	if not t.check(set != null, "[cat art] data/companions/cat_visuals.tres loads"):
 		return
-	t.check_eq(set.get_pose_names(), [&"resting", &"sleeping", &"alert", &"stretching"] as Array[StringName], "[cat art] four poses mapped")
+	# I024: animated clips; each pose's first frame is <pose>_00.png (the old
+	# single files are kept beside them as copies of that frame).
+	var names := set.get_pose_names()
+	t.check([&"resting", &"sleeping", &"alert", &"stretching"].all(func(p: StringName) -> bool: return p in names) and names.size() >= 10,
+		"[cat art] the four classic poses and more clips mapped (%d)" % names.size())
 	for pose: StringName in CAT_FILES:
 		var art := set.get_pose_art(pose)
-		t.check(art != null and art.image_path == CAT_FILES[pose], "[cat art] '%s' uses %s" % [pose, String(CAT_FILES[pose]).get_file()])
+		var first := String(CAT_FILES[pose]).replace(".png", "_00.png")
+		t.check(art != null and art.image_path == first and art.frames.size() >= 3, "[cat art] '%s' is a clip starting with %s" % [pose, first.get_file()])
 		var texture := set.get_texture(pose)
 		t.check(texture != null and texture.get_width() <= set.max_texture_size and texture.get_width() >= 200,
 			"[cat art] '%s' loads (%s)" % [pose, texture.get_size() if texture else "missing"])
 	for pose: StringName in OWNER_FILES:
 		t.check(FileAccess.get_md5(OWNER_FILES[pose]) == OWNER_MD5[pose], "[cat art] the owner's original %s is kept, unchanged" % String(OWNER_FILES[pose]).get_file())
 	var dog := CompanionVisualSet.for_kind(&"dog")
-	if t.check(dog != null and dog.get_pose_names() == ([&"resting", &"sleeping", &"alert", &"stretching"] as Array[StringName]),
-			"[dog art] data/companions/dog_visuals.tres: the dog's four poses"):
+	if t.check(dog != null and [&"resting", &"sleeping", &"alert", &"stretching"].all(func(p: StringName) -> bool: return p in dog.get_pose_names()),
+			"[dog art] data/companions/dog_visuals.tres: the dog's poses"):
 		for pose: StringName in DOG_FILES:
-			t.check(dog.get_pose_art(pose).image_path == DOG_FILES[pose] and dog.get_texture(pose) != null, "[dog art] '%s' uses %s" % [pose, String(DOG_FILES[pose]).get_file()])
+			var first := String(DOG_FILES[pose]).replace(".png", "_00.png")
+			t.check(dog.get_pose_art(pose).image_path == first and dog.get_texture(pose) != null, "[dog art] '%s' starts with %s" % [pose, first.get_file()])
 
 
 func _test_background_removal() -> void:
@@ -140,8 +146,10 @@ func _test_consistent_placement() -> void:
 			first = rect
 		same = same and rect.is_equal_approx(first)
 	t.check(same, "[cat art] all four poses share the same logical size and position %s" % first)
-	t.check(is_equal_approx(maxf(first.size.x, first.size.y), set.display_size) and first.get_center().is_zero_approx(),
-		"[cat art] %d units, centred on the resting spot" % set.display_size)
+	# I024: the pivot is the animal's ground point (where it rests), not the canvas centre.
+	var ground := first.position + set.pivot * first.size
+	t.check(is_equal_approx(maxf(first.size.x, first.size.y), set.display_size) and ground.is_zero_approx(),
+		"[cat art] %d units, its ground point on the resting spot" % set.display_size)
 
 
 # --- In the game ----------------------------------------------------------------------

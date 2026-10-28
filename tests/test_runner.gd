@@ -90,6 +90,7 @@ const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_world_voyage.gd"),
 	preload("res://tests/suites/test_diagnostics.gd"),
 	preload("res://tests/suites/test_gameplay_flow.gd"),
+	preload("res://tests/suites/test_company_we_keep.gd"),
 ]
 
 const TEST_SAVE_DIR := "user://test_saves"

@@ -20,7 +20,8 @@ and are never merged back into one chain.
 | I023 Steady Hands & Golden Harbours | 0.109a | original only | `release/i023` = `d4e2e7e56206b220f8839323186e0c06d2a4c589`; original integration head `claude/friendly-fermat-dey23f` = `81d2526655352b6172d9941ce532f620d5d5050b` (I023 + docs) |
 | Real Horizon visual conversion (not numbered) | 0.109a | WorldSailorSim | built on `ec84cfa`; conversion tip `bbdadfadf17fc50a56a1a2e389ba2c92b8c2ff1d` |
 | Great Handover (Operation New Horizon, not numbered) | 0.109a | WorldSailorSim | merge of `81d2526` into Real Horizon: `9b3c44f650ad9d7e887e7832c8c3ab9899da2845`; the handover ends at the head of `claude/friendly-fermat-dey23f` after its fast-forward (this commit or the next docs-only one) |
-| I024 | — | WorldSailorSim | next major iteration, not yet commissioned |
+| I024 The Company We Keep: living companions (Ragdoll, Pug, parrot), shore visits, the achievement collection, the cabin laptop | 0.110a | WorldSailorSim | started at `41130c04e168239a082202f3d147ace543620f55`; `release/i024` at the final tested commit ([report](iterations/i024/ITERATION_24_REPORT.md)) |
+| I025 | — | WorldSailorSim | next major iteration, not yet commissioned |
 
 ## The Great Handover (2026-10-28)
 

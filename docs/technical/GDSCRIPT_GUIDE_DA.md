@@ -156,16 +156,16 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Formål:** Spillets "dirigent": det forbinder menuerne, skærmene og spillets systemer, så de arbejder sammen.
-- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog.
+- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning).
 - **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`.
-- **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, og hvornår ledsageren næste gang følger dig mellem kahyt og dæk. Selve spillet ligger i `GameSession`.
+- **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, hvornår ledsageren næste gang følger dig mellem kahyt, dæk og land, og hvornår Kaptajnen næste gang taler med den på en lang passage. Selve spillet ligger i `GameSession`.
 - **Hvornår det kører:** Altid: det er hovedscenen, der starter med spillet.
 - **Hvis du ændrer det:** Næsten alle forløb kan blive påvirket: hvilke vinduer der åbner hvor, hvornår spillet pauser bag en menu, hvad spilleren får at vide efter søvn eller ankomst, motorlyden og reglerne for hurtig-gem.
 
 ### `src/app/game_version.gd`
 
 **Formål:** Holder spillets versionsnummer ét sted.
-- **Hvad det gør:** Giver den version, spillerne ser (fx "0.108a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes.
+- **Hvad det gør:** Giver den version, spillerne ser (fx "0.110a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes.
 - **Arbejder sammen med:** `SessionLog` (skriver versionen ved opstart), hovedmenuen (viser den), `tools/write_build_info.py` (skriver `build_info.json`).
 - **Holder styr på:** Buildens commit-kode, læst én gang og husket.
 - **Hvornår det kører:** Når noget spørger efter versionen (opstartslog, hovedmenu).
@@ -197,6 +197,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Datafilen, læst én gang.
 - **Hvornår det kører:** Når en side, et trin eller et tip vises, og når fremskridtet ændres.
 - **Hvis du ændrer det:** Tilføj nye tekster i datafilen med `{action}`-pladsholdere; `test_academy` fejler ved en ukendt pladsholder eller en manglende dansk tekst.
+
+### `src/core/achievement_catalog.gd`
+
+**Formål:** Samlingen af bedrifter, som vises på laptoppen i kahytten (I024).
+- **Hvad det gør:** Læser `data/progression/achievements.json`: et mindre udvalg af meningsfulde bedrifter i syv kategorier (rejser, sømandskab, sejlpræstationer, livet om bord, ledsagerskab, opdagelser, omdømme). En bedrift er et udsnit af de ry-optegnelser, spillet allerede fører, aldrig et regnskab ved siden af: den låses op, når en af dens optegnelser er gennemført (eller nok optegnelser af én slags), og ry betales stadig én gang af selve optegnelsen, så intet betales to gange, og et ældre gemt spils bedrifter vises med det samme. Den fortæller, hvornår, hvor (en havn eller en position til søs) og på hvilken båd en bedrift blev låst op, og siger ærligt "Stedet er ikke registreret" eller "Låst op tidligere", når et ældre gemt spil ikke ved det. En skjult hemmelighed viser kun sit hint og det hemmelige mærke.
+- **Arbejder sammen med:** `ObjectiveProgress` (optegnelserne), `ObjectiveCatalog` (målene for fjerne havne), `PortCatalog`, `VesselCatalog`, `Simulation` (datoer), `Loc`, `LaptopView` (viser den); mærkerne ligger i `assets/achievements/`.
+- **Holder styr på:** Datafilen, læst én gang (kun til læsning).
+- **Hvornår det kører:** Når laptoppen viser bedrifter.
+- **Hvis du ændrer det:** Hvad samlingen viser, aldrig hvad der betales. En bedrifts id er fast: omdøb den aldrig.
 
 ### `src/core/anchor_state.gd`
 
@@ -255,9 +264,9 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/game_session.gd`
 
 **Formål:** Vogteren af det kørende spil: det eneste sted, hvor spillets tilstand ændres.
-- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen.
+- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen. I024: ledsageren må gå i land, mens båden er fortøjet, men bliver aldrig efterladt: der kan ikke kastes los, før den er kaldt om bord (`recall_companion`). Landgang i 5 havne og i 3 lande og en uge til søs sammen giver bedrifter for ledsageren; når Kaptajnen vågner, findes den ved køjen, nu og da med en lille linje (`wake_companion`). Vedvarende fart for sejl måles på simulationens egne trin (`note_sailing`: bedste time og bedste døgn, milepæle for 7, 9 og 12 knob i en time og et døgn på 150 sømil), og hver ry-optegnelse noterer nu, hvor og på hvilken båd den blev optjent.
 - **Arbejder sammen med:** `SessionState` (de data, det ejer), `Simulation` (flytter tiden frem og kalder tilbage), `SaveManager`, `App`, HUD og menuer, mange kataloger (`PortCatalog`, `SeaRouter`, `VesselCatalog`, `ObjectiveCatalog`, `BoatCare`, `FishingCatalog`).
-- **Holder styr på:** Den aktuelle `SessionState`, om der er ændringer, der ikke er gemt, og et par ting, der ikke gemmes (en fisk på linen, om kaptajnen sover, om båden ligger roligt for anker).
+- **Holder styr på:** Den aktuelle `SessionState`, om der er ændringer, der ikke er gemt, og et par ting, der ikke gemmes (en fisk på linen, om kaptajnen sover, om båden ligger roligt for anker, det aktuelle ubrudte stræk for sejl til fartrekorderne).
 - **Hvornår det kører:** Altid (en autoload: et script Godot starter automatisk, og som altid findes).
 - **Hvis du ændrer det:** Næsten alle spilleregler og hvad der havner i gemte spil. Ændr med stor forsigtighed.
 
@@ -291,8 +300,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/objective_catalog.gd`
 
 **Formål:** Listen over sejlmål og præstationer, der giver ry.
-- **Hvad det gør:** Læser målene fra `data/progression/objectives.json`, tilføjer nogle "fjerne horisonter"-mål for fjerne havne og tjekker, hvilke mål en afsluttet rejse eller en hue-hændelse har opfyldt. Den ved også, hvor mange euro en rejseopdatering betaler pr. point ry. Hemmelige præstationer forbliver skjulte, indtil de findes.
-- **Arbejder sammen med:** `GameSession` (spørger efter en rejse eller hue-hændelse), `CaptainsLog`, `ObjectiveProgress`, `HatState`, `PortCatalog`, Logbogens menu.
+- **Hvad det gør:** Læser målene fra `data/progression/objectives.json`, tilføjer nogle "fjerne horisonter"-mål for fjerne havne og tjekker, hvilke mål en afsluttet rejse eller en hue-hændelse har opfyldt. Den ved også, hvor mange euro en rejseopdatering betaler pr. point ry. Hemmelige præstationer forbliver skjulte, indtil de findes. I024: et mål markeret "retired" (pensioneret) er taget ud af samlingen af bedrifter og Logbogens liste over mål, men betaler stadig sit lille ry som før.
+- **Arbejder sammen med:** `GameSession` (spørger efter en rejse eller hue-hændelse), `CaptainsLog`, `ObjectiveProgress`, `HatState`, `PortCatalog`, Logbogens menu, `AchievementCatalog` og laptoppen.
 - **Holder styr på:** De indlæste mål (kun til læsning).
 - **Hvornår det kører:** Når en rejse slutter, når huen tabes eller købes, og når Logbogen viser mål.
 - **Hvis du ændrer det:** Hvilke præstationer der findes, hvor meget ry de giver, og hvor meget rejseopdateringer betaler.
@@ -300,8 +309,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/objective_progress.gd`
 
 **Formål:** Dit ry og hvilke mål du har gennemført.
-- **Hvad det gør:** Holder ry for hele spillet (falder aldrig), ry der endnu ikke er udgivet, hvert gennemført mål og hvornår, de seneste belønninger og de udgivne rejseopdateringer. Den sikrer, at ingen rejse nogensinde bliver betalt to gange.
-- **Arbejder sammen med:** `SessionState`, `GameSession` (den eneste, der skriver), `ObjectiveCatalog`, Logbogens menu, Go Ashore-hændelser (gå i land).
+- **Hvad det gør:** Holder ry for hele spillet (falder aldrig), ry der endnu ikke er udgivet, hvert gennemført mål og hvornår, de seneste belønninger og de udgivne rejseopdateringer. Den sikrer, at ingen rejse nogensinde bliver betalt to gange. Siden I024 husker den også, hvor og på hvilken båd et mål første gang blev nået, og hvad det betalte (ældre optegnelser har simpelthen intet sted), personlige rekorder som den bedste time og det bedste døgn for sejl, og hvornår det samlede ry passerede 250 og 1.000.
+- **Arbejder sammen med:** `SessionState`, `GameSession` (den eneste, der skriver), `ObjectiveCatalog`, `AchievementCatalog`, Logbogens menu, laptoppen, Go Ashore-hændelser (gå i land).
 - **Holder styr på:** Alt ovenfor.
 - **Hvornår det kører:** Når der optjenes eller udgives ry; ved gemme og indlæse.
 - **Hvis du ændrer det:** Ry, indtægten fra rejseopdateringer og "progress"-delen af gemte spil.
@@ -336,7 +345,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/session_state.gd`
 
 **Formål:** Det komplette gemte billede af ét spil, som rene data.
-- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil).
+- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil). I024: et nyt spil giver ledsagerens valgte navn og køn videre.
 - **Arbejder sammen med:** `GameSession` (ejer og ændrer det), `SaveManager` (skriver og læser det), alle de mindre tilstands-optegnelser i `src/core/`.
 - **Holder styr på:** Hele spillets tilstand.
 - **Hvornår det kører:** Ved nyt spil, hver gang der gemmes og indlæses, og som data bag hele spillet.
@@ -345,7 +354,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/simulation.gd`
 
 **Formål:** Spillets ur og den motor, der flytter båden gennem tiden.
-- **Hvad det gør:** Hvert billede laver det rigtig tid om til spiltid (1 rigtigt sekund = 1 spilminut ved 1×) og flytter båden langs kursen, med sejl eller motor efter vinden. Det tjekker vejret, huen, fiskebid, ankeret, trafik og opkald på VHF-radioen på et fast tidsgitter, så resultatet bliver det samme ved enhver hastighed, under søvn og under en Lang passage. Siden I022 skaleres vejrskader efter sværhedsgraden (selve vejret ikke). I022: fjernarbejde fortæller nu også, hvad der stoppede det før tid, så tidsskærmen kan sige det.
+- **Hvad det gør:** Hvert billede laver det rigtig tid om til spiltid (1 rigtigt sekund = 1 spilminut ved 1×) og flytter båden langs kursen, med sejl eller motor efter vinden. Det tjekker vejret, huen, fiskebid, ankeret, trafik og opkald på VHF-radioen på et fast tidsgitter, så resultatet bliver det samme ved enhver hastighed, under søvn og under en Lang passage. Siden I022 skaleres vejrskader efter sværhedsgraden (selve vejret ikke). I022: fjernarbejde fortæller nu også, hvad der stoppede det før tid, så tidsskærmen kan sige det. I024: efter hvert trin fortæller det `GameSession`, hvor hurtigt båden sejlede, og om det var for sejl, til fartrekorderne.
 - **Arbejder sammen med:** `GameSession` (læser og opdaterer spillet), `WeatherModel`, `PropulsionController`, `WeatherDamage`, `HatConfig`, `FishingCatalog`, `TrafficModel`, `VhfRadio`; `App` lytter efter dens advarsler.
 - **Holder styr på:** Ikke gemt: farten for Lang passage, et gemt (cachet) skøn over ankomsttiden, og om kaptajnen er under dæk.
 - **Hvornår det kører:** Altid (en autoload); det står stille, mens spillet er sat på pause.
@@ -745,8 +754,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat/boat_area.gd`
 
 **Formål:** Hjertet i hver dæks- og kahytsscene: den placerer Kaptajnen, sætter alt om bord op og gør "tryk på E ved noget" til ønsker, som spillet tager sig af.
-- **Hvad det gør:** Ved indlæsning lægger den bådens grafik på og tilføjer lys, vejr, liv i vandet, ankertegn, ledsageren på dækket, fiskestang, ankerspil, komfur, trofætavle, kaffepladser og kahytspynt. Den styrer kameraet (bredere under sejlads, drejet efter kursen, følger dig i land), gangen ud på pontonen i havnen og den korte ankomst til kaj. Når du bruger en station, sender den et signal (en besked et objekt sender, som andre kan lytte efter), f.eks. åbn søkort, sov eller lav mad, som app'en tager sig af; den åbner aldrig selv menuer. Når du kæler for ledsageren, viser den en gang imellem et venligt ord (`CompanionRemarks`), eller et venligt blik, når hænderne er fulde. I022: dækkets vand får sin blødere farve fra WaterLook med en svag havbund i lavt vand (ShallowWater), og Starling 33's kahyt får sine vinduer (CabinWindows), kun vist med den tegnede stil.
-- **Arbejder sammen med:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `App` (som lytter efter dens ønsker).
+- **Hvad det gør:** Ved indlæsning lægger den bådens grafik på og tilføjer lys, vejr, liv i vandet, ankertegn, ledsageren på dækket, fiskestang, ankerspil, komfur, trofætavle, kaffepladser og kahytspynt. Den styrer kameraet (bredere under sejlads, drejet efter kursen, følger dig i land), gangen ud på pontonen i havnen og den korte ankomst til kaj. Når du bruger en station, sender den et signal (en besked et objekt sender, som andre kan lytte efter), f.eks. åbn søkort, sov eller lav mad, som app'en tager sig af; den åbner aldrig selv menuer. Når du kæler for ledsageren, viser den en gang imellem et venligt ord (`CompanionRemarks`), eller et venligt blik, når hænderne er fulde. I022: dækkets vand får sin blødere farve fra WaterLook med en svag havbund i lavt vand (ShallowWater), og Starling 33's kahyt får sine vinduer (CabinWindows), kun vist med den tegnede stil. I024: den stiller Kaptajnens laptop (`LaptopProp`) på kahytsbordet ved arbejdspladsen, hvis tekst bliver "Brug laptoppen".
+- **Arbejder sammen med:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `LaptopProp`, `App` (som lytter efter dens ønsker).
 - **Holder styr på:** Kameraindstillinger, stationerne i land og ankomst-animationen; den skriver Kaptajnens position tilbage til spillets tilstand.
 - **Hvornår det kører:** Når du er på dækket eller i kahytten.
 - **Hvis du ændrer det:** Næsten alt om bord kan påvirkes: hvor Kaptajnen dukker op efter indlæsning, hvilke stationer der findes, og hvad de gør, kameraet og ankomsten i havn.
@@ -796,6 +805,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Hvilke fendere der er fundet i hvert billede, resten af kørslen.
 - **Hvornår det kører:** På dækket, når grafikken lægges på, og når båden forlader eller når havnen.
 - **Hvis du ændrer det:** Om fendrene vises rigtigt; en fejl kunne slette andre hvide dele af dæksgrafikken.
+
+### `src/boat/laptop_prop.gd`
+
+**Formål:** Kaptajnens laptop, tegnet åben på kahytsbordet (I024).
+- **Hvad det gør:** Tegner en lille grafitgrå laptop med tastatur og en blødt oplyst skærm vendt mod arbejdspladsen, set ovenfra som resten af kahytten, i Real Horizon-farverne (skærmen lidt lysere om natten). `place()` stiller en på det bord, der er nærmest arbejdspladsen, i hver kahyt.
+- **Arbejder sammen med:** `BoatArea` (stiller den frem og giver arbejdspladsen teksten "Brug laptoppen"), `BoatFixture` (bordene), `App.open_laptop()` (det, stationen åbner).
+- **Holder styr på:** Kun hvor kraftigt skærmen lyser.
+- **Hvornår det kører:** Når kahytten er på skærmen.
+- **Hvis du ændrer det:** Kun hvordan laptoppen ser ud, og hvor den står; selve arbejdspladsen bliver, hvor den var.
 
 ### `src/boat/provision_display.gd`
 
@@ -1071,39 +1089,39 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/companion/companion_pose_art.gd`
 
-**Formål:** Beskriver ét stillingsbillede af katten eller hunden (hviler, sover, opmærksom, strækker sig).
-- **Hvad det gør:** Indeholder stillingens navn, den PNG-fil der skal vises, og små justeringer: forskydning, størrelse og spejlvending. Det er en byggeklods i et `CompanionVisualSet`.
+**Formål:** Beskriver én stilling eller ét animeret klip af en ledsager (hviler, sover, går, flyver og mere).
+- **Hvad det gør:** Indeholder stillingens navn, den PNG-fil der skal vises, og små justeringer: forskydning, størrelse og spejlvending. Siden I024 kan en stilling være et klip: flere billeder efter det første, billeder pr. sekund, og om det gentages eller spilles én gang og bliver stående på sit sidste billede. Det er en byggeklods i et `CompanionVisualSet`.
 - **Arbejder sammen med:** `CompanionVisualSet` (som oplister stillingerne) og gennem den `ShipCompanion`.
 - **Holder styr på:** Kun disse indstillinger, der redigeres i Godots inspector eller i `.tres`-filen.
 - **Hvornår det kører:** Når ledsagerens billeder indlæses.
-- **Hvis du ændrer det:** Hvilket billede der vises for en stilling, og hvordan det placeres; en manglende fil får blot den stilling til at falde tilbage til en anden.
+- **Hvis du ændrer det:** Hvilket billede der vises for en stilling, og hvordan det placeres; en manglende fil får blot den stilling til at falde tilbage til en anden, og et erstatningsbillede fra Sprite Workshop erstatter hele klippet med sit ene billede.
 
 ### `src/companion/companion_remarks.gd`
 
-**Formål:** De venlige ord, Kaptajnen siger, når han kæler for skibets kat eller hund.
-- **Hvad det gør:** Har nogle få korte bemærkninger til en kat og til en hund ("Sikke en dejlig lille spinden."), vælger den næste, så den samme linje aldrig kommer to gange i træk, og oversætter den til det aktuelle sprog. Den er klar til en ledsager med navn og køn: så bruger den linjer med navnet ("Hvem er en dygtig pige, Freja?"), og navnet sættes ind præcis som det er skrevet. Giver også linjen om, at hænderne er fulde.
-- **Arbejder sammen med:** `CompanionState` (hvem ledsageren er), `Loc` (engelsk eller dansk), `ShipCompanion` (som beder om en bemærkning, når der bliver kælet) og `BoatArea` (som viser den).
-- **Holder styr på:** Intet; linjerne står fast i scriptet.
-- **Hvornår det kører:** Når du kæler for ledsageren (højst én bemærkning hvert 15. sekund) eller prøver med fulde hænder.
-- **Hvis du ændrer det:** Hvad Kaptajnen siger, når han kæler; nye linjer skal have en dansk oversættelse i `locale/da.po`.
+**Formål:** Alt, hvad skibets ledsager "siger", eller som siges om den, samlet ét sted.
+- **Hvad det gør:** Har korte bemærkninger til at kæle for katten, hunden og papegøjen ("Sikke en dejlig lille spinden."), vælger den næste, så den samme linje aldrig kommer to gange i træk, og oversætter den til det aktuelle sprog. Med det navn og køn, spilleren har valgt, bruger den linjer med navnet ("Hvem er en dygtig pige, Freja?"), sat ind præcis som det er skrevet; uden navn siger den "katten". Siden I024 giver den også teksten for at kæle, linjerne for at gå i land og blive kaldt om bord (også hvorfor båden endnu ikke kan kaste los), en linje en gang imellem, når den findes ved køjen om morgenen, og Kaptajnens snak på lange passager i tre trin (de første dage, efter to døgn, efter fem) med dyrets svar (en linje og det klip, der skal spilles). Giver også linjen om, at hænderne er fulde.
+- **Arbejder sammen med:** `CompanionState` (hvem ledsageren er), `Loc` (engelsk eller dansk), `ShipCompanion` (som beder om en bemærkning, når der bliver kælet), `BoatArea` (som viser den), `GameSession` (land, opvågning, bedrifter) og `App` (spørgsmålet ved afgang, snakken på passager).
+- **Holder styr på:** Intet; linjerne står fast i scriptet, og de, der kalder den, bestemmer hvornår.
+- **Hvornår det kører:** Når du kæler for ledsageren (højst én bemærkning hvert 15. sekund) eller prøver med fulde hænder, går i land eller kaster los, vågner, eller sejler en lang passage.
+- **Hvis du ændrer det:** Hvad Kaptajnen siger til og om ledsageren; nye linjer skal have en dansk oversættelse i `locale/da.po`.
 
 ### `src/companion/companion_state.gd`
 
-**Formål:** De gemte oplysninger om skibets ledsager: kat eller hund, hvor den hviler, og om den er i kahytten eller på dækket.
-- **Hvad det gør:** Hver 2.–5. spiltime flytter ledsageren til et andet hvilested i kahytten (sofaen, kortbordet, køjen for katten; gulvet, nedgangen, siddepladsen for hunden). Valget regnes ud fra spillets ur, ikke tilfældighed, så det er det samme ved enhver hastighed og efter indlæsning. Den kan også være på dækket på et af tre steder.
-- **Arbejder sammen med:** `SessionState` (ejer og gemmer det), `GameSession` (den eneste der ændrer det), `ShipCompanion` (viser det), `SaveManager` (giver gamle gemte spil en kat).
-- **Holder styr på:** Slags, hvilested, tidspunktet for næste flytning, antal flytninger, område (kahyt/dæk) og stedet på dækket.
+**Formål:** De gemte oplysninger om skibets ledsager: hvilket dyr, dens navn, hvor den hviler, og om den er i kahytten, på dækket eller i land.
+- **Hvad det gør:** Hver 2.–5. spiltime flytter ledsageren til et andet hvilested i kahytten (sofaen, kortbordet, køjen for katten; gulvet, nedgangen, siddepladsen for hunden). Valget regnes ud fra spillets ur, ikke tilfældighed, så det er det samme ved enhver hastighed og efter indlæsning. Den kan også være på dækket på et af tre steder. Siden I024 er der tre slags (gemt som `cat` for ragdoll-katten, `dog` for mopsen og `parrot` for den grønkindede parakit, som sidder ved kortbordet, på sofaen, ved køjen og på trappen), et valgfrit navn (én linje, højst 20 tegn, aldrig opfundet) og køn, og et område i land, mens båden er fortøjet. Når Kaptajnen vågner, findes den ved køjen (`wake_by_berth`). Et gemt spil indlæses aldrig med den i land: den er tilbage om bord.
+- **Arbejder sammen med:** `SessionState` (ejer og gemmer det), `GameSession` (den eneste der ændrer det), `ShipCompanion` (viser det), `NewGameMenu` (valget), `CompanionRemarks`, `SaveManager` (giver gamle gemte spil en kat).
+- **Holder styr på:** Slags, navn, køn, hvilested, tidspunktet for næste flytning, antal flytninger, område (kahyt/dæk/land) og stedet på dækket eller pontonen.
 - **Hvornår det kører:** Hele tiden i et spil, efterhånden som uret går.
-- **Hvis du ændrer det:** Hvor katten eller hunden dukker op, og gemte spil (forkerte navne eller tal får et gemt spil til ikke at kunne indlæses).
+- **Hvis du ændrer det:** Hvor ledsageren dukker op, og gemte spil (forkerte navne eller tal får et gemt spil til ikke at kunne indlæses).
 
 ### `src/companion/companion_visual_set.gd`
 
 **Formål:** Billedsættet for én slags ledsager: stillinger, størrelse, placering og tider for, hvad den laver i ro.
-- **Hvad det gør:** Indlæser hvert stillingsbillede, gør det mindre for at spare hukommelse og skærer en ensfarvet papirbaggrund væk, hvis tegningen ikke har gennemsigtighed. Det regner ud, hvor billedet tegnes på hvilestedet, og holder styr på, hvor længe dyret hviler, sover, strækker sig og kigger op. Et erstatningsbillede fra Sprite Workshop bruges, når det findes.
-- **Arbejder sammen med:** `CompanionPoseArt` (hver stilling), `ArtworkResolver` (erstatningsgrafik), `ShipCompanion` (tegner det); sættene ligger i `data/companions/cat_visuals.tres` og `dog_visuals.tres`.
+- **Hvad det gør:** Indlæser hvert stillingsbillede, gør det mindre for at spare hukommelse og skærer en ensfarvet papirbaggrund væk, hvis tegningen ikke har gennemsigtighed. Det regner ud, hvor billedet tegnes på hvilestedet, og holder styr på, hvor længe dyret hviler, sover, strækker sig og kigger op. Et erstatningsbillede fra Sprite Workshop bruges, når det findes. Siden I024 kan hver stilling være et animeret klip (`get_frames`, med sin egen hastighed og gentagelse), der er mange flere klip (gå, vende, sidde, lægge sig, vågne, pleje pelsen, falde til ro og papegøjens hop, letten, flugt, landing, pjusken og fjerpleje), og sættet angiver gang- og flyvefarten, der passer til skridtet, så fødderne ikke glider.
+- **Arbejder sammen med:** `CompanionPoseArt` (hver stilling), `ArtworkResolver` (erstatningsgrafik), `ShipCompanion` (tegner det); sættene ligger i `data/companions/cat_visuals.tres`, `dog_visuals.tres` og `parrot_visuals.tres`.
 - **Holder styr på:** Sine indstillinger og en fælles hukommelse (cache) af færdigbehandlede billeder.
 - **Hvornår det kører:** Når en ledsager vises i kahytten, på dækket eller som forhåndsvisning i menuen for nyt spil.
-- **Hvis du ændrer det:** Hvordan katten og hunden ser ud og opfører sig i ro; uden et brugbart hvilebillede tegner spillet i stedet et enkelt indbygget dyr.
+- **Hvis du ændrer det:** Hvordan ledsagerne ser ud, bevæger sig og opfører sig i ro; uden et brugbart hvilebillede tegner spillet i stedet et enkelt indbygget dyr.
 
 ### `src/companion/deck_companion_spots.gd`
 
@@ -1116,10 +1134,10 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/companion/ship_companion.gd`
 
-**Formål:** Katten eller hunden, som du ser og kan kæle for, i kahytten eller på dækket.
-- **Hvad det gør:** Viser ledsageren på dens hvilested med stillingsbilleder (hviler, sover, strækker sig, kigger op) eller et enkelt tegnet dyr, hvis der ikke er billeder. Tryk på E kæler for den: katten spinder og viser hjerter, hunden pruster og logrer, og en gang imellem (højst hvert 15. sekund) siger Kaptajnen et venligt ord, valgt af `CompanionRemarks`. Når den skifter mellem kahyt og dæk, mens du ser på, går den derhen. På en rolig ankerplads krøller den sig sammen og tager lange lure.
-- **Arbejder sammen med:** `GameSession` og `CompanionState` (hvor den skal være), `CompanionVisualSet` (billeder), `DeckCompanionSpots` (steder og ruter på dækket), `AudioManager` (lyde), `Interactable` og `HighlightResolver` (kæl og glød), `SessionLog`. Placeret i hver kahyts scene og bygget på dækket af `BoatArea`; bruges også som forhåndsvisning i menuen for nyt spil.
-- **Holder styr på:** Kun hvordan den ser ud lige nu (stilling, gåtur, reaktion); intet gemmes.
+**Formål:** Katten, hunden eller papegøjen, som du ser og kan kæle for, i kahytten, på dækket eller på pontonen.
+- **Hvad det gør:** Viser ledsageren på dens hvilested med stillingsbilleder (hviler, sover, strækker sig, kigger op) eller et enkelt tegnet dyr, hvis der ikke er billeder. Tryk på E kæler for den: katten spinder og viser hjerter, hunden pruster og logrer, og en gang imellem (højst hvert 15. sekund) siger Kaptajnen et venligt ord, valgt af `CompanionRemarks`. Når den skifter mellem kahyt og dæk, mens du ser på, går den derhen. På en rolig ankerplads krøller den sig sammen og tager lange lure. I024: stillingerne er animerede klip med korte overgange imellem (lægge sig, vågne, vende, falde til ro); den vender sig, hvor den går hen, og går i sit eget skridts tempo, også når tidsplanen flytter den, mens du ser på. Papegøjen flyver mellem sine pinde (letter, flyver, lander) og hopper korte stykker. Fortøjet følger den Kaptajnen ned ad landgangen til en plads på pontonen, og på lange passager svarer den på Kaptajnens ord med et lille klip (`respond`).
+- **Arbejder sammen med:** `GameSession` og `CompanionState` (hvor den skal være), `CompanionVisualSet` (billeder), `DeckCompanionSpots` (steder og ruter på dækket), `ShoreAccess` (landgangen og pontonen), `CompanionRemarks` (tekst og bemærkninger), `AudioManager` (lyde), `Interactable` og `HighlightResolver` (kæl og glød), `SessionLog`. Placeret i hver kahyts scene og bygget på dækket af `BoatArea`; bruges også som forhåndsvisning i menuen for nyt spil.
+- **Holder styr på:** Kun hvordan den ser ud lige nu (stilling, klip og billede, retning, gåtur eller flugt, reaktion); intet gemmes.
 - **Hvornår det kører:** Når kahytten eller dækket er på skærmen.
 - **Hvis du ændrer det:** Hvordan ledsageren ser ud, bevæger sig og reagerer på kæl.
 
@@ -1479,7 +1497,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/captains_log_menu.gd`
 
 **Formål:** Logbogen (tryk L): din statistik, dit ry, sejladser, havne, mål og bådens stand.
-- **Hvad det gør:** Fire faner: Log (statistik, ry, knappen "Publish travel update", seneste sejladser og mindeværdige øjeblikke), Harbours (havne grupperet efter land, med filtre), Objectives (åbne, gennemførte og hemmelige præstationer, som forbliver skjulte, til du finder dem) og Boat (stand og værftshistorik).
+- **Hvad det gør:** Fire faner: Log (statistik, ry, knappen "Publish travel update", seneste sejladser og mindeværdige øjeblikke), Harbours (havne grupperet efter land, med filtre), Objectives (åbne, gennemførte og hemmelige præstationer, som forbliver skjulte, til du finder dem) og Boat (stand og værftshistorik). I024: mål, der er taget ud af samlingen af bedrifter, tilbydes ikke længere, og en linje henviser til laptoppen, hvor bedrifterne er.
 - **Arbejder sammen med:** `GameSession`, `CaptainsLog`, `PortCatalog`, `ObjectiveCatalog`, `VesselCatalog`, `BoatCareView`, `BoatCare`, `Simulation`, `App` (åbner den og udgivelsesvinduet).
 - **Holder styr på:** Kun havnefilteret og hvilke lande der er foldet ud, så længe spillet kører (gemmes ikke).
 - **Hvornår det kører:** Når du trykker L eller åbner den fra pausemenuen eller handlingshjulet.
@@ -1674,6 +1692,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun første gang spillet starter, før der er valgt et sprog.
 - **Hvis du ændrer det:** Oplevelsen ved første opstart ændres. En fejl her kan blokere hovedmenuen ved første opstart.
 
+### `src/ui/laptop/laptop_view.gd`
+
+**Formål:** Kaptajnens laptop, åbnet helt tæt på (I024): det ene hjem for ry og udgivelser.
+- **Hvad det gør:** Dæmper kahytten og tegner den illustrerede laptop (låg, skærmkant, tastatur), så den fylder billedet; alt foregår på dens skærm. Fire apps i faner: Hjem (ry, fjernarbejde, det lille spil), Udgivelser (postkort, scrapbogen og rejseopdateringer), Bedrifter (samlingen efter kategori, de låste op først; låste mærker gjort grå af en lille shader, `greyed_badge.gdshader`, med en hængelås; hvornår, hvor og på hvilken båd) og Rejsehistorik (tal i alt, bedste time og bedste døgn for sejl, de seneste sejladser, tidligere hædersbevisninger). De eksisterende dialoger genbruges uændret og vises på skærmen (`SimplePanel.embedded`), så deres regler, tid og belønninger forbliver deres egne. Esc lukker en åben opgave og derefter laptoppen.
+- **Arbejder sammen med:** `App` (åbner den og gør det, der tager spiltid eller penge, når den beder om det), `AchievementCatalog`, `GameSession`, `CaptainsLog`, `ObjectiveCatalog`, `PostcardMenu`, `ScrapbookMenu`, `PublishMenu`, `WorkMenu`, `GameDevMenu`, `Loc`.
+- **Holder styr på:** Kun den åbne app, den åbne opgave og den valgte kategori af bedrifter (gemmes ikke).
+- **Hvornår det kører:** Når du bruger arbejdspladsen ved kahytsbordet eller vælger Laptop på handlingshjulet.
+- **Hvis du ændrer det:** Hvor spillerne finder deres bedrifter, udgivelser og fjernarbejde; testene finder dens dele ved navn.
+
 ### `src/ui/loading_screen.gd`
 
 **Formål:** Spillets egen indlæsningsskærm med logoet over et roligt hav.
@@ -1721,12 +1748,12 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/new_game_menu.gd`
 
-**Formål:** Dialogen til nyt spil, hvor du vælger din ledsager, katten eller hunden.
-- **Hvad det gør:** Viser et billede og en kort beskrivelse af den valgte ledsager (katten er valgt på forhånd) og melder Start med valget. Siden I022 spørger den også, hvor tilgivende havet skal være (sværhedsgraden).
+**Formål:** Dialogen til nyt spil, hvor du vælger din ledsager: en ragdoll-kat, en mops eller en lille papegøje.
+- **Hvad det gør:** Viser et billede og en kort beskrivelse af den valgte ledsager (katten er valgt på forhånd) og melder Start med valget. Siden I022 spørger den også, hvor tilgivende havet skal være (sværhedsgraden). I024: du kan give ledsageren et navn og sige, om det er en hun eller en han; begge dele er valgfrie, og der opfindes aldrig et navn.
 - **Arbejder sammen med:** `CompanionState`, `ShipCompanion` (forhåndsvisningen), `App` (starter spillet).
-- **Holder styr på:** Den valgte slags ledsager, indtil du trykker Start.
+- **Holder styr på:** Den valgte ledsager, navn og køn, indtil du trykker Start.
 - **Hvornår det kører:** Når du trykker Nyt spil på titelskærmen.
-- **Hvis du ændrer det:** Hvem der bor i din kahyt i starten af et nyt spil.
+- **Hvis du ændrer det:** Hvem der bor om bord i starten af et nyt spil.
 
 ### `src/ui/passage_panel.gd`
 
@@ -1866,8 +1893,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/simple_panel.gd`
 
 **Formål:** Et byggesæt til enkle dialoger: en titel, noget tekst og en række knapper.
-- **Hvad det gør:** Bygger i kode et centreret panel over en dæmpet baggrund og giver hurtige måder at tilføje tekster og knapper på.
-- **Arbejder sammen med:** `ModalPanel` (bygger videre på den) og mange dialoger, der bruger den (arbejde, købmand, optagning, butikker, VHF-radio og andre).
+- **Hvad det gør:** Bygger i kode et centreret panel over en dæmpet baggrund og giver hurtige måder at tilføje tekster og knapper på. I024: den kan også vises indlejret på laptoppens skærm, uden baggrund og ramme.
+- **Arbejder sammen med:** `ModalPanel` (bygger videre på den) og mange dialoger, der bruger den (arbejde, købmand, optagning, butikker, VHF-radio og andre) samt `LaptopView`, som viser nogle af dem på sin skærm.
 - **Holder styr på:** Kun henvisninger til sin boks og sin knaprække.
 - **Hvornår det kører:** Når en af de dialoger er åben.
 - **Hvis du ændrer det:** Udseendet og layoutet af mange dialoger på én gang.
@@ -2048,11 +2075,11 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Formål:** Tjekker spillets navn, versionsnummer, skrifttyper, mappen til gemte spil og kopiering af gamle gemte spil fra Next Harbor.
-- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.108a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
+- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.110a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
 - **Arbejder sammen med:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Holder styr på:** Intet af sit eget (den laver en midlertidig, opdigtet Next Harbor-mappe og fjerner den igen).
 - **Hvornår det kører:** Kun i test.
-- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker den nøjagtige version ("0.108a", "0.108.1") og gemmeformat 12, så en ny udgivelse betyder, at denne test skal rettes.
+- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker den nøjagtige version ("0.110a", "0.110.1") og gemmeformat 12, så en ny udgivelse betyder, at denne test skal rettes.
 
 ### `tests/suites/test_cabin_windows.gd`
 
@@ -2075,7 +2102,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_captains_other_life.gd`
 
 **Formål:** Tjekker I022, Kaptajnens andet liv.
-- **Hvad det gør:** Tjekker bådpriser, at et nyt spil kun ejer startbåden, køb af en båd (aldrig to gange, aldrig under nul kroner, kun på et værft), at gamle gemte spil beholder alle både, de tre sværhedsgrader (startpenge, mad, udgifter, danske navne), ændring af niveauet undervejs og menuerne Nyt spil og pause, der tilbyder det. I022 fritidssysler: postkort (rigtige motiver, to timer, bevares ved afbrydelse, ry én gang), det lille spil (økter på 2 til 4 timer, point for den del der er arbejdet, milepæle, udgivelse, ingen gentagne belønninger), gemte og gamle spil, det ene ur gennem App (to timer af verden går, en ankomst afbryder et kort, som gøres færdigt senere) og menuerne.
+- **Hvad det gør:** Tjekker bådpriser, at et nyt spil kun ejer startbåden, køb af en båd (aldrig to gange, aldrig under nul kroner, kun på et værft), at gamle gemte spil beholder alle både, de tre sværhedsgrader (startpenge, mad, udgifter, danske navne), ændring af niveauet undervejs og menuerne Nyt spil og pause, der tilbyder det. I022 fritidssysler: postkort (rigtige motiver, to timer, bevares ved afbrydelse, ry én gang), det lille spil (økter på 2 til 4 timer, point for den del der er arbejdet, milepæle, udgivelse, ingen gentagne belønninger), gemte og gamle spil, det ene ur gennem App (to timer af verden går, en ankomst afbryder et kort, som gøres færdigt senere) og menuerne. I024: kahyttens hjul tilbyder laptoppen, hvor begge fritidssysler nu er.
 - **Arbejder sammen med:** `GameSession`, `SessionState`, `VesselCatalog`, `Difficulty`, `NewGameMenu`, `DifficultyMenu`, `App`.
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** Sammen med de andre testsæt (`test_runner.tscn`).
@@ -2147,7 +2174,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_companion_art.gd`
 
 **Formål:** Tjekker billederne af katten og hunden, og hvordan de opfører sig (Iteration 004b, med nye tegninger siden Iteration 13).
-- **Hvad det gør:** Den tjekker billederne af stillingerne (hviler, sover, vågen, strækker sig) for kat og hund, og at ejerens originale kattetegninger i `Visuals/Cat/` aldrig bliver ændret. Den tjekker, at hvid papirbaggrund bliver fjernet, og at stillingerne skifter en gang imellem uden at blinke. Den tjekker også at gå hen til og klappe dyret (lysende omrids, spinden), hvad der sker, når et billede mangler, at et nyt billede kan skiftes ind alene via data, alle både, og at stillinger ikke gemmes.
+- **Hvad det gør:** Den tjekker billederne af stillingerne (hviler, sover, vågen, strækker sig) for kat og hund, og at ejerens originale kattetegninger i `Visuals/Cat/` aldrig bliver ændret. Den tjekker, at hvid papirbaggrund bliver fjernet, og at stillingerne skifter en gang imellem uden at blinke. Den tjekker også at gå hen til og klappe dyret (lysende omrids, spinden), hvad der sker, når et billede mangler, at et nyt billede kan skiftes ind alene via data, alle både, og at stillinger ikke gemmes. Siden I024 er hver stilling et animeret klip med flere billeder, og billedets fodpunkt står på hvilestedet.
 - **Arbejder sammen med:** `CompanionVisualSet`, `ShipCompanion`, `NewGameMenu`, `CompanionState`, `AudioManager`, `SaveManager` og testhjælperen til gang-områder.
 - **Holder styr på:** Intet af sit eget (den skriver et midlertidigt testbillede og sletter det igen).
 - **Hvornår det kører:** Kun i test.
@@ -2170,6 +2197,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** I testkørslen (`--only=companion_remarks`).
 - **Hvis du ændrer det:** Kun testen; bemærkningernes ordlyd tjekkes via deres engelske nøgler.
+
+### `tests/suites/test_company_we_keep.gd`
+
+**Formål:** Tjekker I024, The Company We Keep.
+- **Hvad det gør:** Tjekker de tre ledsagere med valgfrit navn og køn (intet opfundet), og at ældre gemte spil beholder deres; linjerne på engelsk og dansk; de animerede klip (gå, vende, sove, vågne, kæl) og papegøjens letten, flugt og landing; at ledsageren følger Kaptajnen i land, at båden ikke kaster los, mens den er i land, at den kan kaldes om bord, og at en indlæsning aldrig efterlader den i land; opvågning ved køjen; snak på lange passager, der aldrig bliver en strøm, heller ikke efter en indlæsning; rekorder og milepæle for vedvarende fart for sejl; samlingen af bedrifter (rækkefølge, grå låste mærker, hvornår, hvor og hvilken båd, ærlige erstatninger for ældre gemte spil, intet betalt to gange); og laptoppen på hvert kahytsbord med sine apps, Esc, postkort og fjernarbejde.
+- **Arbejder sammen med:** app-scenen, `CompanionState`, `CompanionRemarks`, `CompanionVisualSet`, `ShipCompanion`, `NewGameMenu`, `GameSession`, `Simulation`, `SessionState`, `ObjectiveProgress`, `AchievementCatalog`, `LaptopView`, `SettingsManager`, `WeatherFixtures`.
+- **Holder styr på:** Intet selv.
+- **Hvornår det kører:** Kun i test (den gemmer `i024_*`-skærmbilleder, når man beder om det).
+- **Hvis du ændrer det:** Kun tjekkene ændres; fejler testen, kan ledsagerne, bedrifterne eller laptoppen opføre sig forkert.
 
 ### `tests/suites/test_cozy_patch.gd`
 
@@ -2223,7 +2259,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Arbejder sammen med:** `SessionLog`, `GameSession`, `SaveManager`, `GameVersion`, `Simulation`.
 - **Holder styr på:** Intet af sit eget (den bruger sin egen midlertidige logmappe og rydder den op).
 - **Hvornår det kører:** Kun i test.
-- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker det nøjagtige versionsnummer ("0.108a") og gemmeformat (12), så et nyt versionsnummer betyder, at denne test skal rettes.
+- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker det nøjagtige versionsnummer ("0.110a") og gemmeformat (12), så et nyt versionsnummer betyder, at denne test skal rettes.
 
 ### `tests/suites/test_eight_directions.gd`
 
@@ -2327,7 +2363,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_life_aboard.gd`
 
 **Formål:** Tester hverdagen om bord: katten eller hunden, søvn, søkortets panel og sejlene.
-- **Hvad det gør:** Tester valget af kat eller hund ved nyt spil, hvor ledsageren hviler, dens tidsplan og at klappe den (med lyd). Det tester også søvndialogen fra køjen og fra søkortet, at man vækkes tidligt af et vejrvarsel eller ved ankomst, og at søkortets panel står stille. Til sidst tester det rorets sejltjek, sejlenes rolige bevægelse, spilerens form og at ledsageren gemmes, også i gamle gemte spil.
+- **Hvad det gør:** Tester valget af kat eller hund ved nyt spil, hvor ledsageren hviler, dens tidsplan og at klappe den (med lyd). Det tester også søvndialogen fra køjen og fra søkortet, at man vækkes tidligt af et vejrvarsel eller ved ankomst, og at søkortets panel står stille. Til sidst tester det rorets sejltjek, sejlenes rolige bevægelse, spilerens form og at ledsageren gemmes, også i gamle gemte spil. I024: når tiden kommer, går ledsageren hen til sit nye sted, og teksten siger "Pet the cat".
 - **Arbejder sammen med:** `NewGameMenu`, `SleepMenu`, `WorldMap`, `SailRig`, `ShipCompanion`, `CompanionState`, `AudioManager`, `GameSession`, `SaveManager`, `WeatherFixtures` og app-scenen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene (det går om bord i Wing 33, `starling_33`, fordi gåturene er skrevet til den kahyt).
@@ -2345,8 +2381,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_living.gd`
 
 **Formål:** Tester, hvordan man tjener og bruger penge: fjernarbejde og dagligvarebutikken.
-- **Hvad det gør:** Tester fjernarbejde i havn (1–8 timer, €25 i timen, afvist til søs) og priser i dagligvarebutikken (€10 pr. manglende dag af mad og vand tilsammen, samme pris i alle havne). Det tester også, at reparationer koster det tilbudte beløb, at penge og proviant overlever gemme/indlæse, og at arbejdspladsen og butikken kan åbnes på alle både.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures` og app-scenen.
+- **Hvad det gør:** Tester fjernarbejde i havn (1–8 timer, €25 i timen, afvist til søs) og priser i dagligvarebutikken (€10 pr. manglende dag af mad og vand tilsammen, samme pris i alle havne). Det tester også, at reparationer koster det tilbudte beløb, at penge og proviant overlever gemme/indlæse, at hver båds kahyt har sin laptop ved arbejdspladsen (siden I024 åbnes fjernarbejde på laptoppen), og at butikken kan åbnes på alle både.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `LaptopView`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures` og app-scenen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændringer i løn, priser, startpenge eller stationernes placering kan få testen til at fejle.
@@ -2399,7 +2435,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_objectives.gd`
 
 **Formål:** Tester sejlermål og ry.
-- **Hvad det gør:** Tester listen over mål (også de automatisk lavede) og at ry udbetales én gang, når en sejlads slutter. Gentagelige mål betaler kun igen ved en ny sejlads. En forlist båd får kun for sine sømil, og gemme, indlæse og gamle gemte spil betaler aldrig to gange. Det tester også fanen med mål i Logbogen.
+- **Hvad det gør:** Tester listen over mål (også de automatisk lavede) og at ry udbetales én gang, når en sejlads slutter. Gentagelige mål betaler kun igen ved en ny sejlads. En forlist båd får kun for sine sømil, og gemme, indlæse og gamle gemte spil betaler aldrig to gange. Det tester også fanen med mål i Logbogen. I024: et mål, der er taget ud af samlingen, tilbydes ikke længere der.
 - **Arbejder sammen med:** `ObjectiveCatalog`, `ObjectiveProgress`, `CaptainsLog`, `CaptainsLogMenu`, `GameSession`, `Simulation`, `SaveManager`, `WeatherFixtures` og app-scenen.
 - **Holder styr på:** En liste over de ry-belønninger, det har set under kørslen.
 - **Hvornår det kører:** Kun i testene.
@@ -2417,7 +2453,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_publishing.gd`
 
 **Formål:** Tjekker, at udgivelse af en rejseopdatering omsætter ry til penge korrekt.
-- **Hvad det gør:** Tjekker, at ikke-udgivet ry udbetales til den fastsatte sats (som standard €2 pr. ry), kun i havn og aldrig to gange, at det samlede ry bevares, at det overlever gemme/indlæse, og at fjernarbejde og køb af proviant stadig virker. Derefter klikker den sig gennem udgiv-knapperne i Logbogen og i arbejdsdialogen i det rigtige spil.
+- **Hvad det gør:** Tjekker, at ikke-udgivet ry udbetales til den fastsatte sats (som standard €2 pr. ry), kun i havn og aldrig to gange, at det samlede ry bevares, at det overlever gemme/indlæse, og at fjernarbejde og køb af proviant stadig virker. Derefter klikker den sig gennem udgiv-knapperne i Logbogen og i arbejdsdialogen (på laptoppen siden I024) i det rigtige spil.
 - **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `ObjectiveCatalog`, `CaptainsLogMenu`, `PublishMenu`, `WorkMenu`.
 - **Holder styr på:** Intet selv; den bruger gemmeplads 2 kortvarigt og sletter den igen.
 - **Hvornår det kører:** Kun i test.
@@ -2588,7 +2624,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_upkeep_ui.gd`
 
 **Formål:** Tjekker skærmene for bådens tilstand, proviant, bådeværftet og redning i det rigtige spil.
-- **Hvad det gør:** Tjekker, at HUD'en (infolinjen på skærmen) viser skrogets tilstand, penge, mad og vand; at proviantstationen i hver kahyt åbner proviantpanelet og fører videre til købmanden; at kasserne med mad og vand tømmes, efterhånden som tiden går; at skadesmærker bliver flere, når båden slides, og forsvinder efter reparation; at bådeværftets panel bevarer sin størrelse og tilbyder reparation og påfyldning; og at redningsrapporten vises og sætter spillet på pause. Den tjekker også udviklerens testpanel (F10), og at spillere aldrig ser det, og at skibskatten aldrig spærrer for en station.
+- **Hvad det gør:** Tjekker, at HUD'en (infolinjen på skærmen) viser skrogets tilstand, penge, mad og vand; at proviantstationen i hver kahyt åbner proviantpanelet og fører videre til købmanden; at kasserne med mad og vand tømmes, efterhånden som tiden går; at skadesmærker bliver flere, når båden slides, og forsvinder efter reparation; at bådeværftets panel bevarer sin størrelse og tilbyder reparation og påfyldning; og at redningsrapporten vises og sætter spillet på pause. Den tjekker også udviklerens testpanel (F10), og at spillere aldrig ser det, og at skibskatten aldrig spærrer for en station (dens tekst siger "Pet the cat").
 - **Arbejder sammen med:** app-scenen, `ProvisionsMenu`, `GroceryMenu`, `ProvisionDisplay`, `BoatyardMenu`, `BoatCareMenu`, `RescueDialog`, `DevTools`, `DevTestPanel`, `ShipCompanion`, `InteractionSensor`, `TestWalkability`, `GameSession`.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i test (den gemmer skærmbilleder, når man beder om det).
@@ -2749,6 +2785,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun når du starter det, med skærm: `xvfb-run godot --path . --rendering-driver opengl3 --resolution 1600x900 res://tests/cabin_light_18.tscn -- --out=DIR --label=before`.
 - **Hvis du ændrer det:** Intet i spillet ændres.
 
+### `tests/companion_animation_preview.gd`
+
+**Formål:** Viser alle ledsagernes klip spille side om side, som dokumentation for animationerne fra I024.
+- **Hvad det gør:** Én række pr. slags (kat, hund, papegøje) og én celle pr. klip, hver en lille forhåndsvist ledsager i spillets størrelse, forstørret; et klip, der spilles én gang, starter forfra hvert andet sekund. Med `--out` gemmer den nogle øjebliksbilleder af gitteret og lukker.
+- **Arbejder sammen med:** `CompanionState`, `CompanionVisualSet`, `ShipCompanion` (som forhåndsvisning).
+- **Holder styr på:** Intet; den skriver PNG-filer, når man beder om det.
+- **Hvornår det kører:** Kun når du starter det: i editoren (F6) eller tegnet med `res://tests/companion_animation_preview.tscn -- --out=DIR`.
+- **Hvis du ændrer det:** Intet i spillet ændres.
+
 ### `tests/helpers/art_fixtures.gd`
 
 **Formål:** Laver iøjnefaldende pink-og-gule testbilleder, der står i stedet for rigtig grafik i Sprite Workshop-testene.
@@ -2875,6 +2920,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun når du starter det, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i021.tscn -- --out=DIR`.
 - **Hvis du ændrer det:** Kun skærmbillederne ændrer sig.
 
+### `tests/screenshots_i024.gd`
+
+**Formål:** Tager billederne til I024-rapporten fra det kørende spil.
+- **Hvad det gør:** Fotograferer de tre ledsagere om bord, papegøjen på sin pind og i flugt, en ledsager i land og afgangen, der venter på den, opvågningen med ledsageren ved køjen, Kaptajnen der taler på en lang passage, og laptoppen i kahytten: på bordet, åben på Hjem, bedrifterne med låste mærker, en detalje med hvornår og hvor, postkortværkstedet, en kategori, rejsehistorikken og bedrifterne på dansk. De fleste billeder får også et nærbillede.
+- **Arbejder sammen med:** App-scenen, `GameSession`, `CompanionState`, `ShipCompanion`, `LaptopView`, `UiTheme`, `SettingsManager`, `WindField`.
+- **Holder styr på:** Intet; den skriver PNG-filer (kun testens gemte spil og indstillinger, aldrig spillerens egne).
+- **Hvornår det kører:** Kun når du starter det, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i024.tscn -- --out=DIR [--only=PREFIX]`.
+- **Hvis du ændrer det:** Kun skærmbillederne ændrer sig.
+
 ### `tests/one_clock_sea_trial.gd`
 
 **Formål:** En prøvetur på fem minutter, der måler, hvor tiden går, når uret kører hurtigere end 1x, især ved daggry, skumring, om natten og i havn (Operation One Clock).
@@ -2886,8 +2940,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Formål:** Spillets automatiske testkører: den kører alle 74 testsamlinger og fortæller, hvor mange tjek der bestod.
-- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne.
+**Formål:** Spillets automatiske testkører: den kører alle 80 testsamlinger og fortæller, hvor mange tjek der bestod.
+- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep.
 - **Arbejder sammen med:** Alle testsamlinger i `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Holder styr på:** Antal beståede/fejlede tjek og listen over fejl.
 - **Hvornår det kører:** Når du starter det, eller i automatik: `godot --headless --path . res://tests/test_runner.tscn` (valgmuligheder efter `--`: `--only=navn`, `--skip=navn`, `--screenshots=MAPPE`).

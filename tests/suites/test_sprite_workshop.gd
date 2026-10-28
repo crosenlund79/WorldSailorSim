@@ -284,8 +284,8 @@ func _test_snovs() -> void:
 	var texture := pet.get_pose_texture(CompanionVisualSet.POSE_RESTING)
 	t.check(F.is_fixture(texture), "[example 2] 2-3. a valid %s x %s PNG: Snøvs is drawn with it" % [entry.source_width_2x, entry.source_height_2x])
 	var rect := pet.visual_set.get_draw_rect(CompanionVisualSet.POSE_RESTING, texture)
-	t.check(rect.size.is_equal_approx(Vector2.ONE * pet.visual_set.display_size) and rect.get_center().is_equal_approx(Vector2.ZERO),
-		"[example 2] 4. shown %d x %d units, centred on the resting spot (pivot)" % [roundi(rect.size.x), roundi(rect.size.y)])
+	t.check(rect.size.is_equal_approx(Vector2.ONE * pet.visual_set.display_size) and (rect.position + pet.visual_set.pivot * rect.size).is_zero_approx(),
+		"[example 2] 4. shown %d x %d units, its pivot (the ground point) on the resting spot" % [roundi(rect.size.x), roundi(rect.size.y)])
 	t.check(GameSession.get_companion().spot == spot_before and pet.position.is_equal_approx(position_before),
 		"[example 2] the pet's state and resting place are unchanged by the picture")
 	t.check(not F.is_fixture(pet.get_pose_texture(CompanionVisualSet.POSE_SLEEPING)), "[example 2] the other poses keep their own pictures until drawn")
