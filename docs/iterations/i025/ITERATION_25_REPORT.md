@@ -131,14 +131,109 @@ adoption record, already welcomed.
 
 ## Part II - A more believable Real Horizon
 
-(See the visual sections below: cabins, harbours, neighbouring boats,
-windows and the water outside the cabin.)
+### Scale first
 
-VISUALS_PLACEHOLDER
+Measured on the painted boats, the art runs at about **1 cm per scene unit**
+(the Starling 33's hull is 1000 units for 10 m; the Captain 40 units across
+the shoulders), not the 2.5 cm the art guide said. Harbour houses, quay
+fittings and neighbouring boats were 3-10 times too small; everything is now
+drawn to the boats as painted (`HarbourDressing.METRE` = 100). The art guide
+is corrected.
+
+### Cabins (item 12)
+
+All four cabins repainted as yacht interiors from their own scene shapes, by
+one shared painter (`tools/vessels/cabin_joinery.py`): a gelcoat edge, pale
+headlining and varnished battens on the hull band with frames about every
+60 cm, a teak-and-holly sole with lift-out boards and brass finger rings,
+rounded joinery with grain and fiddles, buttoned settee backs and piped
+cushions with a lee cloth, berths with sheet, quilt and pillows, a stainless
+stove and sink, the chart table's hinged lid and instruments, non-slip steps
+with grab rails, louvred lockers. Per boat: the Arctic Wanderer 26 with three
+portlights a side; the Wing 33 keeps its six windows and its black space aft
+is now the cockpit above, behind a varnished bulkhead; the Frogleap 36's
+floats are muted gelcoat instead of brown shapes; the Clam 40 has four large
+saloon windows forward, wet heads with a teak grating, an L-settee and a
+bunk with a bunk board. Walkable areas, collision, stations, spawn points,
+companion spots and the laptop table are unchanged.
+
+### Windows on every boat (item 15)
+
+Every cabin has windows now, each in a framed recess painted into the wall;
+they can look to either side and (the Clam 40) forward. Port and starboard
+look out on opposite bearings, the scenery stays inside each opening (no
+bleed through the hull) and the windows sit under the furniture. Moored, the
+water in them is calmer. Data in `data/vessels/cabin_windows.json`.
+
+### The water outside the cabin (item 16)
+
+The black void around the hull is gone: the deck's own sea (so wind,
+weather, harbour shelter and the boat's speed all match) is drawn under a
+night-blue veil, thinnest along the hull, a little stronger at night, with
+the sun glints cut to a quarter; moored, the pontoon shows faintly to
+starboard (`CabinSeaBackdrop`). It lies under all cabin art, the cabin lamps
+do not light it, and the shader skips the floor the cabin art covers, so it
+never reads as a transparent hull. Its cost is in the performance section.
+
+### Harbour houses (item 13)
+
+The generated town has building types per region instead of one recoloured
+row: Nordic timber houses and gable-end boat sheds; Atlantic granite and
+render terraces with slate roofs and chimney stacks; Mediterranean pantile
+and hip roofs, roof terraces, shutters and umbrella pines; tropical tin
+roofs, verandas, water tanks and palms. Roof materials at real size, detail
+fading towards the back, a light haze. Quay fittings at real size (granite
+coping 32, bollards r 14, a 75 cm life ring, lamps 34 × 22, ladders 44). All
+fifteen painted looks and special harbours repainted at true scale - one or
+two full-size buildings with real windows and doors and each region's
+signature (a tarred boathouse, a stepped gable, a blue dome, Valletta's
+coloured store doors, Essaouira's cannons, Lunenburg's ox-blood
+warehouses) - with glazing bars, so the harbour moment still lights their
+windows at night.
+
+### Neighbouring boats (item 14)
+
+A mix per region in real lengths - tenders 2.6-3.2 m, small sailboats
+6-7.6 m, cruising yachts 9.5-12 m, large yachts, motor yachts, catamarans,
+Nordic cutters, Atlantic crabbers, snekker, gozzi, tropical launches -
+moored side by side and running on out of the picture, ends towards the
+pontoon (bows in the Mediterranean, which moors stern-to), the far side
+softly hazed. No magnifier circle. Collision, stations, the shore strip and
+the clearance from the player's boat are unchanged.
+
+Screenshots: `docs/screenshots/i025/visual/` (cabins before/after by day and
+night, moored and underway; harbours and boats before/after for Copenhagen,
+Kiel, Naples, Dingle, Dakar, Bergen, plus Le Marin).
+
+### Found on the way
+
+Since I017, every companion facing left was drawn one sprite width to the
+right of where it stood (Godot draws a negative-width rectangle from its
+position to the right; the old code shifted it once more). Its highlight
+outline was always right, so tests never saw it; the dock animals' rendered
+frames did. Fixed in `ShipCompanion._draw_texture_in`.
 
 ## Part III
 
-TITLE_PLACEHOLDER
+### The name (item 17: discussion only, nothing renamed)
+
+Asked to think about it, not to change it: the repository, save folders, app
+identifier, metadata and file paths are all untouched.
+
+| Candidate | For | Against |
+|---|---|---|
+| **Little Captain's Hat** (today) | Warm, personal, the hat is a real object in the game; it has history with the Captain and in the saves. | Sounds smaller and more childlike than the illustrated-realism direction; says nothing about sailing. |
+| **LCH: Real Horizon** | Keeps the heritage and the build label's `LCH`, marks the new edition clearly. | A subtitle with a colon reads like an expansion pack; two names to remember. |
+| **Real Horizon** | Short, calm, describes the look and the feeling of the sea; already the edition's name internally. | Loses the hat and the coziness; generic enough to collide with other products. |
+| **WorldSailor** | Matches the repository (`WorldSailorSim`) and the world-wide sailing. | Sounds like a simulator brand, cooler than the game's heart; "Sim" expectations. |
+| *Harbour Light* (new) | Cozy, evokes arriving somewhere safe at dusk, the lamps in the cabin, the golden harbours. | Less about the voyage itself. |
+| *Fair Winds, Little Captain* (new) | Keeps "Little Captain", adds the sailor's blessing; gentle and specific. | Long for a title bar and a store tile. |
+
+**Recommendation for the Captain's decision:** keep **Little Captain's Hat**
+as the game's name for now, and use **Real Horizon** as the name of the
+edition and art direction (as today) — a rename can wait until the store
+page and the save folder questions are worth answering. If a new name is
+wanted, *Fair Winds, Little Captain* keeps the most of what the game is.
 
 **The laptop and the in-world interface** are kept as I024 left them; the
 history gained its *Aboard* section. **Pet toys** are not built: nothing in
