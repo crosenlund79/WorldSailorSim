@@ -34,6 +34,7 @@ func run(runner: Node) -> void:
 	await _test_winch()
 	await _test_vhf()
 	await _test_postcard()
+	await _test_layout()
 	Simulation.auto_advance = true
 	app.queue_free()
 	await t.frames(2)
@@ -219,3 +220,18 @@ func _test_postcard() -> void:
 	await t.screenshot("i026_view_postcard")
 	app.modals.clear()
 	await t.frames(2)
+
+
+func _test_layout() -> void:
+	await _cabin()
+	var problems: Array[String] = await ViewFit.problems(t, app, {
+		"logbook": func() -> void: app.open_cabin_object(CabinObject.LOGBOOK),
+		"vhf": func() -> void: app.open_cabin_object(CabinObject.VHF),
+		"systems": func() -> void: app.open_cabin_object(CabinObject.SYSTEMS),
+		"postcard": func() -> void: app.open_cabin_object(CabinObject.POSTCARD),
+		"locker": func() -> void: app.open_provisions(),
+		"stove": func() -> void: app.open_cooking(),
+		"trophies": func() -> void: app.open_trophies(),
+		"berth": func() -> void: app.open_sleep_menu(),
+	})
+	t.check(problems.is_empty(), "[layout] the cabin's framed views fit at 1280x720 and 1024x768, 100 %% and 130 %%, English and Danish %s" % [problems])

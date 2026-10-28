@@ -10036,3 +10036,9 @@ msgstr "Skala"
 
 msgid "Trim the sails"
 msgstr "Trim sejlene"
+
+msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. The instruments show the speed, the heading, the wind and the route, on deck and in the cabin; {instruments} (or a click on them) shows them close up with their pages, and {chartplotter} the chartplotter at the helm. The wheel offers the radar, and a chandlery sells better instruments. {sail_trim} (or the winch on the cockpit coaming) opens sail trim: well-trimmed sails are faster."
+msgstr "Sæt sejl fra hjulet, når en kurs er lagt. Båden sejler kursen af sig selv. Instrumenterne viser fart, kurs, vind og rute, på dækket og i kahytten; {instruments} (eller et klik på dem) viser dem tæt på med deres sider, og {chartplotter} kortplotteren ved roret. Hjulet tilbyder radaren, og en skibshandel sælger bedre instrumenter. {sail_trim} (eller spillet på cockpitkarmen) åbner sejltrim: godt trimmede sejl er hurtigere."
+
+msgid "The cabin has your berth (sleep), the navigation table (the chart) with the logbook and the VHF radio on it, the switch panel (what the boat keeps track of), the sea chest by the berth (make the cabin home), the provisions locker, your laptop on the table, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board; your newest postcard lies on the table. Things you can use light up when you are close; press {interact}, and {pause} puts them back."
+msgstr "Kahytten har din køje (søvn), navigationsbordet (søkortet) med logbogen og VHF-radioen, eltavlen (det, båden holder styr på), søkisten ved køjen (gør kahytten til et hjem), proviantskabet, din laptop på bordet, komfuret, kaffebordet, hattekrogen, det indrammede verdenskort og trofætavlen; dit nyeste postkort ligger på bordet. Ting, du kan bruge, lyser op, når du er tæt på; tryk {interact}, og {pause} lægger dem tilbage."

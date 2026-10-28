@@ -212,7 +212,7 @@ msgid "Set sail"
 msgstr ""
 
 #: data/academy/academy.json
-msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. The instruments show the speed, the heading, the wind and the route, on deck and in the cabin; {instruments} (or a click on them) shows them close up with their pages, and {chartplotter} the chartplotter at the helm. The wheel offers the radar, and a chandlery sells better instruments. {sail_trim} opens sail trim: well-trimmed sails are faster."
+msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. The instruments show the speed, the heading, the wind and the route, on deck and in the cabin; {instruments} (or a click on them) shows them close up with their pages, and {chartplotter} the chartplotter at the helm. The wheel offers the radar, and a chandlery sells better instruments. {sail_trim} (or the winch on the cockpit coaming) opens sail trim: well-trimmed sails are faster."
 msgstr ""
 
 #: data/academy/academy.json
@@ -264,7 +264,7 @@ msgid "The cabin"
 msgstr ""
 
 #: data/academy/academy.json
-msgid "The cabin has your berth (sleep), the navigation table (the chart), the provisions locker, your laptop on the table, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board. Things you can use light up when you are close; press {interact}."
+msgid "The cabin has your berth (sleep), the navigation table (the chart) with the logbook and the VHF radio on it, the switch panel (what the boat keeps track of), the sea chest by the berth (make the cabin home), the provisions locker, your laptop on the table, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board; your newest postcard lies on the table. Things you can use light up when you are close; press {interact}, and {pause} puts them back."
 msgstr ""
 
 #: data/academy/academy.json

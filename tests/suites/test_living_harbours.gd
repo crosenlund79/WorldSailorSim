@@ -34,6 +34,7 @@ func run(runner: Node) -> void:
 	await _test_cafe()
 	await _test_people()
 	await _test_wheel_and_keys()
+	await _test_layout()
 	await _test_save_on_the_quay()
 	await _test_walk_back_down()
 	Simulation.auto_advance = true
@@ -523,3 +524,19 @@ func _test_walk_back_down() -> void:
 	var deck := app.router.current_screen as BoatArea
 	t.check(deck != null and deck.player.position.distance_to(deck.get_walkway_return_point()) < 40.0,
 		"[leave] walking back down the walkway returns to the deck, by the walkway")
+
+
+## The quay's own views fit at every promised size, scale and language.
+func _test_layout() -> void:
+	_moor_at(&"copenhagen", 11.0)
+	var front := await _quay()
+	if front == null:
+		return
+	var problems: Array[String] = await ViewFit.problems(t, app, {
+		"café": func() -> void: app.open_cafe(),
+		"harbour office": func() -> void: app.open_harbour_office(false),
+		"hatch": func() -> void: app.open_harbour_office(true),
+		"noticeboard": func() -> void: app.open_noticeboard(),
+		"chandlery": func() -> void: app.open_chandlery(),
+	})
+	t.check(problems.is_empty(), "[layout] the café, the office, its hatch, the noticeboard and a shop counter fit at 1280x720 and 1024x768, 100 %% and 130 %%, English and Danish %s" % [problems])
