@@ -21,8 +21,9 @@ extends Node
 ## they go when the encounter does.
 
 ## How far from the gangplank the box stands (between the service slots at
-## ±215 and ±430, clear of the companions' places on the pontoon).
-const BOX_OFFSET := 300.0
+## ±215 and ±430, past the mooring line's cleat, clear of the companions'
+## places on the pontoon).
+const BOX_OFFSET := 370.0
 ## How close it keeps to the Captain while following.
 const FOLLOW_GAP := 38.0
 const FOLLOW_START := 70.0
