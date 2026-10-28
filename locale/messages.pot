@@ -67,7 +67,7 @@ msgstr ""
 msgid "Each harbour offers its own services: a grocery (food, water, a new hat, lures and the fishmonger), a boatyard (boat care, haul-out, chandlery, sailmaker and boats for sale) and Go Ashore. The arrival card says what is there."
 msgstr ""
 
-#: data/academy/academy.json src/boat/boat_area.gd:1050
+#: data/academy/academy.json src/boat/boat_area.gd:1065
 msgid "Fishing"
 msgstr ""
 
@@ -4306,7 +4306,7 @@ msgstr ""
 msgid "Desk"
 msgstr ""
 
-#: src/aboard/cabin_object.gd:31 src/boat/boat_area.gd:1173 src/boat/boat_lighting.gd:38 src/boat/laptop_prop.gd:23
+#: src/aboard/cabin_object.gd:31 src/boat/boat_area.gd:1188 src/boat/boat_lighting.gd:38 src/boat/laptop_prop.gd:23
 msgid "Table"
 msgstr ""
 
@@ -4594,7 +4594,7 @@ msgstr ""
 msgid "Travel update published: %d renown earned you %s. Funds: %s."
 msgstr ""
 
-#: src/app/app.gd:1874 src/boat/boat_area.gd:122 src/boat/boat_area.gd:1440 src/boat/boat_area.gd:806
+#: src/app/app.gd:1874 src/boat/boat_area.gd:125 src/boat/boat_area.gd:1455 src/boat/boat_area.gd:821
 msgid "Interactable"
 msgstr ""
 
@@ -4748,7 +4748,7 @@ msgstr ""
 msgid "Laptop"
 msgstr ""
 
-#: src/app/app.gd:739 src/app/app.gd:746 src/ui/instrument_view.gd:71 src/ui/systems_view.gd:55
+#: src/app/app.gd:739 src/app/app.gd:746 src/ui/instrument_view.gd:71 src/ui/systems_view.gd:56
 msgid "Instruments"
 msgstr ""
 
@@ -4764,7 +4764,7 @@ msgstr ""
 msgid "Trim sails"
 msgstr ""
 
-#: src/app/app.gd:752 src/boat/boat_area.gd:1058 src/ui/anchor_menu.gd:63
+#: src/app/app.gd:752 src/boat/boat_area.gd:1073 src/ui/anchor_menu.gd:63
 msgid "Anchor"
 msgstr ""
 
@@ -4776,7 +4776,7 @@ msgstr ""
 msgid "Charts"
 msgstr ""
 
-#: src/app/app.gd:766 src/boat/boat_area.gd:1050 src/ui/fishing_menu.gd:55
+#: src/app/app.gd:766 src/boat/boat_area.gd:1065 src/ui/fishing_menu.gd:55
 msgid "Fishing rod"
 msgstr ""
 
@@ -4990,99 +4990,99 @@ msgstr ""
 msgid "OneShot%d"
 msgstr ""
 
-#: src/boat/boat_area.gd:1073
+#: src/boat/boat_area.gd:1088
 msgid "Cup holder"
 msgstr ""
 
-#: src/boat/boat_area.gd:1086 src/ui/cooking_menu.gd:72
+#: src/boat/boat_area.gd:1101 src/ui/cooking_menu.gd:72
 msgid "Cook"
 msgstr ""
 
-#: src/boat/boat_area.gd:1086
+#: src/boat/boat_area.gd:1101
 msgid "Cook a meal or make coffee"
 msgstr ""
 
-#: src/boat/boat_area.gd:1096
+#: src/boat/boat_area.gd:1111
 msgid "Look at the trophy board"
 msgstr ""
 
-#: src/boat/boat_area.gd:1096
+#: src/boat/boat_area.gd:1111
 msgid "Trophies"
 msgstr ""
 
-#: src/boat/boat_area.gd:1192
+#: src/boat/boat_area.gd:1207
 msgid "Your coffee"
 msgstr ""
 
-#: src/boat/boat_area.gd:1467
+#: src/boat/boat_area.gd:1482
 msgid "Captain's hat"
 msgstr ""
 
-#: src/boat/boat_area.gd:1521 src/ui/plotter_view.gd:48
+#: src/boat/boat_area.gd:1536 src/ui/plotter_view.gd:48
 msgid "Chartplotter"
 msgstr ""
 
-#: src/boat/boat_area.gd:1521
+#: src/boat/boat_area.gd:1536
 msgid "Use the chartplotter"
 msgstr ""
 
-#: src/boat/boat_area.gd:441
+#: src/boat/boat_area.gd:444
 msgid "Visual/BoomVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:441
+#: src/boat/boat_area.gd:444
 msgid "Visual/HeadSailVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:441
+#: src/boat/boat_area.gd:444
 msgid "Visual/MainSailVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:441
+#: src/boat/boat_area.gd:444
 msgid "Visual/RiggingVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:442
+#: src/boat/boat_area.gd:445
 msgid "Visual/SpinnakerVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:464
+#: src/boat/boat_area.gd:467
 msgid "Use the laptop"
 msgstr ""
 
-#: src/boat/boat_area.gd:711
+#: src/boat/boat_area.gd:726
 msgid "The cup holder, just the size of a mug. Make a coffee in the galley."
 msgstr ""
 
-#: src/boat/boat_area.gd:73
+#: src/boat/boat_area.gd:75
 msgid "Take the helm"
 msgstr ""
 
-#: src/boat/boat_area.gd:74
+#: src/boat/boat_area.gd:76
 msgid "Check sail configuration"
 msgstr ""
 
-#: src/boat/boat_area.gd:77
+#: src/boat/boat_area.gd:79
 msgid "Put on captain's hat"
 msgstr ""
 
-#: src/boat/boat_area.gd:78 src/boat/boat_area.gd:79
+#: src/boat/boat_area.gd:80 src/boat/boat_area.gd:81
 msgid "Hang up captain's hat"
 msgstr ""
 
-#: src/boat/boat_area.gd:80
+#: src/boat/boat_area.gd:82
 msgid "Look at the empty hat hook"
 msgstr ""
 
-#: src/boat/boat_area.gd:821
+#: src/boat/boat_area.gd:836
 msgid "GUEST PONTOON · %s"
 msgstr ""
 
-#: src/boat/boat_area.gd:850 src/harbour/harbour_facilities.gd:133
+#: src/boat/boat_area.gd:865 src/harbour/harbour_facilities.gd:133
 msgid "Go ashore"
 msgstr ""
 
-#: src/boat/boat_area.gd:863
+#: src/boat/boat_area.gd:878
 msgid "GO ASHORE"
 msgstr ""
 
@@ -5140,6 +5140,10 @@ msgstr ""
 
 #: src/boat/visuals/vessel_visual_profile.gd:60
 msgid "Damage"
+msgstr ""
+
+#: src/boat/winch_prop.gd:53
+msgid "Trim the sails"
 msgstr ""
 
 #: src/boat_care/boat_care.gd:170

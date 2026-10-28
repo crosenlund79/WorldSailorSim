@@ -2047,6 +2047,7 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.cooking_requested.connect(open_cooking)
 	area.anchor_requested.connect(open_anchor)
 	area.cabin_object_requested.connect(func(kind: StringName) -> void: open_cabin_object(kind))
+	area.trim_requested.connect(func() -> void: open_sail_trim())
 	_update_vhf_lamp.call_deferred()
 	area.instruments_requested.connect(open_instruments)
 	area.chartplotter_requested.connect(open_chartplotter)

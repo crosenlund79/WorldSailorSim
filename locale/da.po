@@ -9792,3 +9792,6 @@ msgstr "%d sm"
 
 msgid "Range"
 msgstr "Skala"
+
+msgid "Trim the sails"
+msgstr "Trim sejlene"

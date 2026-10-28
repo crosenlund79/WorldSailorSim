@@ -1,5 +1,6 @@
 extends RefCounted
-## I026, A World You Can Touch - life aboard (stage 04): the things a sailor
+## I026, A World You Can Touch - life aboard (stage 04): the sheet winch on
+## every deck trims the sails (WinchProp); the things a sailor
 ## uses below are objects in every cabin (CabinObject) - the logbook and the
 ## VHF set at the nav station, the switch panel, the sea chest by the berth,
 ## the newest postcard on the saloon table - each reachable by the Captain
@@ -30,6 +31,7 @@ func run(runner: Node) -> void:
 	for boat in BOATS:
 		await _test_cabin(boat)
 	await _test_views()
+	await _test_winch()
 	await _test_vhf()
 	await _test_postcard()
 	Simulation.auto_advance = true
@@ -54,7 +56,7 @@ func _cabin() -> BoatArea:
 
 ## A free place beside `object` (inside the cabin, outside every piece of
 ## furniture) from which E focuses it, or Vector2.INF.
-func _stand_by(area: BoatArea, object: CabinObject) -> Vector2:
+func _stand_by(area: BoatArea, object: Node2D) -> Vector2:
 	var solids: Array[PackedVector2Array] = []
 	for fixture in area.get_node("Layout/Collision").get_children():
 		if fixture is BoatFixture and String(fixture.name) != "Hull":
@@ -62,7 +64,7 @@ func _stand_by(area: BoatArea, object: CabinObject) -> Vector2:
 	for radius in [34.0, 46.0, 58.0]:
 		for i in 16:
 			var p: Vector2 = object.position + Vector2.from_angle(TAU * i / 16.0) * radius
-			if not area.walkable_bounds.grow(-22.0).has_point(p):
+			if not area.walkable_bounds.grow(-22.0).has_point(p) or not area.is_valid_player_position(p):
 				continue
 			if solids.any(func(poly: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(p, poly)):
 				continue
@@ -70,7 +72,7 @@ func _stand_by(area: BoatArea, object: CabinObject) -> Vector2:
 			area.player.velocity = Vector2.ZERO
 			area.player.set_facing((object.position - p).normalized())
 			await t.physics_frames(4)
-			if area.player.get_focused_interactable() == object.interactable:
+			if area.player.get_focused_interactable() == object.get("interactable"):
 				return p
 	return Vector2.INF
 
@@ -133,6 +135,40 @@ func _test_views() -> void:
 	var labels := rows.map(func(r: Array) -> String: return String(r[0]))
 	t.check(labels.has("Hull and bottom") and labels.has("Food aboard") and labels.has("Water aboard") and not labels.any(func(l: String) -> bool: return l.containsn("battery") or l.containsn("fuel")),
 		"[systems] hull, care survey, food and water - no invented battery or fuel (%s)" % [labels])
+	await t.frames(2)
+
+
+## The sheet winch on every deck: E there trims the sails (under way).
+func _test_winch() -> void:
+	for boat in BOATS:
+		await t.board(boat, app)
+		app.modals.clear()
+		GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"start")
+		app._show_current_boat_area()
+		await _settle()
+		var deck := app.router.current_screen as BoatArea
+		var winch := deck.get_winch()
+		if not t.check(winch != null, "[%s] a sheet winch on the cockpit coaming" % boat):
+			continue
+		var spot := await _stand_by(deck, winch)
+		t.check(spot != Vector2.INF, "[%s] the winch can be reached: E focuses it ('%s')" % [boat, winch.interactable.prompt])
+		if boat == &"starling_33":
+			await t.screenshot("i026_winch_%s" % boat)
+	# In harbour it says why not; under way it opens the trim.
+	var deck := app.router.current_screen as BoatArea
+	app.toasts.clear()
+	deck.get_winch().interactable.interacted.emit(deck.get_winch().interactable, deck.player)
+	await t.frames(3)
+	t.check(app.modals.is_empty() and app.toasts.get_messages().size() > 0, "[winch] moored: no trim, a word why (%s)" % [app.toasts.get_messages()])
+	GameSession.plan_route_to(&"kiel")
+	GameSession.depart()
+	await _settle()
+	deck = app.router.current_screen as BoatArea
+	deck.get_winch().interactable.interacted.emit(deck.get_winch().interactable, deck.player)
+	await t.frames(3)
+	t.check(app.modals.get_top() is SailTrimPanel, "[winch] under way: E on the winch opens the sail trim (as T does)")
+	app.modals.clear()
+	GameSession.start_new_session(&"")
 	await t.frames(2)
 
 

@@ -42,6 +42,8 @@ signal trophies_requested
 ## I026: a cabin object was used (CabinObject: logbook, VHF set, systems
 ## panel, sea chest, postcard); App opens its focused view.
 signal cabin_object_requested(kind: StringName)
+## I026: the sheet winch was used (WinchProp): sail trim.
+signal trim_requested
 ## I026: the cockpit instruments or the helm's chartplotter were used (E or a click).
 signal instruments_requested
 signal chartplotter_requested
@@ -119,6 +121,7 @@ func _ready() -> void:
 	player.focus_changed.connect(_on_player_focus_changed)
 	_setup_second_companion()  # I025: a node for a second companion (before the connections below)
 	_setup_cabin_objects()  # I026: the logbook, the VHF set, ... (before the connections below)
+	_setup_winch()  # I026: the sheet winch where the sails are trimmed (before the connections below)
 	for node in find_children("*", "Interactable", true, false):
 		(node as Interactable).interacted.connect(_on_interacted)
 	AudioManager.play_ambience(ambience)
@@ -473,6 +476,16 @@ func _setup_cabin_objects() -> void:
 	CabinObject.place_all(self)
 
 
+## The sheet winch on deck (I026, WinchProp): E trims the sails.
+func _setup_winch() -> void:
+	if area_id == SessionState.AREA_EXTERIOR:
+		WinchProp.place(self)
+
+
+func get_winch() -> WinchProp:
+	return get_node_or_null(^"Winch") as WinchProp
+
+
 func get_cabin_object(kind: StringName) -> CabinObject:
 	return get_node_or_null(NodePath("CabinObject_%s" % kind)) as CabinObject
 
@@ -700,6 +713,8 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 			chartplotter_requested.emit()
 		&"hat":
 			message_requested.emit(GameSession.use_hat_hook())
+		&"trim":
+			trim_requested.emit()
 		&"logbook", &"vhf", &"systems", &"keepsakes", &"postcard":
 			cabin_object_requested.emit(interactable.interaction_id)
 		&"cup_holder", &"coffee_table":
