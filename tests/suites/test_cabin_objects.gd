@@ -110,7 +110,7 @@ func _test_views() -> void:
 		await t.frames(4)
 		t.check(app.modals.is_empty(), "[%s] Esc closes it" % kind)
 	# The logbook holds the real Captain's Log.
-	var log := app.open_cabin_object(CabinObject.LOGBOOK)
+	var log: ModalPanel = app.open_cabin_object(CabinObject.LOGBOOK)
 	t.check(log is CaptainsLogMenu, "[logbook] the Captain's Log itself, not a copy")
 	app.modals.clear()
 	# The existing cabin menus, framed as their objects.
@@ -152,7 +152,7 @@ func _test_vhf() -> void:
 		app._on_vhf_call(call)
 		answerable = GameSession.can_answer_vhf(call)
 	t.check(call.is_empty() or radio.call_waiting, "[vhf] a call waiting: the set's lamp blinks")
-	var view := app.open_vhf_set()
+	var view: VhfSetView = app.open_vhf_set()
 	await t.frames(3)
 	t.check(view != null and view.has_node(^"FocusFrame"), "[vhf] the set opens, framed as the radio")
 	t.check(VhfSetView.broadcast_lines().size() >= 1 and VhfSetView.broadcast_lines()[0].containsn("kn"),
