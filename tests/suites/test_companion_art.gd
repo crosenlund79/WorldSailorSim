@@ -155,16 +155,13 @@ func _test_consistent_placement() -> void:
 # --- In the game ----------------------------------------------------------------------
 
 func _test_new_game_preview() -> void:
+	# I025: New Game no longer previews a companion (one is found along the
+	# way); the art below is tested on a game started with the cat.
 	await t.click(app.router.current_screen.find_child("NewGameButton", true, false) as Button)
 	var menu := app.modals.get_top() as NewGameMenu
-	var preview := menu.find_child("Preview", true, false) as ShipCompanion
-	t.check(preview.is_sprite_mode() and preview.pose == &"resting", "[cat art] the New Game dialog previews the drawn cat")
-	await t.screenshot("53_new_game_cat_art")
-	await t.click(menu.find_child("DogButton", true, false) as Button)
-	t.check(preview.is_sprite_mode() and preview.kind == CompanionState.KIND_DOG, "[dog art] the dog preview shows the new illustrated dog")
-	await t.screenshot("13_new_game_dog_art")
-	await t.click(menu.find_child("CatButton", true, false) as Button)
-	await t.click(menu.find_child("StartButton", true, false) as Button)
+	t.check(menu != null and menu.find_child("Preview", true, false) == null, "[new game] no companion preview (I025)")
+	app.modals.clear()
+	app.start_new_game(CompanionState.KIND_CAT)
 	await _settle()
 
 
@@ -424,7 +421,7 @@ func _test_dog() -> void:
 func _count_companions() -> int:
 	var count := 0
 	for node in t.get_tree().root.find_children("*", "", true, false):
-		if node is ShipCompanion and not (node as ShipCompanion).preview and node.is_inside_tree():
+		if node is ShipCompanion and not (node as ShipCompanion).preview and node.is_visible_in_tree():
 			count += 1
 	return count
 

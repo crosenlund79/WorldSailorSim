@@ -69,6 +69,21 @@ const HEART := Color("#C97A6C")
 @export var preview := false
 ## The cabin's resting-spot markers (one Marker2D per CompanionState spot id).
 @export var spots_path := ^"../Layout/CompanionSpots"
+## I025: which companion this node shows - the first (0) or the second (1)
+## aboard. Every cabin and deck has one node per slot; a slot with nobody in
+## it shows nothing. Signals name a companion by its stable id.
+@export var slot := 0
+## I025: an animal that is not (yet) a companion - the one waiting on the
+## dock (DockEncounterScene). Its kind is set directly; it follows no session
+## state and is not petted (its own interaction is "befriend").
+@export var stray := false
+## Where a second animal rests when both share a spot (towards the room's
+## middle, so they lie side by side, never on top of one another).
+const PAIR_OFFSET := 26.0
+## I025: how much faster than its calm walk it moves (and its walk clip
+## plays, so the feet never slide): a dock animal following the Captain
+## (the cat walks briskly, the Pug trots).
+var pace := 1.0
 
 var kind: StringName = CompanionState.DEFAULT_KIND
 var spot: StringName = &""
@@ -145,7 +160,7 @@ func _ready() -> void:
 		return
 	interactable = Interactable.new()
 	interactable.name = "Pet"
-	interactable.interaction_id = &"pet"
+	interactable.interaction_id = &"befriend" if stray else &"pet"
 	interactable.focus_priority = -1  # stations and doors nearby keep precedence
 	# Focused, it glows around the animal itself (Iteration 13), like every
 	# station: no tint, no circle.
@@ -156,12 +171,16 @@ func _ready() -> void:
 	shape.shape = circle
 	interactable.add_child(shape)
 	add_child(interactable)
-	set_meta(HighlightResolver.META_FOR, &"pet")
+	set_meta(HighlightResolver.META_FOR, interactable.interaction_id)
 	add_to_group(HighlightResolver.GROUP)
+	if stray:
+		_load_visuals()
+		return
 	_sync()
 	GameSession.companion_area_changed.connect(_on_area_changed)
 	GameSession.companion_moved.connect(_on_companion_moved)
 	GameSession.state_replaced.connect(_sync)
+	GameSession.companions_changed.connect(_sync)
 	GameSession.anchor_life_changed.connect(_on_anchor_life_changed)
 	# Coming below at a quiet anchorage: already curled up.
 	if GameSession.is_settled_at_anchor():
@@ -192,7 +211,8 @@ func pet() -> void:
 		# Walking it keeps its walking look (alert) until it arrives; resting,
 		# it plays its petting response (the pet clip, else the alert look).
 		set_pose(CompanionVisualSet.POSE_ALERT, 60.0 if is_walking() else maxf(visual_set.alert_seconds, REACTION_SECONDS))
-	GameSession.note_companion_petted(kind)
+	if not stray:
+		GameSession.note_companion_petted(kind)
 	petted.emit(kind)
 
 
@@ -204,7 +224,7 @@ func take_remark() -> String:
 		return ""
 	_last_remark_ms = now
 	_remark_turn += 1
-	return CompanionRemarks.remark(CompanionRemarks.identity(GameSession.get_companion()), _remark_turn - 1)
+	return CompanionRemarks.remark(CompanionRemarks.identity(get_companion_state()), _remark_turn - 1)
 
 
 ## Lets the next petting have its remark at once (tests).
@@ -238,11 +258,9 @@ func show_kind(companion_kind: StringName) -> void:
 
 ## Its resting spot changed (the schedule, or waking by the berth). In view
 ## it walks (or flies) there; out of view it is simply there.
-func _on_companion_moved(_spot: StringName) -> void:
-	if is_walking():
-		return
-	var companion := GameSession.get_companion()
-	if companion == null:
+func _on_companion_moved(id: int, _spot: StringName) -> void:
+	var companion := get_companion_state()
+	if companion == null or companion.id != id or is_walking():
 		return
 	if not on_deck and companion.area == CompanionState.AREA_CABIN and is_visible_in_tree() and is_sprite_mode() \
 			and companion.kind == kind and not GameSession.is_asleep() and GameSession.get_time_scale() <= 1:
@@ -259,7 +277,10 @@ func _shows(area: StringName) -> bool:
 
 
 ## Up on deck, down below, ashore, or to another place (Iteration 18, I024).
-func _on_area_changed(area: StringName) -> void:
+func _on_area_changed(id: int, area: StringName) -> void:
+	var companion := get_companion_state()
+	if companion == null or companion.id != id:
+		return
 	if GameSession.is_asleep():
 		_sync()  # it moved while the Captain slept: simply there
 		return
@@ -280,6 +301,13 @@ func _on_area_changed(area: StringName) -> void:
 
 func is_walking() -> bool:
 	return _walk_index < _walk.size()
+
+
+## Walks (flies, hops) from where it is to `target`, by the same ways as
+## every other walk (I025: the dock animal, the welcome home, pair moments).
+func walk_to(target: Vector2) -> void:
+	_walking_out = false
+	_start_walk(position, target)
 
 
 ## True while the parrot is in the air.
@@ -410,14 +438,14 @@ func _advance_walk(delta: float) -> void:
 
 func _walk_speed() -> float:
 	if visual_set == null:
-		return WALK_SPEED
+		return WALK_SPEED * pace
 	if _flying:
 		return visual_set.fly_speed if visual_set.fly_speed > 0.0 else FLY_SPEED
 	if _is_bird():
 		# A hop covers its distance in one hop clip.
 		var length := maxf(clip_length(CompanionVisualSet.POSE_HOP), 0.3)
 		return maxf(HOP_DISTANCE / length, 20.0)
-	return visual_set.walk_speed if visual_set.walk_speed > 0.0 else WALK_SPEED
+	return (visual_set.walk_speed if visual_set.walk_speed > 0.0 else WALK_SPEED) * pace
 
 
 ## Faces the way of a move along x (small moves keep the facing).
@@ -434,14 +462,42 @@ func _entry_position() -> Vector2:
 
 
 func _rest_position() -> Vector2:
-	var companion := GameSession.get_companion()
+	var companion := get_companion_state()
+	if companion == null:
+		return position
 	if on_deck and companion.area == CompanionState.AREA_SHORE:
 		var shore := _shore_access()
 		if shore:
 			return get_shore_spot(shore, companion.deck_spot)
 	if on_deck and deck_spots:
 		return deck_spots.get_spot(companion.deck_spot)
-	return get_spot_position(companion.spot)
+	return _paired(get_spot_position(companion.spot), companion)
+
+
+## The companion this node shows (a copy), or null when its slot is empty.
+func get_companion_state() -> CompanionState:
+	if stray or preview:
+		return null
+	var all := GameSession.get_companions()
+	return all[slot] if slot < all.size() else null
+
+
+## The other companion's copy, or null.
+func _other_companion() -> CompanionState:
+	var all := GameSession.get_companions()
+	return all[1 - slot] if all.size() == 2 else null
+
+
+## A second animal on the same cabin spot lies beside the first, a little
+## towards the room (the companionway marker), not on top of it.
+func _paired(at: Vector2, companion: CompanionState) -> Vector2:
+	var other := _other_companion()
+	if slot == 0 or other == null or other.area != CompanionState.AREA_CABIN or other.spot != companion.spot:
+		return at
+	var toward := get_spot_position(&"companionway") - at
+	if toward.length() < 1.0:
+		toward = Vector2(1, 0)
+	return at + toward.normalized() * PAIR_OFFSET
 
 
 ## Its place `index` on the pontoon (I024): beside the gangplank, on the
@@ -659,7 +715,7 @@ func _idle_extras() -> Array[StringName]:
 
 
 func _advance_clip(delta: float) -> void:
-	_clip_time += delta * _clip_rate
+	_clip_time += delta * _clip_rate * (pace if clip == CompanionVisualSet.POSE_WALK else 1.0)
 	if _clip_queue.is_empty() or not has_clip(clip):
 		return
 	var settings := visual_set.get_clip_settings(clip)
@@ -731,9 +787,14 @@ func use_visual_set(visual_set_override: CompanionVisualSet, refresh := true) ->
 
 ## Shows the companion from the session state (kind and resting spot).
 func _sync() -> void:
-	var companion := GameSession.get_companion()
+	if stray:
+		return
+	var companion := get_companion_state()
 	if companion == null:
 		visible = false
+		_walk = PackedVector2Array()
+		_walk_index = 0
+		_update_interactable()
 		return
 	visible = true
 	if companion.kind != kind or (visual_set == null and _textures.is_empty()):
@@ -751,6 +812,24 @@ func _sync() -> void:
 	update_highlight()
 	interactable.prompt = CompanionRemarks.pet_prompt(CompanionRemarks.identity(companion))
 	_update_interactable()
+	# I025: just adopted - its first minute aboard (once).
+	if not on_deck and visible and not companion.welcomed and not _welcoming and is_sprite_mode():
+		_welcoming = true
+		_welcome.call_deferred()
+
+
+var _welcoming := false
+
+
+func _welcome() -> void:
+	var area := get_parent() as BoatArea
+	var other: ShipCompanion = null
+	if area:
+		for node in area.get_companion_nodes():
+			if node != self:
+				other = node
+	WelcomeHome.play(self, other)
+	_welcoming = false
 
 
 func _sync_rotation() -> void:

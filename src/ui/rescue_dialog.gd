@@ -24,7 +24,9 @@ func _ready() -> void:
 	var port := PortCatalog.get_default().get_display_name(StringName(info.get("port_id", "copenhagen")))
 	_message.text = (Loc.t("Your boat was too badly damaged to sail on. A maritime rescue crew took you and the %s ") +
 		Loc.t("in tow and brought you both safely back to %s. The boat has been repaired and is ready to sail; ") +
-		Loc.t("your companion and supplies are aboard.")) % [GameSession.get_vessel_definition().display_name, port]
+		(Loc.t("your companion and supplies are aboard.") if GameSession.get_companion_count() == 1
+			else Loc.t("your companions and supplies are aboard.") if GameSession.get_companion_count() > 1
+			else Loc.t("your supplies are aboard."))) % [GameSession.get_vessel_definition().display_name, port]
 	_details.text = Loc.t("Return destination: %s\nRescue fee: %s\nRemaining funds: %s") % [port,
 		GameSession.format_money(int(info.get("fee", 0))), GameSession.format_money(int(info.get("funds_after", 0)))]
 	%ContinueButton.pressed.connect(close)

@@ -585,6 +585,12 @@ func _build_history() -> Control:
 		_text(grid, &"Key", row[0], &"MutedLabel")
 		_text(grid, &"Value", row[1])
 	_text(page, &"SpeedNote", "Speeds are averages under sail alone, over a whole hour or day without the engine, as the log measured them.", &"MutedLabel")
+	# I025: who sails along, and where each came aboard (from its own record).
+	var companions := GameSession.get_companions()
+	if not companions.is_empty():
+		_heading(page, "Aboard")
+		for i in companions.size():
+			_text(page, StringName("Companion_%d" % i), _companion_history(companions[i]), &"MutedLabel")
 	_heading(page, "Recent passages")
 	var voyages: Array = log.voyages
 	if voyages.is_empty():
@@ -601,6 +607,15 @@ func _build_history() -> Control:
 		_heading(page, "Earlier honours")
 		_text(page, &"Earlier", ", ".join(earlier), &"MutedLabel")
 	return page
+
+
+## "Welcomed Biscuit aboard in Helsingør, 3 June." - or, for a companion
+## without an adoption record, that it has sailed along from the start.
+static func _companion_history(companion: CompanionState) -> String:
+	if not companion.has_adoption_record():
+		return Loc.t("%s: aboard from the start.") % CompanionRemarks.subject(CompanionRemarks.identity(companion))
+	var port := PortCatalog.get_default().get_display_name(StringName(companion.adopted_port)) if companion.adopted_port != "" else ""
+	return "%s  ·  %s" % [CompanionRemarks.welcomed_line(companion, port), Simulation.format_game_time(companion.adopted_at, false)]
 
 
 static func _record_text(record: Dictionary, format: String) -> String:

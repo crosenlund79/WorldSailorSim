@@ -75,8 +75,12 @@ static func subjects() -> Array[Dictionary]:
 	for species: String in fishing.records:
 		var fish_name := FishingCatalog.get_default().get_species_name(species)
 		out.append({"kind": "fish", "subject": species, "title": fish_name, "args": [fish_name.to_lower()]})
-	var kind := GameSession.get_companion().kind
-	out.append({"kind": "companion", "subject": String(kind), "title": CompanionState.display_name(kind), "args": []})
+	# The companions aboard (I025: none, one or two; one card per kind).
+	var kinds := {}
+	for companion in GameSession.get_companions():
+		if not kinds.has(companion.kind):
+			kinds[companion.kind] = true
+			out.append({"kind": "companion", "subject": String(companion.kind), "title": CompanionState.display_name(companion.kind), "args": []})
 	var seen := {}
 	for record: Dictionary in log.voyages:
 		if record.get("outcome") != String(CaptainsLog.OUTCOME_ARRIVED):

@@ -29,9 +29,13 @@ signal anchorage_reached(waypoint_index: int)
 ## The player switched boats at the boatyard.
 signal vessel_changed(vessel_id: StringName)
 ## The ship's companion moved to another resting spot (see CompanionState).
-signal companion_moved(spot: StringName)
+signal companion_moved(id: int, spot: StringName)
 ## The companion went up on deck or down to the cabin (Iteration 18).
-signal companion_area_changed(area: StringName)
+signal companion_area_changed(id: int, area: StringName)
+## A companion joined the crew (I025: adopted), or the crew was replaced.
+signal companions_changed
+## The animal waiting on the dock appeared, followed, or went (I025).
+signal dock_encounter_changed
 ## Something the player should be told that is not an error of their action
 ## (e.g. an old save's route had to be dropped).
 signal notice(text: String)
@@ -611,9 +615,31 @@ func are_sails_set() -> bool:
 	return is_underway() and _state.propulsion.initialised and _state.propulsion.sails_set()
 
 
-## A copy of the ship's companion (kind, resting spot, schedule).
-func get_companion() -> CompanionState:
-	return _state.companion.duplicate_state() if _state else null
+## A copy of the companion with `id` (0 = the first), or null - since I025
+## there may be none (a new game starts without one).
+func get_companion(id := 0) -> CompanionState:
+	if _state == null:
+		return null
+	var companion := _state.find_companion(id)
+	return companion.duplicate_state() if companion else null
+
+
+## Copies of all companions aboard (I025: none, one or two), first first.
+func get_companions() -> Array[CompanionState]:
+	var out: Array[CompanionState] = []
+	if _state:
+		for c in _state.companions:
+			out.append(c.duplicate_state())
+	return out
+
+
+func get_companion_count() -> int:
+	return _state.companions.size() if _state else 0
+
+
+## True when there is room for another companion (I025: at most two).
+func has_room_for_companion() -> bool:
+	return _state != null and _state.companions.size() < CompanionState.MAX_COMPANIONS
 
 
 ## Whether the companion may be on deck now (Iteration 18): moored, or at
@@ -632,43 +658,57 @@ func companion_may_go_ashore() -> bool:
 	return _state != null and not is_underway() and get_location() != null and companion_may_be_on_deck()
 
 
-## True while the companion is ashore (the boat cannot cast off).
-func is_companion_ashore() -> bool:
-	return _state != null and _state.companion.area == CompanionState.AREA_SHORE
+## True while a companion (`id`, or any when 0) is ashore (the boat cannot
+## cast off then).
+func is_companion_ashore(id := 0) -> bool:
+	if _state == null:
+		return false
+	for c in _state.companions:
+		if (id == 0 or c.id == id) and c.area == CompanionState.AREA_SHORE:
+			return true
+	return false
 
 
-## Moves the companion up on deck (to deck resting place `deck_spot`), down
-## to the cabin or, since I024, ashore (`deck_spot` is then its place on the
-## pontoon). Refused on deck or ashore when it may not be there. Returns
+## The companions ashore now (copies).
+func get_companions_ashore() -> Array[CompanionState]:
+	return get_companions().filter(func(c: CompanionState) -> bool: return c.area == CompanionState.AREA_SHORE)
+
+
+## Moves the companion `id` (0 = the first) up on deck (to deck resting place
+## `deck_spot`), down to the cabin or, since I024, ashore (`deck_spot` is then
+## its place on the pontoon). Refused on deck or ashore when it may not be
+## there. With two companions each keeps its own place (I025). Returns
 ## whether it moved.
-func set_companion_area(area: StringName, deck_spot := 0) -> bool:
+func set_companion_area(area: StringName, deck_spot := 0, id := 0) -> bool:
 	if _state == null or not area in CompanionState.AREAS:
 		return false
 	if area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
 		return false
 	if area == CompanionState.AREA_SHORE and not companion_may_go_ashore():
 		return false
-	var companion := _state.companion
+	var companion := _state.find_companion(id)
+	if companion == null:
+		return false
 	if companion.area == area and (area == CompanionState.AREA_CABIN or companion.deck_spot == deck_spot):
 		return false
 	companion.area = area
 	companion.deck_spot = clampi(deck_spot, 0, 2)
 	_has_unsaved_changes = true
-	SessionLog.write("companion_area", {"area": String(area), "deck_spot": companion.deck_spot})
-	companion_area_changed.emit(area)
+	SessionLog.write("companion_area", {"id": companion.id, "area": String(area), "deck_spot": companion.deck_spot})
+	companion_area_changed.emit(companion.id, area)
 	if area == CompanionState.AREA_SHORE:
-		_note_shore_visit()
+		_note_shore_visit(companion)
 	return true
 
 
-## I024: the harbours (and countries) the companion has been ashore in, kept
-## as renown records without pay ("companion_ashore:<harbour>"), and the two
-## companionship achievements they lead to. Walking about pays nothing.
+## I024: the harbours (and countries) the companions have been ashore in,
+## kept as renown records without pay ("companion_ashore:<harbour>"), and the
+## two companionship achievements they lead to. Walking about pays nothing.
 const COMPANION_SHORE_HARBOURS := 5
 const COMPANION_SHORE_COUNTRIES := 3
 
 
-func _note_shore_visit() -> void:
+func _note_shore_visit(companion: CompanionState) -> void:
 	var port := get_location()
 	if port == null:
 		return
@@ -685,7 +725,7 @@ func _note_shore_visit() -> void:
 			var visited := catalog.get_port(StringName(id.trim_prefix("companion_ashore:")))
 			if visited:
 				countries[visited.country] = true
-	var who := CompanionRemarks.subject(CompanionRemarks.identity(_state.companion))
+	var who := CompanionRemarks.subject(CompanionRemarks.identity(companion))
 	var awards: Array[Dictionary] = []
 	if harbours >= COMPANION_SHORE_HARBOURS:
 		awards.append(_award_once("companion:shore_5", Loc.t("Shore leave: ashore with %s in %d harbours") % [who, harbours], 10))
@@ -767,39 +807,173 @@ func _last_hour_nm() -> float:
 	return nm
 
 
-## Brings the companion below when the deck stops being a place for it (the
-## boat sets off, the anchor comes up, the weather turns).
+## Brings the companions below when the deck stops being a place for them
+## (the boat sets off, the anchor comes up, the weather turns).
 func _companion_to_cabin_if_needed() -> void:
 	if _state == null:
 		return
-	var area := _state.companion.area
-	if area == CompanionState.AREA_SHORE and not companion_may_go_ashore():
-		# Never left behind (weather turned, boat changed): straight back aboard.
-		recall_companion()
-	elif area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
-		set_companion_area(CompanionState.AREA_CABIN)
+	for companion in _state.companions:
+		if companion.area == CompanionState.AREA_SHORE and not companion_may_go_ashore():
+			# Never left behind (weather turned, boat changed): straight back aboard.
+			_recall(companion)
+		elif companion.area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
+			set_companion_area(CompanionState.AREA_CABIN, 0, companion.id)
 
 
-## Calls the companion back aboard from the shore (I024): on deck when it may
-## be there, otherwise below. Always works. Returns a short note for the
-## player, or "" when it was already aboard.
+## Calls every companion ashore back aboard (I024; I025: all of them, one
+## call): on deck when it may be there, otherwise below. Always works.
+## Returns a short note for the player, or "" when all were aboard.
 func recall_companion() -> String:
-	if not is_companion_ashore():
+	if _state == null:
 		return ""
-	var companion := _state.companion
+	var lines: Array[String] = []
+	for companion in _state.companions:
+		if companion.area == CompanionState.AREA_SHORE:
+			lines.append(_recall(companion))
+	return " ".join(lines)
+
+
+func _recall(companion: CompanionState) -> String:
 	companion.area = CompanionState.AREA_CABIN
 	if companion_may_be_on_deck():
 		companion.area = CompanionState.AREA_DECK
-		companion.deck_spot = 0
+		companion.deck_spot = _free_deck_spot(companion)
 	_has_unsaved_changes = true
-	SessionLog.write("companion_area", {"area": String(companion.area), "deck_spot": companion.deck_spot, "recalled": true})
-	companion_area_changed.emit(companion.area)
+	SessionLog.write("companion_area", {"id": companion.id, "area": String(companion.area), "deck_spot": companion.deck_spot, "recalled": true})
+	companion_area_changed.emit(companion.id, companion.area)
 	return CompanionRemarks.recalled(CompanionRemarks.identity(companion))
 
 
-## The reason the boat may not cast off because of the companion (I024), or "".
+# --- Animals on the dock (I025) ---------------------------------------------------------
+
+## Arriving in a harbour, now and then an animal waits on the dock (see
+## DockEncounters): decided once, here, for this arrival.
+func _roll_dock_encounter(port: PortData) -> void:
+	var encounters := _state.encounters
+	if not encounters.current.is_empty():
+		encounters.resolve()
+	if not has_room_for_companion() or port == null:
+		return
+	if DockEncounters.rolls(_state.wind_seed, port.id, _state.game_time, encounters.arrivals_since):
+		encounters.arrivals_since = 0
+		encounters.offered += 1
+		encounters.current = {"port": String(port.id), "kind": DockEncounters.pick_kind(_state.wind_seed, port.id, _state.game_time),
+			"since": _state.game_time, "state": DockEncounters.STATE_WAITING, "trust": 0}
+		SessionLog.write("dock_encounter", {"port": String(port.id), "kind": String(encounters.current.kind)})
+		dock_encounter_changed.emit()
+	else:
+		encounters.arrivals_since += 1
+
+
+func _end_dock_encounter() -> void:
+	if _state and not _state.encounters.current.is_empty():
+		_state.encounters.resolve()
+		dock_encounter_changed.emit()
+
+
+## The animal waiting on this harbour's dock now (a copy), or {} - none while
+## two companions live aboard or away from its harbour.
+func get_dock_encounter() -> Dictionary:
+	if _state == null or not has_room_for_companion():
+		return {}
+	var current := _state.encounters.current
+	if current.is_empty() or is_underway() or String(get_location_id()) != String(current.port):
+		return {}
+	return current.duplicate()
+
+
+## A kind gesture to the waiting animal (greeting, a treat, a little play).
+## Returns {"step": 1.., "trusting": bool, "kind"}; after TRUST_NEEDED it
+## follows the Captain. No meter: the animal's behaviour says it.
+func befriend_dock_animal() -> Dictionary:
+	var current := get_dock_encounter()
+	if current.is_empty():
+		return {}
+	var live := _state.encounters.current
+	live.trust = mini(int(live.trust) + 1, DockEncounters.TRUST_NEEDED)
+	if int(live.trust) >= DockEncounters.TRUST_NEEDED:
+		live.state = DockEncounters.STATE_FOLLOWING
+	_has_unsaved_changes = true
+	dock_encounter_changed.emit()
+	return {"step": int(live.trust), "trusting": live.state == DockEncounters.STATE_FOLLOWING, "kind": live.kind}
+
+
+## Welcomes the waiting animal aboard (I025): a new companion with its name
+## and gender, the time and place of its adoption, in the cabin. Returns its
+## copy, or null when there is no animal or no room.
+func adopt_dock_animal(companion_name: String, companion_gender: StringName) -> CompanionState:
+	var current := get_dock_encounter()
+	if current.is_empty():
+		return null
+	var companion := CompanionState.create(StringName(current.kind), _state.game_time, companion_name, companion_gender)
+	companion.origin = CompanionState.ORIGIN_ADOPTED
+	companion.adopted_at = _state.game_time
+	companion.adopted_port = String(get_location_id())
+	companion.adopted_position = _state.vessel_position
+	companion.welcomed = false
+	companion.area = CompanionState.AREA_CABIN
+	if _state.add_companion(companion) == null:
+		return null
+	_state.encounters.adopted += 1
+	_state.encounters.resolve()
+	# A personal milestone (no renown: the companion is the reward).
+	_state.progress.mark(&"companion:adopted", _state.game_time, _here())
+	_has_unsaved_changes = true
+	SessionLog.write("adoption", {"id": companion.id, "kind": String(companion.kind), "port": companion.adopted_port})
+	dock_encounter_changed.emit()
+	companions_changed.emit()
+	return companion.duplicate_state()
+
+
+## Not now (I025): the animal goes back to the dock, where someone who knows
+## it comes to fetch it. The encounter ends.
+func decline_dock_animal() -> void:
+	if get_dock_encounter().is_empty():
+		return
+	_state.encounters.declined += 1
+	_state.encounters.resolve()
+	_has_unsaved_changes = true
+	SessionLog.write("adoption_declined", {"port": String(get_location_id())})
+	dock_encounter_changed.emit()
+
+
+## The welcome-home moment of companion `id` has played (it plays once).
+func mark_companion_welcomed(id: int) -> void:
+	var companion := _state.find_companion(id) if _state else null
+	if companion and not companion.welcomed:
+		companion.welcomed = true
+		_has_unsaved_changes = true
+
+
+## For tests and tools: puts an animal of `kind` on this harbour's dock now.
+func test_place_dock_animal(kind: StringName) -> void:
+	if _state == null or get_location() == null:
+		return
+	_state.encounters.current = {"port": String(get_location_id()), "kind": kind, "since": _state.game_time,
+		"state": DockEncounters.STATE_WAITING, "trust": 0}
+	dock_encounter_changed.emit()
+
+
+## A deck place (0-2) no other companion on deck is using.
+func _free_deck_spot(companion: CompanionState) -> int:
+	var used := {}
+	for other in _state.companions:
+		if other != companion and other.area in [CompanionState.AREA_DECK, CompanionState.AREA_SHORE]:
+			used[other.deck_spot] = true
+	for spot in 3:
+		if not used.has(spot):
+			return spot
+	return 0
+
+
+## The reason the boat may not cast off because of the companions (I024;
+## I025: naming one or both), or "".
 func companion_departure_refusal() -> String:
-	return CompanionRemarks.still_ashore(CompanionRemarks.identity(_state.companion)) if is_companion_ashore() else ""
+	var ashore: Array[Dictionary] = []
+	for companion in _state.companions if _state else []:
+		if companion.area == CompanionState.AREA_SHORE:
+			ashore.append(CompanionRemarks.identity(companion))
+	return CompanionRemarks.still_ashore_all(ashore)
 
 
 func get_wind_seed() -> int:
@@ -927,6 +1101,7 @@ func depart() -> String:
 	var ashore := companion_departure_refusal()
 	if ashore != "":
 		return ashore
+	_end_dock_encounter()  # I025: an animal still waiting stays on its dock
 	_state.voyage = Voyage.create(route, _state.game_time)
 	_state.hat.voyage_worn_hazard = 0
 	_state.hat.voyage_lost = false
@@ -987,8 +1162,9 @@ func apply_simulation_step(game_time: float, progress_nm: float) -> void:
 		_state.provisions.consume(elapsed / Provisions.DAY_SECONDS * Difficulty.factor("provisions_use"), factor)
 		_check_provisions()
 	# The companion's resting schedule runs on the same clock (pure function of time).
-	if _state.companion.advance_to(game_time):
-		companion_moved.emit(_state.companion.spot)
+	for companion in _state.companions:
+		if companion.advance_to(game_time):
+			companion_moved.emit(companion.id, companion.spot)
 	_companion_to_cabin_if_needed()
 	if _state.voyage:
 		var progress := clampf(progress_nm, 0.0, _state.voyage.get_total_nm())
@@ -1080,8 +1256,9 @@ func complete_voyage() -> void:
 	_state.vessel_position = destination.get_geo_position()
 	var awards := _award_objectives(record, new_harbour)
 	awards.append_array(_award_world_firsts(record, destination))
+	_roll_dock_encounter(destination)  # I025: now and then, a box on the dock
 	# I024: a week or more at sea, together.
-	if float(record.ended) - float(record.departed) >= COMPANION_WEEK_AT_SEA_S:
+	if float(record.ended) - float(record.departed) >= COMPANION_WEEK_AT_SEA_S and not _state.companions.is_empty():
 		var together := _award_once("companion:week_at_sea", Loc.t("Just the two of us: %d days at sea") % floori((float(record.ended) - float(record.departed)) / 86400.0), 25)
 		if not together.is_empty():
 			awards.append(together)
@@ -3504,29 +3681,34 @@ var _companion_wake_day := -1
 
 
 func wake_companion(slept_seconds: float) -> String:
-	if _state == null:
-		return ""
-	var companion := _state.companion
-	var area_before := companion.area
-	var spot_before := companion.spot
-	companion.wake_by_berth(_state.game_time)
-	_has_unsaved_changes = true
+	if _state == null or _state.companions.is_empty():
+		return ""  # sailing alone: nothing to say (I025)
 	# It was there while the Captain slept: shown there at once, not walking
 	# over after waking (the companion nodes do not animate moves in sleep).
 	var awake := not _asleep
 	_asleep = true
-	if companion.area != area_before:
-		companion_area_changed.emit(companion.area)
-	if companion.spot != spot_before:
-		companion_moved.emit(companion.spot)
+	for companion in _state.companions:
+		var area_before := companion.area
+		var spot_before := companion.spot
+		companion.wake_by_berth(_state.game_time)
+		if companion.area != area_before:
+			companion_area_changed.emit(companion.id, companion.area)
+		if companion.spot != spot_before:
+			companion_moved.emit(companion.id, companion.spot)
 	_asleep = not awake
+	_has_unsaved_changes = true
 	if slept_seconds < COMPANION_WAKE_MIN_SLEEP_S:
 		return ""
+	var first := _state.companions[0]
 	var day := AnchorLife.local_day(_state.game_time, _state.vessel_position.x)
-	if day == _companion_wake_day or absi(hash("%s:%d" % [companion.kind, day])) % 2 != 0:
+	if day == _companion_wake_day or absi(hash("%s:%d" % [first.kind, day])) % 2 != 0:
 		return ""
 	_companion_wake_day = day
-	return CompanionRemarks.wake_line(CompanionRemarks.identity(companion), day)
+	# One line, never two competing ones: about both when there are two.
+	var who: Array[Dictionary] = []
+	for companion in _state.companions:
+		who.append(CompanionRemarks.identity(companion))
+	return CompanionRemarks.wake_line_all(who, day)
 
 
 ## Petting a companion on a settled evening or night: one soft line a stay.

@@ -61,11 +61,10 @@ var weather_audio: WeatherAudio
 ## True from a rescue until its dialog is closed: gameplay stays paused (also
 ## while the screen changes to the harbour underneath).
 var _rescue_open := false
-## The companion follows the captain between cabin and deck (Iteration 18):
-## seconds until it goes, where to, and when it next wanders on deck.
-var _follow_left := 0.0
-var _follow_target: StringName = &""
-var _wander_left := 60.0
+## The companions follow the captain between cabin and deck (Iteration 18):
+## per companion id (I025: up to two), seconds until it goes, where to, and
+## when it next wanders on deck.
+var _follow := {}
 const FOLLOW_UP_SECONDS := Vector2(2.5, 5.0)
 const FOLLOW_DOWN_SECONDS := Vector2(4.0, 8.0)
 const WANDER_SECONDS := Vector2(45.0, 100.0)
@@ -80,13 +79,21 @@ const WANDER_SECONDS := Vector2(45.0, 100.0)
 ## gangplank to a place on the pontoon near them, and back. Coming back it
 ## sometimes lingers a while (it is exploring); the boat cannot cast off
 ## until it is aboard, and "Call ... aboard" fetches it at once.
+##
+## I025: each companion on its own timing (two never move as one), and two
+## never take the same place on deck or on the pontoon.
 func _update_companion_follow(delta: float) -> void:
 	var area := router.current_screen as BoatArea
 	if area == null or not GameSession.is_active() or router.is_busy() or GameSession.is_asleep() or get_tree().paused:
 		return
-	var companion := GameSession.get_companion()
-	if companion == null:
-		return
+	var companions := GameSession.get_companions()
+	for companion in companions:
+		_follow_one(companion, companions, area, delta)
+
+
+func _follow_one(companion: CompanionState, all: Array[CompanionState], area: BoatArea, delta: float) -> void:
+	var timing: Dictionary = _follow.get(companion.id, {"target": &"", "left": 0.0, "wander": randf_range(30.0, 60.0)})
+	_follow[companion.id] = timing
 	var want := companion.area
 	var shore := area.get_shore_access() if area.area_id == SessionState.AREA_EXTERIOR else null
 	var captain_ashore := shore != null and shore.is_active() and shore.is_player_ashore()
@@ -96,47 +103,59 @@ func _update_companion_follow(delta: float) -> void:
 		want = CompanionState.AREA_DECK
 	elif area.area_id == SessionState.AREA_INTERIOR:
 		want = CompanionState.AREA_CABIN
+	var taken := {}
+	for other in all:
+		if other.id != companion.id and other.area in [CompanionState.AREA_DECK, CompanionState.AREA_SHORE]:
+			taken[other.deck_spot] = true
 	if want == companion.area:
-		_follow_target = &""
+		timing.target = &""
 		var wanders := (want == CompanionState.AREA_DECK and area.area_id == SessionState.AREA_EXTERIOR and not GameSession.is_settled_at_anchor()) \
 			or want == CompanionState.AREA_SHORE
 		if wanders:
-			_wander_left -= delta
-			if _wander_left <= 0.0:
-				_wander_left = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
-				if want == CompanionState.AREA_SHORE:
-					GameSession.set_companion_area(want, _shore_place_near(shore, area.player.position, companion.deck_spot))
-				else:
-					GameSession.set_companion_area(CompanionState.AREA_DECK, (companion.deck_spot + randi_range(1, 2)) % 3)
+			timing.wander = float(timing.wander) - delta
+			if float(timing.wander) <= 0.0:
+				timing.wander = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
+				var place := _shore_place_near(shore, area.player.position, companion.deck_spot, taken) if want == CompanionState.AREA_SHORE \
+					else _free_place((companion.deck_spot + randi_range(1, 2)) % 3, taken)
+				GameSession.set_companion_area(want, place, companion.id)
 		return
-	if _follow_target != want:
-		_follow_target = want
+	if timing.target != want:
+		timing.target = want
 		var delay := FOLLOW_UP_SECONDS if want == CompanionState.AREA_DECK else FOLLOW_DOWN_SECONDS
 		if want == CompanionState.AREA_SHORE:
 			delay = FOLLOW_UP_SECONDS
 		elif companion.area == CompanionState.AREA_SHORE and randf() < SHORE_LINGER_CHANCE:
 			delay = SHORE_LINGER_SECONDS  # still sniffing about on the pontoon
-		_follow_left = randf_range(delay.x, delay.y)
-	_follow_left -= delta
-	if _follow_left <= 0.0:
-		_follow_target = &""
-		_wander_left = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
-		var place := randi_range(0, 2)
+		timing.left = randf_range(delay.x, delay.y)
+	timing.left = float(timing.left) - delta
+	if float(timing.left) <= 0.0:
+		timing.target = &""
+		timing.wander = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
+		var place := _free_place(randi_range(0, 2), taken)
 		if want == CompanionState.AREA_SHORE:
-			place = _shore_place_near(shore, area.player.position, -1)
-		GameSession.set_companion_area(want, place)
+			place = _shore_place_near(shore, area.player.position, -1, taken)
+		GameSession.set_companion_area(want, place, companion.id)
+
+
+## `wanted`, or the next place (0-2) nobody else is using.
+static func _free_place(wanted: int, taken: Dictionary) -> int:
+	for i in 3:
+		var place := (wanted + i) % 3
+		if not taken.has(place):
+			return place
+	return wanted
 
 ## Coming back aboard, now and then it stays ashore a little longer (I024).
 const SHORE_LINGER_CHANCE := 0.35
 const SHORE_LINGER_SECONDS := Vector2(25.0, 60.0)
 
 
-## Its place on the pontoon nearest the Captain (not `avoid`).
-static func _shore_place_near(shore: ShoreAccess, captain: Vector2, avoid: int) -> int:
+## Its place on the pontoon nearest the Captain (not `avoid`, not `taken`).
+static func _shore_place_near(shore: ShoreAccess, captain: Vector2, avoid: int, taken := {}) -> int:
 	var best := 0
 	var best_d := INF
 	for i in ShipCompanion.SHORE_OFFSETS.size():
-		if i == avoid:
+		if i == avoid or taken.has(i):
 			continue
 		var d := ShipCompanion.get_shore_spot(shore, i).distance_to(captain)
 		if d < best_d:
@@ -145,11 +164,11 @@ static func _shore_place_near(shore: ShoreAccess, captain: Vector2, avoid: int) 
 	return best
 
 
-## Calls the companion back aboard from the shore (I024).
+## Calls the companions back aboard from the shore (I024; I025: all at once).
 func recall_companion() -> void:
 	var line := GameSession.recall_companion()
 	if line != "":
-		_follow_target = &""
+		_follow.clear()
 		notify(line)
 
 
@@ -193,7 +212,10 @@ func _update_passage_talk(delta: float) -> void:
 			or toasts.get_child_count() > 0 or hud.is_warning_visible() or not GameSession.get_pending_bite().is_empty() \
 			or is_instance_valid(voyage_map) or (academy != null and academy.card.visible):
 		return  # not now: the remark waits for a quiet moment (no tip card either)
-	var who := CompanionRemarks.identity(GameSession.get_companion())
+	var crew := GameSession.get_companions()
+	if crew.is_empty():
+		return  # sailing alone: the Captain keeps their own counsel (I025)
+	var who := CompanionRemarks.identity(crew[0])
 	var hours := (now - departed) / 3600.0
 	var stage := CompanionRemarks.passage_stage(hours)
 	var lines := CompanionRemarks.passage_lines(who, stage).filter(func(l: String) -> bool: return not l in _talk_said)
@@ -201,12 +223,29 @@ func _update_passage_talk(delta: float) -> void:
 		_talk_said.clear()
 		lines = CompanionRemarks.passage_lines(who, stage)
 	var seed := absi(hash("%d:%d" % [int(departed), _talk_count]))
+	# I025: with two companions, the remark is sometimes to one of them,
+	# sometimes about both - one remark, never twice as many.
+	var addressed := 0
+	var pair_lines: Array[String] = []
+	if crew.size() == 2:
+		addressed = (seed / 3) % 2
+		who = CompanionRemarks.identity(crew[addressed])
+		var other := CompanionRemarks.identity(crew[1 - addressed])
+		pair_lines.assign(CompanionRemarks.passage_pair_lines(who, other, stage).filter(func(l: String) -> bool: return not l in _talk_said))
+		lines = CompanionRemarks.passage_lines(who, stage).filter(func(l: String) -> bool: return not l in _talk_said)
+		if lines.is_empty():
+			lines = CompanionRemarks.passage_lines(who, stage)
 	var key: String = lines[seed % lines.size()]
+	var text := CompanionRemarks.say(who, key)
+	if crew.size() == 2 and not pair_lines.is_empty() and seed % 3 == 0:
+		key = pair_lines[(seed / 11) % pair_lines.size()]
+		text = CompanionRemarks.say_pair(who, CompanionRemarks.identity(crew[1 - addressed]), key)
 	_talk_said.append(key)
 	_talk_count += 1
-	var text := CompanionRemarks.say(who, key)
 	# Its response, when it is here to hear it (and awake); sometimes nothing.
-	var companion := (router.current_screen as BoatArea).find_child("Companion", false, false) as ShipCompanion
+	var area := router.current_screen as BoatArea
+	var nodes := area.get_companion_nodes() if area else ([] as Array[ShipCompanion])
+	var companion: ShipCompanion = nodes[addressed] if addressed < nodes.size() else null
 	if companion and companion.visible and companion.pose != CompanionVisualSet.POSE_SLEEPING:
 		var answer := CompanionRemarks.response(who, seed / 7)
 		if companion.respond(answer.clip) and answer.text != "":
@@ -449,7 +488,8 @@ func open_new_game_menu() -> void:
 	if not modals.is_empty() or router.is_busy():
 		return
 	var menu := new_game_menu_scene.instantiate() as NewGameMenu
-	menu.start_requested.connect(start_new_game)
+	# I025: a new game begins without a companion (kind "").
+	menu.start_requested.connect(func(level: StringName) -> void: start_new_game(&"", level))
 	modals.push(menu)
 
 
@@ -684,7 +724,10 @@ func get_wheel_actions() -> Array[Dictionary]:
 		elif GameSession.get_planned_route() != null:
 			add.call(&"set_sail", Loc.t("Set sail"), request_departure)
 		if GameSession.is_companion_ashore():
-			add.call(&"call_aboard", CompanionRemarks.call_aboard_label(CompanionRemarks.identity(GameSession.get_companion())), recall_companion)
+			var ashore: Array[Dictionary] = []
+			for companion in GameSession.get_companions_ashore():
+				ashore.append(CompanionRemarks.identity(companion))
+			add.call(&"call_aboard", CompanionRemarks.call_all_aboard_label(ashore), recall_companion)
 		add.call(&"chart", "Charts", open_chart)
 		if GameSession.get_pending_bite().is_empty():
 			add.call(&"fishing", Loc.t("Fishing rod"), func() -> void: open_fishing.call_deferred())
@@ -777,9 +820,12 @@ func request_departure() -> void:
 	# I024: never without the companion. It is fetched first, then the
 	# departure question follows as usual.
 	if GameSession.is_companion_ashore():
-		var who := CompanionRemarks.identity(GameSession.get_companion())
-		var fetch: bool = await modals.confirm(CompanionRemarks.still_ashore(who), CompanionRemarks.ashore_hint(who),
-			CompanionRemarks.call_aboard_label(who))
+		var ashore: Array[Dictionary] = []
+		for companion in GameSession.get_companions_ashore():
+			ashore.append(CompanionRemarks.identity(companion))
+		var fetch: bool = await modals.confirm(CompanionRemarks.still_ashore_all(ashore),
+			CompanionRemarks.ashore_hint(ashore[0]) if ashore.size() == 1 else Loc.t("Both are still exploring the pontoon."),
+			CompanionRemarks.call_all_aboard_label(ashore))
 		if not fetch:
 			return
 		recall_companion()
@@ -1637,8 +1683,34 @@ func _show_current_boat_area() -> void:
 
 
 func _on_area_change_requested(area: StringName, spawn_point: StringName) -> void:
+	# I025: the animal from the dock followed the Captain home - the question
+	# comes just before going below.
+	var boat := router.current_screen as BoatArea
+	var dock := boat.get_dock_encounter_scene() if boat and boat.area_id == SessionState.AREA_EXTERIOR else null
+	if dock and area == SessionState.AREA_INTERIOR and dock.is_following():
+		var choice: Array = await ask_about_dock_animal(dock.kind)
+		match choice[0]:
+			AdoptionDialog.CHOICE_ADOPT:
+				var companion := GameSession.adopt_dock_animal(String(choice[1]), StringName(choice[2]))
+				if companion:
+					notify(CompanionRemarks.welcomed_line(companion, GameSession.get_location().display_name if GameSession.get_location() else ""))
+			AdoptionDialog.CHOICE_DECLINE:
+				boat.cancel_exit()
+				dock.decline()
+				return
+			_:
+				boat.cancel_exit()
+				return
 	GameSession.enter_boat_area(area, spawn_point)
 	_show_current_boat_area()
+
+
+## The companionway question (AdoptionDialog). Returns [choice, name, gender].
+func ask_about_dock_animal(kind: StringName) -> Array:
+	var dialog := AdoptionDialog.new(kind)
+	dialog.name = "AdoptionDialog"
+	modals.push(dialog)
+	return await dialog.decided
 
 
 # --- Menus -------------------------------------------------------------------------

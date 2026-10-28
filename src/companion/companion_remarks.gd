@@ -182,6 +182,37 @@ static func still_ashore(who: Dictionary) -> String:
 	return Loc.t("Wait! The cat is still ashore.")
 
 
+## The refusal for everyone still ashore (I025): one companion as before;
+## two named together. "" when nobody is ashore.
+static func still_ashore_all(ashore: Array[Dictionary]) -> String:
+	if ashore.is_empty():
+		return ""
+	if ashore.size() == 1:
+		return still_ashore(ashore[0])
+	return Loc.t("Wait! %s and %s are still ashore.") % [subject(ashore[0]), _lower_subject(ashore[1])]
+
+
+## The subject inside a sentence: a name as written, "the cat" otherwise.
+static func _lower_subject(who: Dictionary) -> String:
+	if _named(who):
+		return String(who.name)
+	match _kind(who):
+		CompanionState.KIND_DOG:
+			return Loc.t("the dog")
+		CompanionState.KIND_PARROT:
+			return Loc.t("the parrot")
+	return Loc.t("the cat")
+
+
+## "Call Fido and Snowy aboard" / "Call the companions aboard".
+static func call_all_aboard_label(ashore: Array[Dictionary]) -> String:
+	if ashore.size() == 1:
+		return call_aboard_label(ashore[0])
+	if ashore.size() == 2 and _named(ashore[0]) and _named(ashore[1]):
+		return Loc.t("Call %s and %s aboard") % [String(ashore[0].name), String(ashore[1].name)]
+	return Loc.t("Call the companions aboard")
+
+
 ## A second line for the refusal: where it is and how to fetch it.
 static func ashore_hint(who: Dictionary) -> String:
 	if _kind(who) == CompanionState.KIND_PARROT:
@@ -242,6 +273,35 @@ static func wake_line(who: Dictionary, day: int) -> String:
 	var choices: Array = WAKE[_kind(who)]
 	var line := Loc.t(choices[posmod(day, choices.size())])
 	return line % subject(who) if line.contains("%s") else line
+
+
+## The wake-up line for one or two companions (I025): with two, one line
+## about both, never two competing messages.
+static func wake_line_all(who: Array[Dictionary], day: int) -> String:
+	if who.is_empty():
+		return ""
+	if who.size() == 1:
+		return wake_line(who[0], day)
+	var a: Dictionary = who[posmod(day, 2)]
+	var b: Dictionary = who[1 - posmod(day, 2)]
+	var pair := "%s+%s" % [_kind(a), _kind(b)]
+	var choices: Array = WAKE_PAIR.get(pair, WAKE_PAIR_ANY)
+	return Loc.t(choices[posmod(day, choices.size())]) % [subject(a), _lower_subject(b)]
+
+
+## Two companions waking with the Captain: %s is the first, %s the second.
+const WAKE_PAIR := {
+	"cat+dog": ["%s had claimed your pillow, and %s was asleep at your feet.", "%s was curled up on the blanket; %s snored softly beside it."],
+	"dog+cat": ["%s was asleep at your feet; %s had claimed your pillow.", "%s licked your nose while %s watched from the end of the berth."],
+	"parrot+dog": ["%s chirped softly while %s stretched.", "%s whistled good morning; %s answered with a yawn."],
+	"dog+parrot": ["%s stretched while %s chirped softly from its perch.", "%s thumped the blanket with its tail; %s whistled back."],
+	"parrot+cat": ["%s chirped from its perch; %s pretended not to hear.", "%s greeted the morning; %s opened one eye."],
+	"cat+parrot": ["%s was curled up beside you, and %s chirped from its perch.", "%s purred at the end of the berth while %s preened nearby."],
+	"cat+cat": ["%s and %s were curled up together at the end of the berth.", "%s had your pillow and %s your feet."],
+	"dog+dog": ["%s and %s were piled up together at your feet.", "%s licked your nose; %s was still snoring."],
+	"parrot+parrot": ["%s and %s chirped back and forth by the berth.", "%s and %s sat side by side on the perch, fluffed up."],
+}
+const WAKE_PAIR_ANY := ["%s and %s were waiting by the berth when you woke."]
 
 
 # --- Talk on long passages (I024) ------------------------------------------------
@@ -350,6 +410,42 @@ const RESPONSES := {
 }
 
 
+## Lines for two companions (I025): %s is the first one's name, %s the
+## second's; only with both named. Mixed in now and then, never on top of the
+## usual lines (one remark at a time, the same gaps).
+const PASSAGE_PAIR := [
+	[STAGE_EARLY, "Well, you two seem to have this voyage figured out."],
+	[STAGE_EARLY, "%s, I think %s has stolen your favourite spot."],
+	[STAGE_DAYS, "%s, are you encouraging %s?"],
+	[STAGE_DAYS, "You two get along better than most crews I know."],
+	[STAGE_DAYS, "%s and %s, the finest crew afloat."],
+	[STAGE_EXTENDED, "Days at sea, and you two still find something to look at."],
+	[STAGE_EXTENDED, "%s, %s - I'm glad you're both aboard."],
+]
+## The second companion's reaction to a pair remark: [line (%s = its
+## subject), clip] or nothing.
+const PAIR_RESPONSES := [["%s glances at the other, then at you.", &"alert"], ["", &""], ["%s settles down a little closer.", &"resting"]]
+
+
+## Pair lines available at `stage` for two companions.
+static func passage_pair_lines(a: Dictionary, b: Dictionary, stage: int) -> Array[String]:
+	var named := _named(a) and _named(b)
+	var out: Array[String] = []
+	for entry: Array in PASSAGE_PAIR:
+		var line := String(entry[1])
+		if int(entry[0]) <= stage and (named or not line.contains("%s")):
+			out.append(line)
+	return out
+
+
+## A pair remark (translated, in quotes, both names in).
+static func say_pair(a: Dictionary, b: Dictionary, key: String) -> String:
+	var line := Loc.t(key)
+	if line.contains("%s"):
+		line = line % [String(a.get("name", "")), String(b.get("name", ""))]
+	return Loc.t("“%s”") % line
+
+
 ## The stage of a passage `hours` long.
 static func passage_stage(hours: float) -> int:
 	var stage := STAGE_EARLY
@@ -391,3 +487,96 @@ static func response(who: Dictionary, n: int) -> Dictionary:
 	var pick: Array = choices[posmod(n, choices.size())]
 	var text := String(pick[0])
 	return {"text": Loc.t(text) % subject(who) if text != "" else "", "clip": StringName(pick[1])}
+
+
+# --- An animal on the dock (I025) ------------------------------------------------
+
+## The kind gestures, in order (DockEncounters.TRUST_NEEDED of them): a
+## hello, a free treat from the Captain's pocket, a little play. What each
+## says and which clip the animal answers with, by kind.
+const BEFRIEND := {
+	CompanionState.KIND_CAT: [
+		["A Ragdoll peeks over the edge of the box. You hold out a hand and let it sniff.", &"alert"],
+		["You find a few treats in your pocket. The Ragdoll eats them, very politely.", &"pet"],
+		["You trail a bit of rope along the planks. The Ragdoll pounces, then purrs.", &"stretching"],
+	],
+	CompanionState.KIND_DOG: [
+		["The little Pug wriggles all over as you crouch down to say hello.", &"tail_wag"],
+		["A biscuit from your pocket disappears in one happy crunch.", &"pet"],
+		["You toss a knot of rope a little way. The Pug brings it back, very proud.", &"tail_wag"],
+	],
+	CompanionState.KIND_PARROT: [
+		["The conure tilts its head and gives a soft chirp as you say hello.", &"head_turn"],
+		["You offer a few seeds on your palm. The conure takes them, one by one.", &"pet"],
+		["You whistle a little tune. The conure whistles it back, nearly right.", &"ruffle"],
+	],
+}
+
+
+static func _dock_kind(kind: StringName) -> StringName:
+	return kind if kind in CompanionState.KINDS else CompanionState.DEFAULT_KIND
+
+
+## What the Captain does next (the prompt over the waiting animal).
+static func befriend_prompt(kind: StringName, trust: int) -> String:
+	if trust >= DockEncounters.TRUST_NEEDED:
+		return ""
+	match trust:
+		0:
+			match _dock_kind(kind):
+				CompanionState.KIND_DOG:
+					return Loc.t("Say hello to the Pug")
+				CompanionState.KIND_PARROT:
+					return Loc.t("Say hello to the conure")
+			return Loc.t("Say hello to the Ragdoll")
+		1:
+			return Loc.t("Offer a treat")
+	return Loc.t("Play a little")
+
+
+## The line for kind gesture `step` (1..TRUST_NEEDED); after the last one,
+## a second sentence says it would like to come along.
+static func befriend_line(kind: StringName, step: int) -> String:
+	var entries: Array = BEFRIEND[_dock_kind(kind)]
+	var line := Loc.t(String(entries[clampi(step - 1, 0, entries.size() - 1)][0]))
+	if step >= DockEncounters.TRUST_NEEDED:
+		line += " " + Loc.t("It looks as if it would like to come with you.")
+	return line
+
+
+## The clip the animal answers gesture `step` with.
+static func befriend_clip(kind: StringName, step: int) -> StringName:
+	var entries: Array = BEFRIEND[_dock_kind(kind)]
+	return entries[clampi(step - 1, 0, entries.size() - 1)][1]
+
+
+## Simply waiting nearby, quietly, also counts as a kind gesture.
+static func waited_line(kind: StringName) -> String:
+	match _dock_kind(kind):
+		CompanionState.KIND_DOG:
+			return Loc.t("You sit on the pontoon for a while. The Pug comes and leans against your leg.")
+		CompanionState.KIND_PARROT:
+			return Loc.t("You sit on the pontoon for a while. The conure hops a little closer.")
+	return Loc.t("You sit on the pontoon for a while. The Ragdoll comes a little closer.")
+
+
+## The question at the companionway.
+static func followed_home(kind: StringName) -> String:
+	match _dock_kind(kind):
+		CompanionState.KIND_DOG:
+			return Loc.t("The little Pug has followed you all the way home. Would you like to welcome it aboard?")
+		CompanionState.KIND_PARROT:
+			return Loc.t("The little conure has followed you all the way home. Would you like to welcome it aboard?")
+	return Loc.t("The Ragdoll has followed you all the way home. Would you like to welcome it aboard?")
+
+
+## The laptop's history line for a companion (I025): where and when it came
+## aboard, from its own record only - never invented. "" for a companion
+## without an adoption record (one who sailed from the start).
+static func welcomed_line(companion: CompanionState, port_name: String) -> String:
+	if companion == null or not companion.has_adoption_record():
+		return ""
+	var who := _lower_subject(identity(companion))
+	if port_name != "":
+		return Loc.t("Welcomed %s aboard in %s.") % [who, port_name]
+	return Loc.t("Welcomed %s aboard.") % who

@@ -63,6 +63,8 @@
 			"text": "Go ashore together with your companion in 3 different countries."},
 		{"id": "a_week_at_sea", "category": "companionship", "icon": "two_at_sea", "title": "Just the two of us", "records": ["companion:week_at_sea"], "reward": 25,
 			"text": "Arrive after a passage of 7 days or more at sea, with your companion aboard."},
+		{"id": "welcome_aboard", "category": "companionship", "icon": "box_welcome", "title": "Welcome aboard", "records": ["companion:adopted"], "reward": 0,
+			"text": "Welcome an animal from the dock aboard as your companion."},
 
 		{"id": "first_fish", "category": "discoveries", "icon": "fish", "title": "First fish", "records": ["fish:first"], "reward": 3,
 			"text": "Catch your first fish."},

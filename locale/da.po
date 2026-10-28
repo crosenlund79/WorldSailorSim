@@ -9231,3 +9231,216 @@ msgstr "Din laptop står på bordet i kahytten: brug den med {interact} (eller L
 
 msgid "{action_wheel} opens a wheel with what makes sense where you are: in the cabin sleep, the world map, the chart table, provisions and the laptop; on deck the charts, the fishing rod and, underway, the chart plotter, sailing details, radar, sail trim and anchor. On/off items show a check mark."
 msgstr "{action_wheel} åbner et hjul med det, der giver mening, hvor du er: i kahytten søvn, verdenskortet, kortbordet, proviant og laptoppen; på dæk søkortene, fiskestangen og, under sejlads, kortplotteren, sejldetaljer, radar, sejltrim og anker. Tænd/sluk-punkter viser et flueben."
+
+msgid "A little more room aboard"
+msgstr "Lidt mere plads om bord"
+
+msgid "Sail with two companions aboard."
+msgstr "Sejl med to ledsagere om bord."
+
+msgid "Welcome aboard"
+msgstr "Velkommen om bord"
+
+msgid "Welcome an animal from the dock aboard as your companion."
+msgstr "Byd et dyr fra kajen velkommen om bord som din ledsager."
+
+msgid "Both are still exploring the pontoon."
+msgstr "Begge er stadig ved at udforske pontonen."
+
+msgid "Wait! %s and %s are still ashore."
+msgstr "Vent! %s og %s er stadig i land."
+
+msgid "the dog"
+msgstr "hunden"
+
+msgid "the parrot"
+msgstr "papegøjen"
+
+msgid "the cat"
+msgstr "katten"
+
+msgid "Call %s and %s aboard"
+msgstr "Kald %s og %s om bord"
+
+msgid "Call the companions aboard"
+msgstr "Kald ledsagerne om bord"
+
+msgid "%s had claimed your pillow, and %s was asleep at your feet."
+msgstr "%s havde lagt beslag på din pude, og %s sov ved dine fødder."
+
+msgid "%s was curled up on the blanket; %s snored softly beside it."
+msgstr "%s lå rullet sammen på tæppet; %s snorkede stille ved siden af."
+
+msgid "%s licked your nose while %s watched from the end of the berth."
+msgstr "%s slikkede dig på næsen, mens %s så til fra enden af køjen."
+
+msgid "%s was asleep at your feet; %s had claimed your pillow."
+msgstr "%s sov ved dine fødder; %s havde lagt beslag på din pude."
+
+msgid "%s chirped softly while %s stretched."
+msgstr "%s kvidrede stille, mens %s strakte sig."
+
+msgid "%s whistled good morning; %s answered with a yawn."
+msgstr "%s fløjtede godmorgen; %s svarede med et gab."
+
+msgid "%s stretched while %s chirped softly from its perch."
+msgstr "%s strakte sig, mens %s kvidrede stille fra sin plads."
+
+msgid "%s thumped the blanket with its tail; %s whistled back."
+msgstr "%s bankede halen i tæppet; %s fløjtede tilbage."
+
+msgid "%s chirped from its perch; %s pretended not to hear."
+msgstr "%s kvidrede fra sin plads; %s lod, som om den ikke hørte det."
+
+msgid "%s greeted the morning; %s opened one eye."
+msgstr "%s hilste på morgenen; %s åbnede det ene øje."
+
+msgid "%s purred at the end of the berth while %s preened nearby."
+msgstr "%s spandt ved enden af køjen, mens %s pudsede fjer lige ved siden af."
+
+msgid "%s was curled up beside you, and %s chirped from its perch."
+msgstr "%s lå rullet sammen ved siden af dig, og %s kvidrede fra sin plads."
+
+msgid "%s and %s were curled up together at the end of the berth."
+msgstr "%s og %s lå rullet sammen ved enden af køjen."
+
+msgid "%s had your pillow and %s your feet."
+msgstr "%s havde din pude og %s dine fødder."
+
+msgid "%s and %s were piled up together at your feet."
+msgstr "%s og %s lå i en bunke ved dine fødder."
+
+msgid "%s licked your nose; %s was still snoring."
+msgstr "%s slikkede dig på næsen; %s snorkede stadig."
+
+msgid "%s and %s chirped back and forth by the berth."
+msgstr "%s og %s kvidrede frem og tilbage ved køjen."
+
+msgid "%s and %s sat side by side on the perch, fluffed up."
+msgstr "%s og %s sad side om side på pinden, helt pustet op."
+
+msgid "%s and %s were waiting by the berth when you woke."
+msgstr "%s og %s ventede ved køjen, da du vågnede."
+
+msgid "Well, you two seem to have this voyage figured out."
+msgstr "Nå, I to har vist styr på den her tur."
+
+msgid "%s, I think %s has stolen your favourite spot."
+msgstr "%s, jeg tror, %s har taget din yndlingsplads."
+
+msgid "%s, are you encouraging %s?"
+msgstr "%s, er det dig, der opmuntrer %s?"
+
+msgid "You two get along better than most crews I know."
+msgstr "I to kommer bedre ud af det med hinanden end de fleste besætninger, jeg kender."
+
+msgid "%s and %s, the finest crew afloat."
+msgstr "%s og %s, den fineste besætning til søs."
+
+msgid "Days at sea, and you two still find something to look at."
+msgstr "Dage på havet, og I to finder stadig noget at kigge på."
+
+msgid "%s, %s - I'm glad you're both aboard."
+msgstr "%s, %s - jeg er glad for, at I begge er om bord."
+
+msgid "%s glances at the other, then at you."
+msgstr "%s kigger på den anden og så på dig."
+
+msgid "%s settles down a little closer."
+msgstr "%s lægger sig lidt tættere på."
+
+msgid "A Ragdoll peeks over the edge of the box. You hold out a hand and let it sniff."
+msgstr "En ragdoll kigger op over kanten af kassen. Du rækker en hånd frem og lader den snuse."
+
+msgid "You find a few treats in your pocket. The Ragdoll eats them, very politely."
+msgstr "Du finder et par godbidder i lommen. Ragdollen spiser dem, meget pænt."
+
+msgid "You trail a bit of rope along the planks. The Ragdoll pounces, then purrs."
+msgstr "Du trækker et stykke tovværk hen over plankerne. Ragdollen springer på det og spinder bagefter."
+
+msgid "The little Pug wriggles all over as you crouch down to say hello."
+msgstr "Den lille mops vrikker med hele kroppen, da du sætter dig på hug og siger hej."
+
+msgid "A biscuit from your pocket disappears in one happy crunch."
+msgstr "En kiks fra din lomme forsvinder i ét glad knas."
+
+msgid "You toss a knot of rope a little way. The Pug brings it back, very proud."
+msgstr "Du kaster en tovknude et lille stykke. Mopsen kommer tilbage med den, meget stolt."
+
+msgid "The conure tilts its head and gives a soft chirp as you say hello."
+msgstr "Parakitten lægger hovedet på skrå og kvidrer sagte, da du siger hej."
+
+msgid "You offer a few seeds on your palm. The conure takes them, one by one."
+msgstr "Du byder på et par frø i håndfladen. Parakitten tager dem, et ad gangen."
+
+msgid "You whistle a little tune. The conure whistles it back, nearly right."
+msgstr "Du fløjter en lille melodi. Parakitten fløjter den tilbage, næsten rigtigt."
+
+msgid "Say hello to the Pug"
+msgstr "Sig hej til mopsen"
+
+msgid "Say hello to the conure"
+msgstr "Sig hej til parakitten"
+
+msgid "Say hello to the Ragdoll"
+msgstr "Sig hej til ragdollen"
+
+msgid "Offer a treat"
+msgstr "Giv en godbid"
+
+msgid "Play a little"
+msgstr "Leg lidt"
+
+msgid "It looks as if it would like to come with you."
+msgstr "Den ser ud til gerne at ville med dig."
+
+msgid "You sit on the pontoon for a while. The Pug comes and leans against your leg."
+msgstr "Du sætter dig på pontonen et stykke tid. Mopsen kommer hen og læner sig op ad dit ben."
+
+msgid "You sit on the pontoon for a while. The conure hops a little closer."
+msgstr "Du sætter dig på pontonen et stykke tid. Parakitten hopper lidt nærmere."
+
+msgid "You sit on the pontoon for a while. The Ragdoll comes a little closer."
+msgstr "Du sætter dig på pontonen et stykke tid. Ragdollen kommer lidt nærmere."
+
+msgid "The little Pug has followed you all the way home. Would you like to welcome it aboard?"
+msgstr "Den lille mops har fulgt dig hele vejen hjem. Vil du byde den velkommen om bord?"
+
+msgid "The little conure has followed you all the way home. Would you like to welcome it aboard?"
+msgstr "Den lille parakit har fulgt dig hele vejen hjem. Vil du byde den velkommen om bord?"
+
+msgid "The Ragdoll has followed you all the way home. Would you like to welcome it aboard?"
+msgstr "Ragdollen har fulgt dig hele vejen hjem. Vil du byde den velkommen om bord?"
+
+msgid "Welcomed %s aboard in %s."
+msgstr "Bød %s velkommen om bord i %s."
+
+msgid "Welcomed %s aboard."
+msgstr "Bød %s velkommen om bord."
+
+msgid "A friend from the dock"
+msgstr "En ven fra kajen"
+
+msgid "Give it a name if you like, and say whether it is a she or a he. Both are optional."
+msgstr "Giv den et navn, hvis du vil, og sig, om det er en hun eller en han. Begge dele er valgfrie."
+
+msgid "Adopt"
+msgstr "Adoptér"
+
+msgid "%s: aboard from the start."
+msgstr "%s: om bord fra starten."
+
+msgid "Your boat is ready and the sea is waiting. Who knows who you will meet along the way?"
+msgstr "Din båd er klar, og havet venter. Hvem ved, hvem du møder undervejs?"
+
+msgid "your companions and supplies are aboard."
+msgstr "dine ledsagere og forsyninger er om bord."
+
+msgid "your supplies are aboard."
+msgstr "dine forsyninger er om bord."
+
+msgid "You set out alone - but perhaps not for long. Now and then, arriving in a harbour, you may find a small cardboard box on the pontoon with a Ragdoll, a Pug or a little conure in it. Say hello with {interact}, offer a treat, play a little; if it decides to follow you, the companionway asks whether to welcome it aboard (with a name, if you like) or let it go home with the girl who knows it. Up to two companions can live aboard. They follow you between cabin and deck and nap where they like; the conure flies between its favourite perches. Walk up and press {interact} to pet one. In harbour they come ashore with you; the boat cannot cast off while one is still ashore, so call them aboard (the wheel, or when you set sail). They are by the berth when you wake, and on long passages you will find yourself talking to them now and then."
+msgstr "Du sætter ud alene - men måske ikke længe. En gang imellem, når du ankommer til en havn, finder du måske en lille papkasse på pontonen med en ragdoll, en mops eller en lille parakit i. Sig hej med {interact}, giv en godbid, leg lidt; hvis den beslutter sig for at følge dig, spørger nedgangen, om du vil byde den velkommen om bord (med et navn, hvis du vil) eller lade den gå hjem med pigen, der kender den. Op til to ledsagere kan bo om bord. De følger dig mellem kahyt og dæk og tager en lur, hvor de har lyst; parakitten flyver mellem sine yndlingspladser. Gå hen og tryk {interact} for at kæle for en af dem. I havn går de med dig i land; båden kan ikke kaste los, mens en af dem stadig er i land, så kald dem om bord (hjulet, eller når du sætter sejl). De er ved køjen, når du vågner, og på lange overfarter kommer du til at snakke lidt med dem en gang imellem."
+
+msgid "Companions"
+msgstr "Ledsagere"

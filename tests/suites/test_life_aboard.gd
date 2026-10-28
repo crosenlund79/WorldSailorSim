@@ -44,18 +44,16 @@ func _test_new_game_companion_choice() -> void:
 	t.check(app.router.current_screen is MainMenu, "(setup) on the main menu")
 	await t.click(_button(app.router.current_screen, "NewGameButton"))
 	var menu := app.modals.get_top() as NewGameMenu
-	if not t.check(menu != null, "[companion] New Game offers the cat/dog choice"):
+	if not t.check(menu != null, "[companion] New Game opens"):
 		return
-	t.check_eq(menu.companion_kind, CompanionState.KIND_CAT, "[companion] the cat is preselected")
-	await t.click(_button(menu, "DogButton"))
-	t.check(menu.companion_kind == CompanionState.KIND_DOG and (_button(menu, "DogButton")).button_pressed
-		and not _button(menu, "CatButton").button_pressed, "[companion] choosing the dog")
-	await t.screenshot("25_new_game_companion")
-	await t.click(_button(menu, "CatButton"))
-	await t.click(_button(menu, "StartButton"))
+	# I025: no companion is chosen at New Game (one is found along the way);
+	# this suite's companion tests run on a game started with the cat.
+	t.check(menu.find_child("DogButton", true, false) == null, "[companion] New Game offers no companion choice (I025)")
+	app.modals.clear()
+	app.start_new_game(CompanionState.KIND_CAT)
 	await _settle()
 	t.check(app.router.current_screen is BoatArea and GameSession.get_companion().kind == CompanionState.KIND_CAT,
-		"[companion] the game starts with the chosen cat")
+		"[companion] a game started with the cat has the cat")
 	t.check_eq(GameSession.get_vessel_id(), &"arctic_wanderer_26", "[companion] aboard the Arctic Wanderer 26")
 	# The walks in this suite were written for the Wing 33's cabin (the starter until 0.100b).
 	await t.board(&"starling_33", app)
@@ -548,12 +546,11 @@ func _test_companion_persistence() -> void:
 func _test_dog_game() -> void:
 	app.show_main_menu()
 	await _settle()
-	await t.click(_button(app.router.current_screen, "NewGameButton"))
-	await t.click(_button(app.modals.get_top(), "DogButton"))
-	await t.click(_button(app.modals.get_top(), "StartButton"))
+	# I025: no companion is chosen at New Game; a game started with the dog.
+	app.start_new_game(CompanionState.KIND_DOG)
 	await _settle()
 	t.check(GameSession.get_companion().kind == CompanionState.KIND_DOG and _companion().kind == CompanionState.KIND_DOG,
-		"[companion] a new game with the dog")
+		"[companion] a game with the dog")
 	await t.frames(2)
 	await t.screenshot("32_cabin_dog")
 	await _test_petting(CompanionState.KIND_DOG)

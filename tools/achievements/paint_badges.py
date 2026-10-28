@@ -774,6 +774,27 @@ def i_two_at_sea(c):
     waves(c, [(96, 1.1, 14, 0.0), (104, 1.3, 16, 1.4)], SEAL, 1.8)
 
 
+def i_box_welcome(c):
+    # I025: an open cardboard box on the pontoon at dusk, a paw print beside it.
+    waves(c, [(30, 1.0, 14, 0.0), (40, 1.2, 16, 1.2)], SEAL, 1.6, alpha=0.6)
+    deck = Shape()
+    for y in range(92, 124, 12):
+        deck.poly([(0, y), (128, y), (128, y + 10), (0, y + 10)])
+    c.paint(deck, TEAK, shade=0.3, shadow=0.5, edge=0.4)
+    CARD = (186, 146, 100)
+    box = Shape().poly([(36, 66), (92, 66), (92, 100), (36, 100)])
+    c.paint(box, CARD, shade=0.5, shadow=0.8)
+    inside = Shape().poly([(40, 56), (88, 56), (92, 66), (36, 66)])
+    c.paint(inside, (110, 82, 54), shade=0.2, shadow=0.2)
+    flaps = Shape()
+    flaps.poly([(36, 66), (40, 56), (26, 50), (22, 62)])
+    flaps.poly([(92, 66), (88, 56), (102, 50), (106, 62)])
+    flaps.poly([(40, 56), (88, 56), (84, 44), (44, 44)])
+    c.paint(flaps, (204, 168, 120), shade=0.4, shadow=0.5)
+    c.fill(Shape().poly([(61, 66), (67, 66), (67, 100), (61, 100)]), (150, 112, 74), 0.9)
+    paw(c, 106, 98, 0.85, 18)
+
+
 def i_fish(c):
     paint_fish(c, 64, 64, 1.45, -6)
 

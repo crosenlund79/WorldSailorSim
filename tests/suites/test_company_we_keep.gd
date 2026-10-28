@@ -258,17 +258,14 @@ func _test_new_game_menu() -> void:
 	var menu := app.modals.get_top() as NewGameMenu
 	if not t.check(menu != null, "[new game] the dialog opens"):
 		return
-	await t.click(menu.find_child("ParrotButton", true, false) as Button)
-	t.check(menu.companion_kind == CompanionState.KIND_PARROT and (menu.find_child("Preview", true, false) as ShipCompanion).is_sprite_mode(),
-		"[new game] the parrot can be chosen, and is previewed")
-	(menu.find_child("NameEdit", true, false) as LineEdit).text = "Kiwi"
-	(menu.find_child("GenderPicker", true, false) as OptionButton).select(1)
-	await t.screenshot("i024_new_game_parrot")
+	# I025: no companion to choose - the Captain sets out alone.
+	t.check(menu.find_child("ParrotButton", true, false) == null and menu.find_child("NameEdit", true, false) == null,
+		"[new game] no companion to pick (I025: found along the way)")
+	await t.screenshot("i025_new_game")
 	await t.click(menu.find_child("StartButton", true, false) as Button)
 	await _settle()
-	var companion := GameSession.get_companion()
-	t.check(companion.kind == CompanionState.KIND_PARROT and companion.name == "Kiwi" and companion.gender == CompanionState.GENDER_FEMALE,
-		"[new game] the game starts with Kiwi, a female parrot")
+	t.check(GameSession.get_companion() == null and GameSession.get_companion_count() == 0,
+		"[new game] the game starts without a companion")
 
 
 # --- Animation --------------------------------------------------------------------------

@@ -139,10 +139,7 @@ func _test_settling() -> void:
 	t.check(GameSession.is_settled_at_anchor(), "[settle] holding well in a light wind: the boat is settled")
 	t.check(moments.is_empty(), "[settle] no line at once: it comes once the boat has settled")
 	var cabin := await _show(CABIN, &"from_deck")
-	var companion := cabin.find_child("ShipCompanion", true, false) as ShipCompanion if cabin else null
-	if companion == null:
-		for node in cabin.find_children("*", "ShipCompanion", true, false):
-			companion = node
+	var companion := cabin.get_node_or_null(^"Companion") as ShipCompanion if cabin else null
 	if t.check(companion != null, "(setup) the companion is below"):
 		companion.advance_behaviour(30.0)
 		t.check(companion.settled and companion.pose == CompanionVisualSet.POSE_SLEEPING,
@@ -172,9 +169,7 @@ func _test_evening() -> void:
 	t.check("quiet evening" in " ".join(app.hud.aboard_badge.get_texts()) or "calm night" in " ".join(app.hud.aboard_badge.get_texts()),
 		"[ambience] the HUD says so: %s" % [app.hud.aboard_badge.get_texts()])
 	await _shot("0102b_01_anchored_evening_cabin")
-	var companion: ShipCompanion = null
-	for node in cabin.find_children("*", "ShipCompanion", true, false):
-		companion = node
+	var companion := cabin.get_node_or_null(^"Companion") as ShipCompanion
 	if companion:
 		companion.advance_behaviour(60.0)
 		await _shot("0102b_02_companion_settled")
@@ -256,9 +251,7 @@ func _test_save_load() -> void:
 
 func _test_unsettled() -> void:
 	var cabin := await _show(CABIN, &"from_deck")
-	var companion: ShipCompanion = null
-	for node in cabin.find_children("*", "ShipCompanion", true, false):
-		companion = node
+	var companion := cabin.get_node_or_null(^"Companion") as ShipCompanion
 	t.set_wind(90.0, 24.0)
 	Simulation.advance(20.0 * 60.0)
 	t.check(not GameSession.is_settled_at_anchor(), "[unsettled] a fresh breeze: no longer settled")

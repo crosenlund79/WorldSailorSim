@@ -110,6 +110,7 @@ func _ready() -> void:
 	_setup_aboard_gear()
 	_place_player()
 	player.focus_changed.connect(_on_player_focus_changed)
+	_setup_second_companion()  # I025: a node for a second companion (before the connections below)
 	for node in find_children("*", "Interactable", true, false):
 		(node as Interactable).interacted.connect(_on_interacted)
 	AudioManager.play_ambience(ambience)
@@ -127,6 +128,8 @@ func _ready() -> void:
 	_setup_lighting()
 	_setup_overhead()
 	_setup_laptop()
+	_setup_dock_encounter()
+	_setup_pair_moments()
 	_setup_hat_hook()
 	_update_hat_station()
 	_resolve_highlights.call_deferred()
@@ -485,18 +488,44 @@ func _setup_deck_companion() -> void:
 	var spots := DeckCompanionSpots.new()
 	get_node(^"Layout").add_child(spots)
 	spots.setup(self)
-	var companion := ShipCompanion.new()
-	companion.name = "Companion"
-	companion.on_deck = true
-	companion.deck_spots = spots
-	companion.spots_path = ^"../Layout/DeckCompanionSpots"
-	add_child(companion)
-	# Made after _ready connected the scene's interactables: connect its "Pet"
-	# here, or E would focus the cat on deck and do nothing (fix after 0.105b).
-	if companion.interactable and not companion.interactable.interacted.is_connected(_on_interacted):
-		companion.interactable.interacted.connect(_on_interacted)
+	for slot in CompanionState.MAX_COMPANIONS:
+		var companion := ShipCompanion.new()
+		companion.name = "Companion" if slot == 0 else "Companion%d" % (slot + 1)
+		companion.slot = slot
+		companion.on_deck = true
+		companion.deck_spots = spots
+		companion.spots_path = ^"../Layout/DeckCompanionSpots"
+		add_child(companion)
+		# Made after _ready connected the scene's interactables: connect its "Pet"
+		# here, or E would focus the cat on deck and do nothing (fix after 0.105b).
+		if companion.interactable and not companion.interactable.interacted.is_connected(_on_interacted):
+			companion.interactable.interacted.connect(_on_interacted)
 	if get_lighting():
 		get_lighting().add_contact_shadows()
+
+
+## I025: the cabin scene has one ShipCompanion ("Companion", slot 0); a
+## second companion gets its own node beside it ("Companion2", slot 1). Both
+## show nothing while their slot is empty.
+func _setup_second_companion() -> void:
+	var first := get_node_or_null(^"Companion") as ShipCompanion
+	if first == null or first.on_deck or has_node(^"Companion2"):
+		return
+	var second := ShipCompanion.new()
+	second.name = "Companion2"
+	second.slot = 1
+	second.spots_path = first.spots_path
+	first.add_sibling(second)
+
+
+## The companion nodes of this area (both slots), first first.
+func get_companion_nodes() -> Array[ShipCompanion]:
+	var out: Array[ShipCompanion] = []
+	for path in [^"Companion", ^"Companion2"]:
+		var node := get_node_or_null(path) as ShipCompanion
+		if node:
+			out.append(node)
+	return out
 
 
 func get_deck_companion() -> ShipCompanion:
@@ -557,6 +586,13 @@ func _physics_process(_delta: float) -> void:
 func begin_exit() -> void:
 	_leaving = true
 	player.set_input_enabled(false)
+
+
+## The exit did not happen after all (I025: the Captain stayed on deck at the
+## companionway question).
+func cancel_exit() -> void:
+	_leaving = false
+	player.set_input_enabled(true)
 
 
 func _place_player() -> void:
@@ -650,7 +686,8 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 				message_requested.emit(Loc.t("The cup holder, just the size of a mug. Make a coffee in the galley."))
 		&"pet":
 			if GameSession.free_hands() == 0:
-				message_requested.emit(CompanionRemarks.hands_full(CompanionRemarks.identity(GameSession.get_companion())))
+				var held := interactable.get_parent() as ShipCompanion
+				message_requested.emit(CompanionRemarks.hands_full(CompanionRemarks.identity(held.get_companion_state() if held else null)))
 				return
 			var companion := interactable.get_parent() as ShipCompanion
 			if companion:
@@ -728,6 +765,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_voyage_arrived(_port: StringName) -> void:
 	_update_mooring()
+	if get_dock_encounter_scene():
+		get_dock_encounter_scene().refresh.call_deferred()
 	var life := get_water_life()
 	if life:
 		life.refresh()
@@ -863,6 +902,34 @@ func _set_station_available(station: Interactable, available: bool) -> void:
 
 func get_shore_access() -> ShoreAccess:
 	return _shore
+
+
+## The animal on the dock (I025): shown on decks with a shore.
+func _setup_dock_encounter() -> void:
+	if _shore == null:
+		return
+	var scene := DockEncounterScene.new()
+	scene.name = "DockEncounter"
+	add_child(scene)
+	scene.setup(self, _shore)
+
+
+## Two companions now and then notice each other (I025).
+func _setup_pair_moments() -> void:
+	if get_companion_nodes().size() < 2:
+		return
+	var moments := PairMoments.new()
+	moments.name = "PairMoments"
+	add_child(moments)
+	moments.setup(self)
+
+
+func get_pair_moments() -> PairMoments:
+	return get_node_or_null(^"PairMoments") as PairMoments
+
+
+func get_dock_encounter_scene() -> DockEncounterScene:
+	return get_node_or_null(^"DockEncounter") as DockEncounterScene
 
 
 ## The shore station for a facility (tests), or null.

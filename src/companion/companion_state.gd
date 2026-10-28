@@ -78,6 +78,25 @@ var name := ""
 var gender: StringName = &""
 ## Which deck resting place (0 aft, 1 amidships, 2 forward); see DeckCompanionSpots.
 var deck_spot := 0
+## I025 (A Little More Room Aboard): up to two companions live aboard, each
+## its own CompanionState. `id` is stable for the life of the save (1, 2, ...;
+## never reused, never a name: two pets may share a name). A companion from
+## before I025 (chosen at New Game) loads as id 1.
+const MAX_COMPANIONS := 2
+var id := 1
+## How it came aboard: ORIGIN_START (chosen at New Game, before I025) or
+## ORIGIN_ADOPTED (found on a dock and welcomed aboard, I025).
+const ORIGIN_START := &"start"
+const ORIGIN_ADOPTED := &"adopted"
+var origin: StringName = ORIGIN_START
+## Adoption: game time (-1 = not recorded), the harbour id ("" = unknown) and
+## the position (NAN = unknown). Only ever set when it happened; nothing is
+## made up for a companion from before I025.
+var adopted_at := -1.0
+var adopted_port := ""
+var adopted_position := Vector2(NAN, NAN)
+## False until its welcome-home moment has played in the cabin (once).
+var welcomed := true
 
 
 static func create(companion_kind: StringName, now: float, companion_name := "", companion_gender: StringName = &"") -> CompanionState:
@@ -163,12 +182,31 @@ func duplicate_state() -> CompanionState:
 	copy.deck_spot = deck_spot
 	copy.name = name
 	copy.gender = gender
+	copy.id = id
+	copy.origin = origin
+	copy.adopted_at = adopted_at
+	copy.adopted_port = adopted_port
+	copy.adopted_position = adopted_position
+	copy.welcomed = welcomed
 	return copy
 
 
+## True when it was adopted and the moment is recorded.
+func has_adoption_record() -> bool:
+	return origin == ORIGIN_ADOPTED and adopted_at >= 0.0
+
+
 func to_dict() -> Dictionary:
-	return {"kind": String(kind), "spot": String(spot), "next_move_time": next_move_time, "moves": moves,
-		"area": String(area), "deck_spot": deck_spot, "name": name, "gender": String(gender)}
+	var data := {"kind": String(kind), "spot": String(spot), "next_move_time": next_move_time, "moves": moves,
+		"area": String(area), "deck_spot": deck_spot, "name": name, "gender": String(gender), "id": id, "origin": String(origin)}
+	if origin == ORIGIN_ADOPTED:
+		data.adopted = {"time": adopted_at, "port": adopted_port}
+		if is_finite(adopted_position.x) and is_finite(adopted_position.y):
+			data.adopted.lon = adopted_position.x
+			data.adopted.lat = adopted_position.y
+	if not welcomed:
+		data.welcomed = false
+	return data
 
 
 ## Validates saved data. Returns null (with reasons in `errors`) when invalid.
@@ -206,6 +244,20 @@ static func from_dict(data: Variant, errors: Array[String]) -> CompanionState:
 	state.name = clean_name(saved_name) if saved_name is String else ""
 	var saved_gender := StringName(str(data.get("gender", "")))
 	state.gender = saved_gender if saved_gender in GENDERS else &""
+	# I025 fields, optional (older saves: id 1, from the start, no adoption record).
+	var saved_id: Variant = data.get("id", 1)
+	state.id = maxi(int(saved_id), 1) if (saved_id is int or saved_id is float) else 1
+	state.origin = ORIGIN_ADOPTED if str(data.get("origin", "")) == String(ORIGIN_ADOPTED) else ORIGIN_START
+	var adopted: Variant = data.get("adopted")
+	if state.origin == ORIGIN_ADOPTED and adopted is Dictionary:
+		var time: Variant = adopted.get("time", -1.0)
+		state.adopted_at = float(time) if (time is int or time is float) and is_finite(float(time)) else -1.0
+		state.adopted_port = str(adopted.get("port", ""))
+		var lon: Variant = adopted.get("lon")
+		var lat: Variant = adopted.get("lat")
+		if (lon is int or lon is float) and (lat is int or lat is float):
+			state.adopted_position = Vector2(float(lon), float(lat))
+	state.welcomed = data.get("welcomed", true) != false
 	return state
 
 
@@ -216,4 +268,6 @@ func _rest_interval() -> float:
 
 ## Deterministic pseudo-random integer in [0, count) for this kind and `n`.
 func _pick(n: int, count: int) -> int:
-	return absi(hash("%s:%d" % [kind, n])) % count
+	# Id 1 keeps the schedule it always had; a second companion its own.
+	var key := "%s:%d" % [kind, n] if id <= 1 else "%s:%d:%d" % [kind, n, id]
+	return absi(hash(key)) % count

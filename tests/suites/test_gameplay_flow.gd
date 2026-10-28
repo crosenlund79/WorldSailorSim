@@ -55,7 +55,7 @@ func _test_main_menu() -> void:
 func _test_new_game_and_movement() -> void:
 	var menu: MainMenu = app.router.current_screen
 	await t.click(_button(menu, "NewGameButton"))
-	t.check(app.modals.get_top() is NewGameMenu, "New Game asks for the ship's companion")
+	t.check(app.modals.get_top() is NewGameMenu, "New Game opens its dialog")
 	await t.click(_button(app.modals.get_top(), "StartButton"))
 	await _settle()
 	var area := app.router.current_screen as BoatArea
@@ -318,7 +318,7 @@ func _test_companionway_transitions() -> void:
 	t.check_eq(_player_count(), 1, "repeated transitions keep exactly one player")
 	t.check_eq(app.get_node("Screen").get_child_count(), 1, "only one screen is loaded")
 	t.check_eq(GameSession.get_boat_area(), &"exterior", "ended on deck after round trips (area:prompt before each E: %s; modals %d, companion %s)" % [
-		trail, app.modals.depth(), GameSession.get_companion().area])
+		trail, app.modals.depth(), GameSession.get_companion().area if GameSession.get_companion() else &"none"])
 
 
 ## Walks to the companionway at `spot`. The ship's companion wanders and

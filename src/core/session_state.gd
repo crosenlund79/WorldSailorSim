@@ -69,8 +69,30 @@ var weather_model_version := 1
 var weather_exposure := WeatherExposure.new()
 ## Which boat the player owns (a VesselDefinition id, stable across versions).
 var vessel_id: StringName = VesselCatalog.STARTER_ID
-## The ship's companion (kind and resting spot in the cabin).
-var companion := CompanionState.new()
+## The ship's companions (I025: none, one or two, each with a stable id; see
+## CompanionState). A new game starts with none; a save from before I025
+## keeps its one companion (id 1).
+var companions: Array[CompanionState] = []
+## The id the next companion gets (ids are never reused).
+var next_companion_id := 1
+## The first companion (the pre-I025 single field, kept for callers that
+## mean "the ship's companion"): null when none lives aboard. Setting it
+## replaces the first companion (keeping its id), or adds one; null removes it.
+var companion: CompanionState:
+	get:
+		return companions[0] if not companions.is_empty() else null
+	set(value):
+		if value == null:
+			if not companions.is_empty():
+				companions.remove_at(0)
+		elif companions.is_empty():
+			add_companion(value)
+		else:
+			value.id = companions[0].id
+			companions[0] = value
+## Animals found on a dock (I025, DockEncounters): the one waiting now, if
+## any, and what keeps encounters rare and fair. Optional in a save.
+var encounters := DockEncounters.new()
 ## The voyage being sailed, or null when not underway.
 var voyage: Voyage
 ## The boats the captain owns (I022; vessel ids). The one aboard is always
@@ -126,7 +148,10 @@ static func create_new(start_location: StringName, start_area: StringName, start
 	state.game_time = get_start_time()
 	state.weather_exposure.reset(state.game_time)
 	state.damage_applied_until = state.game_time
-	state.companion = CompanionState.create(companion_kind, state.game_time, companion_name, companion_gender)
+	# I025: New Game starts without a companion (kind ""); a kind given here
+	# (tools, tests, older flows) still starts with that companion.
+	if companion_kind != &"":
+		state.add_companion(CompanionState.create(companion_kind, state.game_time, companion_name, companion_gender))
 	state.captains_log = CaptainsLog.create(start_location, state.game_time)
 	state.hat = HatState.create(state.game_time)
 	state.fishing.checked_until = state.game_time
@@ -190,7 +215,11 @@ func duplicate_state() -> SessionState:
 	copy.wind_seed = wind_seed
 	copy.weather_model_version = weather_model_version
 	copy.weather_exposure = weather_exposure.duplicate_exposure()
-	copy.companion = companion.duplicate_state()
+	copy.companions = [] as Array[CompanionState]
+	for c in companions:
+		copy.companions.append(c.duplicate_state())
+	copy.next_companion_id = next_companion_id
+	copy.encounters = encounters.duplicate_state()
 	copy.vessel_id = vessel_id
 	copy.voyage = voyage.duplicate_voyage() if voyage else null
 	copy.funds = funds
@@ -238,7 +267,36 @@ func set_condition(id: StringName, percent: float) -> void:
 	vessel_conditions[String(id)] = clampf(percent, 0.0, VesselCondition.FULL)
 
 
+## Adds `companion` with the next id (at most MAX_COMPANIONS). Returns it,
+## or null when there is no room.
+func add_companion(companion: CompanionState) -> CompanionState:
+	if companions.size() >= CompanionState.MAX_COMPANIONS:
+		return null
+	companion.id = next_companion_id
+	next_companion_id += 1
+	companions.append(companion)
+	return companion
+
+
+## The companion with `id` (0 = the first), or null.
+func find_companion(id := 0) -> CompanionState:
+	if id == 0:
+		return companions[0] if not companions.is_empty() else null
+	for c in companions:
+		if c.id == id:
+			return c
+	return null
+
+
 func to_dict() -> Dictionary:
+	var data := _to_dict()
+	# The pre-I025 field, kept for the first companion (readers prefer "companions").
+	if not companions.is_empty():
+		data["companion"] = companions[0].to_dict()
+	return data
+
+
+func _to_dict() -> Dictionary:
 	var player := {}
 	if has_player_position:
 		player["position"] = {"x": player_position.x, "y": player_position.y}
@@ -250,7 +308,9 @@ func to_dict() -> Dictionary:
 		"clock": {"game_time": game_time, "time_scale": time_scale, "paused": paused},
 		"wind": {"seed": wind_seed},
 		"weather": {"model_version": weather_model_version, "exposure": weather_exposure.to_dict()},
-		"companion": companion.to_dict(),
+		"companions": companions.map(func(c: CompanionState) -> Dictionary: return c.to_dict()),
+		"next_companion_id": next_companion_id,
+		"encounters": encounters.to_dict(),
 		"vessel": {
 			"id": String(vessel_id),
 			"status": String(vessel_status),
@@ -350,9 +410,21 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	state.weather_exposure = WeatherExposure.from_dict(weather.get("exposure"), errors)
 	if state.weather_exposure == null:
 		return null
-	state.companion = CompanionState.from_dict(data.get("companion"), errors)
-	if state.companion == null:
-		return null
+	# Companions: the I025 list, or the single companion of an older save
+	# (id 1). Never more than MAX_COMPANIONS; ids unique.
+	var saved_list: Variant = data.get("companions")
+	var entries: Array = saved_list if saved_list is Array else ([data.get("companion")] if data.has("companion") else [])
+	for entry: Variant in entries:
+		var companion := CompanionState.from_dict(entry, errors)
+		if companion == null:
+			return null
+		if state.companions.size() < CompanionState.MAX_COMPANIONS and not state.companions.any(func(c: CompanionState) -> bool: return c.id == companion.id):
+			state.companions.append(companion)
+	var next_id: Variant = data.get("next_companion_id", 1)
+	state.next_companion_id = int(next_id) if (next_id is int or next_id is float) else 1
+	for c in state.companions:
+		state.next_companion_id = maxi(state.next_companion_id, c.id + 1)
+	state.encounters = DockEncounters.from_dict(data.get("encounters"))
 
 	var vessel: Variant = data.get("vessel")
 	if not vessel is Dictionary or not vessel.get("status") is String:

@@ -695,7 +695,7 @@ func _show(area: StringName, spawn: StringName) -> void:
 func _count(type: Variant) -> int:
 	var count := 0
 	for node in t.get_tree().root.find_children("*", "", true, false):
-		if is_instance_of(node, type) and node.is_inside_tree() and not (node is ShipCompanion and node.preview):
+		if is_instance_of(node, type) and node.is_inside_tree() and not (node is ShipCompanion and (node.preview or not node.is_visible_in_tree())):
 			count += 1
 	return count
 
