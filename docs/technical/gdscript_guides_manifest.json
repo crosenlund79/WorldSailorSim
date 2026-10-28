@@ -1108,9 +1108,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/screenshots_horizon.gd": {
-   "sha": "3c90274bfba35494",
+   "sha": "b0ca7be1f93b66cc",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "Ownership flag for the tour; entry still accurate"
   },
   "tests/screenshots_i021.gd": {
    "sha": "4d3ac015a0b94d0e",
