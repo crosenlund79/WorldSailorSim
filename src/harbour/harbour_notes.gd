@@ -94,9 +94,10 @@ static func notices(port_id: StringName, time: float, count := 3) -> Array[Strin
 		order[j] = tmp
 	var layout := QuayLayout.build(port_id)
 	for i in order:
-		var text := String((_notices[i] as Dictionary).get("text", ""))
-		if text.contains("travel lift") and layout.lift == Vector2.ZERO:
-			continue
+		var notice: Dictionary = _notices[i]
+		var text := String(notice.get("text", ""))
+		if notice.get("needs", "") == "lift" and layout.lift == Vector2.ZERO:
+			continue  # a note about the travel lift, where there is none
 		out.append(Loc.t(text))
 		if out.size() >= count:
 			break

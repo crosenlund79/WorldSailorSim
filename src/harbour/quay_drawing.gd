@@ -56,7 +56,7 @@ func get_bench_positions() -> PackedVector2Array:
 	var benches := PackedVector2Array()
 	for lamp in get_lamp_positions():
 		var at := lamp + Vector2(200.0, -24.0)
-		if absf(at.x) > QuayLayout.WALKWAY_CLEAR + 120.0 and not _over_lift(at.x) and at.x < layout.right - 200.0:
+		if absf(at.x) > QuayLayout.WALKWAY_CLEAR + 120.0 and not _over_lift(at.x) and not _before_yard(at.x) and at.x < layout.right - 200.0:
 			benches.append(at)
 	return benches
 
@@ -70,6 +70,15 @@ func get_bollard_positions() -> PackedVector2Array:
 			out.append(Vector2(x, QuayLayout.EDGE_Y - QuayLayout.COPING * 0.5))
 		x += 300.0
 	return out
+
+
+## In front of the boatyard, whose hull on its stands leaves only a lane
+## along the coping: no bench there, or the lane is shut.
+func _before_yard(x: float) -> bool:
+	for front in layout.fronts:
+		if front.kind == QuayLayout.BOATYARD and x > float(front.x0) - 80.0 and x < float(front.x1) + 80.0:
+			return true
+	return false
 
 
 func _over_lift(x: float) -> bool:

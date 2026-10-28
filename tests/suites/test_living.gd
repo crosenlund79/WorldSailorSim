@@ -185,6 +185,14 @@ func _show(area: StringName, spawn: StringName) -> void:
 
 
 ## Stands where `interaction_id` is focused and presses E.
+## The grocery store (I026: up the walkway, its door on the quay).
+func _use_grocery() -> bool:
+	if not await _use(BoatArea.WALKWAY_ID):
+		return false
+	await _settle()
+	return await TestQuay.use_door(t, app, QuayLayout.GROCERY)
+
+
 func _use(interaction_id: StringName) -> bool:
 	var area := app.router.current_screen as BoatArea
 	var station := _station(area, interaction_id)
@@ -260,17 +268,17 @@ func _test_grocery_store() -> void:
 		GameSession.switch_vessel(id)
 		await _show(SessionState.AREA_EXTERIOR, &"from_boatyard")
 		var area := app.router.current_screen as BoatArea
-		var station := _station(area, &"grocery")
-		var sign := area.find_child("GrocerySign", true, false) as Label
-		t.check(station != null and station.enabled and sign != null and sign.is_visible_in_tree(),
-			"[grocery] the %s's pontoon has a grocery store, signposted" % id)
-		t.check(await _use(&"grocery") and app.modals.get_top() is GroceryMenu, "[grocery] on the %s it opens the store" % id)
+		# I026: the grocery store has its own shop on the quay, up the walkway.
+		var station := _station(area, BoatArea.WALKWAY_ID)
+		t.check(station != null and station.enabled and BoatArea.WALKWAY_ID in area.get_harbour_dressing().get_sign_ids(),
+			"[grocery] the %s's pontoon has the walkway to the quay, signposted" % id)
+		t.check(await _use_grocery() and app.modals.get_top() is GroceryMenu, "[grocery] from the %s, the store on the quay opens" % id)
 		app.modals.clear()
 		await t.frames(2)
 	GameSession.switch_vessel(&"starling_33")
 	await _show(SessionState.AREA_EXTERIOR, &"from_boatyard")
 	GameSession.set_provisions_for_testing(4.5)
-	await _use(&"grocery")
+	await _use_grocery()
 	var store := app.modals.get_top() as GroceryMenu
 	if not t.check(store != null, "[grocery] the store is open"):
 		return
@@ -287,7 +295,7 @@ func _test_grocery_store() -> void:
 	_set_funds(30)
 	await _show(SessionState.AREA_EXTERIOR, &"from_boatyard")
 	GameSession.set_provisions_for_testing(2.0)
-	await _use(&"grocery")
+	await _use_grocery()
 	store = app.modals.get_top() as GroceryMenu
 	var note := (store.find_child("Note", true, false) as Label).text if store else ""
 	t.check(store != null and store.get_buy_button().disabled and note.contains("Not enough money") and note.contains("Remote work"),
@@ -300,5 +308,5 @@ func _test_grocery_store() -> void:
 	GameSession.plan_route_to(&"kiel")
 	GameSession.depart()
 	await _show(SessionState.AREA_EXTERIOR, &"from_cabin")
-	var away := _station(app.router.current_screen as BoatArea, &"grocery")
-	t.check(away != null and not away.enabled and not away.visible, "[grocery] underway the grocery store is gone")
+	var away := _station(app.router.current_screen as BoatArea, BoatArea.WALKWAY_ID)
+	t.check(away != null and not away.enabled and not away.visible, "[grocery] underway the way to the grocery store is gone")

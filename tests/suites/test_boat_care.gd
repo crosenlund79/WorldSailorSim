@@ -379,8 +379,12 @@ func _test_small_harbour_ui() -> void:
 	app._show_current_boat_area()
 	await _settle()
 	var deck := app.router.current_screen as BoatArea
-	t.check(deck != null and not HarbourFacilities.BOATYARD in deck.get_harbour_dressing().get_sign_ids(),
-		"[ui] Stege, a small harbour: no boatyard sign on the quay")
+	# I026: the businesses stand on the quay, each in its own building.
+	var front := await TestQuay.go_up(t, app)
+	t.check(deck != null and front != null and front.get_storefront(QuayLayout.BOATYARD) == null and front.get_station(QuayLayout.BOATYARD) == null
+		and front.get_station(HarbourFront.TRAVEL_LIFT) == null, "[ui] Stege, a small harbour: no boatyard on the quay")
+	app.leave_quay()
+	await _settle()
 	app.open_boatyard()
 	await t.frames(2)
 	t.check(app.modals.is_empty() and app.open_boat_care() == null and GameSession.get_funds() == funds,

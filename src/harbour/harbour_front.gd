@@ -235,7 +235,7 @@ func _build_stations() -> void:
 			station.set_highlight_outline_global.call_deferred(drawing.get_highlight_outline())
 	if layout.lift != Vector2.ZERO:
 		var dock := ground.get_lift_dock()
-		var station := _add_station(holder, TRAVEL_LIFT, Vector2(dock.get_center().x, 40.0), Vector2(dock.size.x + 60.0, 60))
+		var station := _add_station(holder, TRAVEL_LIFT, Vector2(dock.get_center().x, dock.position.y - 24.0), Vector2(dock.size.x + 60.0, 60))
 		station.prompt = "Ask about a haul-out"
 		station.set_highlight_outline_global.call_deferred(ground.get_lift_outline())
 	var walkway := _add_station(holder, WALKWAY, Vector2(0.0, QuayLayout.EDGE_Y - 34.0), Vector2(120, 60))

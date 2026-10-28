@@ -164,11 +164,13 @@ func _test_harbour_shore() -> void:
 	app._show_current_boat_area()
 	await _settle()
 	var deck := app.router.current_screen as BoatArea
-	var yard := deck.get_shore_station(HarbourFacilities.BOATYARD) if deck else null
+	var front := await TestQuay.go_up(t, app)
+	var yard := front.get_station(QuayLayout.BOATYARD) if front else null
 	if t.check(yard != null, "[views] Svendborg, a major service harbour, has its boatyard on the quay"):
-		deck.player.position = yard.position + Vector2(0, -26)
+		front.player.position = yard.position + Vector2(0, 6)
 		await t.physics_frames(4)
-		t.check(deck.player.get_focused_interactable() == yard, "[views] the boatyard sign lights up, no circle")
+		t.check(front.player.get_focused_interactable() == yard and yard.highlight_outline.size() >= 3,
+			"[views] the boatyard's storefront lights up, no circle")
 		await t.screenshot("14_19_fleet_in_harbour")
 		app.open_boatyard()
 		await t.frames(4)

@@ -123,12 +123,12 @@ func _test_shore_on_every_boat() -> void:
 		t.check(not W.use_points(companionway, back).is_empty(), "[shore] %s: and from the pontoon back aboard to the companionway" % id)
 		t.check(W.nearest(back, start).distance_to(start) <= W.GRID,
 			"[shore] %s: boat, plank and pontoon are one area: from the pontoon the cockpit is reachable too" % id)
-		for facility in HarbourFacilities.ALL:
-			var station := deck.get_shore_station(facility)
-			t.check(station != null and station.enabled and station.visible and station.position.y > shore.get_rail_y()
-				and not W.use_points(station, cells).is_empty(), "[shore] %s: the %s stands ashore and can be walked to" % [id, facility])
+		# I026: the services stand on the quay now, up the pontoon's walkway.
+		var walkway := deck.get_walkway()
+		t.check(walkway != null and walkway.enabled and walkway.visible and walkway.position.y > shore.get_rail_y()
+			and not W.use_points(walkway, cells).is_empty(), "[shore] %s: the walkway to the quay stands ashore and can be walked to" % id)
 		var signs := deck.get_harbour_dressing().get_sign_ids()
-		t.check(signs.size() == 3, "[shore] %s: three signs on the pontoon (%s)" % [id, signs])
+		t.check(signs == ([BoatArea.WALKWAY_ID] as Array[StringName]), "[shore] %s: its sign on the pontoon (%s)" % [id, signs])
 		# Walk it like a player: down the plank and back up.
 		await t.hold_actions([&"move_down"], 1.4)
 		t.check(shore.is_player_ashore() and deck.player.position.y > shore.get_pontoon_rect().position.y,
@@ -164,27 +164,32 @@ func _test_highlights() -> void:
 	GameSession.switch_vessel(VesselCatalog.STARTER_ID)
 	var deck := await _show(DECK, &"from_boatyard")
 	await t.frames(2)
-	for facility in [HarbourFacilities.GROCERY, HarbourFacilities.BOATYARD, HarbourFacilities.GO_ASHORE]:
-		var station := deck.get_shore_station(facility)
-		var outline := station.get_highlight_points()
-		var center := Vector2.ZERO
-		for p in outline:
-			center += station.to_global(p)
-		center /= maxf(outline.size(), 1)
-		t.check(station.highlight_outline.size() >= 3 and center.y > station.global_position.y,
-			"[highlight] the %s station highlights its sign board" % facility)
-	# Walk up to the grocery sign: it lights up, with its prompt.
-	var grocery := deck.get_shore_station(HarbourFacilities.GROCERY)
-	deck.player.position = grocery.position + Vector2(0, -26)
+	var station := deck.get_walkway()
+	var outline := station.get_highlight_points()
+	var center := Vector2.ZERO
+	for p in outline:
+		center += station.to_global(p)
+	center /= maxf(outline.size(), 1)
+	t.check(station.highlight_outline.size() >= 3 and center.y > station.global_position.y,
+		"[highlight] the walkway highlights its sign board")
+	# Walk up to the walkway's sign: it lights up, with its prompt.
+	deck.player.position = station.position + Vector2(0, -26)
 	await t.physics_frames(4)
-	t.check(deck.player.get_focused_interactable() == grocery and app.hud.get_prompt() == "Visit the grocery store",
-		"[highlight] standing at the grocery sign focuses it: '%s'" % app.hud.get_prompt())
-	await t.screenshot("173_highlight_grocery")
-	var yard := deck.get_shore_station(HarbourFacilities.BOATYARD)
-	deck.player.position = yard.position + Vector2(0, -26)
-	await t.physics_frames(4)
-	t.check(deck.player.get_focused_interactable() == yard, "[highlight] and the boatyard sign likewise")
+	t.check(deck.player.get_focused_interactable() == station and app.hud.get_prompt() == "To the quay",
+		"[highlight] standing at the walkway focuses it: '%s'" % app.hud.get_prompt())
+	await t.screenshot("173_highlight_walkway")
+	# Up on the quay the grocery store and the boatyard light up their own storefronts.
+	var front := await TestQuay.go_up(t, app)
+	for business in [QuayLayout.GROCERY, QuayLayout.BOATYARD]:
+		var door := front.get_station(business)
+		front.player.position = door.position + Vector2(0, 6)
+		await t.physics_frames(4)
+		t.check(front.player.get_focused_interactable() == door and door.highlight_outline.size() >= 3
+			and app.hud.get_prompt().begins_with(HarbourFront.business_name(business)),
+			"[highlight] on the quay the %s's storefront lights up: '%s'" % [business, app.hud.get_prompt()])
 	await t.screenshot("174_highlight_boatyard")
+	app.leave_quay()
+	await _settle()
 
 
 func _station(area: BoatArea, interaction_id: StringName) -> Interactable:
@@ -204,12 +209,16 @@ func _test_lohals() -> void:
 	deck = await _show(DECK, &"from_boatyard")
 	var yard := deck.get_shore_station(HarbourFacilities.BOATYARD)
 	t.check(yard != null and not yard.enabled and not yard.visible and not yard.monitorable,
-		"[lohals] no boatyard station, and no invisible target left behind")
-	t.check(not HarbourFacilities.BOATYARD in deck.get_harbour_dressing().get_sign_ids(), "[lohals] no boatyard sign")
+		"[lohals] no boatyard station on the pontoon, and no invisible target left behind")
 	var label := deck.mooring.get_node_or_null(^"BoatyardSign") as Label
 	t.check(label != null and not label.visible, "[lohals] the classic boatyard label is hidden too")
-	t.check(deck.get_shore_station(HarbourFacilities.GROCERY).enabled and deck.get_shore_station(HarbourFacilities.GO_ASHORE).enabled,
-		"[lohals] the grocery store and Go Ashore are there")
+	var front := await TestQuay.go_up(t, app)
+	t.check(front != null and front.get_station(QuayLayout.BOATYARD) == null and front.get_storefront(QuayLayout.CHANDLERY) == null,
+		"[lohals] no boatyard (nor its chandlery) on the quay")
+	t.check(front != null and front.get_station(QuayLayout.GROCERY) != null and front.get_station(QuayLayout.LANE) != null,
+		"[lohals] the grocery store and the lane into town (Go Ashore) are there")
+	app.leave_quay()
+	await _settle()
 	var funds := GameSession.get_funds()
 	t.check(GameSession.switch_vessel(&"halcyon_40").contains("no boatyard") and GameSession.get_vessel_id() == VesselCatalog.STARTER_ID,
 		"[lohals] changing boats is refused: there is no boatyard")
@@ -238,10 +247,13 @@ func _test_go_ashore() -> void:
 	app.start_new_game()
 	await _settle()
 	var deck := await _show(DECK, &"from_boatyard")
-	var station := deck.get_shore_station(HarbourFacilities.GO_ASHORE)
-	deck.player.position = station.position + Vector2(0, -26)
+	# I026: Go Ashore is the lane into town at the quay's town end.
+	var front := await TestQuay.go_up(t, app)
+	var station := front.get_station(QuayLayout.LANE)
+	front.player.position = station.position + Vector2(0, 6)
 	await t.physics_frames(4)
-	t.check(deck.player.get_focused_interactable() == station and app.hud.get_prompt() == "Go ashore", "[ashore] the Go Ashore sign: 'Go ashore'")
+	t.check(front.player.get_focused_interactable() == station and app.hud.get_prompt() == "Into town (Go ashore)",
+		"[ashore] the lane into town: 'Into town (Go ashore)'")
 	await t.press_action(&"interact")
 	await t.frames(3)
 	var menu := app.modals.get_top() as GoAshoreMenu
@@ -372,10 +384,10 @@ func _test_departure_closes_the_shore() -> void:
 	await t.physics_frames(3)
 	t.check(not shore.is_active() and not shore.is_off_the_boat(deck.player.position) and deck.player.position.y < shore.get_rail_y(),
 		"[shore] setting off, the gangplank comes in and the captain is aboard")
-	var none_open := true
+	var none_open := not deck.get_walkway().enabled
 	for facility in HarbourFacilities.ALL:
 		none_open = none_open and not deck.get_shore_station(facility).enabled
-	t.check(none_open, "[shore] underway no shore service can be used")
+	t.check(none_open, "[shore] underway no shore service (nor the walkway to the quay) can be used")
 	t.use_calm_wind()
 	GameSession.end_session()
 	app.start_new_game()

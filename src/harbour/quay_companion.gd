@@ -39,7 +39,7 @@ func setup(companion_: CompanionState, captain_: Node2D, slot_: int) -> void:
 	captain = captain_
 	slot = slot_
 	visual_set = CompanionVisualSet.for_kind(companion.kind)
-	name = "QuayCompanion%d" % (slot + 1)
+	name = "QuayCompanion" + str(slot + 1)
 	position = captain.position + _offset()
 	if visual_set:
 		_speed = maxf(visual_set.walk_speed * 5.5, 110.0) if not _is_bird() else 160.0

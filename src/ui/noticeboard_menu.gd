@@ -12,12 +12,12 @@ func _ready() -> void:
 	var now := GameSession.get_game_time()
 	_build(Loc.t("Noticeboard") + (" · %s" % place.display_name if place else ""), 720.0)
 	_label("ForecastHeading", Loc.t("Forecast, pinned up this morning"), &"HeaderLabel")
-	_label("Forecast", "\n".join(HarbourNotes.forecast_lines(port_id, now)))
+	_label("ForecastText", "\n".join(HarbourNotes.forecast_lines(port_id, now)))
 	_label("NoticesHeading", Loc.t("Notices"), &"HeaderLabel")
-	_label("Notices", "\n".join(HarbourNotes.notices(port_id, now).map(func(n: String) -> String: return "·  " + n)))
+	_label("NoticesText", "\n".join(HarbourNotes.notices(port_id, now).map(func(n: String) -> String: return "·  " + n)))
 	var notes := HarbourNotes.local_notes(port_id)
 	if not notes.is_empty():
-		_label("About", "\n".join(notes), &"MutedLabel")
+		_label("AboutText", "\n".join(notes), &"MutedLabel")
 	_label("Hint", Loc.t("Opening hours are on each door and at the harbour office."), &"MutedLabel")
 	_button("CloseButton", "Close", close)
 

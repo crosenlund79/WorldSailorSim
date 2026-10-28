@@ -22,6 +22,9 @@ const HOUR := 3600.0
 const DAY := 86400.0
 
 static var _data: Dictionary
+## Tests only (tests/helpers/quay.gd): every door open, for checks that are
+## not about the hours. Never set by the game.
+static var test_always_open := false
 
 
 static func _catalogue() -> Dictionary:
@@ -68,9 +71,12 @@ static func hours(business: StringName, port_id: StringName) -> Vector2:
 
 
 ## Local weekdays the business stays shut (0 = Sunday).
-static func closed_days(business: StringName) -> Array:
+static func closed_days(business: StringName) -> Array[int]:
 	var entry: Dictionary = (_catalogue().get("businesses", {}) as Dictionary).get(String(business), {})
-	return entry.get("closed", [])
+	var out: Array[int] = []
+	for day: Variant in entry.get("closed", []):
+		out.append(int(day))  # JSON numbers are floats; Array.has() is strict
+	return out
 
 
 ## The harbour's local solar time of day (hours, 0..24).
@@ -86,7 +92,7 @@ static func local_weekday(port_id: StringName, time: float) -> int:
 
 
 static func is_open(business: StringName, port_id: StringName, time: float) -> bool:
-	if not has_hours(business):
+	if not has_hours(business) or test_always_open:
 		return true
 	if local_weekday(port_id, time) in closed_days(business):
 		return false
@@ -102,7 +108,7 @@ static func next_opening(business: StringName, port_id: StringName, time: float)
 	var span := hours(business, port_id)
 	var midnight := time - local_hours(port_id, time) * HOUR  # local midnight today
 	for d in 9:
-		var at := midnight + d * DAY + span.x * HOUR
+		var at := midnight + d * DAY + span.x * HOUR + 1.0  # a second in, clear of rounding at the hour
 		if at > time and not local_weekday(port_id, at) in closed_days(business):
 			return at
 	return time
@@ -145,6 +151,6 @@ static func status_text(business: StringName, port_id: StringName, time: float) 
 	var at := next_opening(business, port_id, time)
 	var wait := at - time
 	var clock := format_hour(local_hours(port_id, at))
-	if wait < 20.0 * HOUR:
+	if wait < 20.0 * HOUR and local_weekday(port_id, at) == local_weekday(port_id, time):
 		return Loc.t("closed · opens %s (in %s)") % [clock, Simulation.format_duration(wait)]
 	return Loc.t("closed · opens %s %s") % [Loc.weekday(local_weekday(port_id, at)), clock]

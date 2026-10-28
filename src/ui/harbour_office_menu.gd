@@ -32,7 +32,7 @@ func _ready() -> void:
 	_build(title + (" · %s" % place.display_name if place else ""), 760.0)
 	if hatch:
 		_label("HatchNote", Loc.t("The office is closed for the day; the hatch is open for what cannot wait until morning."), &"MutedLabel")
-	_label("Tier", HarbourNotes.services(port_id))
+	_label("ServicesLine", HarbourNotes.services(port_id))
 	var scroll := ScrollContainer.new()
 	scroll.name = "Scroll"
 	scroll.custom_minimum_size = Vector2(720, 380)
@@ -42,13 +42,13 @@ func _ready() -> void:
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override(&"separation", 6)
 	scroll.add_child(column)
-	_section(column, "Hours", Loc.t("Opening hours (local time)"), HarbourNotes.hours_lines(layout, GameSession.get_game_time()))
-	_section(column, "Forecast", Loc.t("The forecast"), HarbourNotes.forecast_lines(port_id, GameSession.get_game_time()))
+	_section(column, "HoursList", Loc.t("Opening hours (local time)"), HarbourNotes.hours_lines(layout, GameSession.get_game_time()))
+	_section(column, "ForecastList", Loc.t("The forecast"), HarbourNotes.forecast_lines(port_id, GameSession.get_game_time()))
 	var notes := HarbourNotes.local_notes(port_id)
 	if not notes.is_empty():
-		_section(column, "About", Loc.t("About the harbour"), notes)
+		_section(column, "AboutList", Loc.t("About the harbour"), notes)
 	if hatch:
-		_essentials = _label("Essentials", "", &"MutedLabel")
+		_essentials = _label("EssentialsNote", "", &"MutedLabel")
 		var row := HBoxContainer.new()
 		row.name = "EssentialsRow"
 		row.add_theme_constant_override(&"separation", 12)

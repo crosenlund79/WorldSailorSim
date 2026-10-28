@@ -9447,3 +9447,245 @@ msgstr "Ledsagere"
 
 msgid "Both are back aboard."
 msgstr "Begge er tilbage om bord."
+
+# I026 stage 02: living harbours (the quay)
+
+msgid "Each harbour has its own services, each in its own building on the quay: walk up the walkway from the guest pontoon. A grocery (food, water, a new hat, lures) with the fishmonger's stall beside it, a boatyard (boat care, haul-out and boats for sale) with the chandlery and the sail loft, a café, the harbour office and the noticeboard, and a lane into town (Go Ashore). The shops keep opening hours on the harbour's own clock; at a closed door you can wait until it opens, and the harbour office's hatch is always open for food and an emergency repair. The arrival card says what is there."
+msgstr "Hver havn har sine egne tilbud, hver i sin egen bygning på kajen: gå op ad gangbroen fra gæstepontonen. En købmand (mad, vand, en ny hat, blink) med fiskehandlerens bod ved siden af, et bådeværft (bådpleje, optagning og både til salg) med skibshandlen og sejlmageriet, en café, havnekontoret og opslagstavlen og en gyde ind til byen (Gå i land). Butikkerne har åbningstider efter havnens egen klokke; ved en lukket dør kan du vente, til den åbner, og havnekontorets luge er altid åben for mad og en nødreparation. Ankomstkortet fortæller, hvad der er."
+
+msgid "This harbour has a boatyard on its quay, with a chandlery and a sail loft beside it: boat care and boats for sale. Walk up the pontoon's walkway to the quay."
+msgstr "Denne havn har et bådeværft på kajen med en skibshandel og et sejlmageri ved siden af: bådpleje og både til salg. Gå op ad pontonens gangbro til kajen."
+
+msgid "Choir practice in the old net loft on Thursday evenings. All voices welcome."
+msgstr "Korprøve på det gamle nødeloft torsdag aften. Alle stemmer er velkomne."
+
+msgid "Fishing from the quay is welcome away from the walkway and the travel lift."
+msgstr "Fiskeri fra kajen er velkomment, bare ikke ved gangbroen og bådliften."
+
+msgid "For sale: a pair of oars, well used, still good."
+msgstr "Til salg: et par årer, godt brugt, stadig gode."
+
+msgid "Found on the pontoon: a blue fender with a white line. Ask at the harbour office."
+msgstr "Fundet på pontonen: en blå fender med en hvid line. Spørg på havnekontoret."
+
+msgid "Fresh bread in the mornings while it lasts."
+msgstr "Friskt brød om morgenen, så længe det varer."
+
+msgid "Fresh water at every pontoon. Please close the taps."
+msgstr "Ferskvand ved hver ponton. Luk venligst hanerne."
+
+msgid "Lost: a child's red mitten, somewhere near the café."
+msgstr "Tabt: en rød børnevante, et sted ved caféen."
+
+msgid "Market on the square on the first Saturday of the month."
+msgstr "Marked på torvet den første lørdag i måneden."
+
+msgid "Please walk slowly on the pontoons: the boards are slippery when wet."
+msgstr "Gå venligst langsomt på pontonerne: brædderne er glatte, når de er våde."
+
+msgid "Thank you to everyone who helped haul out the old harbour launch."
+msgstr "Tak til alle, der hjalp med at tage den gamle havnebåd op."
+
+msgid "The harbour's flower boxes are looked after by volunteers. Thank you for leaving them be."
+msgstr "Havnens blomsterkasser passes af frivillige. Tak, fordi du lader dem være."
+
+msgid "The sailing club's dinghies are out on Saturday mornings. Keep a lookout in the fairway."
+msgstr "Sejlklubbens joller er ude lørdag formiddag. Hold godt udkig i sejlrenden."
+
+msgid "%s: closed"
+msgstr "%s: lukket"
+
+msgid "It opens at %s local time, in %s. Wait on the quay until then? Time passes as usual, and anything that needs you will interrupt the wait."
+msgstr "Den åbner kl. %s lokal tid, om %s. Vent på kajen så længe? Tiden går som altid, og alt, der har brug for dig, afbryder ventetiden."
+
+msgid "Wait until it opens"
+msgstr "Vent til den åbner"
+
+msgid "Interrupted: %s. It is %s."
+msgstr "Afbrudt: %s. Klokken er %s."
+
+msgid "%s is open now. It is %s."
+msgstr "%s har åbent nu. Klokken er %s."
+
+msgid "Every table on the terrace is taken just now. Try again in a little while."
+msgstr "Alle borde på terrassen er optaget lige nu. Prøv igen om lidt."
+
+msgid "A coffee on the terrace for %s. Stay as long as you like."
+msgstr "En kop kaffe på terrassen for %s. Bliv så længe, du har lyst."
+
+msgid "The yard's night man sees to the hull for %s. The work takes %s."
+msgstr "Værftets nattevagt ordner skroget for %s. Arbejdet tager %s."
+
+msgid "Stand up"
+msgstr "Rejs dig"
+
+msgid "Back to the boat"
+msgstr "Tilbage til båden"
+
+msgid "The quay"
+msgstr "Kajen"
+
+msgid "On the quay"
+msgstr "På kajen"
+
+msgid "To the quay"
+msgstr "Til kajen"
+
+msgid "TO THE QUAY"
+msgstr "TIL KAJEN"
+
+msgid "The café is on the quay; you are not in harbour."
+msgstr "Caféen ligger på kajen; du er ikke i havn."
+
+msgid "always open"
+msgstr "altid åben"
+
+msgid "%s, closed on %s"
+msgstr "%s, lukket %s"
+
+msgid "open"
+msgstr "åben"
+
+msgid "open until %s"
+msgstr "åben til %s"
+
+msgid "closed · opens %s (in %s)"
+msgstr "lukket · åbner %s (om %s)"
+
+msgid "closed · opens %s %s"
+msgstr "lukket · åbner %s %s"
+
+msgid "Ring at the after-hours hatch"
+msgstr "Ring ved lugen uden for åbningstid"
+
+msgid "Read the noticeboard"
+msgstr "Læs opslagstavlen"
+
+msgid "Into town (Go ashore)"
+msgstr "Ind til byen (Gå i land)"
+
+msgid "Ask about a haul-out"
+msgstr "Spørg om en optagning"
+
+msgid "Sail Loft"
+msgstr "Sejlmageri"
+
+msgid "Harbour Office"
+msgstr "Havnekontor"
+
+msgid "Café"
+msgstr "Café"
+
+msgid "Noticeboard"
+msgstr "Opslagstavle"
+
+msgid "Enjoy your coffee  ·  E or a movement key to stand up"
+msgstr "Nyd din kaffe  ·  E eller en bevægelsestast for at rejse dig"
+
+msgid "You finish your coffee and leave the cup on the table. Lovely."
+msgstr "Du drikker kaffen ud og lader koppen stå på bordet. Dejligt."
+
+msgid "Worth seeing: %s."
+msgstr "Værd at se: %s."
+
+msgid "Tomorrow night"
+msgstr "I morgen nat"
+
+msgid "Tonight"
+msgstr "I nat"
+
+msgid "This morning"
+msgstr "I formiddag"
+
+msgid "Tomorrow morning"
+msgstr "I morgen tidlig"
+
+msgid "This afternoon"
+msgstr "I eftermiddag"
+
+msgid "Tomorrow afternoon"
+msgstr "I morgen eftermiddag"
+
+msgid "This evening"
+msgstr "I aften"
+
+msgid "Tomorrow evening"
+msgstr "I morgen aften"
+
+msgid "Guest pontoon"
+msgstr "Gæsteponton"
+
+msgid "Fresh Fish"
+msgstr "Frisk fisk"
+
+msgid "CLOSED"
+msgstr "LUKKET"
+
+msgid "OPEN"
+msgstr "ÅBENT"
+
+msgid "Town"
+msgstr "Byen"
+
+msgid "Choose the boat you sail, or look after the one you have (repairs, services, haul-outs and equipment). Your harbour, the time, your money and your companion stay with you."
+msgstr "Vælg den båd, du sejler, eller pas på den, du har (reparationer, service, optagninger og udstyr). Din havn, tiden, dine penge og din ledsager følger med dig."
+
+msgid "A small café on the quay. A coffee is %s; take it to a table on the terrace and watch the harbour for a while."
+msgstr "En lille café på kajen. En kop kaffe koster %s; tag den med hen til et bord på terrassen, og se på havnen en stund."
+
+msgid "Funds: %s"
+msgstr "Penge: %s"
+
+msgid "Order a coffee and sit outside (%s)"
+msgstr "Bestil en kaffe og sæt dig udenfor (%s)"
+
+msgid "Your catch: %d fish in the cool box, worth about %s at the fishmonger's stall on the quay."
+msgstr "Din fangst: %d fisk i køleboksen, omkring %s værd hos fiskehandlerens bod på kajen."
+
+msgid "There is no grocery store here."
+msgstr "Her er ingen købmand."
+
+msgid "There is no boatyard here."
+msgstr "Her er intet bådeværft."
+
+msgid "Everything else opens again in the morning."
+msgstr "Alt andet åbner igen i morgen tidlig."
+
+msgid "Food and water for %d days are brought down to the boat. Funds: %s."
+msgstr "Mad og vand til %d dage bliver bragt ned til båden. Penge: %s."
+
+msgid "After-hours hatch"
+msgstr "Luge uden for åbningstid"
+
+msgid "The office is closed for the day; the hatch is open for what cannot wait until morning."
+msgstr "Kontoret er lukket for i dag; lugen er åben for det, der ikke kan vente til i morgen."
+
+msgid "Opening hours (local time)"
+msgstr "Åbningstider (lokal tid)"
+
+msgid "The forecast"
+msgstr "Vejrudsigten"
+
+msgid "About the harbour"
+msgstr "Om havnen"
+
+msgid "Food and water (%s)"
+msgstr "Mad og vand (%s)"
+
+msgid "Food and water are full"
+msgstr "Mad og vand er fyldt op"
+
+msgid "Emergency hull repair (%s)"
+msgstr "Nødreparation af skroget (%s)"
+
+msgid "The hull needs no emergency repair"
+msgstr "Skroget behøver ingen nødreparation"
+
+msgid "Forecast, pinned up this morning"
+msgstr "Vejrudsigt, sat op i morges"
+
+msgid "Notices"
+msgstr "Opslag"
+
+msgid "Opening hours are on each door and at the harbour office."
+msgstr "Åbningstiderne står på hver dør og på havnekontoret."

@@ -289,7 +289,7 @@ func _test_boatyard() -> void:
 		t.check(same, "[boatyard] at %d%% the panel keeps its size and place for all three boats (%s)" % [roundi(scale * 100), first])
 		var screen := Rect2(Vector2.ZERO, yard.get_viewport_rect().size)
 		var buttons_ok := true
-		for name in ["ChooseButton", "CloseButton", "CareButton", "GroceryButton"]:
+		for name in ["ChooseButton", "CloseButton", "CareButton"]:
 			var b := yard.find_child(name, true, false) as Control
 			buttons_ok = buttons_ok and b.is_visible_in_tree() and screen.encloses(b.get_global_rect()) and first.encloses(b.get_global_rect())
 		t.check(buttons_ok, "[boatyard] at %d%% all buttons are inside the panel and on screen" % roundi(scale * 100))
@@ -300,14 +300,15 @@ func _test_boatyard() -> void:
 	var condition := yard.find_child("ConditionLabel", true, false) as Label
 	t.check(condition.text.contains("40 % · Damaged"), "[boatyard] it shows the selected boat's condition (%s)" % condition.text)
 	var care := yard.find_child("CareButton", true, false) as Button
-	var grocery := yard.find_child("GroceryButton", true, false) as Button
-	t.check(not care.disabled and care.text.contains("needs attention") and not grocery.disabled,
-		"[boatyard] Boat care (%s) and the grocery store are offered for a worn boat with used stores" % care.text)
+	# I026: the grocery store has its own shop on the quay; the yard is no
+	# longer the way there.
+	t.check(not care.disabled and care.text.contains("needs attention") and yard.find_child("GroceryButton", true, false) == null,
+		"[boatyard] Boat care (%s) is offered for a worn boat; the grocery is its own shop now" % care.text)
 	await t.screenshot("94_boatyard_repair")
 	var funds := GameSession.get_funds()
 	var price := GameSession.get_provisions_price()
 	var repair_cost := int(GameSession.service_quote(BoatCare.SERVICE_REPAIR).cost)
-	await t.click(grocery)
+	app.open_grocery()  # (the store itself; reached from its door on the quay or the cabin's locker)
 	await t.frames(2)
 	var store := app.modals.get_top() as GroceryMenu
 	if store:

@@ -173,11 +173,15 @@ func _test_harbour_copenhagen() -> void:
 		return
 	t.check(dressing.get_landmarks().size() == 1 and dressing.get_landmarks()[0].title == "Nyhavn", "[harbour] with Copenhagen's landmark")
 	var ids := dressing.get_sign_ids()
-	t.check(ids.size() == 3 and ids.has(&"boatyard") and ids.has(&"grocery") and ids.has(&"go_ashore"),
-		"[harbour] signs for the services there are: the grocery store, the boatyard (with repairs) and Go Ashore (Iteration 12)")
-	var offered := HarbourFacilities.for_port(&"copenhagen").get_ids()
-	t.check(ids.size() == offered.size() and ids.all(func(id: StringName) -> bool: return id in offered),
-		"[harbour] and nothing else (no fuel or future services)")
+	# I026: the services moved up to the quay, each in its own building; the
+	# pontoon signposts the walkway there.
+	t.check(ids == ([BoatArea.WALKWAY_ID] as Array[StringName]),
+		"[harbour] the pontoon's sign is the walkway's: To the quay (I026; the services are up there) (%s)" % [ids])
+	var quay := QuayLayout.build(&"copenhagen")
+	var offered := HarbourFacilities.for_port(&"copenhagen")
+	t.check(quay.has_business(QuayLayout.GROCERY) == offered.has(HarbourFacilities.GROCERY)
+		and quay.has_business(QuayLayout.BOATYARD) == offered.has(HarbourFacilities.BOATYARD)
+		and quay.get_businesses().size() == 7, "[harbour] and on the quay the services there are, nothing else (no fuel or future services)")
 	var mooring := deck.mooring
 	t.check(not (mooring.get_node("Plank0") as CanvasItem).visible and (mooring.get_node("GrocerySign") as Label).text == "Groceries",
 		"[harbour] the old pontoon drawing gives way to the illustration; the sign reads Groceries")
@@ -192,13 +196,17 @@ func _test_harbour_copenhagen() -> void:
 		"[harbour] it has no collision of its own (only the signs' highlight outlines)")
 	await t.screenshot("145_copenhagen_harbour_illustrated")
 	# The services still work: walk to them and press E.
-	t.check(await _use(deck, &"grocery") and app.modals.get_top() is GroceryMenu, "[harbour] the grocery store opens from the pontoon as before")
+	t.check(await _use(deck, BoatArea.WALKWAY_ID) and await _settled_door(QuayLayout.GROCERY) and app.modals.get_top() is GroceryMenu,
+		"[harbour] the grocery store opens, from its shop up on the quay")
 	app.modals.clear()
 	await t.frames(2)
-	t.check(await _use(deck, &"boatyard") and app.modals.get_top() is BoatyardMenu, "[harbour] the boatyard opens as before")
+	t.check(await TestQuay.use_door(t, app, QuayLayout.BOATYARD) and app.modals.get_top() is BoatyardMenu, "[harbour] the boatyard opens likewise")
 	await t.screenshot("146_boatyard_illustrated_starling")
 	app.modals.clear()
 	await t.frames(2)
+	deck = await _show(DECK, &"from_boatyard")
+	dressing = deck.get_harbour_dressing()
+	mooring = deck.mooring
 	SettingsManager.set_art_style(SettingsManager.ART_CLASSIC)
 	await t.frames(2)
 	t.check(not dressing.visible and (mooring.get_node("Plank0") as CanvasItem).visible and (mooring.get_node("GrocerySign") as Label).text == "GROCERY STORE",
@@ -206,6 +214,11 @@ func _test_harbour_copenhagen() -> void:
 	await t.screenshot("147_copenhagen_harbour_classic")
 	SettingsManager.set_art_style(SettingsManager.ART_ILLUSTRATED)
 	await t.frames(2)
+
+
+func _settled_door(place: StringName) -> bool:
+	await TestQuay.settle(t, app)
+	return await TestQuay.use_door(t, app, place)
 
 
 func _use(area: BoatArea, id: StringName) -> bool:
@@ -241,7 +254,7 @@ func _test_generic_harbour_and_sea() -> void:
 	# I021: a harbour without its own art shows the illustration of its look
 	# (Kiel: the gabled harbour town), never a landmark of another place.
 	var landmarks := dressing.get_landmarks()
-	t.check(dressing.is_visible_in_tree() and landmarks.size() == 1 and landmarks[0].title == "Gabled harbour town" and dressing.get_sign_ids().size() == 3,
+	t.check(dressing.is_visible_in_tree() and landmarks.size() == 1 and landmarks[0].title == "Gabled harbour town" and dressing.get_sign_ids().size() == 1,
 		"[harbour] a harbour without its own art (Kiel) gets the generic illustrated harbour with its look's view")
 	t.check(deck.mooring_label.text.contains("KIEL"), "[harbour] with its own name on the sign")
 	await t.screenshot("148_kiel_generic_harbour")
@@ -269,7 +282,7 @@ func _test_other_boats() -> void:
 		SettingsManager.set_art_style(SettingsManager.ART_ILLUSTRATED)
 		await t.frames(2)
 		var dressing := deck.get_harbour_dressing()
-		t.check(dressing != null and dressing.is_visible_in_tree() and dressing.get_sign_ids().size() == 3,
+		t.check(dressing != null and dressing.is_visible_in_tree() and dressing.get_sign_ids().size() == 1,
 			"[harbour] the %s's pontoon gets the illustrated harbour and its signs too" % id)
 		await t.screenshot("149_harbour_%s" % id)
 	GameSession.switch_vessel(&"starling_33")

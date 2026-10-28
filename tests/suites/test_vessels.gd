@@ -282,12 +282,17 @@ func _test_reachability_all() -> void:
 func _test_boatyard_menu() -> void:
 	await _show(SessionState.AREA_EXTERIOR, &"start")
 	var deck := app.router.current_screen as BoatArea
-	var yard := deck.get_node("Layout/Stations/Boatyard") as Interactable
-	t.check(GameSession.can_change_vessel() and yard.enabled and yard.visible, "[boatyard] in harbour the boatyard station is open")
+	# I026: the boatyard has its own building on the quay, up the pontoon's
+	# walkway (the pontoon's old station is gone).
+	var walkway := deck.get_walkway()
+	t.check(GameSession.can_change_vessel() and walkway != null and walkway.enabled and walkway.visible,
+		"[boatyard] in harbour the walkway leads up to the quay, where the boatyard is")
 	# Walk there and use it like a player.
-	var used := await _use_station(deck, &"boatyard")
+	var used := await _use_station(deck, BoatArea.WALKWAY_ID)
+	await _settle()
+	used = used and await TestQuay.use_door(t, app, QuayLayout.BOATYARD)
 	var menu := app.modals.get_top() as BoatyardMenu
-	t.check(used and menu != null, "[boatyard] the station opens the boatyard")
+	t.check(used and menu != null, "[boatyard] its door on the quay opens the boatyard")
 	if menu == null:
 		return
 	await t.frames(3)
