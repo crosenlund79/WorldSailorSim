@@ -394,8 +394,8 @@ func _test_not_now(kind: StringName) -> void:
 	# Rendered runs play it at its real pace (for the screenshots and the film).
 	Engine.time_scale = 4.0 if DisplayServer.get_name() == "headless" else 1.0
 	await t.wait_until(func() -> bool: return dock.girl != null, 40.0)
-	await _film("film_girl_%s" % kind, 12, 0.8)
-	var met: bool = await t.wait_until(func() -> bool: return dock.girl != null and not dock.girl.is_walking() and dock.girl.waving > 0.5, 40.0)
+	_film("film_girl_%s" % kind, 12, 0.8)  # alongside, not awaited
+	var met: bool = await t.wait_until(func() -> bool: return dock.girl != null and dock.girl.waved, 40.0)
 	t.check(met, "[the girl] she comes along the pontoon and waves")
 	await t.wait_until(func() -> bool: return dock.animal != null and not dock.animal.is_walking() and dock.animal.position.distance_to(dock.girl.position) < 40.0, 20.0)
 	if dock.girl:

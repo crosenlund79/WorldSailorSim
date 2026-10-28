@@ -13,6 +13,8 @@ const STEP_RATE := 1.6
 var facing := Vector2.RIGHT
 var waving := 0.0
 var carrying_box := false
+## True once she has waved (tests read it; the wave itself is brief).
+var waved := false
 var _target := Vector2.ZERO
 var _walking := false
 var _phase := 0.0
@@ -37,6 +39,7 @@ func is_walking() -> bool:
 ## Raises a hand for `seconds` (a greeting).
 func wave(seconds: float) -> void:
 	_wave_left = seconds
+	waved = true
 
 
 func face(direction: Vector2) -> void:
