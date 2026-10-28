@@ -213,3 +213,29 @@ godot --headless --path . res://tests/test_runner.tscn -- --only=turbocharge
 - **Status:** suspected. The overlay already draws most of them, and the node
   count is land tiles, not labels.
 - **Next action:** do not pursue unless measured.
+
+### 10. Real Horizon deck rendering: the sea shader's fill cost (measured, cause not yet isolated)
+
+- **Evidence (Great Handover, same session, llvmpipe software OpenGL, 1600×900):**
+  `--turbo` probe of `release/i023` (`d4e2e7e`) against the handover build
+  (`docs/benchmarks/handover_before_i023_rendered.json`,
+  `handover_after_real_horizon_rendered.json`). Median frame time on deck is
+  higher: sailing 1× 45.7 → 71.0 ms (+55 %), deck in harbour 58.9 → 81.5 ms
+  (+38 %), day/night sailing 20× +39 %, harbour at night +27 %, debris 1× +21 %;
+  cabin walk +8 %. Unchanged within drift: chart open/idle/zoom, Long Passage
+  (simulation 37.9 → 37.4 ms), sleeps, the Dreamer's Map. Memory over 20
+  session rounds flat (static 243.4 → 244.8 MB), no orphan or connection growth.
+- **Likely cause (hypothesis):** `src/water/sea_surface.gdshader` runs about 30
+  value-noise lookups per pixel over the whole water polygon (plus a 3×3 cell
+  loop for whitecaps from about 18 kn). On a software rasterizer every
+  fragment is CPU work, so this is the worst case; on a GPU it is expected to
+  be small. The busier harbour drawing (`HarbourDressing`) adds some draw calls.
+- **Not yet known:** the cost on the Captain's Windows GPU (Windows acceptance),
+  and how much is the shader versus the harbour drawing (re-run with the
+  shader disabled to isolate).
+- **Cheap options if it matters on real hardware:** fewer fbm octaves for the
+  slow tone/patch/sheen layers, skip the calm-sea sheen when the sea is not
+  calm, or render the slow layers into a small texture updated a few times a
+  second. Each is a visual trade-off for the Captain to see first.
+- **Status:** measured on Linux software rendering; awaiting a Windows reading
+  before any change.

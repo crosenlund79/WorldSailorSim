@@ -55,3 +55,19 @@ full regression result is in the handover report.
 loading screen shows the menu's painted title scene instead of a navy
 gradient (same intent: the start looks like the menu). WaterLook still sets
 the water colour, but the Real Horizon sea shader draws the final water.
+
+**Results.**
+- Full regression on the merged build (`9b3c44f`): 5001 checks passed, 0
+  failed, no script errors. Content checker 31/31 PASS; English/Danish 2611
+  messages, 0 errors; GDScript guides (309 scripts) and links pass.
+- Saves: `SAVE_VERSION` 12 unchanged. `src/persistence`, `SessionState`,
+  `GameSession` and every simulation folder are byte-identical to
+  `release/i023`, so an I023 save loads exactly as it did there; the 69 `src/`
+  files that differ from I023 are presentation only.
+- Performance (same session, Linux software rendering): chart, simulation,
+  sleeps and memory unchanged; deck scenes 20–55 % slower per frame, likely
+  the sea shader's fill cost on a CPU rasterizer. Recorded as #10 in
+  [PERFORMANCE_OPPORTUNITIES.md](technical/PERFORMANCE_OPPORTUNITIES.md); a
+  Windows reading decides whether anything changes.
+- Windows acceptance pending:
+  [WINDOWS_ACCEPTANCE_HANDOVER.md](iterations/real_horizon/WINDOWS_ACCEPTANCE_HANDOVER.md).
