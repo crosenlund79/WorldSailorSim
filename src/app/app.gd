@@ -1474,7 +1474,7 @@ func make_postcard() -> void:
 	if outcome.done:
 		notify(Loc.t("Your postcard is published and in the scrapbook. It is %s.") % now)
 	else:
-		notify(Loc.t("Interrupted after %s: %s. The postcard is kept; finish it later from the cabin (Q, Write a postcard). It is %s.") % [
+		notify(Loc.t("Interrupted after %s: %s. The postcard is kept; finish it later on the laptop in the cabin (Publications). It is %s.") % [
 			Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by), now])
 
 

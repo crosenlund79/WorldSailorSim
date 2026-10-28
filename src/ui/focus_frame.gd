@@ -14,7 +14,7 @@ extends Control
 enum Kind { BOOK, RADIO, TEAK, STEEL, ELECTRIC }
 
 const OPEN_SECONDS := 0.18
-const MARGIN := 18.0
+const MARGIN := 26.0
 const SHADOW := Color(0.0, 0.02, 0.04, 0.35)
 
 var kind := Kind.TEAK
@@ -72,18 +72,19 @@ func _draw() -> void:
 			_teak(r)
 
 
-## A bound logbook: dark green cloth boards, the page block, a ribbon.
+## A bound logbook lying open: dark green cloth boards, the cream page block
+## round the page, the spine down the middle, a red ribbon.
 func _book(r: Rect2) -> void:
-	draw_rect(r, Color("#2F4A3F"))
-	draw_rect(r.grow(-3.0), Color("#36564A"))
-	# Page edges showing under the panel, top and bottom.
-	for i in 3:
-		var y := r.position.y + 6.0 + i * 2.0
-		draw_line(Vector2(r.position.x + 10.0, y), Vector2(r.end.x - 10.0, y), Color(0.9, 0.87, 0.78, 0.9 - i * 0.2), 1.0)
-		var yb := r.end.y - 6.0 - i * 2.0
-		draw_line(Vector2(r.position.x + 10.0, yb), Vector2(r.end.x - 10.0, yb), Color(0.9, 0.87, 0.78, 0.9 - i * 0.2), 1.0)
-	# The spine down the middle, a red ribbon from the top.
-	draw_line(Vector2(r.get_center().x, r.position.y), Vector2(r.get_center().x, r.end.y), Color(0.12, 0.18, 0.16, 0.6), 3.0)
+	draw_rect(r, Color("#2A4439"))
+	draw_rect(r.grow(-2.0), Color("#365A4B"))
+	var pages := r.grow(-7.0)
+	draw_rect(pages, Color(0.86, 0.83, 0.74))
+	for i in 4:
+		draw_rect(pages.grow(-1.5 - i * 1.6), Color(0.93, 0.9, 0.82, 0.5), false, 0.8)
+	# The spine's shadow down the middle of the open book.
+	var cx := r.get_center().x
+	draw_rect(Rect2(Vector2(cx - 5.0, pages.position.y), Vector2(10.0, pages.size.y)), Color(0.45, 0.4, 0.32, 0.35))
+	draw_line(Vector2(cx, r.position.y), Vector2(cx, r.end.y), Color(0.15, 0.22, 0.19, 0.8), 2.0)
 	var rx := r.end.x - 60.0
 	draw_colored_polygon(PackedVector2Array([Vector2(rx, r.position.y - 4.0), Vector2(rx + 10.0, r.position.y - 4.0),
 		Vector2(rx + 10.0, r.position.y + 26.0), Vector2(rx + 5.0, r.position.y + 21.0), Vector2(rx, r.position.y + 26.0)]), Color("#9E3B32"))
@@ -91,8 +92,14 @@ func _book(r: Rect2) -> void:
 
 ## A marine VHF: a graphite moulding, four screws, a lit channel window.
 func _radio(r: Rect2) -> void:
-	draw_rect(r, Color("#22282C"))
-	draw_rect(r.grow(-4.0), Color("#2C3338"))
+	draw_rect(r, Color("#15191C"))
+	draw_rect(r.grow(-2.0), Color("#3A4247"))
+	draw_rect(r.grow(-6.0), Color("#262C30"))
+	# A speaker grille along the bottom edge.
+	for i in 18:
+		var x := r.position.x + 40.0 + i * 7.0
+		if x < r.end.x - 120.0:
+			draw_line(Vector2(x, r.end.y - 16.0), Vector2(x, r.end.y - 8.0), Color("#15191C"), 2.0)
 	for corner in [r.position + Vector2(9, 9), Vector2(r.end.x - 9, r.position.y + 9), r.end - Vector2(9, 9), Vector2(r.position.x + 9, r.end.y - 9)]:
 		draw_circle(corner, 3.0, Color("#5A6368"))
 		draw_line(corner - Vector2(2, 0), corner + Vector2(2, 0), Color("#22282C"), 1.0)

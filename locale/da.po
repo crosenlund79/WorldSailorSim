@@ -9447,3 +9447,66 @@ msgstr "Ledsagere"
 
 msgid "Both are back aboard."
 msgstr "Begge er tilbage om bord."
+
+msgid "Interrupted after %s: %s. The postcard is kept; finish it later on the laptop in the cabin (Publications). It is %s."
+msgstr "Afbrudt efter %s: %s. Postkortet gemmes; gør det færdigt senere på laptoppen i kahytten (Udgivelser). Klokken er %s."
+
+msgid "No postcards yet. Make one on the laptop in the cabin (Publications)."
+msgstr "Ingen postkort endnu. Lav et på laptoppen i kahytten (Udgivelser)."
+
+msgid "Read the logbook"
+msgstr "Læs logbogen"
+
+msgid "Use the VHF radio"
+msgstr "Brug VHF-radioen"
+
+msgid "Check the boat's systems"
+msgstr "Tjek bådens systemer"
+
+msgid "Open the sea chest"
+msgstr "Åbn sømandskisten"
+
+msgid "Look at the postcard"
+msgstr "Se på postkortet"
+
+msgid "Boat systems · %s"
+msgstr "Bådens systemer · %s"
+
+msgid "Fitted by the yard"
+msgstr "Monteret af værftet"
+
+msgid "Food aboard"
+msgstr "Mad om bord"
+
+msgid "Water aboard"
+msgstr "Vand om bord"
+
+msgid "Instruments"
+msgstr "Instrumenter"
+
+msgid "VHF radio · channel 16"
+msgstr "VHF-radio · kanal 16"
+
+msgid "Standing by on channel 16."
+msgstr "Lytter på kanal 16."
+
+msgid "A call is waiting:"
+msgstr "Et opkald venter:"
+
+msgid "Answer the call"
+msgstr "Besvar opkaldet"
+
+msgid "Weather broadcast"
+msgstr "Vejrudsendelse"
+
+msgid "At the boat now: wind %s %d kn, gusts %d kn; %s."
+msgstr "Ved båden nu: vind %s %d kn, vindstød %d kn; %s."
+
+msgid "Nothing worse than a fresh breeze is forecast on your course for now."
+msgstr "Der er ikke varslet mere end frisk vind på din kurs for nu."
+
+msgid "On your course, %s: %s, %d nm ahead."
+msgstr "På din kurs, %s: %s, %d sm forude."
+
+msgid "Plan a course at the chart table to hear what the forecast holds on the way."
+msgstr "Planlæg en kurs ved kortbordet for at høre, hvad vejrudsigten byder på undervejs."

@@ -131,7 +131,7 @@ func _test_views() -> void:
 	# The systems panel: only what the game keeps.
 	var rows := SystemsView.rows()
 	var labels := rows.map(func(r: Array) -> String: return String(r[0]))
-	t.check(labels.has("Hull") and labels.has("Food aboard") and labels.has("Water aboard") and not labels.any(func(l: String) -> bool: return l.containsn("battery") or l.containsn("fuel")),
+	t.check(labels.has("Hull and bottom") and labels.has("Food aboard") and labels.has("Water aboard") and not labels.any(func(l: String) -> bool: return l.containsn("battery") or l.containsn("fuel")),
 		"[systems] hull, care survey, food and water - no invented battery or fuel (%s)" % [labels])
 	await t.frames(2)
 

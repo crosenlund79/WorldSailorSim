@@ -37,7 +37,6 @@ static func rows() -> Array:
 	var out: Array = []
 	var care := GameSession.get_boat_care()
 	var now := GameSession.get_game_time()
-	out.append([Loc.t("Hull"), Loc.format("%.0f %%", GameSession.get_condition())])
 	if care:
 		for area in BoatCare.AREAS:
 			out.append([Loc.t(String(BoatCare.AREA_NAMES[area])), BoatCare.describe_area(area, care, GameSession.get_condition(), now)])

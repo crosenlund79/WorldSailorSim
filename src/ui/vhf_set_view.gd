@@ -32,7 +32,7 @@ func _ready() -> void:
 			answer_requested.emit(call))
 	_label("BroadcastTitle", Loc.t("Weather broadcast"), &"HeaderLabel")
 	for line in broadcast_lines():
-		_label("Broadcast", line)
+		_label(&"Broadcast", line)
 	_button("CloseButton", Loc.t("Close"), close)
 
 
