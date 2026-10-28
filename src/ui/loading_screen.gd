@@ -2,8 +2,8 @@ class_name LoadingScreen
 extends CanvasLayer
 ## The game's own start (Cozy Polish): after Godot's boot splash (an image
 ## the engine shows while it starts; nothing of the game can draw then), this
-## screen shows the logo over a calm sea horizon - a small boat, a lighthouse,
-## the light of the day or of the night (Vintage Chartroom / Harbor Dusk) -
+## screen shows the logo over the title illustration (Real Horizon: an
+## overcast sea, a lighthouse, a sloop under sail; by day or by night) -
 ## while the game loads what it needs, naming each real step as it runs.
 ## The heaviest step (the routing charts) runs on a worker thread, so the
 ## screen keeps moving. It fades into the main menu as soon as the loading
@@ -15,6 +15,8 @@ signal finished
 const FADE_SECONDS := 0.45
 const LOGO_DAY := preload("res://assets/branding/png/little_captains_hat_logo_on_light_480.png")
 const LOGO_NIGHT := preload("res://assets/branding/png/little_captains_hat_logo_480.png")
+const TITLE_DAY := preload("res://assets/ui/title_scene.png")
+const TITLE_NIGHT := preload("res://assets/ui/title_scene_night.png")
 
 ## Shown already in this run of the game.
 static var shown := false
@@ -55,7 +57,7 @@ func _ready() -> void:
 	column.position.y -= 80.0
 	_canvas.add_child(column)
 	var logo := TextureRect.new()
-	logo.texture = LOGO_NIGHT if _night else LOGO_DAY
+	logo.texture = LOGO_NIGHT  # white wordmark over the painted sea, day or night
 	logo.custom_minimum_size = Vector2(440, 206)
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -123,56 +125,14 @@ func is_done() -> bool:
 	return _done
 
 
-## The scene behind the logo: sky, a sea horizon with slow waves, a small
-## boat bobbing and a lighthouse whose light turns (brighter by night).
+## The scene behind the logo: the title illustration (an overcast sea, a
+## headland with its lighthouse, a sloop under sail; the night version by
+## night), drifting very slowly, with a soft breathing light over the sea.
 func _draw_scene() -> void:
 	var size := _canvas.size
-	var sky := UiTheme.color(&"surface")
-	var sea := Color("#2E6E80") if not _night else Color("#163447")
-	var ink := UiTheme.color(&"ink")
-	_canvas.draw_rect(Rect2(Vector2.ZERO, size), sky)
-	var horizon := size.y * 0.72
-	_canvas.draw_rect(Rect2(0, horizon, size.x, size.y - horizon), Color(sea, 0.92))
-	# Slow waves.
-	for row in 6:
-		var y := horizon + 18.0 + row * 34.0
-		var phase := _time * (0.35 + row * 0.05) + row
-		for k in 14:
-			var x := fposmod(k * 160.0 + row * 57.0 + phase * 24.0, size.x + 160.0) - 80.0
-			var pts := PackedVector2Array()
-			for i in 6:
-				var t := i / 5.0
-				pts.append(Vector2(x + t * 46.0, y - sin(t * PI) * 4.0))
-			_canvas.draw_polyline(pts, Color(1, 1, 1, 0.18 - row * 0.02), 2.0, true)
-	# The lighthouse on a little headland, left.
-	var base := Vector2(size.x * 0.16, horizon + 6.0)
-	_canvas.draw_colored_polygon(PackedVector2Array([base + Vector2(-90, 0), base + Vector2(-30, -26), base + Vector2(40, -30),
-		base + Vector2(110, 0)]), Color(ink, 0.55))
-	var tower := PackedVector2Array([base + Vector2(-12, -28), base + Vector2(12, -28), base + Vector2(8, -110), base + Vector2(-8, -110)])
-	_canvas.draw_colored_polygon(tower, Color("#EFE5CC"))
-	for band in [-50.0, -80.0]:
-		_canvas.draw_rect(Rect2(base + Vector2(-10.5 + (-band - 50.0) * 0.03, band - 8.0), Vector2(21.0 - (-band - 50.0) * 0.06, 10.0)), Color("#A4513A"))
-	_canvas.draw_rect(Rect2(base + Vector2(-9, -126), Vector2(18, 16)), Color("#2A2420"))
-	var lamp := base + Vector2(0, -118)
-	var beam := Vector2.from_angle(_time * 0.9)
-	var glow := 0.55 if _night else 0.25
-	_canvas.draw_colored_polygon(PackedVector2Array([lamp, lamp + beam.rotated(-0.08) * 420.0, lamp + beam.rotated(0.08) * 420.0]),
-		Color(1.0, 0.86, 0.5, glow * 0.35))
-	_canvas.draw_circle(lamp, 6.0, Color(1.0, 0.86, 0.5, 0.9))
-	# A small boat under sail, right, bobbing on the swell.
-	var boat := Vector2(size.x * 0.78, horizon + 26.0 + sin(_time * 1.3) * 3.0)
-	var tilt := sin(_time * 1.1) * 0.04
-	var hull := PackedVector2Array([Vector2(-46, 0), Vector2(46, 0), Vector2(34, 14), Vector2(-36, 14)])
-	var sail := PackedVector2Array([Vector2(-4, -6), Vector2(-4, -86), Vector2(38, -8)])
-	var jib := PackedVector2Array([Vector2(-8, -6), Vector2(-8, -74), Vector2(-40, -8)])
-	var place := func(points: PackedVector2Array) -> PackedVector2Array:
-		var out := PackedVector2Array()
-		for p in points:
-			out.append(boat + p.rotated(tilt))
-		return out
-	_canvas.draw_colored_polygon(place.call(hull), Color("#7A4E26"))
-	_canvas.draw_colored_polygon(place.call(sail), Color("#F6EBD5"))
-	_canvas.draw_colored_polygon(place.call(jib), Color("#EFE5CC"))
-	_canvas.draw_line(boat + Vector2(-6, 0).rotated(tilt), boat + Vector2(-6, -92).rotated(tilt), ink, 2.0, true)
-	if _night:
-		_canvas.draw_circle(boat + Vector2(-6, -94).rotated(tilt), 3.0, Color(1.0, 0.9, 0.6))
+	var picture: Texture2D = TITLE_NIGHT if _night else TITLE_DAY
+	var scale := maxf(size.x / picture.get_width(), size.y / picture.get_height()) * 1.04
+	var drawn := picture.get_size() * scale
+	var drift := Vector2(sin(_time * 0.07) * 0.5 - 0.5, 0.0) * (drawn.x - size.x) * 0.5
+	_canvas.draw_texture_rect(picture, Rect2((size - drawn) / 2.0 + drift, drawn), false)
+	_canvas.draw_rect(Rect2(Vector2.ZERO, size), Color(UiTheme.color(&"surface"), 0.25 + 0.04 * sin(_time * 0.6)))

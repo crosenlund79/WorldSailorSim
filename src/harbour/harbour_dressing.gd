@@ -1,9 +1,15 @@
 class_name HarbourDressing
 extends Node2D
-## The illustrated harbour around a moored boat (Visual Identity V01
-## prototype): a hand-drawn guest pontoon with mooring lines and cleats, a
-## stone quay beyond it, gentle variation in the water, wooden signs for the
-## services the harbour has (the grocery store; the boatyard with repairs) and
+## The illustrated harbour around a moored boat (Real Horizon): a floating
+## guest pontoon (weathered decking, galvanised edge, rubbing strip, shore
+## power pedestals), the quay beyond it and the town seen from above, in one
+## of four regional archetypes chosen from the harbour's sea area and country
+## (ARCHETYPE_*): a Nordic fishing harbour (granite setts, falu-red and ochre
+## timber, black and red-tiled roofs), an Atlantic port (granite, slate,
+## white and grey render), a Mediterranean waterfront (limestone, stucco,
+## terracotta, flat roof terraces, pines) or a tropical harbour (concrete,
+## painted corrugated roofs, palms). Marina signage for the services the
+## harbour has (the grocery store; the boatyard with repairs; Go Ashore) and
 ## the harbour's optional landmark illustrations (HarbourArt).
 ##
 ## Art only. BoatArea adds it to the deck's Surroundings/Mooring, so it is
@@ -15,20 +21,57 @@ extends Node2D
 ## drawing shows instead. Harbours without HarbourArt get the same generic
 ## harbour, without landmarks.
 
-const INK := Color("#342c26")
-const PLANK := Color("#a98b62")
-const PLANK_DARK := Color("#7c6243")
-const STONE := Color("#b9ae9a")
-const STONE_DARK := Color("#8d8473")
-const ROPE := Color("#d6c49c")
-const WATER_LIGHT := Color(0.62, 0.82, 0.84, 0.12)
-const WAVE := Color(0.82, 0.92, 0.93, 0.35)
-const SIGN_BOARD := Color("#8a6a4a")
-const SIGN_TEXT := Color("#f3ede0")
-const LAMP := Color("#2b2d30")
-const BRASS := Color("#c79f6d")
+const INK := Color("#2A3236")
+const PLANK := Color("#8A8478")
+const PLANK_DARK := Color("#686458")
+const STONE := Color("#9A9C97")
+const STONE_DARK := Color("#7B7E7A")
+const ROPE := Color("#C9C3B2")
+const GALVANISED := Color("#9AA3A5")
+const RUBBER := Color("#2E3336")
+const SIGN_BOARD := Color("#23394A")
+const SIGN_TEXT := Color("#EEF2F1")
+const LAMP := Color("#3A4044")
+const LAMP_GLASS := Color("#E8E2C8")
+const SHADOW := Color(0.04, 0.07, 0.09, 0.32)
 ## Depth of the quay drawn beyond the pontoon (scene units).
 const QUAY_DEPTH := 130.0
+## Where the buildings start, beyond the quay edge (scene units).
+const TOWN_FROM := 74.0
+
+const ARCHETYPE_NORDIC := &"nordic"
+const ARCHETYPE_ATLANTIC := &"atlantic"
+const ARCHETYPE_MEDITERRANEAN := &"mediterranean"
+const ARCHETYPE_TROPICAL := &"tropical"
+const REGION_ARCHETYPES := {
+	"scandinavia": ARCHETYPE_NORDIC, "baltic": ARCHETYPE_NORDIC,
+	"north_sea": ARCHETYPE_ATLANTIC, "british_isles": ARCHETYPE_ATLANTIC, "channel": ARCHETYPE_ATLANTIC,
+	"biscay": ARCHETYPE_ATLANTIC, "iberia_atlantic": ARCHETYPE_ATLANTIC, "north_atlantic": ARCHETYPE_ATLANTIC,
+	"mediterranean": ARCHETYPE_MEDITERRANEAN, "adriatic": ARCHETYPE_MEDITERRANEAN, "aegean": ARCHETYPE_MEDITERRANEAN,
+	"ionian": ARCHETYPE_MEDITERRANEAN, "levant": ARCHETYPE_MEDITERRANEAN, "atlantic_islands": ARCHETYPE_MEDITERRANEAN,
+	"caribbean": ARCHETYPE_TROPICAL, "pacific": ARCHETYPE_TROPICAL, "central_america": ARCHETYPE_TROPICAL,
+}
+const NORDIC_COUNTRIES := ["Denmark", "Sweden", "Norway", "Finland", "Iceland", "Faroe Islands", "Estonia", "Latvia"]
+## Per archetype: quay paving, its joints, facade colours, roof colours, tree
+## canopy, roof form ("gable", "barrel", "flat", "metal").
+const STYLES := {
+	&"nordic": {"paving": Color("#8E918D"), "joint": Color("#6C706D"), "edge": Color("#7D817F"),
+		"facades": [Color("#7E3F34"), Color("#B8955A"), Color("#D9D6CB"), Color("#8E6B3F"), Color("#6F2F2A"), Color("#C9B98F")],
+		"roofs": [Color("#34383B"), Color("#3F4245"), Color("#7A4A3A"), Color("#2E3134"), Color("#6E4436")],
+		"tree": Color("#56654A"), "forms": ["gable", "gable", "gable", "barrel"]},
+	&"atlantic": {"paving": Color("#8F918C"), "joint": Color("#70736F"), "edge": Color("#7A7D79"),
+		"facades": [Color("#DCDAD2"), Color("#B9BDB8"), Color("#CFC6B0"), Color("#9DA7AB"), Color("#E4E1D8")],
+		"roofs": [Color("#4D5459"), Color("#565D62"), Color("#454B50"), Color("#5E6468")],
+		"tree": Color("#4E5E47"), "forms": ["gable", "gable", "gable", "flat"]},
+	&"mediterranean": {"paving": Color("#C2BAA7"), "joint": Color("#A39A86"), "edge": Color("#B2AA97"),
+		"facades": [Color("#E2D9C6"), Color("#D7B98A"), Color("#E6E2D8"), Color("#C99F7C"), Color("#D9C6A3")],
+		"roofs": [Color("#A8644A"), Color("#B5704F"), Color("#9A5A43"), Color("#D8D0BF")],
+		"tree": Color("#5F6B49"), "forms": ["barrel", "barrel", "flat", "barrel"]},
+	&"tropical": {"paving": Color("#A9A9A2"), "joint": Color("#8D8D86"), "edge": Color("#9B9C96"),
+		"facades": [Color("#D9D4C4"), Color("#9FB8B0"), Color("#D8B98E"), Color("#C9CFC4")],
+		"roofs": [Color("#8C4E44"), Color("#5E7F72"), Color("#9AA2A3"), Color("#4F6F7E")],
+		"tree": Color("#4F6A45"), "forms": ["metal", "metal", "gable", "metal"]},
+}
 ## Facilities shown as signs: station id -> [sign text, icon, the label node
 ## of the classic pontoon drawing whose place the sign takes].
 const FACILITIES := {&"grocery": ["Groceries", &"basket", "GrocerySign"],
@@ -50,6 +93,7 @@ var _font: Font
 var _label_settings_classic: LabelSettings
 var _label_settings_sign: LabelSettings
 var _port_id: StringName = &""
+var _archetype: StringName = ARCHETYPE_NORDIC
 ## The classic sign labels' text and settings, to restore under Classic.
 var _sign_classic := {}
 
@@ -83,7 +127,7 @@ func setup(area: BoatArea, mooring: Node2D) -> void:
 		_label_settings_sign.font = _font
 		_label_settings_sign.font_size = 26
 		_label_settings_sign.font_color = SIGN_TEXT
-		_label_settings_sign.outline_size = 6
+		_label_settings_sign.outline_size = 4
 		_label_settings_sign.outline_color = Color(INK, 0.85)
 	refresh()
 
@@ -112,6 +156,7 @@ func refresh() -> void:
 		sign_label.text = facility[0] if illustrated else classic[0]
 		sign_label.label_settings = _sign_text_settings() if illustrated else classic[1]
 	_port_id = GameSession.get_location_id()
+	_archetype = archetype_for(_port_id)
 	_art = HarbourArt.for_port(_port_id)
 	_landmarks = _art.get_landmarks() if _art else ([] as Array[HarbourLandmark])
 	_signs.clear()
@@ -133,6 +178,21 @@ func refresh() -> void:
 	queue_redraw()
 
 
+## The regional archetype of a harbour (ARCHETYPE_*), from its sea area,
+## with the Nordic countries' North Sea harbours counted as Nordic.
+static func archetype_for(port_id: StringName) -> StringName:
+	var port := PortCatalog.get_default().get_port(port_id) if not port_id.is_empty() else null
+	if port == null:
+		return ARCHETYPE_NORDIC
+	if port.country in NORDIC_COUNTRIES:
+		return ARCHETYPE_NORDIC
+	return REGION_ARCHETYPES.get(port.region, ARCHETYPE_ATLANTIC)
+
+
+func get_archetype() -> StringName:
+	return _archetype
+
+
 ## Each sign board is what its station highlights (Iteration 12).
 func _update_sign_highlights() -> void:
 	for child in get_children():
@@ -147,7 +207,7 @@ func _update_sign_highlights() -> void:
 func sign_board(sign: Dictionary) -> Rect2:
 	var text_width := _font.get_string_size(String(sign.text), HORIZONTAL_ALIGNMENT_LEFT, -1, 24).x
 	var center: Vector2 = sign.at
-	return Rect2(center - Vector2(text_width / 2.0 + 36.0, 18), Vector2(text_width + 50.0, 36))
+	return Rect2(center - Vector2(text_width / 2.0 + 38.0, 18), Vector2(text_width + 52.0, 36))
 
 
 func _sign_text_settings() -> LabelSettings:
@@ -211,9 +271,10 @@ func _draw() -> void:
 	if _pontoon.size == Vector2.ZERO:
 		return
 	var rng := RandomNumberGenerator.new()
-	rng.seed = 17  # the same harbour every frame
+	rng.seed = 17 + hash(_port_id)  # the same harbour every frame, its own per port
 	_draw_water(rng)
 	_draw_quay(rng)
+	_draw_town(rng)
 	for landmark in _landmarks:
 		_draw_landmark(landmark)
 	_draw_pontoon(rng)
@@ -225,59 +286,206 @@ func _draw() -> void:
 		_draw_sign(sign)
 
 
-func _draw_water(rng: RandomNumberGenerator) -> void:
-	# Soft lighter patches and a few small wave strokes, kept away from the boat.
-	for i in 14:
-		var c := Vector2(rng.randf_range(-700, 700), rng.randf_range(-330, -190) if i % 2 == 0 else rng.randf_range(195, 235))
-		var r := rng.randf_range(40, 110)
-		draw_colored_polygon(_blob(c, Vector2(r, r * 0.35), rng.randi()), WATER_LIGHT)
-	for i in 18:
-		var c := Vector2(rng.randf_range(-720, 720), rng.randf_range(-320, -195) if i % 3 else rng.randf_range(196, 232))
-		var w := rng.randf_range(14, 30)
-		var pts := PackedVector2Array()
-		for k in 7:
-			var t := k / 6.0
-			pts.append(c + Vector2(w * (t - 0.5) * 2.0, -sin(t * PI) * 3.0))
-		draw_polyline(pts, WAVE, 2.0, true)
+func _style() -> Dictionary:
+	return STYLES.get(_archetype, STYLES[ARCHETYPE_NORDIC])
+
+
+func _draw_water(_rng: RandomNumberGenerator) -> void:
+	# The water in the pontoon's lee is darker and calmer (SeaSurface draws
+	# the rest); a soft shadow band along the pontoon's float.
+	var p := _pontoon
+	for k in 4:
+		var h := 10.0 + k * 9.0
+		draw_rect(Rect2(p.position.x - 60.0, p.position.y - h, p.size.x + 120.0, h), Color(0.05, 0.12, 0.14, 0.05))
 
 
 func _draw_quay(rng: RandomNumberGenerator) -> void:
+	var style := _style()
 	var top := _pontoon.end.y + 6.0
-	var quay := Rect2(_pontoon.position.x - 40.0, top, _pontoon.size.x + 80.0, QUAY_DEPTH)
-	draw_rect(Rect2(quay.position + Vector2(0, -6), Vector2(quay.size.x, 6)), Color(0.07, 0.17, 0.2, 0.9))  # gap of water
-	draw_rect(quay, STONE)
-	# Granite edging blocks, then cobbles.
+	var quay := Rect2(_pontoon.position.x - 260.0, top, _pontoon.size.x + 520.0, QUAY_DEPTH + 220.0)
+	draw_rect(Rect2(quay.position + Vector2(0, -6), Vector2(quay.size.x, 6)), Color(0.06, 0.12, 0.14, 0.95))  # gap of water
+	var paving: Color = style.paving
+	var joint: Color = style.joint
+	draw_rect(quay, paving)
+	# Coping stones along the edge, then setts or slabs.
 	var x := quay.position.x
 	while x < quay.end.x:
-		var w := rng.randf_range(38, 62)
-		var block := Rect2(x, top, minf(w, quay.end.x - x), 16)
-		draw_rect(block, STONE.lerp(STONE_DARK, rng.randf_range(0.0, 0.4)))
-		draw_polyline(_wobbly_rect(block, rng), Color(INK, 0.7), 1.4, true)
+		var w := rng.randf_range(54, 86)
+		var block := Rect2(x, top, minf(w, quay.end.x - x), 15)
+		draw_rect(block, (style.edge as Color).lerp(joint, rng.randf_range(0.0, 0.3)))
+		draw_line(block.position, Vector2(block.position.x, block.end.y), Color(joint.darkened(0.3), 0.8), 1.0)
 		x += w
-	var y := top + 22.0
-	while y < quay.end.y - 4.0:
-		x = quay.position.x + rng.randf_range(0, 10)
-		while x < quay.end.x - 4.0:
-			var size := Vector2(rng.randf_range(12, 18), rng.randf_range(9, 12))
-			draw_rect(Rect2(Vector2(x, y), size), STONE.lerp(STONE_DARK, rng.randf_range(0.05, 0.35)))
-			x += size.x + 3.0
-		y += 14.0
-	# Bollards and lamp posts along the quay edge.
-	var bx := quay.position.x + 80.0
+	draw_line(Vector2(quay.position.x, top + 15), Vector2(quay.end.x, top + 15), Color(joint.darkened(0.25), 0.7), 1.2)
+	var y := top + 18.0
+	var slab := Vector2(26, 13) if _archetype in [ARCHETYPE_NORDIC, ARCHETYPE_ATLANTIC] else Vector2(60, 30)
+	var row := 0
+	while y < top + TOWN_FROM - 4.0:
+		x = quay.position.x + (slab.x * 0.5 if row % 2 else 0.0)
+		while x < quay.end.x:
+			var r := Rect2(Vector2(x, y), slab - Vector2(2, 2))
+			draw_rect(r, paving.lerp(joint, rng.randf_range(0.0, 0.22)))
+			x += slab.x
+		y += slab.y
+		row += 1
+	# A soft shadow of the edge onto the paving, light from the upper left.
+	draw_rect(Rect2(quay.position.x, top + 15, quay.size.x, 3), Color(0, 0, 0, 0.08))
+	# Bollards, lamp posts, ladders and a life ring along the quay edge.
+	var bx := _pontoon.position.x - 40.0 + 80.0
 	var i := 0
-	while bx < quay.end.x - 40.0:
+	while bx < _pontoon.end.x + 40.0 - 40.0:
 		var at := Vector2(bx, top + 8.0)
 		if i % 3 == 1:
-			draw_circle(at + Vector2(3, 4), 9.0, Color(0, 0, 0, 0.25))
-			draw_circle(at, 9.0, LAMP)
-			draw_circle(at, 4.5, Color("#f2d58a"))
-			draw_arc(at, 9.0, 0, TAU, 20, INK, 1.4, true)
+			_draw_lamp_post(at)
+		elif i % 6 == 4:
+			_draw_life_ring(at + Vector2(0, 2))
 		else:
-			draw_circle(at + Vector2(2, 3), 7.0, Color(0, 0, 0, 0.25))
-			draw_circle(at, 7.0, Color("#3e4347"))
-			draw_arc(at, 7.0, 0, TAU, 18, INK, 1.4, true)
+			draw_circle(at + Vector2(2, 3), 6.5, SHADOW)
+			draw_circle(at, 6.5, Color("#2F3438"))
+			draw_circle(at + Vector2(-1.5, -1.5), 2.5, Color("#5A6064"))
+		if i % 4 == 2:  # a steel ladder down to the water
+			draw_rect(Rect2(bx + 40, top - 6, 12, 8), GALVANISED)
+			draw_line(Vector2(bx + 40, top - 2), Vector2(bx + 52, top - 2), Color(INK, 0.6), 1.0)
 		bx += 190.0
 		i += 1
+
+
+func _draw_lamp_post(at: Vector2) -> void:
+	# Seen from above: the post's foot, a short arm and the lantern head.
+	draw_circle(at + Vector2(2, 3), 8.0, SHADOW)
+	draw_circle(at, 4.0, LAMP)
+	draw_line(at, at + Vector2(0, -9), LAMP, 2.0, true)
+	var head := Rect2(at + Vector2(-7, -15), Vector2(14, 8))
+	draw_rect(head, LAMP)
+	draw_rect(head.grow(-2.0), LAMP_GLASS)
+
+
+func _draw_life_ring(at: Vector2) -> void:
+	draw_circle(at + Vector2(2, 3), 9.0, SHADOW)
+	draw_rect(Rect2(at + Vector2(-2, -12), Vector2(4, 24)), Color("#4A5054"))
+	draw_arc(at, 7.0, 0, TAU, 24, Color("#D9783A"), 4.0, true)
+	for k in 4:
+		var a := k * PI / 2.0 + PI / 4.0
+		draw_line(at + Vector2.from_angle(a) * 5.0, at + Vector2.from_angle(a) * 9.0, Color("#E8E6DF"), 3.0)
+
+
+## The town beyond the quay, seen from above: a row of buildings with their
+## roofs (the archetype's materials), alleys between them, the odd tree.
+## Where the harbour has its own landmark illustration, that takes the place.
+func _draw_town(rng: RandomNumberGenerator) -> void:
+	var style := _style()
+	var y0 := _pontoon.end.y + 6.0 + TOWN_FROM
+	var left := _pontoon.position.x - 260.0
+	var right := _pontoon.end.x + 260.0
+	var skip := Rect2()
+	for landmark in _landmarks:
+		var size := landmark.texture.get_size()
+		var drawn := Vector2(landmark.width, size.y * landmark.width / maxf(size.x, 1.0))
+		var area := Rect2(get_quay_anchor() + landmark.offset - drawn / 2.0, drawn)
+		skip = skip.merge(area) if skip.has_area() else area
+	# The street in front of the houses.
+	draw_rect(Rect2(left, y0 - 24.0, right - left, 24.0), (style.paving as Color).darkened(0.18))
+	var x := left
+	while x < right:
+		var w := rng.randf_range(70.0, 150.0)
+		var depth := rng.randf_range(120.0, 180.0)
+		var gap := rng.randf_range(6.0, 30.0) if rng.randf() < 0.6 else 0.0
+		var rect := Rect2(x, y0 + rng.randf_range(0.0, 10.0), w, depth)
+		if not (skip.has_area() and skip.grow(10.0).intersects(rect)):
+			if rng.randf() < 0.12 and gap > 0.0:
+				_draw_tree(Vector2(x + w * 0.5, y0 + 30.0), rng.randf_range(26.0, 40.0), style.tree, rng)
+			else:
+				_draw_building(rect, style, rng)
+		x += w + gap
+
+
+func _draw_building(rect: Rect2, style: Dictionary, rng: RandomNumberGenerator) -> void:
+	var facades: Array = style.facades
+	var roofs: Array = style.roofs
+	var forms: Array = style.forms
+	var facade: Color = facades[rng.randi() % facades.size()]
+	var roof: Color = roofs[rng.randi() % roofs.size()]
+	var form: String = forms[rng.randi() % forms.size()]
+	# Cast shadow down-right onto the street.
+	draw_rect(Rect2(rect.position + Vector2(8, 10), rect.size), Color(0.03, 0.05, 0.06, 0.28))
+	# The facade's top edge seen just in front of the eaves (a slight
+	# perspective from the boat), with its windows' heads.
+	var lip := Rect2(rect.position, Vector2(rect.size.x, 9.0))
+	draw_rect(lip, facade)
+	var wx := rect.position.x + 9.0
+	while wx < rect.end.x - 12.0:
+		draw_rect(Rect2(wx, rect.position.y + 3.0, 7.0, 6.0), facade.darkened(0.45))
+		wx += 18.0
+	var body := Rect2(rect.position + Vector2(0, 9.0), rect.size - Vector2(0, 9.0))
+	match form:
+		"flat":
+			draw_rect(body, roof)
+			draw_rect(body.grow(-4.0), roof.darkened(0.06))
+			draw_rect(body, roof.darkened(0.3), false, 1.2)
+			if rng.randf() < 0.6:  # a roof terrace or plant on top
+				draw_rect(Rect2(body.position + Vector2(10, 10), Vector2(24, 14)), Color("#6F6A60"))
+				draw_circle(body.position + Vector2(body.size.x - 18, 20), 7.0, (style.tree as Color).lightened(0.05))
+		"barrel":
+			# Pantiles: two planes, rows of tiles running down the slope.
+			var ridge := body.position.y + body.size.y * 0.45
+			draw_rect(Rect2(body.position, Vector2(body.size.x, ridge - body.position.y)), roof.lightened(0.08))
+			draw_rect(Rect2(body.position.x, ridge, body.size.x, body.end.y - ridge), roof.darkened(0.14))
+			var tx := body.position.x + 3.0
+			while tx < body.end.x - 1.0:
+				draw_line(Vector2(tx, body.position.y + 1), Vector2(tx, body.end.y - 1), Color(roof.darkened(0.35), 0.55), 1.0)
+				tx += 6.0
+			draw_line(Vector2(body.position.x, ridge), Vector2(body.end.x, ridge), roof.darkened(0.4), 2.0)
+		"metal":
+			var ridge := body.position.y + body.size.y * 0.5
+			draw_rect(Rect2(body.position, Vector2(body.size.x, ridge - body.position.y)), roof.lightened(0.1))
+			draw_rect(Rect2(body.position.x, ridge, body.size.x, body.end.y - ridge), roof.darkened(0.12))
+			var cx := body.position.x + 2.0
+			while cx < body.end.x:
+				draw_line(Vector2(cx, body.position.y), Vector2(cx, body.end.y), Color(roof.darkened(0.3), 0.4), 1.0)
+				cx += 4.0
+			draw_line(Vector2(body.position.x, ridge), Vector2(body.end.x, ridge), roof.lightened(0.25), 1.5)
+			if rng.randf() < 0.4:  # weathering
+				draw_rect(Rect2(body.position + Vector2(body.size.x * 0.3, 6), Vector2(body.size.x * 0.25, 12)), Color(0.45, 0.3, 0.22, 0.25))
+		_:
+			# A pitched roof with its ridge along the street: the plane facing
+			# the light (towards the quay) lighter, the far one in shade.
+			var ridge := body.position.y + body.size.y * 0.42
+			draw_rect(Rect2(body.position, Vector2(body.size.x, ridge - body.position.y)), roof.lightened(0.12))
+			draw_rect(Rect2(body.position.x, ridge, body.size.x, body.end.y - ridge), roof.darkened(0.1))
+			var ty := body.position.y + 5.0
+			while ty < body.end.y:
+				draw_line(Vector2(body.position.x + 1, ty), Vector2(body.end.x - 1, ty), Color(roof.darkened(0.25), 0.3), 1.0)
+				ty += 5.0
+			draw_line(Vector2(body.position.x, ridge), Vector2(body.end.x, ridge), roof.darkened(0.35), 2.2)
+			if rng.randf() < 0.5:  # a roof window
+				var sk := Rect2(body.position.x + rng.randf_range(10, maxf(11, body.size.x - 30)), body.position.y + 8, 16, 12)
+				draw_rect(sk, Color("#3A4A55"))
+				draw_rect(sk, roof.darkened(0.45), false, 1.0)
+	if rng.randf() < 0.55 and form != "flat":  # a chimney
+		var ch := Vector2(body.position.x + rng.randf_range(12, maxf(13, body.size.x - 20)), body.position.y + body.size.y * 0.32)
+		draw_rect(Rect2(ch + Vector2(3, 4), Vector2(10, 10)), Color(0, 0, 0, 0.25))
+		draw_rect(Rect2(ch, Vector2(10, 10)), Color("#6E625A") if _archetype != ARCHETYPE_NORDIC else Color("#5C5550"))
+		draw_rect(Rect2(ch + Vector2(2.5, 2.5), Vector2(5, 5)), Color("#2B2826"))
+	# Eaves line.
+	draw_rect(rect, Color(INK, 0.55), false, 1.0)
+
+
+func _draw_tree(at: Vector2, radius: float, colour: Color, rng: RandomNumberGenerator) -> void:
+	draw_circle(at + Vector2(radius * 0.35, radius * 0.45), radius, Color(0.03, 0.05, 0.05, 0.3))
+	if _archetype == ARCHETYPE_TROPICAL:
+		# A palm: fronds radiating from the crown.
+		for k in 9:
+			var a := TAU * k / 9.0 + rng.randf_range(-0.15, 0.15)
+			var tip := at + Vector2.from_angle(a) * radius * rng.randf_range(0.85, 1.1)
+			draw_line(at, tip, colour.lerp(Color("#7C8C58"), 0.25), 5.0, true)
+			draw_line(at, tip, colour.lightened(0.15), 1.5, true)
+		draw_circle(at, 4.0, Color("#6B5A44"))
+		return
+	for k in 7:
+		var o := Vector2.from_angle(TAU * k / 7.0 + rng.randf()) * radius * 0.45
+		draw_circle(at + o, radius * 0.62, colour.darkened(0.08))
+	for k in 5:
+		var o := Vector2.from_angle(TAU * k / 5.0 + rng.randf()) * radius * 0.3 + Vector2(-radius * 0.15, -radius * 0.15)
+		draw_circle(at + o, radius * 0.42, colour.lightened(0.08))
 
 
 func _draw_landmark(landmark: HarbourLandmark) -> void:
@@ -289,30 +497,36 @@ func _draw_landmark(landmark: HarbourLandmark) -> void:
 
 func _draw_pontoon(rng: RandomNumberGenerator) -> void:
 	var p := _pontoon
-	draw_rect(Rect2(p.position + Vector2(6, 8), p.size), Color(0, 0, 0, 0.28))  # shadow on the water
+	draw_rect(Rect2(p.position + Vector2(6, 9), p.size), SHADOW)  # shadow on the water
+	# Weathered decking across the pontoon, between galvanised edge frames.
+	draw_rect(p, PLANK)
 	var x := p.position.x
-	var board := 44.0
+	var board := 14.0
 	while x < p.end.x - 0.5:
 		var w := minf(board, p.end.x - x)
-		var rect := Rect2(x, p.position.y, w, p.size.y)
-		draw_rect(rect, PLANK.lerp(PLANK_DARK, rng.randf_range(0.0, 0.35)))
-		for k in 2:  # grain
-			var gx := x + rng.randf_range(0.2, 0.8) * w
-			var pts := PackedVector2Array()
-			var gy := p.position.y + 3.0
-			var phase := rng.randf_range(0, TAU)
-			while gy < p.end.y - 3.0:
-				pts.append(Vector2(gx + sin(gy / 13.0 + phase) * 2.0, gy))
-				gy += 6.0
-			draw_polyline(pts, Color(PLANK_DARK, 0.45), 1.0, true)
-		draw_line(Vector2(x, p.position.y), Vector2(x, p.end.y), Color(INK, 0.55), 1.2, true)
-		if rng.randf() < 0.5:  # a nail or two
-			draw_circle(Vector2(x + 6, p.position.y + 8), 1.4, Color(INK, 0.6))
-			draw_circle(Vector2(x + 6, p.end.y - 8), 1.4, Color(INK, 0.6))
+		draw_rect(Rect2(x + 0.5, p.position.y + 7.0, w - 1.0, p.size.y - 14.0), PLANK.lerp(PLANK_DARK, rng.randf_range(0.0, 0.3)))
 		x += board
-	# The pontoon's float edge and a rub rail on the water side.
-	draw_rect(Rect2(p.position, Vector2(p.size.x, 7)), Color("#5f4a33"))
-	draw_polyline(_wobbly_rect(p, rng), INK, 2.2, true)
+	# Fixings: rows of screws along the joists.
+	for jy in [p.position.y + 24.0, p.get_center().y, p.end.y - 24.0]:
+		draw_line(Vector2(p.position.x, jy), Vector2(p.end.x, jy), Color(PLANK_DARK.darkened(0.25), 0.35), 1.0)
+	# The galvanised frame on both long edges and the black rubbing strip on the water side.
+	draw_rect(Rect2(p.position, Vector2(p.size.x, 7)), GALVANISED)
+	draw_rect(Rect2(p.position.x, p.end.y - 7, p.size.x, 7), GALVANISED.darkened(0.12))
+	draw_rect(Rect2(p.position + Vector2(0, -4), Vector2(p.size.x, 4)), RUBBER)
+	# Module joints and shore-power pedestals.
+	var mx := p.position.x + 400.0
+	while mx < p.end.x - 10.0:
+		draw_line(Vector2(mx, p.position.y), Vector2(mx, p.end.y), Color(INK, 0.5), 2.0)
+		mx += 400.0
+	var px := p.position.x + 210.0
+	while px < p.end.x - 80.0:
+		var at := Vector2(px, p.position.y + 18.0)
+		draw_rect(Rect2(at + Vector2(-7, -5) + Vector2(3, 4), Vector2(14, 10)), SHADOW)
+		draw_rect(Rect2(at + Vector2(-7, -5), Vector2(14, 10)), Color("#DADBD5"))
+		draw_rect(Rect2(at + Vector2(-5, -3), Vector2(10, 3)), Color("#3B6E8C"))
+		draw_rect(Rect2(at + Vector2(-7, -5), Vector2(14, 10)), Color(INK, 0.6), false, 1.0)
+		px += 560.0
+	draw_rect(p, Color(INK, 0.6), false, 1.4)
 
 
 func _draw_rope(points: PackedVector2Array) -> void:
@@ -326,71 +540,58 @@ func _draw_rope(points: PackedVector2Array) -> void:
 	for k in 13:
 		var t := k / 12.0
 		pts.append(a.lerp(b, t) + normal * sin(t * PI) * 6.0)
-	draw_polyline(pts, INK, 4.2, true)
-	draw_polyline(pts, ROPE, 2.6, true)
+	var shadow := PackedVector2Array()
+	for q in pts:
+		shadow.append(q + Vector2(3, 5))
+	draw_polyline(shadow, SHADOW, 3.0, true)
+	draw_polyline(pts, ROPE.darkened(0.35), 3.2, true)
+	draw_polyline(pts, ROPE, 2.0, true)
 
 
 func _draw_cleat(c: Vector2) -> void:
-	var body := Rect2(c - Vector2(16, 4), Vector2(32, 8))
-	draw_rect(Rect2(body.position + Vector2(2, 3), body.size), Color(0, 0, 0, 0.3))
-	draw_rect(body, Color("#9aa0a4"))
-	draw_rect(body, INK, false, 1.4)
-	draw_circle(c, 3.0, Color("#6c7276"))
+	var body := Rect2(c - Vector2(15, 3.5), Vector2(30, 7))
+	draw_rect(Rect2(body.position + Vector2(2, 3), body.size), SHADOW)
+	draw_rect(body, GALVANISED)
+	draw_rect(Rect2(body.position, Vector2(body.size.x, 2.5)), GALVANISED.lightened(0.25))
+	draw_rect(body, Color(INK, 0.7), false, 1.0)
+	draw_circle(c, 3.0, GALVANISED.darkened(0.3))
 
 
 func _draw_sign(sign: Dictionary) -> void:
-	# The board and its icon; the text is the sign's own Label (drawn on top).
+	# Marina signage: a dark blue panel on two posts, a white pictogram
+	# square; the text is the sign's own Label (drawn on top).
 	var text: String = sign.text
 	var text_width := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 24).x
 	var center: Vector2 = sign.at
 	var board := sign_board(sign)
-	draw_rect(Rect2(board.position + Vector2(4, 5), board.size), Color(0, 0, 0, 0.3))
+	draw_rect(Rect2(board.position + Vector2(4, 6), board.size), SHADOW)
 	draw_rect(board, SIGN_BOARD)
-	draw_rect(board.grow(-3), Color(SIGN_BOARD.lightened(0.12), 0.6), false, 1.0)
-	draw_rect(board, INK, false, 2.0)
-	_draw_icon(sign.icon, Vector2(board.position.x + 17, center.y))
+	draw_rect(Rect2(board.position, Vector2(board.size.x, 3)), Color("#5AA8B8"))
+	draw_rect(board, Color(INK, 0.8), false, 1.0)
+	var tile := Rect2(Vector2(board.position.x + 5, center.y - 13), Vector2(26, 26))
+	draw_rect(tile, Color("#EEF2F1"))
+	_draw_icon(sign.icon, tile.get_center())
 	if not sign.label:
-		draw_string(_font, Vector2(center.x - text_width / 2.0, center.y + 8), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, SIGN_TEXT)
+		draw_string(_font, Vector2(center.x - text_width / 2.0 + 8.0, center.y + 8), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, SIGN_TEXT)
 
 
 func _draw_icon(icon: StringName, at: Vector2) -> void:
+	# Plain pictograms in the sign's blue on its white tile.
+	var ink := SIGN_BOARD
 	match icon:
 		&"basket":
-			var basket := PackedVector2Array([at + Vector2(-9, -2), at + Vector2(9, -2), at + Vector2(6, 9), at + Vector2(-6, 9)])
-			draw_colored_polygon(basket, Color("#e3c27a"))
-			draw_polyline(basket + PackedVector2Array([basket[0]]), INK, 1.4, true)
-			draw_arc(at + Vector2(0, -2), 7.0, PI, TAU, 12, INK, 1.6, true)
-			draw_circle(at + Vector2(-3, -4), 2.6, Color("#c8553d"))
-			draw_circle(at + Vector2(3, -5), 2.4, Color("#7ba05b"))
+			var basket := PackedVector2Array([at + Vector2(-8, -2), at + Vector2(8, -2), at + Vector2(5.5, 8), at + Vector2(-5.5, 8)])
+			draw_colored_polygon(basket, ink)
+			draw_arc(at + Vector2(0, -2), 6.0, PI, TAU, 12, ink, 1.8, true)
 		&"compass":
-			draw_circle(at, 8.0, Color("#efe5cc"))
-			draw_arc(at, 8.0, 0, TAU, 18, INK, 1.4, true)
-			draw_colored_polygon(PackedVector2Array([at + Vector2(0, -7), at + Vector2(2.5, 0), at + Vector2(-2.5, 0)]), Color("#c8553d"))
-			draw_colored_polygon(PackedVector2Array([at + Vector2(0, 7), at + Vector2(2.5, 0), at + Vector2(-2.5, 0)]), Color("#3e4347"))
+			draw_arc(at, 8.5, 0, TAU, 24, ink, 1.8, true)
+			draw_colored_polygon(PackedVector2Array([at + Vector2(0, -7), at + Vector2(2.6, 0), at + Vector2(-2.6, 0)]), Color("#B5523F"))
+			draw_colored_polygon(PackedVector2Array([at + Vector2(0, 7), at + Vector2(2.6, 0), at + Vector2(-2.6, 0)]), ink)
 		&"wrench":
-			draw_line(at + Vector2(-7, 7), at + Vector2(5, -5), Color("#d8dde0"), 3.0, true)
-			draw_arc(at + Vector2(6, -6), 4.5, -PI * 0.25, PI * 1.25, 10, Color("#d8dde0"), 3.0, true)
-			draw_line(at + Vector2(-7, 7), at + Vector2(5, -5), INK, 0.8, true)
+			draw_line(at + Vector2(-7, 7), at + Vector2(4, -4), ink, 3.2, true)
+			draw_arc(at + Vector2(5.5, -5.5), 4.2, -PI * 0.25, PI * 1.25, 10, ink, 2.6, true)
 
 
-static func _blob(center: Vector2, radii: Vector2, seed: int) -> PackedVector2Array:
-	var pts := PackedVector2Array()
-	for i in 20:
-		var t := TAU * i / 20.0
-		var w := 1.0 + 0.12 * sin(t * 3.0 + seed) + 0.08 * sin(t * 5.0 + seed * 0.7)
-		pts.append(center + Vector2(cos(t) * radii.x, sin(t) * radii.y) * w)
-	return pts
-
-
-static func _wobbly_rect(rect: Rect2, rng: RandomNumberGenerator) -> PackedVector2Array:
-	var corners := [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y), rect.position]
-	var pts := PackedVector2Array()
-	for i in 4:
-		var a: Vector2 = corners[i]
-		var b: Vector2 = corners[i + 1]
-		var n := maxi(2, int(a.distance_to(b) / 40.0))
-		for k in n:
-			var p := a.lerp(b, float(k) / n)
-			pts.append(p + Vector2(rng.randf_range(-0.8, 0.8), rng.randf_range(-0.8, 0.8)))
-	pts.append(pts[0])
-	return pts
+static func _wobbly_rect(rect: Rect2, _rng: RandomNumberGenerator) -> PackedVector2Array:
+	return PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y),
+		rect.position])

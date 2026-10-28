@@ -177,6 +177,10 @@ func _setup_water_life() -> void:
 	var water := surroundings.get_node_or_null(^"Water") if surroundings else null
 	if water == null:
 		return
+	if water is Polygon2D:
+		var sea := SeaSurface.new()
+		add_child(sea)
+		sea.setup(self, water)
 	var life := WaterLife.new()
 	life.name = "WaterLife"
 	surroundings.add_child(life)

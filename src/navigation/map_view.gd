@@ -33,20 +33,24 @@ signal cursor_moved(geo: Variant)
 ## is centred and fitted within the remaining area.
 @export var occluded_right_px := 0.0
 
-const WATER := Color("#1D4A5A")
-const WATER_EDGE := Color("#16394A")
-const LAND := Color("#CDBF9E")
-const COAST := Color("#8C7E5E")
-const GRID := Color(0.651, 0.769, 0.788, 0.16)
-const GRID_TEXT := Color(0.651, 0.769, 0.788, 0.6)
-const PORT_FILL := Color("#EFE5CC")
-const PORT_RIM := Color("#102D3B")
-const BRASS := Color("#C79F6D")
-const SEAFOAM := Color("#A6C4C9")
-const HOVER := Color("#A6C4C9")
-const INVALID := Color("#E06A4E")
-const LABEL_COUNTRY := Color(0.36, 0.31, 0.22, 0.75)
-const LABEL_SEA := Color(0.651, 0.769, 0.788, 0.55)
+# Real Horizon: a modern chartplotter's dusk palette - deep slate water,
+# muted khaki land with a pale coastline for clear separation, white
+# soundings-free labels, magenta for the route (the chart convention) and
+# instrument cyan for waypoints and proposals.
+const WATER := Color("#1B3340")
+const WATER_EDGE := Color("#12232C")
+const LAND := Color("#8E8B74")
+const COAST := Color("#D6D2BC")
+const GRID := Color(0.353, 0.659, 0.722, 0.14)
+const GRID_TEXT := Color(0.62, 0.74, 0.77, 0.7)
+const PORT_FILL := Color("#EEF2F1")
+const PORT_RIM := Color("#0E1A21")
+const BRASS := Color("#D46CA4")
+const SEAFOAM := Color("#5AA8B8")
+const HOVER := Color("#7FC3D0")
+const INVALID := Color("#E0A657")
+const LABEL_COUNTRY := Color(0.17, 0.18, 0.15, 0.72)
+const LABEL_SEA := Color(0.62, 0.76, 0.79, 0.55)
 ## How often (game seconds) the weather overlay follows the moving events.
 const WEATHER_REFRESH_SECONDS := 300.0
 
@@ -80,7 +84,7 @@ const WORLD_LAND_RES := "res://data/navigation/world/land.res"
 ## At world zoom, harbour markers closer than this (screen pixels) to a more
 ## important one are left out, so a click always hits the intended harbour.
 const DECLUTTER_PX := 16.0
-const ISLET_COLOUR := Color("#B8AA88")
+const ISLET_COLOUR := Color("#7F7C66")
 
 ## ROUTE: pressed on a course line; it becomes a new waypoint only when dragged
 ## (Cozy Polish: a plain click on the line no longer drops a waypoint).
@@ -106,7 +110,7 @@ var waypoints: Array[Vector2] = []
 var anchorages: Array[bool] = []
 ## Which of them need the Magic Anchor (0.105b): drawn in amber.
 var anchorage_magic: Array[bool] = []
-const MAGIC_AMBER := Color("#F2B24A")
+const MAGIC_AMBER := Color("#D9A85A")
 var invalid_waypoints := PackedInt32Array()
 var selected_waypoint := -1
 ## Course legs and waypoints react to the mouse only when editing is enabled.
@@ -1623,7 +1627,7 @@ func _draw_anchorage(p: Vector2, s: float, selected: bool, invalid: bool, number
 	if selected:
 		_overlay.draw_circle(p, r + 6.0 * s, BRASS, false, 3.0 * s, true)
 	_overlay.draw_circle(p, r, MAGIC_AMBER if magic else PORT_RIM, true, -1.0, true)
-	_overlay.draw_circle(p, r - 2.0 * s, Color("#16394A"), true, -1.0, true)
+	_overlay.draw_circle(p, r - 2.0 * s, WATER, true, -1.0, true)
 	var w := 1.8 * s
 	_overlay.draw_circle(p + Vector2(0, -6.5) * s, 2.0 * s, BRASS, false, w, true)  # ring
 	_overlay.draw_line(p + Vector2(0, -4.5) * s, p + Vector2(0, 7) * s, BRASS, w, true)  # shank

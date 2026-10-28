@@ -22,13 +22,14 @@ const EPOCH_2000 := 946684800.0
 const TROPICAL_YEAR_DAYS := 365.2422
 
 ## Outside light by sun elevation (degrees): [elevation, colour]. Moonless
-## night is a deep blue, twilight a dusky violet, sunrise and sunset warm.
+## night is a deep blue-grey, twilight a cool rose-grey, sunrise and sunset
+## softly warm without bathing the sea in amber (Real Horizon).
 const OUTSIDE: Array = [
-	[-18.0, Color(0.26, 0.31, 0.47)],
-	[-6.0, Color(0.36, 0.40, 0.57)],
-	[-1.0, Color(0.66, 0.58, 0.66)],
-	[3.0, Color(0.98, 0.78, 0.62)],
-	[9.0, Color(1.0, 0.92, 0.80)],
+	[-18.0, Color(0.24, 0.29, 0.40)],
+	[-6.0, Color(0.34, 0.39, 0.52)],
+	[-1.0, Color(0.62, 0.60, 0.68)],
+	[3.0, Color(0.93, 0.82, 0.74)],
+	[9.0, Color(0.99, 0.95, 0.89)],
 	[18.0, Color(1.0, 1.0, 1.0)],
 ]
 
@@ -75,8 +76,10 @@ static func outside_colour(elevation: float, overcast := 0.0) -> Color:
 			colour = (a[1] as Color).lerp(b[1], clampf((elevation - a[0]) / (b[0] - a[0]), 0.0, 1.0))
 			break
 		colour = b[1]
-	var grey := Color(colour.get_luminance(), colour.get_luminance(), colour.get_luminance())
-	return colour.lerp(grey, overcast * 0.5) * (1.0 - overcast * 0.3)
+	# Overcast: a cool blue-grey light, not a neutral grey.
+	var l := colour.get_luminance()
+	var grey := Color(l * 0.95, l * 0.99, l * 1.04)
+	return colour.lerp(grey, overcast * 0.55) * (1.0 - overcast * 0.3)
 
 
 ## The base light in the cabin (before its lamps): daylight through the

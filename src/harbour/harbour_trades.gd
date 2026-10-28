@@ -78,7 +78,7 @@ static func sail_colours(id: String) -> Array[Color]:
 	var cloth := get_sail_cloth(id)
 	if cloth.is_empty():
 		cloth = get_sail_cloth(CLASSIC_CLOTH)
-	return [Color(String(cloth.get("sail", "#EFE5CC"))), Color(String(cloth.get("shade", "#D8CDB1")))]
+	return [Color(String(cloth.get("sail", "#E3E2DA"))), Color(String(cloth.get("shade", "#BDBEB7")))]
 
 
 # --- The chandlery ----------------------------------------------------------------------

@@ -28,10 +28,12 @@ const SIGN_BAND := 38.0
 ## Distances of the service slots from the gangplank, in order of preference.
 const SLOT_OFFSETS: Array[float] = [-215.0, 215.0, 430.0, -430.0]
 
-const PLANK := Color("#b08f63")
-const PLANK_DARK := Color("#7a5e3e")
-const ROPE := Color("#d6c49c")
-const INK := Color("#342c26")
+# Real Horizon: an aluminium passerelle with non-slip treads and stainless
+# hand rails.
+const PLANK := Color("#A3AAAB")
+const PLANK_DARK := Color("#6E7678")
+const ROPE := Color("#C4CBCC")
+const INK := Color("#2A3236")
 
 var _area: BoatArea
 var _active := false
@@ -273,19 +275,19 @@ func _draw() -> void:
 	var x0 := _plank_x - PLANK_HALF + 2.0
 	var x1 := _plank_x + PLANK_HALF - 2.0
 	# Shadow on the water, the boards, the cleats across them, the hand ropes.
-	draw_rect(Rect2(x0 + 6, top + 8, x1 - x0, bottom - top), Color(0, 0, 0, 0.25))
+	draw_rect(Rect2(x0 + 6, top + 9, x1 - x0, bottom - top), Color(0.04, 0.07, 0.09, 0.3))
 	draw_rect(Rect2(x0, top, x1 - x0, bottom - top), PLANK)
-	for i in 3:
-		var x := x0 + (x1 - x0) * (i + 1) / 4.0
-		draw_line(Vector2(x, top + 2), Vector2(x, bottom - 2), Color(PLANK_DARK, 0.55), 1.2, true)
-	var y := top + 9.0
+	# Side beams and the non-slip treads between them.
+	draw_rect(Rect2(x0, top, 4, bottom - top), PLANK_DARK)
+	draw_rect(Rect2(x1 - 4, top, 4, bottom - top), PLANK_DARK)
+	var y := top + 7.0
 	while y < bottom - 4.0:
-		draw_line(Vector2(x0 + 3, y), Vector2(x1 - 3, y), Color(PLANK_DARK, 0.9), 3.0, true)
-		y += 14.0
-	draw_rect(Rect2(x0, top, x1 - x0, bottom - top), INK, false, 2.0)
+		draw_rect(Rect2(x0 + 6, y, x1 - x0 - 12, 3.0), Color("#3A4144"))
+		y += 11.0
+	draw_rect(Rect2(x0, top, x1 - x0, bottom - top), Color(INK, 0.7), false, 1.2)
 	for x in [x0 - 4.0, x1 + 4.0]:
-		draw_line(Vector2(x, top - 4), Vector2(x, bottom + 2), INK, 4.0, true)
-		draw_line(Vector2(x, top - 4), Vector2(x, bottom + 2), ROPE, 2.4, true)
+		draw_line(Vector2(x, top - 4), Vector2(x, bottom + 2), Color(INK, 0.6), 3.0, true)
+		draw_line(Vector2(x, top - 4), Vector2(x, bottom + 2), ROPE, 1.6, true)
 		for post_y in [top - 4.0, bottom + 2.0]:
-			draw_circle(Vector2(x, post_y), 4.0, INK)
-			draw_circle(Vector2(x, post_y), 2.6, Color("#9aa0a4"))
+			draw_circle(Vector2(x, post_y), 3.2, Color(INK, 0.7))
+			draw_circle(Vector2(x, post_y), 2.2, ROPE)

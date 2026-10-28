@@ -15,11 +15,11 @@
 			"text": "A string of small signal flags. Read them right and they say \"welcome aboard\"."}
 	],
 	"sail_cloths": [
-		{"id": "classic", "name": "Classic cream", "price_per_ft": 0, "sail": "#EFE5CC", "shade": "#D8CDB1",
+		{"id": "classic", "name": "Classic cream", "price_per_ft": 0, "sail": "#E3E2DA", "shade": "#BDBEB7",
 			"text": "The boat's own cream sailcloth."},
-		{"id": "tanbark", "name": "Tanbark", "price_per_ft": 10, "sail": "#B9754F", "shade": "#9C5F3E",
+		{"id": "tanbark", "name": "Tanbark", "price_per_ft": 10, "sail": "#9E6F58", "shade": "#82594A",
 			"text": "The warm red-brown of the old working boats. Purely a look: the sails draw exactly as before."},
-		{"id": "harbour_blue", "name": "Harbour blue", "price_per_ft": 10, "sail": "#9DB8C9", "shade": "#7E9CAF",
+		{"id": "harbour_blue", "name": "Harbour blue", "price_per_ft": 10, "sail": "#93A8B5", "shade": "#74899A",
 			"text": "A soft sea blue, cut by the same pattern. Purely a look: the sails draw exactly as before."}
 	],
 	"chandlery": {

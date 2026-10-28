@@ -32,14 +32,19 @@ extends Node2D
 ## the spinnaker: the leading edge) and its bottom edge the foot. So the
 ## sprite follows the trim, the belly and the breathing automatically.
 
-const SAIL := Color("#EFE5CC")
-const SAIL_SHADE := Color("#D8CDB1")
-const SAIL_EDGE := Color("#8C7E5E")
-const BOOM := Color("#5E6B70")
-const COVER := Color("#3F7880")
-const SPINNAKER := Color("#C79F6D")
-const SPINNAKER_STRIPE := Color("#EFE5CC")
-const SHEET := Color(0.937, 0.898, 0.8, 0.7)
+# Real Horizon: white Dacron, anodised spars, a navy sail cover, a
+# restrained asymmetric in slate and white.
+const SAIL := Color("#E3E2DA")
+const SAIL_SHADE := Color("#BDBEB7")
+const SAIL_EDGE := Color("#7D8483")
+const BOOM := Color("#8D979A")
+const COVER := Color("#2F3E4A")
+const SPINNAKER := Color("#5D7F95")
+const SPINNAKER_STRIPE := Color("#E3E2DA")
+const SHEET := Color(0.80, 0.79, 0.75, 0.75)
+## The sails' shadow on the deck and water (light from the upper left).
+const SAIL_SHADOW := Color(0.04, 0.07, 0.09, 0.16)
+const SHADOW_OFFSET := Vector2(10, 14)
 
 ## Defaults (the starter sloop) used when the scene has no SailMarkers.
 const MAST := Vector2(182, 0)
@@ -330,20 +335,25 @@ func _draw_main(shape: Dictionary) -> void:
 		else:
 			var outline := leech.duplicate()
 			outline.append_array(_inner(_curve(clew, mast, shape.foot_control, 8)))
-			draw_colored_polygon(outline, Color(sail_colour, set_amount))
-			draw_polyline(leech, Color(SAIL_EDGE, set_amount), 2.0, true)
-			# Battens.
-			for t in [0.3, 0.55, 0.8]:
+			_draw_cloth(outline, leech.size(), set_amount)
+			draw_polyline(leech, Color(SAIL_EDGE, set_amount), 1.5, true)
+			# Cross-cut panel seams, and the battens a little heavier.
+			for k in 9:
+				var t := (k + 1) / 10.0
 				var on_boom := mast.lerp(clew, t)
 				var on_leech := leech[roundi(t * (leech.size() - 1))]
-				draw_line(on_boom, on_leech, Color(sail_shade, set_amount), 2.0, true)
+				var batten := k in [2, 5, 7]
+				draw_line(on_boom, on_leech, Color(sail_shade.darkened(0.1 if batten else 0.0), set_amount * (0.9 if batten else 0.35)),
+					2.0 if batten else 0.8, true)
 		# Main sheet to the traveller in the cockpit.
 		draw_line(clew, traveller, Color(SHEET, set_amount * 0.8), 1.5, true)
 	# Boom (and the sail cover on it when furled).
 	if boom_texture:
 		_draw_textured_spar(mast, clew, boom_texture)
 	else:
-		draw_line(mast, clew, BOOM, 7.0, true)
+		draw_line(mast, clew, BOOM.darkened(0.35), 7.0, true)
+		draw_line(mast, clew, BOOM, 5.0, true)
+		draw_line(mast + Vector2(0, -1.2), clew + Vector2(0, -1.2), BOOM.lightened(0.35), 1.2, true)
 	if set_amount < 0.99:
 		draw_line(mast + (clew - mast) * 0.03, clew - (clew - mast) * 0.04, Color(COVER, 1.0 - set_amount), 16.0, true)
 
@@ -361,8 +371,11 @@ func _draw_jib(shape: Dictionary) -> void:
 	else:
 		var outline: PackedVector2Array = leech.duplicate()
 		outline.append_array(_inner(_curve(clew, tack, shape.foot_control, 6)))
-		draw_colored_polygon(outline, Color(sail_colour, shown))
-		draw_polyline(outline, Color(SAIL_EDGE, shown), 2.0, true)
+		_draw_cloth(outline, leech.size(), shown)
+		for k in 5:
+			var t := (k + 1) / 6.0
+			draw_line(tack.lerp(clew, t), leech[roundi(t * (leech.size() - 1))], Color(sail_shade, shown * 0.35), 0.8, true)
+		draw_polyline(outline, Color(SAIL_EDGE, shown), 1.5, true)
 	# Jib sheet to the leeward winch.
 	var lee := signf(jib_angle_deg) if jib_angle_deg != 0.0 else 1.0
 	draw_line(clew, Vector2(jib_sheet_lead.x, absf(jib_sheet_lead.y) * lee), Color(SHEET, shown * 0.8), 1.5, true)
@@ -400,6 +413,25 @@ func _draw_spinnaker(shape: Dictionary) -> void:
 	# Corner fittings: the sail visibly hangs from its tack, clew and head.
 	for corner: Vector2 in [kite_tack, clew]:
 		draw_circle(corner, 4.0, Color(BOOM, amount))
+
+
+## A sail's cloth: its shadow on the deck first, then the sail shaded from
+## the luff and foot (lit, sail_colour) to the curved leech (sail_shade), so
+## its belly reads. `leech_count` points of `outline` are the leech.
+func _draw_cloth(outline: PackedVector2Array, leech_count: int, alpha: float) -> void:
+	# The offset is down-right on screen, whichever way the course view turns the deck.
+	var offset := SHADOW_OFFSET.rotated(-get_global_transform().get_rotation())
+	var shadow := PackedVector2Array()
+	for p in outline:
+		shadow.append(p + offset)
+	draw_colored_polygon(shadow, Color(SAIL_SHADOW, SAIL_SHADOW.a * alpha))
+	var colours := PackedColorArray()
+	for i in outline.size():
+		var on_leech := i < leech_count
+		var t := float(i) / maxf(1.0, leech_count - 1) if on_leech else 0.0
+		var c := sail_colour.lerp(sail_shade, 0.25 + 0.5 * sin(PI * t)) if on_leech else sail_colour.lightened(0.04)
+		colours.append(Color(c, alpha))
+	draw_polygon(outline, colours)
 
 
 ## Stretches `texture` over the band between two edges of a sail: `outer`

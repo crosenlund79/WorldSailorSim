@@ -1,4 +1,12 @@
-"""Shared toolkit for the illustrated vessel art (Visual Identity V01, 0.100b).
+"""Shared toolkit for the illustrated vessel art (Real Horizon restyle of
+Visual Identity V01, 0.100b).
+
+Real Horizon (see DEV_GUIDES/ART_DIRECTION.md): weathered white fibreglass
+with grey non-skid, weathered teak only where yachts carry it, brushed-steel
+fittings, varnished marine-timber joinery below; thin, nearly straight
+blue-grey linework, edges carried by tone. The colour constants below keep
+their old names (the painters use them by name) but hold the new palette,
+tools/art/marine_palette.py.
 
 The painter scripts (tools/vessels/paint_illustrated_*.py) build full-canvas
 PNG layers with it: shapes read from the boats' own scenes, slightly uneven
@@ -20,23 +28,28 @@ ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 SS = 4            # supersampling: px per unit while painting
 FINAL = 2         # px per unit in the PNGs
 
-INK = (52, 44, 38)
-CREAM = (239, 229, 204)
-HULL = (233, 222, 196)
-SAND = (212, 204, 180)
-TEAK = (138, 106, 74)
-TEAK_LIGHT = (166, 130, 92)
-TEAK_DARK = (104, 78, 54)
-HONEY = (154, 122, 87)
-SEAGLASS = (63, 120, 128)
-NAVY = (34, 52, 74)
-RED = (176, 84, 62)
-OCHRE = (204, 160, 82)
-SAGE = (134, 158, 128)
-ROPE = (214, 196, 156)
-BLANKET = (126, 150, 166)
-CUSHION = (72, 128, 136)
-WHITE = (246, 241, 230)
+INK = (42, 50, 54)              # line: dark blue-grey, used thin and translucent
+CREAM = (219, 220, 213)         # gelcoat: coachroof, smooth deck mouldings
+HULL = (211, 213, 206)          # topsides seen from above
+SAND = (186, 189, 182)          # moulded non-skid
+TEAK = (136, 118, 99)           # weathered teak (silvering)
+TEAK_LIGHT = (156, 139, 118)
+TEAK_DARK = (102, 86, 70)       # dark marine timber
+HONEY = (124, 100, 77)          # varnished teak-and-holly sole below
+SEAGLASS = (52, 66, 74)         # smoked acrylic hatches and portlights
+NAVY = (40, 52, 64)
+RED = (150, 70, 60)
+OCHRE = (192, 160, 102)
+SAGE = (118, 128, 110)
+ROPE = (201, 195, 178)
+BLANKET = (92, 104, 118)
+CUSHION = (72, 86, 98)          # slate upholstery
+WHITE = (232, 232, 226)
+STEEL = (150, 160, 164)         # brushed stainless
+STEEL_LIGHT = (196, 204, 206)
+STEEL_DARK = (96, 106, 110)
+CANVAS_GREY = (63, 77, 87)      # sprayhood / sail covers
+SHADOW_TINT = (10, 16, 20)
 
 
 def parse(path):
@@ -128,13 +141,14 @@ class Layer:
         self.img.alpha_composite(layer)
 
     def ink(self, pts, width=1.5, color=INK, closed=True, amp=0.9, alpha=235):
-        path = self.wobble(pts, amp, closed)
+        # Real Horizon: one steady line (an illustrator's fine liner, not a
+        # quick pen). Outlines in the ink colour are thinner and translucent,
+        # so form comes from tone; coloured strokes (rails, ropes) keep weight.
+        path = self.wobble(pts, amp * 0.25, closed)
         d = ImageDraw.Draw(self.img, "RGBA")
+        if color == INK:
+            width, alpha = width * 0.6, int(alpha * 0.62)
         d.line([self.px(p) for p in path], fill=color + (alpha,), width=max(1, int(width * SS)), joint="curve")
-        # A second, lighter pass slightly off: the doubled line of a quick pen.
-        path2 = self.wobble(pts, amp * 0.8, closed)
-        d.line([self.px((x + 0.4, y + 0.3)) for x, y in path2], fill=color + (alpha // 3,), width=max(1, int(width * 0.6 * SS)),
-               joint="curve")
 
     def line(self, a, b, width=1.0, color=INK, alpha=200, amp=0.5):
         self.ink([a, b], width, color, closed=False, amp=amp, alpha=alpha)
@@ -211,7 +225,7 @@ class Layer:
         m = Image.new("L", self.img.size, 0)
         ImageDraw.Draw(m).polygon([self.px((x + offset[0], y + offset[1])) for x, y in pts], fill=alpha)
         m = m.filter(ImageFilter.GaussianBlur(blur * SS))
-        layer = Image.new("RGBA", self.img.size, (20, 14, 10, 0))
+        layer = Image.new("RGBA", self.img.size, SHADOW_TINT + (0,))
         layer.putalpha(m)
         self.img.alpha_composite(layer)
 
@@ -223,12 +237,95 @@ class Layer:
         if hatch:
             self.hatch(pts, alpha=40)
         if shade:
-            xs = [p[0] for p in pts]
-            ys = [p[1] for p in pts]
-            cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
-            inner = [(cx + (x - cx) * 0.92 + 1.5, cy + (y - cy) * 0.9 + 1.5) for x, y in pts]
-            self.fill(inner, tuple(int(c * 0.93) for c in color), 0.03, alpha=70)
+            self.tone_edges(pts, color)
         self.ink(pts, ink)
+
+    def tone_edges(self, pts, color, depth=2.5):
+        """Form by tone: a lighter band on the upper-left edges, a darker one
+        on the lower-right (light from the upper left), clipped to the shape."""
+        m = self.mask(pts)
+        d = int(depth * SS)
+        base = np.asarray(m, np.int16)
+
+        def edge(dx):
+            moved = np.asarray(m.transform(m.size, Image.AFFINE, (1, 0, dx, 0, 1, dx)), np.int16)
+            return Image.fromarray(np.clip(base - moved, 0, 255).astype(np.uint8))
+
+        # The mask moved down-right leaves the upper-left rim (lit), and the
+        # other way round the lower-right rim (shaded).
+        lit, dark = edge(-d), edge(d)
+        hi = tuple(min(255, int(c * 1.10 + 12)) for c in color)
+        lo = tuple(int(c * 0.78) for c in color)
+        for band, c, a in ((lit, hi, 0.55), (dark, lo, 0.6)):
+            band = band.filter(ImageFilter.GaussianBlur(SS * 0.6))
+            layer = Image.new("RGBA", self.img.size, c + (0,))
+            layer.putalpha(Image.fromarray((np.asarray(band, np.float32) * a).astype(np.uint8)))
+            self.img.alpha_composite(layer)
+
+    def speckle(self, pts, color, density=0.35, size=0.55, alpha=70, mask=None):
+        """Fine moulded texture (non-skid): small dots of `color`."""
+        m = mask if mask is not None else self.mask(pts)
+        w, h = self.img.size
+        cell = max(2, int(size * 2.6 * SS))
+        grid = self.rng.random((h // cell + 1, w // cell + 1)) < density
+        dots = Image.new("L", self.img.size, 0)
+        dd = ImageDraw.Draw(dots)
+        r = max(1, int(size * SS))
+        ys, xs = np.nonzero(grid)
+        for y, x in zip(ys, xs):
+            cx, cy = x * cell + (y % 2) * cell // 2, y * cell
+            dd.ellipse([cx - r, cy - r, cx + r, cy + r], fill=alpha)
+        dots = Image.fromarray(np.minimum(np.asarray(dots), np.asarray(m)))
+        layer = Image.new("RGBA", self.img.size, color + (0,))
+        layer.putalpha(dots)
+        self.img.alpha_composite(layer)
+
+    def grain(self, pts, color, horizontal=True, spacing=2.2, alpha=40):
+        """Fine wood grain along the long axis, clipped to the shape."""
+        m = self.mask(pts)
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        layer = Image.new("RGBA", self.img.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(layer)
+        lo, hi = (min(ys), max(ys)) if horizontal else (min(xs), max(xs))
+        a0, a1 = (min(xs), max(xs)) if horizontal else (min(ys), max(ys))
+        v = lo + self.rng.uniform(0, spacing)
+        while v < hi:
+            ph = self.rng.uniform(0, 10)
+            amp = self.rng.uniform(0.2, 0.9)
+            path = []
+            t = a0
+            while t <= a1:
+                off = math.sin(t / self.rng.uniform(25, 60) + ph) * amp
+                path.append((t, v + off) if horizontal else (v + off, t))
+                t += 6
+            k = self.rng.uniform(0.6, 1.0)
+            d.line([self.px(p) for p in path], fill=color + (int(alpha * k),), width=max(1, int(0.35 * SS)))
+            v += spacing * self.rng.uniform(0.6, 1.5)
+        clipped = Image.new("RGBA", self.img.size, (0, 0, 0, 0))
+        clipped.paste(layer, (0, 0), m)
+        self.img.alpha_composite(clipped)
+
+    def joinery(self, pts, color=None, horizontal=None, frame=3.0, shadow=True):
+        """Varnished marine joinery: a timber panel with fine grain, a fiddle
+        or frame line inset from the edge, lit and shaded edges."""
+        color = color or TEAK_DARK
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        if horizontal is None:
+            horizontal = (max(xs) - min(xs)) >= (max(ys) - min(ys))
+        if shadow:
+            self.shadow(pts, (3, 4), 3, 80)
+        self.fill(pts, color, 0.05, grain=40.0)
+        self.grain(pts, tuple(int(c * 0.72) for c in color), horizontal)
+        self.tone_edges(pts, color, 2.0)
+        if (max(xs) - min(xs)) > frame * 4 and (max(ys) - min(ys)) > frame * 4:
+            cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+            sx = 1 - 2 * frame / max(1.0, max(xs) - min(xs))
+            sy = 1 - 2 * frame / max(1.0, max(ys) - min(ys))
+            inner = [(cx + (x - cx) * sx, cy + (y - cy) * sy) for x, y in pts]
+            self.ink(inner, 0.5, tuple(int(c * 0.6) for c in color), alpha=150, amp=0.0)
+        self.ink(pts, 1.1)
 
     def circle(self, c, r, color, ink=1.2, n=28, shadow=True):
         pts = [(c[0] + r * math.cos(2 * math.pi * i / n), c[1] + r * math.sin(2 * math.pi * i / n)) for i in range(n)]
@@ -245,8 +342,8 @@ class Layer:
             pts.append((c[0] + rr * math.cos(t), c[1] + rr * math.sin(t)))
         self.shadow([(c[0] + r * math.cos(a), c[1] + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 20)], (2, 3), 2, 50)
         d = ImageDraw.Draw(self.img, "RGBA")
-        d.line([self.px(p) for p in pts], fill=INK + (220,), width=int(2.6 * SS), joint="curve")
-        d.line([self.px(p) for p in pts], fill=color + (255,), width=int(1.7 * SS), joint="curve")
+        d.line([self.px(p) for p in pts], fill=tuple(int(c * 0.62) for c in color) + (200,), width=int(1.8 * SS), joint="curve")
+        d.line([self.px(p) for p in pts], fill=color + (255,), width=int(1.25 * SS), joint="curve")
 
     def rect(self, x, y, w, h):
         return [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
@@ -283,9 +380,9 @@ def inset(pts, d):
 # =============================================================== marine teak
 from shapely.geometry import LineString, MultiLineString, Polygon, box  # noqa: E402
 
-TEAK_DECK = (158, 116, 72)
-CAULK = (44, 34, 28)
-HOLLY = (226, 212, 180)
+TEAK_DECK = (138, 121, 101)     # weathered, silvering teak
+CAULK = (58, 56, 52)
+HOLLY = (200, 196, 182)
 
 
 def _lines_of(geom):
@@ -394,7 +491,7 @@ def teak_deck(layer, area, holes=(), strip=4.2, margin=8.0, sprung=3, king_plank
             length = rng.uniform(20, 70)
             yy = y + rng.uniform(0.6, strip - 0.6)
             gd.line([layer.px((x, yy)), layer.px((x + length, yy + rng.uniform(-0.5, 0.5)))],
-                    fill=(90, 62, 38, 45), width=max(1, int(0.4 * SS)))
+                    fill=(84, 74, 62, 45), width=max(1, int(0.4 * SS)))
             x += length + rng.uniform(10, 50)
         y += strip
     clipped = Image.new("RGBA", layer.img.size, (0, 0, 0, 0))
@@ -418,13 +515,13 @@ def teak_deck(layer, area, holes=(), strip=4.2, margin=8.0, sprung=3, king_plank
     cd = ImageDraw.Draw(layer.img, "RGBA")
     for ln in seams:
         if len(ln) >= 2:
-            cd.line([layer.px(p) for p in ln], fill=CAULK + (210,), width=max(1, int(0.7 * SS)), joint="curve")
+            cd.line([layer.px(p) for p in ln], fill=CAULK + (150,), width=max(1, int(0.55 * SS)), joint="curve")
     if outline:
         for ln in _lines_of(whole):
             layer.ink([tuple(p) for p in ln[:-1]], 1.5)
 
 
-def teak_sole(layer, area, strip=5.0, holly=True, color=TEAK_DECK):
+def teak_sole(layer, area, strip=5.0, holly=True, color=TEAK_DECK, holly_alpha=150):
     """A cockpit sole: narrow fore-and-aft teak strips with pale holly lines
     between them (teak-and-holly), inside a margin."""
     whole = Polygon(area).buffer(0)
@@ -446,8 +543,60 @@ def teak_sole(layer, area, strip=5.0, holly=True, color=TEAK_DECK):
     while y < maxy - 0.5:
         seg = LineString([(minx, y), (maxx, y)]).intersection(inner)
         for ln in _lines_of(seg):
-            cd.line([layer.px(p) for p in ln], fill=(HOLLY if holly else CAULK) + (200,), width=max(1, int(0.8 * SS)))
+            cd.line([layer.px(p) for p in ln], fill=(HOLLY if holly else CAULK) + (holly_alpha,), width=max(1, int(0.6 * SS)))
         y += strip
     for ln in _lines_of(inner):
         cd.line([layer.px(p) for p in ln], fill=CAULK + (200,), width=max(1, int(0.7 * SS)))
     layer.ink(list(whole.exterior.coords)[:-1], 1.6)
+
+
+
+# =============================================================== fibreglass deck
+def nonskid_deck(layer, area, holes=(), margin=7.0, outline=True, color=SAND, gloss=CREAM):
+    """A moulded fibreglass deck: smooth gelcoat along every edge and round
+    every opening (coachroof, cockpit, hatches), grey non-skid inside with a
+    fine moulded texture, soft tonal shading towards the starboard side."""
+    whole = Polygon(area).buffer(0)
+    for h in holes:
+        whole = whole.difference(Polygon(h).buffer(0))
+    if whole.is_empty:
+        return
+    full = _geom_mask(layer, whole)
+    layer.fill(None, gloss, 0.03, grain=80.0, mask=full)
+    inner = whole.buffer(-margin, join_style=1)
+    if not inner.is_empty:
+        im = _geom_mask(layer, inner)
+        layer.fill(None, color, 0.05, grain=60.0, mask=im)
+        layer.speckle(None, tuple(int(c * 0.82) for c in color), mask=im)
+        layer.speckle(None, tuple(min(255, int(c * 1.08)) for c in color), density=0.2, alpha=50, mask=im)
+        cd = ImageDraw.Draw(layer.img, "RGBA")
+        for ln in _lines_of(inner):
+            cd.line([layer.px(p) for p in ln], fill=tuple(int(c * 0.8) for c in color) + (140,), width=max(1, int(0.5 * SS)),
+                    joint="curve")
+    # Soft shade on the starboard half (light from the upper left / port bow).
+    minx, miny, maxx, maxy = whole.bounds
+    shade = Image.new("L", layer.img.size, 0)
+    sd = ImageDraw.Draw(shade)
+    steps = 12
+    for i in range(steps):
+        cy = (miny + maxy) / 2
+        y0 = maxy - (maxy - cy) * (i + 1) / steps
+        sd.rectangle([layer.px((minx, y0)), layer.px((maxx, maxy + 1))], fill=int(5 + i * 0.4))
+    shade = Image.fromarray(np.minimum(np.asarray(shade), np.asarray(full)))
+    tint = Image.new("RGBA", layer.img.size, SHADOW_TINT + (0,))
+    tint.putalpha(shade)
+    layer.img.alpha_composite(tint)
+    if outline:
+        for ln in _lines_of(whole):
+            layer.ink([tuple(p) for p in ln[:-1]], 1.3)
+
+
+def topsides(layer, hull, rail=STEEL, rub=2.4):
+    """A hull seen from above: the topsides as a slim white band round the
+    deck, a rubbing strake/toe rail line along the sheer, shade to starboard."""
+    layer.shadow(hull, (5, 8), 6, 70)
+    layer.fill(hull, HULL, 0.03, grain=80.0)
+    layer.tone_edges(hull, HULL, 6.0)
+    # The rubbing strake (dark grey) with the toe rail's steel just inside.
+    layer.ink(hull, rub * 1.4, (92, 100, 102), alpha=235, amp=0.0)
+    layer.ink(hull, 0.5, (170, 178, 178), alpha=200, amp=0.0)

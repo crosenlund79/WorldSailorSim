@@ -1,8 +1,13 @@
 extends Node
-## The Captain's Chartroom (UI pass after 0.105b): one interface, two moods.
+## Marine Electronics (Operation Real Horizon): one interface, two moods,
+## styled after a yacht's multifunction displays (no particular product).
 ##
-##   Day   - Vintage Chartroom: parchment, aged brass, teak, dark nautical ink.
-##   Night - Harbor Dusk: midnight blue, slate, soft ivory, lantern amber.
+##   Day   - Sunlit display: charcoal-navy glass, clear white figures,
+##           functional cyan, muted marine amber for warnings.
+##   Night - Night mode: the same layout dimmed for dark adaptation.
+##
+## Shape language: hairline borders, 2-4 px corners, flat keys; headings in
+## Barlow Condensed (instrument lettering), body text in Barlow.
 ##
 ## The project theme (assets/ui/next_harbor_theme.tres, set in project.godot)
 ## keeps its type variations (HudPanel, SectionPanel, MutedLabel, ...) so no
@@ -41,48 +46,52 @@ const MAX_RATE := 0.25
 
 ## Role -> [day, night].
 const PALETTES := {
-	# Surfaces
-	&"backdrop": [Color(0.09, 0.13, 0.13, 0.55), Color(0.02, 0.06, 0.10, 0.62)],
-	&"surface": [Color("#E8D8B8"), Color("#162D40")],
-	&"surface_hud": [Color(0.93, 0.87, 0.75, 0.94), Color(0.09, 0.18, 0.26, 0.90)],
-	&"surface_raised": [Color("#F2E6CC"), Color("#233F53")],
-	&"surface_sunken": [Color("#DCC9A3"), Color("#0F2232")],
-	&"sidebar": [Color(0.91, 0.85, 0.72, 0.97), Color(0.07, 0.15, 0.22, 0.96)],
-	# Text
-	&"ink": [Color("#172D30"), Color("#F3E4C8")],
-	&"ink_soft": [Color("#4F5536"), Color("#A9BDCB")],
-	&"heading": [Color("#6B4430"), Color("#E9A84D")],
-	&"title": [Color("#172D30"), Color("#F3E4C8")],
-	# Lines and accents
-	&"border": [Color("#BE914B"), Color("#8E7148")],
-	&"border_soft": [Color(0.75, 0.57, 0.29, 0.45), Color(0.56, 0.44, 0.28, 0.45)],
-	&"accent": [Color("#BE914B"), Color("#E9A84D")],
-	&"rust": [Color("#A4513A"), Color("#B8654E")],
-	&"focus": [Color("#A4513A"), Color("#E9A84D")],
-	# Buttons
-	&"button": [Color("#F2E6CC"), Color("#233F53")],
-	&"button_hover": [Color("#F8EEDB"), Color("#2D5068")],
-	&"button_pressed": [Color("#D8C29A"), Color("#1A3346")],
-	&"button_text": [Color("#172D30"), Color("#F3E4C8")],
-	&"action": [Color("#666D47"), Color("#E9A84D")],
-	&"action_hover": [Color("#767E54"), Color("#F2BA66")],
-	&"action_text": [Color("#F6EBD5"), Color("#0B1C2A")],
-	&"disabled": [Color(0.86, 0.79, 0.64, 0.6), Color(0.14, 0.24, 0.32, 0.6)],
-	&"disabled_text": [Color(0.31, 0.33, 0.25, 0.55), Color(0.66, 0.74, 0.80, 0.45)],
-	# States
-	&"warning": [Color("#A4513A"), Color("#E9965E")],
-	&"warning_surface": [Color(0.96, 0.86, 0.74, 0.97), Color(0.24, 0.16, 0.14, 0.95)],
-	&"success": [Color("#4F6B3A"), Color("#A9C98B")],
-	&"caution": [Color("#8A5A1E"), Color("#E9C46A")],
+	# Surfaces: charcoal-navy instrument glass (day: a sunlit display, night:
+	# dimmed for dark adaptation).
+	&"backdrop": [Color(0.04, 0.07, 0.09, 0.58), Color(0.01, 0.02, 0.03, 0.66)],
+	&"surface": [Color("#202D35"), Color("#10181D")],
+	&"surface_hud": [Color(0.106, 0.149, 0.176, 0.90), Color(0.051, 0.078, 0.094, 0.90)],
+	&"surface_raised": [Color("#283842"), Color("#162027")],
+	&"surface_sunken": [Color("#151E24"), Color("#0A1014")],
+	&"sidebar": [Color(0.118, 0.165, 0.196, 0.96), Color(0.055, 0.086, 0.106, 0.96)],
+	# Text: clear instrument typography.
+	&"ink": [Color("#E4EAE8"), Color("#B7C4C6")],
+	&"ink_soft": [Color("#9DB0B5"), Color("#7C8F94")],
+	&"heading": [Color("#7FC3D0"), Color("#5AA8B8")],
+	&"title": [Color("#F0F3F1"), Color("#C4D0D1")],
+	# Lines and accents: precise hairlines, functional cyan.
+	&"border": [Color("#3E525C"), Color("#2A3940")],
+	&"border_soft": [Color(0.467, 0.533, 0.549, 0.30), Color(0.467, 0.533, 0.549, 0.22)],
+	&"accent": [Color("#5AA8B8"), Color("#4A94A3")],
+	&"rust": [Color("#D49A4B"), Color("#B9843F")],
+	&"focus": [Color("#7FC3D0"), Color("#5AA8B8")],
+	# Buttons: flat keys on the panel, cyan-edged when active.
+	&"button": [Color("#2B3B45"), Color("#18232A")],
+	&"button_hover": [Color("#35505C"), Color("#203540")],
+	&"button_pressed": [Color("#1A3640"), Color("#0F242C")],
+	&"button_text": [Color("#E4EAE8"), Color("#B7C4C6")],
+	&"action": [Color("#5AA8B8"), Color("#3F8796")],
+	&"action_hover": [Color("#73BACA"), Color("#4C99A8")],
+	&"action_text": [Color("#0B171D"), Color("#050B0E")],
+	&"disabled": [Color(0.16, 0.21, 0.24, 0.6), Color(0.09, 0.13, 0.15, 0.6)],
+	&"disabled_text": [Color(0.62, 0.69, 0.71, 0.45), Color(0.50, 0.57, 0.59, 0.40)],
+	# States: muted marine amber for warnings.
+	&"warning": [Color("#E0A657"), Color("#C98F45")],
+	&"warning_surface": [Color(0.20, 0.16, 0.11, 0.96), Color(0.12, 0.09, 0.06, 0.96)],
+	&"success": [Color("#86C29A"), Color("#6AA47E")],
+	&"caution": [Color("#D9BB66"), Color("#B9A055")],
 	# Documents (the developer guides): code and links.
-	&"code": [Color("#7A3E2C"), Color("#E6D3A8")],
-	&"link": [Color("#2F6670"), Color("#8FC7CC")],
-	&"tooltip": [Color("#F6EBD5"), Color("#0B1C2A")],
-	&"key": [Color("#785039"), Color("#E9A84D")],
-	&"key_text": [Color("#F6EBD5"), Color("#0B1C2A")],
-	&"track": [Color(0.47, 0.31, 0.22, 0.25), Color(0.40, 0.55, 0.65, 0.25)],
-	&"shadow": [Color(0.18, 0.12, 0.06, 0.28), Color(0.0, 0.0, 0.0, 0.45)],
+	&"code": [Color("#E2C38E"), Color("#C7AA7A")],
+	&"link": [Color("#7FC3D0"), Color("#5AA8B8")],
+	&"tooltip": [Color("#162127"), Color("#0A1115")],
+	&"key": [Color("#3A5560"), Color("#22363F")],
+	&"key_text": [Color("#E4EAE8"), Color("#B7C4C6")],
+	&"track": [Color(0.467, 0.533, 0.549, 0.28), Color(0.467, 0.533, 0.549, 0.20)],
+	&"shadow": [Color(0.0, 0.0, 0.0, 0.35), Color(0.0, 0.0, 0.0, 0.5)],
 }
+
+## The largest corner radius any style box gets (precise, not toy-like).
+const MAX_RADIUS := 3
 
 var theme: Theme
 ## 0 = day, 1 = night, as currently applied.
@@ -106,9 +115,8 @@ func _ready() -> void:
 	theme = ThemeDB.get_project_theme()
 	if theme == null:
 		theme = Theme.new()
-	# Maritime headings: the Patrick Hand variation the title screen uses
-	# (Barlow as its fallback for any glyph it lacks). Body text stays Barlow.
-	_font_heading = theme.get_font(&"font", &"DisplayHeader")
+	# Instrument headings: Barlow Condensed, slightly spaced. Body text stays Barlow.
+	_font_heading = _condensed("res://assets/fonts/BarlowCondensed-SemiBold.ttf", 1)
 	_font_body = load("res://assets/fonts/Barlow-Regular.ttf")
 	_font_medium = load("res://assets/fonts/Barlow-Medium.ttf")
 	_font_semibold = load("res://assets/fonts/Barlow-SemiBold.ttf")
@@ -119,6 +127,16 @@ func _ready() -> void:
 	set_blend(_target_blend(), true)
 	# Every modal's "Dim" backdrop takes the theme's backdrop colour.
 	get_tree().node_added.connect(_on_node_added)
+
+
+## A condensed instrument face with a little letter spacing (Barlow as the
+## fallback for any glyph it lacks).
+func _condensed(path: String, spacing: int) -> FontVariation:
+	var v := FontVariation.new()
+	v.base_font = load(path)
+	v.spacing_glyph = spacing
+	v.fallbacks = [load("res://assets/fonts/Barlow-Regular.ttf")]
+	return v
 
 
 func _on_node_added(node: Node) -> void:
@@ -258,8 +276,9 @@ func _box(fill: StringName, border: StringName, border_w := 0, radius := 8, marg
 		shadow := 0, fill_alpha := -1.0, border_alpha := -1.0, draw_center := true) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()
 	box.draw_center = draw_center and fill != &""
-	box.set_corner_radius_all(radius)
-	box.set_border_width_all(border_w)
+	# Instrument shape language: tight corners, hairline borders.
+	box.set_corner_radius_all(mini(radius, MAX_RADIUS))
+	box.set_border_width_all(mini(border_w, 1) if border_w > 0 and fill != &"" else border_w)
 	box.content_margin_left = margin.x
 	box.content_margin_top = margin.y
 	box.content_margin_right = margin.z
@@ -267,7 +286,7 @@ func _box(fill: StringName, border: StringName, border_w := 0, radius := 8, marg
 	box.anti_aliasing = true
 	var spec := {"box": box, "fill": fill, "border": border, "fill_alpha": fill_alpha, "border_alpha": border_alpha}
 	if shadow > 0:
-		box.shadow_size = shadow
+		box.shadow_size = mini(shadow, 6)
 		box.shadow_offset = Vector2(0, 2)
 		spec["shadow"] = true
 	if fill == &"":
@@ -354,9 +373,13 @@ func _build() -> void:
 	_style(&"LineEdit", &"read_only", _box(&"disabled", &"border_soft", 1, 6, Vector4(10, 6, 10, 6)))
 	# Headings: a little maritime handwriting; body stays Barlow.
 	theme.set_font(&"font", &"HeaderLabel", _font_heading)
-	theme.set_font_size(&"font_size", &"HeaderLabel", 28)
+	theme.set_font_size(&"font_size", &"HeaderLabel", 27)
 	theme.set_font(&"font", &"TitleLabel", _font_heading)
-	theme.set_font_size(&"font_size", &"TitleLabel", 44)
+	theme.set_font_size(&"font_size", &"TitleLabel", 42)
+	var display := _condensed("res://assets/fonts/BarlowCondensed-Medium.ttf", 1)
+	for type: StringName in [&"DisplayHeader", &"DisplayName", &"DisplayTagline"]:
+		theme.set_font(&"font", type, display)
+	theme.set_font_size(&"font_size", &"DisplayTagline", 30)
 	theme.set_font(&"font", &"Button", _font_medium)
 	theme.set_font(&"font", &"OptionButton", _font_medium)
 	# Keys (E, Q, Esc...): a small brass/amber plate.

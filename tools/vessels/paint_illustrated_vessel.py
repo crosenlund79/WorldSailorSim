@@ -27,7 +27,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from illustrate import *  # noqa: E402,F403
-from illustrate import ROOT, Layer, teak_deck, teak_sole  # noqa: E402
+from illustrate import ROOT, Layer, nonskid_deck, teak_deck, teak_sole, topsides  # noqa: E402
 from shapely.geometry import Polygon  # noqa: E402
 
 DECK_SLOTS = {"HullBase": "hull_base", "DeckBase": "deck_base", "Coachroof": "coachroof", "DeckDetails": "deck_details"}
@@ -150,6 +150,9 @@ def slot_children(order, slot):
 # ------------------------------------------------------------------ painting
 
 def paint_shape(L, nodes, name, holes_for_deck, king=None):
+    """Real Horizon materials: fibreglass hulls, roofs and decks with grey
+    non-skid, weathered teak in the cockpit, brushed steel, smoked acrylic,
+    varnished marine timber and fitted upholstery below."""
     n = nodes[name]
     if n["type"] == "Label" or "/Labels" in name:
         return
@@ -160,32 +163,46 @@ def paint_shape(L, nodes, name, holes_for_deck, king=None):
         if len(pts) < 2:
             return
         width = n.get("width", 2.0)
-        if mat in ("teak", "darkwood"):
-            L.ink(pts, width * 0.6, TEAK if mat == "teak" else TEAK_DARK, closed=False, amp=0.3, alpha=255)
-            L.ink(pts, 0.6, INK, closed=False, amp=0.3, alpha=150)
+        if "ToeRail" in name:
+            L.ink(pts, max(width * 0.55, 1.6), STEEL, closed=False, amp=0.0, alpha=235)
+            L.ink(pts, 0.5, STEEL_LIGHT, closed=False, amp=0.0, alpha=180)
+        elif mat in ("teak", "darkwood"):
+            L.ink(pts, width * 0.6, TEAK if mat == "teak" else TEAK_DARK, closed=False, amp=0.0, alpha=255)
+            L.ink(pts, 0.6, INK, closed=False, amp=0.0, alpha=150)
         elif mat in ("metal_light", "metal"):
-            L.ink(pts, max(width * 0.45, 0.8), (205, 210, 214), closed=False, amp=0.25, alpha=int(255 * min(alpha + 0.2, 1)))
+            # Lifelines and pulpits: stainless tube with a highlight.
+            L.ink(pts, max(width * 0.45, 0.9), STEEL_DARK, closed=False, amp=0.0, alpha=int(230 * min(alpha + 0.2, 1)))
+            L.ink(pts, max(width * 0.2, 0.4), STEEL_LIGHT, closed=False, amp=0.0, alpha=int(230 * min(alpha + 0.2, 1)))
         elif mat == "glass" or mat == "teal":
-            L.ink(pts, width * 0.55, SEAGLASS, closed=False, amp=0.3, alpha=230)
-            L.ink(pts, 0.6, (230, 240, 240), closed=False, amp=0.3, alpha=120)
+            L.ink(pts, width * 0.55, SEAGLASS, closed=False, amp=0.0, alpha=230)
+            L.ink(pts, 0.5, (190, 204, 208), closed=False, amp=0.0, alpha=110)
         elif mat == "ink":
-            L.ink(pts, width * 0.5, INK, closed=False, amp=0.4, alpha=int(255 * alpha))
+            L.ink(pts, width * 0.5, INK, closed=False, amp=0.0, alpha=int(255 * alpha))
         else:
-            L.ink(pts, max(width * 0.5, 0.7), INK, closed=False, amp=0.3, alpha=int(180 * alpha))
+            L.ink(pts, max(width * 0.5, 0.7), INK, closed=False, amp=0.0, alpha=int(180 * alpha))
         return
     pts = outline(nodes, name)
     if not pts or len(pts) < 3:
         return
     if mat == "cream":
-        L.piece(pts, HULL if "Hull" in name or "Aka" in name or "Ama" in name or "Bridgedeck" in name else WHITE, 1.6,
-                shade=False, shadow=False)
+        if "Hull" in name or "Aka" in name or "Ama" in name or "Bridgedeck" in name:
+            if "Bridgedeck" in name or "Aka" in name:
+                nonskid_deck(L, pts, margin=6.0)
+            else:
+                topsides(L, pts)
+        else:
+            # Coachroof and other mouldings: smooth gelcoat, lit and shaded.
+            L.shadow(pts, (5, 7), 5, 80)
+            L.fill(pts, CREAM, 0.03, grain=80.0)
+            L.tone_edges(pts, CREAM, 3.5)
+            L.ink(pts, 1.4)
     elif mat == "deck":
         holes = [h for h in holes_for_deck if Polygon(h).intersects(Polygon(pts))]
-        teak_deck(L, pts, holes=holes, king_plank=king(pts) if king else None)
+        nonskid_deck(L, pts, holes=holes)
     elif mat == "sole":
         if "Locker" in name or "Hatch" in name:
-            L.piece(pts, TEAK_LIGHT, 1.3)
-            teak_deck(L, pts, strip=4.0, margin=3.5, sprung=0)
+            L.piece(pts, CREAM, 1.2)
+            L.speckle(pts, tuple(int(c * 0.85) for c in CREAM), density=0.3)
         else:
             L.shadow(pts, (3, 4), 3, 70)
             teak_sole(L, pts)
@@ -193,16 +210,12 @@ def paint_shape(L, nodes, name, holes_for_deck, king=None):
         L.shadow(pts, (3, 4), 3, 70)
         teak_deck(L, pts, strip=4.0, margin=3.5, sprung=0)
     elif mat in ("wood", "darkwood", "steps"):
-        color = {"wood": TEAK, "darkwood": TEAK_DARK, "steps": TEAK_LIGHT}[mat]
-        L.shadow(pts, (4, 5), 3, 80)
-        xs = [p[0] for p in pts]
-        ys = [p[1] for p in pts]
-        L.planks(pts, 8.0 if mat != "steps" else 9.0, color, horizontal=(max(xs) - min(xs)) >= (max(ys) - min(ys)))
-        L.ink(pts, 1.5)
+        color = {"wood": TEAK_DARK, "darkwood": (88, 74, 61), "steps": TEAK}[mat]
+        L.joinery(pts, color)
     elif mat in ("teal", "teal_dark"):
-        if alpha < 0.95:  # glass in a teal tint (sliding doors, windows)
-            L.fill(pts, SEAGLASS, 0.08, alpha=int(255 * alpha))
-            L.ink(pts, 1.1)
+        if alpha < 0.95:  # glass in a tint (sliding doors, windows)
+            L.fill(pts, SEAGLASS, 0.06, alpha=int(255 * max(alpha, 0.7)))
+            L.ink(pts, 1.0)
             return
         cushions(L, pts)
     elif mat == "berth":
@@ -210,31 +223,33 @@ def paint_shape(L, nodes, name, holes_for_deck, king=None):
         px = [x for o in pillows if o for x, _ in o]
         berth(L, pts, sum(px) / len(px) if px else None)
     elif mat == "fold":
-        L.fill(pts, (226, 230, 214), 0.04)
-        L.ink(pts, 0.9, alpha=150)
+        L.fill(pts, (214, 216, 210), 0.03)
+        L.ink(pts, 0.8, alpha=140)
     elif mat == "glass":
-        L.fill(pts, SEAGLASS if "Window" in name or "Portlight" in name else (170, 200, 204), 0.08, alpha=int(255 * max(alpha, 0.6)))
+        L.fill(pts, SEAGLASS if "Window" in name or "Portlight" in name else (120, 140, 148), 0.05, alpha=int(255 * max(alpha, 0.75)))
         xs = [p[0] for p in pts]
         ys = [p[1] for p in pts]
-        L.line((min(xs) + 3, min(ys) + 3), (min(xs) + (max(xs) - min(xs)) * 0.55, min(ys) + 3), 0.8, WHITE, 130)
-        L.ink(pts, 1.1)
+        # Sky reflected in the acrylic: a pale diagonal sheen.
+        L.line((min(xs) + 3, min(ys) + 3), (min(xs) + (max(xs) - min(xs)) * 0.5, min(ys) + 3), 0.7, (200, 214, 218), 120)
+        L.ink(pts, 1.4, STEEL_DARK, alpha=200, amp=0.0)
     elif mat in ("metal", "metal_dark", "metal_light"):
-        color = {"metal": (150, 156, 160), "metal_dark": (80, 84, 88), "metal_light": (200, 206, 210)}[mat]
-        L.piece(pts, color, 1.1, shade=False)
+        color = {"metal": STEEL, "metal_dark": STEEL_DARK, "metal_light": STEEL_LIGHT}[mat]
+        L.piece(pts, color, 1.0)
     elif mat == "interior":
-        L.fill(pts, (62, 52, 44), 0.08, alpha=int(255 * alpha))
-        L.ink(pts, 2.0, alpha=int(235 * alpha))
+        # The hull's inside: dark timber ceiling strips against the topsides.
+        L.fill(pts, (64, 56, 48), 0.05, alpha=int(255 * alpha))
+        L.ink(pts, 2.0, (40, 36, 32), alpha=int(235 * alpha), amp=0.0)
     elif mat == "cabin_sole":
         L.shadow(pts, (0, 0), 6, 120)
-        L.planks(pts, 15.0, HONEY, seam=(110, 84, 58), horizontal=True)
-        L.ink(pts, 1.6)
+        teak_sole(L, pts, strip=11.0, color=HONEY, holly_alpha=70)
+        L.grain(pts, (96, 78, 60), True, spacing=3.0, alpha=30)
     elif mat in ("tile", "tile_light"):
-        L.fill(pts, (196, 206, 204) if mat == "tile" else (214, 224, 222), 0.03)
-        L.hatch(pts, spacing=10.0, width=0.4, alpha=110, angle=0.0, color=(150, 160, 160))
-        L.hatch(pts, spacing=10.0, width=0.4, alpha=110, angle=90.0, color=(150, 160, 160))
-        L.ink(pts, 1.3)
+        # Galley worktop: solid-surface, pale grey.
+        L.fill(pts, (198, 200, 196) if mat == "tile" else (212, 214, 210), 0.02)
+        L.tone_edges(pts, (198, 200, 196), 2.0)
+        L.ink(pts, 1.1)
     elif mat == "stove":
-        L.piece(pts, (40, 42, 44), 0.9, shade=False, shadow=False)
+        L.piece(pts, (44, 48, 52), 0.9, shade=False, shadow=False)
     elif mat == "net":
         paint_net(L, pts)
     elif mat == "ink":
@@ -242,59 +257,65 @@ def paint_shape(L, nodes, name, holes_for_deck, king=None):
 
 
 def paint_net(L, pts):
-    """A trampoline or safety net: rope mesh over the water, a rope border."""
-    L.fill(pts, (40, 70, 78), 0.05, alpha=150)
-    L.hatch(pts, spacing=14.0, width=0.6, alpha=140, angle=0.0, color=ROPE)
-    L.hatch(pts, spacing=14.0, width=0.6, alpha=140, angle=90.0, color=ROPE)
-    L.ink(pts, 2.2, ROPE, alpha=230)
+    """A trampoline or safety net: dark mesh over the water, a rope border."""
+    L.fill(pts, (30, 44, 52), 0.04, alpha=170)
+    L.hatch(pts, spacing=7.0, width=0.45, alpha=120, angle=0.0, color=(120, 130, 132))
+    L.hatch(pts, spacing=7.0, width=0.45, alpha=120, angle=90.0, color=(120, 130, 132))
+    L.ink(pts, 2.0, (150, 154, 150), alpha=230, amp=0.0)
     L.ink(pts, 0.8, INK, alpha=160)
 
 
 def cushions(L, pts):
-    """A settee: a teak base with plump cushions along its length."""
+    """A settee: a timber base with fitted upholstery and piping."""
     xs = [p[0] for p in pts]
     ys = [p[1] for p in pts]
     x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
-    L.shadow(pts, (4, 6), 4, 90)
-    L.fill(pts, TEAK_DARK, 0.06)
-    L.ink(pts, 1.4)
+    L.joinery(pts, TEAK_DARK)
     along_x = (x1 - x0) >= (y1 - y0)
     length = (x1 - x0) if along_x else (y1 - y0)
-    count = max(1, int(round(length / 72.0)))
-    gap = 3.0
+    count = max(1, int(round(length / 80.0)))
+    gap = 1.5
     for i in range(count):
         if along_x:
             a = x0 + gap + i * (length - gap) / count
-            L.piece(L.rounded(a, y0 + 3, (length - gap) / count - gap, (y1 - y0) - 6, 8),
-                    CUSHION if i % 2 == 0 else (88, 140, 146), 1.2)
+            r = L.rounded(a, y0 + 2.5, (length - gap) / count - gap, (y1 - y0) - 5, 3)
         else:
             a = y0 + gap + i * (length - gap) / count
-            L.piece(L.rounded(x0 + 3, a, (x1 - x0) - 6, (length - gap) / count - gap, 8),
-                    CUSHION if i % 2 == 0 else (88, 140, 146), 1.2)
+            r = L.rounded(x0 + 2.5, a, (x1 - x0) - 5, (length - gap) / count - gap, 3)
+        L.shadow(r, (1.5, 2), 1.5, 70)
+        L.fill(r, CUSHION, 0.04, grain=30.0)
+        L.tone_edges(r, CUSHION, 2.2)
+        L.ink(r, 0.9, (46, 56, 64), alpha=220, amp=0.0)
 
 
 def berth(L, pts, pillow_x=None):
-    """A made-up berth: mattress and a blue check blanket over the part away
-    from the pillows."""
-    L.shadow(pts, (4, 6), 5, 90)
-    L.fill(pts, (226, 218, 196), 0.05)
-    L.ink(pts, 1.5)
+    """A made-up berth: a fitted mattress with a pale sheet and a folded
+    duvet in muted blue over the part away from the pillows."""
+    L.joinery(pts, TEAK_DARK)
     xs = [p[0] for p in pts]
     ys = [p[1] for p in pts]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    sx = 1 - 6 / max(1.0, max(xs) - min(xs))
+    sy = 1 - 6 / max(1.0, max(ys) - min(ys))
+    mattress = [(cx + (x - cx) * sx, cy + (y - cy) * sy) for x, y in pts]
+    L.fill(mattress, (214, 214, 208), 0.03)
+    L.tone_edges(mattress, (214, 214, 208), 2.5)
     x0, x1 = min(xs), max(xs)
     if pillow_x is not None and pillow_x < (x0 + x1) / 2:
-        a, b = x0 + (x1 - x0) * 0.38, x1 + 1  # pillows aft: the blanket forward
+        a, b = x0 + (x1 - x0) * 0.4, x1 + 1  # pillows aft: the duvet forward
     else:
-        a, b = x0 - 1, x0 + (x1 - x0) * 0.62
-    clip = Polygon(pts).intersection(Polygon([(a, min(ys) - 1), (b, min(ys) - 1), (b, max(ys) + 1), (a, max(ys) + 1)]))
-    blanket_end = b
+        a, b = x0 - 1, x0 + (x1 - x0) * 0.6
+    clip = Polygon(mattress).intersection(Polygon([(a, min(ys) - 1), (b, min(ys) - 1), (b, max(ys) + 1), (a, max(ys) + 1)]))
     if not clip.is_empty and clip.geom_type == "Polygon":
         bl = list(clip.exterior.coords)[:-1]
-        L.fill(bl, BLANKET, 0.08)
-        for k in range(1, 5):
-            y = min(ys) + (max(ys) - min(ys)) * k / 5
-            L.line((max(a, x0) + 3, y), (min(b, x1) - 3, y), 0.6, (220, 226, 230), 110, 0.2)
-        L.ink(bl, 1.2)
+        L.shadow(bl, (1, 2), 2, 60)
+        L.fill(bl, BLANKET, 0.05, grain=25.0)
+        L.tone_edges(bl, BLANKET, 3.0)
+        # A folded-back edge: a lighter band.
+        edge_x = a if pillow_x is not None and pillow_x < (x0 + x1) / 2 else b
+        L.line((edge_x, min(ys) + 4), (edge_x, max(ys) - 4), 2.0, (130, 142, 156), 200, 0.0)
+        L.ink(bl, 0.8, (60, 70, 82), alpha=200, amp=0.0)
+    L.ink(mattress, 0.8)
 
 
 def illustrate(vessel, area):
@@ -357,71 +378,106 @@ def _king_monohull(pts, roof_front):
 KING = {"petrel_36": _king_monohull, "arctic_wanderer_26": _king_monohull}
 
 
+def fender(L, x, y, length=26, width=13, horizontal=False):
+    """A white fender with its line, hung over the side."""
+    if horizontal:
+        L.line((x - length / 2 - 8, y), (x - length / 2, y), 0.6, ROPE, 220)
+        r = L.rounded(x - length / 2, y - width / 2, length, width, width / 2 - 0.5)
+    else:
+        L.line((x, y - length / 2 - 8), (x, y - length / 2), 0.6, ROPE, 220)
+        r = L.rounded(x - width / 2, y - length / 2, width, length, width / 2 - 0.5)
+    L.shadow(r, (2, 3), 2, 70)
+    L.fill(r, (226, 228, 224), 0.02)
+    L.tone_edges(r, (226, 228, 224), 3.0)
+    L.ink(r, 0.9)
+
+
+def winch_handle(L, x, y, angle=0.4):
+    c, s_ = math.cos(angle), math.sin(angle)
+    L.line((x, y), (x + 16 * c, y + 16 * s_), 1.6, (58, 62, 66), 255, 0.0)
+    L.circle((x + 16 * c, y + 16 * s_), 2.2, (40, 42, 44), 0.6, n=10, shadow=False)
+
+
+def grab_bag(L, x, y, w=22, h=14):
+    """The orange grab bag every passage-maker keeps by the companionway."""
+    r = L.rounded(x, y, w, h, 3)
+    L.piece(r, (196, 104, 52), 0.9)
+    L.line((x + 3, y + h / 2), (x + w - 3, y + h / 2), 0.6, (60, 62, 64), 160, 0.0)
+
+
+def mug(L, x, y, color=(222, 222, 216)):
+    L.circle((x, y), 4.2, color, 0.8, n=14)
+    L.circle((x, y), 2.8, (70, 56, 44), 0.0, n=12, shadow=False)
+
+
+def book_row(L, x, y, n=4, vertical=False):
+    colors = ((96, 108, 120), (132, 120, 98), (80, 92, 84), (150, 146, 136), (108, 82, 74))
+    for i in range(n):
+        if vertical:
+            L.piece(L.rect(x, y + i * 7, 12, 6), colors[i % len(colors)], 0.6, shadow=False)
+        else:
+            L.piece(L.rect(x + i * 7, y, 6, 12), colors[i % len(colors)], 0.6, shadow=False)
+
+
 def _halcyon_deck(L):
-    # Lines coiled by the winches, cushions in the cockpit, a fender basket.
+    # Sheets coiled by the winches, cockpit cushions, fenders ready on the side.
     L.coil((-252, -112), 10)
-    L.coil((-252, 112), 10, color=(196, 116, 92))
-    L.piece(L.rounded(-380, -100, 22, 60, 6), CUSHION, 1.1)
-    L.piece(L.rounded(-380, 30, 22, 60, 6), (192, 112, 84), 1.1)
-    L.circle((-330, 104), 6, (196, 120, 70), 0.9, n=14)        # a bucket
+    L.coil((-252, 112), 10, color=(160, 166, 172))
+    winch_handle(L, -262, -96)
+    for y in (-100, 30):
+        r = L.rounded(-380, y, 22, 60, 3)
+        L.piece(r, CUSHION, 0.9)
+    grab_bag(L, -330, 96)
     for x in (-300, -40, 220):                                   # fenders, harbour side
-        L.line((x, 276), (x, 286), 0.7, ROPE, 220)
-        L.piece(L.rounded(x - 7, 284, 14, 26, 6), (238, 236, 228), 1.2)
+        fender(L, x, 297)
 
 
 def _halcyon_roof(L):
-    L.piece(L.rounded(-60, -150, 40, 26, 5), (110, 140, 96), 1.0)  # herb box
-    for (x, y) in ((-50, -141), (-38, -134), (-28, -143)):
-        L.circle((x, y), 4, (96, 140, 80), 0.6, n=10, shadow=False)
+    # A sail bag lashed on the coachroof and a halyard coil at the mast.
+    bag = L.rounded(-70, -152, 70, 22, 8)
+    L.piece(bag, CANVAS_GREY, 1.0)
+    L.line((-50, -152), (-50, -130), 0.6, ROPE, 200, 0.0)
+    L.line((-20, -152), (-20, -130), 0.6, ROPE, 200, 0.0)
     L.coil((60, 120), 12)
 
 
 def _halcyon_details(L):
-    # Books, a mug, a plant and a rug: the saloon is the heart of the boat.
-    for i, color in enumerate(((160, 72, 60), (70, 104, 130), (200, 160, 80), (90, 120, 90))):
-        L.piece(L.rect(-232 + i * 9, -298, 8, 14), color, 0.8, shadow=False)
-    L.circle((-30, 60), 9, (210, 120, 90), 1.2)
-    L.circle((-70, 80), 5, WHITE, 1.0, n=14)
-    L.circle((-10, 84), 5, (130, 170, 176), 1.0, n=14)
-    L.circle((40, -40), 9, (150, 110, 80), 1.1, n=16)
-    for a in range(0, 360, 60):
-        r = math.radians(a)
-        L.circle((40 + 7 * math.cos(r), -40 + 7 * math.sin(r)), 4, (96, 140, 80), 0.6, n=10, shadow=False)
-    rug = [(30 + 38 * math.cos(a), 20 + 22 * math.sin(a)) for a in [i * math.pi / 20 for i in range(40)]]
-    L.fill(rug, (176, 112, 92), 0.08, alpha=200)
-    L.ink(rug, 0.9)
-    L.circle((-330, -280), 6, OCHRE, 1.0, n=14)                    # reading lamp
+    # The saloon of a well-run cruising boat: pilot books, mugs, binoculars, a lamp.
+    book_row(L, -232, -298, 5)
+    L.circle((-30, 60), 8, STEEL, 1.0)                              # kettle
+    L.line((-24, 54), (-18, 50), 1.0, STEEL_DARK, 220, 0.0)
+    mug(L, -70, 80)
+    mug(L, -10, 84, (96, 110, 124))
+    L.piece(L.rounded(30, -48, 24, 14, 4), (50, 54, 58), 0.8)      # binoculars
+    L.piece(L.rect(-46, 10, 26, 18), (226, 226, 216), 0.7, shadow=False)  # a chart folded on the table
+    L.circle((-330, -280), 5, (208, 196, 160), 0.9, n=14)           # reading lamp
 
 
 def _petrel_deck(L):
     L.coil((-182, -48), 9)
-    L.coil((-182, 48), 9, color=(196, 116, 92))
-    L.piece(L.rounded(-360, -84, 50, 18, 6), CUSHION, 1.1)
+    L.coil((-182, 48), 9, color=(160, 166, 172))
+    winch_handle(L, -190, -36)
+    L.piece(L.rounded(-360, -84, 50, 18, 3), CUSHION, 0.9)
     for x in (-250, 60):                                          # fenders on the starboard float
-        L.line((x, 268), (x, 278), 0.7, ROPE, 220)
-        L.piece(L.rounded(x - 7, 276, 14, 24, 6), (238, 236, 228), 1.2)
+        fender(L, x, 288)
 
 
 def _petrel_details(L):
-    L.circle((-10, -4), 8, (210, 120, 90), 1.2)                    # teapot on the table
-    L.circle((24, 6), 4.5, WHITE, 1.0, n=14)
-    for i, color in enumerate(((160, 72, 60), (70, 104, 130), (200, 160, 80))):
-        L.piece(L.rect(140 + i * 9, 84, 8, 13), color, 0.8, shadow=False)
-    L.circle((120, -60), 8, (150, 110, 80), 1.1, n=16)
-    for a in range(0, 360, 60):
-        r = math.radians(a)
-        L.circle((120 + 6 * math.cos(r), -60 + 6 * math.sin(r)), 3.5, (96, 140, 80), 0.6, n=10, shadow=False)
-    L.circle((250, -38), 5, OCHRE, 1.0, n=14)
+    L.circle((-10, -4), 7, STEEL, 1.0)                            # kettle on the table
+    mug(L, 24, 6)
+    book_row(L, 140, 84, 3)
+    L.piece(L.rounded(112, -66, 22, 12, 4), (50, 54, 58), 0.8)     # binoculars
+    L.circle((250, -38), 4.5, (208, 196, 160), 0.9, n=14)
 
 
 def _wanderer_deck(L):
+    # A small, practical boat: tiller, a couple of coiled sheets, a bucket, fenders.
     L.coil((-215, -52), 8)
-    L.coil((-215, 52), 8, color=(196, 116, 92))
-    L.piece(L.rounded(-330, -64, 40, 16, 5), CUSHION, 1.0)
-    L.circle((-318, 38), 5, (196, 120, 70), 0.9, n=14)             # a bucket
+    L.coil((-215, 52), 8, color=(160, 166, 172))
+    winch_handle(L, -222, -40)
+    L.circle((-318, 38), 5, (86, 98, 108), 0.8, n=14)             # a bucket
     for x in (-220, 40):
-        L.line((x, 126), (x, 136), 0.7, ROPE, 220)
-        L.piece(L.rounded(x - 6, 134, 12, 22, 5), (238, 236, 228), 1.1)
+        fender(L, x, 145, 22, 12)
 
 
 def _wanderer_roof(L):
@@ -429,11 +485,11 @@ def _wanderer_roof(L):
 
 
 def _wanderer_details(L):
-    L.circle((26, -4), 7, (210, 120, 90), 1.1)                     # kettle on the little table
-    L.circle((54, 6), 4, WHITE, 1.0, n=12)
-    for i, color in enumerate(((160, 72, 60), (70, 104, 130), (200, 160, 80))):
-        L.piece(L.rect(146 + i * 7, 87, 6, 12), color, 0.8, shadow=False)  # books on the shelf
-    L.piece(L.rounded(-170, -64, 9, 18, 3), (196, 160, 110), 0.8, shadow=False)  # tea towel
+    L.circle((26, -4), 6, STEEL, 0.9)                              # kettle on the little table
+    mug(L, 54, 6)
+    book_row(L, 146, 87, 3)                                         # pilot books on the shelf
+    L.piece(L.rounded(-170, -64, 8, 16, 2), (150, 156, 150), 0.6, shadow=False)  # tea towel
+    L.piece(L.rounded(90, -20, 7, 16, 2), (40, 44, 48), 0.6, shadow=False)        # handheld VHF
 
 
 EXTRAS = {

@@ -5,14 +5,14 @@ extends RefCounted
 ## slightly uneven dark ink line so it sits with the hand-drawn look. Used
 ## wherever HatArt has no image for a slot.
 
-const INK := Color("#1d1a17")
-const CROWN := Color("#f3ede0")
-const CROWN_SHADE := Color("#d9d0bd")
-const BAND := Color("#22344a")
-const PEAK := Color("#141b22")
-const PEAK_SHINE := Color("#4a5866")
-const BADGE := Color("#c79f3f")
-const SHADOW := Color(0, 0, 0, 0.22)
+const INK := Color(0.11, 0.13, 0.15, 0.7)
+const CROWN := Color("#E6E7E1")
+const CROWN_SHADE := Color("#B9BCB6")
+const BAND := Color("#1F2B38")
+const PEAK := Color("#14191E")
+const PEAK_SHINE := Color("#56626C")
+const BADGE := Color("#B39858")
+const SHADOW := Color(0.02, 0.04, 0.05, 0.28)
 
 
 ## Draws the hat centred at `center` with crown radius `radius`, the peak
@@ -56,7 +56,7 @@ static func _blob(center: Vector2, radius: float, angle: float, seed: int) -> Pa
 	var count := 28
 	for i in count:
 		var t := TAU * i / count
-		var wobble := 1.0 + 0.035 * sin(t * 3.0 + seed) + 0.025 * sin(t * 5.0 + seed * 1.7)
+		var wobble := 1.0 + 0.012 * sin(t * 3.0 + seed) + 0.008 * sin(t * 5.0 + seed * 1.7)
 		points.append(center + Vector2.from_angle(t + angle) * radius * wobble)
 	return points
 

@@ -47,16 +47,18 @@ const WAVELETS := 34
 ## Seconds between two looks at the wind (it changes slowly).
 const WIND_REFRESH := 0.5
 
-const CREST := Color(0.80, 0.91, 0.92, 0.55)
-const CREST_DARK := Color(0.04, 0.16, 0.2, 0.35)
-const FOAM := Color(0.95, 0.97, 0.95, 0.75)
-const GLINT := Color(1.0, 0.98, 0.88, 0.55)
-const SEAWEED := Color("#4f6b3a")
-const LEAF_COLOURS := [Color("#c98a3c"), Color("#a5552f"), Color("#8f9a3e")]
-const PAPER := Color("#ece6d6")
-const DRIFTWOOD := Color("#7a5a3c")
-const DRIFTWOOD_GRAIN := Color("#4e3826")
-const FEATHER := Color("#f1ece0")
+# Real Horizon: the sea surface itself (SeaSurface) carries the waves; these
+# strokes are restrained accents on it, in the natural palette.
+const CREST := Color(0.78, 0.85, 0.86, 0.32)
+const CREST_DARK := Color(0.07, 0.15, 0.18, 0.22)
+const FOAM := Color(0.90, 0.93, 0.92, 0.6)
+const GLINT := Color(0.97, 0.98, 0.96, 0.4)
+const SEAWEED := Color("#4a5a3c")
+const LEAF_COLOURS := [Color("#8a6a45"), Color("#6f5a3c"), Color("#77784a")]
+const PAPER := Color("#d6d6cf")
+const DRIFTWOOD := Color("#7b7266")
+const DRIFTWOOD_GRAIN := Color("#4f4a43")
+const FEATHER := Color("#e3e3dc")
 
 var _area: BoatArea
 var _rng := RandomNumberGenerator.new()
@@ -468,8 +470,8 @@ func _draw_waves() -> void:
 		var w := _waves[i]
 		var pulse := 0.5 + 0.5 * sin(_time * (1.0 + energy) * w.speed + w.phase)
 		var length: float = w.len * (0.8 + energy * 0.7)
-		_arc(w.p, length, across, Color(CREST, 0.18 + 0.3 * pulse * (0.4 + energy)), 1.4 + energy * 1.4, 0.3 + 0.2 * energy)
-		_arc(w.p - _wind_dir * 3.0, length * 0.9, across, Color(CREST_DARK, 0.25 * (0.4 + energy)), 1.2, 0.25)
+		_arc(w.p, length, across, Color(CREST, (0.1 + 0.18 * pulse) * (0.4 + energy * 0.5)), 1.2 + energy * 0.6, 0.12 + 0.08 * energy)
+		_arc(w.p - _wind_dir * 3.0, length * 0.9, across, Color(CREST_DARK, 0.18 * (0.4 + energy * 0.5)), 1.0, 0.1)
 		if _wind_kn >= 20.0 and i % 3 == 0:
 			draw_circle(w.p + _wind_dir * 1.5, 1.5 + energy * 1.5, Color(FOAM, 0.4 * pulse))
 	for d in _sea_drifters:

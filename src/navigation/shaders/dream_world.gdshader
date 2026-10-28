@@ -12,14 +12,14 @@ uniform vec4 land_src : source_color;
 uniform vec4 islet_src : source_color;
 uniform vec4 coast_src : source_color;
 uniform vec4 water_src : source_color;
-uniform vec4 green : source_color = vec4(0.47, 0.62, 0.40, 1.0);
-uniform vec4 green_dark : source_color = vec4(0.36, 0.52, 0.33, 1.0);
-uniform vec4 snow : source_color = vec4(0.93, 0.94, 0.95, 1.0);
-uniform vec4 sand : source_color = vec4(0.74, 0.65, 0.48, 1.0);
+uniform vec4 green : source_color = vec4(0.44, 0.50, 0.39, 1.0);
+uniform vec4 green_dark : source_color = vec4(0.35, 0.42, 0.32, 1.0);
+uniform vec4 snow : source_color = vec4(0.86, 0.88, 0.89, 1.0);
+uniform vec4 sand : source_color = vec4(0.66, 0.60, 0.48, 1.0);
 uniform vec4 coast_green : source_color = vec4(0.25, 0.36, 0.24, 1.0);
 uniform vec4 coast_sand : source_color = vec4(0.52, 0.42, 0.28, 1.0);
 uniform vec4 coast_snow : source_color = vec4(0.62, 0.66, 0.70, 1.0);
-uniform vec4 deep_sea : source_color = vec4(0.07, 0.20, 0.30, 1.0);
+uniform vec4 deep_sea : source_color = vec4(0.12, 0.21, 0.26, 1.0);
 
 varying vec2 local_pos;
 

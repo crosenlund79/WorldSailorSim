@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" path="res://assets/branding/little_captains_hat_logo.svg" id="2_logo"]
+[ext_resource type="Texture2D" path="res://assets/ui/title_scene.png" id="3_scene"]
 
 [sub_resource type="Gradient" id="Gradient_sky"]
 offsets = PackedFloat32Array(0, 0.62, 0.6201, 1)
@@ -16,7 +17,7 @@ fill_to = Vector2(0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
 font_size = 18
-font_color = Color(0.651, 0.769, 0.788, 0.75)
+font_color = Color(0.86, 0.9, 0.9, 0.7)
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource("1_menu")
@@ -36,8 +37,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_sky")
+texture = ExtResource("3_scene")
 expand_mode = 1
+stretch_mode = 6
 
 [node name="Horizon" type="ColorRect" parent="Root"]
 layout_mode = 1
@@ -47,6 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 0.62
 offset_bottom = 2.0
 grow_horizontal = 2
+visible = false
 color = Color(0.651, 0.769, 0.788, 0.18)
 
 [node name="Center" type="CenterContainer" parent="Root"]
@@ -62,7 +65,7 @@ layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="Logo" type="TextureRect" parent="Root/Center/Column"]
-custom_minimum_size = Vector2(600, 280)
+custom_minimum_size = Vector2(620, 150)
 layout_mode = 2
 texture = ExtResource("2_logo")
 expand_mode = 1
@@ -139,7 +142,7 @@ offset_top = -52.0
 offset_right = 900.0
 offset_bottom = -24.0
 grow_vertical = 0
-text = "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Patrick Hand (SIL OFL)"
+text = "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Barlow Condensed, Patrick Hand (SIL OFL)"
 label_settings = SubResource("LabelSettings_hint")
 
 [node name="DevGuidesButton" type="Button" parent="Root"]
