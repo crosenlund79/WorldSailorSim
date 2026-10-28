@@ -662,8 +662,9 @@ Two; the wording was again not found in the repository in Iteration 18.
   few kind gestures and it follows, and at the companionway the Captain
   adopts it (name, gender) or lets it go home with a little girl; up to two
   companions with their own identities, places, pair moments and a combined
-  morning line; the laptop records where each came aboard; cabins, cabin
-  windows on every boat, the water outside, harbour houses and neighbouring
-  boats made more believable. See `docs/iterations/i025/ITERATION_25_REPORT.md`.
+  morning line; the laptop records where each came aboard; cabins, framed
+  glass windows on every boat (no live view outside, by the Captain's
+  revision), the faded water outside the hull, harbour houses and
+  neighbouring boats made more believable. See `docs/iterations/i025/ITERATION_25_REPORT.md`.
   Branches `iteration/i025` (from `cfc9b52`) and recovery branch `release/i025`.
 - **Next numbered major iteration: I026** (not yet commissioned).

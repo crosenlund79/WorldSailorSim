@@ -53,9 +53,10 @@ acceptance. The build label in the bottom-right corner should read
 1. Each cabin (Arctic Wanderer 26, Starling 33, Petrel 36, Halcyon 40):
    proportions, joinery, berths and lighting; the laptop, galley and berth
    still work.
-2. Cabin windows on every boat show the outside world (harbour by day and
-   night, open sea), port and starboard different, nothing bleeding through
-   the hull.
+2. Cabin windows on every boat: framed plain glass (no view of the world
+   outside, by the Captain's revision), lighter by day, dark with a faint
+   lamp glint at night, nothing bleeding through the hull, never over the
+   furniture.
 3. The faded water outside the cabin never looks like a transparent hull.
 4. Harbour houses: believable scale and regional character (Nordic,
    Mediterranean, Atlantic, tropical), no oversized buildings.

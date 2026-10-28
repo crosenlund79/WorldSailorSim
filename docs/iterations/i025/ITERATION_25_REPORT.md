@@ -157,15 +157,28 @@ saloon windows forward, wet heads with a teak grating, an L-settee and a
 bunk with a bunk board. Walkable areas, collision, stations, spawn points,
 companion spots and the laptop table are unchanged.
 
-### Windows on every boat (item 15)
+### Windows on every boat (item 15, revised by the Captain)
 
-Every cabin has windows now, each in a framed recess painted into the wall;
-they can look to either side and (the Clam 40) forward. Port and starboard
-look out on opposite bearings, the scenery stays inside each opening (no
-bleed through the hull) and the windows sit under the furniture. Moored, the
-water in them is calmer. Data in `data/vessels/cabin_windows.json`.
+Every cabin has windows now, each in a framed recess painted into the wall:
+portlights in the hull sides and, on the Clam 40, four saloon windows
+forward; they sit under the furniture. Data in
+`data/vessels/cabin_windows.json`.
 
-### The water outside the cabin (item 16)
+During the iteration the windows first showed a live view of the world
+outside (sky, sun, stars, the harbour's picture, sea crests, rain, turning
+with the heading and with where the Captain stood). **The Captain then
+changed his mind**, and the windows are now plain glass: smoked acrylic,
+lighter at the outer edge where the daylight comes in, a soft reflection,
+dark glass with a faint warm glint of the cabin lamps at night, dimmed with
+the cabin by its own lighting. The panorama code was removed, not hidden:
+nothing of the sea, harbour, other boats or weather is drawn through the
+windows, nothing is redrawn as the Captain walks (it was redrawn on every
+move before), and the glass reads the daylight once every 20 seconds. One
+redraw of all six Wing 33 windows costs about 0.1 ms of CPU (the live view's
+guide figure was about 0.35 ms). The faded sea round the hull, below, is a
+separate treatment and stays.
+
+### The water outside the cabin (item 16, kept)
 
 The black void around the hull is gone: the deck's own sea (so wind,
 weather, harbour shelter and the boat's speed all match) is drawn under a
