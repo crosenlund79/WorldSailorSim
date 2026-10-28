@@ -22,7 +22,7 @@ var _wave_left := 0.0
 
 
 func _ready() -> void:
-	z_index = 5
+	z_index = 4  # under the animals (5): the conure sits on her shoulder
 
 
 func walk_to(target: Vector2) -> void:
