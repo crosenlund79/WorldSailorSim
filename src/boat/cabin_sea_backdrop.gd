@@ -17,9 +17,13 @@ extends Node2D
 ## outside the hull (and between a catamaran's hulls or round a trimaran's
 ## floats). Cabin lamps do not light it (light_mask 0).
 ##
-## Cost: one shader polygon (the deck's sea, cut to the area the fade
-## reaches), one small vertex-coloured mesh for the veil, one rectangle for
-## the pontoon; the veil's colour is updated every REFRESH_SECONDS.
+## Cost: one shader mesh (the deck's sea, reaching only as far as the fade
+## and leaving out the cabin sole, which the opaque cabin art covers), one
+## small vertex-coloured mesh for the veil, one rectangle for the pontoon; the
+## veil is rebuilt only when the light changes (checked every
+## REFRESH_SECONDS). Measured on the software renderer (llvmpipe, 1600x900,
+## Wing 33 cabin): about +40 ms a frame with the whole rectangle shaded,
+## see the report in docs for the cut mesh.
 ##
 ## BoatArea adds it with one call: CabinSeaBackdrop.attach(self).
 
@@ -46,7 +50,9 @@ const PONTOON := Color(0.42, 0.39, 0.35, 0.5)
 var area: BoatArea
 ## The boat's half size (scene units) the rings are measured from.
 var half_size := Vector2(500, 170)
+## SeaSurface's carrier polygon (hidden) and the mesh the sea is drawn on.
 var sea: Polygon2D
+var sea_mesh: MeshInstance2D
 var surface: SeaSurface
 var veil: MeshInstance2D
 var pontoon: Polygon2D
@@ -105,19 +111,23 @@ func setup(boat_area: BoatArea) -> void:
 	var visual := area.get_node_or_null(^"Visual") as VesselVisual
 	if visual and visual.canvas.size != Vector2.ZERO:
 		half_size = visual.canvas.size * 0.5 * 0.92
-	# The sea, cut to where the veil still lets it through.
+	# The sea: SeaSurface drives the deck's sea shader on a (hidden) carrier
+	# polygon; the shader is drawn on a mesh that reaches as far as the veil
+	# lets the sea through and leaves out the cabin sole, which the opaque
+	# cabin art always covers (no shading of pixels nobody sees).
 	sea = Polygon2D.new()
-	sea.name = "Sea"
-	sea.light_mask = 0
+	sea.name = "SeaCarrier"
+	sea.visible = false
 	add_child(sea)
 	surface = SeaSurface.new()
 	add_child(surface)
 	surface.setup(area, sea)
-	var outline := PackedVector2Array()
-	for i in SEGMENTS:
-		outline.append(ring_point(half_size, RINGS[RINGS.size() - 1] + 0.05, TAU * float(i) / float(SEGMENTS)))
-	sea.polygon = outline
-	sea.color = Color.WHITE
+	sea_mesh = MeshInstance2D.new()
+	sea_mesh.name = "Sea"
+	sea_mesh.light_mask = 0
+	sea_mesh.material = surface.material
+	sea_mesh.mesh = _sea_mesh(half_size * (RINGS[RINGS.size() - 1] + 0.05), _sole_outline())
+	add_child(sea_mesh)
 	# The berth's pontoon, very faint, under the veil.
 	pontoon = Polygon2D.new()
 	pontoon.name = "Pontoon"
@@ -160,6 +170,52 @@ func _refresh() -> void:
 	if absf(day - _veil_day) > 0.01:
 		_veil_day = day
 		veil.mesh = _veil_mesh(day)
+
+
+## The cabin sole (the walkable floor, Layout/Collision/Hull) in this node's
+## coordinates, a little inset; empty when the cabin has none.
+func _sole_outline() -> PackedVector2Array:
+	var hull := area.get_node_or_null(^"Layout/Collision/Hull")
+	if hull == null:
+		return PackedVector2Array()
+	for child in hull.get_children():
+		if child is CollisionPolygon2D and (child as CollisionPolygon2D).polygon.size() >= 3:
+			var into := get_global_transform().affine_inverse() * (child as CollisionPolygon2D).get_global_transform()
+			var inset := Geometry2D.offset_polygon(into * (child as CollisionPolygon2D).polygon, -2.0)
+			return inset[0] if inset.size() == 1 else PackedVector2Array()
+	return PackedVector2Array()
+
+
+## The sea's area: the rectangle of half size `half` without `hole`, built
+## from vertical strips (each wide hole crosses its strips, so no strip is
+## left with a hole inside it) and triangulated.
+static func _sea_mesh(half: Vector2, hole: PackedVector2Array) -> ArrayMesh:
+	var points := PackedVector2Array()
+	var indices := PackedInt32Array()
+	var strips := 16
+	for k in strips:
+		var x0 := -half.x + 2.0 * half.x * float(k) / float(strips)
+		var x1 := -half.x + 2.0 * half.x * float(k + 1) / float(strips)
+		var strip := PackedVector2Array([Vector2(x0, -half.y), Vector2(x1, -half.y), Vector2(x1, half.y), Vector2(x0, half.y)])
+		var pieces: Array[PackedVector2Array] = [strip]
+		if hole.size() >= 3:
+			var cut := Geometry2D.clip_polygons(strip, hole)
+			var has_hole := cut.any(func(p: PackedVector2Array) -> bool: return Geometry2D.is_polygon_clockwise(p))
+			pieces = [strip] if has_hole else cut
+		for piece in pieces:
+			var tris := Geometry2D.triangulate_polygon(piece)
+			var base := points.size()
+			points.append_array(piece)
+			for i in tris:
+				indices.append(base + i)
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	if not indices.is_empty():
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
 
 
 ## How much of the sea shows at ring `i` for the light `light` (0 night .. 1 day).

@@ -221,9 +221,19 @@ func _test_sea_backdrop(area: BoatArea, vessel: StringName) -> void:
 	t.check(sea.show_at(0, 1.0) < 0.6 and sea.show_at(0, 1.0) > 0.2 and sea.show_at(CabinSeaBackdrop.RINGS.size() - 1, 1.0) == 0.0,
 		"[sea] faded: at most %.0f%% of the sea shows by the hull, none at the edge of the fade" % [sea.show_at(0, 1.0) * 100.0])
 	t.check(sea.show_at(0, 0.0) < sea.show_at(0, 1.0), "[sea] darker at night than by day")
-	t.check(sea.sea.light_mask == 0 and sea.veil.light_mask == 0, "[sea] the cabin lamps do not light the water outside")
-	t.check(sea.sea.material is ShaderMaterial and sea.sea.polygon.size() <= CabinSeaBackdrop.SEGMENTS,
-		"[sea] one shader polygon, the deck's sea (%d points)" % sea.sea.polygon.size())
+	t.check(sea.sea_mesh.light_mask == 0 and sea.veil.light_mask == 0, "[sea] the cabin lamps do not light the water outside")
+	t.check(sea.sea_mesh.material is ShaderMaterial and sea.sea_mesh.material == sea.surface.material and not sea.sea.visible,
+		"[sea] one shader mesh with the deck's own sea (SeaSurface)")
+	var walk: Vector2 = area.player.position
+	var covered := false
+	var arrays := sea.sea_mesh.mesh.surface_get_arrays(0)
+	var a: PackedVector2Array = arrays[Mesh.ARRAY_VERTEX]
+	var idx: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+	for i in range(0, idx.size(), 3):
+		if Geometry2D.point_is_inside_triangle(walk, a[idx[i]], a[idx[i + 1]], a[idx[i + 2]]):
+			covered = true
+			break
+	t.check(not covered, "[sea] the sea is not shaded under the cabin floor where the captain stands (%s)" % walk)
 	t.check(sea.pontoon.visible == (not GameSession.is_underway() and not GameSession.is_anchored()),
 		"[sea] the pontoon is hinted only while moored")
 	await t.frames(2)
