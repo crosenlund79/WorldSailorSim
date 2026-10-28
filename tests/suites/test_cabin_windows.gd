@@ -1,13 +1,20 @@
 extends RefCounted
-## I022, the world beyond the windows and softer water: the Starling 33's
-## cabin windows sit in its wall art only, change with where the captain
-## stands, which side they face, the heading, the place, the hour and the
-## weather; the classic art has none; the other cabins are untouched; the
-## water's translucency and the glass tint are separate settings; and what it
-## costs to draw. Screenshots: two viewpoints, dusk, night, underway, and the
-## deck's water before and after.
+## I022, the world beyond the windows and softer water: the cabin windows sit
+## in the wall art only, change with where the captain stands, which side they
+## face, the heading, the place, the hour and the weather; the classic art has
+## none; the water's translucency and the glass tint are separate settings;
+## and what it costs to draw. I025: every boat's cabin has windows (portlights,
+## the catamaran's forward saloon windows), and the faded sea outside the hull
+## (CabinSeaBackdrop) lies under the whole cabin. Screenshots: two
+## viewpoints, dusk, night, underway, each boat's cabin, and the deck's water
+## before and after.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
+## Each cabin's art canvas (VesselVisual.canvas, DEV_GUIDES/VESSEL_ART.md).
+const CANVASES := {
+	&"arctic_wanderer_26": Rect2(-440, -160, 880, 320), &"starling_33": Rect2(-560, -200, 1120, 400),
+	&"halcyon_40": Rect2(-560, -330, 1120, 660), &"petrel_36": Rect2(-600, -320, 1200, 640),
+}
 
 var t: Node
 var app: Node
@@ -55,26 +62,35 @@ func _aboard(vessel: StringName, area: StringName, hour_utc := 8.0, underway := 
 
 
 ## Every opening lies on the illustrated wall: its corners are wall paint,
-## never floor or the space outside the hull.
+## never floor or the space outside the hull, on every boat (I025).
 func _test_data_in_the_walls() -> void:
 	var windows := CabinWindows.windows_for(&"starling_33")
 	t.check(windows.size() == 6 and windows.filter(func(w: Dictionary) -> bool: return w.side == "port").size() == 3,
 		"[windows] the Starling 33 has three windows each side")
-	var image := Image.load_from_file("res://assets/vessels/starling_33/illustrated/cabin/cabin_base.png")
-	var canvas := Rect2(-560, -200, 1120, 400)
-	var scale := Vector2(image.get_width(), image.get_height()) / canvas.size
-	var bad: Array[String] = []
-	for w in windows:
-		var along := Vector2.RIGHT.rotated(deg_to_rad(w.angle))
-		var across := along.orthogonal()
-		for corner in [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]:
-			var p: Vector2 = w.at + along * corner.x * (w.length * 0.5 + 1.5) + across * corner.y * (w.thickness * 0.5 + 1.5)
-			var pixel := image.get_pixelv(Vector2i(((p - canvas.position) * scale).floor()))
-			if pixel.a < 0.9 or pixel.r > 0.35:
-				bad.append("%s %s" % [w.at, p])
-	t.check(bad.is_empty(), "[windows] every opening (with its frame) lies inside the wall paint: nothing shows through floor or hull (%s)" % [bad])
-	t.check(CabinWindows.windows_for(&"arctic_wanderer_26").is_empty() and CabinWindows.windows_for(&"halcyon_40").is_empty(),
-		"[windows] the other cabins are left as they are (proof of concept on one cabin)")
+	for vessel: StringName in CANVASES:
+		var list := CabinWindows.windows_for(vessel)
+		var port := list.filter(func(w: Dictionary) -> bool: return w.side == "port").size()
+		var starboard := list.filter(func(w: Dictionary) -> bool: return w.side == "starboard").size()
+		t.check(port >= 2 and starboard >= 2, "[windows] %s has windows on both sides (%d port, %d starboard)" % [vessel, port, starboard])
+		var image := Image.load_from_file("res://assets/vessels/%s/illustrated/cabin/cabin_base.png" % vessel)
+		var canvas: Rect2 = CANVASES[vessel]
+		var scale := Vector2(image.get_width(), image.get_height()) / canvas.size
+		var bad: Array[String] = []
+		for w in list:
+			var frame := CabinWindows.axes(w)
+			var along: Vector2 = frame.right
+			var across: Vector2 = frame.outward
+			for corner in [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]:
+				var p: Vector2 = w.at + along * corner.x * (w.length * 0.5 + 1.5) + across * corner.y * (w.thickness * 0.5 + 1.5)
+				var pixel := image.get_pixelv(Vector2i(((p - canvas.position) * scale).floor()))
+				if pixel.a < 0.9 or pixel.r > 0.35:
+					bad.append("%s %s" % [w.at, p])
+		t.check(bad.is_empty(), "[windows] %s: every opening (with its frame) lies inside the wall paint: nothing shows through floor or hull (%s)" % [vessel, bad])
+	var forward := CabinWindows.windows_for(&"halcyon_40").filter(func(w: Dictionary) -> bool: return w.side == "forward")
+	t.check(forward.size() == 4, "[windows] the Clam 40's saloon has its four big windows looking forward")
+	if forward.size() > 0:
+		var frame := CabinWindows.axes(forward[0])
+		t.check((frame.outward as Vector2).is_equal_approx(Vector2.RIGHT), "[windows] a forward window looks out over the bow")
 
 
 func _test_water_look() -> void:
@@ -161,12 +177,60 @@ func _test_in_the_cabin() -> void:
 	t.check(windows.visible, "[windows] back with the illustrated art")
 
 
+## I025: every cabin has its windows and the faded sea round the hull.
 func _test_other_cabins() -> void:
 	for vessel: StringName in [&"arctic_wanderer_26", &"petrel_36", &"halcyon_40"]:
 		await _aboard(vessel, &"interior")
 		var area := app.router.current_screen as BoatArea
-		t.check(area != null and area.get_cabin_windows() == null and area.player != null,
-			"[windows] %s: cabin unchanged, no windows node" % vessel)
+		var windows := area.get_cabin_windows() if area else null
+		if not t.check(windows != null and windows.visible and area.player != null, "[windows] %s: the cabin has its windows" % vessel):
+			continue
+		var visual := area.get_node("Visual")
+		t.check(windows.get_index() == visual.get_node("CabinBase").get_index() + 1 and windows.get_index() < visual.get_node("FurnitureVisual").get_index(),
+			"[windows] %s: drawn right over the wall art and under the furniture" % vessel)
+		var port: Dictionary = windows.windows.filter(func(w: Dictionary) -> bool: return w.side == "port")[0]
+		var starboard: Dictionary = windows.windows.filter(func(w: Dictionary) -> bool: return w.side == "starboard")[0]
+		var a := windows.view_of(port, Vector2(port.at.x, 0))
+		var b := windows.view_of(starboard, Vector2(starboard.at.x, 0))
+		t.check(absf(CabinWindows._angle_diff(a.centre, b.centre)) > 150.0,
+			"[view] %s: port and starboard look out on opposite bearings (%.0f° / %.0f°)" % [vessel, a.centre, b.centre])
+		await _test_sea_backdrop(area, vessel)
+		await t.screenshot("i025_cabin_%s" % vessel)
+	await _aboard(&"halcyon_40", &"interior", 9.0, true)
+	var screen := app.router.current_screen as BoatArea
+	var ahead: Dictionary = screen.get_cabin_windows().windows[0]
+	var seen := screen.get_cabin_windows().view_of(ahead, Vector2(0, ahead.at.y))
+	t.check(absf(CabinWindows._angle_diff(seen.centre, Simulation.get_current_heading())) < 1.0,
+		"[view] underway, the Clam 40's saloon windows look out ahead (%.0f°, heading %.0f°)" % [seen.centre, Simulation.get_current_heading()])
+	await _test_sea_backdrop(screen, &"halcyon_40")
+	await t.screenshot("i025_cabin_halcyon_40_underway")
+
+
+## The faded sea (CabinSeaBackdrop): only in cabins, under everything (in the
+## Backdrop, right above the Darkness), thin along the hull and closing to
+## the backdrop outside, darker at night, no cabin lamp on it, the pontoon
+## hinted only while moored, cheap.
+func _test_sea_backdrop(area: BoatArea, vessel: StringName) -> void:
+	var sea := CabinSeaBackdrop.attach(area)
+	if not t.check(sea != null and CabinSeaBackdrop.attach(area) == sea, "[sea] %s: the cabin has its faded sea (once)" % vessel):
+		return
+	var backdrop := area.get_node("Backdrop")
+	t.check(sea.get_parent() == backdrop and sea.get_index() == backdrop.get_node("Darkness").get_index() + 1
+		and backdrop.get_index() < area.get_node("Visual").get_index(),
+		"[sea] %s: drawn above the backdrop's darkness and under all the cabin art, furniture, captain and controls" % vessel)
+	t.check(sea.show_at(0, 1.0) < 0.6 and sea.show_at(0, 1.0) > 0.2 and sea.show_at(CabinSeaBackdrop.RINGS.size() - 1, 1.0) == 0.0,
+		"[sea] faded: at most %.0f%% of the sea shows by the hull, none at the edge of the fade" % [sea.show_at(0, 1.0) * 100.0])
+	t.check(sea.show_at(0, 0.0) < sea.show_at(0, 1.0), "[sea] darker at night than by day")
+	t.check(sea.sea.light_mask == 0 and sea.veil.light_mask == 0, "[sea] the cabin lamps do not light the water outside")
+	t.check(sea.sea.material is ShaderMaterial and sea.sea.polygon.size() <= CabinSeaBackdrop.SEGMENTS,
+		"[sea] one shader polygon, the deck's sea (%d points)" % sea.sea.polygon.size())
+	t.check(sea.pontoon.visible == (not GameSession.is_underway() and not GameSession.is_anchored()),
+		"[sea] the pontoon is hinted only while moored")
+	await t.frames(2)
+	var deck := BoatArea.new()
+	deck.area_id = SessionState.AREA_EXTERIOR
+	t.check(CabinSeaBackdrop.attach(deck) == null, "[sea] never on a deck (no cabin, no sea backdrop)")
+	deck.free()
 
 
 func _test_deck_water() -> void:
