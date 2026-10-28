@@ -53,14 +53,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "29a9335d9a8785c9",
+   "sha": "055e685f02c58012",
    "reviewed": "2026-10-28",
-   "note": "Build identifier (bottom-right LCH label)"
+   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
   },
   "src/app/game_version.gd": {
-   "sha": "b988a1ebd35745f1",
+   "sha": "64f6bad50e654c33",
    "reviewed": "2026-10-28",
-   "note": "Build identifier (bottom-right LCH label)"
+   "note": "I025: version 0.111a, iteration i025"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -98,9 +98,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/boat_area.gd": {
-   "sha": "c5500753b4aaa8f4",
+   "sha": "59d244afa5d0dfdc",
    "reviewed": "2026-10-28",
-   "note": "I024: _setup_laptop / get_laptop, work station prompt 'Use the laptop'"
+   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
   },
   "src/boat/boat_fixture.gd": {
    "sha": "cb427e4ff17e7ac7",
@@ -112,10 +112,15 @@
    "reviewed": "2026-10-28",
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
-  "src/boat/cabin_windows.gd": {
-   "sha": "5e4dc46d656955d6",
+  "src/boat/cabin_sea_backdrop.gd": {
+   "sha": "077142292176395e",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I025: new faded sea outside the cabin hull documented"
+  },
+  "src/boat/cabin_windows.gd": {
+   "sha": "9c59914770b03f34",
+   "reviewed": "2026-10-28",
+   "note": "I025: windows on every cabin (SIDES, axes, harbour calm); harbour at true scale (METRE, TOWNS, FLEETS, BOAT_SIZES)"
   },
   "src/boat/cabin_world_map.gd": {
    "sha": "25405b12759b9069",
@@ -203,14 +208,14 @@
    "note": "I024: animated clips (frames/fps/loop, get_frames), clip constants, walk/fly speed, parrot set"
   },
   "src/companion/companion_remarks.gd": {
-   "sha": "71c0b09c7173022e",
+   "sha": "ba6973244e1acf70",
    "reviewed": "2026-10-28",
-   "note": "I024: the one dialogue place: pet prompt, shore/recall, wake lines, passage talk stages and responses"
+   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
   },
   "src/companion/companion_state.gd": {
-   "sha": "cbcfcc71e85419d1",
+   "sha": "b3f6a02199f38107",
    "reviewed": "2026-10-28",
-   "note": "I024: parrot, name/gender, AREA_SHORE, WAKE_SPOT/wake_by_berth, clean_name, optional save fields"
+   "note": "I025: up to two companions by stable id, dock encounters and adoption API, two-companion and befriending lines, slot/stray/pace/walk_to and mirror fix"
   },
   "src/companion/companion_visual_set.gd": {
    "sha": "0c183e657a65421a",
@@ -222,10 +227,45 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
-  "src/companion/ship_companion.gd": {
-   "sha": "4e27dd0ddf3c39df",
+  "src/companion/dock_box.gd": {
+   "sha": "1a790ea71f42e6ad",
    "reviewed": "2026-10-28",
-   "note": "I024: header comment refreshed (walking, no instant moves in view)"
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/dock_encounter_scene.gd": {
+   "sha": "65f07e6d424aab0d",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/dock_encounters.gd": {
+   "sha": "a2c8c9bd76a3b85b",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/dock_girl.gd": {
+   "sha": "837842f1d3a0f152",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/girl_drawing.gd": {
+   "sha": "a081bc4180ec00df",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/pair_moments.gd": {
+   "sha": "85575e679dfb65f0",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+  },
+  "src/companion/ship_companion.gd": {
+   "sha": "492dd865f8ba554b",
+   "reviewed": "2026-10-28",
+   "note": "I025: up to two companions by stable id, dock encounters and adoption API, two-companion and befriending lines, slot/stray/pace/walk_to and mirror fix"
+  },
+  "src/companion/welcome_home.gd": {
+   "sha": "772b8481703bb397",
+   "reviewed": "2026-10-28",
+   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
   },
   "src/core/academy.gd": {
    "sha": "382366535e0b01c1",
@@ -268,9 +308,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "ef75c436c9434a6a",
+   "sha": "41c582744f114d6d",
    "reviewed": "2026-10-28",
-   "note": "I024: wake-line day reset on a new game"
+   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -298,9 +338,9 @@
    "note": "I024: at/r per record, personal records, renown milestones"
   },
   "src/core/pastimes.gd": {
-   "sha": "b7a1a203b29d646a",
-   "reviewed": "2026-10-27",
-   "note": "I022 pastimes and the one clock for hours-long tasks"
+   "sha": "4c414e35e4f0a45d",
+   "reviewed": "2026-10-28",
+   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
   },
   "src/core/pastimes_state.gd": {
    "sha": "72bccc9fc02774d9",
@@ -313,9 +353,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/session_state.gd": {
-   "sha": "fb31986f902d33f6",
+   "sha": "ea75979b6c283cf2",
    "reviewed": "2026-10-28",
-   "note": "I024: create_new passes companion name and gender"
+   "note": "I025: up to two companions by stable id, dock encounters and adoption API, two-companion and befriending lines, slot/stray/pace/walk_to and mirror fix"
   },
   "src/core/simulation.gd": {
    "sha": "259e92048e594bf1",
@@ -393,9 +433,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_dressing.gd": {
-   "sha": "a2a3ff6196419885",
+   "sha": "c860b0cae895fb44",
    "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "note": "I025: windows on every cabin (SIDES, axes, harbour calm); harbour at true scale (METRE, TOWNS, FLEETS, BOAT_SIZES)"
   },
   "src/harbour/harbour_facilities.gd": {
    "sha": "89468fd9d1acf16e",
@@ -652,6 +692,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/ui/adoption_dialog.gd": {
+   "sha": "1164eec60c96f2b6",
+   "reviewed": "2026-10-28",
+   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
+  },
   "src/ui/anchor_menu.gd": {
    "sha": "1d4772714e8a6317",
    "reviewed": "2026-10-28",
@@ -803,9 +848,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/laptop/laptop_view.gd": {
-   "sha": "8d2f8899db6468b7",
+   "sha": "46b0627778767a8a",
    "reviewed": "2026-10-28",
-   "note": "I024: new entry, the cabin laptop view (greyed_badge.gdshader mentioned)"
+   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
   },
   "src/ui/loading_screen.gd": {
    "sha": "a19337a583a9a6ae",
@@ -833,9 +878,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/new_game_menu.gd": {
-   "sha": "44261776cd039058",
+   "sha": "7b0b5c1a538aa8c8",
    "reviewed": "2026-10-28",
-   "note": "I024: three companions, name field, gender picker"
+   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
   },
   "src/ui/passage_panel.gd": {
    "sha": "f70ca42a7c40c5c3",
@@ -878,9 +923,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/rescue_dialog.gd": {
-   "sha": "4744edd8a4a648e2",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "fbfd1e0d768e3bda",
+   "reviewed": "2026-10-28",
+   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
   },
   "src/ui/sail_trim_panel.gd": {
    "sha": "78a0279c6a5317f2",
@@ -1132,6 +1177,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "tests/screenshots_harbours_i025.gd": {
+   "sha": "70ef6ae998fe5404",
+   "reviewed": "2026-10-28",
+   "note": "I025: new suite and harbour screenshot driver; runner registers test_more_room_aboard (82 suites)"
+  },
   "tests/screenshots_horizon.gd": {
    "sha": "b0ca7be1f93b66cc",
    "reviewed": "2026-10-28",
@@ -1153,9 +1203,9 @@
    "note": "Steady Hands (UI reliability)"
   },
   "tests/suites/test_anchor_life.gd": {
-   "sha": "74cec34564e9983a",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "f614f6fddeb778d6",
+   "reviewed": "2026-10-28",
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_anchorage.gd": {
    "sha": "93ebf9d74f9a5b29",
@@ -1183,9 +1233,9 @@
    "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "bcd50f40033adf22",
+   "sha": "6ceaf5ee64544423",
    "reviewed": "2026-10-28",
-   "note": "I024: version 0.110a / 0.110.1"
+   "note": "I025: version 0.111a, iteration i025"
   },
   "tests/suites/test_build_label.gd": {
    "sha": "07a24bd0a5bd5ca2",
@@ -1193,9 +1243,9 @@
    "note": "Build identifier (bottom-right LCH label)"
   },
   "tests/suites/test_cabin_windows.gd": {
-   "sha": "9ce202d5cda1ec1f",
+   "sha": "09c09b621dd645ab",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands (UI reliability)"
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_captains_log.gd": {
    "sha": "476e2391b68c04c1",
@@ -1243,9 +1293,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_companion_art.gd": {
-   "sha": "8a7772f99e6c248f",
+   "sha": "ff0ba528c952b135",
    "reviewed": "2026-10-28",
-   "note": "I024: laptop, clips, wording and retired-goal adjustments"
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_companion_deck.gd": {
    "sha": "48090b160076469b",
@@ -1258,9 +1308,9 @@
    "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
   },
   "tests/suites/test_company_we_keep.gd": {
-   "sha": "7081fd27dc7d94cd",
+   "sha": "c01b85f05d209c42",
    "reviewed": "2026-10-28",
-   "note": "I024: pre-I024 save fixture"
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_cozy_patch.gd": {
    "sha": "129afee3a93726c5",
@@ -1288,9 +1338,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_diagnostics.gd": {
-   "sha": "0fad347d2c9c4c6c",
+   "sha": "9e6e374fb8dddf25",
    "reviewed": "2026-10-28",
-   "note": "I024: version 0.110a / 0.110.1"
+   "note": "I025: version 0.111a, iteration i025"
   },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",
@@ -1313,9 +1363,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_gameplay_flow.gd": {
-   "sha": "b5b04233c48364a7",
+   "sha": "59d55339d348b00a",
    "reviewed": "2026-10-28",
-   "note": "I024: let a companion walk finish before the hatch round trips"
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_golden_harbours.gd": {
    "sha": "745f5217db84dccc",
@@ -1348,9 +1398,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_life_aboard.gd": {
-   "sha": "b8c75b46eb2ecf49",
+   "sha": "32403ebea148cfd9",
    "reviewed": "2026-10-28",
-   "note": "I024: laptop, clips, wording and retired-goal adjustments"
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_lighting.gd": {
    "sha": "c814d41a4d0f35a0",
@@ -1381,6 +1431,11 @@
    "sha": "420d89228376e294",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "tests/suites/test_more_room_aboard.gd": {
+   "sha": "34b8cce4f8829f98",
+   "reviewed": "2026-10-28",
+   "note": "I025: new suite and harbour screenshot driver; runner registers test_more_room_aboard (82 suites)"
   },
   "tests/suites/test_navigation_views.gd": {
    "sha": "c36a50d31a9388d3",
@@ -1498,9 +1553,9 @@
    "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_vessels.gd": {
-   "sha": "901413d9f3302546",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "79fd268539629efc",
+   "reviewed": "2026-10-28",
+   "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_visual_prototype.gd": {
    "sha": "3972a55c811a1f78",
@@ -1553,9 +1608,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/test_runner.gd": {
-   "sha": "d01842434447fd8e",
+   "sha": "66accffa1e4eb495",
    "reviewed": "2026-10-28",
-   "note": "Build identifier (bottom-right LCH label)"
+   "note": "I025: new suite and harbour screenshot driver; runner registers test_more_room_aboard (82 suites)"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",

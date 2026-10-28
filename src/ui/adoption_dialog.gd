@@ -28,6 +28,12 @@ var _naming: Control
 
 func _init(animal_kind: StringName = CompanionState.DEFAULT_KIND) -> void:
 	kind = animal_kind
+	# Closed from outside (the modal stack cleared): nothing decided, so
+	# whoever waits for the answer is never left waiting.
+	tree_exiting.connect(func() -> void:
+		if not _decided:
+			_decided = true
+			decided.emit(CHOICE_LATER, "", &""))
 
 
 func _ready() -> void:

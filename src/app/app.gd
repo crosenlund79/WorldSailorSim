@@ -237,9 +237,11 @@ func _update_passage_talk(delta: float) -> void:
 			lines = CompanionRemarks.passage_lines(who, stage)
 	var key: String = lines[seed % lines.size()]
 	var text := CompanionRemarks.say(who, key)
+	var about_both := false
 	if crew.size() == 2 and not pair_lines.is_empty() and seed % 3 == 0:
 		key = pair_lines[(seed / 11) % pair_lines.size()]
 		text = CompanionRemarks.say_pair(who, CompanionRemarks.identity(crew[1 - addressed]), key)
+		about_both = true
 	_talk_said.append(key)
 	_talk_count += 1
 	# Its response, when it is here to hear it (and awake); sometimes nothing.
@@ -250,6 +252,12 @@ func _update_passage_talk(delta: float) -> void:
 		var answer := CompanionRemarks.response(who, seed / 7)
 		if companion.respond(answer.clip) and answer.text != "":
 			text += "\n" + String(answer.text)
+	# A remark about both: now and then the other one answers too.
+	var other: ShipCompanion = nodes[1 - addressed] if about_both and nodes.size() == 2 else null
+	if other and other.visible and other.pose != CompanionVisualSet.POSE_SLEEPING:
+		var reply := CompanionRemarks.pair_response(CompanionRemarks.identity(crew[1 - addressed]), seed / 13)
+		if other.respond(reply.clip) and reply.text != "":
+			text += "\n" + String(reply.text)
 	toasts.show_message(text, ANCHOR_MOMENT_SECONDS)
 	SessionLog.write("passage_talk", {"hours": snappedf(hours, 0.1), "stage": stage, "line": key})
 	var gap := CompanionRemarks.PASSAGE_GAP_HOURS[stage] * 3600.0

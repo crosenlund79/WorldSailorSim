@@ -427,6 +427,14 @@ const PASSAGE_PAIR := [
 const PAIR_RESPONSES := [["%s glances at the other, then at you.", &"alert"], ["", &""], ["%s settles down a little closer.", &"resting"]]
 
 
+## The other companion's answer to a remark about both: {"text", "clip"}
+## (the text may be empty: it only looks).
+static func pair_response(who: Dictionary, n: int) -> Dictionary:
+	var entry: Array = PAIR_RESPONSES[posmod(n, PAIR_RESPONSES.size())]
+	var line := String(entry[0])
+	return {"text": Loc.t(line) % subject(who) if line != "" else "", "clip": entry[1]}
+
+
 ## Pair lines available at `stage` for two companions.
 static func passage_pair_lines(a: Dictionary, b: Dictionary, stage: int) -> Array[String]:
 	var named := _named(a) and _named(b)

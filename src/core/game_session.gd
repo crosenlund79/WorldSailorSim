@@ -903,8 +903,8 @@ func befriend_dock_animal() -> Dictionary:
 ## copy, or null when there is no animal or no room.
 func adopt_dock_animal(companion_name: String, companion_gender: StringName) -> CompanionState:
 	var current := get_dock_encounter()
-	if current.is_empty():
-		return null
+	if current.is_empty() or current.state != DockEncounters.STATE_FOLLOWING:
+		return null  # only an animal that has decided to follow the Captain
 	var companion := CompanionState.create(StringName(current.kind), _state.game_time, companion_name, companion_gender)
 	companion.origin = CompanionState.ORIGIN_ADOPTED
 	companion.adopted_at = _state.game_time
