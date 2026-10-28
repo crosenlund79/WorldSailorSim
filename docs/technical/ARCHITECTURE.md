@@ -104,7 +104,15 @@ come from `project.godot` (`application/config/name` "Little Captain's Hat",
 (`src/app/game_version.gd`) holds the version in one place (a test keeps
 `project.godot` equal to it), a numbers-only form for tools, and the commit
 (from an optional `build_info.json` written by `tools/write_build_info.py`, or
-read from `.git`; no git process at runtime). The save format version
+read from `.git`; no git process at runtime). It is also the one source of
+the **development build identifier** (`ITERATION`, `STAGE`, `CHANNEL`,
+`build_label()` → `LCH · i024 · DEV · 1a2b3c4`): `BuildLabel`
+(`src/ui/build_label.gd`) shows it in the window's bottom-right corner on
+its own `UiScaleLayer` (layer 128, added once by `App`), above every screen,
+ignoring the mouse; the project setting `application/config/show_build_label`
+(overridden to false for an export with the `public_release` feature) hides
+it. How the values change per checkpoint: the Captain's Orders, *Major
+iteration branches*; checked by `tests/suites/test_build_label.gd`. The save format version
 (`SaveManager.SAVE_VERSION`) is independent. `application/config/use_custom_user_dir`
 with `custom_user_dir_name` "Little Captains Hat" fixes `user://`, so the old
 Next Harbor folder is never written to; `LegacySaves` (`src/persistence/legacy_saves.gd`)

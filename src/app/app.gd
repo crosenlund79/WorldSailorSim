@@ -283,6 +283,10 @@ func _ready() -> void:
 	academy.name = "AcademyGuide"
 	academy.app = self
 	academy_layer.add_child(academy)
+	# The development build identifier, bottom right, over every screen.
+	var build_label_layer := BuildLabel.create_layer()
+	if build_label_layer:
+		add_child(build_label_layer)
 	show_main_menu()
 	# Cozy Polish: the game's own loading screen over the menu, once per launch.
 	if LoadingScreen.wanted():

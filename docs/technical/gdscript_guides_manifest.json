@@ -53,14 +53,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "ae9f7990116101e5",
+   "sha": "29a9335d9a8785c9",
    "reviewed": "2026-10-28",
-   "note": "I024: open_laptop, companion shore following and recall before departure, wake line, passage talk timing, Laptop wheel item"
+   "note": "Build identifier (bottom-right LCH label)"
   },
   "src/app/game_version.gd": {
-   "sha": "09aa73deb2a67365",
+   "sha": "b988a1ebd35745f1",
    "reviewed": "2026-10-28",
-   "note": "I024: version 0.110a / 0.110.1"
+   "note": "Build identifier (bottom-right LCH label)"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -677,6 +677,11 @@
    "reviewed": "2026-10-28",
    "note": "Steady Hands (UI reliability)"
   },
+  "src/ui/build_label.gd": {
+   "sha": "49c8a87eaf404550",
+   "reviewed": "2026-10-28",
+   "note": "Build identifier (bottom-right LCH label)"
+  },
   "src/ui/cabin_home_menu.gd": {
    "sha": "b15d7cbd96d4b279",
    "reviewed": "2026-10-28",
@@ -1182,6 +1187,11 @@
    "reviewed": "2026-10-28",
    "note": "I024: version 0.110a / 0.110.1"
   },
+  "tests/suites/test_build_label.gd": {
+   "sha": "07a24bd0a5bd5ca2",
+   "reviewed": "2026-10-28",
+   "note": "Build identifier (bottom-right LCH label)"
+  },
   "tests/suites/test_cabin_windows.gd": {
    "sha": "9ce202d5cda1ec1f",
    "reviewed": "2026-10-28",
@@ -1543,9 +1553,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/test_runner.gd": {
-   "sha": "b6f0381da7bb7da4",
+   "sha": "d01842434447fd8e",
    "reviewed": "2026-10-28",
-   "note": "I024: test_company_we_keep runs before test_gameplay_flow, which quits the game and must stay last"
+   "note": "Build identifier (bottom-right LCH label)"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",

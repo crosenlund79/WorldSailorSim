@@ -431,7 +431,20 @@ quality-assurance assignments. They are committed on the integration branch.
    `git push origin <SHA>:refs/heads/iteration/i022`.
 5. Verify it remotely: `git ls-remote origin refs/heads/iteration/i022` must
    show that SHA (and the GitHub branch list, when available).
-6. Develop the iteration on that branch only.
+6. Develop the iteration on that branch only. Its first commit sets the
+   build identity in `src/app/game_version.gd`: `ITERATION = "i022"`,
+   `STAGE = ""`, `CHANNEL = "DEV"` (the label in the window's bottom-right
+   corner then reads `LCH · i022 · DEV · <commit>`).
+
+**Build identifier.** Every running build names its checkpoint in the
+bottom-right corner (`BuildLabel`), from `GameVersion` only: `ITERATION`,
+an optional internal `STAGE` (shown `i022_02`) when an iteration is delivered
+in numbered stages, and `CHANNEL` - `DEV` while work is in progress, `TEST`
+for a verified snapshot that a release branch points at. Small adjustments
+on the integration branch after a release keep that iteration's number with
+`DEV`. The values are committed with the code, so a historical checkout names
+itself; they are never edited on a `release/…` branch. A public export hides
+the label (export feature `public_release`).
 
 If the branch cannot be created and verified, implementation does not begin.
 If the GitHub environment refuses a branch, an authorized GitHub
@@ -442,7 +455,10 @@ the remote.
 **Completing a major iteration.**
 
 1. Run the required tests (`docs/technical/RELEASE_READINESS.md`).
-2. Commit all of the iteration's changes.
+2. Commit all of the iteration's changes; the final commit sets
+   `CHANNEL = "TEST"` in `GameVersion` (the snapshot reads
+   `LCH · i022 · TEST`). The next development commit after the release sets
+   it back to `DEV`.
 3. Push `iteration/i022` and verify its remote head.
 4. Create `release/i022` at that exact completed SHA:
    `git push origin <SHA>:refs/heads/release/i022`.

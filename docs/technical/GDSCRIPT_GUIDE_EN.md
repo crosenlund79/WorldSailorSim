@@ -154,7 +154,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Purpose:** The game's main "conductor": it connects the menus, the screens and the game systems so they all work together.
-- **What it does:** Shows the main menu, starts and loads games, opens every window (pause menu, sleep, fishing rod, anchor, boatyard, shops, Captain's Log and more) and turns game events into short on-screen messages and sounds. It is the one place that handles Esc and the hotkeys (F5 quicksave, F9 quickload, H hat, L log, R reel in), so two windows never react to the same key press. On arrival (I021) it shows the arrival card: the harbour's picture, "Arrived in …" and one sentence about the place. Since I022 it asks before buying a boat at the boatyard, starts new games at the chosen difficulty and opens the Difficulty dialog from the pause menu. I022: hours-long tasks aboard (remote work, a postcard, a session on the little game) pass on the one clock through `pass_time`: a fade to black, the simulation run once while the clock counts, a line if something interrupted it, and back in at ×1; the cabin's Q wheel offers Write a postcard and Work on your little game. I022 Academy: it holds the Academy card on its own layer, offers the First Voyage once on the first new game on this computer, and opens the Captain's Handbook with F1 or from the pause menu. Steady Hands: each button gets its click sound once, also when it is moved to another parent. Golden Harbours: the first arrival in a harbour that has a picture shows the Golden Harbour Moment (the harbour's picture lit for the hour, with the Captain's Log line on it) instead of the small card and a separate Log message; a known harbour keeps the small card. Renown messages now show the milestone names in the chosen language. I024: the work station and the cabin wheel's Laptop item open the Captain's laptop (`open_laptop`, `LaptopView`), where postcards, travel updates, remote work, the little game and the achievements now live (`open_work_menu`, `open_postcards` and `open_game_dev` open it on the right app). Moored, the companion follows the Captain ashore down the gangplank and sometimes lingers on the pontoon; casting off first asks to call it aboard (`recall_companion`, also on the wheel). After a real sleep a small line may say where the companion is found, and on long passages the Captain now and then talks to it (`_update_passage_talk`: timed on the voyage's clock, only in quiet moments, never a flood after fast time or a reload).
+- **What it does:** Shows the main menu, starts and loads games, opens every window (pause menu, sleep, fishing rod, anchor, boatyard, shops, Captain's Log and more) and turns game events into short on-screen messages and sounds. It is the one place that handles Esc and the hotkeys (F5 quicksave, F9 quickload, H hat, L log, R reel in), so two windows never react to the same key press. On arrival (I021) it shows the arrival card: the harbour's picture, "Arrived in …" and one sentence about the place. Since I022 it asks before buying a boat at the boatyard, starts new games at the chosen difficulty and opens the Difficulty dialog from the pause menu. I022: hours-long tasks aboard (remote work, a postcard, a session on the little game) pass on the one clock through `pass_time`: a fade to black, the simulation run once while the clock counts, a line if something interrupted it, and back in at ×1; the cabin's Q wheel offers Write a postcard and Work on your little game. I022 Academy: it holds the Academy card on its own layer, offers the First Voyage once on the first new game on this computer, and opens the Captain's Handbook with F1 or from the pause menu. Steady Hands: each button gets its click sound once, also when it is moved to another parent. Golden Harbours: the first arrival in a harbour that has a picture shows the Golden Harbour Moment (the harbour's picture lit for the hour, with the Captain's Log line on it) instead of the small card and a separate Log message; a known harbour keeps the small card. Renown messages now show the milestone names in the chosen language. I024: the work station and the cabin wheel's Laptop item open the Captain's laptop (`open_laptop`, `LaptopView`), where postcards, travel updates, remote work, the little game and the achievements now live (`open_work_menu`, `open_postcards` and `open_game_dev` open it on the right app). Moored, the companion follows the Captain ashore down the gangplank and sometimes lingers on the pontoon; casting off first asks to call it aboard (`recall_companion`, also on the wheel). After a real sleep a small line may say where the companion is found, and on long passages the Captain now and then talks to it (`_update_passage_talk`: timed on the voyage's clock, only in quiet moments, never a flood after fast time or a reload). It also adds the small build identifier in the bottom-right corner, once (`BuildLabel`).
 - **Works with:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`.
 - **Keeps:** Only screen bookkeeping: whether the rescue report is open, a VHF call or anchorage question waiting to be shown, the seconds left before a hooked fish gets away, when the companion next follows you between cabin, deck and shore, and when the Captain next talks to it on a long passage. The game itself lives in `GameSession`.
 - **When it runs:** Always: it is the main scene that starts with the game.
@@ -163,11 +163,11 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/game_version.gd`
 
 **Purpose:** Holds the game's version number in one place.
-- **What it does:** Gives the version shown to players (for example "0.110a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found.
-- **Works with:** `SessionLog` (writes the version at start-up), the main menu (shows it), `tools/write_build_info.py` (writes `build_info.json`).
+- **What it does:** Gives the version shown to players (for example "0.110a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found. Also the one source of the development build identifier: the iteration ("i024"), an optional internal stage ("i024_02") and DEV or TEST, joined into the label "LCH · i024 · DEV · <commit>" (or an honest "LCH · dev-build" when the iteration is not set), and whether that label is shown.
+- **Works with:** `SessionLog` (writes the version at start-up), the main menu (shows it), `BuildLabel` (shows the identifier), `tools/write_build_info.py` (writes `build_info.json`).
 - **Keeps:** The build's commit code, read once and remembered.
 - **When it runs:** Whenever something asks for the version (start-up log, main menu).
-- **If you change it:** You must also change the version in the project settings; a test checks that the two match. Saves record the game version.
+- **If you change it:** You must also change the version in the project settings; a test checks that the two match. Saves record the game version. Set the iteration, stage and channel at each checkpoint as the Captain's Orders say (*Major iteration branches*).
 
 ### `src/app/scene_router.gd`
 
@@ -1483,6 +1483,13 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** When you use the boatyard while moored in harbour.
 - **If you change it:** How boats are chosen and compared, and the way to the yard's other services.
 
+### `src/ui/build_label.gd`
+
+**Purpose:** Shows which build is running, small, in the bottom-right corner of the window.
+- **What it does:** Shows the development build identifier ("LCH · i024 · DEV" with the short commit) from `GameVersion`, on its own layer above every screen, at the interface size; neutral grey with a soft outline, no panel; it ignores the mouse and the keyboard. Not made when the build label is switched off (a public export).
+- **Works with:** `GameVersion`, `UiScaleLayer`, `App` (adds it once).
+- **Keeps:** Nothing.
+- **When it runs:** From start-up to quitting, in every screen.
 ### `src/ui/cabin_home_menu.gd`
 
 **Purpose:** "Make it home": choose which of your cabin things are shown aboard this boat.
@@ -2079,6 +2086,13 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Only in tests.
 - **If you change it:** Only the checks change. It checks the exact version ("0.110a", "0.110.1") and save format 12, so a new release means updating this test.
 
+### `tests/suites/test_build_label.gd`
+
+**Purpose:** Checks the development build identifier.
+- **What it does:** Checks the label's form and that its iteration matches this checkout's newest iteration report (or the next one), the stage suffix, exactly one label through menu, game, deck and cabin, chart and pause, its place in the corner at several interface sizes and (rendered) after resizing the window, that it ignores input, and that the public-release setting hides it.
+- **Works with:** the app scene, `GameVersion`, `BuildLabel`, `SettingsManager`.
+- **Keeps:** Nothing (restores the interface size and the setting).
+- **When it runs:** In the test runner, before `test_gameplay_flow`.
 ### `tests/suites/test_cabin_windows.gd`
 
 **Purpose:** Checks the cabin windows and the softer water (I022).
@@ -2938,7 +2952,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Purpose:** The game's automatic test runner: it runs all 80 test suites and says how many checks passed.
+**Purpose:** The game's automatic test runner: it runs all 81 test suites and says how many checks passed.
 - **What it does:** Moves saves, settings and logs to scratch test files, turns off the sleep/dawn animations, sets English and calm wind, and runs each suite in turn. It also gives the suites shared tools: checks, waiting, pressing keys, clicking, boarding a boat, setting the wind, planning routes and screenshots. Since I021 it also runs the wider-world suite. Since I022 it runs the I022 suite and lets the suites sail every boat without buying it. I022: it turns the Academy's offer and tips off for the other suites. It also runs the cabin windows suite. It also runs the Steady Hands interface suite. It also runs the Golden Harbours suite. I024: it also runs The Company We Keep suite.
 - **Works with:** Every suite in `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Keeps:** The pass/fail counts and the list of failures.

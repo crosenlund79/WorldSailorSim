@@ -18,6 +18,7 @@ tools and the Godot executable's own name.
 | 7 | **Documentation** | `python3 tools/docs/check_gdscript_guides.py` and `python3 tools/docs/check_links.py` | Both pass; the release has its report and is in the [library index](../README.md) and the Captain's Orders |
 | 8 | **Windows acceptance** | The release's `WINDOWS_ACCEPTANCE_*.md` checklist | Written for the Captain; marked **pending** until the Captain's own trial. Never claimed in advance |
 | 9 | **GitHub backup** | Before the work starts: a `backup/…` branch at the starting commit, verified with `git ls-remote origin` (and the GitHub branch list); after it: the development branch's remote head equals the final commit. A major iteration instead works on `iteration/iNNN` and ends with `release/iNNN` at its final commit ([Captain's Orders](../../CAPTAINS_ORDERS.md), *Major iteration branches*) | The backup or release branch exists at the recorded SHA; existing backups and releases untouched; no force-push |
+| 9a | **Build identifier** | `GameVersion.ITERATION`/`STAGE`/`CHANNEL`; `test_build_label` | The label names this checkpoint (`TEST` on a release snapshot, `DEV` otherwise); a screenshot shows it in the bottom-right corner |
 | 10 | **Known issues** | The report's limitations section | Every deferral, workaround and uncertain value written down, with what it would take |
 
 ## Before you start a build

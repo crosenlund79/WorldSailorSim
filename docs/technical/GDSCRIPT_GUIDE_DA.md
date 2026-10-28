@@ -156,7 +156,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Formål:** Spillets "dirigent": det forbinder menuerne, skærmene og spillets systemer, så de arbejder sammen.
-- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning).
+- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning). Den tilføjer også det lille versions-id i nederste højre hjørne, én gang (`BuildLabel`).
 - **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`.
 - **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, hvornår ledsageren næste gang følger dig mellem kahyt, dæk og land, og hvornår Kaptajnen næste gang taler med den på en lang passage. Selve spillet ligger i `GameSession`.
 - **Hvornår det kører:** Altid: det er hovedscenen, der starter med spillet.
@@ -165,11 +165,11 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/game_version.gd`
 
 **Formål:** Holder spillets versionsnummer ét sted.
-- **Hvad det gør:** Giver den version, spillerne ser (fx "0.110a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes.
-- **Arbejder sammen med:** `SessionLog` (skriver versionen ved opstart), hovedmenuen (viser den), `tools/write_build_info.py` (skriver `build_info.json`).
+- **Hvad det gør:** Giver den version, spillerne ser (fx "0.110a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes. Også den eneste kilde til udviklingsversionens id: iterationen ("i024"), et valgfrit internt stadie ("i024_02") og DEV eller TEST, samlet til mærket "LCH · i024 · DEV · <commit>" (eller et ærligt "LCH · dev-build", når iterationen ikke er sat), og om mærket vises.
+- **Arbejder sammen med:** `SessionLog` (skriver versionen ved opstart), hovedmenuen (viser den), `BuildLabel` (viser id'et), `tools/write_build_info.py` (skriver `build_info.json`).
 - **Holder styr på:** Buildens commit-kode, læst én gang og husket.
 - **Hvornår det kører:** Når noget spørger efter versionen (opstartslog, hovedmenu).
-- **Hvis du ændrer det:** Du skal også ændre versionen i projektindstillingerne; en test tjekker, at de to passer sammen. Gemte spil registrerer spillets version.
+- **Hvis du ændrer det:** Du skal også ændre versionen i projektindstillingerne; en test tjekker, at de to passer sammen. Gemte spil registrerer spillets version. Sæt iteration, stadie og kanal ved hvert checkpoint, som kaptajnens ordrer siger (*Major iteration branches*).
 
 ### `src/app/scene_router.gd`
 
@@ -1485,6 +1485,13 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når du bruger bådeværftet, mens du ligger fortøjet i havn.
 - **Hvis du ændrer det:** Hvordan både vælges og sammenlignes, og vejen til værftets andre tjenester.
 
+### `src/ui/build_label.gd`
+
+**Formål:** Viser, hvilken version der kører, med lille skrift i vinduets nederste højre hjørne.
+- **Hvad det gør:** Viser udviklingsversionens id ("LCH · i024 · DEV" med den korte commit) fra `GameVersion` på sit eget lag over alle skærme, i grænsefladens størrelse; neutral grå med en blød kontur og uden panel; den reagerer ikke på mus eller tastatur. Laves ikke, når versionsmærket er slået fra (en offentlig eksport).
+- **Arbejder sammen med:** `GameVersion`, `UiScaleLayer`, `App` (tilføjer den én gang).
+- **Gemmer:** Intet.
+- **Hvornår det kører:** Fra opstart til lukning, på alle skærme.
 ### `src/ui/cabin_home_menu.gd`
 
 **Formål:** "Make it home": vælg hvilke af dine ting til kahytten der vises om bord på denne båd.
@@ -2081,6 +2088,13 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker den nøjagtige version ("0.110a", "0.110.1") og gemmeformat 12, så en ny udgivelse betyder, at denne test skal rettes.
 
+### `tests/suites/test_build_label.gd`
+
+**Formål:** Tjekker udviklingsversionens id.
+- **Hvad det gør:** Tjekker mærkets form, og at dets iteration passer til den nyeste iterationsrapport i denne checkout (eller den næste), stadie-endelsen, at der er præcis ét mærke gennem menu, spil, dæk og kahyt, søkort og pause, dets plads i hjørnet ved flere grænsefladestørrelser og (renderet) efter at vinduet ændrer størrelse, at det ikke tager imod input, og at indstillingen for offentlige udgaver skjuler det.
+- **Arbejder sammen med:** app-scenen, `GameVersion`, `BuildLabel`, `SettingsManager`.
+- **Gemmer:** Intet (sætter grænsefladestørrelsen og indstillingen tilbage).
+- **Hvornår det kører:** I testkøreren, før `test_gameplay_flow`.
 ### `tests/suites/test_cabin_windows.gd`
 
 **Formål:** Tester kahytsvinduerne og det blødere vand (I022).
@@ -2940,7 +2954,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Formål:** Spillets automatiske testkører: den kører alle 80 testsamlinger og fortæller, hvor mange tjek der bestod.
+**Formål:** Spillets automatiske testkører: den kører alle 81 testsamlinger og fortæller, hvor mange tjek der bestod.
 - **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep.
 - **Arbejder sammen med:** Alle testsamlinger i `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Holder styr på:** Antal beståede/fejlede tjek og listen over fejl.

@@ -229,7 +229,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Depends on:** autoloads `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, `AudioManager`, `SessionLog`, `UiTheme`; scene children `SceneRouter` ($SceneRouter), `Hud`, `ModalStack`, `Toasts`; creates `WeatherAudio`, `DayNightWatch`, `LoadingScreen`, `TimePassage`, `VoyageMap`; pushes modals (`NewGameMenu`, `PauseMenu`, `SleepMenu`, `SaveLoadMenu`, `BoatyardMenu`, `ProvisionsMenu`, `RescueDialog`, `GroceryMenu`, `FishmongerMenu`, `ChandleryMenu`, `SailmakerMenu`, `CabinHomeMenu`, `GoAshoreMenu`, `FishingMenu`, `CookingMenu`, `AnchorMenu`, `AnchoragePrompt`, `VhfDialog`, `TrophyMenu`, `WorkMenu`, `PublishMenu`, `LaptopView`, `CaptainsLogMenu`, `SailTrimPanel`, `ActionWheel`, `BoatCareMenu`, `HaulOutPanel`, `LanguagePicker`, `DevTestPanel`); static helpers `Loc`, `CompanionRemarks`, `PortCatalog`, `VesselCatalog`, `PassageReadiness`, `LegacySaves`, `DevTools`, `DevGuides`, `HarbourFacilities`, `BoatCare`, `FishingSounds`, `HatBadge`, `AnchorSite`, `ChartPlotter`, `SailingPanel`, `RadarPanel`, `Interactable`; screen types `MainMenu`, `BoatArea`, `WorldMap`.
 - **Signals:** declares none. Connects to `GameSession` (`notice`, `rescued`, `voyage_logged`, `renown_awarded`, `hat_warning`, `hat_lost`, `fish_bite`, `anchorage_reached`, `anchor_alarm`, `anchor_moment`, `fishing_warning`, `provisions_warning`, `propulsion_changed`, `state_replaced`, `session_started/ended` → `DevTools.on_session_changed`), `Simulation` (`weather_warning`, `traffic_alert`, `vhf_call`, `arrived`, `passage_started`), `router.screen_changed`, `modals.stack_changed`, `hud.*_requested`, `get_tree().node_added` (adds UI click sound to every BaseButton), and every BoatArea/WorldMap/MainMenu request signal in `_connect_*`.
 - **State:** writes no game state directly; all changes go through `GameSession`/`Simulation`/`SaveManager` calls. Owns UI-only fields: `_rescue_open`, `_anchorage_prompt_due`, `_pending_vhf`, `_bite_wait`, companion follow timers, passage-talk timing (`_talk_voyage_at`, `_talk_next_at`, `_talk_real_wait`, `_talk_said`, `_talk_count`; not saved), `_last_quick_msec`, `voyage_map`, `time_passage`. Sets `get_tree().paused` in `_on_modal_stack_changed` (paused while any modal is open in gameplay, or while the rescue report is open).
-- **Lifecycle:** main scene, instanced by the engine at start; `process_mode = ALWAYS`, `$Screen` is PAUSABLE. Many test suites instance `app.tscn` themselves.
+- **Lifecycle:** main scene, instanced by the engine at start; `process_mode = ALWAYS`, `$Screen` is PAUSABLE. Many test suites instance `app.tscn` themselves. `_ready` adds `BuildLabel.create_layer()` once (layer 128) before `show_main_menu()`.
 - **Persistence:** quicksave/quickload (F5/F9) via `SaveManager.QUICKSAVE_SLOT` with a 1000 ms cooldown; quicksave refused unless aboard, no modal, router idle and no Long Passage (`quicksave_blocker()`). `load_slot()` validates fully before `GameSession.replace_state()`.
 - **Performance:** `_process` each frame: weather audio throttled to 1 s (`WEATHER_AUDIO_INTERVAL`), bite-wait countdown, companion follow, passage-talk check (cheap until due), deferred anchorage prompt / VHF dialog checks. Cheap.
 - **Invariants:** single Esc/hotkey handler (`_unhandled_input`); hotkey actions only when `is_in_gameplay()`, modals empty and router not busy; after any sleep the player wakes at `WAKE_SPAWN` (`v_berth`) unless the sleep ended in a rescue; actions needing a free hand go through `_hand_free()` (`GameSession.hands_refusal()`).
@@ -238,14 +238,14 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/app/game_version.gd`
 
-- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.110a", `MACHINE` "0.110.1") and build commit lookup.
+- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.110a", `MACHINE` "0.110.1") and build commit lookup; the development build identity `PROJECT_CODE` "LCH", `ITERATION` "i024", `STAGE` "", `CHANNEL` "DEV" (`CHANNELS` DEV/TEST), `checkpoint()`/`format_checkpoint(iteration, stage)`, `build_label(with_commit)` (placeholder "LCH · dev-build" without an iteration), `shows_build_label()` (`SHOW_LABEL_SETTING` `application/config/show_build_label`, false for the `public_release` feature).
 - **Depends on:** `res://build_info.json` (optional), else `res://.git/HEAD`, ref file or `packed-refs` (read as files, no git process).
 - **State:** static `_commit` cache ("-" sentinel = unknown).
 - **Lifecycle:** static helper.
 - **Persistence:** independent of `SaveManager.SAVE_VERSION`; saves record `application/config/version`, which must equal `DISPLAY`.
 - **Invariants:** `DISPLAY` == project.godot `application/config/version`; format `^0\.\d{3}[a-z]$`.
-- **Tests:** `tests/suites/test_branding.gd` (version format and equality), `tests/suites/test_diagnostics.gd`.
-- **Change risks:** bumping `DISPLAY` without project.godot (and the test's expected literal) fails tests. Run `python3 tools/write_build_info.py` before an export to embed the commit.
+- **Tests:** `tests/suites/test_branding.gd` (version format and equality), `tests/suites/test_diagnostics.gd`, `tests/suites/test_build_label.gd` (identifier, iteration matches the newest report).
+- **Change risks:** bumping `DISPLAY` without project.godot (and the test's expected literal) fails tests. Run `python3 tools/write_build_info.py` before an export to embed the commit. `ITERATION`/`CHANNEL` are edited by hand per checkpoint (never on a `release/…` branch); a stale `ITERATION` fails `test_build_label`.
 
 ### `src/app/scene_router.gd`
 
@@ -1821,6 +1821,14 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_vessels.gd`, `tests/suites/test_boat_care.gd`, `tests/suites/test_denmark_views.gd`, `tests/suites/test_upkeep_ui.gd`, `tests/suites/test_visual_prototype.gd`, `tests/suites/test_solar_panels.gd`, `tests/suites/test_harbour_life.gd`.
 - **Change risks:** Renaming unique nodes in the .tscn breaks `@onready`. Tests compare `get_panel_rect()` across selections (size must not change). Preview depends on each vessel's `deck_visual_scene` and `visual.canvas`.
 
+### `src/ui/build_label.gd`
+
+- **Role:** `class_name BuildLabel`, extends Label; the development build identifier. `create_layer()` returns a `UiScaleLayer` (`LAYER` 128, name `BuildLabelLayer`) with a full-rect `BuildLabelRoot` (mouse ignore) holding one label, or null when `GameVersion.shows_build_label()` is false. `_ready` sets `text = GameVersion.build_label()`, `AUTO_TRANSLATE_MODE_DISABLED`, mouse ignore, `FOCUS_NONE`, `FONT_SIZE` 14, neutral colour with outline, bottom-right anchors with `MARGIN` (12, 4).
+- **Depends on:** `GameVersion`, `UiScaleLayer` (scale and window size).
+- **Lifecycle:** added once by `App._ready()` (before `show_main_menu()`), persists across screen changes; never in a scene.
+- **Invariants:** exactly one in the tree; never receives input; text comes only from `GameVersion`.
+- **Tests:** `tests/suites/test_build_label.gd`.
+- **Change risks:** adding it to individual scenes would duplicate it; a lower `LAYER` would hide it under modals or the time-passage black.
 ### `src/ui/cabin_home_menu.gd`
 
 - **Role:** class_name `CabinHomeMenu`, extends `TradePanel`; toggles which owned cabin decor items are shown on the current boat. Steady Hands: explicit right-column anchors; `_fit_column` sets `offset_left = -(minimum width + SAFE_MARGIN)` deferred and on `minimum_size_changed` (a preset in `_ready` used the unsized modal and a 700 px column for a 737 px panel).
@@ -2517,6 +2525,11 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —
 - **Change risks:** pins the version strings, save version and asset paths, so every release bump needs this test updated. Tagline text is compared exactly. Screenshots `130_*`–`134_*`.
 
+### `tests/suites/test_build_label.gd`
+
+- **Role:** extends RefCounted; build identifier suite: `_test_metadata` (label pattern, channel, `GameVersion.format_checkpoint`, `ITERATION` equals the newest `docs/iterations/iNNN/ITERATION_N_REPORT.md` or the next), `_test_everywhere` (one `BuildLabel` over menu, game, round trips, chart, pause), `_test_scale_and_input` (corner gap at UI scales 1.0/1.5/0.8, window resize when rendered, mouse/focus/translation off), `_test_public_release` (setting off → `create_layer()` null; project.godot override).
+- **Depends on:** `src/app/app.tscn`, `GameVersion`, `BuildLabel`, `SettingsManager`, `ProjectSettings`.
+- **State:** restores UI scale 1.0 and the show-label setting.
 ### `tests/suites/test_cabin_windows.gd`
 
 - **Role:** extends RefCounted; I022 suite. `_test_data_in_the_walls` (each opening's corners +1.5 frame sampled in `cabin_base.png`: alpha ≥ 0.9 and r ≤ 0.35 = wall paint), `_test_water_look`, `_test_in_the_cabin` (`_aboard` sets vessel/time via `replace_state`; node order after `CabinBase`; `view_of` port north / starboard south moored, aft offset, fov up close; `last_draw_usec` median of 30 redraws; ≤ 2 redraws standing still for 60 frames; dusk 18:42 and night 22:30 UTC; underway heading −90°; classic art hides), `_test_other_cabins`, `_test_deck_water` (translucency 0/1 × moored/underway screenshots).
@@ -3397,7 +3410,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 80 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed. I021: registers `test_wider_world.gd` after `test_companion_remarks.gd`. I022: `test_captains_other_life` in `SUITES`; sets `GameSession.test_all_boats_owned = true` with `TimePassage.enabled = false`. I022: `AcademyGuide.enabled = false` at start; `test_academy` in SUITES after `test_captains_other_life`. `test_cabin_windows` in SUITES after `test_academy`. `test_steady_hands` in SUITES after `test_cabin_windows`. Golden Harbours: `test_golden_harbours` in `SUITES` after `test_steady_hands`. I024: `test_company_we_keep` last in `SUITES` (after `test_gameplay_flow`).
+- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 81 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed. I021: registers `test_wider_world.gd` after `test_companion_remarks.gd`. I022: `test_captains_other_life` in `SUITES`; sets `GameSession.test_all_boats_owned = true` with `TimePassage.enabled = false`. I022: `AcademyGuide.enabled = false` at start; `test_academy` in SUITES after `test_captains_other_life`. `test_cabin_windows` in SUITES after `test_academy`. `test_steady_hands` in SUITES after `test_cabin_windows`. Golden Harbours: `test_golden_harbours` in `SUITES` after `test_steady_hands`. I024: `test_company_we_keep`, then `test_build_label`, before `test_gameplay_flow`, which stays last.
 - **Depends on:** all `tests/suites/test_*.gd`; `SaveManager`, `SessionLog`, `SettingsManager`, `TimePassage`, `WindField`, `Simulation`, `GameSession`, `PortCatalog`, `SeaRouter`.
 - **State:** redirects `SaveManager.save_dir = user://test_saves`, `SessionLog.log_dir = user://test_diagnostics`, `SettingsManager.settings_path = user://test_settings.cfg`; `TimePassage.enabled = false`; language forced to `en` before each suite; before each suite `use_calm_wind()` and `Simulation.sea_encounters` true only for `test_captains_watch.gd` and `test_localization.gd`; scratch saves/settings deleted at start and end; `_exit_tree` calls `WindField.clear_default()`.
 - **Lifecycle:** `godot --headless --path . res://tests/test_runner.tscn [-- --only=a,b] [--skip=a,b] [--screenshots=DIR]` (filters match suite file-name substrings; screenshots only when rendered). `process_mode = ALWAYS`.

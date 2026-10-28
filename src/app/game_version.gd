@@ -13,11 +13,67 @@ extends RefCounted
 
 const DISPLAY := "0.110a"
 const MACHINE := "0.110.1"
+
+## The development build identity (the label in the window's bottom-right
+## corner, BuildLabel): which major iteration this checkpoint belongs to, an
+## optional internal stage of it, and its channel. Committed with the code, so
+## every checkout - a historical release branch too - names itself, never the
+## iteration currently in development. Updated by hand at each checkpoint (see
+## the Captain's Orders, *Major iteration branches*):
+##   ITERATION "i024"   the major iteration (lower-case i, three digits);
+##                      "" = not known: the label says so honestly
+##   STAGE "" or "02"   an internal stage of it (shown as i024_02)
+##   CHANNEL DEV        work in progress; TEST = the verified snapshot that a
+##                      release/iNNN branch points at
+const PROJECT_CODE := "LCH"
+const ITERATION := "i024"
+const STAGE := ""
+const CHANNEL := "DEV"
+const CHANNELS: Array[String] = ["DEV", "TEST"]
+## Project setting that shows or hides the label (true by default). A public
+## export turns it off with a feature-tag override in project.godot:
+## application/config/show_build_label.public_release=false
+const SHOW_LABEL_SETTING := "application/config/show_build_label"
 ## Written by tools/write_build_info.py before an export (optional); in a run
 ## from the project the commit is read from the checkout's .git instead.
 const BUILD_INFO_PATH := "res://build_info.json"
 
 static var _commit := ""
+
+
+## "i024" or "i024_02" (STAGE set), or "" when the iteration is not known.
+static func checkpoint() -> String:
+	return format_checkpoint(ITERATION, STAGE)
+
+
+## `iteration` with its `stage` ("i042", "02" -> "i042_02").
+static func format_checkpoint(iteration: String, stage: String) -> String:
+	if iteration.is_empty():
+		return ""
+	return iteration if stage.is_empty() else "%s_%s" % [iteration, stage]
+
+
+## The build label: "LCH · i024 · DEV", with the short commit when it is known
+## ("LCH · i024 · DEV · 1a2b3c4"). Without a known iteration: "LCH · dev-build"
+## (never an invented or stale number).
+static func build_label(with_commit := true) -> String:
+	var parts: Array[String] = [PROJECT_CODE]
+	var point := checkpoint()
+	if point.is_empty():
+		parts.append("dev-build")
+	else:
+		parts.append(point)
+		parts.append(CHANNEL if CHANNEL in CHANNELS else "DEV")
+	var commit := get_commit() if with_commit else ""
+	if not commit.is_empty():
+		parts.append(commit)
+	return " · ".join(parts)
+
+
+## Whether the label is shown (the project setting; on unless a public
+## export overrides it).
+static func shows_build_label() -> bool:
+	return bool(ProjectSettings.get_setting(SHOW_LABEL_SETTING, true))
 
 
 ## "0.101a", or "0.101a (1a2b3c4)" when the commit is known.
