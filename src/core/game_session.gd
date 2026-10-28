@@ -128,6 +128,7 @@ func has_unsaved_changes() -> bool:
 func _exit_tree() -> void:
 	PortCatalog.clear_default()
 	ObjectiveCatalog.clear_default()
+	AchievementCatalog.clear_default()
 	HatConfig.clear_default()
 	HatArt.clear_default()
 	SeaRouter.clear_default()
@@ -139,9 +140,12 @@ func _exit_tree() -> void:
 
 # --- Lifecycle ----------------------------------------------------------------
 
-## Starts a new game with the chosen ship's companion ("cat" or "dog").
-func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> void:
-	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind, level)
+## Starts a new game with the chosen ship's companion ("cat", "dog" or
+## "parrot"; I024: with the name and gender the player chose, both optional).
+func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
+		companion_name := "", companion_gender: StringName = &"") -> void:
+	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind, level, companion_name, companion_gender)
+	_companion_wake_day = -1
 	_has_unsaved_changes = false
 	_asleep = false
 	if _settled:
@@ -560,6 +564,7 @@ func switch_vessel(vessel_id: StringName) -> String:
 	_state.fishing.line_out = false
 	_pending_bite = {}
 	_has_unsaved_changes = true
+	recall_companion()  # I024: comes along to the new boat
 	enter_boat_area(SessionState.AREA_EXTERIOR, &"from_boatyard")
 	vessel_changed.emit(vessel_id)
 	return ""
@@ -621,13 +626,27 @@ func companion_may_be_on_deck() -> bool:
 	return weather.speed_kn < COMPANION_DECK_MAX_WIND_KN and WeatherAudio.rain_level(weather) <= 0.0 and not weather.thunder_active
 
 
-## Moves the companion up on deck (to deck resting place `deck_spot`) or down
-## to the cabin. Refused on deck when it may not be there. Returns whether
-## it moved.
+## Whether the companion may go ashore with the Captain (I024): moored in a
+## harbour, in weather it may be on deck in.
+func companion_may_go_ashore() -> bool:
+	return _state != null and not is_underway() and get_location() != null and companion_may_be_on_deck()
+
+
+## True while the companion is ashore (the boat cannot cast off).
+func is_companion_ashore() -> bool:
+	return _state != null and _state.companion.area == CompanionState.AREA_SHORE
+
+
+## Moves the companion up on deck (to deck resting place `deck_spot`), down
+## to the cabin or, since I024, ashore (`deck_spot` is then its place on the
+## pontoon). Refused on deck or ashore when it may not be there. Returns
+## whether it moved.
 func set_companion_area(area: StringName, deck_spot := 0) -> bool:
-	if _state == null or not area in [CompanionState.AREA_CABIN, CompanionState.AREA_DECK]:
+	if _state == null or not area in CompanionState.AREAS:
 		return false
 	if area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
+		return false
+	if area == CompanionState.AREA_SHORE and not companion_may_go_ashore():
 		return false
 	var companion := _state.companion
 	if companion.area == area and (area == CompanionState.AREA_CABIN or companion.deck_spot == deck_spot):
@@ -637,14 +656,150 @@ func set_companion_area(area: StringName, deck_spot := 0) -> bool:
 	_has_unsaved_changes = true
 	SessionLog.write("companion_area", {"area": String(area), "deck_spot": companion.deck_spot})
 	companion_area_changed.emit(area)
+	if area == CompanionState.AREA_SHORE:
+		_note_shore_visit()
 	return true
+
+
+## I024: the harbours (and countries) the companion has been ashore in, kept
+## as renown records without pay ("companion_ashore:<harbour>"), and the two
+## companionship achievements they lead to. Walking about pays nothing.
+const COMPANION_SHORE_HARBOURS := 5
+const COMPANION_SHORE_COUNTRIES := 3
+
+
+func _note_shore_visit() -> void:
+	var port := get_location()
+	if port == null:
+		return
+	var key := "companion_ashore:%s" % port.id
+	if _state.progress.is_completed(StringName(key)):
+		return
+	_state.progress.mark(StringName(key), _state.game_time, _here())
+	var harbours := 0
+	var countries := {}
+	var catalog := PortCatalog.get_default()
+	for id: String in _state.progress.completed:
+		if id.begins_with("companion_ashore:"):
+			harbours += 1
+			var visited := catalog.get_port(StringName(id.trim_prefix("companion_ashore:")))
+			if visited:
+				countries[visited.country] = true
+	var who := CompanionRemarks.subject(CompanionRemarks.identity(_state.companion))
+	var awards: Array[Dictionary] = []
+	if harbours >= COMPANION_SHORE_HARBOURS:
+		awards.append(_award_once("companion:shore_5", Loc.t("Shore leave: ashore with %s in %d harbours") % [who, harbours], 10))
+	if countries.size() >= COMPANION_SHORE_COUNTRIES:
+		awards.append(_award_once("companion:countries_3", Loc.t("Ports of call: ashore with %s in %d countries") % [who, countries.size()], 15))
+	awards = awards.filter(func(a: Dictionary) -> bool: return not a.is_empty())
+	if not awards.is_empty():
+		renown_awarded.emit(awards)
+
+
+# --- Sailing performance (I024) -------------------------------------------------------
+
+## Sustained speed under sail, measured on the simulation's own steps (never a
+## momentary value, never the engine): the distance sailed in the last hour
+## and in the last 24 hours, counted only while the sails drive the boat
+## without a break. Motoring, anchoring, arriving or loading a game starts
+## the count again (it is kept in memory only). Time acceleration and sleep
+## change nothing: the simulation is the same at every speed.
+const SPEED_MILESTONES := [[7.0, "speed:sail_7", "Seven knots under sail for an hour", 10],
+	[9.0, "speed:sail_9", "Nine knots under sail for an hour", 20], [12.0, "speed:sail_12", "Twelve knots under sail for an hour", 30]]
+const DAYS_RUN_NM := 150.0
+const RECORD_BEST_HOUR := "best_hour_sail_kn"
+const RECORD_BEST_DAY := "best_day_sail_nm"
+var _sail_segments: Array[PackedFloat64Array] = []  # [seconds, nm], oldest first
+var _sail_seconds := 0.0
+var _sail_nm := 0.0
+var _sail_until := -1.0
+
+
+## The simulation sailed from `t0` to `t1` at `speed_kn` (Simulation only).
+func note_sailing(t0: float, t1: float, speed_kn: float, under_sail: bool) -> void:
+	if _state == null or t1 <= t0:
+		return
+	if not under_sail or speed_kn <= 0.0 or absf(t0 - _sail_until) > 1.0:
+		_sail_segments.clear()
+		_sail_seconds = 0.0
+		_sail_nm = 0.0
+	_sail_until = t1 if under_sail and speed_kn > 0.0 else -1.0
+	if _sail_until < 0.0:
+		return
+	var seconds := t1 - t0
+	_sail_segments.append(PackedFloat64Array([seconds, speed_kn * seconds / 3600.0]))
+	_sail_seconds += seconds
+	_sail_nm += speed_kn * seconds / 3600.0
+	while not _sail_segments.is_empty() and _sail_seconds - _sail_segments[0][0] >= 86400.0:
+		_sail_seconds -= _sail_segments[0][0]
+		_sail_nm -= _sail_segments[0][1]
+		_sail_segments.remove_at(0)
+	var awards: Array[Dictionary] = []
+	var hour := _last_hour_nm()
+	if hour >= 0.0:
+		_state.progress.note_record(RECORD_BEST_HOUR, snappedf(hour, 0.01), t1, _state.vessel_id)
+		for milestone: Array in SPEED_MILESTONES:
+			if hour >= float(milestone[0]) - 1e-6:
+				awards.append(_award_once(milestone[1], Loc.t(milestone[2]), int(milestone[3])))
+	if _sail_seconds >= 86400.0 - 1.0:
+		_state.progress.note_record(RECORD_BEST_DAY, snappedf(_sail_nm, 0.1), t1, _state.vessel_id)
+		if _sail_nm >= DAYS_RUN_NM:
+			awards.append(_award_once("speed:days_run_150", Loc.t("A 150-mile day: %d nm under sail in 24 hours") % floori(_sail_nm), 25))
+	awards = awards.filter(func(a: Dictionary) -> bool: return not a.is_empty())
+	if not awards.is_empty():
+		renown_awarded.emit(awards)
+
+
+## The distance sailed in the last full hour under sail (nm), or -1 when the
+## boat has not yet sailed a whole hour without a break.
+func _last_hour_nm() -> float:
+	if _sail_seconds < 3600.0 - 1e-6:
+		return -1.0
+	var left := 3600.0
+	var nm := 0.0
+	for i in range(_sail_segments.size() - 1, -1, -1):
+		var segment := _sail_segments[i]
+		var take := minf(segment[0], left)
+		nm += segment[1] * take / segment[0]
+		left -= take
+		if left <= 1e-6:
+			break
+	return nm
 
 
 ## Brings the companion below when the deck stops being a place for it (the
 ## boat sets off, the anchor comes up, the weather turns).
 func _companion_to_cabin_if_needed() -> void:
-	if _state and _state.companion.area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
+	if _state == null:
+		return
+	var area := _state.companion.area
+	if area == CompanionState.AREA_SHORE and not companion_may_go_ashore():
+		# Never left behind (weather turned, boat changed): straight back aboard.
+		recall_companion()
+	elif area == CompanionState.AREA_DECK and not companion_may_be_on_deck():
 		set_companion_area(CompanionState.AREA_CABIN)
+
+
+## Calls the companion back aboard from the shore (I024): on deck when it may
+## be there, otherwise below. Always works. Returns a short note for the
+## player, or "" when it was already aboard.
+func recall_companion() -> String:
+	if not is_companion_ashore():
+		return ""
+	var companion := _state.companion
+	companion.area = CompanionState.AREA_CABIN
+	if companion_may_be_on_deck():
+		companion.area = CompanionState.AREA_DECK
+		companion.deck_spot = 0
+	_has_unsaved_changes = true
+	SessionLog.write("companion_area", {"area": String(companion.area), "deck_spot": companion.deck_spot, "recalled": true})
+	companion_area_changed.emit(companion.area)
+	return CompanionRemarks.recalled(CompanionRemarks.identity(companion))
+
+
+## The reason the boat may not cast off because of the companion (I024), or "".
+func companion_departure_refusal() -> String:
+	return CompanionRemarks.still_ashore(CompanionRemarks.identity(_state.companion)) if is_companion_ashore() else ""
 
 
 func get_wind_seed() -> int:
@@ -709,6 +864,12 @@ func get_voyage() -> Voyage:
 	return _state.voyage.duplicate_voyage() if _state and _state.voyage else null
 
 
+## When the current voyage began (game time), or -1 when not underway (I024;
+## cheap, for things that look every frame).
+func get_voyage_departed_at() -> float:
+	return _state.voyage.departed_at if _state and _state.voyage else -1.0
+
+
 ## Cheap read-only queries for UI that refreshes every frame.
 func get_voyage_destination_id() -> StringName:
 	return _state.voyage.route.destination_port_id if _state and _state.voyage else &""
@@ -762,6 +923,10 @@ func depart() -> String:
 	var problem := SeaRouter.get_default().validate_route(route)
 	if not problem.is_empty():
 		return problem
+	# I024: nobody is left on the pontoon.
+	var ashore := companion_departure_refusal()
+	if ashore != "":
+		return ashore
 	_state.voyage = Voyage.create(route, _state.game_time)
 	_state.hat.voyage_worn_hazard = 0
 	_state.hat.voyage_lost = false
@@ -900,18 +1065,28 @@ func set_propulsion(state: PropulsionState) -> void:
 		propulsion_changed.emit(state.mode)
 
 
+## A passage this long (game seconds) is "a week at sea together" (I024).
+const COMPANION_WEEK_AT_SEA_S := 7.0 * 86400.0
+
+
 func complete_voyage() -> void:
 	if not is_underway():
 		return
 	var destination := PortCatalog.get_default().get_port(_state.voyage.route.destination_port_id)
 	var record := CaptainsLog.make_record(_state.voyage, _state.game_time, _state.vessel_id, CaptainsLog.OUTCOME_ARRIVED)
 	var new_harbour := _state.captains_log.record_voyage(record)
-	var awards := _award_objectives(record, new_harbour)
-	awards.append_array(_award_world_firsts(record, destination))
-	_state.voyage = null
-	_state.vessel_status = SessionState.STATUS_ARRIVED
+	# Moored first, so the renown records note the harbour they were earned in (I024).
 	_state.location_id = destination.id
 	_state.vessel_position = destination.get_geo_position()
+	var awards := _award_objectives(record, new_harbour)
+	awards.append_array(_award_world_firsts(record, destination))
+	# I024: a week or more at sea, together.
+	if float(record.ended) - float(record.departed) >= COMPANION_WEEK_AT_SEA_S:
+		var together := _award_once("companion:week_at_sea", Loc.t("Just the two of us: %d days at sea") % floori((float(record.ended) - float(record.departed)) / 86400.0), 25)
+		if not together.is_empty():
+			awards.append(together)
+	_state.voyage = null
+	_state.vessel_status = SessionState.STATUS_ARRIVED
 	_state.propulsion = PropulsionState.new()
 	_state.weather_exposure.reset(_state.game_time)
 	_has_unsaved_changes = true
@@ -1380,6 +1555,7 @@ func publish_travel_update() -> Dictionary:
 	progress.published_renown += renown
 	progress.published_euros += euros
 	_state.funds += euros
+	progress.mark(&"publish:first", _state.game_time, _here())  # I024: the collection's "Going public"
 	_has_unsaved_changes = true
 	var info := {"error": "", "renown": renown, "euros": euros, "funds_after": _state.funds}
 	funds_changed.emit(_state.funds)
@@ -1393,7 +1569,7 @@ func publish_travel_update() -> Dictionary:
 func _award_objectives(record: Dictionary, new_harbour: bool) -> Array[Dictionary]:
 	var awards := ObjectiveCatalog.get_default().evaluate(_state.captains_log, record, new_harbour, _state.progress, _state.hat)
 	for award in awards:
-		_state.progress.award(StringName(award.id), award.title, award.reward, float(record.ended))
+		_state.progress.award(StringName(award.id), award.title, award.reward, float(record.ended), _here())
 	return awards
 
 
@@ -1450,7 +1626,7 @@ static func _is_atlantic_crossing(from: Vector2, to: Vector2) -> bool:
 func _award_hat_objectives(event: Dictionary) -> Array[Dictionary]:
 	var awards := ObjectiveCatalog.get_default().evaluate_hat_event(event, _state.captains_log, _state.hat, _state.progress)
 	for award in awards:
-		_state.progress.award(StringName(award.id), award.title, award.reward, float(event.time))
+		_state.progress.award(StringName(award.id), award.title, award.reward, float(event.time), _here())
 	return awards
 
 
@@ -1743,10 +1919,21 @@ func set_passage_posture(posture: StringName) -> void:
 
 ## Pays `renown` for milestone `id` the first time only (an existing
 ## ObjectiveProgress record, like Go Ashore), or {} when already paid.
+## Where and on which boat something happens now (I024; kept with a renown
+## record the first time): the harbour when in one, the position (rounded to
+## about a mile) and the boat.
+func _here() -> Dictionary:
+	if _state == null:
+		return {}
+	var location := get_location()
+	return {"port": String(location.id) if location else "", "lon": snappedf(_state.vessel_position.x, 0.01),
+		"lat": snappedf(_state.vessel_position.y, 0.01), "vessel": String(_state.vessel_id)}
+
+
 func _award_once(id: String, title: String, renown: int) -> Dictionary:
 	if _state.progress.is_completed(StringName(id)):
 		return {}
-	_state.progress.award(StringName(id), title, renown, _state.game_time)
+	_state.progress.award(StringName(id), title, renown, _state.game_time, _here())
 	return {"id": id, "reward": renown, "title": title, "text": "", "secret": false, "tone": ""}
 
 
@@ -2704,9 +2891,9 @@ func apply_shore_choice(event_id: String, choice_index: int) -> Dictionary:
 	if cost > 0:
 		_state.funds -= cost
 	if renown > 0:
-		_state.progress.award(key, title, renown, _state.game_time)
+		_state.progress.award(key, title, renown, _state.game_time, _here())
 	else:
-		_state.progress.mark(key, _state.game_time)
+		_state.progress.mark(key, _state.game_time, _here())
 	_has_unsaved_changes = true
 	result.cost = cost
 	result.minutes = int(choice.minutes)
@@ -3304,6 +3491,42 @@ func end_sleep(slept_seconds: float) -> String:
 	var text := AnchorLife.pick(AnchorLife.WAKE_LINES, day)
 	_record_moment(key, "wake", text)
 	return text
+
+
+## I024: waking up, the companion is found by the berth (the cat or dog at
+## its foot, the parrot on its perch beside it), wherever it was. Now and
+## then - about one morning in two after a real sleep, once a day at most -
+## a small line says so; returns it, or "". The sleep itself (its clock,
+## hazards and interruptions) is not touched; the caller shows the line only
+## when nothing more important woke the Captain.
+const COMPANION_WAKE_MIN_SLEEP_S := 3.0 * 3600.0
+var _companion_wake_day := -1
+
+
+func wake_companion(slept_seconds: float) -> String:
+	if _state == null:
+		return ""
+	var companion := _state.companion
+	var area_before := companion.area
+	var spot_before := companion.spot
+	companion.wake_by_berth(_state.game_time)
+	_has_unsaved_changes = true
+	# It was there while the Captain slept: shown there at once, not walking
+	# over after waking (the companion nodes do not animate moves in sleep).
+	var awake := not _asleep
+	_asleep = true
+	if companion.area != area_before:
+		companion_area_changed.emit(companion.area)
+	if companion.spot != spot_before:
+		companion_moved.emit(companion.spot)
+	_asleep = not awake
+	if slept_seconds < COMPANION_WAKE_MIN_SLEEP_S:
+		return ""
+	var day := AnchorLife.local_day(_state.game_time, _state.vessel_position.x)
+	if day == _companion_wake_day or absi(hash("%s:%d" % [companion.kind, day])) % 2 != 0:
+		return ""
+	_companion_wake_day = day
+	return CompanionRemarks.wake_line(CompanionRemarks.identity(companion), day)
 
 
 ## Petting a companion on a settled evening or night: one soft line a stay.

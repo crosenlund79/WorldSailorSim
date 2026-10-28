@@ -126,6 +126,7 @@ func _ready() -> void:
 	_setup_camera()
 	_setup_lighting()
 	_setup_overhead()
+	_setup_laptop()
 	_setup_hat_hook()
 	_update_hat_station()
 	_resolve_highlights.call_deferred()
@@ -440,6 +441,20 @@ func _setup_overhead() -> void:
 	var rig := get_node_or_null(^"SailRig") as SailRig
 	if rig:
 		rig.see_through = player
+
+
+## The Captain's laptop on the cabin table (I024): the work station opens it
+## (renown, publications, achievements, remote work).
+func _setup_laptop() -> void:
+	var station := get_node_or_null(^"Layout/Stations/Work") as Interactable
+	if station == null:
+		return
+	station.prompt = Loc.t("Use the laptop")
+	LaptopProp.place(self, station)
+
+
+func get_laptop() -> LaptopProp:
+	return get_node_or_null(^"Laptop") as LaptopProp
 
 
 ## Day and night, lamps and soft shadows (Iteration 17, BoatLighting).

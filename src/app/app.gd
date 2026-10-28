@@ -75,6 +75,11 @@ const WANDER_SECONDS := Vector2(45.0, 100.0)
 ## after the captain and goes back down a little after them; on deck it
 ## moves to another of its places now and then. Underway or in poor weather
 ## it stays below (GameSession brings it down by itself).
+##
+## I024: moored in a harbour it also follows the Captain ashore, down the
+## gangplank to a place on the pontoon near them, and back. Coming back it
+## sometimes lingers a while (it is exploring); the boat cannot cast off
+## until it is aboard, and "Call ... aboard" fetches it at once.
 func _update_companion_follow(delta: float) -> void:
 	var area := router.current_screen as BoatArea
 	if area == null or not GameSession.is_active() or router.is_busy() or GameSession.is_asleep() or get_tree().paused:
@@ -83,27 +88,134 @@ func _update_companion_follow(delta: float) -> void:
 	if companion == null:
 		return
 	var want := companion.area
-	if area.area_id == SessionState.AREA_EXTERIOR and GameSession.companion_may_be_on_deck():
+	var shore := area.get_shore_access() if area.area_id == SessionState.AREA_EXTERIOR else null
+	var captain_ashore := shore != null and shore.is_active() and shore.is_player_ashore()
+	if captain_ashore and GameSession.companion_may_go_ashore():
+		want = CompanionState.AREA_SHORE
+	elif area.area_id == SessionState.AREA_EXTERIOR and GameSession.companion_may_be_on_deck():
 		want = CompanionState.AREA_DECK
 	elif area.area_id == SessionState.AREA_INTERIOR:
 		want = CompanionState.AREA_CABIN
 	if want == companion.area:
 		_follow_target = &""
-		if want == CompanionState.AREA_DECK and area.area_id == SessionState.AREA_EXTERIOR and not GameSession.is_settled_at_anchor():
+		var wanders := (want == CompanionState.AREA_DECK and area.area_id == SessionState.AREA_EXTERIOR and not GameSession.is_settled_at_anchor()) \
+			or want == CompanionState.AREA_SHORE
+		if wanders:
 			_wander_left -= delta
 			if _wander_left <= 0.0:
 				_wander_left = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
-				GameSession.set_companion_area(CompanionState.AREA_DECK, (companion.deck_spot + randi_range(1, 2)) % 3)
+				if want == CompanionState.AREA_SHORE:
+					GameSession.set_companion_area(want, _shore_place_near(shore, area.player.position, companion.deck_spot))
+				else:
+					GameSession.set_companion_area(CompanionState.AREA_DECK, (companion.deck_spot + randi_range(1, 2)) % 3)
 		return
 	if _follow_target != want:
 		_follow_target = want
 		var delay := FOLLOW_UP_SECONDS if want == CompanionState.AREA_DECK else FOLLOW_DOWN_SECONDS
+		if want == CompanionState.AREA_SHORE:
+			delay = FOLLOW_UP_SECONDS
+		elif companion.area == CompanionState.AREA_SHORE and randf() < SHORE_LINGER_CHANCE:
+			delay = SHORE_LINGER_SECONDS  # still sniffing about on the pontoon
 		_follow_left = randf_range(delay.x, delay.y)
 	_follow_left -= delta
 	if _follow_left <= 0.0:
 		_follow_target = &""
 		_wander_left = randf_range(WANDER_SECONDS.x, WANDER_SECONDS.y)
-		GameSession.set_companion_area(want, randi_range(0, 2))
+		var place := randi_range(0, 2)
+		if want == CompanionState.AREA_SHORE:
+			place = _shore_place_near(shore, area.player.position, -1)
+		GameSession.set_companion_area(want, place)
+
+## Coming back aboard, now and then it stays ashore a little longer (I024).
+const SHORE_LINGER_CHANCE := 0.35
+const SHORE_LINGER_SECONDS := Vector2(25.0, 60.0)
+
+
+## Its place on the pontoon nearest the Captain (not `avoid`).
+static func _shore_place_near(shore: ShoreAccess, captain: Vector2, avoid: int) -> int:
+	var best := 0
+	var best_d := INF
+	for i in ShipCompanion.SHORE_OFFSETS.size():
+		if i == avoid:
+			continue
+		var d := ShipCompanion.get_shore_spot(shore, i).distance_to(captain)
+		if d < best_d:
+			best_d = d
+			best = i
+	return best
+
+
+## Calls the companion back aboard from the shore (I024).
+func recall_companion() -> void:
+	var line := GameSession.recall_companion()
+	if line != "":
+		_follow_target = &""
+		notify(line)
+
+
+# --- Talk on long passages (I024) ---------------------------------------------------
+
+## The Captain talks to the companion now and then underway, a little more
+## as the days at sea add up (CompanionRemarks: stages, lines, responses).
+## Timed on the voyage's own game clock, at most one remark per stage gap
+## and never within PASSAGE_MIN_REAL_SECONDS of real time, so neither time
+## acceleration nor sleeping brings a flood; after loading, the next remark
+## is a full gap away (a reload never brings one sooner). Only in a quiet
+## moment: aboard, no window, notice or warning showing. No meter, nothing
+## to earn, nothing lost by silence.
+var _talk_voyage_at := -1.0
+var _talk_next_at := INF
+var _talk_real_wait := 0.0
+var _talk_said: Array[String] = []
+var _talk_count := 0
+
+
+func _update_passage_talk(delta: float) -> void:
+	var departed := GameSession.get_voyage_departed_at() if GameSession.is_active() else -1.0
+	if departed < 0.0:
+		_talk_voyage_at = -1.0
+		return
+	var now := GameSession.get_game_time()
+	if departed != _talk_voyage_at:
+		_talk_voyage_at = departed
+		_talk_said.clear()
+		_talk_count = 0
+		var gap := CompanionRemarks.PASSAGE_GAP_HOURS[CompanionRemarks.passage_stage((now - departed) / 3600.0)] * 3600.0
+		# A passage just begun: after the first hours. Joined later (a loaded
+		# game): a whole gap from now.
+		_talk_next_at = departed + CompanionRemarks.PASSAGE_FIRST_HOURS * 3600.0 if now - departed < 600.0 else now + gap
+		_talk_real_wait = CompanionRemarks.PASSAGE_MIN_REAL_SECONDS * 0.5
+	if not get_tree().paused and not GameSession.is_paused():
+		_talk_real_wait -= delta
+	if now < _talk_next_at or _talk_real_wait > 0.0:
+		return
+	if not is_in_gameplay() or not modals.is_empty() or router.is_busy() or GameSession.is_asleep() or get_tree().paused \
+			or toasts.get_child_count() > 0 or hud.is_warning_visible() or not GameSession.get_pending_bite().is_empty() \
+			or is_instance_valid(voyage_map) or (academy != null and academy.card.visible):
+		return  # not now: the remark waits for a quiet moment (no tip card either)
+	var who := CompanionRemarks.identity(GameSession.get_companion())
+	var hours := (now - departed) / 3600.0
+	var stage := CompanionRemarks.passage_stage(hours)
+	var lines := CompanionRemarks.passage_lines(who, stage).filter(func(l: String) -> bool: return not l in _talk_said)
+	if lines.is_empty():
+		_talk_said.clear()
+		lines = CompanionRemarks.passage_lines(who, stage)
+	var seed := absi(hash("%d:%d" % [int(departed), _talk_count]))
+	var key: String = lines[seed % lines.size()]
+	_talk_said.append(key)
+	_talk_count += 1
+	var text := CompanionRemarks.say(who, key)
+	# Its response, when it is here to hear it (and awake); sometimes nothing.
+	var companion := (router.current_screen as BoatArea).find_child("Companion", false, false) as ShipCompanion
+	if companion and companion.visible and companion.pose != CompanionVisualSet.POSE_SLEEPING:
+		var answer := CompanionRemarks.response(who, seed / 7)
+		if companion.respond(answer.clip) and answer.text != "":
+			text += "\n" + String(answer.text)
+	toasts.show_message(text, ANCHOR_MOMENT_SECONDS)
+	SessionLog.write("passage_talk", {"hours": snappedf(hours, 0.1), "stage": stage, "line": key})
+	var gap := CompanionRemarks.PASSAGE_GAP_HOURS[stage] * 3600.0
+	_talk_next_at = now + gap * (0.8 + 0.5 * float(seed % 100) / 100.0)
+	_talk_real_wait = CompanionRemarks.PASSAGE_MIN_REAL_SECONDS
 
 
 ## An anchorage was reached; its prompt waits for a free moment (Iteration 18).
@@ -196,6 +308,7 @@ func _process(delta: float) -> void:
 		update_weather_audio()
 	_update_bite_wait(delta)
 	_update_companion_follow(delta)
+	_update_passage_talk(delta)
 	if _anchorage_prompt_due and is_in_gameplay() and modals.is_empty() and not router.is_busy() and not GameSession.is_asleep():
 		_anchorage_prompt_due = false
 		show_anchorage_prompt()
@@ -326,7 +439,8 @@ func show_main_menu() -> void:
 	router.change_screen(main_menu_scene, _connect_main_menu)
 
 
-## New Game asks for the ship's companion (cat or dog) first.
+## New Game asks for the ship's companion first (I024: Ragdoll cat, Pug or
+## parrot, with an optional name and gender).
 func open_new_game_menu() -> void:
 	if not modals.is_empty() or router.is_busy():
 		return
@@ -335,9 +449,10 @@ func open_new_game_menu() -> void:
 	modals.push(menu)
 
 
-func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> void:
+func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
+		companion_name := "", companion_gender: StringName = &"") -> void:
 	modals.clear()
-	GameSession.start_new_session(companion_kind, level)
+	GameSession.start_new_session(companion_kind, level, companion_name, companion_gender)
 	_show_current_boat_area()
 	if AcademyGuide.enabled and Academy.first_voyage_state() == Academy.NEVER_OFFERED:
 		offer_first_voyage.call_deferred()
@@ -542,8 +657,9 @@ func get_wheel_actions() -> Array[Dictionary]:
 		add.call(&"chart", Loc.t("Chart table"), open_chart)
 		add.call(&"provisions", "Provisions", open_provisions)
 		add.call(&"cabin_home", "Make it home", func() -> void: open_cabin_home.call_deferred())
-		add.call(&"postcards", Loc.t("Write a postcard"), func() -> void: open_postcards.call_deferred())
-		add.call(&"game_dev", Loc.t("Work on your little game"), func() -> void: open_game_dev.call_deferred())
+		# I024: postcards, travel updates, the little game and the achievements
+		# all live on the laptop now (one item instead of two).
+		add.call(&"laptop", Loc.t("Laptop"), func() -> void: open_laptop.call_deferred())
 	else:
 		if GameSession.is_underway():
 			# On/off items show a check mark read from the setting itself (Cozy Polish).
@@ -563,6 +679,8 @@ func get_wheel_actions() -> Array[Dictionary]:
 					notify(Loc.t("Sailing on along the course.") if error == "" else error))
 		elif GameSession.get_planned_route() != null:
 			add.call(&"set_sail", Loc.t("Set sail"), request_departure)
+		if GameSession.is_companion_ashore():
+			add.call(&"call_aboard", CompanionRemarks.call_aboard_label(CompanionRemarks.identity(GameSession.get_companion())), recall_companion)
 		add.call(&"chart", "Charts", open_chart)
 		if GameSession.get_pending_bite().is_empty():
 			add.call(&"fishing", Loc.t("Fishing rod"), func() -> void: open_fishing.call_deferred())
@@ -652,6 +770,17 @@ func request_departure() -> void:
 	if route == null or not route.has_path():
 		notify(Loc.t("Plot a course at the chart table before setting sail."))
 		return
+	# I024: never without the companion. It is fetched first, then the
+	# departure question follows as usual.
+	if GameSession.is_companion_ashore():
+		var who := CompanionRemarks.identity(GameSession.get_companion())
+		var fetch: bool = await modals.confirm(CompanionRemarks.still_ashore(who), CompanionRemarks.ashore_hint(who),
+			CompanionRemarks.call_aboard_label(who))
+		if not fetch:
+			return
+		recall_companion()
+		if GameSession.is_companion_ashore():
+			return
 	var catalog := PortCatalog.get_default()
 	var estimate := Simulation.estimate_route_seconds(route.path)
 	var waypoints := "" if route.waypoints.is_empty() else Loc.n(" via %d waypoint", " via %d waypoints",
@@ -759,11 +888,13 @@ func _sleep_now(hours: float) -> Dictionary:
 	var wake_line := GameSession.end_sleep(result.elapsed_seconds)
 	SessionLog.write("sleep", {"hours": hours, "slept_h": snappedf(result.elapsed_seconds / 3600.0, 0.01), "stopped_by": String(result.stopped_by),
 		"anchored": GameSession.is_anchored()})
+	var companion_line := ""
 	if result.stopped_by != Simulation.STOP_RESCUE:
+		companion_line = GameSession.wake_companion(result.elapsed_seconds)  # I024: by the berth
 		_wake_in_berth()
 	if TimePassage.is_shown():
 		snap_light()
-	return {"result": result, "wake_line": wake_line}
+	return {"result": result, "wake_line": wake_line, "companion_line": companion_line}
 
 
 ## One short line on the black when the captain woke early.
@@ -814,6 +945,10 @@ func _after_sleep(_hours: float, outcome: Dictionary) -> void:
 			notify(Loc.t("You slept %s. It is %s.%s") % [slept, now, still_paused])
 	if not wake_line.is_empty():
 		toasts.show_message(wake_line, ANCHOR_MOMENT_SECONDS)
+	elif result.stopped_by == Simulation.STOP_NONE and not String(outcome.get("companion_line", "")).is_empty():
+		# I024: a small morning moment with the companion - only when nothing
+		# more important woke the Captain.
+		toasts.show_message(outcome.companion_line, ANCHOR_MOMENT_SECONDS)
 
 
 ## After a jump in time (sleep, a dawn or dusk passed under the black): the
@@ -1149,17 +1284,32 @@ func _refuse_facility(facility: StringName) -> void:
 	SessionLog.write("facility", {"facility": String(facility), "outcome": "unavailable", "port": String(GameSession.get_location_id())})
 
 
-## The cabin's work station: remote work, in harbour only.
-func open_work_menu() -> void:
+## The Captain's laptop at the cabin table (I024, LaptopView): renown,
+## publications, the achievement collection, a voyage history, remote work
+## and the little game, all on its screen. The work station opens it.
+func open_laptop(start_app: StringName = LaptopView.APP_HOME) -> LaptopView:
 	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
-		return
+		return null
+	var laptop := LaptopView.new(start_app)
+	laptop.name = "LaptopView"
+	laptop.postcard_requested.connect(func() -> void: make_postcard.call_deferred())
+	laptop.work_requested.connect(func(hours: int) -> void: work_for.call_deferred(hours))
+	laptop.game_work_requested.connect(func(task_id: String, choice: int) -> void: work_on_game.call_deferred(task_id, choice))
+	laptop.publish_confirmed.connect(publish_travel_update)
+	modals.push(laptop)
+	SessionLog.write("laptop", {"app": String(start_app), "port": String(GameSession.get_location_id())})
+	return laptop
+
+
+## Remote work, on the laptop (in harbour only).
+func open_work_menu() -> WorkMenu:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
 	if not GameSession.can_work_remotely():
 		notify(Loc.t("Remote work needs a steady connection: moor in a harbour first."))
-		return
-	var menu := WorkMenu.new()
-	menu.work_requested.connect(work_for)
-	menu.publish_requested.connect(open_publish_menu)
-	modals.push(menu)
+		return null
+	var laptop := open_laptop()
+	return laptop.open_work() if laptop else null
 
 
 ## Works for `hours` through the normal simulation (Simulation.work), then
@@ -1241,15 +1391,10 @@ static func interruption_reason(stopped_by: StringName) -> String:
 	return ""
 
 
-## Postcards from the Sea (I022): from the cabin.
+## Postcards from the Sea (I022): from the cabin, on the laptop (I024).
 func open_postcards() -> PostcardMenu:
-	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
-		return null
-	var menu := PostcardMenu.new()
-	menu.make_requested.connect(func() -> void: make_postcard.call_deferred())
-	menu.scrapbook_requested.connect(func() -> void: modals.push(ScrapbookMenu.new()))
-	modals.push(menu)
-	return menu
+	var laptop := open_laptop(LaptopView.APP_PUBLICATIONS)
+	return laptop.open_postcards() if laptop else null
 
 
 ## Makes the postcard drafted in GameSession: its remaining time passes on the
@@ -1270,14 +1415,10 @@ func make_postcard() -> void:
 			Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by), now])
 
 
-## A Game Developer at Sea (I022): from the cabin.
+## A Game Developer at Sea (I022): from the cabin, on the laptop (I024).
 func open_game_dev() -> GameDevMenu:
-	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
-		return null
-	var menu := GameDevMenu.new()
-	menu.work_requested.connect(func(task_id: String, choice: int) -> void: work_on_game.call_deferred(task_id, choice))
-	modals.push(menu)
-	return menu
+	var laptop := open_laptop()
+	return laptop.open_game() if laptop else null
 
 
 ## A session on the little game: the task's (remaining) hours pass on the one
@@ -1732,7 +1873,7 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.interaction_prompt_changed.connect(hud.set_prompt)
 	area.boatyard_requested.connect(open_boatyard)
 	area.provisions_requested.connect(open_provisions)
-	area.work_requested.connect(open_work_menu)
+	area.work_requested.connect(open_laptop)
 	area.grocery_requested.connect(open_grocery)
 	area.go_ashore_requested.connect(open_go_ashore)
 	area.fishing_requested.connect(open_fishing)

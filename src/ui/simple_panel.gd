@@ -3,11 +3,27 @@ extends ModalPanel
 ## A small centred dialog built in code (title, body, a row of buttons), in the
 ## same style as the other modals. Used by the work and grocery dialogs.
 
+## I024: shown on the cabin laptop's screen (LaptopView) instead of as a
+## dialog of its own: no backdrop, no frame, it fills the screen's app area.
+## Set before the panel enters the tree.
+var embedded := false
+
 var _box: VBoxContainer
 var _buttons: HBoxContainer
 
 
 func _build(title: String, width := 620.0) -> VBoxContainer:
+	if embedded:
+		var page := PanelContainer.new()
+		page.name = "Panel"
+		page.add_theme_stylebox_override(&"panel", StyleBoxEmpty.new())
+		page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		add_child(page)
+		_box = VBoxContainer.new()
+		_box.add_theme_constant_override("separation", 12)
+		page.add_child(_box)
+		_label("Title", title, &"HeaderLabel")
+		return _box
 	var dim := ColorRect.new()
 	dim.name = "Dim"  # coloured by UiTheme (the modal backdrop)
 	dim.color = Color(0.04, 0.07, 0.09, 0.58)

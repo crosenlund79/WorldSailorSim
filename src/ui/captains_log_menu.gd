@@ -281,6 +281,7 @@ func _build_objectives_tab() -> Control:
 	var log := GameSession.get_captains_log()
 	_add_text(list, "RenownSummary", Loc.t("Renown: %d earned in all, %d not yet published. Objectives are tracked automatically and pay renown when a voyage completes them.") % [
 		progress.lifetime_renown, progress.unpublished_renown], &"MutedLabel")
+	_add_text(list, "LaptopHint", "Your achievements, with when and where you earned them, are on the laptop at the cabin table.", &"MutedLabel")
 	_add_text(list, "OpenTitle", "Objectives", HEADING)
 	var open := VBoxContainer.new()
 	open.name = "Open"
@@ -295,7 +296,8 @@ func _build_objectives_tab() -> Control:
 			secrets.append(objective)
 			continue
 		var count := progress.get_count(StringName(objective.id))
-		if count == 0 or objective.repeatable:
+		# I024: filler retired from the collection is no longer offered as a goal.
+		if (count == 0 or objective.repeatable) and not objective.retired:
 			_add_objective(open, objective, describe_progress(objective, log, count))
 		if count > 0:
 			var entry: Dictionary = progress.completed[objective.id]

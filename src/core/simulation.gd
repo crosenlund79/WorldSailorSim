@@ -369,6 +369,7 @@ func advance(seconds: float, stop_at_events := false) -> AdvanceResult:
 		var reached_event := to_event <= step
 		var new_progress := event_at if reached_event else progress + speed * step / 3600.0
 		GameSession.apply_simulation_step(time + step, new_progress)
+		GameSession.note_sailing(time, time + step, speed, propulsion.sails_set())  # I024: sustained speed
 		_check_hat(time, time + step, progress, new_progress, result)
 		result.elapsed_seconds += step
 		remaining -= step

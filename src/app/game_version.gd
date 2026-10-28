@@ -11,8 +11,8 @@ extends RefCounted
 ##
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
-const DISPLAY := "0.109a"
-const MACHINE := "0.109.1"
+const DISPLAY := "0.110a"
+const MACHINE := "0.110.1"
 ## Written by tools/write_build_info.py before an export (optional); in a run
 ## from the project the commit is read from the checkout's .git instead.
 const BUILD_INFO_PATH := "res://build_info.json"

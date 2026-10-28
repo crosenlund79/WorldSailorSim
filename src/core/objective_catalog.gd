@@ -8,6 +8,12 @@ extends RefCounted
 ## written to the Captain's Log (see evaluate()) or when something happens to
 ## the captain's hat (evaluate_hat_event()). Nothing here changes state.
 ##
+## I024: an objective marked "retired" is filler retired from the
+## achievement collection (AchievementCatalog) and from the Captain's Log's
+## list of goals. It still pays its small renown as before (a renown event,
+## like a new harbour), so the renown economy and every save are unchanged;
+## once earned it is listed among the earlier honours.
+##
 ## Secret achievements (Visual Identity V01) are ordinary objectives with
 ## "secret": true. They pay renown like the others, exactly once, but the
 ## Captain's Log shows nothing about them (title, condition or reward) until
@@ -143,6 +149,7 @@ func _add(entry: Variant, generated: bool, ports: PortCatalog) -> void:
 		"generated": generated,
 		"secret": bool(entry.get("secret", false)),
 		"tone": StringName(str(entry.get("tone", TONE_PROUD))),
+		"retired": bool(entry.get("retired", false)),
 	}
 	objectives.append(objective)
 	_by_id[objective.id] = objective

@@ -10,12 +10,21 @@ extends RefCounted
 
 ## Rewards listed in the log, newest last.
 const MAX_RECENT := 20
+## Lifetime renown milestones noted as records ("renown:<n>", I024).
+const RENOWN_MILESTONES: Array[int] = [250, 1000]
 
 var lifetime_renown := 0
 var unpublished_renown := 0
 ## Objective id (String) -> {"count": times paid, "first": game time of the
 ## first completion, "last_event": game time of the voyage last paid for}.
+## I024: since then also, optional, "at" = where and on which boat it first
+## happened ({"port": harbour id or "", "lon", "lat", "vessel"}) and "r" =
+## the renown it first paid. Older records have neither: shown as "Location
+## not recorded", never made up.
 var completed := {}
+## I024: personal records ({"key": {"value", "time", "vessel"}}), e.g. the
+## best hour under sail. Optional in a save.
+var records := {}
 ## The latest rewards: {"id", "title", "reward", "time"}.
 var recent: Array[Dictionary] = []
 ## Travel updates published, the renown they used and the euros they paid.
@@ -34,6 +43,7 @@ func duplicate_progress() -> ObjectiveProgress:
 	copy.publications = publications
 	copy.published_renown = published_renown
 	copy.published_euros = published_euros
+	copy.records = records.duplicate(true)
 	return copy
 
 
@@ -58,14 +68,22 @@ func can_pay(objective: Dictionary, event_time: float) -> bool:
 
 ## Pays `reward` renown for objective `id` completed by the voyage that ended
 ## at `event_time` (GameSession only).
-func award(id: StringName, title: String, reward: int, event_time: float) -> void:
+## `at` (I024): where it happened (see `completed`), kept for the first time.
+func award(id: StringName, title: String, reward: int, event_time: float, at := {}) -> void:
 	var key := String(id)
 	if not completed.has(key):
-		completed[key] = {"count": 0, "first": event_time, "last_event": event_time}
+		completed[key] = {"count": 0, "first": event_time, "last_event": event_time, "r": reward}
+		if not at.is_empty():
+			completed[key].at = at.duplicate()
 	completed[key].count = int(completed[key].count) + 1
 	completed[key].last_event = event_time
+	var before := lifetime_renown
 	lifetime_renown += reward
 	unpublished_renown += reward
+	# I024: renown milestones are kept as records of when (and where) they were passed.
+	for milestone in RENOWN_MILESTONES:
+		if before < milestone and lifetime_renown >= milestone:
+			mark(StringName("renown:%d" % milestone), event_time, at)
 	recent.append({"id": key, "title": title, "reward": reward, "time": event_time})
 	while recent.size() > MAX_RECENT:
 		recent.remove_at(0)
@@ -73,10 +91,12 @@ func award(id: StringName, title: String, reward: int, event_time: float) -> voi
 
 ## Records that `id` happened at `event_time` without paying renown (a Go
 ## Ashore outing repeated, Iteration 12). Same record as award().
-func mark(id: StringName, event_time: float) -> void:
+func mark(id: StringName, event_time: float, at := {}) -> void:
 	var key := String(id)
 	if not completed.has(key):
 		completed[key] = {"count": 0, "first": event_time, "last_event": event_time}
+		if not at.is_empty():
+			completed[key].at = at.duplicate()
 	completed[key].count = int(completed[key].count) + 1
 	completed[key].last_event = event_time
 
@@ -90,6 +110,7 @@ func to_dict() -> Dictionary:
 		"publications": publications,
 		"published_renown": published_renown,
 		"published_euros": published_euros,
+		"records": records.duplicate(true),
 	}
 
 
@@ -122,6 +143,12 @@ static func from_dict(data: Variant, errors: Array[String]) -> ObjectiveProgress
 			errors.append("invalid objective record")
 			return null
 		progress.completed[id] = {"count": int(entry.count), "first": float(entry.first), "last_event": float(entry.last_event)}
+		# I024 (optional): where it happened, and the renown it paid.
+		var at: Variant = entry.get("at")
+		if at is Dictionary and _is_number(at.get("lon")) and _is_number(at.get("lat")):
+			progress.completed[id].at = {"port": str(at.get("port", "")), "lon": float(at.lon), "lat": float(at.lat), "vessel": str(at.get("vessel", ""))}
+		if _is_number(entry.get("r")):
+			progress.completed[id].r = int(entry.r)
 	for entry: Variant in recent:
 		if not entry is Dictionary or not entry.get("id") is String or not _is_number(entry.get("reward")) or not _is_number(entry.get("time")):
 			errors.append("invalid renown record")
@@ -130,7 +157,26 @@ static func from_dict(data: Variant, errors: Array[String]) -> ObjectiveProgress
 			"time": float(entry.time)})
 	while progress.recent.size() > MAX_RECENT:
 		progress.recent.remove_at(0)
+	var records: Variant = data.get("records", {})
+	if records is Dictionary:
+		for key: Variant in records:
+			var record: Variant = records[key]
+			if key is String and record is Dictionary and _is_number(record.get("value")) and _is_number(record.get("time")):
+				progress.records[key] = {"value": float(record.value), "time": float(record.time), "vessel": str(record.get("vessel", ""))}
 	return progress
+
+
+## A personal record (I024): keeps `value` when it beats the one kept.
+## Returns true when it is a new record.
+func note_record(key: String, value: float, time: float, vessel: StringName) -> bool:
+	if records.has(key) and float(records[key].value) >= value:
+		return false
+	records[key] = {"value": value, "time": time, "vessel": String(vessel)}
+	return true
+
+
+func get_record(key: String) -> Dictionary:
+	return records.get(key, {})
 
 
 static func _is_number(value: Variant) -> bool:
