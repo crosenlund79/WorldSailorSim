@@ -1,9 +1,13 @@
 class_name CabinWindows
 extends Node2D
-## The world beyond the cabin windows (I022), proof of concept on one cabin.
+## The world beyond the cabin windows (I022; all four cabins since I025).
 ##
 ## The cabin is seen from above, so a window is a short opening in the wall
-## band of the illustrated cabin (data/vessels/cabin_windows.json). Each
+## band of the illustrated cabin (data/vessels/cabin_windows.json): portlights
+## in the monohulls' and the catamaran's hull sides, and the catamaran's big
+## saloon windows looking forward. The cabin painters
+## (tools/vessels/cabin_joinery.py) paint each opening's recess from the
+## same file, so the art and the scenery always line up. Each
 ## opening shows a slice of one shared, cheap 360° panorama around the boat,
 ## flattened into the opening with "up" pointing out of the boat: sky at the
 ## outer edge, the horizon, the sea nearer the cabin.
@@ -19,16 +23,18 @@ extends Node2D
 ##           weather (grey when overcast); the sun at its real bearing; stars
 ##           at night
 ##   sea   - WaterLook's water colour, lit by the hour; wave crests that grow
-##           and whiten with the wind and the weather's hazard
+##           and whiten with the wind and the weather's hazard, fewer and
+##           smaller in the shelter of a harbour (I025)
 ##   shore - moored, the harbour's own landmark art (HarbourLooks, I021) on
 ##           the quay side (starboard, as the boat lies), its far shore small
 ##           across the water to port; lit windows in it at night
 ##   rain  - streaks on the glass when it rains
 ##   glass - a faint tint over everything (GLASS_TINT, glass_strength), kept
 ##           apart from the water's own translucency (WaterLook)
-## The cabin's frames are drawn over the scenery, so it never shows outside
-## the openings; the node sits right above the cabin's wall art and under
-## the furniture.
+## Everything is drawn inside the opening's own rectangle, then the frame
+## over its edge, so the scenery never shows beyond the opening; the node
+## sits right above the cabin's wall art (whose recess the frame covers) and
+## under the furniture, so nothing is ever drawn over a piece of furniture.
 ##
 ## Cost: a few dozen draw calls, redrawn only when the captain moves or every
 ## REFRESH_SECONDS for the time and weather; no shader, no viewport, no
@@ -44,6 +50,10 @@ const FOV_MIN := 16.0
 const FOV_MAX := 80.0
 const REFRESH_SECONDS := 2.0
 const MOVE_EPSILON := 1.5
+## How much a harbour calms the water in the windows (crests, I025).
+const HARBOUR_CALM := 0.45
+## Which way each side looks out (before the wall's slope).
+const SIDES := {"port": Vector2.UP, "starboard": Vector2.DOWN, "forward": Vector2.RIGHT, "aft": Vector2.LEFT}
 ## The harbour's landmark art spans this many degrees on the quay side.
 const QUAY_HALF := 40.0
 const FAR_SHORE_HALF := 22.0
@@ -75,8 +85,15 @@ static func windows_for(vessel_id: StringName) -> Array[Dictionary]:
 		if entry is Dictionary and entry.get("at") is Array and (entry.at as Array).size() == 2:
 			out.append({"at": Vector2(float(entry.at[0]), float(entry.at[1])), "length": float(entry.get("length", 50)),
 				"thickness": float(entry.get("thickness", 14)), "angle": float(entry.get("angle", 0)),
-				"side": String(entry.get("side", "port"))})
+				"side": String(entry.get("side", "port")) if SIDES.has(String(entry.get("side", "port"))) else "port"})
 	return out
+
+
+## A window's axes: {"outward": out of the boat through the opening,
+## "right": along the opening, to the right of someone looking out}.
+static func axes(window: Dictionary) -> Dictionary:
+	var outward: Vector2 = (SIDES.get(String(window.side), Vector2.UP) as Vector2).rotated(deg_to_rad(float(window.angle)))
+	return {"outward": outward, "right": outward.rotated(PI * 0.5)}
 
 
 ## Returns false (and does nothing) when the boat has no windows.
@@ -136,15 +153,14 @@ func _sample_world() -> void:
 ## How window `window` is seen from `viewer`: {"centre": compass bearing at
 ## its middle, "fov": degrees it covers, "right", "outward": unit vectors}.
 func view_of(window: Dictionary, viewer: Vector2) -> Dictionary:
-	var port := String(window.side) == "port"
-	var along := Vector2.RIGHT.rotated(deg_to_rad(float(window.angle)))
-	var outward := (Vector2.UP if port else Vector2.DOWN).rotated(deg_to_rad(float(window.angle)))
-	var right := along if port else -along
+	var frame := axes(window)
+	var outward: Vector2 = frame.outward
+	var right: Vector2 = frame.right
 	var to_window: Vector2 = window.at - viewer
 	var depth := maxf(to_window.dot(outward), 8.0)
 	var off := rad_to_deg(atan2(to_window.dot(right), depth))
 	var fov := clampf(2.0 * rad_to_deg(atan2(float(window.length) * 0.5, depth)), FOV_MIN, FOV_MAX)
-	var side_bearing := rad_to_deg(outward.angle())  # from the bow (+x): port -90, starboard +90
+	var side_bearing := rad_to_deg(outward.angle())  # from the bow (+x): port -90, starboard +90, forward 0
 	var centre := fposmod(float(world.get("heading", 90.0)) + side_bearing + off, 360.0)
 	return {"centre": centre, "fov": fov, "right": right, "outward": outward}
 
@@ -219,6 +235,8 @@ func _draw_window(window: Dictionary, view: Dictionary) -> void:
 	var water: Color = world.water
 	_quad(Rect2(-half_len, horizon, half_len * 2.0, half_th - horizon), water * light, (water * light).darkened(0.15))
 	var rough := clampf(float(world.wind_kn) / 25.0 + float(world.hazard) * 0.2, 0.0, 1.0)
+	if bool(world.moored):
+		rough *= HARBOUR_CALM
 	var crest := Color(MarinePalette.FOAM, 0.3 + rough * 0.4) * lerpf(0.45, 1.0, day)
 	var drift := float(world.time) / 40.0
 	for k in range(int(floor((centre - fov * 0.5) / 4.0)), int(ceil((centre + fov * 0.5) / 4.0)) + 1):

@@ -20,7 +20,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from illustrate import *  # noqa: E402,F403
 from illustrate import ROOT, nonskid_deck, topsides  # noqa: E402
-from paint_illustrated_vessel import berth, cushions, fender, grab_bag, mug, book_row, winch_handle  # noqa: E402
+from paint_illustrated_vessel import fender, grab_bag, mug, book_row, winch_handle  # noqa: E402
+from paint_illustrated_vessel import illustrate_cabin, parse_nodes  # noqa: E402
 
 OUT = os.path.join(ROOT, "assets", "vessels", "starling_33", "illustrated")
 CANVAS = (-560, -200, 1120, 400)
@@ -154,101 +155,8 @@ def paint_deck():
 
 
 # =============================================================== cabin
-def paint_cabin():
-    v = parse(os.path.join(ROOT, "src/vessels/starling_33/cabin_visual.tscn"))
-    hull = shape(v, "CabinBase/HullShape")
-    sole = shape(v, "CabinBase/CabinSole")
-
-    B = Layer(11, CANVAS)
-    B.fill(hull, (64, 56, 48), 0.05)                     # the hull's inside, dark timber
-    B.ink(hull, 2.0, (40, 36, 32), amp=0.0)
-    B.shadow(sole, (0, 0), 6, 120)
-    teak_sole(B, sole, strip=11.0, color=HONEY, holly_alpha=70)
-    B.grain(sole, (96, 78, 60), True, spacing=3.0, alpha=30)
-    # Warm light pooling under the saloon lamp, a darker edge along the sides.
-    light = Image.new("L", B.img.size, 0)
-    ImageDraw.Draw(light).ellipse([B.px((-140, -90)), B.px((170, 90))], fill=30)
-    light = light.filter(ImageFilter.GaussianBlur(40 * SS))
-    glow = Image.new("RGBA", B.img.size, (240, 226, 196, 0))
-    glow.putalpha(light)
-    clipped = Image.new("RGBA", B.img.size, (0, 0, 0, 0))
-    clipped.paste(glow, (0, 0), B.mask(sole))
-    B.img.alpha_composite(clipped)
-    B.save(os.path.join(OUT, "cabin", "cabin_base.png"))
-
-    F = Layer(12, CANVAS)
-    # Engine box and companionway steps.
-    F.joinery(shape(v, "FurnitureVisual/EngineBox"), TEAK_DARK)
-    steps = shape(v, "FurnitureVisual/CompanionwaySteps")
-    F.joinery(steps, TEAK, horizontal=False)
-    for k in range(1, 4):
-        xs_ = [p[0] for p in steps]
-        x = min(xs_) + (max(xs_) - min(xs_)) * k / 4
-        F.line((x, min(p[1] for p in steps) + 2), (x, max(p[1] for p in steps) - 2), 0.8, (70, 58, 46), 200, 0.0)
-    # Galley: teak counter, a two-burner stove, a round sink.
-    galley = shape(v, "FurnitureVisual/Galley")
-    F.joinery(galley, TEAK_DARK)
-    top = [(x * 1.0, y) for x, y in galley]
-    F.fill(F.rect(min(p[0] for p in galley) + 3, min(p[1] for p in galley) + 3, max(p[0] for p in galley) - min(p[0] for p in galley) - 6,
-                  max(p[1] for p in galley) - min(p[1] for p in galley) - 9), (196, 198, 194), 0.02)   # solid-surface worktop
-    F.piece(F.rect(-318, -138, 58, 30), (52, 56, 60), 1.0, shadow=False)         # gimballed stove
-    for x in (-300, -276):
-        F.circle((x, -123), 8, (34, 36, 38), 0.8, shadow=False)
-        F.circle((x, -123), 4.5, (70, 74, 78), 0.0, n=12, shadow=False)
-    F.line((-320, -106), (-258, -106), 1.2, STEEL, 230, 0.0)                     # stainless fiddle rail
-    # (The right half of the counter is left plain: the provisions display
-    # draws the food crates and water cans there.)
-    # Navigation table with the chart, dividers and a lamp.
-    nav = shape(v, "FurnitureVisual/NavTable")
-    F.joinery(nav, TEAK_DARK)
-    chart = [(x - 232, y + 116) for x, y in v["FurnitureVisual/NavTable/ChartPaper"]["polygon"]]
-    F.piece(chart, (226, 226, 218), 0.8, shadow=False)
-    F.ink([(x - 232, y + 116) for x, y in v["FurnitureVisual/NavTable/ChartCourse"]["points"]], 0.8, (180, 70, 60), closed=False, amp=0.0)
-    F.ink([(-248, 104), (-262, 118), (-250, 132)], 0.6, STEEL_DARK, closed=False, amp=0.0)
-    F.piece(F.rect(-196, 88, 18, 14), (28, 36, 42), 0.7, shadow=False)          # a small chartplotter repeater
-    F.fill(F.rect(-194, 90, 14, 10), (62, 110, 122), 0.0)
-    # Settees with plump cushions and the saloon table.
-    for name, sy in (("FurnitureVisual/SetteePort", -1), ("FurnitureVisual/SetteeStarboard", 1)):
-        base = shape(v, name)
-        F.joinery(base, TEAK_DARK)
-        for i in range(3):
-            x0 = -112 + i * 80
-            cy = 128 * sy
-            r = F.rounded(x0, cy - 13, 78, 26, 3)
-            F.shadow(r, (1.5, 2), 1.5, 70)
-            F.fill(r, CUSHION, 0.04, grain=30.0)
-            F.tone_edges(r, CUSHION, 2.2)
-            F.ink(r, 0.9, (46, 56, 64), alpha=220, amp=0.0)
-    table = F.rounded(-55, -33, 130, 66, 3)
-    F.joinery(table, (118, 92, 68))
-    F.line((-10, -30), (-10, 30), 0.6, (70, 56, 42), 200, 0.0)                    # drop-leaf hinges
-    F.line((30, -30), (30, 30), 0.6, (70, 56, 42), 200, 0.0)
-    F.ink(table, 1.4, (150, 124, 96), alpha=200, amp=0.0)                         # fiddle
-    # Lockers and bulkheads forward, the V-berth with a blanket and pillow.
-    for name in ("FurnitureVisual/StoragePort", "FurnitureVisual/StorageStarboard"):
-        locker = shape(v, name)
-        F.joinery(locker, TEAK_DARK, horizontal=False)
-    for name in ("FurnitureVisual/BulkheadPort", "FurnitureVisual/BulkheadStarboard"):
-        F.joinery(shape(v, name), (88, 74, 61))
-    vberth = shape(v, "FurnitureVisual/VBerth")
-    F.joinery(vberth, TEAK_DARK)
-    xs_ = [p[0] for p in vberth]
-    ys_ = [p[1] for p in vberth]
-    cx, cy = (min(xs_) + max(xs_)) / 2, (min(ys_) + max(ys_)) / 2
-    mattress = [(cx + (x - cx) * 0.95, cy + (y - cy) * 0.94) for x, y in vberth]
-    F.fill(mattress, (214, 214, 208), 0.03)
-    F.tone_edges(mattress, (214, 214, 208), 2.5)
-    blanket = [(x + 370, y) for x, y in v["FurnitureVisual/VBerth/Blanket"]["polygon"]]
-    F.shadow(blanket, (1, 2), 2, 60)
-    F.fill(blanket, BLANKET, 0.05, grain=25.0)
-    F.tone_edges(blanket, BLANKET, 3.0)
-    F.ink(blanket, 0.8, (60, 70, 82), alpha=200, amp=0.0)
-    pillow = [(x + 370, y) for x, y in v["FurnitureVisual/VBerth/Pillow"]["polygon"]]
-    F.piece(pillow, (226, 226, 220), 0.8, shadow=False)
-    F.save(os.path.join(OUT, "cabin", "furniture.png"))
-
-    # Small details on top: books, a teapot and mugs, a lamp, a plant, a towel.
-    X = Layer(13, CANVAS)
+def paint_details(X):
+    """Small details on top: books, a teapot and mugs, a lamp, a towel."""
     book_row(X, 172, 100, 5)                                                       # pilot books and an almanac
     X.circle((-20, -6), 8, STEEL, 1.0)                                             # kettle
     X.line((-14, -12), (-8, -16), 1.0, STEEL_DARK, 220, 0.0)
@@ -260,7 +168,16 @@ def paint_cabin():
     X.piece(X.rounded(140, -58, 24, 14, 4), (50, 54, 58), 0.8)                     # binoculars
     X.piece(X.rounded(-236, -96, 9, 20, 2), (150, 156, 150), 0.6, shadow=False)   # tea towel on the galley rail
     X.circle((290, -40), 5, (208, 196, 160), 0.9, n=14)                            # reading lamp by the berth
-    X.save(os.path.join(OUT, "cabin", "cabin_details.png"))
+
+
+def paint_cabin():
+    """The cabin (I025): the shared yacht-interior painting of
+    paint_illustrated_vessel.illustrate_cabin (cabin_joinery.py), from the
+    Wing 33's own cabin_visual.tscn, with its own small details."""
+    path = os.path.join(ROOT, "src/vessels/starling_33/cabin_visual.tscn")
+    nodes, order = parse_nodes(path)
+    illustrate_cabin("starling_33", nodes, order, CANVAS, os.path.join(OUT, "cabin"), {"CabinDetails": paint_details},
+                     seeds=(11, 12, 13))
 
 
 if __name__ == "__main__":

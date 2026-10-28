@@ -29,6 +29,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from illustrate import *  # noqa: E402,F403
 from illustrate import ROOT, Layer, nonskid_deck, teak_deck, teak_sole, topsides  # noqa: E402
 from shapely.geometry import Polygon  # noqa: E402
+import cabin_joinery as cj  # noqa: E402
 
 DECK_SLOTS = {"HullBase": "hull_base", "DeckBase": "deck_base", "Coachroof": "coachroof", "DeckDetails": "deck_details"}
 CABIN_SLOTS = {"CabinBase": "cabin_base", "FurnitureVisual": "furniture", "CabinDetails": "cabin_details"}
@@ -323,6 +324,10 @@ def illustrate(vessel, area):
     nodes, order = parse_nodes(path)
     canvas_line = re.search(r"canvas = Rect2\(([^)]*)\)", open(path).read())
     canvas = tuple(int(float(x)) for x in canvas_line.group(1).split(","))
+    if area == "cabin":
+        illustrate_cabin(vessel, nodes, order, canvas, os.path.join(ROOT, "assets", "vessels", vessel, "illustrated", "cabin"),
+                         {"CabinDetails": EXTRAS.get((vessel, "CabinDetails"))})
+        return
     slots = DECK_SLOTS if area == "deck" else CABIN_SLOTS
     out = os.path.join(ROOT, "assets", "vessels", vessel, "illustrated", area)
     holes = []
@@ -363,6 +368,155 @@ def illustrate(vessel, area):
         if extra:
             extra(L)
         L.save(os.path.join(out, file_name + ".png"))
+
+
+# ------------------------------------------------------------------ cabins (I025)
+
+# The cabin's wall band (units between the sole and the hull's edge, at
+# least) and where the lift-out sole boards have their finger rings.
+CABIN_BAND = {"arctic_wanderer_26": 14.0, "starling_33": 24.0, "petrel_36": 13.0, "halcyon_40": 12.0}
+SOLE_RINGS = {
+    "arctic_wanderer_26": [(-60, 50), (110, -40)],
+    "starling_33": [(-150, 55), (130, -50), (290, 0)],
+    "petrel_36": [(-150, 50), (100, -48), (250, 30)],
+    "halcyon_40": [(-60, 0), (-300, -220), (-250, 230), (220, -200)],
+}
+# Shell pieces painted together by cj.hull_lining() / cj.cabin_sole().
+_SHELL = ("HullShape", "SaloonShape", "CabinSole", "CabinSide", "Seam", "HullSeam", "Portlight", "Window", "HullEdge")
+
+
+def _children(nodes, order, name, prefix):
+    return [outline(nodes, c) for c in order if c.startswith(name + "/") and c.split("/")[-1].startswith(prefix)
+            and nodes[c]["type"] != "Line2D"]
+
+
+def paint_cabin_piece(L, nodes, order, name, centre):
+    """One cabin furniture shape by what it is (its name), in the I025
+    yacht-interior style (cabin_joinery). Returns False for shapes it does
+    not know, which keep the generic material painting."""
+    n = nodes[name]
+    leaf = name.split("/")[-1]
+    depth = name.count("/")
+    pts = outline(nodes, name) if n["type"] != "Line2D" else None
+    if depth == 1:
+        if not pts or len(pts) < 3:
+            return False
+        if leaf.startswith("Settee") or leaf == "OwnerSofa":
+            cj.settee(L, pts, centre)
+        elif leaf.endswith("Berth") or leaf == "Bunk":
+            pillows = _children(nodes, order, name, "Pillow") + _children(nodes, order, name, "BunkPillow")
+            cj.berth(L, pts, pillows, single=leaf in ("Bunk",), vberth=leaf == "VBerth", centre=centre)
+        elif leaf.startswith("Galley"):
+            cj.worktop(L, pts)
+            burners = _children(nodes, order, name, "Burner")
+            if burners:
+                cj.stove(L, burners)
+            for sink_pts in _children(nodes, order, name, "Sink"):
+                cj.sink(L, sink_pts, centre)
+            for lid in _children(nodes, order, name, "Fridge"):
+                cj.fridge(L, lid)
+        elif leaf in ("NavTable", "NavDesk"):
+            charts = _children(nodes, order, name, "ChartPaper")
+            inst = _children(nodes, order, name, "Instruments")
+            cj.nav_station(L, pts, charts[0] if charts else None, inst[0] if inst else None, centre)
+            for c in order:
+                if c.startswith(name + "/") and nodes[c]["type"] == "Line2D" and "Course" in c:
+                    L.ink(line_points(nodes, c), 0.6, (176, 70, 60), closed=False, amp=0.0)
+        elif leaf in ("SaloonTable", "Table"):
+            cj.table(L, pts)
+        elif leaf in ("CompanionwaySteps", "DoorStep") or leaf.startswith("HullSteps"):
+            treads = [line_points(nodes, c) for c in order if c.startswith(name + "/") and nodes[c]["type"] == "Line2D"]
+            cj.steps(L, pts, treads)
+        elif leaf == "EngineBox":
+            cj.engine_box(L, pts)
+        elif leaf.startswith("Bulkhead"):
+            cj.bulkhead(L, pts)
+        elif leaf.startswith("Storage") or leaf in ("Locker", "GuestLocker", "Wardrobe"):
+            cj.locker(L, pts)
+        elif leaf == "Desk":
+            cj.cabinetry(L, pts)
+        elif leaf == "Shelf":
+            x0, y0, x1, y1 = cj.bbox(pts)
+            cj.shelf(L, pts, (0.0, -1.0 if (y0 + y1) / 2 > centre[1] else 1.0))
+        elif leaf == "MastPost":
+            cj.mast_post(L, pts)
+        elif leaf == "NavSeat":
+            cj.round_seat(L, pts)
+        elif leaf in ("Heads", "Ensuite"):
+            cj.heads_unit(L, pts)
+        elif leaf == "Shower":
+            cj.shower_tray(L, pts)
+        else:
+            return False
+        return True
+    # Children of the pieces above are painted by their parent.
+    parent = name.split("/")[1]
+    if parent.startswith(("Settee", "Galley", "NavTable", "NavDesk", "SaloonTable", "Table", "CompanionwaySteps", "DoorStep",
+                          "HullSteps", "VBerth", "OwnerBerth", "GuestBerth", "Bunk")):
+        return True
+    if leaf in ("Toilet", "EnsuiteToilet") and pts:
+        cj.toilet(L, pts)
+        return True
+    if leaf == "Basin" and pts:
+        cj.basin(L, pts)
+        return True
+    if leaf == "EnsuiteShower" and pts:
+        cj.shower_tray(L, pts)
+        return True
+    if leaf == "Drain" and pts:
+        cj.drain(L, pts)
+        return True
+    return False
+
+
+def illustrate_cabin(vessel, nodes, order, canvas, out, extras=None, seeds=(100, 101, 102)):
+    """The three cabin layers (I025): the shell (sole and hull lining with the
+    window recesses), the furniture, the small details."""
+    extras = extras or {}
+    band = CABIN_BAND.get(vessel, 14.0)
+    windows = cj.load_windows(vessel)
+    sole = outline(nodes, "CabinBase/CabinSole")
+    hulls = [outline(nodes, c) for c in order if c.startswith("CabinBase/") and c.split("/")[1].startswith(("HullShape", "SaloonShape"))]
+    hull = cj.hull_outline(hulls, sole, band)
+    centre = (0.0, 0.0)
+    # The shell.
+    B = Layer(seeds[0], canvas)
+    for name in slot_children(order, "CabinBase"):
+        leaf = name.split("/")[1]
+        if leaf.startswith("AmaHint"):
+            cj.floats(B, outline(nodes, name))
+    for poly in cj._polys_of(hull):
+        B.shadow(list(poly.exterior.coords)[:-1], (4, 6), 6, 90)
+    cj.cabin_sole(B, sole, rings=SOLE_RINGS.get(vessel, ()))
+    cj.hull_lining(B, hull, sole, windows, band)
+    cj.deck_beyond(B, vessel, hull, sole)
+    for name in slot_children(order, "CabinBase"):
+        leaf = name.split("/")[1]
+        if leaf.startswith(_SHELL) or leaf.startswith("AmaHint") or nodes[name]["type"] == "Label":
+            continue
+        paint_shape(B, nodes, name, [])
+    if extras.get("CabinBase"):
+        extras["CabinBase"](B)
+    B.save(os.path.join(out, "cabin_base.png"))
+    # Furniture.
+    F = Layer(seeds[1], canvas)
+    for name in slot_children(order, "FurnitureVisual"):
+        if nodes[name]["type"] == "Label" or "/Labels" in name:
+            continue
+        if not paint_cabin_piece(F, nodes, order, name, centre):
+            paint_shape(F, nodes, name, [])
+    if extras.get("FurnitureVisual"):
+        extras["FurnitureVisual"](F)
+    F.save(os.path.join(out, "furniture.png"))
+    # Details.
+    X = Layer(seeds[2], canvas)
+    for name in slot_children(order, "CabinDetails"):
+        if nodes[name]["type"] == "Label" or "/Labels" in name:
+            continue
+        paint_shape(X, nodes, name, [])
+    if extras.get("CabinDetails"):
+        extras["CabinDetails"](X)
+    X.save(os.path.join(out, "cabin_details.png"))
 
 
 # ------------------------------------------------------------------ boat by boat

@@ -1,6 +1,14 @@
 {
-	"note": "I022 cabin windows: openings in the illustrated cabin's wall band (cabin-local units; the bow is +x, port is -y). 'at' is the opening's centre, 'length' along the wall, 'thickness' across it, 'angle' the wall's slope in degrees, 'side' port or starboard. Read by src/boat/cabin_windows.gd. Proof of concept: the Starling 33 (Wing 33) saloon, three windows each side above the settees, clear of the world map.",
+	"note": "Cabin windows (I022, all four boats since I025): openings in the illustrated cabin's wall band (cabin-local units; the bow is +x, port is -y). 'at' is the opening's centre, 'length' along the wall, 'thickness' across it, 'angle' the wall's slope in degrees, 'side' the way the window looks out: port, starboard, forward or aft. Read by src/boat/cabin_windows.gd, and by tools/vessels/cabin_joinery.py, which paints each opening's recess into the wall, so art and scenery always line up. Portlights on the monohulls and in the catamaran's hulls, four big saloon windows looking forward on the catamaran; all clear of the world map, the furniture and the floor.",
 	"windows": {
+		"arctic_wanderer_26": [
+			{"at": [-165, -120.6], "length": 30, "thickness": 9, "angle": -6.8, "side": "port"},
+			{"at": [-105, -123.4], "length": 30, "thickness": 9, "angle": -2.5, "side": "port"},
+			{"at": [60, -122.6], "length": 30, "thickness": 9, "angle": 3.0, "side": "port"},
+			{"at": [-165, 120.6], "length": 30, "thickness": 9, "angle": 6.8, "side": "starboard"},
+			{"at": [-105, 123.4], "length": 30, "thickness": 9, "angle": 2.5, "side": "starboard"},
+			{"at": [60, 122.6], "length": 30, "thickness": 9, "angle": -3.0, "side": "starboard"}
+		],
 		"starling_33": [
 			{"at": [-104, -159.0], "length": 48, "thickness": 14, "angle": 0, "side": "port"},
 			{"at": [-44, -158.6], "length": 48, "thickness": 14, "angle": 0, "side": "port"},
@@ -8,6 +16,35 @@
 			{"at": [-104, 158.3], "length": 48, "thickness": 14, "angle": 0, "side": "starboard"},
 			{"at": [-44, 157.5], "length": 48, "thickness": 14, "angle": 0, "side": "starboard"},
 			{"at": [14, 155.9], "length": 40, "thickness": 14, "angle": -5.5, "side": "starboard"}
+		],
+		"petrel_36": [
+			{"at": [-250, -106.8], "length": 34, "thickness": 8.5, "angle": -3.8, "side": "port"},
+			{"at": [-150, -112.6], "length": 34, "thickness": 8.5, "angle": -1.9, "side": "port"},
+			{"at": [-60, -113.0], "length": 34, "thickness": 8.5, "angle": 0, "side": "port"},
+			{"at": [150, -107.0], "length": 34, "thickness": 8.5, "angle": 6.4, "side": "port"},
+			{"at": [-250, 106.8], "length": 34, "thickness": 8.5, "angle": 3.8, "side": "starboard"},
+			{"at": [-150, 112.6], "length": 34, "thickness": 8.5, "angle": 1.9, "side": "starboard"},
+			{"at": [-60, 113.0], "length": 34, "thickness": 8.5, "angle": 0, "side": "starboard"},
+			{"at": [150, 107.0], "length": 34, "thickness": 8.5, "angle": -6.4, "side": "starboard"}
+		],
+		"halcyon_40": [
+			{"at": [127, -110], "length": 50, "thickness": 9, "angle": 0, "side": "forward"},
+			{"at": [127, -40], "length": 50, "thickness": 9, "angle": 0, "side": "forward"},
+			{"at": [127, 40], "length": 50, "thickness": 9, "angle": 0, "side": "forward"},
+			{"at": [127, 110], "length": 50, "thickness": 9, "angle": 0, "side": "forward"},
+			{"at": [-385, -316], "length": 44, "thickness": 7.5, "angle": 0, "side": "port"},
+			{"at": [-250, -316], "length": 44, "thickness": 7.5, "angle": 0, "side": "port"},
+			{"at": [190, -316], "length": 44, "thickness": 7.5, "angle": 0, "side": "port"},
+			{"at": [-385, 316], "length": 44, "thickness": 7.5, "angle": 0, "side": "starboard"},
+			{"at": [-250, 316], "length": 44, "thickness": 7.5, "angle": 0, "side": "starboard"},
+			{"at": [190, 316], "length": 44, "thickness": 7.5, "angle": 0, "side": "starboard"}
 		]
+	},
+	"sea": {
+		"note": "The faded sea outside the hull in the cabin view (I025, src/boat/cabin_sea_backdrop.gd): 'pontoon' is the berth's pontoon in cabin units (x, y, width, height), the same place as on the deck (Surroundings/Mooring/Pontoon), hinted very faintly while moored.",
+		"arctic_wanderer_26": {"pontoon": [-820, 188, 1640, 100]},
+		"starling_33": {"pontoon": [-760, 245, 1520, 100]},
+		"petrel_36": {"pontoon": [-820, 310, 1640, 100]},
+		"halcyon_40": {"pontoon": [-820, 345, 1640, 100]}
 	}
 }
