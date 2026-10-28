@@ -10,10 +10,10 @@ extends RefCounted
 ## crests, ripples and glints of WaterLife still lie over it, so dawn, night,
 ## calm and rough water stay as distinct as before.
 ##
-## Kept apart from the cabin windows' glass: WINDOW glass tint lives in
-## CabinWindows and does not change this, and `translucency` here does not
-## change the glass. `translucency = 0` gives the water exactly as it was
-## before I022 (the before/after screenshots use that).
+## Kept apart from the cabin windows' glass (CabinWindows draws its own
+## glass colours), and `translucency` here does not change the glass.
+## `translucency = 0` gives the water exactly as it was before I022 (the
+## before/after screenshots use that).
 
 ## The water's own colour until I022 (every deck scene's Surroundings/Water).
 const DEEP := Color(0.1137, 0.2745, 0.3216)

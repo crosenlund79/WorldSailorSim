@@ -790,12 +790,12 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/boat/cabin_windows.gd`
 
-**Formål:** Verden uden for kahytsvinduerne (I022), siden I025 i hver båds kahyt.
-- **Hvad det gør:** Tegner vinduesåbninger i den tegnede kahyts vægge. Hver åbning viser et lille udsnit af verden omkring båden: himlen i timens og vejrets farver, solen hvor den virkelig står, stjerner om natten, havet med toppe der vokser med vinden, havnens eget billede på kajsiden, når båden er fortøjet, og regn på glasset. Hvilket udsnit afhænger af bådens kurs, hvilken side vinduet sidder på, og hvor skipperen står: går man forbi et vindue, drejer udsigten, og tæt på viser det mere. Vinduesrammerne tegnes over udsigten, og møblerne forbliver foran. Den spørger nu bådens lys, hvor overskyet det er (én fælles regel). I025: hver båds kahyt har vinduer: koøjer i enkeltskrogenes og katamaranens skrogsider og katamaranens store salonvinduer, der ser fremad (et vindue kan vende mod bagbord, styrbord, forud eller agterud). Kahytstegningerne maler hver åbnings fordybning ud fra den samme datafil, så tegning og udsigt altid passer sammen. I havn er vandet i vinduerne roligere (færre og mindre toppe).
-- **Arbejder sammen med:** `BoatArea` (tilføjer den), `WaterLook` (havets farve), `HarbourLooks` (havnebilledet), `Daylight`, `Simulation` (vejr, kurs), `data/vessels/cabin_windows.json` (hvor vinduerne sidder).
-- **Holder styr på:** Vinduerne, verden som sidst aflæst, hvor skipperen stod.
-- **Hvornår det kører:** Den tegner kun igen, når skipperen flytter sig, eller hvert andet sekund (omkring 0,35 ms pr. gang).
-- **Hvis du ændrer det:** Vinduer til en anden båd kræver målte åbninger, der ligger inde i den kahyts vægtegning; testen tjekker hvert hjørne. Hold den fri for shaders og arbejde i hvert billede.
+**Formål:** Glasset i kahytsvinduerne (I022), siden I025 i hver båds kahyt.
+- **Hvad det gør:** Tegner vinduesåbningerne i den tegnede kahyts vægge som almindeligt røget glas i en anodiseret ramme: lysere ved yderkanten, hvor dagslyset kommer ind, dybere ind mod kahytten, en blød refleks hen over det, og om natten mørkt glas med et svagt varmt skær fra kahytslamperne. Hver båds kahyt har vinduer: koøjer i enkeltskrogenes og katamaranens skrogsider og katamaranens store salonvinduer, der ser fremad. Kahytstegningerne maler hver åbnings fordybning ud fra den samme datafil, så glasset altid sidder i sin ramme. Kaptajnens ændring af I025: vinduerne viser ikke længere en levende udsigt til havet, havnen, andre både eller vejret (den tegning er fjernet, ikke blot skjult). Det falmede hav omkring skroget er et separat script (`CabinSeaBackdrop`).
+- **Arbejder sammen med:** `BoatArea` (tilføjer den), `Daylight` (dag eller nat), `data/vessels/cabin_windows.json` (hvor vinduerne sidder).
+- **Holder styr på:** Vinduerne og hvor meget dagslys glasset viser.
+- **Hvornår det kører:** Den tegner, når kahytten åbnes, og igen kun når dagslyset har ændret sig mærkbart (tjekkes hvert 20. sekund); at gå rundt tegner den aldrig om.
+- **Hvis du ændrer det:** Vinduer til en anden båd kræver målte åbninger, der ligger inde i den kahyts vægtegning; testen tjekker hvert hjørne. Hold den billig: ingen udsigt til verden udenfor, ingen shader, intet arbejde i hvert billede.
 
 ### `src/boat/cabin_world_map.gd`
 
@@ -2178,12 +2178,12 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** I testkøreren, før `test_gameplay_flow`.
 ### `tests/suites/test_cabin_windows.gd`
 
-**Formål:** Tester kahytsvinduerne og det blødere vand (I022; siden I025 hver kahyt og det falmede hav udenfor).
-- **Hvad det gør:** Tester, at hver vinduesåbning ligger inde i sin kahyts vægtegning på alle fire både (hver med vinduer i begge sider; Clam 40's salon med sine fire store vinduer, der ser fremad), at vinduerne ligger over væggene og under møblerne, og at udsigten skifter med hvor skipperen står, siden, kursen, havnen, timen og vejret. Den tester også, at den klassiske tegnestil skjuler vinduerne, at bagbord og styrbord i hver kahyt ser ud mod modsatte retninger, og at Clam 40's salonvinduer ser fremad under sejlads, og at det falmede hav uden for skroget (`CabinSeaBackdrop`) ligger under al kahytstegningen, er mørkere om natten, ikke lyses op af kahytslamperne, ikke tegnes under kahytsgulvet, kun antyder pontonen, når båden er fortøjet, og aldrig vises på dækket. Den måler hvad en ny tegning koster, og tjekker at vandets blødhed og glassets farve er adskilt. Den tager skærmbilleder fra to steder, i skumringen, om natten, undervejs, af hver båds kahyt og af dækkets vand før og efter.
+**Formål:** Tjekker kahytsvinduerne og det blødere vand (I022; hver kahyt og det falmede hav udenfor siden I025).
+- **Hvad det gør:** Tjekker, at hver vinduesåbning ligger inde i kahyttens vægtegning på alle fire både (hver med vinduer i begge sider; Clam 40's salon med sine fire store vinduer, der ser fremad), at vinduerne ligger over væggene og under møblerne, og at de siden Kaptajnens ændring af I025 er almindeligt glas: ingen udsigt til verden udenfor, ingen anden scene bag dem, lysere glas om dagen og mørkt glas om natten, aldrig tegnet om, mens skipperen går rundt, og billige at tegne. Den tjekker også, at den klassiske tegning skjuler vinduerne, at bagbords- og styrbordsvinduer vender hver sin vej i hver kahyt, det falmede hav omkring skroget (under al kahytstegning, svagt, mørkere om natten, ikke oplyst af lamperne, ikke under gulvet, pontonen kun ved fortøjning, aldrig på et dæk), og det blødere vand på dækket.
 - **Arbejder sammen med:** `CabinWindows`, `CabinSeaBackdrop`, `WaterLook`, `BoatArea`, `App`.
-- **Holder styr på:** Intet.
-- **Hvornår det kører:** Sammen med de andre testsæt (`test_runner.tscn`).
-- **Hvis du ændrer det:** Kun testene ændres.
+- **Holder styr på:** Intet; den sætter vand- og tegningsindstillingerne tilbage.
+- **Hvornår det kører:** I testkøreren; med skærmbilleder viser den hver kahyts glas om dagen og om natten og hver båds kahyt.
+- **Hvis du ændrer det:** Flyttes et vindue, skal kahyttens fordybning males igen; hjørnetesten siger det.
 
 ### `tests/suites/test_captains_log.gd`
 

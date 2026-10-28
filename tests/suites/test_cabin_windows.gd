@@ -1,12 +1,12 @@
 extends RefCounted
-## I022, the world beyond the windows and softer water: the cabin windows sit
-## in the wall art only, change with where the captain stands, which side they
-## face, the heading, the place, the hour and the weather; the classic art has
-## none; the water's translucency and the glass tint are separate settings;
-## and what it costs to draw. I025: every boat's cabin has windows (portlights,
-## the catamaran's forward saloon windows), and the faded sea outside the hull
-## (CabinSeaBackdrop) lies under the whole cabin. Screenshots: two
-## viewpoints, dusk, night, underway, each boat's cabin, and the deck's water
+## I022, the cabin windows and softer water: the cabin windows sit in the
+## wall art only; the classic art has none; the water's translucency and the
+## glass are separate; and what it costs to draw. I025: every boat's cabin has
+## windows (portlights, the catamaran's forward saloon windows), and the faded
+## sea outside the hull (CabinSeaBackdrop) lies under the whole cabin. The
+## Captain's revision of I025: the windows are plain glass - no live view of
+## the world outside, nothing redrawn as the Captain walks, only darker glass
+## at night. Screenshots: day, night, each boat's cabin, and the deck's water
 ## before and after.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
@@ -35,7 +35,6 @@ func run(runner: Node) -> void:
 	app.queue_free()
 	await t.frames(2)
 	WaterLook.translucency = 1.0
-	CabinWindows.glass_strength = 0.2
 	Simulation.auto_advance = true  # as the other suites leave it
 
 
@@ -103,9 +102,8 @@ func _test_water_look() -> void:
 	t.check(sea.get_luminance() > before.get_luminance() and shallow.get_luminance() > sea.get_luminance() and shallow.s < before.s,
 		"[water] softer: a little lighter and less saturated at sea, more so in harbour (%s → %s / %s)" % [before.to_html(false), sea.to_html(false), shallow.to_html(false)])
 	t.check(sea.get_luminance() < 0.35, "[water] still clearly water, not washed out (%.2f)" % sea.get_luminance())
-	CabinWindows.glass_strength = 0.6
-	t.check(WaterLook.water_colour(false) == sea, "[water] the window glass tint does not touch the water's own colour")
-	CabinWindows.glass_strength = 0.2
+	var glass := CabinWindows.glass_colours(1.0)
+	t.check(WaterLook.water_colour(false) == sea and glass[0] != sea, "[water] the window glass has its own colours, apart from the water's")
 
 
 func _test_in_the_cabin() -> void:
@@ -117,23 +115,17 @@ func _test_in_the_cabin() -> void:
 	var visual := area.get_node("Visual")
 	t.check(windows.get_index() == visual.get_node("CabinBase").get_index() + 1 and windows.get_index() < visual.get_node("FurnitureVisual").get_index(),
 		"[windows] drawn right over the wall art and under the furniture (frames and furniture stay in front)")
-	t.check(windows.world.get("picture") != null and bool(windows.world.moored), "[windows] moored: the harbour's own art is outside")
-	var port: Dictionary = windows.windows[1]
-	var starboard: Dictionary = windows.windows[4]
-	var aft := windows.view_of(port, Vector2(port.at.x - 200.0, 0))
-	var abeam := windows.view_of(port, Vector2(port.at.x, 0))
-	var close := windows.view_of(port, Vector2(port.at.x, -110))
-	var other := windows.view_of(starboard, Vector2(starboard.at.x, 0))
-	t.check(absf(CabinWindows._angle_diff(abeam.centre, 0.0)) < 1.0 and absf(CabinWindows._angle_diff(other.centre, 180.0)) < 1.0,
-		"[view] moored heading east: port looks north (%.0f°), starboard south (%.0f°)" % [abeam.centre, other.centre])
-	t.check(CabinWindows._angle_diff(aft.centre, abeam.centre) > 20.0, "[view] seen from aft the view turns towards the bow (%.0f° → %.0f°)" % [abeam.centre, aft.centre])
-	t.check(close.fov > abeam.fov * 2.0, "[view] up close a window shows a wider view (%.0f° vs %.0f°)" % [close.fov, abeam.fov])
-	area.player.position = Vector2(-140, -60)
+	# Plain glass: nothing of the world outside, nothing that follows the Captain.
+	t.check(not "world" in windows and not windows.has_method("view_of"), "[glass] the windows hold no view of the world outside (no sea, harbour, boats or weather)")
+	t.check(not windows.get_children().any(func(n: Node) -> bool: return n is SubViewport or n is Camera2D),
+		"[glass] no second scene or viewport behind the glass")
+	var day := CabinWindows.glass_colours(1.0)
+	var night := CabinWindows.glass_colours(0.0)
+	t.check(night[0].get_luminance() < day[0].get_luminance() * 0.5 and day[0].get_luminance() > day[1].get_luminance(),
+		"[glass] lighter at the outer edge by day, dark glass at night")
+	area.player.position = Vector2(-60, -100)
 	await t.frames(3)
-	await t.screenshot("i022_windows_view_aft")
-	area.player.position = Vector2(-44, -100)
-	await t.frames(3)
-	await t.screenshot("i022_windows_view_close")
+	await t.screenshot("i025_windows_glass_day")
 	# The cost of drawing all six windows (CPU time of one redraw), and how often it happens.
 	var samples: Array[int] = []
 	for i in 30:
@@ -144,30 +136,18 @@ func _test_in_the_cabin() -> void:
 	var median := float(samples[samples.size() / 2]) / 1000.0
 	var redraws := [0]
 	windows.draw.connect(func() -> void: redraws[0] += 1)
-	await t.frames(60)
-	t.check(median < 1.0, "[performance] one redraw of all six windows: median %.3f ms CPU (max %.3f ms)" % [median, float(samples.back()) / 1000.0])
-	t.check(redraws[0] <= 2, "[performance] standing still for 60 frames: %d redraws (only the %d-second refresh)" % [redraws[0], int(CabinWindows.REFRESH_SECONDS)])
-	# Dusk and night.
-	await _aboard(&"starling_33", &"interior", 18.7)
-	(app.router.current_screen as BoatArea).player.position = Vector2(-60, -100)
-	await t.frames(4)
-	await t.screenshot("i022_windows_dusk")
+	for spot in [Vector2(-140, -60), Vector2(-44, -100), Vector2(60, 80)]:
+		area.player.position = spot
+		await t.frames(20)
+	t.check(median < 0.5, "[performance] one redraw of all six windows: median %.3f ms CPU (max %.3f ms)" % [median, float(samples.back()) / 1000.0])
+	t.check(redraws[0] == 0, "[performance] walking about for 60 frames: %d redraws (the glass does not follow the Captain)" % redraws[0])
+	# Night.
 	await _aboard(&"starling_33", &"interior", 22.5)
 	windows = (app.router.current_screen as BoatArea).get_cabin_windows()
-	t.check(float(windows.world.daylight) < 0.05, "[time] at night the windows know it is night")
+	t.check(windows.daylight < 0.05, "[time] at night the glass is night glass (daylight %.2f)" % windows.daylight)
 	(app.router.current_screen as BoatArea).player.position = Vector2(-60, -100)
 	await t.frames(4)
-	await t.screenshot("i022_windows_night")
-	# Underway: open sea, the view turns with the heading.
-	await _aboard(&"starling_33", &"interior", 9.0, true)
-	windows = (app.router.current_screen as BoatArea).get_cabin_windows()
-	var heading := Simulation.get_current_heading()
-	var seen := windows.view_of(windows.windows[1], Vector2(windows.windows[1].at.x, 0))
-	t.check(windows.world.get("picture") == null and absf(CabinWindows._angle_diff(seen.centre, heading - 90.0)) < 1.0,
-		"[view] underway: open sea, the port windows look out at the heading −90° (%.0f°, heading %.0f°)" % [seen.centre, heading])
-	(app.router.current_screen as BoatArea).player.position = Vector2(-60, 100)
-	await t.frames(4)
-	await t.screenshot("i022_windows_underway")
+	await t.screenshot("i025_windows_glass_night")
 	# Classic art: no openings in its walls, so no windows.
 	SettingsManager.set_art_style(SettingsManager.ART_CLASSIC)
 	await t.frames(2)
@@ -190,18 +170,12 @@ func _test_other_cabins() -> void:
 			"[windows] %s: drawn right over the wall art and under the furniture" % vessel)
 		var port: Dictionary = windows.windows.filter(func(w: Dictionary) -> bool: return w.side == "port")[0]
 		var starboard: Dictionary = windows.windows.filter(func(w: Dictionary) -> bool: return w.side == "starboard")[0]
-		var a := windows.view_of(port, Vector2(port.at.x, 0))
-		var b := windows.view_of(starboard, Vector2(starboard.at.x, 0))
-		t.check(absf(CabinWindows._angle_diff(a.centre, b.centre)) > 150.0,
-			"[view] %s: port and starboard look out on opposite bearings (%.0f° / %.0f°)" % [vessel, a.centre, b.centre])
+		t.check((CabinWindows.axes(port).outward as Vector2).dot(CabinWindows.axes(starboard).outward) < -0.8,
+			"[windows] %s: port and starboard windows face opposite ways" % vessel)
 		await _test_sea_backdrop(area, vessel)
 		await t.screenshot("i025_cabin_%s" % vessel)
 	await _aboard(&"halcyon_40", &"interior", 9.0, true)
 	var screen := app.router.current_screen as BoatArea
-	var ahead: Dictionary = screen.get_cabin_windows().windows[0]
-	var seen := screen.get_cabin_windows().view_of(ahead, Vector2(0, ahead.at.y))
-	t.check(absf(CabinWindows._angle_diff(seen.centre, Simulation.get_current_heading())) < 1.0,
-		"[view] underway, the Clam 40's saloon windows look out ahead (%.0f°, heading %.0f°)" % [seen.centre, Simulation.get_current_heading()])
 	await _test_sea_backdrop(screen, &"halcyon_40")
 	await t.screenshot("i025_cabin_halcyon_40_underway")
 

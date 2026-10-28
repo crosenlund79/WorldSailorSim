@@ -204,9 +204,9 @@ func _on_arrived_recolour_water(_port: StringName) -> void:
 	_recolour_water()
 
 
-## The world beyond the cabin windows (I022, CabinWindows): in the cabins
-## that have windows in their illustrated art, right above the cabin's wall
-## art and under the furniture.
+## The cabin windows' glass (I022, CabinWindows; plain glass since I025): in
+## the cabins that have windows in their illustrated art, right above the
+## cabin's wall art and under the furniture.
 func _setup_cabin_windows() -> void:
 	if area_id != SessionState.AREA_INTERIOR:
 		return

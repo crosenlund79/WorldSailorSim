@@ -788,12 +788,12 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/boat/cabin_windows.gd`
 
-**Purpose:** The world beyond the cabin windows (I022), in every boat's cabin since I025.
-- **What it does:** Draws window openings in the illustrated cabin's walls. Each opening shows a small slice of the world around the boat: sky in the colours of the hour and the weather, the sun where it really is, stars at night, the sea with crests that grow with the wind, the harbour's own picture on the quay side when moored, and rain on the glass. Which slice depends on the boat's heading, which side the window is on, and where the captain stands: walking past a window turns the view, and up close it shows more. The window frames are drawn over the scenery, and the furniture stays in front. It now asks the boat lighting how overcast it is (one shared rule). I025: every boat's cabin has windows: portlights in the monohulls' and the catamaran's hull sides, and the catamaran's big saloon windows looking forward (a window can face port, starboard, forward or aft). The cabin painters paint each opening's recess from the same data file, so the art and the scenery always line up. In a harbour the water in the windows is calmer (fewer, smaller crests).
-- **Works with:** `BoatArea` (adds it), `WaterLook` (the sea's colour), `HarbourLooks` (the harbour art), `Daylight`, `Simulation` (weather, heading), `data/vessels/cabin_windows.json` (where the windows are).
-- **Keeps:** The windows, the world as last sampled, where the captain stood.
-- **When it runs:** It redraws only when the captain moves or every two seconds (about 0.35 ms per redraw).
-- **If you change it:** Windows for another boat need measured openings that lie inside that cabin's wall art; the test checks every corner. Keep it free of shaders and per-frame work.
+**Purpose:** The glass in the cabin windows (I022), in every boat's cabin since I025.
+- **What it does:** Draws the window openings in the illustrated cabin's walls as plain smoked glass in an anodised frame: lighter at the outer edge where the daylight comes through, deeper towards the cabin, a soft reflection across it, and at night dark glass with a faint warm glint of the cabin lamps. Every boat's cabin has windows: portlights in the monohulls' and the catamaran's hull sides, and the catamaran's big saloon windows looking forward. The cabin painters paint each opening's recess from the same data file, so the glass always sits in its frame. The Captain's revision of I025: the windows no longer show a live view of the sea, the harbour, other boats or the weather (that drawing is removed, not hidden). The faded sea round the hull is a separate script (`CabinSeaBackdrop`).
+- **Works with:** `BoatArea` (adds it), `Daylight` (day or night), `data/vessels/cabin_windows.json` (where the windows are).
+- **Keeps:** The windows and how much daylight the glass shows.
+- **When it runs:** It draws when the cabin opens and again only when the daylight has changed noticeably (checked every 20 seconds); walking about never redraws it.
+- **If you change it:** Windows for another boat need measured openings that lie inside that cabin's wall art; the test checks every corner. Keep it cheap: no view of the world outside, no shader, no per-frame work.
 
 ### `src/boat/cabin_world_map.gd`
 
@@ -906,7 +906,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat/water_look.gd`
 
 **Purpose:** Softer, more translucent-looking water (I022).
-- **What it does:** Gives the colour of the water around the boat: the old deep blue-green with a little of a sandy sea-bed colour showing through, a little more in harbour or at anchor where the water is shallow. It is a plain colour blend, with no shader and no transparency. Day and night light, crests and ripples still lie over it. Its strength is one setting, separate from the window glass tint, and 0 gives exactly the old water.
+- **What it does:** Gives the colour of the water around the boat: the old deep blue-green with a little of a sandy sea-bed colour showing through, a little more in harbour or at anchor where the water is shallow. It is a plain colour blend, with no shader and no transparency. Day and night light, crests and ripples still lie over it. Its strength is one setting, separate from the cabin windows' glass, and 0 gives exactly the old water.
 - **Works with:** `BoatArea` (the deck's water), `ShallowWater`, `CabinWindows`.
 - **Keeps:** Only the strength setting.
 - **When it runs:** When a deck scene opens and when the boat leaves, arrives or anchors.
@@ -2177,11 +2177,11 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_cabin_windows.gd`
 
 **Purpose:** Checks the cabin windows and the softer water (I022; every cabin and the faded sea outside since I025).
-- **What it does:** Checks that every window opening lies inside its cabin's wall art on all four boats (each with windows on both sides; the Clam 40's saloon with its four big windows looking forward), that the windows sit over the walls and under the furniture, and that the view changes with where the captain stands, the side, the heading, the harbour, the hour and the weather. It also checks that the classic art hides the windows, that in every cabin port and starboard look out on opposite bearings and the Clam 40's saloon windows look ahead underway, and that the faded sea outside the hull (`CabinSeaBackdrop`) lies under all the cabin art, is darker at night, is not lit by the cabin lamps, is not drawn under the cabin floor, hints the pontoon only while moored and never appears on deck. It measures the cost of a redraw and checks that the water's softness and the glass tint are separate. It takes screenshots from two viewpoints, at dusk, at night, underway, of each boat's cabin, and of the deck water before and after.
+- **What it does:** Checks that every window opening lies inside its cabin's wall art on all four boats (each with windows on both sides; the Clam 40's saloon with its four big windows looking forward), that the windows sit over the walls and under the furniture, and that since the Captain's revision of I025 they are plain glass: no view of the world outside, no second scene behind them, lighter glass by day and dark glass at night, never redrawn while the captain walks about, and cheap to draw. It also checks that the classic art hides the windows, that port and starboard windows face opposite ways in every cabin, the faded sea round the hull (under all cabin art, faint, darker at night, not lit by the lamps, not under the floor, the pontoon only while moored, never on a deck), and the softer deck water.
 - **Works with:** `CabinWindows`, `CabinSeaBackdrop`, `WaterLook`, `BoatArea`, `App`.
-- **Keeps:** Nothing.
-- **When it runs:** With the other suites (`test_runner.tscn`).
-- **If you change it:** Only the tests change.
+- **Keeps:** Nothing; it puts the water and art settings back.
+- **When it runs:** In the test runner; with screenshots it shows each cabin's glass by day and night and every boat's cabin.
+- **If you change it:** Moving a window means repainting that cabin's recess; the corner test will say so.
 
 ### `tests/suites/test_captains_log.gd`
 
