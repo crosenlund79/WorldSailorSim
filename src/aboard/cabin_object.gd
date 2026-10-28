@@ -27,11 +27,14 @@ const PLACES := {
 	LOGBOOK: [["NavTable", "NavDesk"], 0.28],
 	VHF: [["NavTable", "NavDesk"], 0.78],
 	SYSTEMS: [["EngineBox", "GalleySide", "CompanionwaySteps"], 0.5],
-	CHEST: [["VBerth", "OwnerBerth", "GuestBerth"], 0.5],
+	CHEST: [["VBerth", "OwnerBerth", "GuestBerth"], 0.2],
 	POSTCARD: [["SaloonTable", "Table", "Desk"], 0.2],
 }
 const REACH := 34.0
 const POSTCARD_CHECK_SECONDS := 2.0
+## How far an object keeps from the cabin's other stations (the chart table,
+## the berth, ...), so E beside it chooses it.
+const CLEAR_OF_STATIONS := 44.0
 const INK := Color(0.12, 0.13, 0.14, 0.6)
 const SHADOW := Color(0.04, 0.05, 0.06, 0.28)
 
@@ -65,7 +68,7 @@ static func place(area: Node2D, object_kind: StringName) -> CabinObject:
 	var object := CabinObject.new()
 	object.name = "CabinObject_%s" % object_kind
 	object.kind = object_kind
-	object.position = _spot(rect, float(rule[1]), object_kind, area)
+	object.position = _best_spot(area, rect, float(rule[1]), object_kind)
 	object.z_index = 3
 	area.add_child(object)
 	return object
@@ -79,6 +82,43 @@ static func _rect_of(area: Node2D, fixture: BoatFixture) -> Rect2:
 	return rect
 
 
+## The first spot along the fixture (the preferred one, then others) that
+## the Captain can stand beside - free floor within reach, outside every
+## piece of furniture - and that is not right on top of another station, so
+## E there picks this object. The preferred spot when none qualifies.
+static func _best_spot(area: Node2D, rect: Rect2, preferred: float, object_kind: StringName) -> Vector2:
+	var solids: Array[PackedVector2Array] = []
+	for fixture in area.get_node("Layout/Collision").get_children():
+		if fixture is BoatFixture and String(fixture.name) != "Hull":
+			solids.append((fixture as BoatFixture).transform * (fixture as BoatFixture).get_points())
+	var stations: Array[Vector2] = []
+	var holder := area.get_node_or_null(^"Layout/Stations")
+	for station in (holder.get_children() if holder else []):
+		stations.append((station as Node2D).position)
+	var bounds: Rect2 = area.get("walkable_bounds") if "walkable_bounds" in area else Rect2()
+	var candidates: Array[Vector2] = []
+	if object_kind == CHEST:
+		# The berth's corners on the cabin side first: beside the berth's own
+		# "sleep" in the middle, never on top of it.
+		var inset := 18.0
+		var corners: Array[Vector2] = [rect.position + Vector2(inset, inset), Vector2(rect.end.x - inset, rect.position.y + inset),
+			rect.end - Vector2(inset, inset), Vector2(rect.position.x + inset, rect.end.y - inset)]
+		corners.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.length() < b.length())
+		candidates.append_array(corners)
+	for along: float in [preferred, 0.2, 0.8, 0.35, 0.65, 0.5]:
+		candidates.append(_spot(rect, along, object_kind, area))
+	for at in candidates:
+		if stations.any(func(s: Vector2) -> bool: return s.distance_to(at) < CLEAR_OF_STATIONS):
+			continue
+		for i in 12:
+			var p := at + Vector2.from_angle(TAU * i / 12.0) * (REACH + 6.0)
+			if bounds.size != Vector2.ZERO and not bounds.grow(-22.0).has_point(p):
+				continue
+			if not solids.any(func(poly: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(p, poly)):
+				return at
+	return _spot(rect, preferred, object_kind, area)
+
+
 ## A spot on the fixture: `along` its long side; across, towards the cabin's
 ## middle (where the Captain stands), a hand's width in from the edge.
 static func _spot(rect: Rect2, along: float, object_kind: StringName, area: Node2D) -> Vector2:
@@ -89,9 +129,9 @@ static func _spot(rect: Rect2, along: float, object_kind: StringName, area: Node
 	else:
 		at.y = rect.position.y + rect.size.y * along
 	var toward := -rect.get_center()  # the cabin's middle is about the origin
-	var inset := 12.0
-	if object_kind == CHEST:
-		inset = 22.0
+	# The sea chest stands at one end of the berth's inner edge (clear of the
+	# berth's own "sleep" in the middle); everything else a hand's width in.
+	var inset := 18.0 if object_kind == CHEST else 12.0
 	if long_x:
 		at.y = rect.get_center().y + signf(toward.y) * maxf(rect.size.y * 0.5 - inset, 0.0)
 	else:
