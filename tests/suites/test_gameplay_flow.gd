@@ -126,7 +126,11 @@ func _test_interactions_in_cabin() -> void:
 	var sensor: InteractionSensor = player.get_node("InteractionSensor")
 	await _move_player_to(Vector2(-220, 40))
 	var in_reach := sensor.get_overlapping_areas().filter(func(a: Area2D) -> bool: return a is Interactable)
-	t.check_eq(in_reach.size(), 2, "two interactables are in reach between companionway and chart table")
+	# I026: the nav station's own things (logbook, VHF set) may be in reach too.
+	var ids := in_reach.map(func(a: Interactable) -> StringName: return a.interaction_id)
+	t.check(ids.has(&"companionway") and ids.has(&"nav_table") and ids.all(func(id: StringName) -> bool:
+		return id in [&"companionway", &"nav_table", CabinObject.LOGBOOK, CabinObject.VHF, CabinObject.SYSTEMS]),
+		"companionway and chart table are both in reach between them (with the nav station's own things: %s)" % [ids])
 	t.check_eq(sensor.focused.interaction_id, &"nav_table", "the closer chart table is focused")
 	await t.physics_frames(5)
 	t.check_eq(sensor.focused.interaction_id, &"nav_table", "focus stays stable while standing still")
