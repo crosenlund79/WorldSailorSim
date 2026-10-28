@@ -1,0 +1,38 @@
+2026-10-27T12:56:52 GIT start: verify branch clean, record SHA
+2026-10-27T12:56:53 UNDERSTANDING start: read decor system
+2026-10-27T12:57:28 IMPLEMENTATION start: trades.json + cabin_decor.gd
+2026-10-27T12:57:28 IMPLEMENTATION end: code+data written
+2026-10-27T12:57:33 LOCALIZATION start: extract + da.po
+2026-10-27T12:57:42 LOCALIZATION end: pot extracted, da.po 2 entries, check.py passes
+2026-10-27T12:57:59 TESTS start: add compass checks
+2026-10-27T12:57:59 TESTS run: test_boat_of_your_own (cmd start)
+2026-10-27T12:58:12 TESTS run end
+2026-10-27T12:58:32 REWORK start: investigate 8-of-10 placement failure
+2026-10-27T12:58:48 REWORK run: boyo with span 0.48 (cmd start)
+2026-10-27T12:58:59 REWORK run end
+2026-10-27T12:59:14 REWORK end: span reverted to 0.42; paused for Captain decision
+2026-10-27T12:59:14 PAUSE waiting for decision (not counted)
+2026-10-27T13:03:01 REWORK resume after decision: make room; investigate capacity
+2026-10-27T13:05:14 REWORK probing done (3 probe runs); implement second placement pass
+2026-10-27T13:05:20 TESTS run: boyo after second pass (cmd start)
+2026-10-27T13:05:32 TESTS run end
+2026-10-27T13:05:39 TESTS visual check: capture previews rendered (cmd start)
+2026-10-27T13:06:29 TESTS capture end
+2026-10-27T13:06:54 TESTS visual check done
+2026-10-27T13:06:54 GUARDRAILS start: gdscript guide checker
+2026-10-27T13:07:09 DOCUMENTATION start: guide entries
+2026-10-27T13:07:18 DOCUMENTATION end: guide entries
+2026-10-27T13:07:18 GUARDRAILS content checker + links + i18n
+2026-10-27T13:07:21 GUARDRAILS end
+2026-10-27T13:07:31 TESTS full regression start (cmd)
+2026-10-27T13:07:31 TESTS full regression end
+2026-10-27T13:07:32 DOCUMENTATION catalogue: rebuild sheets + text (overlaps regression)
+2026-10-27T13:07:48 REWORK full regression launch failed (no /usr/bin/time); relaunch
+2026-10-27T13:07:48 TESTS full regression start (cmd)
+2026-10-27T13:07:59 DOCUMENTATION catalogue text updated; idle-wait on regression next
+2026-10-27T13:07:59 TESTS waiting for full regression (no other work)
+2026-10-27T13:27:39 TESTS full regression end
+2026-10-27T13:27:57 GIT commit + push compass
+2026-10-27T13:28:01 GIT pushed + verified
+2026-10-27T13:28:01 DOCUMENTATION start: experiment report
+2026-10-27T13:29:17 DOCUMENTATION end: report written; numbers fixed now

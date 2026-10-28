@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"isafjordur"
+display_name = "Ísafjörður"
+country = "Iceland"
+latitude = 66.0748
+longitude = -23.1350
+description = "Ísafjörður, a fishing town on a sandspit in the fjords of Iceland's north-west, under steep mountains."
+importance = 3
+region = "north_atlantic"
+island = false
+source = "GeoNames Ísafjörður (66.0748, -23.1350), cities1000; UN/LOCODE IS ISA (no coordinate); I021"

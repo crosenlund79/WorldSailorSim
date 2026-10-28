@@ -9,6 +9,10 @@ extends TradePanel
 ## say where to find them (the chandlery).
 
 
+## Room kept between the panel and the screen's edge.
+const SAFE_MARGIN := 24.0
+
+
 func _ready() -> void:
 	_build_trade("Make it home", Loc.t("The small things that make the %s yours. Each appears in the cabin at once; put it away any time.") %
 		GameSession.get_vessel_definition().display_name, 620.0)
@@ -16,13 +20,29 @@ func _ready() -> void:
 	var dim := get_node_or_null(^"Dim") as Control
 	if dim:
 		dim.visible = false
+	# A column on the right, as wide as the panel needs plus the safe margin
+	# (explicit anchors: a preset applied now would use the not yet sized
+	# modal and leave the panel partly off screen).
 	for child in get_children():
 		if child is CenterContainer:
-			(child as Control).set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
-			(child as Control).offset_left = -700.0
+			var column := child as Control
+			column.anchor_left = 1.0
+			column.anchor_right = 1.0
+			column.anchor_top = 0.0
+			column.anchor_bottom = 1.0
+			column.offset_right = -SAFE_MARGIN
+			column.offset_top = 0.0
+			column.offset_bottom = 0.0
+			# Its width follows the panel's real width (known once it is styled).
+			column.minimum_size_changed.connect(_fit_column.bind(column))
+			_fit_column.call_deferred(column)
 	for item: Dictionary in HarbourTrades.get_decor():
 		_row(String(item.id), Loc.t(String(item.name)), Loc.t(String(item.text)), _toggle.bind(String(item.id)))
 	refresh()
+
+
+func _fit_column(column: Control) -> void:
+	column.offset_left = -(column.get_combined_minimum_size().x + SAFE_MARGIN)
 
 
 func refresh() -> void:

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"dingle"
+display_name = "Dingle"
+country = "Ireland"
+latitude = 52.1408
+longitude = -10.2689
+description = "Dingle, a small fishing harbour at the head of its bay in Ireland's far south-west, with painted shopfronts above the quay."
+importance = 3
+region = "british_isles"
+island = false
+source = "GeoNames Dingle (52.1408, -10.2689), cities1000; UN/LOCODE IE DIN (no coordinate); I021"

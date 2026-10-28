@@ -89,6 +89,10 @@ signal anchor_alarm(info: Dictionary)
 signal boat_care_changed
 ## A boat of your own (I020): cabin things or sailcloth changed.
 signal home_changed
+## I022: a boat was bought (the owned boats changed).
+signal fleet_changed
+## I022: the difficulty was changed during the game.
+signal difficulty_changed(level: StringName)
 ## A loaded position or course was invalid under the current chart and was
 ## moved or re-planned (Iteration 14): {kind, from, to, moved_nm, replanned}.
 signal location_recovered(info: Dictionary)
@@ -136,8 +140,8 @@ func _exit_tree() -> void:
 # --- Lifecycle ----------------------------------------------------------------
 
 ## Starts a new game with the chosen ship's companion ("cat" or "dog").
-func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND) -> void:
-	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind)
+func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> void:
+	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind, level)
 	_has_unsaved_changes = false
 	_asleep = false
 	if _settled:
@@ -366,6 +370,165 @@ func facility_refusal(facility: StringName) -> String:
 	return ""
 
 
+# --- Pastimes (I022): postcards and the little game -------------------------------------------
+
+func get_pastimes() -> PastimesState:
+	return _state.pastimes if _state else PastimesState.new()
+
+
+## Starts (or replaces) the postcard being made: a subject from
+## Pastimes.subjects(), a caption index and a layout.
+func set_postcard_draft(kind: String, subject: String, caption: int, layout: String) -> void:
+	if _state == null:
+		return
+	var minutes: float = float(_state.pastimes.draft.get("minutes", 0.0)) if _state.pastimes.draft.get("subject") == subject \
+		and _state.pastimes.draft.get("kind") == kind else 0.0
+	_state.pastimes.draft = {"kind": kind, "subject": subject, "caption": caption, "layout": layout if layout in Pastimes.LAYOUTS else "classic",
+		"minutes": minutes}
+	_has_unsaved_changes = true
+
+
+func abandon_postcard() -> void:
+	if _state and not _state.pastimes.draft.is_empty():
+		_state.pastimes.draft = {}
+		_has_unsaved_changes = true
+
+
+## Minutes still needed for the postcard being made.
+func postcard_minutes_left() -> float:
+	if _state == null or _state.pastimes.draft.is_empty():
+		return Pastimes.postcard_minutes()
+	return maxf(Pastimes.postcard_minutes() - float(_state.pastimes.draft.minutes), 0.0)
+
+
+## `minutes` were spent on the draft (the one clock has already passed them).
+## When it is done it goes into the scrapbook, and a subject posted for the
+## first time earns renown. Returns {"done": bool, "award": {} or the award}.
+func work_on_postcard(minutes: float) -> Dictionary:
+	if _state == null or _state.pastimes.draft.is_empty():
+		return {"done": false, "award": {}}
+	var draft := _state.pastimes.draft
+	draft.minutes = float(draft.minutes) + maxf(minutes, 0.0)
+	_has_unsaved_changes = true
+	if float(draft.minutes) < Pastimes.postcard_minutes() - 0.5:
+		return {"done": false, "award": {}}
+	var card := {"kind": draft.kind, "subject": draft.subject, "caption": int(draft.caption), "layout": draft.layout,
+		"time": _state.game_time, "place": Pastimes.where_now()}
+	_state.pastimes.postcards.append(card)
+	var keep := int(Pastimes.postcard_data().get("scrapbook_size", 40))
+	while _state.pastimes.postcards.size() > keep:
+		_state.pastimes.postcards.remove_at(0)
+	_state.pastimes.draft = {}
+	var award := _award_once(Pastimes.renown_key(card.kind, card.subject), Loc.t("Postcard: %s") % Pastimes.kind_name(card.kind).to_lower(),
+		Pastimes.postcard_renown())
+	SessionLog.write("postcard", {"kind": card.kind, "subject": card.subject, "renown": int(award.get("reward", 0))})
+	if not award.is_empty():
+		renown_awarded.emit([award])
+	return {"done": true, "award": award, "card": card}
+
+
+## A session on the little game: `minutes` of `task_id` were worked (the one
+## clock has passed them), with `choice`. Points count for the share of the
+## task's hours actually worked; an unfinished task is kept to go on with.
+## Returns {"points", "done": bool, "milestone": {} or the milestone reached,
+## "award": {}, "euros": int}.
+func work_on_game(task_id: String, choice: int, minutes: float) -> Dictionary:
+	var out := {"points": 0.0, "done": false, "milestone": {}, "award": {}, "euros": 0}
+	var task := Pastimes.task(task_id)
+	if _state == null or task.is_empty():
+		return out
+	var game := _state.pastimes.game
+	var total := float(task.hours) * 60.0
+	var before := float((game.task as Dictionary).get("minutes", 0.0)) if (game.task as Dictionary).get("id") == task_id else 0.0
+	var worked := minf(before + maxf(minutes, 0.0), total)
+	var points := Pastimes.session_points(task_id, choice) * (worked - before) / total
+	out.points = points
+	out.done = worked >= total - 0.5
+	game.task = {} if out.done else {"id": task_id, "choice": choice, "minutes": worked}
+	if out.done:
+		game.sessions = int(game.sessions) + 1
+	game.points = float(game.points) + points
+	var stones := Pastimes.milestones()
+	if int(game.milestone) < stones.size() and float(game.points) >= float(stones[int(game.milestone)].points) - 1e-6:
+		var stone: Dictionary = stones[int(game.milestone)]
+		game.points = float(game.points) - float(stone.points)
+		game.log.append({"milestone": int(game.milestone), "time": _state.game_time})
+		game.milestone = int(game.milestone) + 1
+		out.milestone = stone
+		out.award = _award_once("gamedev:%s" % stone.id, Loc.t("%s: %s") % [Pastimes.game_title(), Loc.t(String(stone.name))],
+			int(Pastimes.game_data().get("renown_per_milestone", 4)))
+		if int(game.milestone) >= stones.size():
+			out.euros = int(Pastimes.game_data().get("release_euros", 0))
+			_state.funds += out.euros
+			funds_changed.emit(_state.funds)
+		if not out.award.is_empty():
+			renown_awarded.emit([out.award])
+	_has_unsaved_changes = true
+	SessionLog.write("game_dev", {"task": task_id, "choice": choice, "minutes": snappedf(minutes, 0.1), "points": snappedf(points, 0.01),
+		"milestone": int(game.milestone)})
+	return out
+
+
+## True when every milestone of the little game is done.
+func is_game_released() -> bool:
+	return _state != null and int(_state.pastimes.game.milestone) >= Pastimes.milestones().size()
+
+
+## The difficulty of the game being played (Difficulty; Standard without a game).
+func get_difficulty() -> StringName:
+	return _state.difficulty if _state else Difficulty.STANDARD
+
+
+## Changes the difficulty during the game (I022): it counts from now on; money
+## already spent or earned and the boat's state stay as they are.
+func set_difficulty(level: StringName) -> void:
+	if _state == null or Difficulty.valid(level) == _state.difficulty:
+		return
+	_state.difficulty = Difficulty.valid(level)
+	_has_unsaved_changes = true
+	SessionLog.write("difficulty", {"level": String(_state.difficulty)})
+	difficulty_changed.emit(_state.difficulty)
+
+
+## Tests only (the test runner): every boat counts as owned, so the many
+## suites that sail each boat need not buy them first. Ownership tests turn
+## it off.
+var test_all_boats_owned := false
+
+
+## True when the captain owns `vessel_id` (I022).
+func owns_vessel(vessel_id: StringName) -> bool:
+	return _state != null and (vessel_id in _state.owned_vessels or test_all_boats_owned)
+
+
+func get_owned_vessels() -> Array[StringName]:
+	return _state.owned_vessels.duplicate() if _state else ([] as Array[StringName])
+
+
+## Buys a boat at the boatyard (I022): never twice, never below zero money.
+## Returns "" or why not. Moving aboard is then switch_vessel().
+func buy_vessel(vessel_id: StringName) -> String:
+	if _state == null:
+		return Loc.t("No game is running.")
+	if not can_change_vessel():
+		return facility_refusal(HarbourFacilities.BOATYARD)
+	var vessel := VesselCatalog.get_default().get_vessel(vessel_id)
+	if vessel == null:
+		return Loc.t("Unknown boat '%s'.") % vessel_id
+	if owns_vessel(vessel_id):
+		return Loc.t("The %s is already yours.") % vessel.display_name
+	if vessel.price > _state.funds:
+		return Loc.t("The %s costs %s; you have %s.") % [vessel.display_name, format_money(vessel.price), format_money(_state.funds)]
+	_state.funds -= vessel.price
+	_state.owned_vessels.append(vessel_id)
+	_state.get_boat_care(vessel_id)
+	_has_unsaved_changes = true
+	SessionLog.write("vessel_bought", {"vessel": String(vessel_id), "price": vessel.price, "funds": _state.funds})
+	funds_changed.emit(_state.funds)
+	fleet_changed.emit()
+	return ""
+
+
 ## Switches to another boat at the boatyard. Only in harbour; refused (with a
 ## reason) underway. Everything long-term stays: time, location, planned
 ## course, companion, saves. The player goes on deck of the new boat at its
@@ -386,6 +549,8 @@ func switch_vessel(vessel_id: StringName) -> String:
 		return Loc.t("Unknown boat '%s'.") % vessel_id
 	if vessel_id == _state.vessel_id:
 		return ""
+	if not owns_vessel(vessel_id):
+		return Loc.t("The %s is not yours yet: buy it first (%s).") % [vessel.display_name, format_money(vessel.price)]
 	_state.vessel_id = vessel_id
 	_state.get_boat_care(vessel_id)
 	# Stores beyond what the new boat can stow stay ashore.
@@ -408,6 +573,8 @@ func _check_vessel() -> void:
 		return
 	var unknown := _state.vessel_id
 	_state.vessel_id = catalog.get_starter().id
+	if not _state.vessel_id in _state.owned_vessels:
+		_state.owned_vessels.append(_state.vessel_id)
 	_state.spawn_point = &"start"
 	_state.has_player_position = false
 	push_warning("Unknown vessel id '%s' in the loaded game; using '%s'." % [unknown, _state.vessel_id])
@@ -652,7 +819,7 @@ func apply_simulation_step(game_time: float, progress_nm: float) -> void:
 		# A well-fed crew eats a little less (only the well-fed part of the step).
 		var well_fed := clampf(_state.galley.well_fed_until - (game_time - elapsed), 0.0, elapsed)
 		var factor := lerpf(1.0, WELL_FED_FOOD_FACTOR, well_fed / elapsed)
-		_state.provisions.consume(elapsed / Provisions.DAY_SECONDS, factor)
+		_state.provisions.consume(elapsed / Provisions.DAY_SECONDS * Difficulty.factor("provisions_use"), factor)
 		_check_provisions()
 	# The companion's resting schedule runs on the same clock (pure function of time).
 	if _state.companion.advance_to(game_time):
@@ -851,7 +1018,7 @@ func rescue() -> void:
 	_state.anchor.alarm = false
 	_state.fishing.line_out = false
 	_pending_bite = {}
-	var fee := mini(SessionState.RESCUE_FEE, _state.funds)
+	var fee := mini(roundi(SessionState.RESCUE_FEE * Difficulty.factor("rescue_fee")), _state.funds)
 	_state.funds -= fee
 	var record := CaptainsLog.make_record(_state.voyage, _state.game_time, _state.vessel_id, CaptainsLog.OUTCOME_RESCUED)
 	_state.captains_log.record_voyage(record)
@@ -911,10 +1078,11 @@ func _wear(elapsed: float, nm: float) -> void:
 	var care := _state.get_boat_care(_state.vessel_id)
 	var before := [BoatCare.area_level(BoatCare.AREA_RIG, care, get_condition(), _state.game_time),
 		BoatCare.area_level(BoatCare.AREA_ENGINE, care, get_condition(), _state.game_time)]
+	var wear := Difficulty.factor("wear")  # I022 (Standard: 1.0)
 	if _state.propulsion.is_motoring():
-		care.engine_hours += elapsed / 3600.0
+		care.engine_hours += elapsed / 3600.0 * wear
 	else:
-		care.rig_wear = minf(care.rig_wear + BoatCare.rig_wear_for(nm, _state.propulsion.wind_speed_kn, care), 100.0)
+		care.rig_wear = minf(care.rig_wear + BoatCare.rig_wear_for(nm, _state.propulsion.wind_speed_kn, care) * wear, 100.0)
 	var after := [BoatCare.area_level(BoatCare.AREA_RIG, care, get_condition(), _state.game_time),
 		BoatCare.area_level(BoatCare.AREA_ENGINE, care, get_condition(), _state.game_time)]
 	if after != before:
@@ -961,7 +1129,9 @@ func service_refusal(service: StringName) -> String:
 func service_quote(service: StringName) -> Dictionary:
 	if _state == null:
 		return {"cost": 0, "minutes": 0.0}
-	return BoatCare.quote(service, _state.get_boat_care(_state.vessel_id), get_condition(), get_base_vessel_profile().length_ft)
+	var quote := BoatCare.quote(service, _state.get_boat_care(_state.vessel_id), get_condition(), get_base_vessel_profile().length_ft)
+	quote.cost = ceili(int(quote.cost) * Difficulty.factor("costs") - 1e-6)  # I022 difficulty (Standard: unchanged)
+	return quote
 
 
 ## Has a service done: one transaction that pays, restores and records it.
@@ -2646,7 +2816,7 @@ func get_missing_provision_days(target := Provisions.CAPACITY_DAYS) -> float:
 ## What filling food and water to `target` days costs now (whole euros,
 ## rounded up, so a fraction of a day is never free).
 func get_provisions_price(target := Provisions.CAPACITY_DAYS) -> int:
-	return ceili(get_missing_provision_days(target) * PROVISIONS_PRICE_PER_DAY - 1e-6)
+	return ceili(get_missing_provision_days(target) * PROVISIONS_PRICE_PER_DAY * Difficulty.factor("costs") - 1e-6)
 
 
 ## Days of food and water the active boat can stow for a long passage

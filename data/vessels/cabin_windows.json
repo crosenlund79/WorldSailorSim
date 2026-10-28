@@ -1,0 +1,13 @@
+{
+	"note": "I022 cabin windows: openings in the illustrated cabin's wall band (cabin-local units; the bow is +x, port is -y). 'at' is the opening's centre, 'length' along the wall, 'thickness' across it, 'angle' the wall's slope in degrees, 'side' port or starboard. Read by src/boat/cabin_windows.gd. Proof of concept: the Starling 33 (Wing 33) saloon, three windows each side above the settees, clear of the world map.",
+	"windows": {
+		"starling_33": [
+			{"at": [-104, -159.0], "length": 48, "thickness": 14, "angle": 0, "side": "port"},
+			{"at": [-44, -158.6], "length": 48, "thickness": 14, "angle": 0, "side": "port"},
+			{"at": [14, -156.8], "length": 40, "thickness": 14, "angle": 5.5, "side": "port"},
+			{"at": [-104, 158.3], "length": 48, "thickness": 14, "angle": 0, "side": "starboard"},
+			{"at": [-44, 157.5], "length": 48, "thickness": 14, "angle": 0, "side": "starboard"},
+			{"at": [14, 155.9], "length": 40, "thickness": 14, "angle": -5.5, "side": "starboard"}
+		]
+	}
+}

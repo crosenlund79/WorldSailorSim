@@ -1,0 +1,36 @@
+{
+	"note": "I022 A Game Developer at Sea: a tiny fictional game made in the cabin. Each session is one task with one small choice; a wise choice counts double. Points are earned for the hours actually worked (an interrupted session counts its share). Read by src/core/pastimes.gd.",
+	"game_title": "Tiny Lighthouse",
+	"renown_per_milestone": 4,
+	"release_euros": 300,
+	"milestones": [
+		{"id": "keeper", "points": 3, "name": "The keeper walks", "log": "The little keeper can walk up the spiral stairs now. She stops at the top to look at the sea, which I did not program. I am choosing to call it a feature."},
+		{"id": "light", "points": 4, "name": "The light turns", "log": "The lamp turns! It sweeps across the sea and every boat in the harbour blinks back. Tried it with the cabin lights off. Very pleased."},
+		{"id": "ships", "points": 4, "name": "Ships to guide", "log": "Three little ships now sail home if the light finds them in time. The cat watched the first one arrive and approved."},
+		{"id": "weather", "points": 5, "name": "Squalls and fog", "log": "Fog rolls in, the ships slow down, and the keeper has to light the fog bell too. It is harder now, but kind: nobody sinks, they only wait."},
+		{"id": "sound", "points": 4, "name": "Sound and music", "log": "Added the creak of the stairs, the wind at the gallery and a small tune on an accordion. The game feels like a place now."},
+		{"id": "release", "points": 5, "name": "Release: Tiny Lighthouse 1.0", "log": "Published Tiny Lighthouse 1.0 from a harbour café, with a slow connection and a fast heart. Kind messages are arriving. A few people even bought it."}
+	],
+	"tasks": [
+		{"id": "feature", "name": "Add a tiny feature", "hours": 3,
+			"question": "What should the keeper be able to do next?",
+			"choices": ["Wave at passing ships", "Juggle three lanterns", "Collect every seashell on the island"], "best": 0,
+			"done": ["The keeper waves. Ships wave back. Small, and exactly right.", "The juggling is impressive, if rather off-topic.", "The seashell counter now reaches 4,000. Perhaps too many shells."]},
+		{"id": "bug", "name": "Fix a funny bug", "hours": 2,
+			"question": "The ships sail backwards when the moon is full. Where do you look first?",
+			"choices": ["The moon's tide code", "The sails' colour", "The keeper's hat"], "best": 0,
+			"done": ["Found it: the tide pulled the ships home stern first. Fixed, with a small sigh of pride.", "The sails are now a lovely blue. The ships still sail backwards.", "The hat is fine. The ships are not. The search continues."]},
+		{"id": "balance", "name": "Balance the game", "hours": 2,
+			"question": "Playtesters say the storms are too hard. What do you change?",
+			"choices": ["Make the light reach a little further", "Remove storms completely", "Make the ships faster in every weather"], "best": 0,
+			"done": ["A little further, and suddenly every storm is a good story rather than a bad day.", "Without storms it is calm. Perhaps a little too calm.", "The ships now zip about like dragonflies. Fun, but odd."]},
+		{"id": "arrange", "name": "Arrange the scene", "hours": 3,
+			"question": "Where should the lighthouse stand on the title screen?",
+			"choices": ["On the rocks, a little to the left, with the sea in front", "Right in the middle, very large", "Hidden behind the menu buttons"], "best": 0,
+			"done": ["The title screen breathes now: rocks, sea and a light that waits for you.", "Very large indeed. It looks surprised.", "Mysterious. Nobody can find the lighthouse."]},
+		{"id": "update", "name": "Prepare a small update", "hours": 4,
+			"question": "What goes into the update notes?",
+			"choices": ["What changed, in plain words, and a thank-you", "A thousand words about the code", "Nothing at all: let them guess"], "best": 0,
+			"done": ["Short, clear and kind notes. Players will like that.", "The notes are longer than the game.", "A mystery update. Brave."]}
+	]
+}

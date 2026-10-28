@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"essaouira"
+display_name = "Essaouira"
+country = "Morocco"
+latitude = 31.5125
+longitude = -9.7700
+description = "Essaouira on Morocco's Atlantic coast: blue fishing boats beneath the old sea bastion, and gulls over the Skala."
+importance = 3
+region = "west_africa"
+island = false
+source = "GeoNames Essaouira (31.5125, -9.7700), cities1000; UN/LOCODE MA ESS 3125N 00930W (point inland; not used); I021"

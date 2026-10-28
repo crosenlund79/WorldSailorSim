@@ -1,0 +1,20 @@
+{
+	"note": "I022 Postcards from the Sea: subjects come from the game's own records (src/core/pastimes.gd); each subject earns renown once. Captions use %s for names; voyage captions take the start and the destination.",
+	"minutes": 120,
+	"renown": 3,
+	"scrapbook_size": 40,
+	"kinds": {
+		"harbour": {"name": "A harbour", "captions": ["Hello from %s!", "Moored in %s. The kettle is on.", "%s: worth every mile to get here."]},
+		"fish": {"name": "A catch", "captions": ["Caught today: a %s. Supper is sorted.", "Look what came up on the line: a %s!", "One %s, one very happy captain."]},
+		"companion": {"name": "Our companion", "captions": ["The real captain of this boat.", "First mate, on watch (asleep).", "Every voyage is better with a friend aboard."]},
+		"voyage": {"name": "A voyage", "captions": ["%s to %s: another passage in the log.", "From %s to %s, and the sea was kind.", "%s behind us, %s ahead. And then we arrived."]},
+		"weather": {"name": "Weather we met", "captions": ["We met %s on the way. The boat held, and so did we.", "There was %s out there. Glad to be in port.", "Lesson of the day: respect %s."]},
+		"sunset": {"name": "Evening light", "captions": ["Sunset at %s. Nothing to add.", "The light at %s tonight.", "Another day ends softly at %s."]}
+	},
+	"weather_names": {"1": "rough weather", "2": "heavy weather", "3": "a storm"},
+	"layouts": {
+		"classic": {"name": "Classic"},
+		"snapshot": {"name": "Snapshot"},
+		"banner": {"name": "Banner"}
+	}
+}

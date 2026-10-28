@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"lunenburg"
+display_name = "Lunenburg"
+country = "Canada"
+latitude = 44.3785
+longitude = -64.3166
+description = "Lunenburg, Nova Scotia, an old fishing town of painted wooden houses climbing the hill above its red waterfront sheds."
+importance = 2
+region = "north_america"
+island = false
+source = "GeoNames Lunenburg (44.3785, -64.3166), cities1000; UN/LOCODE CA LUN (no coordinate); I021"

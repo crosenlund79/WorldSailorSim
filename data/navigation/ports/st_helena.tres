@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"st_helena"
+display_name = "Jamestown"
+country = "Saint Helena"
+latitude = -15.9249
+longitude = -5.7182
+description = "Jamestown, St Helena: one long street in a narrow valley between dark volcanic cliffs, alone in the South Atlantic."
+importance = 2
+region = "south_atlantic"
+island = true
+source = "GeoNames Jamestown (-15.9249, -5.7182), cities1000; UN/LOCODE SH SHN (no coordinate); I021"

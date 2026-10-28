@@ -77,6 +77,12 @@ const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_localization.gd"),
 	preload("res://tests/suites/test_boat_of_your_own.gd"),
 	preload("res://tests/suites/test_companion_remarks.gd"),
+	preload("res://tests/suites/test_wider_world.gd"),
+	preload("res://tests/suites/test_captains_other_life.gd"),
+	preload("res://tests/suites/test_academy.gd"),
+	preload("res://tests/suites/test_cabin_windows.gd"),
+	preload("res://tests/suites/test_steady_hands.gd"),
+	preload("res://tests/suites/test_golden_harbours.gd"),
 	preload("res://tests/suites/test_galley_and_anchor.gd"),
 	preload("res://tests/suites/test_eight_directions.gd"),
 	preload("res://tests/suites/test_catch_and_cove_journey.gd"),
@@ -129,6 +135,10 @@ func _run() -> void:
 	# Sleep, dawn and dusk happen at once in tests (suites that test the
 	# presentation switch it back on).
 	TimePassage.enabled = false
+	# I022: suites sail every boat without buying it (ownership tests turn this off).
+	GameSession.test_all_boats_owned = true
+	# I022: no First Voyage offer or tips over other suites (test_academy turns it on).
+	AcademyGuide.enabled = false
 	SettingsManager.load_settings()
 	# The suites check the English text; the language suite switches itself.
 	SettingsManager.set_language(&"en")

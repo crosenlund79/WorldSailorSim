@@ -333,6 +333,21 @@ func update_now() -> void:
 	_process(0.0)
 
 
+## How overcast the sky is for a weather sample (0 clear .. 0.8 stormy); also
+## used by the cabin windows and the Golden Harbour Moments.
+static func overcast_of(weather: WeatherSample) -> float:
+	if weather == null:
+		return 0.0
+	if weather.thunder_active or weather.classification in [WeatherModel.CLASS_THUNDERSTORM, WeatherModel.CLASS_SQUALL,
+			WeatherModel.CLASS_STORM, WeatherModel.CLASS_TROPICAL_STORM, WeatherModel.CLASS_HURRICANE]:
+		return 0.8
+	if weather.classification == WeatherModel.CLASS_GALE or weather.thunder_possible:
+		return 0.5
+	if weather.classification == WeatherModel.CLASS_STRONG_WIND:
+		return 0.25
+	return 0.0
+
+
 func _process(delta: float) -> void:
 	if area == null or not GameSession.is_active():
 		return
@@ -340,15 +355,7 @@ func _process(delta: float) -> void:
 	var geo := GameSession.get_vessel_position()
 	if absf(now - _weather_at) >= WEATHER_REFRESH:
 		_weather_at = now
-		var weather := Simulation.get_weather_at_vessel()
-		_overcast = 0.0
-		if weather.thunder_active or weather.classification in [WeatherModel.CLASS_THUNDERSTORM, WeatherModel.CLASS_SQUALL,
-				WeatherModel.CLASS_STORM, WeatherModel.CLASS_TROPICAL_STORM, WeatherModel.CLASS_HURRICANE]:
-			_overcast = 0.8
-		elif weather.classification == WeatherModel.CLASS_GALE or weather.thunder_possible:
-			_overcast = 0.5
-		elif weather.classification == WeatherModel.CLASS_STRONG_WIND:
-			_overcast = 0.25
+		_overcast = overcast_of(Simulation.get_weather_at_vessel())
 	var elevation := Daylight.sun_elevation(geo, now)
 	var interior := area.area_id == SessionState.AREA_INTERIOR
 	var target := Daylight.inside_colour(elevation, _overcast) if interior else Daylight.outside_colour(elevation, _overcast)

@@ -94,7 +94,7 @@ func _build_tackle() -> void:
 	_tackle.name = "Tackle"
 	_tackle.custom_minimum_size = Vector2(240, 0)
 	for lure in FishingCatalog.get_default().lures:
-		_tackle.add_item("%s (%s)" % [lure.name, GameSession.format_money(int(lure.price))])
+		_tackle.add_item("%s (%s)" % [Loc.t(String(lure.name)), GameSession.format_money(int(lure.price))])
 	row.add_child(_tackle)
 	_buy_lure = Button.new()
 	_buy_lure.name = "BuyLureButton"

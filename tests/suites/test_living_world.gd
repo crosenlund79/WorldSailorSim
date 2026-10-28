@@ -85,16 +85,29 @@ func _test_sailor() -> void:
 	var right := SailorDrawing.hand_position(Vector2.RIGHT, 0.0, 1.0)
 	t.check(absf(left.y) > 12.0 and absf(left.y + right.y) < 0.01 and is_equal_approx(left.x, right.x), "[sailor] two hands, one at each shoulder")
 	t.check(not SailorDrawing.hand_position(Vector2.RIGHT, 1.0, 1.0).is_equal_approx(right), "[sailor] the arms swing")
+	# Walking measured by distance (up to two strides), on the foredeck
+	# towards the bow. From the start spot, beside the companionway, the
+	# walk met deck fittings after 31 px (down) or 52 px (forward), under one
+	# stride: the swing then reached 0.60 at best, which failed now and then.
+	# From here there are about 72 px before the next fitting: more than one
+	# stride, which swings each arm both ways. The companion is moved aside.
+	player.position = Vector2(250, 0)
+	var companion := deck.get_node_or_null(^"Companion") as Node2D
+	var from := player.position
+	if companion:
+		companion.position = from + Vector2(-150, 60)
+	await t.physics_frames(2)
 	var swings := []
-	var timer := t.get_tree().create_timer(0.6)
-	Input.action_press(&"move_down")
-	while timer.time_left > 0.0:
+	var timer := t.get_tree().create_timer(3.0)
+	Input.action_press(&"move_right")
+	while timer.time_left > 0.0 and player.position.distance_to(from) < Player.STRIDE * 2.0:
 		await t.frames(1)
 		swings.append(player.get_swing())
-	Input.action_release(&"move_down")
+	Input.action_release(&"move_right")
 	var low: float = swings.min()
 	var high: float = swings.max()
-	t.check(high - low > 0.6, "[sailor] walking swings the arms (%.2f .. %.2f)" % [low, high])
+	var walked := player.position.distance_to(from)
+	t.check(walked >= Player.STRIDE and high - low > 0.6, "[sailor] walking a stride or more swings the arms (%.2f .. %.2f; walked %.0f px)" % [low, high, walked])
 	await t.screenshot("160_sailor_walking")
 	await t.frames(30)
 	t.check(is_zero_approx(snappedf(player.get_swing(), 0.05)), "[sailor] the arms come to rest after walking")

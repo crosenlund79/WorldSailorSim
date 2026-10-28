@@ -97,14 +97,17 @@ func get_concern() -> int:
 func should_show() -> bool:
 	if not GameSession.is_active() or (on_deck.is_valid() and not on_deck.call()):
 		return false
-	return shown or (GameSession.is_underway() and get_concern() >= Simulation.RISK_CAUTION)
+	# Only underway, where its Q-menu item is: switched on at sea it never
+	# stays up in harbour with no way to close it; the choice is kept for the
+	# next voyage (as the chartplotter).
+	return GameSession.is_underway() and (shown or get_concern() >= Simulation.RISK_CAUTION)
 
 
 func _process(delta: float) -> void:
 	_refresh -= delta
 	if _refresh <= 0.0:
 		_refresh = REFRESH_SECONDS
-		var looking := GameSession.is_active() and (shown or GameSession.is_underway())
+		var looking := GameSession.is_active() and GameSession.is_underway()
 		_risks = Simulation.traffic_risks(get_range_nm()) if looking else ([] as Array[Dictionary])
 		_info.text = describe(_risks)
 		_scope.queue_redraw()

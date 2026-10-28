@@ -30,6 +30,35 @@ Each is a scene in `tests/` with the exact command in its header comment.
 
 Every release has a checklist for the Captain's own Windows trial, kept in that release's folder (for example [0.105b](../revisions/v0.105b/WINDOWS_ACCEPTANCE_0_105B.md) and [Iteration 18](../iterations/i018/WINDOWS_ACCEPTANCE_18.md)). Acceptance is never claimed before the Captain's own results come back.
 
+## Content check (the Harbourmaster's Inspection)
+
+```sh
+python3 tools/qa/check_game_content.py                 # Linux / macOS
+py tools\qa\check_game_content.py                      # Windows (or: python tools\qa\check_game_content.py)
+python3 tools/qa/check_game_content.py --verbose       # every check, also the passing ones
+python3 tools/qa/check_game_content.py --json qa.json  # machine-readable report
+```
+
+Reads the game's data files (no Godot, no network, about five seconds) and checks
+that harbours, harbour looks and special harbours, fish, boats, cabin things,
+companions, the Danish catalogue and the asset paths hang together. Findings are
+FAIL (a confirmed defect; exit code 1), WARN (worth a look) or INFO (for review
+only, such as unused images; nothing is ever deleted), each with its file and
+entry. Run it after adding or changing content, and before every delivery; the
+Godot runner then checks behaviour (routes, mooring, catching, saves). See
+[RELEASE_READINESS.md](../technical/RELEASE_READINESS.md) and
+[the inspection report](../technical/HARBOURMASTERS_INSPECTION_REPORT.md).
+
+## Operation One Clock sea trial
+
+Where the frame time goes at 1×, 5× and 20×, at night, at dawn and dusk and in
+harbour. In Godot open `tests/one_clock_sea_trial.tscn` and press F6 (about five
+minutes; the table is shown, copied to the clipboard and saved as
+`one_clock_sea_trial.txt`). Developers: `xvfb-run -a godot --path .
+--rendering-driver opengl3 --resolution 1600x900 res://tests/one_clock_sea_trial.tscn
+-- --all --out=/tmp/one_clock.json`. See
+[the investigation](../technical/ONE_CLOCK_PERFORMANCE_INVESTIGATION.md).
+
 ## Documentation checks
 
 ```sh
@@ -37,3 +66,15 @@ python3 tools/docs/check_links.py   # every internal Markdown link and #heading 
 ```
 
 `test_dev_guides` also checks every link and repository path in the developer guides and in a set of linked documents.
+
+## The Illustrated Catalogue's contact sheets
+
+Picture sheets of all the game's art, for looking, not for pass/fail (see
+[the catalogue](../art/ILLUSTRATED_ASSET_CATALOGUE.md)):
+
+```sh
+# the art the game draws in code, photographed through the game (needs a display)
+xvfb-run -a godot --path . --rendering-driver opengl3 --resolution 1600x900 \
+  res://tools/art/capture_previews.tscn -- --out=docs/art/previews
+python3 tools/art/build_contact_sheets.py   # six sheets in docs/art/contact_sheets/ (Pillow)
+```

@@ -263,7 +263,7 @@ func refresh() -> void:
 	_lure.clear()
 	for i in catalog.lures.size():
 		var lure: Dictionary = catalog.lures[i]
-		_lure.add_item("%s (%d)" % [lure.name, fishing.get_lure_count(lure.id)])
+		_lure.add_item("%s (%d)" % [Loc.t(String(lure.name)), fishing.get_lure_count(lure.id)])
 		if lure.id == fishing.lure:
 			_lure.select(i)
 	_lure.disabled = fishing.line_out

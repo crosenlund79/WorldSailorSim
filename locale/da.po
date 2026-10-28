@@ -6186,8 +6186,8 @@ msgstr "Indstillinger"
 msgid "Quit"
 msgstr "Afslut"
 
-msgid "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Patrick Hand (SIL OFL)"
-msgstr "Kystlinjer: Natural Earth (public domain)  ·  Skrifttyper: Barlow, Patrick Hand (SIL OFL)"
+msgid "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Barlow Condensed, Patrick Hand (SIL OFL)"
+msgstr "Kystlinjer: Natural Earth (public domain)  ·  Skrifttyper: Barlow, Barlow Condensed, Patrick Hand (SIL OFL)"
 
 msgid "Developer guides (development builds only)"
 msgstr "Udviklerguider (kun udviklerversioner)"
@@ -7477,3 +7477,1036 @@ msgstr "Hvem er en dygtig pige?"
 
 msgid "Who's a good boy?"
 msgstr "Hvem er en dygtig dreng?"
+
+# I021, A Wider, Warmer World
+
+msgid "Pollack"
+msgstr "Lubbe"
+
+msgid "Atlantic halibut"
+msgstr "Helleflynder"
+
+msgid "Striped red mullet"
+msgstr "Stribet mulle"
+
+msgid "Common dentex"
+msgstr "Tandbrasen"
+
+msgid "Bluefish"
+msgstr "Blåfisk"
+
+msgid "Striped bass"
+msgstr "Stribet bars"
+
+msgid "Giant trevally"
+msgstr "Kæmpehestemakrel"
+
+msgid "Wahoo"
+msgstr "Wahoo"
+
+msgid "Narrow-barred Spanish mackerel"
+msgstr "Smalstribet kongemakrel"
+
+msgid "Dusky grouper"
+msgstr "Brun havaborre"
+
+msgid "Nordic timber harbour"
+msgstr "Nordisk træhavn"
+
+msgid "Gabled harbour town"
+msgstr "Havneby med gavlhuse"
+
+msgid "Stone harbour of the Atlantic coast"
+msgstr "Stenhavn ved Atlanterhavet"
+
+msgid "Mediterranean harbour town"
+msgstr "Middelhavsby med havn"
+
+msgid "Aegean island harbour"
+msgstr "Ø-havn i Det Ægæiske Hav"
+
+msgid "Stone town harbour"
+msgstr "Havn ved en gammel stenby"
+
+msgid "Tropical harbour town"
+msgstr "Tropisk havneby"
+
+msgid "Tropical island harbour"
+msgstr "Tropisk ø-havn"
+
+msgid "Volcanic island harbour"
+msgstr "Havn på en vulkanø"
+
+msgid "Grand Harbour bastions"
+msgstr "Grand Harbours bastioner"
+
+msgid "Gialos"
+msgstr "Gialos"
+
+msgid "The Skala"
+msgstr "Skalaen"
+
+msgid "Lunenburg waterfront"
+msgstr "Lunenburgs havnefront"
+
+msgid "Jamestown"
+msgstr "Jamestown"
+
+msgid "Special harbour: %s"
+msgstr "Særlig havn: %s"
+
+msgid "an illustrated arrival at Nyhavn's painted harbour houses"
+msgstr "en illustreret ankomst ved Nyhavns malede havnehuse"
+
+msgid "an illustrated arrival beneath the bastions of Grand Harbour"
+msgstr "en illustreret ankomst under bastionerne i Grand Harbour"
+
+msgid "an illustrated arrival among the tiers of neoclassical houses at Gialos"
+msgstr "en illustreret ankomst mellem de nyklassiske huse i terrasser ved Gialos"
+
+msgid "an illustrated arrival below the Skala, the old sea bastion"
+msgstr "en illustreret ankomst under Skalaen, den gamle havbastion"
+
+msgid "an illustrated arrival at the red waterfront of the old fishing town"
+msgstr "en illustreret ankomst ved den gamle fiskerbys røde havnefront"
+
+msgid "an illustrated arrival in Jamestown's valley between the cliffs"
+msgstr "en illustreret ankomst i Jamestowns dal mellem klipperne"
+
+
+
+msgid "Model ship"
+msgstr "Modelskib"
+
+msgid "A small model sloop on a wooden stand, rigged with real thread."
+msgstr "En lille modelslup på en træfod, rigget med rigtig tråd."
+
+msgid "Jar of sea glass"
+msgstr "Glas med havglas"
+
+msgid "A jar of smooth green and blue sea glass, picked up on beaches along the way."
+msgstr "Et glas med glatte grønne og blå stykker havglas, samlet op på strande undervejs."
+
+
+
+msgid "Brass barometer"
+msgstr "Barometer i messing"
+
+msgid "A small brass ship's barometer. The needle says what the sky is about to do."
+msgstr "Et lille skibsbarometer i messing. Viseren fortæller, hvad himlen har i sinde."
+
+msgid "Brass compass"
+msgstr "Kompas i messing"
+
+msgid "An old brass compass in a gimballed bowl, fixed to the bulkhead. Purely for show: the real one is at the helm."
+msgstr "Et gammelt messingkompas i en kardansk ophængt skål, fastgjort på skottet. Kun til pynt: det rigtige sidder ved rattet."
+
+msgid "Dingle, a small fishing harbour at the head of its bay in Ireland's far south-west, with painted shopfronts above the quay."
+msgstr "Dingle, en lille fiskerhavn inderst i sin bugt i Irlands yderste sydvest, med malede butiksfacader over kajen."
+
+msgid "Stornoway on the Isle of Lewis, the little capital of the Outer Hebrides, where ferries and fishing boats share the inner harbour."
+msgstr "Stornoway på Isle of Lewis, Ydre Hebriders lille hovedstad, hvor færger og fiskerbåde deler inderhavnen."
+
+msgid "Ísafjörður, a fishing town on a sandspit in the fjords of Iceland's north-west, under steep mountains."
+msgstr "Ísafjörður, en fiskerby på en sandtange i fjordene i Islands nordvestlige hjørne, under stejle fjelde."
+
+msgid "Lunenburg, Nova Scotia, an old fishing town of painted wooden houses climbing the hill above its red waterfront sheds."
+msgstr "Lunenburg i Nova Scotia, en gammel fiskerby, hvor malede træhuse klatrer op ad bakken over de røde skure ved havnen."
+
+msgid "St. John's, Newfoundland, reached through the narrow cliffs of the Narrows, with rows of colourful wooden houses above the harbour."
+msgstr "St. John's på Newfoundland, som man når gennem de smalle klipper i The Narrows, med rækker af farverige træhuse over havnen."
+
+msgid "Valletta, Malta, where honey-coloured bastions rise straight out of the water of Grand Harbour."
+msgstr "Valletta på Malta, hvor honningfarvede bastioner rejser sig lige op af vandet i Grand Harbour."
+
+msgid "Symi, a small island harbour in the Dodecanese, ringed by tiers of pastel neoclassical houses."
+msgstr "Symi, en lille ø-havn i Dodekaneserne, omkranset af nyklassiske huse i pastelfarver, terrasse over terrasse."
+
+msgid "Essaouira on Morocco's Atlantic coast: blue fishing boats beneath the old sea bastion, and gulls over the Skala."
+msgstr "Essaouira ved Marokkos atlanterhavskyst: blå fiskerbåde under den gamle havbastion og måger over Skalaen."
+
+msgid "Dakar, near the westernmost point of Africa, where painted pirogues come in beside a busy commercial port."
+msgstr "Dakar, nær Afrikas vestligste punkt, hvor malede pirogger lægger til ved siden af en travl handelshavn."
+
+msgid "Jamestown, St Helena: one long street in a narrow valley between dark volcanic cliffs, alone in the South Atlantic."
+msgstr "Jamestown på St. Helena: én lang gade i en smal dal mellem mørke vulkanklipper, helt alene i Sydatlanten."
+
+msgid "Cape Town, beneath Table Mountain, the harbour for sailors on the long way round the Cape of Good Hope."
+msgstr "Kapstaden under Taffelbjerget, havnen for sejlere på den lange vej rundt om Kap det Gode Håb."
+
+msgid "Zanzibar's Stone Town, where dhows lie off coral-stone houses with carved wooden doors."
+msgstr "Zanzibars Stone Town, hvor dhower ligger ud for huse af koralsten med udskårne trædøre."
+
+msgid "Port Louis, Mauritius, a busy harbour town between green mountains and the Indian Ocean."
+msgstr "Port Louis på Mauritius, en travl havneby mellem grønne bjerge og Det Indiske Ocean."
+
+msgid "Galle, Sri Lanka, beside the ramparts of its old fort, on the sea road across the Indian Ocean."
+msgstr "Galle på Sri Lanka, ved voldene om det gamle fort, på søvejen over Det Indiske Ocean."
+
+msgid "Kuah on Langkawi, Malaysia, among green limestone islands at the northern entrance of the Strait of Malacca."
+msgstr "Kuah på Langkawi i Malaysia, mellem grønne kalkstensøer ved den nordlige indsejling til Malakkastrædet."
+
+msgid "Hobart, Tasmania, where old sandstone warehouses line the docks below Mount Wellington."
+msgstr "Hobart på Tasmanien, hvor gamle pakhuse af sandsten ligger langs dokkerne under Mount Wellington."
+
+msgctxt "place"
+msgid "Dingle"
+msgstr "Dingle"
+
+msgctxt "place"
+msgid "Stornoway"
+msgstr "Stornoway"
+
+msgctxt "place"
+msgid "Ísafjörður"
+msgstr "Ísafjörður"
+
+msgctxt "place"
+msgid "Lunenburg"
+msgstr "Lunenburg"
+
+msgctxt "place"
+msgid "St. John's"
+msgstr "St. John's"
+
+msgctxt "place"
+msgid "Valletta"
+msgstr "Valletta"
+
+msgctxt "place"
+msgid "Symi"
+msgstr "Symi"
+
+msgctxt "place"
+msgid "Essaouira"
+msgstr "Essaouira"
+
+msgctxt "place"
+msgid "Dakar"
+msgstr "Dakar"
+
+msgctxt "place"
+msgid "Jamestown"
+msgstr "Jamestown"
+
+msgctxt "place"
+msgid "Cape Town"
+msgstr "Kapstaden"
+
+msgctxt "place"
+msgid "Zanzibar"
+msgstr "Zanzibar"
+
+msgctxt "place"
+msgid "Port Louis"
+msgstr "Port Louis"
+
+msgctxt "place"
+msgid "Galle"
+msgstr "Galle"
+
+msgctxt "place"
+msgid "Langkawi"
+msgstr "Langkawi"
+
+msgctxt "place"
+msgid "Hobart"
+msgstr "Hobart"
+
+# I022: boat prices and difficulty
+
+msgid "Demanding seamanship: less money to start with, the crew eats and drinks more, the boat wears faster and takes heavy weather harder, harbour costs and the rescue fee are higher. The weather itself is the same."
+msgstr "Krævende sømandskab: færre penge at starte med, besætningen spiser og drikker mere, båden slides hurtigere og tager hårdt vejr hårdere, havneudgifter og redningsgebyret er højere. Selve vejret er det samme."
+
+msgid "Forgiving: more money to start with, food and water last longer, the boat wears more slowly, harbour costs and the rescue fee are lower."
+msgstr "Tilgivende: flere penge at starte med, mad og vand holder længere, båden slides langsommere, havneudgifter og redningsgebyret er lavere."
+
+msgid "Relaxed"
+msgstr "Afslappet"
+
+msgid "Seasoned Captain"
+msgstr "Erfaren skipper"
+
+msgid "The intended balance: the game as it was designed."
+msgstr "Den tilsigtede balance: spillet, som det er tænkt."
+
+msgid "Buy the %s?"
+msgstr "Køb %s?"
+
+msgid "The %s costs %s; you have %s. It is yours for good, and you move aboard at once. Your other boats stay yours."
+msgstr "%s koster %s; du har %s. Den er din for altid, og du flytter om bord med det samme. Dine andre både forbliver dine."
+
+msgid "The %s is already yours."
+msgstr "%s er allerede din."
+
+msgid "The %s costs %s; you have %s."
+msgstr "%s koster %s; du har %s."
+
+msgid "The %s is not yours yet: buy it first (%s)."
+msgstr "%s er ikke din endnu: køb den først (%s)."
+
+msgid "This is your boat"
+msgstr "Det er din båd"
+
+msgid "Buy the %s (%s)…"
+msgstr "Køb %s (%s)…"
+
+msgid "%s needed to buy it"
+msgstr "Der skal %s til at købe den"
+
+msgid "(your boat)"
+msgstr "(din båd)"
+
+msgid "Difficulty"
+msgstr "Sværhedsgrad"
+
+msgid "A change counts from now on. Money already spent or earned and the state of your boat stay as they are."
+msgstr "En ændring gælder fra nu af. Penge, der allerede er brugt eller tjent, og din båds tilstand forbliver, som de er."
+
+msgid "Difficulty: %s, from now on."
+msgstr "Sværhedsgrad: %s fra nu af."
+
+msgid "How forgiving should the sea be?"
+msgstr "Hvor tilgivende skal havet være?"
+
+msgid "Difficulty…"
+msgstr "Sværhedsgrad…"
+
+# I022: pastimes (Postcards from the Sea, A Game Developer at Sea) and time passing
+
+msgid "%d of %d · sent %s"
+msgstr "%d af %d · sendt %s"
+
+msgid "%s (%d h)"
+msgstr "%s (%d t)"
+
+msgid "%s behind us, %s ahead. And then we arrived."
+msgstr "%s bag os, %s forude. Og så var vi fremme."
+
+msgid "%s to %s: another passage in the log."
+msgstr "%s til %s: endnu en sejlads i logbogen."
+
+msgid "%s: %s"
+msgstr "%s: %s"
+
+msgid "%s: worth every mile to get here."
+msgstr "%s: hver sømil værd."
+
+msgid "A catch"
+msgstr "En fangst"
+
+msgid "A first card of this subject earns %d renown."
+msgstr "Det første kort med dette motiv giver %d ry."
+
+msgid "A harbour"
+msgstr "En havn"
+
+msgid "A little further, and suddenly every storm is a good story rather than a bad day."
+msgstr "Lidt længere, og pludselig er hver storm en god historie i stedet for en dårlig dag."
+
+msgid "A mystery update. Brave."
+msgstr "En mystisk opdatering. Modigt."
+
+msgid "A thousand words about the code"
+msgstr "Tusind ord om koden"
+
+msgid "A voyage"
+msgstr "En sejlads"
+
+msgid "Add a tiny feature"
+msgstr "Tilføj en lillebitte funktion"
+
+msgid "Added the creak of the stairs, the wind at the gallery and a small tune on an accordion. The game feels like a place now."
+msgstr "Trappen knirker nu, vinden suser om galleriet, og en lille melodi spilles på harmonika. Spillet føles som et sted nu."
+
+msgid "Already posted once: a card for the scrapbook, without renown."
+msgstr "Allerede sendt én gang: et kort til scrapbogen, uden ry."
+
+msgid "Another day ends softly at %s."
+msgstr "Endnu en dag slutter stille i %s."
+
+msgid "Arrange the scene"
+msgstr "Arranger scenen"
+
+msgid "Balance the game"
+msgstr "Afbalancer spillet"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "Caught today: a %s. Supper is sorted."
+msgstr "Dagens fangst: %s. Aftensmaden er klaret."
+
+msgid "Choose an answer first"
+msgstr "Vælg et svar først"
+
+msgid "Collect every seashell on the island"
+msgstr "Saml alle muslingeskaller på øen"
+
+msgid "Devlog"
+msgstr "Udviklerdagbog"
+
+msgid "Devlog: nothing yet. Every game starts with a first small step."
+msgstr "Udviklerdagbog: intet endnu. Ethvert spil begynder med et lille første skridt."
+
+msgid "Evening light"
+msgstr "Aftenlys"
+
+msgid "Every voyage is better with a friend aboard."
+msgstr "Enhver sejlads er bedre med en ven om bord."
+
+msgid "Finish the card (%s)"
+msgstr "Gør kortet færdigt (%s)"
+
+msgid "First mate, on watch (asleep)."
+msgstr "Styrmand på vagt (sover)."
+
+msgid "Fix a funny bug"
+msgstr "Ret en sjov fejl"
+
+msgid "Fog rolls in, the ships slow down, and the keeper has to light the fog bell too. It is harder now, but kind: nobody sinks, they only wait."
+msgstr "Tågen ruller ind, skibene sænker farten, og fyrpasseren må også ringe med tågeklokken. Det er sværere nu, men venligt: ingen synker, de venter bare."
+
+msgid "Found it: the tide pulled the ships home stern first. Fixed, with a small sigh of pride."
+msgstr "Fundet: tidevandet trak skibene hjem med agterenden først. Rettet, med et lille stolt suk."
+
+msgid "From %s to %s, and the sea was kind."
+msgstr "Fra %s til %s, og havet var venligt."
+
+msgid "Go on working (%s)"
+msgstr "Arbejd videre (%s)"
+
+msgid "Hello from %s!"
+msgstr "Hilsen fra %s!"
+
+msgid "Hidden behind the menu buttons"
+msgstr "Skjult bag menuknapperne"
+
+msgid "Interrupted after %s: %s. The hours worked count; go on later from the cabin. It is %s."
+msgstr "Afbrudt efter %s: %s. Timerne du har arbejdet tæller; fortsæt senere fra kahytten. Klokken er %s."
+
+msgid "Interrupted after %s: %s. The postcard is kept; finish it later from the cabin (Q, Write a postcard). It is %s."
+msgstr "Afbrudt efter %s: %s. Postkortet gemmes; gør det færdigt senere fra kahytten (Q, Skriv et postkort). Klokken er %s."
+
+msgid "Interrupted last time: the rest of the session is waiting."
+msgstr "Afbrudt sidst: resten af arbejdet venter."
+
+msgid "Interrupted: %s"
+msgstr "Afbrudt: %s"
+
+msgid "Interrupted: %s."
+msgstr "Afbrudt: %s."
+
+msgid "It is %s."
+msgstr "Klokken er %s."
+
+msgid "Juggle three lanterns"
+msgstr "Jonglere med tre lanterner"
+
+msgid "Lesson of the day: respect %s."
+msgstr "Dagens lektie: respekt for %s."
+
+msgid "Look what came up on the line: a %s!"
+msgstr "Se hvad der kom op på linen: %s!"
+
+msgid "Make and publish"
+msgstr "Lav og udgiv"
+
+msgid "Make and publish (%s)"
+msgstr "Lav og udgiv (%s)"
+
+msgid "Make the light reach a little further"
+msgstr "Lad lyset nå lidt længere ud"
+
+msgid "Make the ships faster in every weather"
+msgstr "Gør skibene hurtigere i al slags vejr"
+
+msgid "Milestone %d of %d: %s · %s of %s points"
+msgstr "Milepæl %d af %d: %s · %s af %s point"
+
+msgid "Milestone: %s!"
+msgstr "Milepæl: %s!"
+
+msgid "Moored in %s. The kettle is on."
+msgstr "Fortøjet i %s. Kedlen er sat over."
+
+msgid "Mysterious. Nobody can find the lighthouse."
+msgstr "Mystisk. Ingen kan finde fyrtårnet."
+
+msgid "No postcards yet. Make one at the cabin table: Q, then Write a postcard."
+msgstr "Ingen postkort endnu. Lav et ved kahytsbordet: Q, derefter Skriv et postkort."
+
+msgid "Nothing at all: let them guess"
+msgstr "Slet ingenting: lad dem gætte"
+
+msgid "Nothing to send yet."
+msgstr "Intet at sende endnu."
+
+msgid "On the rocks, a little to the left, with the sea in front"
+msgstr "På klipperne, lidt til venstre, med havet foran"
+
+msgid "One %s, one very happy captain."
+msgstr "Én fisk (%s), én meget glad skipper."
+
+msgid "Our companion"
+msgstr "Vores følgesvend"
+
+msgid "Playtesters say the storms are too hard. What do you change?"
+msgstr "Testspillerne siger, at stormene er for svære. Hvad ændrer du?"
+
+msgid "Postcard: %s"
+msgstr "Postkort: %s"
+
+msgid "Postcards from the Sea"
+msgstr "Postkort fra havet"
+
+msgid "Prepare a small update"
+msgstr "Forbered en lille opdatering"
+
+msgid "Published Tiny Lighthouse 1.0 from a harbour café, with a slow connection and a fast heart. Kind messages are arriving. A few people even bought it."
+msgstr "Udgav Lille Fyrtårn 1.0 fra en havnecafé, med en langsom forbindelse og et hurtigt hjerte. Søde beskeder strømmer ind. Nogle har endda købt det."
+
+msgid "Release: Tiny Lighthouse 1.0"
+msgstr "Udgivelse: Lille Fyrtårn 1.0"
+
+msgid "Released! Every milestone is done; small updates still make it better."
+msgstr "Udgivet! Alle milepæle er nået; små opdateringer gør det stadig bedre."
+
+msgid "Remove storms completely"
+msgstr "Fjern stormene helt"
+
+msgid "Right in the middle, very large"
+msgstr "Midt i billedet, meget stort"
+
+msgid "Scrapbook"
+msgstr "Scrapbog"
+
+msgid "Scrapbook (%d)"
+msgstr "Scrapbog (%d)"
+
+msgid "Ships to guide"
+msgstr "Skibe at lede hjem"
+
+msgid "Short, clear and kind notes. Players will like that."
+msgstr "Korte, klare og venlige noter. Det vil spillerne kunne lide."
+
+msgid "Snapshot"
+msgstr "Øjebliksbillede"
+
+msgid "Sound and music"
+msgstr "Lyd og musik"
+
+msgid "Squalls and fog"
+msgstr "Byger og tåge"
+
+msgid "Sunset at %s. Nothing to add."
+msgstr "Solnedgang ved %s. Intet at tilføje."
+
+msgid "The first sales: %s."
+msgstr "De første salg: %s."
+
+msgid "The hat is fine. The ships are not. The search continues."
+msgstr "Hatten er fin. Skibene er ikke. Jagten fortsætter."
+
+msgid "The juggling is impressive, if rather off-topic."
+msgstr "Jongleringen er imponerende, om end lidt ved siden af."
+
+msgid "The keeper walks"
+msgstr "Fyrpasseren går"
+
+msgid "The keeper waves. Ships wave back. Small, and exactly right."
+msgstr "Fyrpasseren vinker. Skibene vinker igen. Lille, og helt rigtigt."
+
+msgid "The keeper's hat"
+msgstr "Fyrpasserens hat"
+
+msgid "The lamp turns! It sweeps across the sea and every boat in the harbour blinks back. Tried it with the cabin lights off. Very pleased."
+msgstr "Lampen drejer! Den fejer hen over havet, og alle bådene i havnen blinker tilbage. Prøvede det med lyset slukket i kahytten. Meget tilfreds."
+
+msgid "The layout"
+msgstr "Layoutet"
+
+msgid "The light at %s tonight."
+msgstr "Lyset ved %s i aften."
+
+msgid "The light turns"
+msgstr "Lyset drejer"
+
+msgid "The little keeper can walk up the spiral stairs now. She stops at the top to look at the sea, which I did not program. I am choosing to call it a feature."
+msgstr "Den lille fyrpasser kan gå op ad vindeltrappen nu. Hun stopper øverst og kigger ud over havet, hvilket jeg ikke har programmeret. Jeg vælger at kalde det en funktion."
+
+msgid "The moon's tide code"
+msgstr "Månens tidevandskode"
+
+msgid "The notes are longer than the game."
+msgstr "Noterne er længere end spillet."
+
+msgid "The real captain of this boat."
+msgstr "Den egentlige skipper på denne båd."
+
+msgid "The sails are now a lovely blue. The ships still sail backwards."
+msgstr "Sejlene er nu smukt blå. Skibene sejler stadig baglæns."
+
+msgid "The sails' colour"
+msgstr "Sejlenes farve"
+
+msgid "The seashell counter now reaches 4,000. Perhaps too many shells."
+msgstr "Muslingetælleren når nu op på 4.000. Måske lidt for mange skaller."
+
+msgid "The ships now zip about like dragonflies. Fun, but odd."
+msgstr "Skibene suser nu rundt som guldsmede. Sjovt, men underligt."
+
+msgid "The ships sail backwards when the moon is full. Where do you look first?"
+msgstr "Skibene sejler baglæns, når det er fuldmåne. Hvor kigger du først?"
+
+msgid "The title screen breathes now: rocks, sea and a light that waits for you."
+msgstr "Titelskærmen ånder nu: klipper, hav og et lys, der venter på dig."
+
+msgid "The words"
+msgstr "Ordene"
+
+msgid "There was %s out there. Glad to be in port."
+msgstr "Der var %s derude. Godt at være i havn."
+
+msgid "This session takes %s of game time. Time passes as usual; an alarm or a warning interrupts it, and the hours worked still count."
+msgstr "Dette arbejde tager %s spiltid. Tiden går som altid; en alarm eller en advarsel afbryder det, og de timer du har arbejdet tæller stadig."
+
+msgid "Three little ships now sail home if the light finds them in time. The cat watched the first one arrive and approved."
+msgstr "Tre små skibe sejler nu hjem, hvis lyset finder dem i tide. Katten så det første ankomme og godkendte det."
+
+msgid "Throw away the unfinished card"
+msgstr "Smid det ufærdige kort ud"
+
+msgid "Very large indeed. It looks surprised."
+msgstr "Meget stort, ja. Det ser overrasket ud."
+
+msgid "Wave at passing ships"
+msgstr "Vinke til forbipasserende skibe"
+
+msgid "We met %s on the way. The boat held, and so did we."
+msgstr "Vi mødte %s undervejs. Båden holdt, og det gjorde vi også."
+
+msgid "Weather we met"
+msgstr "Vejr vi mødte"
+
+msgid "What changed, in plain words, and a thank-you"
+msgstr "Hvad der er ændret, i almindelige ord, og et tak"
+
+msgid "What goes into the update notes?"
+msgstr "Hvad skal der stå i opdateringsnoterne?"
+
+msgid "What should the keeper be able to do next?"
+msgstr "Hvad skal fyrpasseren kunne nu?"
+
+msgid "What the card shows"
+msgstr "Hvad kortet viser"
+
+msgid "Where should the lighthouse stand on the title screen?"
+msgstr "Hvor skal fyrtårnet stå på titelskærmen?"
+
+msgid "Without storms it is calm. Perhaps a little too calm."
+msgstr "Uden storme er der roligt. Måske lidt for roligt."
+
+msgid "Work for %s"
+msgstr "Arbejd i %s"
+
+msgid "Work on your little game"
+msgstr "Arbejd på dit lille spil"
+
+msgid "Write a postcard"
+msgstr "Skriv et postkort"
+
+msgid "Writing, arranging and publishing a postcard takes about %s of game time. Time passes as usual, and an alarm or a warning interrupts it; the card is kept to finish later."
+msgstr "At skrive, arrangere og udgive et postkort tager omkring %s spiltid. Tiden går som altid, og en alarm eller en advarsel afbryder det; kortet gemmes, så du kan gøre det færdigt senere."
+
+msgid "Your postcard is published and in the scrapbook. It is %s."
+msgstr "Dit postkort er udgivet og ligger i scrapbogen. Klokken er %s."
+
+msgid "a call on the radio"
+msgstr "et opkald på radioen"
+
+msgid "a storm"
+msgstr "en storm"
+
+msgid "a traffic warning"
+msgstr "en trafikadvarsel"
+
+msgid "a weather warning came in"
+msgstr "en vejradvarsel kom ind"
+
+msgid "at sea"
+msgstr "på havet"
+
+msgid "heavy weather"
+msgstr "meget hårdt vejr"
+
+msgid "rough weather"
+msgstr "hårdt vejr"
+
+msgid "the anchor alarm went"
+msgstr "ankeralarmen gik"
+
+msgid "the bell on the rod rang: a fish is on"
+msgstr "klokken på stangen ringede: der er fisk på"
+
+msgid "the boat has arrived"
+msgstr "båden er fremme"
+
+msgid "the boat is at the anchorage"
+msgstr "båden er ved ankerpladsen"
+
+msgid "the rescue came"
+msgstr "redningen kom"
+
+msgid "Tiny Lighthouse"
+msgstr "Lille Fyrtårn"
+
+# I022: the Captain's Academy (Handbook, First Voyage, tips)
+
+msgid "A Game Developer at Sea"
+msgstr "En spiludvikler til søs"
+
+msgid "A call on the VHF radio. Help if you can; some calls bring a forecast."
+msgstr "Et opkald på VHF-radioen. Hjælp, hvis du kan; nogle opkald giver en vejrudsigt."
+
+msgid "A long passage: the passage panel lets hours pass quickly, and the voyage map shows the way."
+msgstr "En lang sejlads: sejladspanelet lader timerne gå hurtigt, og rejsekortet viser vejen."
+
+msgid "A weather warning stops fast time. The chart's Weather tab shows what is coming along the course."
+msgstr "En vejradvarsel stopper hurtig tid. Kortets Vejr-fane viser, hvad der kommer langs kursen."
+
+msgid "Anchoring"
+msgstr "Ankring"
+
+msgid "At anchor. If the anchor drags the alarm sounds; the windlass raises it again."
+msgstr "For anker. Hvis ankeret slæber, lyder alarmen; ankerspillet hiver det op igen."
+
+msgid "Begin"
+msgstr "Begynd"
+
+msgid "Begin the First Voyage again"
+msgstr "Begynd den første sejlads igen"
+
+msgid "Boats"
+msgstr "Både"
+
+msgid "Captain's Handbook"
+msgstr "Skipperens håndbog"
+
+msgid "Captain's Handbook (F1)"
+msgstr "Skipperens håndbog (F1)"
+
+msgid "Click a harbour nearby and plan a course to it."
+msgstr "Klik på en havn i nærheden og læg en kurs dertil."
+
+msgid "Cook at the galley stove in the cabin; a meal takes a little time. Make coffee, carry the mug, and set it in the cup holder on deck."
+msgstr "Lav mad ved komfuret i kahytten; et måltid tager lidt tid. Lav kaffe, bær kruset med og sæt det i kopholderen på dækket."
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Down"
+msgstr "Ned"
+
+msgid "Each harbour offers its own services: a grocery (food, water, a new hat, lures and the fishmonger), a boatyard (boat care, haul-out, chandlery, sailmaker and boats for sale) and Go Ashore. The arrival card says what is there."
+msgstr "Hver havn har sine egne tilbud: en købmand (mad, vand, en ny hat, blink og fiskehandleren), et bådeværft (bådpleje, optagning, skibshandel, sejlmager og både til salg) og Gå i land. Ankomstkortet fortæller, hvad der er."
+
+msgid "Escape"
+msgstr "Esc"
+
+msgid "First Voyage skipped. You can begin it again from the Captain's Handbook (%s)."
+msgstr "Den første sejlads er sprunget over. Du kan begynde den igen fra Skipperens håndbog (%s)."
+
+msgid "First Voyage · %d of %d: %s"
+msgstr "Første sejlads · %d af %d: %s"
+
+msgid "Food and water"
+msgstr "Mad og vand"
+
+msgid "Food and water are used every day, at sea and in harbour. The provisions locker in the cabin shows how many days are left; buy more at a grocery. The game warns you when stores run low."
+msgstr "Mad og vand bruges hver dag, til søs og i havn. Proviantskabet i kahytten viser, hvor mange dage der er tilbage; køb mere hos en købmand. Spillet advarer dig, når forrådet er ved at slippe op."
+
+msgid "Getting started"
+msgstr "Kom i gang"
+
+msgid "Go back aboard and choose Set sail on the wheel."
+msgstr "Gå om bord igen og vælg Sæt sejl på hjulet."
+
+msgid "Go on deck, open the chart, choose a harbour and plan a course, then set sail. Time runs while you sail: the buttons at the top of the screen pause it or make it run 5 or 20 times faster. The boat follows the course by itself; you can sleep, fish or cook on the way, and anything important will stop time and tell you."
+msgstr "Gå på dæk, åbn kortet, vælg en havn og læg en kurs, og sæt så sejl. Tiden går, mens du sejler: knapperne øverst på skærmen sætter den på pause eller får den til at gå 5 eller 20 gange hurtigere. Båden følger kursen af sig selv; du kan sove, fiske eller lave mad undervejs, og alt vigtigt stopper tiden og fortæller dig det."
+
+msgid "Got it"
+msgstr "Forstået"
+
+msgid "Harbour services"
+msgstr "Havnens tilbud"
+
+msgid "In harbour"
+msgstr "I havn"
+
+msgid "In harbour the work station in the cabin offers remote work for pay by the hour. Voyages, new harbours, objectives, postcards and your little game earn renown; publish a travel update in harbour to share it, which also earns a little money."
+msgstr "I havn giver arbejdspladsen i kahytten fjernarbejde med timeløn. Sejladser, nye havne, mål, postkort og dit lille spil giver ry; udgiv en rejseopdatering i havn for at dele det, hvilket også giver lidt penge."
+
+msgid "In harbour: services differ from port to port. The arrival card said what is here; the work station pays for remote work while moored."
+msgstr "I havn: tilbuddene er forskellige fra havn til havn. Ankomstkortet fortalte, hvad der er her; arbejdspladsen betaler for fjernarbejde, mens du ligger fortøjet."
+
+msgid "In the cabin, choose Work on your little game on the wheel. Pick a task (2 to 4 hours), answer its small question and work; milestones fill the devlog and earn renown, and the release brings the first sales. An interrupted session keeps the hours worked."
+msgstr "I kahytten vælger du Arbejd på dit lille spil på hjulet. Vælg en opgave (2 til 4 timer), svar på dens lille spørgsmål og arbejd; milepæle fylder udviklerdagbogen og giver ry, og udgivelsen giver de første salg. En afbrudt økt beholder de timer, der er arbejdet."
+
+msgid "In the cabin, choose Write a postcard on the wheel. Pick what it shows (harbours, catches, your companion, voyages, weather and evening light), the words and the layout, then make and publish it: it takes about two hours. Each subject earns renown once; every card goes in the scrapbook."
+msgstr "I kahytten vælger du Skriv et postkort på hjulet. Vælg hvad det viser (havne, fangster, din følgesvend, sejladser, vejr og aftenlys), ordene og layoutet, og lav og udgiv det: det tager omkring to timer. Hvert motiv giver ry én gang; hvert kort kommer i scrapbogen."
+
+msgid "Left"
+msgstr "Venstre"
+
+msgid "Let time run"
+msgstr "Lad tiden gå"
+
+msgid "Life aboard"
+msgstr "Livet om bord"
+
+msgid "Long passages"
+msgstr "Lange sejladser"
+
+msgid "Make it home on the cabin's wheel lets you place cabin things you have bought; the framed world map lets you dream of voyages and plan one from it."
+msgstr "Gør det hjemligt på kahyttens hjul lader dig placere ting, du har købt til kahytten; det indrammede verdenskort lader dig drømme om sejladser og planlægge en derfra."
+
+msgid "Making the cabin home"
+msgstr "Gør kahytten hjemlig"
+
+msgid "Money, work and renown"
+msgstr "Penge, arbejde og ry"
+
+msgid "Night falls. The berth in the cabin is a fine place to sleep; anything important will wake you."
+msgstr "Natten falder på. Køjen i kahytten er et fint sted at sove; alt vigtigt vækker dig."
+
+msgid "No page mentions that. Try another word."
+msgstr "Ingen side nævner det. Prøv et andet ord."
+
+msgid "Nothing found"
+msgstr "Intet fundet"
+
+msgid "On long passages the passage panel lets hours pass quickly while the voyage map shows the boat crossing the sea. Everything that would stop time still does."
+msgstr "På lange sejladser lader sejladspanelet timerne gå hurtigt, mens rejsekortet viser båden krydse havet. Alt, der ville stoppe tiden, gør det stadig."
+
+msgid "Open the chart"
+msgstr "Åbn kortet"
+
+msgid "Open the chart at the navigation table or from the wheel. Click a harbour (or search for one) and plan a course; drag the course line to add a waypoint, and select a waypoint and press {delete_waypoint} to remove it. The tabs show the course, the weather along it and the details. Zoom with {map_zoom_in} and {map_zoom_out}."
+msgstr "Åbn kortet ved navigationsbordet eller fra hjulet. Klik på en havn (eller søg efter en) og læg en kurs; træk i kurslinjen for at tilføje et waypoint, og vælg et waypoint og tryk {delete_waypoint} for at fjerne det. Fanerne viser kursen, vejret langs den og detaljerne. Zoom med {map_zoom_in} og {map_zoom_out}."
+
+msgid "Open the chart: Charts on the wheel, or the navigation table in the cabin."
+msgstr "Åbn kortet: Søkort på hjulet eller navigationsbordet i kahytten."
+
+msgid "Open the menu with {pause} to save in one of three slots or load. Aboard, {quicksave} quicksaves and {quickload} loads the quicksave."
+msgstr "Åbn menuen med {pause} for at gemme på en af tre pladser eller indlæse. Om bord gemmer {quicksave} hurtigt, og {quickload} indlæser hurtiggemningen."
+
+msgid "Other ships sail too. If one is on a collision course a warning sounds and the radar opens by itself while the risk lasts. A call on the VHF radio can ask for help or bring a forecast."
+msgstr "Andre skibe sejler også. Hvis et er på kollisionskurs, lyder en advarsel, og radaren åbner af sig selv, så længe faren varer. Et opkald på VHF-radioen kan bede om hjælp eller give en vejrudsigt."
+
+msgid "Plan a course"
+msgstr "Læg en kurs"
+
+msgid "Press {action_wheel} to open the action wheel. It shows what you can do here. Close it with {pause}."
+msgstr "Tryk {action_wheel} for at åbne handlingshjulet. Det viser, hvad du kan gøre her. Luk det med {pause}."
+
+msgid "Press {captains_log} to open the Captain's Log, then close it again."
+msgstr "Tryk {captains_log} for at åbne logbogen, og luk den igen."
+
+msgid "Read more"
+msgstr "Læs mere"
+
+msgid "Relaxed, Standard or Seasoned Captain changes starting money, how fast stores are used, wear, weather damage, costs and the rescue fee; the weather itself is the same. Change it any time from the menu: it counts from then on."
+msgstr "Afslappet, Standard eller Erfaren skipper ændrer startpenge, hvor hurtigt forrådet bruges, slid, vejrskader, udgifter og redningsgebyret; selve vejret er det samme. Skift når som helst fra menuen: det gælder derfra."
+
+msgid "Renown earned! Publish a travel update in harbour to share it (the work station or the Captain's Log)."
+msgstr "Ry optjent! Udgiv en rejseopdatering i havn for at dele det (arbejdspladsen eller logbogen)."
+
+msgid "Right"
+msgstr "Højre"
+
+msgid "Saving and loading"
+msgstr "Gem og indlæs"
+
+msgid "Search the Handbook"
+msgstr "Søg i håndbogen"
+
+msgid "Settings and tips"
+msgstr "Indstillinger og tips"
+
+msgid "Short tips the first time you meet something new. The Captain's Handbook (F1) has everything either way."
+msgstr "Korte tips første gang, du møder noget nyt. Skipperens håndbog (F1) har det hele under alle omstændigheder."
+
+msgid "Show the tips again"
+msgstr "Vis tipsene igen"
+
+msgid "Show tips as you play"
+msgstr "Vis tips mens du spiller"
+
+msgid "Skip"
+msgstr "Spring over"
+
+msgid "Skip the First Voyage"
+msgstr "Spring første sejlads over"
+
+msgid "Sleep in the berth for 1 to 12 hours. The world goes on while you sleep, and anything important wakes you."
+msgstr "Sov i køjen i 1 til 12 timer. Verden fortsætter, mens du sover, og alt vigtigt vækker dig."
+
+msgid "Sleeping"
+msgstr "Søvn"
+
+msgid "Stores are running low: a grocery in harbour sells food and water."
+msgstr "Forrådet er ved at slippe op: en købmand i havn sælger mad og vand."
+
+msgid "The Captain's Log"
+msgstr "Logbogen"
+
+msgid "The Captain's hat"
+msgstr "Skipperens hat"
+
+msgid "The action wheel"
+msgstr "Handlingshjulet"
+
+msgid "The boat sails the course by itself. Try 5× or 20× at the top of the screen; anything important stops time again."
+msgstr "Båden sejler kursen af sig selv. Prøv 5× eller 20× øverst på skærmen; alt vigtigt stopper tiden igen."
+
+msgid "The boat's condition and rescue"
+msgstr "Bådens stand og redning"
+
+msgid "The cabin"
+msgstr "Kahytten"
+
+msgid "The cabin has your berth (sleep), the navigation table (the chart), the provisions locker, the work station, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board. Things you can use light up when you are close; press {interact}."
+msgstr "Kahytten har din køje (søvn), navigationsbordet (kortet), proviantskabet, arbejdspladsen, komfuret, kaffebordet, hattekrogen, det indrammede verdenskort og trofætavlen. Ting du kan bruge lyser op, når du er tæt på; tryk {interact}."
+
+msgid "The chart and planning a course"
+msgstr "Kortet og at lægge en kurs"
+
+msgid "The chart: click a harbour to plan a course; drag the line to add a waypoint. The tabs show the weather and the details."
+msgstr "Kortet: klik på en havn for at lægge en kurs; træk i linjen for at tilføje et waypoint. Fanerne viser vejret og detaljerne."
+
+msgid "The galley and coffee"
+msgstr "Kabyssen og kaffe"
+
+msgid "The hull, rig and engine wear with miles, time and weather. A boatyard can service and repair them and haul the boat out. If the boat is badly damaged at sea you are rescued and brought to harbour, for a fee."
+msgstr "Skrog, rig og motor slides med sømil, tid og vejr. Et bådeværft kan efterse og reparere dem og tage båden på land. Hvis båden bliver slemt beskadiget til søs, bliver du reddet og bragt i havn mod et gebyr."
+
+msgid "The tips will show again as you come across each thing."
+msgstr "Tipsene vises igen, efterhånden som du støder på hver ting."
+
+msgid "The world has one clock. The buttons at the top pause time or run it at 1, 5 or 20 times. On long passages a passage panel can run hours per second. Sleeping, working and the pastimes pass hours at once: the screen fades, the clock counts, and you come back at normal speed. Warnings, a fish on the line, the anchor alarm, traffic, a radio call and arriving all stop time early."
+msgstr "Verden har ét ur. Knapperne øverst sætter tiden på pause eller lader den gå 1, 5 eller 20 gange. På lange sejladser kan et sejladspanel køre timer i sekundet. Søvn, arbejde og fritidssysler lader timer gå på én gang: skærmen toner ud, uret tæller, og du kommer tilbage i normal fart. Advarsler, en fisk på linen, ankeralarmen, trafik, et radioopkald og ankomst stopper alle tiden før tid."
+
+msgid "This harbour has a boatyard: boat care, a chandlery, a sailmaker and boats for sale."
+msgstr "Denne havn har et bådeværft: bådpleje, skibshandel, sejlmager og både til salg."
+
+msgid "Time and speed"
+msgstr "Tid og fart"
+
+msgid "Tip"
+msgstr "Tip"
+
+msgid "Tips"
+msgstr "Tips"
+
+msgid "Traffic, radar and radio"
+msgstr "Trafik, radar og radio"
+
+msgid "Traffic: a ship on a collision course. The radar shows it until the risk has passed."
+msgstr "Trafik: et skib på kollisionskurs. Radaren viser det, til faren er drevet over."
+
+msgid "Underway"
+msgstr "Undervejs"
+
+msgid "Underway! {sail_trim} trims the sails, {chartplotter} shows the chart plotter, and the time buttons at the top make the passage go faster."
+msgstr "Undervejs! {sail_trim} trimmer sejlene, {chartplotter} viser kortplotteren, og tidsknapperne øverst får sejladsen til at gå hurtigere."
+
+msgid "Up on deck"
+msgstr "Op på dæk"
+
+msgid "Walk about"
+msgstr "Gå en tur"
+
+msgid "Walk around the boat with {move}."
+msgstr "Gå rundt på båden med {move}."
+
+msgid "Walk with {move}. Press {interact} next to something that lights up to use it. {action_wheel} opens the action wheel with what you can do where you stand. {captains_log} opens the Captain's Log, {captains_hat} puts your hat on or takes it off, and {pause} opens the menu (and closes any window). {handbook} opens this Handbook."
+msgstr "Gå med {move}. Tryk {interact} ved noget, der lyser op, for at bruge det. {action_wheel} åbner handlingshjulet med det, du kan gøre, hvor du står. {captains_log} åbner logbogen, {captains_hat} tager hatten på eller af, og {pause} åbner menuen (og lukker ethvert vindue). {handbook} åbner denne håndbog."
+
+msgid "Weather and safety"
+msgstr "Vejr og sikkerhed"
+
+msgid "Wind and weather change with time and place; the chart's Weather tab shows what is coming along your course. A weather warning stops fast time and sleep. Strong wind and storms wear the boat and can damage it."
+msgstr "Vind og vejr skifter med tid og sted; kortets Vejr-fane viser, hvad der kommer langs din kurs. En vejradvarsel stopper hurtig tid og søvn. Hård vind og storme slider på båden og kan beskadige den."
+
+msgid "Would you like a short First Voyage? A small card shows one step at a time, from walking about to setting sail, and you can skip it whenever you like. The Captain's Handbook (%s) is always there either way."
+msgstr "Har du lyst til en kort første sejlads? Et lille kort viser ét skridt ad gangen, fra at gå rundt til at sætte sejl, og du kan springe den over, når du vil. Skipperens håndbog (%s) er der under alle omstændigheder."
+
+msgid "You start with your first boat. At a boatyard you can buy another boat for its price; boats you own stay yours, and you can move aboard any of them at a boatyard."
+msgstr "Du starter med din første båd. På et bådeværft kan du købe en anden båd til dens pris; både du ejer, forbliver dine, og du kan flytte om bord på enhver af dem på et bådeværft."
+
+msgid "Your cat or dog lives aboard, follows you between cabin and deck and naps where it likes. Walk up and press {interact} to pet it."
+msgstr "Din kat eller hund bor om bord, følger dig mellem kahyt og dæk og tager en lur, hvor den har lyst. Gå hen og tryk {interact} for at kæle for den."
+
+msgid "Your companion"
+msgstr "Din følgesvend"
+
+msgid "Your first voyage"
+msgstr "Din første sejlads"
+
+msgid "Your game"
+msgstr "Dit spil"
+
+# I022: texts with {key} placeholders (the extractor now keeps them)
+
+msgid "A fish on the line: press {reel_in} and reel with good timing."
+msgstr "En fisk på linen: tryk {reel_in} og hal ind med god timing."
+
+msgid "Below deck: things that light up can be used with {interact}. The wheel ({action_wheel}) has sleep, provisions, postcards and your little game."
+msgstr "Under dæk: ting der lyser op, kan bruges med {interact}. Hjulet ({action_wheel}) har søvn, proviant, postkort og dit lille spil."
+
+msgid "Go on deck: walk to the companionway and press {interact}, or choose Go on deck on the wheel."
+msgstr "Gå op på dæk: gå hen til nedgangen og tryk {interact}, eller vælg Gå op på dæk på hjulet."
+
+msgid "Mind the hat: strong wind on deck can blow it away. {captains_hat} takes it off."
+msgstr "Pas på hatten: hård vind på dækket kan blæse den væk. {captains_hat} tager den af."
+
+msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. On deck, {chartplotter} shows the chart plotter, and the wheel offers sailing details and the radar. {sail_trim} opens sail trim: well-trimmed sails are faster."
+msgstr "Sæt sejl fra hjulet, når en kurs er lagt. Båden sejler kursen af sig selv. På dækket viser {chartplotter} kortplotteren, og hjulet tilbyder sejldetaljer og radaren. {sail_trim} åbner sejltrim: godt trimmede sejl er hurtigere."
+
+msgid "Set the rod on deck from its holder or the wheel and choose a lure. When a fish bites a bell rings: press {reel_in} and reel it in with good timing. Keep fish in the cool box, release them, sell them at the fishmonger or cook them."
+msgstr "Sæt stangen ud på dækket fra holderen eller hjulet og vælg et blink. Når en fisk bider, ringer en klokke: tryk {reel_in} og hal den ind med god timing. Læg fisk i køleboksen, sæt dem ud igen, sælg dem hos fiskehandleren eller tilbered dem."
+
+msgid "Settings has the volumes (also the wind on its own), display, interface size and light, language and accessibility. Tips can be turned off there. This Handbook is always here: {handbook} or Captain's Handbook in the menu."
+msgstr "Indstillinger har lydstyrkerne (også vinden for sig), skærm, brugerfladens størrelse og lys, sprog og tilgængelighed. Tips kan slås fra der. Denne håndbog er her altid: {handbook} eller Skipperens håndbog i menuen."
+
+msgid "Underway, the windlass on the foredeck (or Anchor on the wheel) drops the anchor where the bottom allows. The anchor alarm sounds if it drags. On the chart at the navigation table you can select a waypoint and press {anchorage_key} to make it an anchorage: the boat stops there and asks whether to anchor or sail on."
+msgstr "Undervejs kaster ankerspillet på fordækket (eller Anker på hjulet) ankeret, hvor bunden tillader det. Ankeralarmen lyder, hvis det slæber. På kortet ved navigationsbordet kan du vælge et waypoint og trykke {anchorage_key} for at gøre det til en ankerplads: båden stopper der og spørger, om du vil ankre eller sejle videre."
+
+msgid "Well done, Captain: you are on your way. Everything else is in the Captain's Handbook ({handbook})."
+msgstr "Godt gået, skipper: du er på vej. Alt det andet står i Skipperens håndbog ({handbook})."
+
+msgid "{action_wheel} opens a wheel with what makes sense where you are: in the cabin sleep, the world map, the chart table, provisions, postcards and your little game; on deck the charts, the fishing rod and, underway, the chart plotter, sailing details, radar, sail trim and anchor. On/off items show a check mark."
+msgstr "{action_wheel} åbner et hjul med det, der giver mening, hvor du er: i kahytten søvn, verdenskortet, kortbordet, proviant, postkort og dit lille spil; på dækket søkortene, fiskestangen og, undervejs, kortplotteren, sejldetaljer, radar, sejltrim og anker. Til/fra-punkter viser et flueben."
+
+msgid "{captains_hat} puts the hat on or takes it off. On deck in strong wind it can blow away: the game warns you first, and below deck or ashore it is safe. A lost hat can be replaced at a grocery in harbour."
+msgstr "{captains_hat} tager hatten på eller af. På dækket i hård vind kan den blæse væk: spillet advarer dig først, og under dæk eller i land er den sikker. En tabt hat kan erstattes hos en købmand i havn."
+
+msgid "The pontoons of {harbour} are full of boats with wind vanes and jerrycans lashed on deck: everyone here is crossing somewhere."
+msgstr "Pontonerne i {harbour} er fulde af både med vindror og dunke surret fast på dækket: alle her skal over et hav et sted hen."
+
+# Steady Hands
+
+msgid "free"
+msgstr "gratis"
+
+# Golden Harbour Moments
+
+msgid "Click to put it away"
+msgstr "Klik for at lægge det væk"
+
+msgid "First visit"
+msgstr "Første besøg"
+
+msgid "✦ Special harbour"
+msgstr "✦ Særlig havn"

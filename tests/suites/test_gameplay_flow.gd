@@ -305,16 +305,33 @@ func _test_companionway_transitions() -> void:
 	t.check(deck.player.position.x < 495.0, "bow pulpit stops the player")
 
 	# Repeated round trips never duplicate the player or the screen.
+	var trail: Array[String] = []
 	for i in 3:
-		await _move_player_to(Vector2(-262, 0))
+		await _to_hatch(Vector2(-262, 0), "Go below")
+		trail.append("%s:%s" % [GameSession.get_boat_area(), app.hud.get_prompt()])
 		await t.press_action(&"interact")
 		await _settle()
-		await _move_player_to(Vector2(-222, 0))
+		await _to_hatch(Vector2(-222, 0), "Go on deck")
+		trail.append("%s:%s" % [GameSession.get_boat_area(), app.hud.get_prompt()])
 		await t.press_action(&"interact")
 		await _settle()
 	t.check_eq(_player_count(), 1, "repeated transitions keep exactly one player")
 	t.check_eq(app.get_node("Screen").get_child_count(), 1, "only one screen is loaded")
-	t.check_eq(GameSession.get_boat_area(), &"exterior", "ended on deck after round trips")
+	t.check_eq(GameSession.get_boat_area(), &"exterior", "ended on deck after round trips (area:prompt before each E: %s; modals %d, companion %s)" % [
+		trail, app.modals.depth(), GameSession.get_companion().area])
+
+
+## Walks to the companionway at `spot`. The ship's companion wanders and
+## sometimes sits right there, and E would pet it instead of using the hatch
+## (the intermittent "ended on deck" failure): it is moved aside first.
+func _to_hatch(spot: Vector2, prompt: String) -> void:
+	await _move_player_to(spot)
+	if app.hud.get_prompt() != prompt:
+		var companion := app.router.current_screen.get_node_or_null(^"Companion") as Node2D
+		if companion:
+			companion.position = spot + Vector2(400, 0)
+		await t.physics_frames(3)
+		await _move_player_to(spot)
 
 
 func _test_pause_and_settings() -> void:
@@ -679,7 +696,14 @@ func _test_first_voyage_acceptance() -> void:
 	await t.screenshot("17_chart_reroute")
 	await t.click(map.find_child("ApplyButton", true, false))
 	t.check_eq(GameSession.get_voyage().revision, 2, "[voyage] the course is changed at sea")
-	t.check(GameSession.get_vessel_position().distance_to(position_at_warning) < 1e-3, "[voyage] no teleport: the boat stays where it was")
+	# A few game seconds pass while the chart opens (the clock check below
+	# allows 120 s), and the boat sails on in them: about 110 m, which was
+	# right at the old fixed 1e-3° limit (intermittent). No teleport means no
+	# more than it could sail in that time (12 kn) plus 10 m.
+	var moved_m := GeoMath.distance_nm(position_at_warning, GameSession.get_vessel_position()) * 1852.0
+	var could_m := (GameSession.get_game_time() - time_at_warning) * 12.0 * 1852.0 / 3600.0 + 10.0
+	t.check(moved_m <= could_m, "[voyage] no teleport: the boat stays where it was (%.0f m in %.0f s of game time; at most %.0f m)" % [
+		moved_m, GameSession.get_game_time() - time_at_warning, could_m])
 	t.check(GameSession.get_game_time() - time_at_warning < 120.0, "[voyage] the clock is preserved")
 	Simulation.auto_advance = true
 	await t.press_action(&"pause")

@@ -46,7 +46,7 @@ func _ready() -> void:
 		var box := CheckBox.new()
 		box.name = String(extra)
 		var price := GameSession.upgrade_price(String(extra)) if extra == &"hard_antifouling" else int(GameSession.service_quote(extra).cost)
-		var name: String = BoatCare.get_upgrade(String(extra)).name if extra == &"hard_antifouling" else Loc.t(BoatCare.SERVICE_NAMES[extra])
+		var name: String = Loc.t(String(BoatCare.get_upgrade(String(extra)).name)) if extra == &"hard_antifouling" else Loc.t(BoatCare.SERVICE_NAMES[extra])
 		box.text = "%s (%s)" % [name, GameSession.format_money(price)]
 		box.toggled.connect(func(_on: bool) -> void: _update_total())
 		options.add_child(box)

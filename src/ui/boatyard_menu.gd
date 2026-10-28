@@ -2,8 +2,11 @@ class_name BoatyardMenu
 extends ModalPanel
 ## The boatyard: browse the boats and move aboard another one. Opened from the
 ## boatyard station on deck, in harbour only (App checks; switching itself is
-## GameSession.switch_vessel()). Changing boats is free and keeps everything
-## else: the time, the harbour, the companion and the saved progress.
+## GameSession.switch_vessel()). Since I022 a boat has a price: one you do not
+## own yet is bought first (GameSession.buy_vessel, once, never below zero
+## money); boats you own are yours for good, and moving between them is free
+## and keeps everything else: the time, the harbour, the companion and the
+## saved progress.
 ##
 ## The preview is the vessel's art-only deck scene (VesselVisual) in a
 ## SubViewport, so it shows exactly the art the game uses, sprites included,
@@ -68,8 +71,7 @@ func _ready() -> void:
 		button.toggle_mode = true
 		button.button_group = group
 		button.custom_minimum_size = Vector2(230, 64)
-		button.text = vessel.display_name + "\n" + vessel.get_hull_type_name() \
-			+ (Loc.t("  (your boat)") if vessel.id == GameSession.get_vessel_id() else "")
+		button.text = vessel.display_name + "\n" + vessel.get_hull_type_name() + "  " + _ownership(vessel)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.pressed.connect(select.bind(vessel.id))
 		_list.add_child(button)
@@ -82,6 +84,10 @@ func _ready() -> void:
 	# I020: the yard's neighbours, beside Boat care.
 	_sailmaker = _trade_button("SailmakerButton", "Sailmaker…", sailmaker_requested.emit)
 	_chandlery = _trade_button("ChandleryButton", "Chandlery…", chandlery_requested.emit)
+	# Steady Hands: the boats, details and comparison scroll when the screen
+	# is too short (title, services and buttons always stay in view).
+	var box := _panel.get_node(^"VBox")
+	FitScroll.wrap([box.get_node(^"Body"), box.get_node(^"CompareTitle"), box.get_node(^"Comparison")] as Array[Control], _panel)
 	resized.connect(_fit_panel)
 	_fit_panel()
 	select(GameSession.get_vessel_id())
@@ -181,9 +187,20 @@ func select(vessel_id: StringName) -> void:
 	for key: Array in _compare_cells:
 		var cell := _compare_cells[key] as Label
 		cell.modulate = Color.WHITE if key[0] == vessel_id else Color(1, 1, 1, 0.55)
+	_specs.add_child(_label(Loc.t("Price"), &"MutedLabel"))
+	_specs.add_child(_label(_ownership(vessel)))
 	var current := vessel_id == GameSession.get_vessel_id()
-	_choose.disabled = current
-	_choose.text = "This is your boat" if current else Loc.t("Move aboard the %s") % vessel.display_name
+	var owned := GameSession.owns_vessel(vessel_id)
+	var affordable := owned or vessel.price <= GameSession.get_funds()
+	_choose.disabled = current or not affordable
+	if current:
+		_choose.text = "This is your boat"
+	elif owned:
+		_choose.text = Loc.t("Move aboard the %s") % vessel.display_name
+	elif affordable:
+		_choose.text = Loc.t("Buy the %s (%s)…") % [vessel.display_name, GameSession.format_money(vessel.price)]
+	else:
+		_choose.text = Loc.t("%s needed to buy it") % GameSession.format_money(vessel.price)
 	_show_preview(vessel)
 
 
@@ -245,6 +262,13 @@ func _show_preview(vessel: VesselDefinition) -> void:
 	root.add_child(camera)
 	_viewport.add_child(root)
 	camera.make_current()
+
+
+## "(your boat)", "Yours" or the price.
+static func _ownership(vessel: VesselDefinition) -> String:
+	if vessel.id == GameSession.get_vessel_id():
+		return Loc.t("(your boat)")
+	return Loc.t("Yours") if GameSession.owns_vessel(vessel.id) else GameSession.format_money(vessel.price)
 
 
 static func _label(text: String, variation: StringName = &"") -> Label:

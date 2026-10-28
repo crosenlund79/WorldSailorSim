@@ -74,6 +74,13 @@ godot --headless --path . res://tests/test_runner.tscn -- --only=turbocharge
 - **Status:** implemented (The Well-Run Ship, `7862607`). Measured benefit:
   0.7 s → 4 ms and 2.3 s → 11 ms per step. Guarded by `test_well_run_ship`
   `[theme]`.
+- **Steady Hands (readability, also fewer steps):** the interface no longer
+  follows the twilight blend (which parked it half-way, with text and panel
+  the same grey, for the whole twilight, stepping whenever the blend moved
+  by `MIN_STEP` 0.02). It now switches once at the middle of the twilight and
+  eases over `MAX_RATE` as before: at most 1 / (0.25 × 0.25 s) = 16 steps per
+  dusk or dawn, instead of up to 50 spread over the twilight. Step cost
+  unchanged. Guarded by `test_steady_hands` `[dusk]`.
 
 ### 3. Chart zoom and pan: wind arrows rebuilt on every view change
 
@@ -128,6 +135,15 @@ godot --headless --path . res://tests/test_runner.tscn -- --only=turbocharge
 - **Status:** measured (software only), deferred.
 - **Next action:** measure on Windows first. Harbor Dusk's lighting is not
   compromised for software-rendering numbers.
+- **Operation One Clock (2026-10-27):** the same cost is now the leading
+  explanation of the Captain's slowdown above 1×. Harbour at night: 130–135 ms
+  with the lights, 57 ms with them hidden (render time 124 → 52 ms); open
+  water at night 64–69 ms against 37 ms by day; all equal at 1×, 5× and 20×.
+  In harbour the lights fall on about 775 draw calls (about 250 at sea).
+  Status: measured (software only); **next action:** the Windows sea trial
+  (`tests/one_clock_sea_trial.tscn`, F6). If it confirms, a lighting
+  follow-up: light range and item masks, quay lamps as glow sprites, at the
+  same look. See `ONE_CLOCK_PERFORMANCE_INVESTIGATION.md`.
 
 ### 9. Traffic queries on the evaluation grid (I019)
 
@@ -165,6 +181,9 @@ godot --headless --path . res://tests/test_runner.tscn -- --only=turbocharge
 | Long-session growth (nodes, connections, orphans, audio players, tweens, caches, memory) | Flat across 20 rounds (The Well-Run Ship) and 10 rounds with save/load and Long Passage (Turbocharge) | No leak shown. This does not prove none can exist: keep the growth rows in the probe |
 | Weather, router, daydream and spot caches | All bounded (`MAX_CACHE`, `LEG_CACHE_LIMIT`, 64-entry limits) | No unbounded growth |
 | I020 trade panels and cabin things | No per-frame work (panels built on open, freed on close; cabin things drawn once, redrawn on change); `--turbo` probe equal to I019 re-run in the same session (`docs/benchmarks/i019_rerun_rendered.json`, `i020_after1_rendered.json`) | Nothing to gain. Note for future comparisons: this machine drifted 3–10 % between runs hours apart; compare against a baseline re-run in the same session |
+| I021 harbour looks, special stars, arrival card | One shared texture per look, loaded on first use and cached (`HarbourLooks`); the chart star is one dictionary lookup per drawn pin; the card is a short-lived toast. `--turbo` probe before and after in the same session (`docs/benchmarks/i021_before_rendered.json`, `i021_after_rendered.json`): equal or faster in every scenario (drift), memory +0.1 MB; repeated moorings keep the node count steady | Nothing to gain |
+| Time acceleration itself (1×, 5×, 20×) and the dawn/dusk machinery (Operation One Clock) | Per frame at any speed: simulation 0.2–0.8 ms (worst 9.7 ms, at most one evaluation point), interface recolouring 4–7.5 ms per step on deck and 20–24 ms at the chart (one step per twilight with the date card, at most four a second without), boat light script 0.1 ms, dawn/dusk watch ≤ 0.02 ms; 60 game hours at 20× with no growth (578 nodes) | Not the bottleneck: frame time follows the lit scene (#5), not the speed |
+| Golden Harbour Moments (Steady Hands & Golden Harbours) | The card is drawn once when shown (no per-frame redraw); the painting's window spots are found once per picture and cached: 18 ms for four pictures the first time, 0.01 ms after (headless, `test_golden_harbours` `[performance]`); one card per first visit, gone after 14 s | Nothing to gain |
 | Disk writes during play | No autosave; one flushed log line per meaningful event; logs capped | Not a responsiveness factor |
 
 ## Hypotheses and larger rework candidates (not yet measured or approved)

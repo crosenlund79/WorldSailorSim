@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/one_clock_sea_trial.gd" id="1"]
+
+[node name="OneClockSeaTrial" type="Node"]
+script = ExtResource("1")

@@ -238,8 +238,11 @@ func _test_generic_harbour_and_sea() -> void:
 	GameSession.replace_state(state)
 	var deck := await _show(DECK, &"from_boatyard")
 	var dressing := deck.get_harbour_dressing()
-	t.check(dressing.is_visible_in_tree() and dressing.get_landmarks().is_empty() and dressing.get_sign_ids().size() == 3,
-		"[harbour] a harbour without art (Kiel) gets the generic illustrated harbour, no landmark")
+	# I021: a harbour without its own art shows the illustration of its look
+	# (Kiel: the gabled harbour town), never a landmark of another place.
+	var landmarks := dressing.get_landmarks()
+	t.check(dressing.is_visible_in_tree() and landmarks.size() == 1 and landmarks[0].title == "Gabled harbour town" and dressing.get_sign_ids().size() == 3,
+		"[harbour] a harbour without its own art (Kiel) gets the generic illustrated harbour with its look's view")
 	t.check(deck.mooring_label.text.contains("KIEL"), "[harbour] with its own name on the sign")
 	await t.screenshot("148_kiel_generic_harbour")
 	GameSession.set_planned_route(t.make_route(&"kiel", &"copenhagen"))

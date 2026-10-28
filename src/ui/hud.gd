@@ -40,6 +40,13 @@ signal save_requested
 const SHORTCUTS: Array = [["WASD / ↑↓←→", "move"], ["E", "interact"], ["Q", "actions"], ["R", "rod"], ["H", "hat"], ["L", "Captain's Log"],  # i18n
 	["Esc", "menu"]]  # i18n
 
+## Space between the panels of the right-hand column.
+const COLUMN_GAP := 12.0
+## Half the prompt's usual width (hud.tscn).
+const PROMPT_HALF_WIDTH := 160.0
+## The right-hand column's margin.
+const RIGHT_MARGIN := 24.0
+
 var hat_badge: HatBadge
 ## Fishing, anchor and galley indicators (Iteration 13), under the hat badge.
 var aboard_badge: AboardBadge
@@ -145,6 +152,23 @@ func _process(_delta: float) -> void:
 		var left := 24.0 + (chart_plotter.size.x + 12.0 if chart_plotter.visible else 0.0)
 		if not is_equal_approx(radar_panel.offset_left, left):
 			radar_panel.offset_left = left
+	_keep_prompt_clear()
+
+
+## The interaction prompt sits centred at the bottom, but steps right of the
+## chartplotter and the radar when they would reach it (Steady Hands: at a
+## large interface size the radar covered "Go below").
+func _keep_prompt_clear() -> void:
+	var left_edge := 0.0
+	for panel: Control in [chart_plotter, radar_panel]:
+		if panel and panel.visible:
+			left_edge = maxf(left_edge, panel.position.x + panel.size.x)
+	var shift := 0.0
+	if left_edge > 0.0:
+		shift = maxf(0.0, left_edge + COLUMN_GAP - (size.x - _prompt_panel.size.x) / 2.0)
+	if not is_equal_approx(_prompt_panel.offset_left, -PROMPT_HALF_WIDTH + shift):
+		_prompt_panel.offset_left = -PROMPT_HALF_WIDTH + shift
+		_prompt_panel.offset_right = PROMPT_HALF_WIDTH + shift
 
 
 ## Width the chart's sidebar takes on the right, in unscaled UI pixels; the
@@ -219,23 +243,43 @@ func get_route_text() -> String:
 	return _route.text
 
 
+## The right-hand column, top to bottom: the route panel, Trip Details (the
+## sailing panel, underway) and a weather warning. Each piece hangs only from
+## the ones above it, so a warning appearing, changing its text or being
+## dismissed never moves Trip Details (Steady Hands: before, Trip Details
+## was pushed down below every warning, and a long warning, e.g. in Danish,
+## ran over it because the warning's height was assumed to be 124 px). The
+## warning takes the height its text needs. Cheap: offsets are only written
+## when they change.
+func _stack_right_column() -> void:
+	var route_panel := $RoutePanel as Control
+	# Never under the clock: at a large interface size on a 16:9 screen the
+	# route panel gives up width (its lines end in "…") rather than overlap.
+	var clock := $ClockPanel as Control
+	var room := size.x - RIGHT_MARGIN - (clock.position.x + clock.size.x) - COLUMN_GAP
+	var wanted := ROUTE_PANEL_WIDTH if _route.visible else ROUTE_PANEL_COMPACT
+	var width := minf(wanted, maxf(room, ROUTE_PANEL_COMPACT))
+	if not is_equal_approx(route_panel.offset_left, -(width + RIGHT_MARGIN)):
+		route_panel.offset_left = -(width + RIGHT_MARGIN)
+	# The route panel shrinks again when lines are hidden.
+	if route_panel.size.y > route_panel.get_combined_minimum_size().y + 0.5:
+		route_panel.offset_bottom = route_panel.offset_top
+	var below_route := route_panel.offset_top + route_panel.size.y + COLUMN_GAP
+	if not is_equal_approx(sailing_panel.offset_top, below_route):
+		sailing_panel.offset_top = below_route
+	var warning_top := sailing_panel.offset_top + sailing_panel.size.y + COLUMN_GAP if sailing_panel.visible else below_route
+	if not is_equal_approx(_warning_panel.offset_top, warning_top):
+		_warning_panel.offset_top = warning_top
+		_warning_panel.offset_bottom = warning_top  # grows to fit its text
+
+
 func refresh() -> void:
 	if not GameSession.is_active():
 		return
 	var catalog := PortCatalog.get_default()
 	_clock.text = Simulation.format_game_time(GameSession.get_game_time())
 	_paused_badge.visible = GameSession.is_paused()
-	# The warning sits just below the route panel, whose height depends on its
-	# lines (it shrinks again when lines are hidden).
-	var route_panel := $RoutePanel as Control
-	if route_panel.size.y > route_panel.get_combined_minimum_size().y + 0.5:
-		route_panel.offset_bottom = route_panel.offset_top
-	var warning_top := route_panel.offset_top + route_panel.size.y + 12.0
-	if not is_equal_approx(_warning_panel.offset_top, warning_top):
-		_warning_panel.offset_top = warning_top
-		_warning_panel.offset_bottom = warning_top + 124.0
-	# The sailing panel sits below the route panel, or below a warning.
-	sailing_panel.offset_top = (_warning_panel.offset_bottom if _warning_panel.visible else warning_top - 12.0) + 12.0
+	_stack_right_column()
 	# The hat badge sits just below the area panel, whose height follows its text.
 	var area_panel := $AreaPanel as Control
 	hat_badge.position = Vector2(area_panel.position.x, area_panel.position.y + area_panel.size.y + 10.0)
@@ -284,7 +328,7 @@ func refresh() -> void:
 	else:
 		var location := GameSession.get_location()
 		var arrived := GameSession.get_vessel_status() == SessionState.STATUS_ARRIVED
-		_location.text = "%s %s" % ["Arrived at" if arrived else "Moored at", location.display_name if location else "?"]
+		_location.text = "%s %s" % [Loc.t("Arrived at") if arrived else Loc.t("Moored at"), location.display_name if location else "?"]
 		var planned := GameSession.get_planned_route()
 		_route_caption.text = "Planned route"
 		_route.text = PlannedRoute.describe(planned, catalog)
@@ -316,8 +360,7 @@ func _set_route_lines(shown: bool) -> void:
 		_route_caption.visible = shown
 		_route.visible = shown
 		_route_detail.visible = shown
-		var panel := $RoutePanel as Control
-		panel.offset_left = panel.offset_right - (ROUTE_PANEL_WIDTH if shown else ROUTE_PANEL_COMPACT)
+		_stack_right_column()  # the panel's width follows (wide with a course)
 
 
 ## The boat's condition, money and stores in one compact line:

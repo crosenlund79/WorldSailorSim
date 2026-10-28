@@ -18,9 +18,16 @@ extends Node
 ## objects, at most a few times a second while dusk or dawn lasts), and the
 ## whole recolouring is announced as one theme change (The Well-Run Ship).
 ##
-## The mood follows the game's own daylight at the boat (Daylight: night below
-## -6° sun elevation, day above +4°, blended in between), never the computer's
-## clock. Settings can pin it: Automatic, Always day, Always night
+## The mood follows the game's own daylight at the boat, never the computer's
+## clock: day until the sun is SWITCH_AT below the horizon in the evening
+## twilight (the middle of the old -6°..+4° blend), night until it is back
+## above it, with a little HYSTERESIS so it never flickers. The change itself
+## eases over a few real seconds (MAX_RATE). It used to follow the twilight
+## blend, so the whole interface sat half-way for many game minutes every
+## dusk and dawn, where ink and parchment meet midnight and ivory as the
+## same grey (text about 1:1 on its panel; Steady Hands). Text roles
+## (TEXT_ROLES) also change at the middle of the fade instead of mixing, so
+## even mid-fade they stay readable. Settings can pin it: Automatic, Always day, Always night
 ## (SettingsManager.ui_light; settings.cfg, not the save).
 ##
 ## Procedural drawings in the UI (dials, badges, warnings) read colours with
@@ -33,9 +40,14 @@ const MODE_DAY := &"day"
 const MODE_NIGHT := &"night"
 const MODES: Array[StringName] = [MODE_AUTO, MODE_DAY, MODE_NIGHT]
 
-## Sun elevations (degrees) between which day blends into night.
-const NIGHT_BELOW := -6.0
-const DAY_ABOVE := 4.0
+## Sun elevation (degrees) where the interface changes mood, and how far past
+## it the sun has to be to change back.
+const SWITCH_AT := -1.0
+const HYSTERESIS := 0.5
+## Colours used for text: these take the day or the night colour, whichever
+## the fade is nearer, never a mix of the two.
+const TEXT_ROLES: Array[StringName] = [&"ink", &"ink_soft", &"heading", &"title", &"button_text", &"action_text",
+	&"disabled_text", &"code", &"link"]
 ## How often (seconds) the automatic mood is re-evaluated, and the smallest
 ## blend change that is applied (so nothing is rebuilt every frame).
 const CHECK_SECONDS := 0.25
@@ -179,14 +191,16 @@ func is_night() -> bool:
 
 ## The colour of `role` now (day/night blended).
 func color(role: StringName) -> Color:
-	var pair: Array = PALETTES.get(role, [Color.MAGENTA, Color.MAGENTA])
-	return (pair[0] as Color).lerp(pair[1], blend)
+	return color_at(role, blend)
 
 
 ## The colour of `role` in a given mood (tests, previews).
 static func color_at(role: StringName, night_amount: float) -> Color:
 	var pair: Array = PALETTES.get(role, [Color.MAGENTA, Color.MAGENTA])
-	return (pair[0] as Color).lerp(pair[1], clampf(night_amount, 0.0, 1.0))
+	var amount := clampf(night_amount, 0.0, 1.0)
+	if role in TEXT_ROLES:
+		amount = 1.0 if amount >= 0.5 else 0.0
+	return (pair[0] as Color).lerp(pair[1], amount)
 
 
 func _target_blend() -> float:
@@ -198,7 +212,8 @@ func _target_blend() -> float:
 	if not GameSession.is_active():
 		return 0.0
 	var elevation := Daylight.sun_elevation(GameSession.get_vessel_position(), GameSession.get_game_time())
-	return 1.0 - smoothstep(NIGHT_BELOW, DAY_ABOVE, elevation)
+	var at := SWITCH_AT + (HYSTERESIS if is_night() else -HYSTERESIS)
+	return 1.0 if elevation < at else 0.0
 
 
 ## Applies a day/night blend (0..1) to every themed colour and style box.

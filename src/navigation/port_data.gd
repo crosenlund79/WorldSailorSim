@@ -28,6 +28,12 @@ extends Resource
 @export var source := ""
 
 
+## The one-sentence description in the current language (the English text is
+## the message key).
+func get_description() -> String:
+	return Loc.t(description) if description != "" else ""
+
+
 ## Geographic position as Vector2(longitude, latitude) in degrees.
 func get_geo_position() -> Vector2:
 	return Vector2(longitude, latitude)

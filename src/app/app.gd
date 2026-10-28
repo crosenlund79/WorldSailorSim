@@ -163,6 +163,14 @@ func _ready() -> void:
 	day_night_watch.name = "DayNightWatch"
 	day_night_watch.app = self
 	add_child(day_night_watch)
+	var academy_layer := UiScaleLayer.new()
+	academy_layer.name = "AcademyLayer"
+	academy_layer.layer = 15
+	add_child(academy_layer)
+	academy = AcademyGuide.new()
+	academy.name = "AcademyGuide"
+	academy.app = self
+	academy_layer.add_child(academy)
 	show_main_menu()
 	# Cozy Polish: the game's own loading screen over the menu, once per launch.
 	if LoadingScreen.wanted():
@@ -173,6 +181,8 @@ func _ready() -> void:
 
 ## The start-up loading screen while it is up (null afterwards).
 var loading_screen: LoadingScreen
+## The Captain's Academy card (I022): the First Voyage and the tips.
+var academy: AcademyGuide
 
 
 func is_loading() -> bool:
@@ -241,6 +251,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.is_echo() and (event as InputEventKey).keycode == KEY_F9:
 		get_viewport().set_input_as_handled()
 		quickload()
+		return
+	if event is InputEventKey and event.pressed and not event.is_echo() and (event as InputEventKey).keycode == KEY_F1:
+		get_viewport().set_input_as_handled()
+		toggle_handbook()
 		return
 	if event.is_action_pressed(&"captains_log") and not event.is_echo():
 		get_viewport().set_input_as_handled()
@@ -321,10 +335,55 @@ func open_new_game_menu() -> void:
 	modals.push(menu)
 
 
-func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND) -> void:
+func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> void:
 	modals.clear()
-	GameSession.start_new_session(companion_kind)
+	GameSession.start_new_session(companion_kind, level)
 	_show_current_boat_area()
+	if AcademyGuide.enabled and Academy.first_voyage_state() == Academy.NEVER_OFFERED:
+		offer_first_voyage.call_deferred()
+
+
+# --- The Captain's Academy (I022) ----------------------------------------------------
+
+## The first new game on this computer asks once: a First Voyage, or not?
+## (Loading a saved game never asks.) Either answer is remembered; the
+## Handbook can begin it again.
+func offer_first_voyage() -> void:
+	await get_tree().process_frame
+	while router.is_busy() or is_loading():
+		await get_tree().process_frame
+	if not is_in_gameplay():
+		return
+	var begin: bool = await modals.confirm(Loc.t("Your first voyage"),
+		Loc.t("Would you like a short First Voyage? A small card shows one step at a time, from walking about to setting sail, and you can skip it whenever you like. The Captain's Handbook (%s) is always there either way.") % Academy.key("handbook"),
+		Loc.t("Begin"), Loc.t("Skip"))
+	if begin:
+		academy.begin_first_voyage()
+	else:
+		Academy.skip_first_voyage()
+
+
+## The Captain's Handbook, at `page` (or its first page). Opens over the
+## pause menu too; anywhere else only when nothing is open.
+func open_handbook(page := "") -> HandbookMenu:
+	if router.is_busy() or (not modals.is_empty() and not modals.get_top() is PauseMenu):
+		return null
+	var menu := HandbookMenu.new()
+	menu.first_voyage_requested.connect(func() -> void:
+		modals.clear()
+		academy.begin_first_voyage())
+	modals.push(menu)
+	if not page.is_empty():
+		menu.show_page(page)
+	return menu
+
+
+## F1: opens the Handbook, or closes it when it is on top.
+func toggle_handbook() -> void:
+	if modals.get_top() is HandbookMenu:
+		modals.get_top().close()
+	else:
+		open_handbook()
 
 
 func continue_game() -> void:
@@ -483,6 +542,8 @@ func get_wheel_actions() -> Array[Dictionary]:
 		add.call(&"chart", Loc.t("Chart table"), open_chart)
 		add.call(&"provisions", "Provisions", open_provisions)
 		add.call(&"cabin_home", "Make it home", func() -> void: open_cabin_home.call_deferred())
+		add.call(&"postcards", Loc.t("Write a postcard"), func() -> void: open_postcards.call_deferred())
+		add.call(&"game_dev", Loc.t("Work on your little game"), func() -> void: open_game_dev.call_deferred())
 	else:
 		if GameSession.is_underway():
 			# On/off items show a check mark read from the setting itself (Cozy Polish).
@@ -1105,14 +1166,144 @@ func open_work_menu() -> void:
 ## reports the pay. Like sleeping, it also works while paused and leaves the
 ## pause as it was; the player stays at the desk.
 func work_for(hours: int) -> void:
-	modals.clear()
-	var result := Simulation.work(hours)
+	if not GameSession.can_work_remotely():
+		notify(Loc.t("Remote work needs a steady connection: moor in a harbour first."))
+		return
+	var result: Dictionary = await pass_time(func() -> Dictionary: return Simulation.work(hours))
 	if not String(result.error).is_empty():
 		notify(result.error)
 		return
-	notify(Loc.t("You worked %d h and earned %s. It is %s. Funds: %s.%s") % [result.hours, GameSession.format_money(result.earned),
-		Simulation.format_game_time(GameSession.get_game_time()), GameSession.format_money(GameSession.get_funds()),
-		Loc.t("  Time is still paused.") if GameSession.is_paused() else ""])
+	if result.stopped_by == Simulation.STOP_RESCUE:
+		return
+	var stopped := interruption_reason(result.stopped_by)
+	notify((Loc.t("Interrupted: %s.") % stopped + " " if not stopped.is_empty() else "") + Loc.t("You worked %d h and earned %s. It is %s. Funds: %s.%s") % [
+		result.hours, GameSession.format_money(result.earned), Simulation.format_game_time(GameSession.get_game_time()),
+		GameSession.format_money(GameSession.get_funds()), Loc.t("  Time is still paused.") if GameSession.is_paused() else ""])
+
+
+# --- Hours-long tasks on the one clock (I022) -------------------------------------------
+
+## Spends a task's hours on the one clock: with a screen, the game fades to
+## black, `work` runs the simulation once under it (Simulation.work,
+## spend_time_aboard ...: it returns an AdvanceResult or a Dictionary with
+## "stopped_by") while the clock counts the hours, a line says why it stopped
+## early, and the game fades back in at ×1. Without a screen (tests) it all
+## happens at once. Like sleep it works while paused and leaves the pause as
+## it was. Returns what `work` returned.
+func pass_time(work: Callable) -> Variant:
+	modals.clear()
+	var outcome := {}
+	var run := func() -> float:
+		outcome.result = work.call()
+		if TimePassage.is_shown():
+			snap_light()
+		return GameSession.get_game_time()
+	if TimePassage.is_shown() and not is_instance_valid(time_passage):
+		time_passage = TimePassage.new()
+		add_child(time_passage)
+		time_passage.play_sleep(GameSession.get_game_time(), run, func() -> String:
+			var why := interruption_reason(_stopped_by(outcome.result))
+			return Loc.t("Interrupted: %s") % why if not why.is_empty() else "")
+		await time_passage.finished
+		_on_modal_stack_changed(modals.depth())
+	else:
+		run.call()
+	if GameSession.get_time_scale() > 1:
+		GameSession.set_time_scale(1)
+	return outcome.result
+
+
+static func _stopped_by(result: Variant) -> StringName:
+	if result is Simulation.AdvanceResult:
+		return result.stopped_by
+	return StringName(result.get("stopped_by", Simulation.STOP_NONE)) if result is Dictionary else Simulation.STOP_NONE
+
+
+## Why a task stopped early, in a few words ("" when it ran to the end).
+static func interruption_reason(stopped_by: StringName) -> String:
+	match stopped_by:
+		Simulation.STOP_WARNING:
+			return Loc.t("a weather warning came in")
+		Simulation.STOP_BITE:
+			return Loc.t("the bell on the rod rang: a fish is on")
+		Simulation.STOP_ANCHOR:
+			return Loc.t("the anchor alarm went")
+		Simulation.STOP_ARRIVAL:
+			return Loc.t("the boat has arrived")
+		Simulation.STOP_ANCHORAGE:
+			return Loc.t("the boat is at the anchorage")
+		Simulation.STOP_TRAFFIC:
+			return Loc.t("a traffic warning")
+		Simulation.STOP_VHF:
+			return Loc.t("a call on the radio")
+		Simulation.STOP_RESCUE:
+			return Loc.t("the rescue came")
+	return ""
+
+
+## Postcards from the Sea (I022): from the cabin.
+func open_postcards() -> PostcardMenu:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var menu := PostcardMenu.new()
+	menu.make_requested.connect(func() -> void: make_postcard.call_deferred())
+	menu.scrapbook_requested.connect(func() -> void: modals.push(ScrapbookMenu.new()))
+	modals.push(menu)
+	return menu
+
+
+## Makes the postcard drafted in GameSession: its remaining time passes on the
+## one clock; an interruption keeps the card, with the time already given it.
+func make_postcard() -> void:
+	if GameSession.get_pastimes().draft.is_empty():
+		return
+	var minutes := GameSession.postcard_minutes_left()
+	var result: Simulation.AdvanceResult = await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_aboard(minutes, true))
+	var outcome := GameSession.work_on_postcard(result.elapsed_seconds / 60.0)
+	if result.stopped_by == Simulation.STOP_RESCUE:
+		return
+	var now := Simulation.format_game_time(GameSession.get_game_time())
+	if outcome.done:
+		notify(Loc.t("Your postcard is published and in the scrapbook. It is %s.") % now)
+	else:
+		notify(Loc.t("Interrupted after %s: %s. The postcard is kept; finish it later from the cabin (Q, Write a postcard). It is %s.") % [
+			Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by), now])
+
+
+## A Game Developer at Sea (I022): from the cabin.
+func open_game_dev() -> GameDevMenu:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var menu := GameDevMenu.new()
+	menu.work_requested.connect(func(task_id: String, choice: int) -> void: work_on_game.call_deferred(task_id, choice))
+	modals.push(menu)
+	return menu
+
+
+## A session on the little game: the task's (remaining) hours pass on the one
+## clock; when interrupted, the hours worked still count.
+func work_on_game(task_id: String, choice: int) -> void:
+	var task := Pastimes.task(task_id)
+	if task.is_empty():
+		return
+	var unfinished: Dictionary = GameSession.get_pastimes().game.task
+	var minutes := float(task.hours) * 60.0 - (float(unfinished.minutes) if unfinished.get("id") == task_id else 0.0)
+	var result: Simulation.AdvanceResult = await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_aboard(minutes, true))
+	var outcome := GameSession.work_on_game(task_id, choice, result.elapsed_seconds / 60.0)
+	if result.stopped_by == Simulation.STOP_RESCUE:
+		return
+	var now := Simulation.format_game_time(GameSession.get_game_time())
+	if not outcome.done:
+		notify(Loc.t("Interrupted after %s: %s. The hours worked count; go on later from the cabin. It is %s.") % [
+			Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by), now])
+		return
+	var lines: Array[String] = [Loc.t(String((task.done as Array)[clampi(choice, 0, (task.done as Array).size() - 1)]))]
+	if not (outcome.milestone as Dictionary).is_empty():
+		lines.append(Loc.t("Milestone: %s!") % Loc.t(String(outcome.milestone.name)))
+	if int(outcome.euros) > 0:
+		lines.append(Loc.t("The first sales: %s.") % GameSession.format_money(int(outcome.euros)))
+	lines.append(Loc.t("It is %s.") % now)
+	notify(" ".join(lines))
 
 
 func _on_weather_warning(warning: Dictionary) -> void:
@@ -1155,7 +1346,16 @@ func get_pending_vhf() -> Dictionary:
 
 func _on_arrived(port_id: StringName) -> void:
 	hud.hide_warning()
-	notify(Loc.t("Arrived in %s.") % PortCatalog.get_default().get_display_name(port_id))
+	# The arrival card (I021): the harbour's picture, the arrival and one line
+	# about the place. Notices go to the same corner, so it never blocks.
+	var port := PortCatalog.get_default().get_port(port_id)
+	var picture := HarbourLooks.get_default().picture_for(port_id)
+	if port_id == _new_harbour_id and picture:
+		show_harbour_moment(port_id, picture)
+	else:
+		toasts.show_card(Loc.t("Arrived in %s.") % PortCatalog.get_default().get_display_name(port_id),
+			port.get_description() if port else "", picture)
+	_new_harbour_id = &""
 	# Sleeping through the arrival, the captain wakes in the cabin as always.
 	if is_instance_valid(voyage_map):
 		_dock_after_map = true  # after the voyage map, when the captain comes aboard
@@ -1191,9 +1391,40 @@ func _start_docking(deck: BoatArea) -> void:
 func _on_voyage_logged(record: Dictionary, new_harbour: bool) -> void:
 	if new_harbour:
 		var log := GameSession.get_captains_log()
-		notify(Loc.t("New harbour in the Captain's Log: %s (%d of %d visited).") % [
+		var line := Loc.t("New harbour in the Captain's Log: %s (%d of %d visited).") % [
 			PortCatalog.get_default().get_display_name(StringName(record.to)), log.get_distinct_harbours(),
-			PortCatalog.get_default().ports.size()])
+			PortCatalog.get_default().ports.size()]
+		# A first arrival with a picture gets a Golden Harbour Moment, which
+		# carries this line itself (one card, not two notices).
+		if HarbourLooks.get_default().picture_for(StringName(record.to)):
+			_new_harbour_id = StringName(record.to)
+			_new_harbour_line = line
+		else:
+			notify(line)
+
+
+# --- Golden Harbour Moments -------------------------------------------------------
+
+## The harbour just logged for the first time (until its arrival is shown).
+var _new_harbour_id: StringName = &""
+var _new_harbour_line := ""
+
+
+## The first arrival in a harbour with a picture: a small illustrated travel
+## memory (HarbourMoment) in the notice column, lit for the hour. Never a
+## window: it does not pause or take the keyboard, a click puts it away, and
+## it fades by itself. Returning to a known harbour keeps the small card.
+func show_harbour_moment(port_id: StringName, picture: Texture2D) -> HarbourMoment:
+	var moment := HarbourMoment.new()
+	moment.port_id = port_id
+	moment.picture = picture
+	moment.special = HarbourLooks.get_default().is_special(port_id)
+	moment.elevation = Daylight.sun_elevation(GameSession.get_vessel_position(), GameSession.get_game_time())
+	moment.overcast = BoatLighting.overcast_of(Simulation.get_weather_at_vessel())
+	moment.log_line = _new_harbour_line
+	toasts.show_moment(moment)
+	SessionLog.write("harbour_moment", {"port": String(port_id), "special": moment.special, "elevation": snappedf(moment.elevation, 0.1)})
+	return moment
 
 
 ## Renown earned on a voyage: one short message for all of it. A secret
@@ -1204,11 +1435,11 @@ func _on_renown_awarded(awards: Array) -> void:
 	var titles: Array[String] = []
 	for award: Dictionary in awards:
 		if award.get("secret", false):
-			notify(Loc.t("Secret achievement: %s. %s  +%d renown") % [award.title, award.text, int(award.reward)])
+			notify(Loc.t("Secret achievement: %s. %s  +%d renown") % [Loc.t(String(award.title)), Loc.t(String(award.text)), int(award.reward)])
 			AudioManager.play_sfx(achievement_sound, ACHIEVEMENT_DB)
 			continue
 		total += int(award.reward)
-		titles.append(award.title)
+		titles.append(Loc.t(String(award.title)))
 	if not titles.is_empty():
 		notify(Loc.t("+%d renown: %s.") % [total, ", ".join(titles)])
 
@@ -1275,6 +1506,8 @@ func open_pause_menu() -> void:
 	menu.load_requested.connect(open_load_menu)
 	menu.log_requested.connect(open_captains_log)
 	menu.settings_requested.connect(open_settings)
+	menu.difficulty_requested.connect(func() -> void: modals.push(DifficultyMenu.new()))
+	menu.handbook_requested.connect(func() -> void: open_handbook())
 	menu.main_menu_requested.connect(request_main_menu)
 	menu.dev_tests_requested.connect(func() -> void:
 		modals.clear()
@@ -1417,9 +1650,22 @@ func _find_modal(type: Variant) -> ModalPanel:
 ## Moves aboard `vessel_id` (from the boatyard): the session, companion, time
 ## and harbour are kept; the player steps aboard on deck by the boatyard.
 func switch_vessel(vessel_id: StringName) -> void:
-	modals.clear()
 	if vessel_id == GameSession.get_vessel_id():
+		modals.clear()
 		return
+	# I022: a boat not yet yours is bought first (asked, once).
+	var vessel := VesselCatalog.get_default().get_vessel(vessel_id)
+	if vessel and not GameSession.owns_vessel(vessel_id):
+		var buy: bool = await modals.confirm(Loc.t("Buy the %s?") % vessel.display_name,
+			Loc.t("The %s costs %s; you have %s. It is yours for good, and you move aboard at once. Your other boats stay yours.") % [
+				vessel.display_name, GameSession.format_money(vessel.price), GameSession.format_money(GameSession.get_funds())], "Buy")
+		if not buy:
+			return
+		var refusal := GameSession.buy_vessel(vessel_id)
+		if refusal != "":
+			notify(refusal)
+			return
+	modals.clear()
 	var error := GameSession.switch_vessel(vessel_id)
 	if error != "":
 		notify(error)
@@ -1552,5 +1798,7 @@ func _on_modal_stack_changed(depth: int) -> void:
 
 func _on_node_added(node: Node) -> void:
 	var button := node as BaseButton
-	if button and ui_click_sound:
+	# Once per button: a button moved to another parent enters the tree again.
+	if button and ui_click_sound and not button.has_meta(&"ui_click"):
+		button.set_meta(&"ui_click", true)
 		button.pressed.connect(AudioManager.play_ui.bind(ui_click_sound))

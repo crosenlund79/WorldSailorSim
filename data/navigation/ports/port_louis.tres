@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"port_louis"
+display_name = "Port Louis"
+country = "Mauritius"
+latitude = -20.1619
+longitude = 57.4989
+description = "Port Louis, Mauritius, a busy harbour town between green mountains and the Indian Ocean."
+importance = 1
+region = "indian_ocean"
+island = true
+source = "GeoNames Port Louis (-20.1619, 57.4989), cities1000; UN/LOCODE MU PLU (no coordinate); I021"

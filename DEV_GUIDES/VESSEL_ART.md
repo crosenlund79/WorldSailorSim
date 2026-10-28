@@ -8,8 +8,8 @@ named PNGs into the vessel's art folder, or assign them in the inspector.
 ## How the pieces fit together
 
 ```
-data/vessels/<vessel_id>.tres            VesselDefinition: id, name, scenes, performance,
-   │                                     visual profile
+data/vessels/<vessel_id>.tres            VesselDefinition: id, name, price (I022, euros),
+   │                                     scenes, performance, visual profile
    ├─ deck_scene / cabin_scene           gameplay scenes  (src/vessels/<vessel_id>/deck.tscn, cabin.tscn)
    │     ├─ Visual        ◄── instance of the art-only scene (deck_visual.tscn / cabin_visual.tscn)
    │     │                    named VisualSlot nodes, each with placeholder drawing

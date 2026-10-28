@@ -70,6 +70,9 @@ func _test_assets_and_buses() -> void:
 	var outside := AudioServer.get_bus_index(WeatherAudio.OUTSIDE_BUS)
 	t.check(outside >= 0 and AudioServer.get_bus_send(outside) == &"Ambience" and AudioServer.get_bus_effect(outside, 0) is AudioEffectLowPassFilter,
 		"[buses] an Outside bus with a low-pass filter feeds the Ambience bus (its volume setting governs it)")
+	var wind := AudioServer.get_bus_index(WeatherAudio.WIND_BUS)
+	t.check(wind > outside and AudioServer.get_bus_send(wind) == WeatherAudio.OUTSIDE_BUS,
+		"[buses] a Wind bus (I022) feeds the Outside bus: muffled below deck, under Ambience, with its own volume")
 	var sfx := AudioServer.get_bus_index(&"SFX")
 	t.check(AudioServer.get_bus_effect_count(sfx) == 0 and AudioServer.get_bus_send(sfx) == &"Master",
 		"[buses] the SFX bus is unfiltered and goes straight out (later alarms stay clear inside and out)")
@@ -101,7 +104,9 @@ func _test_loops_and_muffling() -> void:
 		and not AudioManager.is_loop_playing(WeatherAudio.RAIN_LOOP) and not app.is_storm_audio_playing(),
 		"[loops] a 12 kn breeze underway: wind and water, no rain, no storm wind")
 	var breeze_db := AudioManager.get_loop_target_db(WeatherAudio.WIND_LOOP)
-	t.check(AudioManager.get_loop_player(WeatherAudio.WIND_LOOP).bus == WeatherAudio.OUTSIDE_BUS, "[loops] on the Outside bus")
+	t.check(AudioManager.get_loop_player(WeatherAudio.WIND_LOOP).bus == WeatherAudio.WIND_BUS
+		and AudioManager.get_loop_player(WeatherAudio.WATER_LOOP).bus == WeatherAudio.OUTSIDE_BUS,
+		"[loops] the wind on its own Wind bus (I022), the water on the Outside bus")
 	# A gale: stronger wind sound, the storm wind and rain.
 	WeatherFixtures.use([WeatherFixtures.gale("atmosphere_gale", GameSession.get_vessel_position(), 120.0, 40.0,
 		GameSession.get_game_time() - 3600.0, 72.0)], true)

@@ -11,7 +11,7 @@ const OUTPUT_DIR := "res://assets/branding/png/"
 ## file name (without extension) -> list of output heights in pixels
 ## (The old next_harbor_* PNGs are kept unchanged for history.)
 const EXPORTS := {
-	"little_captains_hat_logo": [480, 960],
+	"little_captains_hat_logo": [240, 480, 960],  # 240: the boot splash (I022)
 	"little_captains_hat_logo_on_light": [480],
 	"little_captains_hat_symbol": [64, 256, 512],
 	"little_captains_hat_icon": [32, 64, 256, 512],

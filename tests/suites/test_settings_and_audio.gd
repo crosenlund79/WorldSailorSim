@@ -38,6 +38,14 @@ func run(t: Node) -> void:
 	t.check_eq(SettingsManager.get_volume(&"Music"), 25, "music volume survives a reload")
 	t.check_eq(SettingsManager.get_volume(&"UI"), 0, "muted UI volume survives a reload")
 	t.check_eq(SettingsManager.get_vsync(), false, "VSync survives a reload")
+	# The wind's own volume (I022): 100 % by default (the earlier balance), kept across a restart.
+	t.check_eq(SettingsManager.DEFAULT_VOLUMES[&"Wind"], 100, "the wind's default keeps the earlier sound balance (0 dB)")
+	SettingsManager.set_volume(&"Wind", 35)
+	t.check(absf(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(&"Wind")) - linear_to_db(0.35)) < 0.01, "the Wind slider sets the Wind bus at once")
+	SettingsManager.save()
+	SettingsManager.restore_defaults()
+	SettingsManager.load_settings()
+	t.check_eq(SettingsManager.get_volume(&"Wind"), 35, "the wind volume survives a restart")
 	t.check_eq(SettingsManager.get_window_mode(), SettingsManager.WINDOW_BORDERLESS, "window mode survives a reload")
 	t.check(is_equal_approx(SettingsManager.get_ui_scale(), 1.2), "UI scale survives a reload")
 

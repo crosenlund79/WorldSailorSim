@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"st_johns"
+display_name = "St. John's"
+country = "Canada"
+latitude = 47.5649
+longitude = -52.7093
+description = "St. John's, Newfoundland, reached through the narrow cliffs of the Narrows, with rows of colourful wooden houses above the harbour."
+importance = 2
+region = "north_america"
+island = false
+source = "GeoNames St. John's (47.5649, -52.7093), cities1000; UN/LOCODE CA SJF 4734N 05244W; I021"

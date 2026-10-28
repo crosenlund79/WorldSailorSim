@@ -1,5 +1,5 @@
 {
-	"note": "I020 harbour trades: the chandlery, the sailmaker and the fishmonger, and the small things that make a cabin a home. Prices in euros (gameplay numbers). Which harbours have which trade follows their facilities (src/harbour/harbour_trades.gd): the fishmonger wherever there is a grocery store, the chandlery and the sailmaker wherever there is a boatyard.",
+	"note": "Operation Paperwork adds a brass compass. I021 adds three cabin things (a model ship, a jar of sea glass, a barometer). I020 harbour trades: the chandlery, the sailmaker and the fishmonger, and the small things that make a cabin a home. Prices in euros (gameplay numbers). Which harbours have which trade follows their facilities (src/harbour/harbour_trades.gd): the fishmonger wherever there is a grocery store, the chandlery and the sailmaker wherever there is a boatyard.",
 	"decor": [
 		{"id": "rug", "name": "Braided rug", "price": 40, "place": "floor",
 			"text": "A round rag rug, braided from old sail ties. Warm underfoot on a cold morning."},
@@ -12,7 +12,15 @@
 		{"id": "books", "name": "Shelf of sea stories", "price": 45, "place": "wall",
 			"text": "A short shelf with a fiddle rail and a row of well-thumbed sea stories."},
 		{"id": "bunting", "name": "Signal-flag bunting", "price": 30, "place": "wall",
-			"text": "A string of small signal flags. Read them right and they say \"welcome aboard\"."}
+			"text": "A string of small signal flags. Read them right and they say \"welcome aboard\"."},
+		{"id": "model_ship", "name": "Model ship", "price": 70, "place": "shelf",
+			"text": "A small model sloop on a wooden stand, rigged with real thread."},
+		{"id": "sea_glass", "name": "Jar of sea glass", "price": 20, "place": "shelf",
+			"text": "A jar of smooth green and blue sea glass, picked up on beaches along the way."},
+		{"id": "barometer", "name": "Brass barometer", "price": 65, "place": "wall",
+			"text": "A small brass ship's barometer. The needle says what the sky is about to do."},
+		{"id": "compass", "name": "Brass compass", "price": 55, "place": "wall",
+			"text": "An old brass compass in a gimballed bowl, fixed to the bulkhead. Purely for show: the real one is at the helm."}
 	],
 	"sail_cloths": [
 		{"id": "classic", "name": "Classic cream", "price_per_ft": 0, "sail": "#E3E2DA", "shade": "#BDBEB7",

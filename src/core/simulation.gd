@@ -556,7 +556,7 @@ func invalidate_estimates() -> void:
 ## Remote work in harbour for `hours` (1-8): the normal simulation advanced
 ## in one go (food and water are used as always), then GameSession pays for
 ## every completed hour. Works while paused, which it leaves as it was.
-## Returns {"error", "hours", "earned", "elapsed"}.
+## Returns {"error", "hours", "earned", "elapsed", "stopped_by"}.
 func work(hours: int) -> Dictionary:
 	if not GameSession.can_work_remotely():
 		return {"error": Loc.t("Remote work needs a steady connection: moor in a harbour first."), "hours": 0, "earned": 0, "elapsed": 0.0}
@@ -566,7 +566,7 @@ func work(hours: int) -> Dictionary:
 	_hat_sheltered = false
 	var completed := floori(result.elapsed_seconds / 3600.0 + 1e-6)
 	var earned := GameSession.pay_remote_work(completed)
-	return {"error": "", "hours": completed, "earned": earned, "elapsed": result.elapsed_seconds}
+	return {"error": "", "hours": completed, "earned": earned, "elapsed": result.elapsed_seconds, "stopped_by": result.stopped_by}
 
 
 ## A Go Ashore outing (Iteration 12): `minutes` of ordinary harbour time
@@ -838,7 +838,7 @@ func _assess_weather(result: AdvanceResult) -> bool:
 	GameSession.update_weather_exposure(here)
 	var damage := WeatherDamage.damage_between(GameSession.get_damage_applied_until(), now,
 		GameSession.get_vessel_position(), GameSession.get_wind_seed(), GameSession.get_vessel_profile().weather_damage_factor) \
-		* GameSession.get_anchor_damage_factor()
+		* GameSession.get_anchor_damage_factor() * Difficulty.factor("weather_damage")
 	if GameSession.apply_weather_damage(damage, now):
 		if result:
 			result.rescued = true

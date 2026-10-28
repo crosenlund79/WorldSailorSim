@@ -20,8 +20,11 @@ extends Node
 ## "Outside" bus (sent to Ambience, so the Ambience volume governs them) whose
 ## low-pass filter closes when the captain goes below and opens on deck. The
 ## SFX and UI buses are never filtered, so later alarms stay clear anywhere.
+## The wind (breeze and storm) plays on the "Wind" bus (I022), which sends to
+## Outside: muffled below deck as before, with its own volume in Settings.
 
 const OUTSIDE_BUS := &"Outside"
+const WIND_BUS := &"Wind"
 const WIND_LOOP := &"wind_breeze"
 const WATER_LOOP := &"water_hull"
 const RAIN_LOOP := &"rain"
@@ -99,7 +102,7 @@ func update(here: WeatherSample, new_place: String, underway: bool, storms: Arra
 	_muffle_target = 0.0 if place == "deck" else 1.0
 	var wind := clampf(here.speed_kn / 25.0, 0.0, 1.0)
 	levels.wind = wind
-	_loop(WIND_LOOP, breeze_sound, wind, -34.0, -14.0)
+	_loop(WIND_LOOP, breeze_sound, wind, -34.0, -14.0, WIND_BUS)
 	var water := clampf((0.35 + GameSession.get_vessel_speed_kn() / 10.0 * 0.4 + wind * 0.25) if underway else 0.15 + wind * 0.2, 0.0, 1.0)
 	levels.water = water
 	_loop(WATER_LOOP, water_sound, water, -30.0, -12.0)
@@ -108,7 +111,7 @@ func update(here: WeatherSample, new_place: String, underway: bool, storms: Arra
 	_loop(RAIN_LOOP, rain_sound, rain, -26.0, -8.0)
 	var storm := clampf(inverse_lerp(STORM_AUDIBLE_KN, STORM_FULL_KN, here.speed_kn), 0.0, 1.0) if here.speed_kn > STORM_AUDIBLE_KN else 0.0
 	levels.storm = storm
-	_loop(STORM_LOOP, storm_wind_sound, storm, -30.0, -6.0)
+	_loop(STORM_LOOP, storm_wind_sound, storm, -30.0, -6.0, WIND_BUS)
 	# The nearest thunderstorm cell (at the boat: right here).
 	_storm_nm = INF
 	if here.thunder_active:
@@ -122,11 +125,11 @@ func update(here: WeatherSample, new_place: String, underway: bool, storms: Arra
 		_strike_in = 0.0
 
 
-func _loop(id: StringName, stream: AudioStream, level: float, quiet_db: float, loud_db: float) -> void:
+func _loop(id: StringName, stream: AudioStream, level: float, quiet_db: float, loud_db: float, bus := OUTSIDE_BUS) -> void:
 	if level <= 0.01:
 		AudioManager.stop_loop(id, FADE)
 	else:
-		AudioManager.play_loop(id, stream, lerpf(quiet_db, loud_db, level), FADE, OUTSIDE_BUS)
+		AudioManager.play_loop(id, stream, lerpf(quiet_db, loud_db, level), FADE, bus)
 
 
 func _process(delta: float) -> void:

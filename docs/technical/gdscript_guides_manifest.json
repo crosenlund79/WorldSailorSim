@@ -13,9 +13,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/aboard/cabin_decor.gd": {
-   "sha": "3cbeebb1d99927c9",
+   "sha": "3035fb8687a36b97",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "brass compass; second placement pass"
   },
   "src/aboard/coffee_mug.gd": {
    "sha": "7591f61fef11b354",
@@ -53,14 +53,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "5c1941fa4019be83",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "1e6879cde2fa9b86",
+   "reviewed": "2026-10-28",
+   "note": "Golden Harbours: show_harbour_moment on first arrival with a picture; renown titles via Loc.t"
   },
   "src/app/game_version.gd": {
-   "sha": "a08c000173a473c6",
+   "sha": "ee3547eb8d0e13de",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 version 0.109a"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -83,9 +83,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/audio/weather_audio.gd": {
-   "sha": "20644b03781bc327",
+   "sha": "945af216b1e5885c",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 wind volume"
   },
   "src/boat/anchor_signals.gd": {
    "sha": "a24007421ad50d1e",
@@ -93,9 +93,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/boat/boat_area.gd": {
-   "sha": "6f0e13675a13a9af",
+   "sha": "e0cc46c5d9189453",
    "reviewed": "2026-10-27",
-   "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
+   "note": "I022 ShallowWater under WaterLife"
   },
   "src/boat/boat_fixture.gd": {
    "sha": "cb427e4ff17e7ac7",
@@ -103,9 +103,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/boat/boat_lighting.gd": {
-   "sha": "bc4df275891ccb27",
-   "reviewed": "2026-10-27",
-   "note": "Engine Room C/D: deterministic blink and walk-out tests, lighting node name, grocery refresh, pacing probe fixed"
+   "sha": "4fef49be7390cc64",
+   "reviewed": "2026-10-28",
+   "note": "Golden Harbours: static overcast_of shared"
+  },
+  "src/boat/cabin_windows.gd": {
+   "sha": "43f83f9030a83b7d",
+   "reviewed": "2026-10-28",
+   "note": "Uses BoatLighting.overcast_of"
   },
   "src/boat/cabin_world_map.gd": {
    "sha": "7af0d7e4aa6154f0",
@@ -126,6 +131,11 @@
    "sha": "88ec65f04dbc67f1",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/boat/shallow_water.gd": {
+   "sha": "ad93d276dcd70921",
+   "reviewed": "2026-10-27",
+   "note": "I022 ShallowWater under WaterLife"
   },
   "src/boat/visuals/damage_overlay.gd": {
    "sha": "3c0ac961e220d95d",
@@ -156,6 +166,11 @@
    "sha": "afd047e224ca3dda",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/boat/water_look.gd": {
+   "sha": "bfa0036989283e38",
+   "reviewed": "2026-10-27",
+   "note": "I022 windows and softer water"
   },
   "src/boat/weather_visuals.gd": {
    "sha": "3d92b4ff77547e19",
@@ -202,6 +217,11 @@
    "reviewed": "2026-10-27",
    "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
   },
+  "src/core/academy.gd": {
+   "sha": "382366535e0b01c1",
+   "reviewed": "2026-10-27",
+   "note": "I022 Captain's Academy"
+  },
   "src/core/anchor_state.gd": {
    "sha": "fca549a2299f57e0",
    "reviewed": "2026-10-27",
@@ -217,6 +237,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/core/difficulty.gd": {
+   "sha": "8cb259b32db95129",
+   "reviewed": "2026-10-27",
+   "note": "I022 boats and difficulty"
+  },
   "src/core/fishing_state.gd": {
    "sha": "1727045f3d97deb5",
    "reviewed": "2026-10-27",
@@ -228,9 +253,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "99c3d3d01a211dcc",
+   "sha": "a0281da6473765bb",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -257,20 +282,30 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/core/pastimes.gd": {
+   "sha": "b7a1a203b29d646a",
+   "reviewed": "2026-10-27",
+   "note": "I022 pastimes and the one clock for hours-long tasks"
+  },
+  "src/core/pastimes_state.gd": {
+   "sha": "72bccc9fc02774d9",
+   "reviewed": "2026-10-27",
+   "note": "I022 pastimes and the one clock for hours-long tasks"
+  },
   "src/core/provisions.gd": {
    "sha": "2a5ea7d7061a4e03",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/session_state.gd": {
-   "sha": "5241c7b692ca60ef",
+   "sha": "ab8482ced3e0e636",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/core/simulation.gd": {
-   "sha": "43d8f1626651ac23",
+   "sha": "6d28ea07e681de6d",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/core/vessel_condition.gd": {
    "sha": "d1e2f8e4ae1d2c4b",
@@ -343,9 +378,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_dressing.gd": {
-   "sha": "89577a924fbc2c64",
+   "sha": "70091c165d333657",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "src/harbour/harbour_facilities.gd": {
    "sha": "89468fd9d1acf16e",
@@ -356,6 +391,11 @@
    "sha": "a0f34cd640504119",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/harbour/harbour_looks.gd": {
+   "sha": "eb39dfe6f16cfefb",
+   "reviewed": "2026-10-27",
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "src/harbour/harbour_trades.gd": {
    "sha": "7f7cd0c7d12d1f2a",
@@ -458,9 +498,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/map_view.gd": {
-   "sha": "d5c9c58916333610",
+   "sha": "4f1eb4670aa6116d",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: special star outside the selection ring (entry still accurate)"
   },
   "src/navigation/nav_grid.gd": {
    "sha": "630855214a2c8a0d",
@@ -478,9 +518,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/port_data.gd": {
-   "sha": "3adcd918d7e4645e",
+   "sha": "b2c2a415bc4a6e25",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "src/navigation/sea_router.gd": {
    "sha": "18bd434ff4ce69b6",
@@ -528,9 +568,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/world_map.gd": {
-   "sha": "f6158f07579093c7",
+   "sha": "5657560d20c7eb09",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "src/persistence/legacy_saves.gd": {
    "sha": "19476bac39c66476",
@@ -573,9 +613,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/settings/settings_manager.gd": {
-   "sha": "e89a2d1703187735",
+   "sha": "04c83e38b8fc4fcd",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 Captain's Academy"
   },
   "src/skills/timing_check.gd": {
    "sha": "9128e4ade8419976",
@@ -586,6 +626,11 @@
    "sha": "6e4c251ca656e9a5",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/ui/academy_guide.gd": {
+   "sha": "aab82ccffc44ac4c",
+   "reviewed": "2026-10-27",
+   "note": "I022 Captain's Academy"
   },
   "src/ui/action_wheel.gd": {
    "sha": "77d784d9635b9903",
@@ -603,9 +648,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/boat_care_menu.gd": {
-   "sha": "cce19b06c0d3099d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "884b482761b89a27",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/boat_care_view.gd": {
    "sha": "75f156024fd6a3de",
@@ -613,14 +658,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/boatyard_menu.gd": {
-   "sha": "54d32d47ce9a99f1",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "4626e0bb1a1b6fe7",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/cabin_home_menu.gd": {
-   "sha": "191f769d207df869",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "b15d7cbd96d4b279",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/captains_log_menu.gd": {
    "sha": "b31e5c66eb208430",
@@ -648,34 +693,64 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/cooking_menu.gd": {
-   "sha": "b474b6acbf7b676d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "a1e2c92bb2e72ec1",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/dev_guides_menu.gd": {
    "sha": "bf781211bd6f3dd9",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
-  "src/ui/fishing_menu.gd": {
-   "sha": "be4c2d8eb50c5cf6",
+  "src/ui/difficulty_menu.gd": {
+   "sha": "f18a4ad7aa1bb9a8",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 boats and difficulty"
+  },
+  "src/ui/difficulty_picker.gd": {
+   "sha": "07bfe4e8e94a7de2",
+   "reviewed": "2026-10-27",
+   "note": "I022 boats and difficulty"
+  },
+  "src/ui/fishing_menu.gd": {
+   "sha": "76db17020efa7330",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/fishmonger_menu.gd": {
    "sha": "72e2541cfd7c5ad7",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
-  "src/ui/go_ashore_menu.gd": {
-   "sha": "e841c575d3dcefe1",
+  "src/ui/fit_scroll.gd": {
+   "sha": "52c2eac6b422acec",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
+  },
+  "src/ui/game_dev_menu.gd": {
+   "sha": "db182ce2c131300c",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 pastimes and the one clock for hours-long tasks"
+  },
+  "src/ui/go_ashore_menu.gd": {
+   "sha": "aec8dedf030fcb58",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/grocery_menu.gd": {
-   "sha": "c77c59a58c948c77",
+   "sha": "99a7046b0e3715df",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
+  },
+  "src/ui/handbook_menu.gd": {
+   "sha": "1aa0717d485405f0",
    "reviewed": "2026-10-27",
-   "note": "Engine Room C/D: deterministic blink and walk-out tests, lighting node name, grocery refresh, pacing probe fixed"
+   "note": "I022 Captain's Academy"
+  },
+  "src/ui/harbour_moment.gd": {
+   "sha": "f41862bc84b6dc10",
+   "reviewed": "2026-10-28",
+   "note": "New: Golden Harbour Moment card"
   },
   "src/ui/hat_badge.gd": {
    "sha": "debcc2db31dc2766",
@@ -683,9 +758,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/haul_out_panel.gd": {
-   "sha": "36ba7fa68dbda54d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "a7feead3de6eacde",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/haul_out_scene.gd": {
    "sha": "ecbfbfa941ccc25b",
@@ -693,9 +768,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/hud.gd": {
-   "sha": "1414c3a6525871a3",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "b963edadbe5e9522",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/language_picker.gd": {
    "sha": "5174b4aa42a259ea",
@@ -703,9 +778,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/loading_screen.gd": {
-   "sha": "28149d1e928f8389",
+   "sha": "26b7a70fe9312e57",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 navy loading screen"
   },
   "src/ui/main_menu.gd": {
    "sha": "d0658dd78d228e31",
@@ -728,9 +803,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/new_game_menu.gd": {
-   "sha": "29570140f252e6ef",
+   "sha": "bea652a299c0ece2",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 boats and difficulty"
   },
   "src/ui/passage_panel.gd": {
    "sha": "f70ca42a7c40c5c3",
@@ -738,9 +813,19 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/pause_menu.gd": {
-   "sha": "9fff1c9562abf1c3",
+   "sha": "e1a4ea8c4aaf849d",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 Captain's Academy"
+  },
+  "src/ui/postcard_menu.gd": {
+   "sha": "8d7e54203418ec86",
+   "reviewed": "2026-10-27",
+   "note": "I022 pastimes and the one clock for hours-long tasks"
+  },
+  "src/ui/postcard_view.gd": {
+   "sha": "a7bdedc3d9586c55",
+   "reviewed": "2026-10-27",
+   "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/ui/provisions_menu.gd": {
    "sha": "0048b26b1806f0f1",
@@ -753,9 +838,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/radar_panel.gd": {
-   "sha": "fdc26df5aac167ad",
+   "sha": "3ad0d7f5ee70845b",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "radar only underway"
   },
   "src/ui/reel_dial.gd": {
    "sha": "07855b87c8f876dc",
@@ -787,10 +872,15 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
-  "src/ui/settings_menu.gd": {
-   "sha": "ec233f3835fec2ed",
+  "src/ui/scrapbook_menu.gd": {
+   "sha": "c6624f2bd0b63919",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 pastimes and the one clock for hours-long tasks"
+  },
+  "src/ui/settings_menu.gd": {
+   "sha": "68933c341e68dd82",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "src/ui/simple_panel.gd": {
    "sha": "fd078dfabae6e16d",
@@ -803,9 +893,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/theme/ui_theme.gd": {
-   "sha": "8200cd8988a1b7ea",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "716a85ea0f70a435",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands: day/night switch at mid-twilight with hysteresis; text roles snap"
   },
   "src/ui/time_controls.gd": {
    "sha": "f9f3d32d9ad81c31",
@@ -818,9 +908,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/toasts.gd": {
-   "sha": "f35506569f47485f",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "7eabb30c11ff288d",
+   "reviewed": "2026-10-28",
+   "note": "Golden Harbours: show_moment"
   },
   "src/ui/trade_panel.gd": {
    "sha": "709186869b53ca24",
@@ -858,9 +948,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/vessels/vessel_definition.gd": {
-   "sha": "efd578df5df7b92e",
+   "sha": "f731c4ec9ad1322e",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 boats and difficulty"
   },
   "src/water/water_life.gd": {
    "sha": "5bd4e07881db7e38",
@@ -947,6 +1037,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "tests/one_clock_sea_trial.gd": {
+   "sha": "0ee993e3e86c2a65",
+   "reviewed": "2026-10-27",
+   "note": "Operation One Clock sea trial"
+  },
   "tests/pacing_18.gd": {
    "sha": "03d6bd428a01645e",
    "reviewed": "2026-10-27",
@@ -997,6 +1092,16 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "tests/screenshots_i021.gd": {
+   "sha": "4d3ac015a0b94d0e",
+   "reviewed": "2026-10-27",
+   "note": "I021 screenshots"
+  },
+  "tests/suites/test_academy.gd": {
+   "sha": "001e7e3769747ff6",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
+  },
   "tests/suites/test_anchor_life.gd": {
    "sha": "74cec34564e9983a",
    "reviewed": "2026-10-27",
@@ -1013,9 +1118,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_atmosphere.gd": {
-   "sha": "583a9754143ea783",
+   "sha": "7eee22df22c09e3e",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 wind volume"
   },
   "tests/suites/test_boat_care.gd": {
    "sha": "42281edf30e6f325",
@@ -1023,24 +1128,34 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_boat_of_your_own.gd": {
-   "sha": "51f1d4ebf4881f59",
+   "sha": "fb919bdfcc26436f",
    "reviewed": "2026-10-27",
-   "note": "Engine Room C/D: deterministic blink and walk-out tests, lighting node name, grocery refresh, pacing probe fixed"
+   "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "1cfc07ae42343c6a",
+   "sha": "32d73f7c86071676",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 version 0.109a"
+  },
+  "tests/suites/test_cabin_windows.gd": {
+   "sha": "9ce202d5cda1ec1f",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "tests/suites/test_captains_log.gd": {
-   "sha": "d53166fad920e986",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "476e2391b68c04c1",
+   "reviewed": "2026-10-28",
+   "note": "Log line may be inside the moment card"
+  },
+  "tests/suites/test_captains_other_life.gd": {
+   "sha": "c1d8621324dc258d",
+   "reviewed": "2026-10-28",
+   "note": "Steady Hands (UI reliability)"
   },
   "tests/suites/test_captains_watch.gd": {
-   "sha": "293c04686a6389a1",
+   "sha": "a511747240a65668",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "radar mooring check"
   },
   "tests/suites/test_catamaran_cabin.gd": {
    "sha": "438528746e1946e8",
@@ -1113,9 +1228,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_diagnostics.gd": {
-   "sha": "89a389fc60d95954",
+   "sha": "85e1c8b0085b1e52",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 version 0.109a"
   },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",
@@ -1138,9 +1253,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_gameplay_flow.gd": {
-   "sha": "02d31465c83eecc1",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "7459c2f3dede03f7",
+   "reviewed": "2026-10-28",
+   "note": "Companion moved aside at the hatch; no-teleport limit follows elapsed time"
+  },
+  "tests/suites/test_golden_harbours.gd": {
+   "sha": "745f5217db84dccc",
+   "reviewed": "2026-10-28",
+   "note": "New: Golden Harbours suite"
   },
   "tests/suites/test_harbour_chart.gd": {
    "sha": "5232ff4311a12f54",
@@ -1148,14 +1268,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_harbour_life.gd": {
-   "sha": "c4d88be48f295ea5",
+   "sha": "16014f0ce80fcfe1",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "tests/suites/test_harbours.gd": {
-   "sha": "c13b0740225f5c43",
+   "sha": "20b68e4c9eed379b",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "tests/suites/test_hat.gd": {
    "sha": "e5bc1f38a8a77ad8",
@@ -1183,9 +1303,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_living_world.gd": {
-   "sha": "3029a4308c8e0ada",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "fa00656f95c862c3",
+   "reviewed": "2026-10-28",
+   "note": "Arm swing on the open foredeck, by distance"
   },
   "tests/suites/test_localization.gd": {
    "sha": "9e12c7c2b89c2885",
@@ -1273,9 +1393,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_settings_and_audio.gd": {
-   "sha": "f210800c0f7b918f",
+   "sha": "198fec484dd042e6",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 wind volume"
   },
   "tests/suites/test_simulation.gd": {
    "sha": "d6a55b5008b6fc35",
@@ -1296,6 +1416,11 @@
    "sha": "8c7062a4806df0e1",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "tests/suites/test_steady_hands.gd": {
+   "sha": "7b470a7b047c0ace",
+   "reviewed": "2026-10-28",
+   "note": "Dusk readability checks"
   },
   "tests/suites/test_turbocharge.gd": {
    "sha": "24511395031b3df7",
@@ -1318,9 +1443,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_visual_prototype.gd": {
-   "sha": "d3138974760ae08a",
+   "sha": "a8a49ae7a3bc9efe",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "tests/suites/test_voyage_persistence.gd": {
    "sha": "8a7b116f4bb8814e",
@@ -1341,6 +1466,11 @@
    "sha": "808425276c89b118",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "tests/suites/test_wider_world.gd": {
+   "sha": "2627818fa629f971",
+   "reviewed": "2026-10-27",
+   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "tests/suites/test_wind.gd": {
    "sha": "e93f2a67688db172",
@@ -1363,9 +1493,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/test_runner.gd": {
-   "sha": "4e61decc73375823",
+   "sha": "fad9a74e380e4164",
+   "reviewed": "2026-10-28",
+   "note": "Registers test_golden_harbours"
+  },
+  "tools/art/capture_previews.gd": {
+   "sha": "5519443f78ad3805",
    "reviewed": "2026-10-27",
-   "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
+   "note": "compass in the bought list; entry still accurate"
   },
   "tools/build_theme.gd": {
    "sha": "0e5953be619e13ca",
@@ -1373,9 +1508,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tools/export_branding.gd": {
-   "sha": "e55e8cb85b55e441",
+   "sha": "856217357ad25dbb",
    "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "note": "I022 240 px logo"
   },
   "tools/navigation/world_land_to_res.gd": {
    "sha": "b75a5694c042570c",

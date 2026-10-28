@@ -225,7 +225,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/app/app.gd`
 
-- **Role:** no class_name, extends Node; root script of `res://src/app/app.tscn` (project `run/main_scene`). Application shell and flow coordinator: wires screens/menus to services, owns all hotkey/Esc handling, turns service signals into toasts, sounds and modals.
+- **Role:** no class_name, extends Node; root script of `res://src/app/app.tscn` (project `run/main_scene`). Application shell and flow coordinator: wires screens/menus to services, owns all hotkey/Esc handling, turns service signals into toasts, sounds and modals. I021: `_on_arrived` calls `toasts.show_card(title, PortData.get_description(), HarbourLooks.picture_for(port))` instead of a plain notice (the title keeps the old "Arrived in %s." text, which tests read through `toasts.get_messages()`). I022: `switch_vessel` awaits `modals.confirm` and `GameSession.buy_vessel` for an unowned boat before switching; `start_new_game(companion, level)`; pause menu `difficulty_requested` pushes `DifficultyMenu.new()`. I022: `pass_time(work: Callable) -> Variant` (modals.clear, TimePassage.play_sleep with `interruption_reason(_stopped_by(result))`, snap_light, time scale back to 1; direct in tests), `interruption_reason(stopped_by)`, `open_postcards/make_postcard`, `open_game_dev/work_on_game(task_id, choice)`; `work_for` now awaits `pass_time(Simulation.work)` and names an interruption; wheel ids `postcards`, `game_dev` (interior). I022 Academy: `academy: AcademyGuide` on `AcademyLayer` (UiScaleLayer, layer 15); `start_new_game` → `offer_first_voyage` (deferred; waits for router idle and the loading screen; `modals.confirm` Begin/Skip) when `Academy.first_voyage_state() == NEVER_OFFERED` and `AcademyGuide.enabled`; `open_handbook(page)` (also over `PauseMenu`), `toggle_handbook()` on KEY_F1 in `_unhandled_input`; pause menu `handbook_requested`. Steady Hands: `_on_node_added` connects `AudioManager.play_ui` once per button (meta `ui_click`), so reparenting (FitScroll) no longer errors with a duplicate connection. Golden Harbours: `_on_voyage_logged` keeps `_new_harbour_id`/`_new_harbour_line` (no toast) when the new harbour has a picture; `_on_arrived` then calls `show_harbour_moment(port_id, picture)` (special = `HarbourLooks.is_special`, elevation = `Daylight.sun_elevation`, overcast = `BoatLighting.overcast_of(Simulation weather)`, `SessionLog` "harbour_moment") instead of `show_card`, and clears the id. `_on_renown_awarded` passes titles/texts through `Loc.t` (objective titles were stored in English).
 - **Depends on:** autoloads `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, `AudioManager`, `SessionLog`, `UiTheme`; scene children `SceneRouter` ($SceneRouter), `Hud`, `ModalStack`, `Toasts`; creates `WeatherAudio`, `DayNightWatch`, `LoadingScreen`, `TimePassage`, `VoyageMap`; pushes modals (`NewGameMenu`, `PauseMenu`, `SleepMenu`, `SaveLoadMenu`, `BoatyardMenu`, `ProvisionsMenu`, `RescueDialog`, `GroceryMenu`, `FishmongerMenu`, `ChandleryMenu`, `SailmakerMenu`, `CabinHomeMenu`, `GoAshoreMenu`, `FishingMenu`, `CookingMenu`, `AnchorMenu`, `AnchoragePrompt`, `VhfDialog`, `TrophyMenu`, `WorkMenu`, `PublishMenu`, `CaptainsLogMenu`, `SailTrimPanel`, `ActionWheel`, `BoatCareMenu`, `HaulOutPanel`, `LanguagePicker`, `DevTestPanel`); static helpers `Loc`, `PortCatalog`, `VesselCatalog`, `PassageReadiness`, `LegacySaves`, `DevTools`, `DevGuides`, `HarbourFacilities`, `BoatCare`, `FishingSounds`, `HatBadge`, `AnchorSite`, `ChartPlotter`, `SailingPanel`, `RadarPanel`, `Interactable`; screen types `MainMenu`, `BoatArea`, `WorldMap`.
 - **Signals:** declares none. Connects to `GameSession` (`notice`, `rescued`, `voyage_logged`, `renown_awarded`, `hat_warning`, `hat_lost`, `fish_bite`, `anchorage_reached`, `anchor_alarm`, `anchor_moment`, `fishing_warning`, `provisions_warning`, `propulsion_changed`, `state_replaced`, `session_started/ended` → `DevTools.on_session_changed`), `Simulation` (`weather_warning`, `traffic_alert`, `vhf_call`, `arrived`, `passage_started`), `router.screen_changed`, `modals.stack_changed`, `hud.*_requested`, `get_tree().node_added` (adds UI click sound to every BaseButton), and every BoatArea/WorldMap/MainMenu request signal in `_connect_*`.
 - **State:** writes no game state directly; all changes go through `GameSession`/`Simulation`/`SaveManager` calls. Owns UI-only fields: `_rescue_open`, `_anchorage_prompt_due`, `_pending_vhf`, `_bite_wait`, companion follow timers, `_last_quick_msec`, `voyage_map`, `time_passage`. Sets `get_tree().paused` in `_on_modal_stack_changed` (paused while any modal is open in gameplay, or while the rescue report is open).
@@ -238,7 +238,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/app/game_version.gd`
 
-- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.107a", `MACHINE` "0.107.1") and build commit lookup.
+- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.108a", `MACHINE` "0.108.1") and build commit lookup.
 - **Depends on:** `res://build_info.json` (optional), else `res://.git/HEAD`, ref file or `packed-refs` (read as files, no git process).
 - **State:** static `_commit` cache ("-" sentinel = unknown).
 - **Lifecycle:** static helper.
@@ -257,6 +257,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Invariants:** only one screen exists at a time; `setup` callable runs before the instance enters the tree (connections exist before `_ready`); calls while busy are ignored with a warning; calls `begin_exit()` on the outgoing screen if present.
 - **Tests:** none direct; indirect via `app.router` in app-instancing suites (e.g. `tests/suites/test_anchor_life.gd`).
 - **Change risks:** callers rely on `is_busy()` to gate input; ignored changes during a transition are silent (warning only); making it awaitable differently breaks tests that wait on `router.is_busy()`.
+
+### `src/core/academy.gd`
+
+- **Role:** class_name `Academy`, extends RefCounted, static only (I022). Data: `data()`, `categories()`, `pages()`, `page(id)`, `category_title`, `search(query)` (all words in Loc.t title + `fill(text)` + chapter). Keys: `key(action)` (InputMap events → `DisplayServer.keyboard_get_keycode_from_physical` except headless → `OS.get_keycode_string`, arrows/Esc via `ARROWS`; "move" = WASD / arrows; `FIXED_KEYS` handbook F1, quicksave F5, quickload F9, delete_waypoint Delete, anchorage_key M), `fill(text)` (Loc.t then `{name}` → `key(name)`). Progress: states `NEVER_OFFERED` "", `ACTIVE`, `SKIPPED`, `DONE`; `first_voyage_state`, `current_step`, `begin_first_voyage`, `skip_first_voyage`, `complete_step`, `steps()`, `tip(id)`, `is_tip_seen`, `mark_tip_seen`, `reset_tips`.
+- **Depends on:** `data/academy/academy.json`, `SettingsManager.get_academy/set_academy`, `InputMap`, `DisplayServer`, `Loc`.
+- **State:** static `_data` cache.
+- **Lifecycle:** used by `AcademyGuide`, `HandbookMenu`, `App.offer_first_voyage/open_handbook`.
+- **Tests:** `tests/suites/test_academy.gd` (`[handbook]`, `[keys]`, `[search]`, `[dansk]`, `[settings]`).
+- **Change risks:** the extractor keeps strings with `{key}` placeholders (json-ish rule narrowed in `tools/i18n/extract.py`); translations must keep the placeholders. Fixed keys must match the key codes in `App._unhandled_input` / `WorldMap`.
 
 ### `src/core/anchor_state.gd`
 
@@ -290,6 +299,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_captains_log.gd`, `tests/suites/test_objectives.gd`.
 - **Change risks:** record keys are read by objectives (`complete`, `damage`, `worst_hazard`, `outcome`) and the log UI; changing them needs both plus `_is_record`.
 
+### `src/core/difficulty.gd`
+
+- **Role:** class_name `Difficulty`, extends RefCounted, static only (I022). `LEVELS` [`RELAXED`, `STANDARD`, `SEASONED`]; `valid(level)` (unknown → Standard), `value_of(level, key)`, `factor(key)` (the current game's level via `GameSession.get_difficulty()`), `display_name`, `describe` (Loc.t of the data's name/text), `starting_funds(level)`.
+- **Depends on:** `data/progression/difficulty.json` (`levels.<id>`: name, text, starting_funds, provisions_use, wear, weather_damage, costs, rescue_fee), `GameSession`, `SessionState.STARTING_FUNDS`, `Loc`.
+- **State:** static `_levels` cache (parsed once).
+- **Lifecycle:** used by `SessionState.create_new` (funds), `GameSession` (`apply_simulation_step` consumption ×provisions_use, `_wear` ×wear, `service_quote` and `get_provisions_price` ×costs, rescue fee ×rescue_fee), `Simulation._assess_weather` (damage ×weather_damage), `DifficultyPicker`.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[difficulty]`, `[new game]`, `[dansk]`).
+- **Change risks:** Standard must stay exactly 1.0 (existing tests compare exact numbers); names/texts come from data and are extracted for translation by `tools/i18n/extract.py`.
+
 ### `src/core/fishing_state.gd`
 
 - **Role:** class_name `FishingState`, extends RefCounted; fishing data (rod, lures, lure, line_out/mode/since, checked_until, hold, next_uid, records, trophies, counters, keep_min_rarity, keep_min_grade, passage_posture, sharks_released, junk_caught).
@@ -312,7 +330,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/core/game_session.gd`
 
-- **Role:** no class_name, extends Node; autoload `GameSession`. Sole mutator of the active `SessionState`; game rules API (lifecycle, area/player, clock and pause, routes and voyages, propulsion/trim, weather exposure and damage, rescue, boat care and services, Captain's Log, objectives/renown/publishing, fishing, galley/coffee/hands, anchor and Magic Anchor, anchorages, VHF standby, Go Ashore, money, provisions, remote work, hat, location recovery, life at anchor).
+- **Role:** no class_name, extends Node; autoload `GameSession`. Sole mutator of the active `SessionState`; game rules API (lifecycle, area/player, clock and pause, routes and voyages, propulsion/trim, weather exposure and damage, rescue, boat care and services, Captain's Log, objectives/renown/publishing, fishing, galley/coffee/hands, anchor and Magic Anchor, anchorages, VHF standby, Go Ashore, money, provisions, remote work, hat, location recovery, life at anchor). I022: signals `fleet_changed`, `difficulty_changed(level)`; `get_difficulty`, `set_difficulty`, `owns_vessel` (or `test_all_boats_owned`, set by the test runner), `get_owned_vessels`, `buy_vessel` (BOATYARD facility, price ≤ funds, not owned); `switch_vessel` refuses unowned boats; `start_new_session(companion, level)`; factors: consumption ×`provisions_use`, `_wear` ×`wear`, `service_quote`/`get_provisions_price` ×`costs` (ceil), rescue fee ×`rescue_fee`; `_check_vessel` owns the fallback starter. I022: `get_pastimes()`, `set_postcard_draft(kind, subject, caption, layout)` (keeps minutes for the same subject), `abandon_postcard()`, `postcard_minutes_left()`, `work_on_postcard(minutes)` → {done, award, card} (`_award_once(Pastimes.renown_key)`, scrapbook trimmed to `scrapbook_size`, SessionLog "postcard"), `work_on_game(task_id, choice, minutes)` → {points, done, milestone, award, euros} (points × share of task hours, `_award_once("gamedev:<id>")`, release_euros on the last milestone, SessionLog "game_dev"), `is_game_released()`.
 - **Depends on:** `SessionState` and its sub-records; `Simulation` (weather queries, `invalidate_estimates`); `PortCatalog`, `SeaRouter`, `VesselCatalog`, `VesselProfile`, `BoatCare`, `HarbourFacilities`, `ObjectiveCatalog`, `FishingCatalog`, `HatConfig`, `AnchorLife`, `AnchorSite`, `SailTrim`, `GeoMath`, `NavGrid`, `WeatherAudio.rain_level`, `SessionLog`, `Loc`; `_exit_tree` clears catalogue singletons (`PortCatalog`, `ObjectiveCatalog`, `HatConfig`, `HatArt`, `SeaRouter`, `WeatherModel`, `WindField`, `VesselProfile`, `VesselCatalog`).
 - **Signals:** declares ~45, incl. `session_started`, `session_ended`, `state_replaced`, `boat_area_changed`, `route_changed`, `time_scale_changed`, `pause_changed`, `voyage_started`, `voyage_course_changed`, `voyage_arrived`, `propulsion_changed`, `sail_trim_changed`, `anchorage_reached`, `vessel_changed`, `companion_moved`, `companion_area_changed`, `notice`, `condition_changed`, `funds_changed`, `provisions_changed`, `provisions_warning`, `rescued`, `voyage_logged`, `renown_awarded`, `travel_update_published`, `hat_*`, `coffee_changed`, `fish_bite`, `fishing_*`, `fish_landed`, `meal_cooked`, `anchor_changed`, `anchor_alarm`, `boat_care_changed`, `home_changed`, `location_recovered`, `anchor_life_changed`, `anchor_moment`. Connects only its own `anchor_changed` → `_update_anchor_life`.
 - **State:** owns `_state`, `_has_unsaved_changes`; unsaved runtime: `_pending_bite`, `_settled`, `_asleep`, `_profile` cache, `_chart_region`, `_last_recovery`, fishing warning flags. Getters return copies (`duplicate_*`) or scalars.
@@ -374,6 +392,24 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_objectives.gd`, `tests/suites/test_secret_achievements.gd`.
 - **Change risks:** `last_event` comparisons use game time; events at identical times will not pay twice.
 
+### `src/core/pastimes.gd`
+
+- **Role:** class_name `Pastimes`, extends RefCounted, static only (I022). Postcards: `KINDS`, `LAYOUTS`, `postcard_minutes()`, `postcard_renown()`, `kind_name`, `layout_name`, `captions(kind)`, `subjects()` → [{kind, subject, title, args}], `args_for(kind, subject)` (caption names in the current language, also for old scrapbook cards), `weather_name(hazard)`, `where_now()`, `caption_text(kind, caption, args)`, `renown_key(kind, subject)` ("postcard:<kind>:<subject>"), `is_posted`. Game: `game_title`, `milestones`, `tasks`, `task(id)`, `session_points(task, choice)` (2 best / 1), `choice_order(task, sessions)` (rotated).
+- **Depends on:** `data/pastimes/*.json`, `GameSession` (log, fishing, companion, position, time, objective progress), `PortCatalog`, `FishingCatalog.get_species_name`, `CompanionState.display_name`, `CaptainsLog.OUTCOME_ARRIVED` (voyage records), `Daylight.sun_elevation` (`LOW_SUN` −8..12°), `HatStory.describe_place`, `Loc`.
+- **State:** static `_postcards`, `_game` caches.
+- **Lifecycle:** read by `GameSession.set_postcard_draft/work_on_postcard/work_on_game`, `PostcardMenu`, `PostcardView`, `ScrapbookMenu`, `GameDevMenu`, `App.work_on_game`.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[postcards]`, `[game dev]`).
+- **Change risks:** subject keys are saved (scrapbook, renown ids): voyage subjects are "<from>-<to>", weather "<from>-<to>:<hazard>"; port ids must not contain "-". Data strings are extracted via `DATA_KEYS` plus `LIST_KEYS` (captions, choices, done) and `MAP_KEYS` (weather_names) in `tools/i18n/extract.py`.
+
+### `src/core/pastimes_state.gd`
+
+- **Role:** class_name `PastimesState`, extends RefCounted. `postcards` [{kind, subject, caption, layout, time, place}], `draft` {kind, subject, caption, layout, minutes} or {}, `game` {points, milestone, sessions, task {id, choice, minutes} or {}, log [{milestone, time}]}; `duplicate_state()`, `to_dict()`, static `from_dict(data)` (never fails; validates types, drops malformed parts).
+- **Depends on:** nothing but Variant checks (`_is_number`).
+- **State:** the three fields above.
+- **Lifecycle:** `SessionState.pastimes` (duplicate_state, to_dict "pastimes", from_dict); mutated only by `GameSession` pastime methods.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[saves]`, `[old saves]`).
+- **Change risks:** optional save section, no SAVE_VERSION bump; adding a field means adding it to all three methods.
+
 ### `src/core/provisions.gd`
 
 - **Role:** class_name `Provisions`, extends RefCounted; food/water days, `warning_level`, consumption, restock, warning thresholds, display levels.
@@ -387,7 +423,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/core/session_state.gd`
 
-- **Role:** class_name `SessionState`, extends RefCounted; the complete serialisable game state and save format (`to_dict`/`from_dict`), plus `create_new`, `duplicate_state`, per-boat condition and care accessors.
+- **Role:** class_name `SessionState`, extends RefCounted; the complete serialisable game state and save format (`to_dict`/`from_dict`), plus `create_new`, `duplicate_state`, per-boat condition and care accessors. I022: `owned_vessels` (saved as `fleet.owned`, always including the boat aboard: `_owned_for_save`/`owned_from`; missing section → every catalogue id) and `difficulty` (top-level `difficulty`, `Difficulty.valid`); `create_new(..., level)` sets funds from `Difficulty.starting_funds` and owns the starter; both copied in `duplicate_state`. No save version change. I022: `pastimes: PastimesState` (duplicate_state, to_dict "pastimes", from_dict via lenient `PastimesState.from_dict`; optional, no version bump).
 - **Depends on:** `PortCatalog`, `PlannedRoute`, `Voyage`, `PropulsionState`, `WeatherExposure`, `CompanionState`, `VesselCatalog.STARTER_ID`, `CaptainsLog`, `ObjectiveProgress`, `HatState`, `FishingState`, `GalleyState`, `AnchorState`, `BoatCareState`, `HomeState`, `Provisions`, `VesselCondition`, `GeoMath`, `Loc`.
 - **State:** pure data; no node references.
 - **Lifecycle:** created by `GameSession.start_new_session()` or `SaveManager` load; owned by `GameSession`.
@@ -398,7 +434,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/core/simulation.gd`
 
-- **Role:** no class_name, extends Node; autoload `Simulation`. The single timeline: converts real time to game time and advances clock, voyage and all timed checks; weather queries, ETA/route estimates, Long Passage, traffic and VHF, hat checks. Inner class `AdvanceResult`.
+- **Role:** no class_name, extends Node; autoload `Simulation`. The single timeline: converts real time to game time and advances clock, voyage and all timed checks; weather queries, ETA/route estimates, Long Passage, traffic and VHF, hat checks. Inner class `AdvanceResult`. I022: `_assess_weather` multiplies `WeatherDamage.damage_between(...)` by `Difficulty.factor("weather_damage")` (1.0 at Standard). I022: `work(hours)` also returns "stopped_by" (the AdvanceResult's) for `App.pass_time`.
 - **Depends on:** `GameSession` (all reads and `apply_*` hooks), `WeatherModel`, `WeatherDamage`, `WeatherEvent`, `WindField`, `PropulsionController`, `SailTrim`, `GeoMath`, `HatConfig`, `FishingCatalog`, `TrafficModel`, `VhfRadio`, `PortCatalog`, `SessionLog`, `Loc`.
 - **Signals:** `weather_warning(warning)`, `arrived(port_id)`, `passage_interrupted(reason, text)`, `passage_started(rate)`, `traffic_alert(info)`, `vhf_call(call)`. Connects to `GameSession.voyage_started`, `voyage_course_changed`, `state_replaced`, `vessel_changed`, `rescued`, `provisions_warning` and `notice` (the last two only flag Long Passage interruptions).
 - **State:** writes game state only through `GameSession` hooks. Unsaved: `passage_rate`, `_passage_notice`, `_eta_key`/`_eta_seconds`, `_hat_sheltered`. Tunables: `game_seconds_per_real_second` (60), `auto_advance`, `sea_encounters`.
@@ -464,7 +500,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/settings/settings_manager.gd`
 
-- **Role:** no class_name, extends Node; autoload `SettingsManager`. Player preferences in `user://settings.cfg` (audio volumes, window mode, VSync, UI scale, art style, course view, reduce flashing, flash intensity, reduce motion, UI light, language, sleep hours).
+- **Role:** no class_name, extends Node; autoload `SettingsManager`. Player preferences in `user://settings.cfg` (audio volumes, window mode, VSync, UI scale, art style, course view, reduce flashing, flash intensity, reduce motion, UI light, language, sleep hours). I022: `&"Wind"` in `AUDIO_BUSES` (after Ambience) and `DEFAULT_VOLUMES` (100 = 0 dB, the pre-I022 balance); stored as `[audio] wind`, read with the default (no migration). I022: `get/set_tips_enabled` (snapshot "tips", `[interface] tips`), `get_academy()`/`set_academy(data)` (saves at once; `_sanitize_academy`: first_voyage in ""/active/skipped/done, step ≥ 0, seen strings; `[academy] first_voyage/step/seen`), not part of the snapshot.
 - **Depends on:** `AudioServer`, `DisplayServer`, `TranslationServer`, `ConfigFile`.
 - **Signals:** `settings_applied`, `ui_scale_changed(scale)`, `art_style_changed(style)`, `course_view_changed(enabled)`, `ui_light_changed(mode)`, `language_changed(locale)` — emitted when values change or are re-applied.
 - **State:** private preference fields; `settings_path` (tests redirect it).
@@ -546,7 +582,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/navigation/map_view.gd`
 
-- **Role:** class_name `MapView`, extends Node2D; draws the navigation chart (water, world/Europe/regional land, coasts, labels, graticule, weather, canals, courses, ports, waypoints, anchorages, pins, boat) and converts input to chart events. Display only; `WorldMap` interprets events.
+- **Role:** class_name `MapView`, extends Node2D; draws the navigation chart (water, world/Europe/regional land, coasts, labels, graticule, weather, canals, courses, ports, waypoints, anchorages, pins, boat) and converts input to chart events. Display only; `WorldMap` interprets events. I021: `_draw_port` adds `_draw_special_star` (8-point brass star, upper left of the pin) when `HarbourLooks.is_special(port.id)`; a dictionary lookup per drawn port, no new layout or per-frame work.
 - **Depends on:** `MapProjection`, `PortCatalog`, `PortData`, `GeoMath`, `NavGrid.REGIONS_INDEX`, `WorldLand` (`land.res`), `WeatherModel.active_events`, `WeatherEvent`, `WeatherStyle`, `SeaRouter.get_loaded().canals`, `WindLayer`, `AnchorageLayer`, `GameSession` (game time, wind seed, `is_active`), `SessionLog`, `Loc`; preloads `assets/fonts/Barlow-SemiBold.ttf` and `src/navigation/shaders/dream_world.gdshader`; data `data/navigation/world/world.json`, `land.json`, region `land.json` files.
 - **Signals:** declares `port_clicked`, `map_clicked`, `route_pressed` (drag past `CLICK_SLOP_PX` on a draft leg), `waypoint_pressed`, `waypoint_dragged`, `waypoint_released`, `waypoint_remove_requested` (right-click without move), `cursor_moved` (geo or null). Connects `$Overlay.draw`, `get_viewport().size_changed`.
 - **State:** Display state set via `set_display()` (boat/selected/destination port, vessel geo, paths, draft legs, waypoints, anchorages, magic flags, invalid waypoints, selected waypoint, editing flag, next turn, visited pins); camera; `weather_time`, `_weather_shapes`; static caches `_world_cache`, `_europe_cache`, `_region_cache` (persist across chart openings).
@@ -594,7 +630,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/navigation/port_data.gd`
 
-- **Role:** class_name `PortData`, extends Resource; one harbour: `id`, `display_name` (getter returns `Loc.t(name, "place")`), `country`, `latitude`, `longitude`, `description`, `importance` (1–3), `region`, `island`, `source`.
+- **Role:** class_name `PortData`, extends Resource; one harbour: `id`, `display_name` (getter returns `Loc.t(name, "place")`), `country`, `latitude`, `longitude`, `description`, `importance` (1–3), `region`, `island`, `source`. I021: `get_description()` returns `Loc.t(description)` (the chart's details and the arrival card use it; the raw field stays English).
 - **Depends on:** `Loc`.
 - **Signals:** none.
 - **State:** Exported fields only; `get_geo_position()` → Vector2(lon, lat).
@@ -708,7 +744,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/navigation/world_map.gd`
 
-- **Role:** class_name `WorldMap`, extends Node2D; the chart screen. MODE_STATION: course planning on a draft (plot, insert/move/remove waypoints, anchorages, Apply/Discard), sidebar tabs (Course/Weather/Details), harbour search, wind and anchorage overlays. MODE_DREAM: the cabin's Dreamer's Map (no weather, no editing, `VoyageDaydream`, visited pins).
+- **Role:** class_name `WorldMap`, extends Node2D; the chart screen. MODE_STATION: course planning on a draft (plot, insert/move/remove waypoints, anchorages, Apply/Discard), sidebar tabs (Course/Weather/Details), harbour search, wind and anchorage overlays. MODE_DREAM: the cabin's Dreamer's Map (no weather, no editing, `VoyageDaydream`, visited pins). I021: both selection panels use `selected.get_description() + _special_line(id)`; static `_special_line` returns "\nSpecial harbour: <note>" from `HarbourLooks.special_note` or "".
 - **Depends on:** `MapView`, `GameSession` (committed route/voyage, `change_course`, `set_planned_route`, `clear_planned_route`, `anchorage_spot`, `nearest_anchorage_spot`, `take_hint`, Captain's Log), `SeaRouter`, `PortCatalog`, `PlannedRoute`, `Simulation` (estimates, ETA, hazards, weather), `PassageReadiness`, `VoyageDaydream`, `AnchorSite`, `AnchorageLayer`, `WindLayer`, `WeatherLegend`, `WeatherStyle`, `WeatherModel`, `WeatherSample`, `WindField.compass_name`, `HarbourFacilities`, `Hud.describe_wind`, `PropulsionState`, `SettingsManager`, `SessionLog`, `Loc`.
 - **Signals:** declares `close_requested`, `depart_requested`, `sleep_requested`, `plan_requested(port_id)` (Dreamer's Map → chart table). Connects all `MapView` signals, `GameSession.route_changed` / `voyage_started` / `voyage_course_changed` / `voyage_arrived`, `SettingsManager.ui_scale_changed`, `WindLayer.snapshot_changed` / `detail_changed`.
 - **State:** Draft only (`_draft_destination`, `_draft_waypoints`, `_draft_anchorages`, `_draft_legs`, `_draft_route`, `_draft_dirty`); commits through `GameSession` on `apply_course()`. Static `wind_shown` persists the wind toggle for the run. `_spot_cache` (≤ 64) for anchorage checks.
@@ -803,14 +839,14 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/aboard/cabin_decor.gd`
 
-- **Role:** class_name `CabinDecor`, extends Node2D; draws one cabin decor item (I020) and provides the static placement algorithm.
+- **Role:** class_name `CabinDecor`, extends Node2D; draws one cabin decor item (I020) and provides the static placement algorithm. I021 adds `model_ship`, `sea_glass` (shelf) and `barometer` (wall) to the `_draw()` match; Operation Paperwork adds `compass` (wall) and a second placement pass: wall items left over by the first pass (unchanged) retry `_wall_spot` from start lines y = 0 and bounds centre ± 0.35 height (the Clam 40's hull cabins) at `SPACING`, then `SECOND_SPACING` 56. With all ten things every cabin places ten (the Arctic Wanderer 26 and Clam 40 first-pass capacity is seven wall spots).
 - **Depends on:** `HarbourTrades.get_decor_item(id)` (`place`: "wall"/"floor"), `Geometry2D`.
-- **State:** `item_id` ("rug", "herbs", "chart_print", "oil_lamp", "books", "bunting"), `side` (+1 starboard, -1 port, 0 floor).
+- **State:** `item_id` ("rug", "herbs", "chart_print", "oil_lamp", "books", "bunting", and since I021 "model_ship", "sea_glass", "barometer"; "compass"), `side` (+1 starboard, -1 port, 0 floor).
 - **Lifecycle:** Instanced by `BoatArea.setup_decor()` (cabin only), which frees and rebuilds all CabinDecor on `GameSession.home_changed`; the rug goes under `Visual` after `CabinBase`, wall items before `Layout`.
-- **Performance:** `place_all` is a one-off scan: `_floor_spot` 10 px grid over hull bounds with 12-point rug test per fixture; `_wall_spot` 41 candidates with 2 px wall walk.
-- **Invariants:** Deterministic for the same hull/fixtures/avoid (no RNG). Wall items keep `CLEARANCE` 46 from avoid points and `SPACING` 70 from each other; rug keeps `RUG_RADIUS + 24` and lies fully inside hull and outside all fixtures. Items with no clear place are omitted.
+- **Performance:** `place_all` is a one-off scan: `_floor_spot` 10 px grid over hull bounds with 12-point rug test per fixture; `_wall_spot` 41 candidates with 2 px wall walk (up to 3 start lines x 2 sides x 2 spacings more per left-over item).
+- **Invariants:** Deterministic for the same hull/fixtures/avoid (no RNG). Wall items keep `CLEARANCE` 46 from avoid points and `SPACING` 70 from each other (only second-pass items may be 56 from a neighbour); rug keeps `RUG_RADIUS + 24` and lies fully inside hull and outside all fixtures. Items with no clear place are omitted.
 - **Tests:** `tests/suites/test_boat_of_your_own.gd` (also `tests/scratch/probe_decor.gd`).
-- **Change risks:** Avoid list is assembled in BoatArea (stations, CompanionSpots, TrophyBoard, GalleyStove, TableMug, HatSpot); new gear not added there can be overlapped. `_wall_y` assumes the hull contains y=0 at x.
+- **Change risks:** Avoid list is assembled in BoatArea (stations, CompanionSpots, TrophyBoard, GalleyStove, TableMug, HatSpot); new gear not added there can be overlapped. `_wall_y(hull, x, side, start)` walks from `start` (default 0) and returns NAN where that point is outside the hull.
 
 ### `src/aboard/coffee_mug.gd`
 
@@ -880,7 +916,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/boat/boat_area.gd`
 
-- **Role:** class_name `BoatArea`, extends Node2D; root script of every vessel's `deck.tscn` / `cabin.tscn`; places the player, builds aboard presentation, routes interactions to signals.
+- **Role:** class_name `BoatArea`, extends Node2D; root script of every vessel's `deck.tscn` / `cabin.tscn`; places the player, builds aboard presentation, routes interactions to signals. I022: `_setup_water_look` (Surroundings/Water colour via `_recolour_water`, connected to voyage_started / voyage_arrived (`_on_arrived_recolour_water`) / anchor_changed; `ShallowWater` as a child of Water), `_setup_cabin_windows` (interior; `CabinWindows.setup`; sibling after the `CabinBase` slot), `_update_cabin_windows` (visible only with an illustrated CabinBase texture; also on art style change), `get_cabin_windows()`.
 - **Depends on:** `GameSession`, `Simulation` (heading, weather), `SettingsManager`, `AudioManager`, `SessionLog`, `Loc`, `Player`, `Interactable`, `VesselVisual`, `VesselVisualProfile`, `VesselDefinition`, `SailRig`, `FenderStowage`, `HarbourDressing`, `WaterLife`, `AnchorAmbience`, `BoatLighting`, `WeatherVisuals`, `AnchorSignals`, `DeckCompanionSpots`, `ShipCompanion`, `CompanionRemarks` (pet: `take_remark()` → `message_requested`; hands full: `hands_full()`), `ShoreAccess`, `HarbourFacilities`, `RodHolder`, `Windlass`, `CoffeeMug`, `GalleyStove`, `TrophyBoard`, `CabinDecor`, `HarbourTrades`, `HighlightProvider`, `HighlightResolver`, `HatHook`, `HatBlowAway`, `HatState`, `BoatFixture`.
 - **Signals:** Declares `area_change_requested(area, spawn_point)`, `chart_requested`, `world_map_requested`, `sleep_requested`, `helm_requested`, `boatyard_requested`, `provisions_requested`, `work_requested`, `grocery_requested`, `go_ashore_requested`, `fishing_requested`, `anchor_requested`, `cooking_requested`, `trophies_requested`, `message_requested(text)`, `interaction_prompt_changed(prompt)`, `docking_finished` — emitted from `_on_interacted` by `interaction_id`, prompt changes, and the end of `play_docking_arrival`. Connected in `App._connect_boat_area`. Connects to many GameSession signals (`condition_changed`, `voyage_started`, `voyage_arrived`, `voyage_course_changed`, `state_replaced`, `rescued`, `hat_changed`, `hat_lost`, `home_changed`, `coffee_changed`) and `SettingsManager.art_style_changed` / `course_view_changed`.
 - **State:** Writes `SessionState.player_position` via `GameSession.set_player_position` every physics frame (unless leaving); reads spawn point / restored position on `_place_player`. Hat/coffee actions go through `GameSession.use_hat_hook`, `put_coffee_down`, `pick_up_coffee`. Owns camera tween, shore station map, docking tween.
@@ -903,7 +939,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/boat/boat_lighting.gd`
 
-- **Role:** class_name `BoatLighting`, extends Node2D; time-of-day light, lamps, nav/anchor/quay lights and soft shadows for one boat area (Iteration 17/18). Inner classes `Lamps`, `FixtureShadows`, `CornerShade`, `ContactShadow`.
+- **Role:** class_name `BoatLighting`, extends Node2D; time-of-day light, lamps, nav/anchor/quay lights and soft shadows for one boat area (Iteration 17/18). Inner classes `Lamps`, `FixtureShadows`, `CornerShade`, `ContactShadow`. Golden Harbours: static `overcast_of(weather: WeatherSample) -> float` (0.8 thunder/squall/storm classes, 0.5 gale or thunder possible, 0.25 strong wind, else 0; 0 for null), used by `_process`, `CabinWindows` and `App.show_harbour_moment`.
 - **Depends on:** `BoatArea` (`area_id`, `walkable_bounds`, `player`, `get_shore_access`, `get_harbour_dressing`, layout nodes), `BoatFixture`, `Interactable` (companionway lookup; writes static `Interactable.light_compensation`), `SailRig.mast`, `HarbourDressing` (`get_lamp_positions`, `get_pontoon_light_positions`), `ShipCompanion`, `Daylight` (`sun_elevation`, `inside_colour`, `outside_colour`, `daylight`), `GameSession` (time, position, underway, anchored), `Simulation.get_weather_at_vessel`, `WeatherModel` classes, `SettingsManager.get_flash_intensity`, `SessionState.AREA_INTERIOR`.
 - **State:** `_lights` entries `{light, energy, when, lamp}` with `when` in dark/night/day/harbour/underway/anchor; `_colour`, `_darkness`, `_overcast`, `_flash`. Static shared gradient textures. Adds a `CanvasModulate` "Ambient" to the area.
 - **Lifecycle:** Created by `BoatArea._setup_lighting()` (every area) then `setup(area)`; `GameSession.state_replaced` -> `update_now`. `flash()` called by `WeatherAudio` via App's `lighting_provider`.
@@ -911,6 +947,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Invariants:** The only CanvasModulate in the scene (AnchorAmbience is hidden for this). Light follows clock with `FOLLOW_RATE` 2.5/s (no strobe at Long Passage speed); `update_now()` snaps. Nav lights only underway and not anchored; anchor light only anchored; harbour lights only moored. Cabin lamps keyed by fixture names, not art.
 - **Tests:** `tests/suites/test_lighting.gd`, `tests/suites/test_companion_deck.gd`, `tests/suites/test_atmosphere.gd`; `tests/cabin_light_18.gd`.
 - **Change risks:** The node name is the literal "Lighting" (never translated: `BoatArea.get_lighting()`, `App.snap_light()` and WeatherAudio's flash find it by name; in Danish it was "Belysning" until the Engine Room pass, checked by `test_localization`); renaming fixtures silently drops lamps; changing `light_compensation` affects all highlights; AnchorSignals depends on `boat_bounds()`.
+
+### `src/boat/cabin_windows.gd`
+
+- **Role:** class_name `CabinWindows`, extends Node2D (I022). static `windows_for(vessel_id)` (data/vessels/cabin_windows.json `windows.<id>`: at, length, thickness, angle, side), `setup(area, vessel_id) -> bool`, `viewer_position()`, `view_of(window, viewer)` → {centre (compass: heading + outward angle from the bow + atan2 offset of the captain), fov (2·atan(half length / depth), 16–80°), right, outward}, `_sample_world()` (heading: `Simulation.get_current_heading()` underway else 90°, elevation, sun bearing from `Daylight.local_solar_hours`, daylight, overcast as BoatLighting, `WeatherAudio.rain_level`, wind, hazard, moored, `HarbourLooks.picture_for(location)`, `WaterLook.water_colour`), `_draw` → per window `draw_set_transform_matrix(Transform2D(right, -outward, at))` + `_draw_window` (sky gradient, stars on a 6° grid, sun + glow, `_draw_shore` quay at heading+90° ±40° and far shore at heading−90° ±22°, sea + crests on a 4° grid drifting with game time, rain, glass `GLASS_TINT`·`glass_strength`, frame). `last_draw_usec`. Golden Harbours: overcast via `BoatLighting.overcast_of(sample)` (was a local copy of the same thresholds).
+- **Depends on:** `BoatArea.player`, `Simulation`, `Daylight`, `WeatherModel` classes, `WeatherAudio.rain_level`, `HarbourLooks`, `WaterLook`.
+- **State:** `windows`, `world`, `_viewer`, `_refresh_left`, static `_data`, static `glass_strength`.
+- **Lifecycle:** created by `BoatArea._setup_cabin_windows` (interior only, inserted right after the `CabinBase` slot of `Visual`, under `FurnitureVisual`); `_update_cabin_windows` hides it with the classic art.
+- **Tests:** `tests/suites/test_cabin_windows.gd`.
+- **Change risks:** everything is drawn inside each opening's rectangle (clamped), so nothing bleeds onto walls; the quay is assumed starboard (as the deck scenes lie alongside); only boats listed in the data get windows.
 
 ### `src/boat/cabin_world_map.gd`
 
@@ -1018,6 +1063,24 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** None found by class name; exercised indirectly through VesselVisual suites (`test_vessels.gd`, `test_visual_prototype.gd`, `test_sprite_workshop.gd`).
 - **Change risks:** `FenderStowage` swaps `get_sprite().texture` directly and relies on `is_sprite()`; `show_procedural` frees the sprite (losing FenderStowage meta).
 
+### `src/boat/shallow_water.gd`
+
+- **Role:** class_name `ShallowWater`, extends Node2D (I022). `PATCHES` 9 soft polygons (plus a fainter rim) within `SPREAD` 1500, alpha `ALPHA` 0.07·translucency, seeded by `hash(location id)` moored (else the position); `refresh()` (visibility = `WaterLook.is_shallow()` and translucency > 0), connected to `voyage_started`, `voyage_arrived` (`_on_arrived`), `anchor_changed`.
+- **Depends on:** `WaterLook`, `GameSession`.
+- **State:** `_seed`.
+- **Lifecycle:** added by `BoatArea._setup_water_look` as a child of `Surroundings/Water` (decks only), so it draws over the water and under `WaterLife`, which stays the Water's next sibling.
+- **Tests:** `tests/suites/test_cabin_windows.gd` (deck water screenshots).
+- **Change risks:** method connections (not lambdas) so they disconnect when the deck scene is freed.
+
+### `src/boat/water_look.gd`
+
+- **Role:** class_name `WaterLook`, extends RefCounted, static only (I022). `DEEP` (the old Surroundings/Water colour), `SEABED`, `OPEN_SEA` 0.12, `SHALLOW_EXTRA` 0.1, static `translucency` (1 default, 0 = old water), `water_colour(shallow)` (DEEP.lerp(SEABED, share·translucency), max 0.6), `is_shallow()` (moored or anchored).
+- **Depends on:** `GameSession.is_underway/is_anchored`.
+- **State:** static `translucency`.
+- **Lifecycle:** read by `BoatArea._setup_water_look/_recolour_water`, `ShallowWater`, `CabinWindows._sample_world`.
+- **Tests:** `tests/suites/test_cabin_windows.gd` (`[water]`, before/after screenshots).
+- **Change risks:** independent from `CabinWindows.glass_strength` by design (the addendum asks for separate controls).
+
 ### `src/boat/weather_visuals.gd`
 
 - **Role:** class_name `WeatherVisuals`, extends Node2D; deck wind streaks and rain (Iteration 17).
@@ -1105,7 +1168,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/vessels/vessel_definition.gd`
 
-- **Role:** class_name `VesselDefinition`, extends Resource; pure data per boat (one `.tres` in `data/vessels/`).
+- **Role:** class_name `VesselDefinition`, extends Resource; pure data per boat (one `.tres` in `data/vessels/`). I022: `@export var price := 0` (euros; data: Arctic Wanderer 6,000, Wing 14,000, Frogleap 22,000, Clam 32,000); the old "Guide price" spec was removed.
 - **Depends on:** `VesselProfile` (performance), `VesselVisualProfile`, `SettingsManager` (`get_art_style`, `ART_ILLUSTRATED`), `SessionState.AREA_INTERIOR`, `Loc`.
 - **State:** `id`, `display_name`, `hull_type` (+ `HULL_*` constants), `description`, `specs`, `performance`, `deck_scene`, `cabin_scene`, `deck_visual_scene`, `visual_profile`, `illustrated_visual_profile`, `passage_stores_days` (14–60).
 - **Lifecycle:** Resource in `VesselCatalog.vessels`; read via `GameSession.get_vessel_definition()`.
@@ -1206,7 +1269,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/audio/weather_audio.gd`
 
-- **Role:** class_name `WeatherAudio`, extends Node; weather soundscape (wind/water/rain/storm loops), lightning flashes and delayed thunder, plus below-deck muffling on the `Outside` bus.
+- **Role:** class_name `WeatherAudio`, extends Node; weather soundscape (wind/water/rain/storm loops), lightning flashes and delayed thunder, plus below-deck muffling on the `Outside` bus. I022: `WIND_BUS` (&"Wind", sends to `Outside`); `_loop(..., bus := OUTSIDE_BUS)` takes the bus; `WIND_LOOP` and `STORM_LOOP` use `WIND_BUS`, water and rain stay on `OUTSIDE_BUS` (thunder one-shots too).
 - **Depends on:** `AudioManager` (`play_loop`, `stop_loop`, `play_one_shot`), `GameSession` (`get_vessel_speed_kn`, `get_vessel_position`, `get_game_time`), `WeatherSample`, `WeatherModel.CLASS_*`, `WeatherEvent` (`offset_nm`, `radius_nm`), `SettingsManager.get_reduce_flashing`, `BoatLighting.flash` via `lighting_provider` Callable; preloaded WAVs in `res://assets/audio/weather/` and `placeholder/storm_wind.wav`.
 - **State:** `place` ("deck" / "inside" / ""), muffle level, strike/thunder timers, pending `_flashes`, `levels` dict and `strikes` counter (tests/diagnostics); `_rng` is cosmetic only.
 - **Lifecycle:** instanced by `src/app/app.gd`, which calls `update(here, place, underway, storms)` once per real second; `PROCESS_MODE_PAUSABLE`.
@@ -1418,7 +1481,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/harbour/harbour_dressing.gd`
 
-- **Role:** class_name `HarbourDressing`, extends Node2D; illustrated harbour scenery (pontoon, ropes, cleats, quay with bollards/lamps, water strokes, facility signs, landmarks) over the classic mooring drawing.
+- **Role:** class_name `HarbourDressing`, extends Node2D; illustrated harbour scenery (pontoon, ropes, cleats, quay with bollards/lamps, water strokes, facility signs, landmarks) over the classic mooring drawing. I021: `refresh()` takes `_art` from `HarbourLooks.get_default().art_for(port_id)` (own HarbourArt with landmarks, else the look's shared HarbourArt, else null) instead of `HarbourArt.for_port`.
 - **Depends on:** `BoatArea` (`mooring_label`, `Layout/Stations` `Interactable`s with `interaction_id`, optional meta `sign_at`), mooring nodes (`Pontoon`, `*Line` Line2Ds, `Cleat*` polygons, `Plank*`, sign labels `GrocerySign`/`BoatyardSign`/`GoAshoreSign`), `SettingsManager.get_art_style`/`ART_ILLUSTRATED`, `GameSession.get_location_id`, `HarbourArt`, `HarbourLandmark`, `HighlightProvider.create`, `HighlightResolver.rounded_rect`, project theme font `DisplayHeader`.
 - **State:** cached pontoon rect, lines, cleats, `_signs`, `_landmarks`, `_sign_classic` (original label text/settings for restoring Classic).
 - **Lifecycle:** created by `BoatArea` under `Surroundings/Mooring` and `setup(area, mooring)` called; `refresh()` called by `BoatArea` on harbour/setting/station changes; accessed via `BoatArea.get_harbour_dressing()`.
@@ -1445,6 +1508,18 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Invariants:** art only, no collision.
 - **Tests:** `tests/suites/test_visual_prototype.gd`.
 - **Change risks:** renaming exports breaks existing harbour `.tres` files.
+
+### `src/harbour/harbour_looks.gd`
+
+- **Role:** class_name `HarbourLooks`, extends RefCounted (I021); per-harbour look (archetype) table, the special-harbour list, and the art drawn beyond the pontoon. Static `get_default()` (loaded once).
+- **Depends on:** `res://data/harbours/harbour_looks.json` (`looks` {id: {title, texture, about}}, `harbours` {port id: look id}, `special` {port id: {text}}), `HarbourArt.for_port`, `HarbourLandmark`, `Loc`.
+- **State:** `looks`, `harbours`, `special` dictionaries; `_art_cache` look id -> shared `HarbourArt` (one landmark at `OFFSET` (0, 79), `WIDTH` 1150, like the Nyhavn strip) or null when the image is missing.
+- **API:** `look_of(id)`, `look_title(look)` (translated), `is_special(id)`, `special_note(id)` (translated), `art_for(id)` (own HarbourArt with landmarks > look art (merged into a duplicate when the harbour file has only an atmosphere) > own/null), `picture_for(id)` (first landmark texture).
+- **Lifecycle:** used by `HarbourDressing.refresh()`, `MapView._draw_port`, `WorldMap._special_line`, `App._on_arrived`.
+- **Performance:** textures loaded lazily via `load()` on first use of a look and kept (nine looks at most, ~0.3 MB each as imported); no per-frame work; a chart redraw does one dictionary lookup per drawn port.
+- **Invariants:** looks are chosen per harbour (data), never derived from continent/region at runtime; `special` keys equal the harbours whose `data/harbours/<id>.tres` has landmarks (`test_wider_world`); a missing look or image falls back to the plain quay with a warning.
+- **Tests:** `tests/suites/test_wider_world.gd`, `tests/suites/test_visual_prototype.gd`.
+- **Change risks:** renaming a look id requires the table's `harbours` entries to follow; a special harbour without its own art (or the reverse) fails the suite; art is painted by `tools/harbours/paint_harbour_looks.py`.
 
 ### `src/harbour/harbour_trades.gd`
 
@@ -1616,6 +1691,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_galley_and_anchor.gd`, `tests/suites/test_fishing.gd`, `tests/suites/test_fishing2.gd`, `tests/suites/test_anchor_life.gd` (via `aboard_badge` / `lines_for_game`).
 - **Change risks:** Tests compare exact row texts (`get_texts()`, `lines_for_game()`); changing wording or row ids breaks them. Theme role names (`caution`, `warning`) must exist in `UiTheme`.
 
+### `src/ui/academy_guide.gd`
+
+- **Role:** class_name `AcademyGuide`, extends Control (mouse ignored), child of App's `AcademyLayer` (UiScaleLayer, layer 15). static `enabled` (false in `test_runner`). `card` (PanelContainer "AcademyCard", bottom-right; `MARGIN_CHART` 540 at `WorldMap`), Heading/Text labels, SkipButton/MoreButton/CloseButton (focus none). `queue_tip(id)`, `queued_tips()`, `shown_tip()`, `update_card()` (every `CHECK_SECONDS` 0.25 from `_process`), `is_free()` (game active, BoatArea/WorldMap, no modal, router idle, no time_passage/voyage_map/loading, no HUD warning), `step_done(id)`, `dismiss()` (starts `TIP_GAP_SECONDS` 20), `read_more()`, `skip_first_voyage()`, `begin_first_voyage()`. Tips auto-close after `TIP_SECONDS` 25; the farewell "!done" after `DONE_SECONDS`. Night tip polled every 2 s (`Daylight.sun_elevation` < −6°).
+- **Depends on:** `App` (router, modals, hud, time_passage, voyage_map, is_loading, open_handbook, notify), `Academy`, signals `GameSession.voyage_started/fish_bite/anchor_changed/provisions_warning/hat_warning/renown_awarded/boat_area_changed`, `Simulation.arrived/weather_warning/traffic_alert/vhf_call/passage_started`, `HarbourFacilities.BOATYARD`, `ActionWheel`, `CaptainsLogMenu`, `WorldMap`, `BoatArea`.
+- **State:** `_queue`, `_tip`, `_tip_left`, `_gap_left`, `_moved`, timers.
+- **Lifecycle:** created in `App._ready`; lives for the whole run.
+- **Tests:** `tests/suites/test_academy.gd` (`[first voyage]`, `[tips]`).
+- **Change risks:** `_input` only reads move actions (never handles input); a tip id must exist in `academy.json` `tips`.
+
 ### `src/ui/action_wheel.gd`
 
 - **Role:** class_name `ActionWheel`, extends `ModalPanel`; radial modal menu of context actions (Q).
@@ -1652,7 +1736,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/boat_care_menu.gd`
 
-- **Role:** class_name `BoatCareMenu`, extends `SimplePanel`; boatyard services (repair, rig, engine, haul-out) and yard-fitted upgrades.
+- **Role:** class_name `BoatCareMenu`, extends `SimplePanel`; boatyard services (repair, rig, engine, haul-out) and yard-fitted upgrades. Steady Hands: `Loc.t` on the upgrade name in the "%s fitted" notice.
 - **Depends on:** `BoatCareView`, `GameSession` (service_quote, service_refusal, perform_service, has_upgrade, upgrade_refusal, upgrade_price, install_upgrade, has_facility, get_harbour_facilities, has_magic_anchor, format_money, MAGIC_ANCHOR_*), `BoatCare` (SERVICE_*, SERVICE_NAMES, get_upgrades, get_upgrade), `HarbourFacilities` (HAUL_OUT, TIER_NAMES), `HarbourTrades.is_chandlery_upgrade`, `SessionLog`, `Loc`.
 - **Signals:** declares `time_requested(minutes)` (after a service or upgrade) and `haul_out_requested` (HaulOutButton). Connects `GameSession.boat_care_changed` -> `refresh`, `GameSession.funds_changed` -> `_on_funds_changed`.
 - **State:** writes only through `GameSession.perform_service` / `install_upgrade`.
@@ -1674,7 +1758,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/boatyard_menu.gd`
 
-- **Role:** class_name `BoatyardMenu`, extends `ModalPanel`; vessel browser/switcher with SubViewport deck preview, spec list, performance comparison and yard-service buttons.
+- **Role:** class_name `BoatyardMenu`, extends `ModalPanel`; vessel browser/switcher with SubViewport deck preview, spec list, performance comparison and yard-service buttons. I022: list buttons and a `Price` spec row from `_ownership()` ("(your boat)"/"Yours"/price); `_choose` reads "Move aboard…", "Buy the %s (%s)…" or "%s needed to buy it" (disabled when unaffordable); still emits `vessel_chosen`. Steady Hands: `FitScroll.wrap([Body, CompareTitle, Comparison], _panel)` in `_ready`.
 - **Depends on:** scene `src/ui/boatyard_menu.tscn` (unique nodes `%VesselList`, `%PreviewViewport`, `%NameLabel`, `%HullLabel`, `%Description`, `%Specs`, `%Comparison`, `%ChooseButton`, `%Panel`, `%ConditionLabel`, `%ServiceStatus`, `%CareButton`, `%GroceryButton`, `%CloseButton`), `VesselCatalog`, `VesselDefinition` (performance profile, specs, deck_visual_scene, get_active_visual_profile), `VesselVisual`, `VesselCondition`, `GameSession`, `BoatCare.overall_level`, `Provisions.format_days`, `HarbourFacilities`, `Loc`.
 - **Signals:** declares `vessel_chosen(vessel_id)`, `care_requested`, `grocery_requested`, `chandlery_requested`, `sailmaker_requested`. App connects them to `switch_vessel`, `open_boat_care`, `open_grocery`, `open_chandlery`, `open_sailmaker`.
 - **State:** `selected: VesselDefinition`; no writes (switching is `App.switch_vessel` -> GameSession).
@@ -1686,7 +1770,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/cabin_home_menu.gd`
 
-- **Role:** class_name `CabinHomeMenu`, extends `TradePanel`; toggles which owned cabin decor items are shown on the current boat.
+- **Role:** class_name `CabinHomeMenu`, extends `TradePanel`; toggles which owned cabin decor items are shown on the current boat. Steady Hands: explicit right-column anchors; `_fit_column` sets `offset_left = -(minimum width + SAFE_MARGIN)` deferred and on `minimum_size_changed` (a preset in `_ready` used the unsized modal and a 700 px column for a 737 px panel).
 - **Depends on:** `TradePanel` (`_build_trade`, `_row`, `_rows`), `HarbourTrades.get_decor`, `GameSession` (get_cabin_decor, set_cabin_decor, get_home().owns_decor, get_vessel_definition, get_vessel_id, format_money), `SessionLog`, `Loc`.
 - **Signals:** none declared; inherits TradePanel's connections to `GameSession.funds_changed`, `home_changed`, `boat_care_changed`.
 - **State:** writes per-vessel decor visibility via `GameSession.set_cabin_decor` (persisted in the home state; placement is done by `CabinDecor` in `BoatArea`, indirect).
@@ -1754,7 +1838,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/cooking_menu.gd`
 
-- **Role:** class_name `CookingMenu`, extends `SimplePanel`; galley: recipe list, detail, cook animation, coffee.
+- **Role:** class_name `CookingMenu`, extends `SimplePanel`; galley: recipe list, detail, cook animation, coffee. Steady Hands: `Loc.t` on `recipe.text` and `recipe.name` (Cook %s).
 - **Depends on:** `GameSession` (cooking_refusal, recipe_refusal, coffee_refusal, cook, make_coffee, get_fishing, get_food_days, COFFEE_MINUTES), `Recipes` (LIST, MAX_FISH_DAYS), `Provisions.format_days`, `Simulation.format_game_time`, `AudioManager` + `FishingSounds.sizzle`, `SessionLog`, `UiTheme`, `Loc`.
 - **Signals:** declares `cooked(result)` (after a successful `serve()`) and `coffee_made(result)` (after `pour_coffee()`). App connects both to `Simulation.spend_time_aboard(minutes, true)` (cooked via `_on_meal_cooked`, which reports interruptions).
 - **State:** writes via `GameSession.cook` / `make_coffee` only; local timers `_cooking`, `_brewing`, `_steam_until`, `_last_result`.
@@ -1775,9 +1859,26 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_dev_guides.gd`.
 - **Change risks:** Not gameplay; risks are limited to dev builds. Button node names derive from guide file basenames.
 
+### `src/ui/difficulty_menu.gd`
+
+- **Role:** class_name `DifficultyMenu`, extends `SimplePanel` (I022). Built in `_ready`: title "Difficulty", note label, `picker` (DifficultyPicker, starts at `GameSession.get_difficulty()`), buttons `CancelButton`/`ApplyButton`; Apply calls `GameSession.set_difficulty(picker.level)` and `notify()`s a change, then `close()`.
+- **Depends on:** `SimplePanel` (`_build`, `_label`, `_button`), `DifficultyPicker`, `Difficulty`, `GameSession`.
+- **Lifecycle:** pushed by App when `PauseMenu.difficulty_requested` fires (on top of the pause menu; closing returns to it).
+- **Tests:** `test_captains_other_life` `[menus]`.
+- **Change risks:** `focus_default` looks the Apply button up by name.
+
+### `src/ui/difficulty_picker.gd`
+
+- **Role:** class_name `DifficultyPicker`, extends VBoxContainer (I022). `_init` builds a `Levels` row of toggle buttons named `Relaxed`/`Standard`/`Seasoned` (ButtonGroup) and a `Description` label; `select(id)` sets `level`, relabels the buttons via `Difficulty.display_name`, sets the description and emits `changed(level)`; re-selects on `NOTIFICATION_TRANSLATION_CHANGED`.
+- **Depends on:** `Difficulty`.
+- **State:** `level` (StringName), `_buttons`, `_text`.
+- **Lifecycle:** created in code by `NewGameMenu._ready` (inserted before its Buttons row) and `DifficultyMenu`.
+- **Tests:** `test_captains_other_life` `[menus]` (clicks `Seasoned`, `Relaxed`).
+- **Change risks:** tests find the buttons by node name.
+
 ### `src/ui/fishing_menu.gd`
 
-- **Role:** class_name `FishingMenu`, extends `SimplePanel`; rod panel with three faces (rod, reel, result).
+- **Role:** class_name `FishingMenu`, extends `SimplePanel`; rod panel with three faces (rod, reel, result). Steady Hands: `Loc.t` on `lure.name` in the lure list.
 - **Depends on:** `GameSession` (get_fishing, get_fishing_mode, get_vessel_position, get_vessel_speed_kn, is_anchored, is_line_out, set_line, select_lure, set_keep_preferences, set_passage_posture, release_fish, sell_fish, has_facility, get_pending_bite, finish_fight, get_anchor, format_money; signals `fishing_changed`, `fish_bite`), `FishingCatalog`, `FishingState` (MODE_TROLLING, PASSAGE_*), `ReelTiming`, `ReelDial`, `FishPortrait`, `FishArt.thumbnail`, `CatchBadge`, `Simulation` (AdvanceResult, STOP_*, format_duration), `AnchorSite.holding_text`, `HarbourFacilities.GROCERY`, `AudioManager` + `FishingSounds`, `SessionLog`, `Loc`.
 - **Signals:** declares `wait_requested(minutes)` (Wait button, `WAIT_MINUTES`=60). Connects `GameSession.fishing_changed` -> `refresh`, `GameSession.fish_bite` -> `_start_reel_if_bite`, `ReelDial.pressed` -> `press_reel`.
 - **State:** writes via GameSession only; local `_reel`, `_reel_bite`, `_reel_done`, `_last_result`.
@@ -1798,9 +1899,27 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_boat_of_your_own.gd`.
 - **Change risks:** `_rebuild` frees rows with `queue_free` and clears `_rows`; the sell-all total is recomputed here from catalog prices and must match GameSession's `sell_catch`.
 
+### `src/ui/fit_scroll.gd`
+
+- **Role:** class_name `FitScroll`, extends ScrollContainer (Steady Hands). static `wrap(nodes, window_panel)` (moves the given siblings into a VBox "Content" inside a new FitScroll placed where the first was; `reparent(keep_global=false)` keeps owners), `fit()` (height = content minimum, capped at viewport height ÷ canvas scale − the rest of the parent box's minimum − the frame's stylebox − 2·`MARGIN`, at least `MIN_HEIGHT`), `is_scrolling()`. `_queue_fit` (deferred, once per change) on `viewport.size_changed`, `SettingsManager.ui_scale_changed` and the content's `minimum_size_changed`.
+- **Depends on:** `SettingsManager.ui_scale_changed`.
+- **State:** `frame`, `_fit_queued`.
+- **Lifecycle:** created by `SettingsMenu._ready` (AudioSection + DisplaySection) and `BoatyardMenu._ready` (Body + CompareTitle + Comparison).
+- **Tests:** `tests/suites/test_steady_hands.gd` (sweep at 1280×720 100/130 %, 1024×768, 2560×1080).
+- **Change risks:** reparenting re-enters buttons into the tree; `App._on_node_added` connects the click sound once per button (meta `ui_click`).
+
+### `src/ui/game_dev_menu.gd`
+
+- **Role:** class_name `GameDevMenu`, extends `SimplePanel`. Signal `work_requested(task_id, choice)`. Nodes: Progress, Devlog, Task OptionButton ("name (N h)"), Question, Choices (toggle buttons Choice0..2 in `Pastimes.choice_order` order, locked for an interrupted task), Note, CancelButton, WorkButton (disabled until a choice). `selected_task()`, `pick(position)` (tests).
+- **Depends on:** `Pastimes`, `GameSession.get_pastimes/is_game_released`, `Simulation.format_duration/format_game_time`.
+- **State:** `choice`, `_order`.
+- **Lifecycle:** pushed by `App.open_game_dev()`; App connects `work_requested` → `App.work_on_game` (deferred), which runs `pass_time` + `GameSession.work_on_game`.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[menus]`, screenshot i022_game_dev).
+- **Change risks:** the interrupted task's choice is fixed (points count for the share worked with that choice).
+
 ### `src/ui/go_ashore_menu.gd`
 
-- **Role:** class_name `GoAshoreMenu`, extends `SimplePanel`; harbour shore event with drawn icon and choices.
+- **Role:** class_name `GoAshoreMenu`, extends `SimplePanel`; harbour shore event with drawn icon and choices. Steady Hands: `_describe_choice` uses `Loc.t(choice.label)` and `Loc.t("free")`.
 - **Depends on:** `GameSession` (get_location, get_shore_event, get_funds, facility_refusal, format_money), `ShoreEvents.fill`, `HarbourFacilities.GO_ASHORE`, `Loc`.
 - **Signals:** declares `choice_made(event_id, choice_index)`; App connects it to `_on_shore_choice` (applies `GameSession.apply_shore_choice`, spends time via `Simulation.spend_time_ashore`, then calls `show_outcome(result)`).
 - **State:** `_offer` (read once in `_ready`); no direct writes.
@@ -1812,7 +1931,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/grocery_menu.gd`
 
-- **Role:** class_name `GroceryMenu`, extends `SimplePanel`; harbour store for provisions, passage stock-up, replacement hat and lures, with a link to the fishmonger.
+- **Role:** class_name `GroceryMenu`, extends `SimplePanel`; harbour store for provisions, passage stock-up, replacement hat and lures, with a link to the fishmonger. Steady Hands: `Loc.t` on `lure.name` in the tackle list.
 - **Depends on:** `GameSession` (get_location, get_provisions, get_provisions_price, get_funds, get_missing_provision_days, is_moored_in_harbour, buy_provisions, get_passage_store_days, get_vessel_definition, get_hat_price, get_hat, buy_hat, buy_lure, get_fishing, has_facility, format_money, PROVISIONS_PRICE_PER_DAY, REMOTE_WORK_PAY_PER_HOUR), `Provisions` (CAPACITY_DAYS, format_days), `FishingCatalog`, `HarbourFacilities.FISHMONGER`, `Loc`.
 - **Signals:** declares `fishmonger_requested` (FishmongerButton); App connects it to `open_fishmonger`.
 - **Signals (in):** `GameSession.funds_changed` (`_on_funds_changed`) and `fishing_changed` -> `refresh()`.
@@ -1821,6 +1940,25 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Invariants:** everyday fill to `Provisions.CAPACITY_DAYS`; stock-up to `get_passage_store_days()`; the hat row is separate so provisions figures are unaffected.
 - **Tests:** `tests/suites/test_hat.gd`, `tests/suites/test_living.gd`, `tests/suites/test_upkeep_ui.gd`, `tests/suites/test_visual_prototype.gd`, `tests/suites/test_boat_of_your_own.gd` (refresh after a fishmonger sale).
 - **Change risks:** a new figure shown here that other screens can change needs its signal connected too (funds and catch are). Buy/BuyHat/StockUp buttons are exposed via getters used by tests.
+
+### `src/ui/handbook_menu.gd`
+
+- **Role:** class_name `HandbookMenu`, extends `SimplePanel` (1160 wide). Signal `first_voyage_requested`. Nodes: Search (LineEdit), Pages (ItemList: chapter headers disabled with empty metadata, pages with their id), PageTitle, PageText (in a ScrollContainer), FirstVoyageButton, TipsButton, CloseButton. `search(query)`, `listed()`, `show_page(id)`, `shown_page()`.
+- **Depends on:** `Academy.search/page/category_title/fill/begin_first_voyage/reset_tips`.
+- **State:** `_ids`, `_shown`.
+- **Lifecycle:** pushed by `App.open_handbook(page)` (also over the pause menu); `App.toggle_handbook` (F1) closes it when on top.
+- **Tests:** `tests/suites/test_academy.gd` (`[handbook]`).
+- **Change risks:** none beyond the modal stack.
+
+### `src/ui/harbour_moment.gd`
+
+- **Role:** class_name `HarbourMoment`, extends PanelContainer (Golden Harbours). Properties set before `_ready`: `port_id`, `first_visit`, `special`, `picture`, `elevation`, `overcast`, `log_line`. `_ready` builds Stamp (MutedLabel: "✦ Special harbour · " if special, "First visit · <date>"), the inner `HarbourScene` (WIDTH−24 × `PICTURE_HEIGHT`) and centred labels (header "Arrived in %s.", description, log line). `_gui_input` left click → `dismiss()` (0.25 s fade, `TWEEN_PAUSE_PROCESS`, emits `dismissed`). static `light_of(elevation, morning)` → `&"night"` < −6°, `&"dawn"`/`&"dusk"` < 8°, else `&"day"`. static `window_spots(texture)` → `Array[Rect2]` (UV) cached in `_window_cache` by resource path: samples the middle `CROP` (0.42) every `SAMPLE_STEP` px, at most `MAX_WINDOWS`, one per 18 px cell; `_is_window` = 5 dark opaque samples (luminance ≤ 0.33) with opaque light wall (> 0.42) at `WALL_REACH` (12) px on ≥ 3 of 4 sides (rejects palm leaves against the sky).
+- **Depends on:** `HarbourLooks` (through App), `PortCatalog`, `Simulation.format_game_time`, `Daylight.local_solar_hours`/`outside_colour`, `WaterLook.water_colour`, `GameSession`.
+- **State:** the properties above; static `_window_cache`.
+- **Lifecycle:** created by `App.show_harbour_moment`, added by `Toasts.show_moment` (`MOMENT_DURATION` 14 s, then fade and free).
+- **Performance:** `HarbourScene._draw` only on show/resize; window sampling once per picture (~18 ms for four pictures, then ~0.01 ms cached, measured headless).
+- **Tests:** `tests/suites/test_golden_harbours.gd`.
+- **Change risks:** `get_messages()` reads its labels (tests look for the Log line inside it); a picture with pale windows (Symi) gets no lit windows by design.
 
 ### `src/ui/hat_badge.gd`
 
@@ -1836,7 +1974,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/haul_out_panel.gd`
 
-- **Role:** `class_name HaulOutPanel`, extends `SimplePanel`; haul-out choice + animation + result dialog.
+- **Role:** `class_name HaulOutPanel`, extends `SimplePanel`; haul-out choice + animation + result dialog. Steady Hands: `Loc.t` on the upgrade name in the option list.
 - **Depends on:** `GameSession` (`get_location`, `get_vessel_definition`, `get_boat_care`, `get_haul_out_extras`, `upgrade_price`, `service_quote`, `haul_out_quote`, `haul_out`, `format_money`, `get_funds`), `BoatCare` (`fouling`, `FOULING_NEEDED`, `get_upgrade`, `SERVICE_NAMES`), `VesselDefinition.HULL_CATAMARAN`, `HaulOutScene`, `SessionLog`, `Loc`.
 - **Signals:** declares `time_requested(minutes)` (emitted in `_finish` with `_result.minutes`); App connects it to `_spend_yard_time` (→ `Simulation.spend_time_ashore`).
 - **State:** writes game state only through `GameSession.haul_out(extras)` (the single transaction); logs `haul_out` to SessionLog. Owns `_options`, `_result`, `_finished`.
@@ -1857,7 +1995,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/hud.gd`
 
-- **Role:** `class_name Hud`, extends Control; gameplay overlay (area/location, clock + PAUSED, route/voyage, status line, wind, warning panel, prompt, shortcut strip) and host of sub-panels.
+- **Role:** `class_name Hud`, extends Control; gameplay overlay (area/location, clock + PAUSED, route/voyage, status line, wind, warning panel, prompt, shortcut strip) and host of sub-panels. Steady Hands: `_stack_right_column()` (from `refresh` and `_set_route_lines`): route width = `ROUTE_PANEL_WIDTH` with a course else `ROUTE_PANEL_COMPACT`, capped by the room right of `ClockPanel`; `sailing_panel.offset_top` = route bottom + `COLUMN_GAP` (independent of the warning); `WarningPanel` below Trip Details (or the route panel) with `offset_bottom = offset_top` (sizes to content; was a fixed 124 px under which Trip Details was pushed). `_keep_prompt_clear()` (from `_process`) shifts `PromptPanel` by the overlap with `ChartPlotter`/`RadarPanel`. Offsets are written only when they change.
 - **Depends on:** `hud.tscn` (unique-name nodes, `TimeControls` inside `ClockPanel`), `GameSession`, `Simulation` (`format_game_time`, `get_wind_at`, `get_eta`, `estimate_route_seconds`, `format_duration`), `PortCatalog`, `PlannedRoute.describe`, `AnchorSite.holding_text`, `PropulsionState.wind_side`, `VesselCondition`, `Provisions`, `WindField`, `WeatherSample`/`WeatherModel.HAZARD_CAUTION`, `SessionState`, `Loc`; creates `HatBadge`, `AboardBadge`, `PassagePanel`, `SailingPanel`, `ChartPlotter`, `RadarPanel`.
 - **Signals:** declares `menu_requested`, `chart_requested` (warning chart button or PassagePanel), `save_requested` (PassagePanel Save). App connects them to `open_pause_menu`, `open_chart_from_warning`, `open_save_menu`.
 - **State:** read-only on game state; caches `_planned_seconds` (re-estimated when route key changes or after 1800 game-seconds), `_chart_mode`, `_warning_pending`.
@@ -1880,8 +2018,8 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/loading_screen.gd`
 
-- **Role:** `class_name LoadingScreen`, extends CanvasLayer (layer 100, `PROCESS_MODE_ALWAYS`); start-up splash that warms caches.
-- **Depends on:** `UiTheme` (`is_night`, `color`), `PortCatalog.get_default()`, `SeaRouter.get_default()` (on `WorkerThreadPool`), `VesselCatalog.get_default()`, branding PNGs (preloaded), `Loc`.
+- **Role:** `class_name LoadingScreen`, extends CanvasLayer (layer 100, `PROCESS_MODE_ALWAYS`); start-up splash that warms caches. I022: `_night` is always true; the sky and sea are drawn as two vertex-coloured polygons with the main menu's gradient (`SKY_TOP/SKY_LOW/SEA_TOP/SEA_LOW`, horizon `HORIZON` 0.62) and the night logo `LOGO` (480) at 400×188; tagline and status take `ink_soft` night colours. project.godot's boot splash: navy `bg_color`, `stretch_mode=0` (native size), `little_captains_hat_logo_240.png`.
+- **Depends on:** `UiTheme.color_at(role, 1.0)` (night colours only), `PortCatalog.get_default()`, `SeaRouter.get_default()` (on `WorkerThreadPool`), `VesselCatalog.get_default()`, branding PNGs (preloaded), `Loc`.
 - **Signals:** declares `finished` (after fade, before `queue_free`).
 - **State:** static `shown` (once per process); `_step`, `_task`, `_done`.
 - **Lifecycle:** created by `App._ready()` when `LoadingScreen.wanted()` (not shown yet and display is not headless); frees itself.
@@ -1935,7 +2073,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/new_game_menu.gd`
 
-- **Role:** `class_name NewGameMenu`, extends `ModalPanel`; companion selection for a new game.
+- **Role:** `class_name NewGameMenu`, extends `ModalPanel`; companion selection for a new game. I022: builds `difficulty` (DifficultyPicker) and a question label before `Center/Panel/VBox/Buttons`; `start_requested(companion_kind, level)`.
 - **Depends on:** `new_game_menu.tscn` (`%CatButton`, `%DogButton`, `%Preview`, `%Description`, `%StartButton`, `%CancelButton`), `CompanionState` (`DEFAULT_KIND`, `KIND_CAT`, `KIND_DOG`), `ShipCompanion.show_kind`, `Loc`.
 - **Signals:** declares `start_requested(companion_kind)`; App connects it to `start_new_game`.
 - **State:** `companion_kind`.
@@ -1957,12 +2095,30 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/pause_menu.gd`
 
-- **Role:** `class_name PauseMenu`, extends `ModalPanel`; in-game pause menu that only emits intents.
+- **Role:** `class_name PauseMenu`, extends `ModalPanel`; in-game pause menu that only emits intents. I022: `difficulty_requested` signal; a code-built `DifficultyButton` after `SettingsButton`. I022: `HandbookButton` built in code after `DifficultyButton`; signal `handbook_requested`.
 - **Depends on:** `pause_menu.tscn`, `DevTools.is_enabled`.
 - **Signals:** declares `save_requested`, `log_requested`, `load_requested`, `settings_requested`, `main_menu_requested`, `dev_tests_requested`; App wires them in `open_pause_menu()`.
 - **Lifecycle:** instantiated from `pause_menu_scene` by `App.open_pause_menu()` (Esc or `Hud.menu_requested`).
 - **Tests:** `tests/suites/test_gameplay_flow.gd`, `test_upkeep_ui.gd`; opened via `open_pause_menu` in `test_hat.gd`, `test_captains_log.gd`, `test_localization.gd`, `test_well_run_ship.gd` and others.
 - **Change risks:** the dev button is added only when DevTools is enabled.
+
+### `src/ui/postcard_menu.gd`
+
+- **Role:** class_name `PostcardMenu`, extends `SimplePanel`. Signals `make_requested` (after `GameSession.set_postcard_draft`), `scrapbook_requested`. Nodes: Subject/Caption/Layout OptionButtons, Preview (`PostcardView`), Note, buttons ScrapbookButton, AbandonButton (only with a draft), CancelButton, MakeButton. `chosen_card()`, `selected_subject()`, `choose(index, caption, layout)` (tests), `_resume_draft()`.
+- **Depends on:** `Pastimes`, `GameSession.get_pastimes/postcard_minutes_left/set_postcard_draft/abandon_postcard`, `Simulation.format_duration`.
+- **State:** `_subjects` (snapshot of `Pastimes.subjects()` at open).
+- **Lifecycle:** pushed by `App.open_postcards()`; App connects `make_requested` → `make_postcard` (deferred) and `scrapbook_requested` → push `ScrapbookMenu`.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[menus]`).
+- **Change risks:** Esc closes (ModalPanel); `make_requested` closes all modals through `App.pass_time`.
+
+### `src/ui/postcard_view.gd`
+
+- **Role:** class_name `PostcardView`, extends Control (600×390 minimum, mouse ignored). `card` setter (finds the picture, redraws), `caption()`; `_draw` per layout ("classic", "snapshot", "banner"), `_draw_scene` (gradient sky/sea per kind, rain lines for weather, sun for sunset, `_draw_boat` for voyage/weather/sunset), the art fitted into the picture box.
+- **Depends on:** `Pastimes.caption_text/args_for`, `HarbourLooks.picture_for`, `FishArt.thumbnail/has_art`, `CompanionVisualSet.for_kind(...).get_texture(&"resting")`.
+- **State:** `card`, `_picture`.
+- **Lifecycle:** child of `PostcardMenu` (Preview) and `ScrapbookMenu` (Card).
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[menus]`, screenshots i022_postcard, i022_scrapbook).
+- **Change risks:** draw calls only, redrawn on change, not per frame.
 
 ### `src/ui/provisions_menu.gd`
 
@@ -1986,7 +2142,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/radar_panel.gd`
 
-- **Role:** `class_name RadarPanel`, extends PanelContainer; north-up traffic scope with up to three advice lines.
+- **Role:** `class_name RadarPanel`, extends PanelContainer; north-up traffic scope with up to three advice lines. `should_show()` requires `GameSession.is_underway()` (the wheel's Radar item exists only underway; before, `shown` kept it up in harbour with no way to close it); `shown` is kept for the next voyage, and traffic is only queried underway.
 - **Depends on:** `Simulation` (`traffic_risks`, `RISK_NONE/CAUTION/DANGER`, `get_current_heading`), `GameSession`, `TrafficModel.kind_name`, `WindField.compass_name`, `Loc`.
 - **State:** static `shown` and `range_index` (per run, not saved); `on_deck` Callable set by Hud; `_risks` cache.
 - **Lifecycle:** created in code by `Hud._ready()` (`hud.radar_panel`); App's action wheel toggles `RadarPanel.shown`.
@@ -2061,9 +2217,18 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_gameplay_flow.gd`, `test_long_passage.gd`.
 - **Change risks:** `setup()` must precede `_ready`; `_refresh` rebuilds all buttons on `slots_changed`.
 
+### `src/ui/scrapbook_menu.gd`
+
+- **Role:** class_name `ScrapbookMenu`, extends `SimplePanel`. `page`, `view` (`PostcardView` "Card"), `turn(delta)`, When label, PreviousButton/NextButton/CloseButton; ui_left/ui_right and move_left/move_right turn pages.
+- **Depends on:** `GameSession.get_pastimes().postcards`, `Simulation.format_game_time`.
+- **State:** `page` (0 = newest).
+- **Lifecycle:** pushed by App from `PostcardMenu.scrapbook_requested`.
+- **Tests:** `tests/suites/test_captains_other_life.gd` (`[menus] the scrapbook opens on the newest card`).
+- **Change risks:** none beyond the modal stack.
+
 ### `src/ui/settings_menu.gd`
 
-- **Role:** `class_name SettingsMenu`, extends `ModalPanel`; shared settings dialog with live preview and Apply/Discard.
+- **Role:** `class_name SettingsMenu`, extends `ModalPanel`; shared settings dialog with live preview and Apply/Discard. I022: `BUS_LABELS` has `Wind`; `_play_test_sound(&"Wind")` plays `WIND_TEST` (wind_breeze.wav, not looping) as a one-shot on the Wind bus. I022: `_tips` CheckBox ("Tips" row after Reduce motion) → `SettingsManager.set_tips_enabled`; synced in `_sync_controls`. Steady Hands: `FitScroll.wrap([AudioSection, DisplaySection], $Center/Panel)` at the end of `_ready`.
 - **Depends on:** `settings_menu.tscn`, `SettingsManager` (snapshot/restore, volumes, window mode, vsync, UI scale, art style, course view, reduce flashing, flash intensity, reduce motion, UI light, language, save, defaults), `Loc.LANGUAGES`, `SessionLog.get_folder`, `AudioManager`, `MusicDirector`, `ModalStack.confirm`.
 - **State:** `_saved` snapshot for unapplied-change detection; all writes go through SettingsManager.
 - **Lifecycle:** instantiated from `settings_menu_scene` by `App.open_settings()` (from main menu and pause menu).
@@ -2094,7 +2259,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/theme/ui_theme.gd`
 
-- **Role:** no class_name, extends Node; autoload `UiTheme` that rebuilds and recolours the project Theme from day/night role palettes.
+- **Role:** no class_name, extends Node; autoload `UiTheme` that rebuilds and recolours the project Theme from day/night role palettes. Steady Hands: `_target_blend()` is now a switch (1 below `SWITCH_AT` −1° ± `HYSTERESIS` 0.5°, chosen by `is_night()`), not `1 − smoothstep(−6°, +4°)`; the old blend parked the interface half-way for the whole twilight with ink ≈ surface (1.0:1). `color_at()` snaps `TEXT_ROLES` to the nearer end (≥ 2.5:1 mid-fade); `color()` delegates to it. `MAX_RATE` still eases each change over ≈ 4 s.
 - **Depends on:** `ThemeDB.get_project_theme()`, Barlow fonts, `SettingsManager` (`get_ui_light`, `ui_light_changed`), `GameSession` (position, time), `Daylight.sun_elevation`, `ModalPanel` (for "Dim" detection).
 - **Signals:** declares `palette_changed` (after every applied blend); connects `SettingsManager.ui_light_changed` → `set_mode` and `get_tree().node_added` → `_on_node_added`.
 - **State:** `theme`, `blend` (0 day … 1 night), `_mode`, style-box/colour specs, weak refs to dims and tinted controls.
@@ -2128,7 +2293,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/toasts.gd`
 
-- **Role:** `class_name Toasts`, extends VBoxContainer; transient notification stack.
+- **Role:** `class_name Toasts`, extends VBoxContainer; transient notification stack. I021: `show_card(title, text, picture)` adds an "ArrivalCard" panel (AtlasTexture crop of the middle two-fifths of the strip, `CARD_DURATION` 6 s, mouse ignored); `get_messages()` now joins every Label in a panel, so cards and plain notices read the same. Golden Harbours: `show_moment(moment, duration = MOMENT_DURATION)` (14 s) adds a `HarbourMoment` with the same `MAX_VISIBLE` eviction and a fade tween.
 - **Depends on:** theme variation `ToastPanel`.
 - **State:** child panels (max `MAX_VISIBLE` = 3; oldest removed first).
 - **Lifecycle:** node `ToastLayer/ToastArea/Toasts` in `app.tscn` (`app.toasts`); App routes `notify()` and hat/anchor messages through `show_message`.
@@ -2201,6 +2366,13 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ## Test suites
 
+### `tests/suites/test_academy.gd`
+
+- **Role:** extends RefCounted; I022 suite. `_test_data` (chapters, page links, `{placeholder}` validity via RegEx, no "press X" letters, 8 steps), `_test_keys_and_search` (E/Esc/L/F1, move, fill, search, Danish completeness and search "anker"), `_test_settings` (sanitizing, save/load, restore_defaults keeps progress), then with `app.tscn` and `AcademyGuide.enabled = true`: `_test_offer` (ConfirmDialog on the first new game, Esc = skip, once, `load_slot` never offers), `_test_first_voyage` (drives each step: InputEventAction move_up into `_input`, wheel, log, deck, chart, `plan_route_to`, `depart`, time scale 5), `_test_tips` (pause menu and HUD warning defer; close + 20 s gap; once; tips off; Read more → `HandbookMenu.shown_page`), `_test_handbook` (F1 via `_unhandled_input`, search, pause menu button, Close back to the pause menu, FirstVoyageButton). Screenshots i022_academy_offer, _first_voyage, _chart_step, _tip, i022_handbook.
+- **Depends on:** `app.tscn`, `SaveManager.save_to_slot(3)`, runner helpers.
+- **Lifecycle:** in `test_runner.gd` `SUITES` after `test_captains_other_life`; resets `AcademyGuide.enabled` and the progress at the end.
+- **Change risks:** sets the private `_queue`/`_gap_left` of the guide to make tip timing deterministic.
+
 ### `tests/suites/test_anchor_life.gd`
 
 - **Role:** extends RefCounted; test suite for 0.102b life at anchor. Covers `AnchorLife` rules (local solar hour, phases, tints), harbour coffee (no award), settling at a CLASS_GOOD anchorage on Copenhagen→Malmö, one-shot `settled`/`evening`/`pet`/`wake` moments, anchor ambience (tint, cabin lamp), the anchor-morning coffee award (+2 renown, once), save/load (slot 3, incl. a save stripped of `anchor.moments`), and unsettling in 24–30 kn wind.
@@ -2233,7 +2405,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_atmosphere.gd`
 
-- **Role:** extends RefCounted; test suite for Iteration 17 weather audio and visuals. Covers asset files plus README provenance in `assets/audio/weather/`, the Outside bus (low-pass, sends to Ambience) and the unfiltered SFX bus, `WeatherAudio.rain_level` per classification, the wind/water/rain loops and storm audio in a gale fixture, cabin muffling, lightning flashes on the scene lighting (flash intensity 0, reduce flashing), thunder delay with distance, and deck `WeatherVisuals` streaks and drops.
+- **Role:** extends RefCounted; test suite for Iteration 17 weather audio and visuals. Covers asset files plus README provenance in `assets/audio/weather/`, the Outside bus (low-pass, sends to Ambience) and the unfiltered SFX bus, `WeatherAudio.rain_level` per classification, the wind/water/rain loops and storm audio in a gale fixture, cabin muffling, lightning flashes on the scene lighting (flash intensity 0, reduce flashing), thunder delay with distance, and deck `WeatherVisuals` streaks and drops. I022: `[buses]` checks `WIND_BUS` sends to `OUTSIDE_BUS` (index after it); `[loops]` checks the wind loop on `WIND_BUS`, water on `OUTSIDE_BUS`.
 - **Depends on:** `src/app/app.tscn`, `WeatherAudio` (reads private `_strike_in`, `_thunder_near`, `_flashes`), `AudioManager`, `AudioServer`, `WeatherFixtures`, `WeatherSample`, `WeatherModel`, `WeatherVisuals`, `SettingsManager`, `Simulation`, `GameSession`.
 - **State:** changes the flash settings and restores the defaults; clears `WeatherFixtures`.
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
@@ -2252,7 +2424,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_boat_of_your_own.gd`
 
-- **Role:** extends RefCounted; test suite for I020 "A Boat of Your Own". Covers `HarbourFacilities` trades per port (counts across the catalogue), the fishmonger opened from the grocery store (single sale, the `GroceryMenu` under it refreshed with the new funds, sell all, no double sale, reload undoes a sale, none at sea), the chandlery (upgrade = boat-care upgrade, decor, never below zero funds, none without a yard), the sailmaker (sail cloth per vessel, free to switch back, look only, `SailRig.sail_colour`, the rig service = `BoatCare.SERVICE_RIG`), decor placement on all four vessels (clearance from stations, no collisions), save tolerance (missing `home`, unknown decor or sails dropped), and the Danish UI fitting on screen.
+- **Role:** extends RefCounted; test suite for I020 "A Boat of Your Own". Covers `HarbourFacilities` trades per port (counts across the catalogue), the fishmonger opened from the grocery store (single sale, the `GroceryMenu` under it refreshed with the new funds, sell all, no double sale, reload undoes a sale, none at sea), the chandlery (upgrade = boat-care upgrade, decor, never below zero funds, none without a yard), the sailmaker (sail cloth per vessel, free to switch back, look only, `SailRig.sail_colour`, the rig service = `BoatCare.SERVICE_RIG`), decor placement on all four vessels (clearance from stations, no collisions), save tolerance (missing `home`, unknown decor or sails dropped), and the Danish UI fitting on screen. I021: the Danish fit check measures the `Scroll` container against the screen and rows inside it only for width. `_test_cabins` also checks `placed.has("compass")` per vessel and the Danish name of `compass` (Operation Paperwork).
 - **Depends on:** `src/app/app.tscn`, `HarbourFacilities`, `HarbourTrades`, `TradePanel`, `GameSession`, `FishingCatalog`, `CabinDecor`, `SailRig`, `BoatCare`, `BoatCareState`, `SessionState`, `SaveManager`, `SettingsManager`, `Loc`, `Interactable`.
 - **State:** injects fish into `state.fishing.hold` (uids 9000+) via `replace_state`; sets funds; sets the language to `da` and back to `en`.
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
@@ -2262,7 +2434,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_branding.gd`
 
-- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.107a", MACHINE "0.107.1", commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Patrick Hand headings with Barlow fallback, Barlow body), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
+- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.108a", MACHINE "0.108.1", commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Patrick Hand headings with Barlow fallback, Barlow body), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
 - **Depends on:** `src/app/app.tscn`, `assets/ui/next_harbor_theme.tres`, `GameVersion`, `SaveManager`, `LegacySaves`, `GameSession`, `HatState`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`, `ProjectSettings`.
 - **State:** writes v9 legacy saves under `user://test_legacy_userdata/saves` via `LegacySaves.legacy_dir_override` (reset and cleaned at the end); deletes save slots 1–3.
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
@@ -2270,9 +2442,16 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —
 - **Change risks:** pins the version strings, save version and asset paths, so every release bump needs this test updated. Tagline text is compared exactly. Screenshots `130_*`–`134_*`.
 
+### `tests/suites/test_cabin_windows.gd`
+
+- **Role:** extends RefCounted; I022 suite. `_test_data_in_the_walls` (each opening's corners +1.5 frame sampled in `cabin_base.png`: alpha ≥ 0.9 and r ≤ 0.35 = wall paint), `_test_water_look`, `_test_in_the_cabin` (`_aboard` sets vessel/time via `replace_state`; node order after `CabinBase`; `view_of` port north / starboard south moored, aft offset, fov up close; `last_draw_usec` median of 30 redraws; ≤ 2 redraws standing still for 60 frames; dusk 18:42 and night 22:30 UTC; underway heading −90°; classic art hides), `_test_other_cabins`, `_test_deck_water` (translucency 0/1 × moored/underway screenshots).
+- **Depends on:** `app.tscn`, `Image.load_from_file` of the cabin art, runner helpers.
+- **Lifecycle:** in `test_runner.gd` `SUITES` after `test_academy`; restores `WaterLook.translucency` and `CabinWindows.glass_strength`.
+- **Change risks:** the time-of-day checks assume Copenhagen on the default start date.
+
 ### `tests/suites/test_captains_log.gd`
 
-- **Role:** extends RefCounted; test suite for Iteration 006 Captain's Log. Covers the start harbour, arrival records, change of course (one record, both legs), rescue (a gale fixture with condition 1 %), determinism (9 h in one step vs 540 steps), the bounded history (`MAX_VOYAGES`, save size < 20000 chars), save/load equality, rejection of a negative distance, migration of version 7 saves (in port and underway), and the `CaptainsLogMenu` UI (L key, statistics, tabs, country groups and filters, pause-menu button).
+- **Role:** extends RefCounted; test suite for Iteration 006 Captain's Log. Covers the start harbour, arrival records, change of course (one record, both legs), rescue (a gale fixture with condition 1 %), determinism (9 h in one step vs 540 steps), the bounded history (`MAX_VOYAGES`, save size < 20000 chars), save/load equality, rejection of a negative distance, migration of version 7 saves (in port and underway), and the `CaptainsLogMenu` UI (L key, statistics, tabs, country groups and filters, pause-menu button). Golden Harbours: `_test_log_panel` accepts the Log line inside the Gothenburg `HarbourMoment` (exactly one message contains it).
 - **Depends on:** `src/app/app.tscn`, `GameSession`, `CaptainsLog`, `Simulation`, `SaveManager`, `SessionState`, `WeatherFixtures`, `WeatherModel`, `PortCatalog`, `CaptainsLogMenu`.
 - **Signals:** connects to `GameSession.voyage_logged`.
 - **State:** writes raw save wrappers (`next_harbor_save`, version 7) into `SaveManager.save_dir` slot 3; uses slot 2.
@@ -2281,9 +2460,16 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —
 - **Change risks:** exact toast text "New harbour in the Captain's Log: … (3 of N visited)." and node names (`DistanceValue`, `Harbour_kiel`, `Country_Germany`). Screenshots `108_*`, `109_*`.
 
+### `tests/suites/test_captains_other_life.gd`
+
+- **Role:** extends RefCounted; I022 suite. `_test_prices_and_new_games`, `_test_old_saves` (erases `fleet`/`difficulty` from a save dict; unknown ids and levels), `_test_buying` (sets `GameSession.test_all_boats_owned = false`, restores it), `_test_difficulty_factors` (a day of food, provisions price, engine service quote per level; `set_difficulty`; Danish names), `_test_menus` (App: New Game picker → Seasoned start; pause menu `DifficultyButton` → `DifficultyMenu` → Relaxed). I022: `_test_postcards`, `_test_game_dev`, `_test_pastime_saves`, `_test_pastimes_on_the_clock` (Copenhagen→Helsingør measured, then a card started ~1 h out is stopped by STOP_ARRIVAL), `_test_pastime_menus` (wheel ids, PostcardMenu/ScrapbookMenu/GameDevMenu, screenshots).
+- **Depends on:** `app.tscn`, `GameSession`, `SessionState.from_dict`, `VesselCatalog`, `Difficulty`, runner helpers (`click`, `frames`, `wait_until`, `screenshot`).
+- **Lifecycle:** in `test_runner.gd` `SUITES` after `test_wider_world`.
+- **Change risks:** prices and starting funds are read from data, not hard-coded; the ownership switch must be restored for later suites.
+
 ### `tests/suites/test_captains_watch.gd`
 
-- **Role:** extends RefCounted; test suite for I019 The Captain's Watch. Covers `TrafficModel` (deterministic, navigable, bounded by `MAX_PER_CELL`, ships moving, query < 2 ms), `TrafficModel.approach` CPA/TCPA, `Simulation.risk_level`, `traffic_alert` fairness (tcpa ≥ 0.15 h, once per ship, ≤ 1 per 10 h), sleep and Long Passage stopping (`STOP_TRAFFIC`/`STOP_WARNING`), `RadarPanel.describe`/`colour_for`, anchor alarm levels and `AnchorState` compatibility, and `VhfRadio` (deterministic per slot, answering and declining, standby, once-only reward across a round trip, the expiry window).
+- **Role:** extends RefCounted; test suite for I019 The Captain's Watch. Covers `TrafficModel` (deterministic, navigable, bounded by `MAX_PER_CELL`, ships moving, query < 2 ms), `TrafficModel.approach` CPA/TCPA, `Simulation.risk_level`, `traffic_alert` fairness (tcpa ≥ 0.15 h, once per ship, ≤ 1 per 10 h), sleep and Long Passage stopping (`STOP_TRAFFIC`/`STOP_WARNING`), `RadarPanel.describe`/`colour_for`, anchor alarm levels and `AnchorState` compatibility, and `VhfRadio` (deterministic per slot, answering and declining, standby, once-only reward across a round trip, the expiry window). `_test_radar` also checks `RadarPanel.should_show()` on a standalone panel: on at sea, off when moored, on again after `_depart`.
 - **Depends on:** `GameSession`, `Simulation`, `TrafficModel`, `SeaRouter`, `PortCatalog`, `RadarPanel`, `VhfRadio`, `AnchorState`, `SessionState`.
 - **Signals:** connects to `Simulation.traffic_alert`, `Simulation.passage_interrupted`, `Simulation.vhf_call`, `GameSession.anchor_alarm`, `GameSession.notice`.
 - **State:** no app scene. `app = runner.get("app")` is null with the current runner, so the HUD radar check is skipped. Sets `Simulation.passage_rate` directly.
@@ -2426,7 +2612,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
 - **Invariants:** the log must not affect the simulation (same hat-loss time with or without it).
 - **Tests:** —
-- **Change risks:** pins `GameVersion.DISPLAY == "0.107a"` and save format 12, so every version bump needs this test updated. The expected `error` line depends on `push_error` capture.
+- **Change risks:** pins `GameVersion.DISPLAY == "0.108a"` and save format 12, so every version bump needs this test updated. The expected `error` line depends on `push_error` capture.
 
 ### `tests/suites/test_eight_directions.gd`
 
@@ -2468,13 +2654,19 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_gameplay_flow.gd`
 
-- **Role:** extends RefCounted; end-to-end suite through real input (`press_action`, `click`, pushed mouse drags). Covers the main menu, new game (Arctic Wanderer 26), movement normalisation and collisions, interaction focus/prompts, the sleep menu, the chart (zoom/pan, port pick, plot/clear, waypoint drag/invalid/remove, unapplied-changes confirm), companionway round trips and the helm confirm. Also covers the pause menu with UI scale, settings apply/discard, save/overwrite/load, a damaged-save load, return to menu/Continue, and a first voyage to Kiel (20× time, sleep, save underway, gale warning via `WeatherFixtures.gale`, reroute at sea with no teleport, arrival). Ends with `_test_quit`.
+- **Role:** extends RefCounted; end-to-end suite through real input (`press_action`, `click`, pushed mouse drags). Covers the main menu, new game (Arctic Wanderer 26), movement normalisation and collisions, interaction focus/prompts, the sleep menu, the chart (zoom/pan, port pick, plot/clear, waypoint drag/invalid/remove, unapplied-changes confirm), companionway round trips and the helm confirm. Also covers the pause menu with UI scale, settings apply/discard, save/overwrite/load, a damaged-save load, return to menu/Continue, and a first voyage to Kiel (20× time, sleep, save underway, gale warning via `WeatherFixtures.gale`, reroute at sea with no teleport, arrival). Ends with `_test_quit`. Steady Hands: the round-trip check records area and prompt before each E (diagnostics only). Steady Hands: `_to_hatch(spot, prompt)` moves `Companion` 400 px aside when the prompt is not the hatch's (root cause of the intermittent "ended on deck": E petted the cat). "No teleport": distance ≤ elapsed game time × 12 kn + 10 m (was a fixed 1e-3°, about 110 m, which ~43 s of sailing reached; failed 2/2 on the committed Mission A state).
 - **Depends on:** `src/app/app.tscn`, `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, `SeaRouter`, `WeatherFixtures`, `HatConfig`, `Provisions`, `MainMenu`, `NewGameMenu`, `SleepMenu`, `WorldMap`, `MapView`, `PauseMenu`, `SettingsMenu`, `SaveLoadMenu`, `ConfirmDialog`, `AudioServer`.
 - **State:** writes `t.TEST_SETTINGS_PATH` and save slots 1–3 under the test save dir; toggles `Simulation.auto_advance` for exact comparisons.
 - **Lifecycle:** test suite; last entry in the runner's `SUITES` because pressing Quit ends the process (only when `t.failed == 0`).
 - **Invariants:** `_same_state` allows real-time clock drift (stores and `hat.checked_until` follow the drift; numbers compared to 1e-9 relative, after the I17 JSON-precision flake).
 - **Tests:** —
 - **Change risks:** Most timing-sensitive suite: real-time clock runs during waits, fixed pixel coordinates for collisions, ordering-dependent (must stay last). Screenshots `01_*`–`18_*`.
+
+### `tests/suites/test_golden_harbours.gd`
+
+- **Role:** extends RefCounted; Golden Harbours suite. `_test_light_and_windows` (`light_of`; `window_spots` on helsingor/symi/bequia/valletta: ≥ 3 with ≥ 6 spots, all ≤ `MAX_WINDOWS`; first < 400 ms, cached < 2 ms). Sets `root.size` 1280×720, `Simulation.auto_advance = false`. `_arrive(from, to, hour_utc)` (new session, real `plan_route_to`/`depart`/`Simulation.advance`, then waits for `UiTheme.blend == _target_blend()`), `_hop_hours`. `_test_first_and_repeat` (Copenhagen→Helsingør 09:00 UTC: one moment, labels, no separate Log toast, no modal/pause, click dismiss; back to Copenhagen → one "ArrivalCard"; Helsingør again → none), `_test_quiet_places` (load slot 3 in Symi; interior and back), `_test_dusk_and_night` (Marmaris→Symi ~17.4 UTC in Danish: special stamp, dusk/dawn light, inside the screen; Castries→Bequia ~03 UTC: night). Screenshots `golden_helsingor_day_en`, `golden_symi_dusk_da`, `golden_bequia_night_en`.
+- **Depends on:** `app.tscn`, `HarbourLooks`, `PortCatalog`, `SaveManager`, runner helpers.
+- **Lifecycle:** in `test_runner.gd` `SUITES` after `test_steady_hands`; restores language, window size and `auto_advance`.
 
 ### `tests/suites/test_harbour_chart.gd`
 
@@ -2488,7 +2680,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_harbour_life.gd`
 
-- **Role:** extends RefCounted; suite (I12 "A Little Harbour Life", extended I14/I16). Headless: `HarbourFacilities.for_port` (Copenhagen major with haul-out; Lohals and the small Danish/island ports lack a boatyard; Kiel keeps `ALL`; fewer than half the ports can haul out; tiers). App part: on every vessel, the gangplank is active, walkable to the pontoon and back, every facility station is ashore and reachable, there are 3 signs, the camera follows ashore. Also: object highlights (no `debug_show_areas`), the Lohals refusals (switch vessel, repair, boatyard), Go Ashore (`GoAshoreMenu`, cost/renown/minutes, shore moment, resting state, no double pay, `REST_HOURS`, the record persists in a save), departure retracting the plank, save/load ashore, and the course view (camera rotation by `BoatArea.octant_for`, HUD upright, waves keep world direction, screen-relative walking, upright again in harbour or when the setting is off).
+- **Role:** extends RefCounted; suite (I12 "A Little Harbour Life", extended I14/I16). Headless: `HarbourFacilities.for_port` (Copenhagen major with haul-out; Lohals and the small Danish/island ports lack a boatyard; Kiel keeps `ALL`; fewer than half the ports can haul out; tiers). App part: on every vessel, the gangplank is active, walkable to the pontoon and back, every facility station is ashore and reachable, there are 3 signs, the camera follows ashore. Also: object highlights (no `debug_show_areas`), the Lohals refusals (switch vessel, repair, boatyard), Go Ashore (`GoAshoreMenu`, cost/renown/minutes, shore moment, resting state, no double pay, `REST_HOURS`, the record persists in a save), departure retracting the plank, save/load ashore, and the course view (camera rotation by `BoatArea.octant_for`, HUD upright, waves keep world direction, screen-relative walking, upright again in harbour or when the setting is off). I021: the expected no-boatyard list adds `dingle`, `isafjordur`, `symi`, `essaouira`, `st_helena` (the `small` tier of `add_i021_harbours.py`).
 - **Depends on:** `src/app/app.tscn`, `tests/helpers/walkability.gd`, `HarbourFacilities`, `ShoreEvents`, `GoAshoreMenu`, `BoatArea`, `Interactable`, `PortCatalog`, `VesselCatalog`, `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`.
 - **State:** `_moor_in` relocates the boat via `replace_state`; toggles `SettingsManager` course view and restores the default; slot 3 (deleted).
 - **Lifecycle:** test suite.
@@ -2497,7 +2689,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_harbours.gd`
 
-- **Role:** extends RefCounted; data suite (I006 D/E, extended I16) with no app scene. Verifies the catalogue: ≥150 ports, unique `^[a-z][a-z0-9_]*$` ids, complete records, valid importance/region, 15 original ids, regional spread. Every port lies inside `CHART`, has a `find_port_approach`, and has land within 3 nm (Colón/Panama City exempt). Every added port has a valid route to its nearest original port. Also covers 17 representative voyages with nm bounds plus `validate_route`, `ports_in_rect` vs a scan, and `search`.
+- **Role:** extends RefCounted; data suite (I006 D/E, extended I16) with no app scene. Verifies the catalogue: ≥150 ports, unique `^[a-z][a-z0-9_]*$` ids, complete records, valid importance/region, 15 original ids, regional spread. Every port lies inside `CHART`, has a `find_port_approach`, and has land within 3 nm (Colón/Panama City exempt). Every added port has a valid route to its nearest original port. Also covers 17 representative voyages with nm bounds plus `validate_route`, `ports_in_rect` vs a scan, and `search`. I021: `REGIONS` adds north_america, west_africa, south_atlantic, indian_ocean, southeast_asia; 239 harbours.
 - **Depends on:** `PortCatalog`, `PortData`, `SeaRouter` (`plan_route`, `validate_route`, `find_port_approach`, `grid`), `NavGrid`, `GeoMath`.
 - **Performance:** routes every non-original port (prints elapsed ms); one of the heavier pure-data suites.
 - **Lifecycle:** test suite.
@@ -2553,7 +2745,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_living_world.gd`
 
-- **Role:** extends RefCounted; presentation suite (0.100b). Verifies `WaterLife.atmosphere_for` by harbour kind; sailor arm swing (`SailorDrawing.hand_position`, `get_swing`) with unchanged collision radius 20; moored water (drifters ≤ max, laps, no collision nodes, z-order, hides classic ripples, moves while paused, off in Classic art); and illustrated deck/cabin sprites plus hat hook on every vessel. Underway: waves follow the wind relative to heading and scale with wind (≤ `MAX_WAVES`), the camera zooms by `BoatArea.UNDERWAY_ZOOM_FACTOR` with an eased transition and returns on arrival.
+- **Role:** extends RefCounted; presentation suite (0.100b). Verifies `WaterLife.atmosphere_for` by harbour kind; sailor arm swing (`SailorDrawing.hand_position`, `get_swing`) with unchanged collision radius 20; moored water (drifters ≤ max, laps, no collision nodes, z-order, hides classic ripples, moves while paused, off in Classic art); and illustrated deck/cabin sprites plus hat hook on every vessel. Underway: waves follow the wind relative to heading and scale with wind (≤ `MAX_WAVES`), the camera zooms by `BoatArea.UNDERWAY_ZOOM_FACTOR` with an eased transition and returns on arrival. Steady Hands: walks `move_right` from (250, 0) with the companion moved aside, up to two `Player.STRIDE` (cap 3 s), and checks walked ≥ one stride and range > 0.6. From the start spot (−252, 0) the walk hit fittings after 31 px down or 52 px forward (< one stride), so the range topped out at 0.59–0.60.
 - **Depends on:** `src/app/app.tscn`, `WaterLife`, `HarbourArt`, `PortCatalog`, `SailorDrawing`, `VesselVisual`, `VesselCatalog`, `BoatArea`, `SettingsManager`, `GameSession`, `Simulation`.
 - **State:** sets art style Illustrated and course view off, restores course view default.
 - **Lifecycle:** test suite.
@@ -2721,7 +2913,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_settings_and_audio.gd`
 
-- **Role:** extends RefCounted; test suite: `SettingsManager` defaults on missing file, `AUDIO_BUSES` exist and route to Master, `set_volume` → bus dB / mute / clamp, save/load round trip (volumes, VSync, window mode, UI scale), `snapshot`/`restore_snapshot`, invalid/unparseable config values fall back or clamp; non-headless only: window modes map to `DisplayServer` modes, VSync (skipped if unsupported), windowed size; `AudioManager` fixed one-shot player pool, bus routing, ambience start/replace/stop, music play/stop.
+- **Role:** extends RefCounted; test suite: `SettingsManager` defaults on missing file, `AUDIO_BUSES` exist and route to Master, `set_volume` → bus dB / mute / clamp, save/load round trip (volumes, VSync, window mode, UI scale), `snapshot`/`restore_snapshot`, invalid/unparseable config values fall back or clamp; non-headless only: window modes map to `DisplayServer` modes, VSync (skipped if unsupported), windowed size; `AudioManager` fixed one-shot player pool, bus routing, ambience start/replace/stop, music play/stop. I022: Wind default 100, `set_volume(&"Wind", 35)` sets the bus dB, save/restore_defaults/load round trip.
 - **Depends on:** `SettingsManager`, `AudioManager`, `AudioServer`, `DisplayServer`; placeholder audio under `res://assets/audio/placeholder/`; runner `TEST_SETTINGS_PATH`.
 - **Persistence:** Writes/deletes the test settings config file.
 - **Lifecycle:** test suite in `tests/test_runner.gd`; `run(t)` uses the runner directly.
@@ -2764,6 +2956,13 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —
 - **Change risks:** A crash mid-suite can leave fixture PNGs installed (final check catches it next run); depends on entry ids and slot names (`Coachroof`, `DeckBase`); screenshots `rb_16_*`–`rb_21_*`.
 
+### `tests/suites/test_steady_hands.gd`
+
+- **Role:** extends RefCounted; Steady Hands suite. Sets `get_tree().root.size` (the runner's 64 px window otherwise "expands" to a 1920×1920 canvas; restored at the end). `_test_weather_does_not_move_trip_details` (4 texts × 3 rounds, en/da, 10:00/23:00, `SailingPanel.collapsed`), `_test_long_texts` (les_sables→boulogne, 130 %), `_test_transitions` (sail trim then moored, wheel + warning, settings + language switch, load with pause menu open), then `SWEEPS` (1280×720 en/da 100/130 %, 1024×768 da, 2560×1080 da) → `_sweep` (openers list; `check_window`: interface controls only (`get_canvas_layer_node()`), skip contents of ScrollContainer/ItemList/RichTextLabel and `Dim`; on screen ± `EPS`; Esc via `modals.handle_back` (`NO_ESC`: LanguagePicker); raw `%s`/`%d`/`{…}`; Danish: non-auto-translated text with a translation, and `english_phrase` for composed text), `_check_hud` (`HUD_PAIRS`, Danish English-phrase check, screenshots), `_check_screens` (main menu, new game, language, load, chart, dream map), `_check_no_hidden_click_catchers` (STOP controls > 20 % of the screen). `_test_dusk_readability` (144 × 600 s moored from 00:00 UTC: `_target_blend()` ∈ {0, 1}, exactly 2 switches; `_contrast` of ink/surface, ink/surface_hud, ink/sidebar, button_text/button, action_text/action at blends 0…1 ≥ 2.5:1).
+- **Depends on:** `app.tscn`, `VhfRadio.call_for_slot`, `SaveManager`, runner helpers.
+- **Lifecycle:** in `test_runner.gd` `SUITES` after `test_cabin_windows`.
+- **Change risks:** `english_phrase` uses the Danish catalogue's two-word-plus messages; a deliberate English proper name of that shape would need an exemption.
+
 ### `tests/suites/test_turbocharge.gd`
 
 - **Role:** extends RefCounted; test suite (performance pass): `WeatherModel.sample_hazard()` equals `sample()` exactly (8 places × 3 dates × 3 seeds × 40 × 2 `known_at`); `Simulation.route_hazards()` equals an inline copy of the pre-Turbocharge implementation on 5 routes × seeds × dates × start fractions and is faster in total; `WeatherDamage.damage_between()` equals per-`SUBSTEP` summation of `rate_per_hour`; two identical 3-night `Simulation.sleep` runs Copenhagen→Reykjavik end identically.
@@ -2804,7 +3003,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_visual_prototype.gd`
 
-- **Role:** extends RefCounted; test suite (Visual Identity V01 D): owner cat PNG MD5s unchanged; Starling/Halcyon/Petrel `illustrated_visual_profile` in `<id>/illustrated` with all deck/cabin slots sourced from "file", classic profiles unchanged; `HatArt` slot fallback/assignment/`procedural_only`; `HarbourArt.for_port` (Copenhagen → one "Nyhavn" landmark, `MAX_LANDMARKS`, image-less landmarks skipped); art style switch (`SettingsManager.ART_CLASSIC`/`ART_ILLUSTRATED`) keeps `Layout` (collision, stations, spawns, markers) identical on deck and cabin, hat hook, provisions display, damage overlay; harbour dressing (signs = `HarbourFacilities.for_port` ids, Patrick Hand name sign, z-order, no collision, grocery/boatyard usable, Classic restores old pontoon), generic harbour at Kiel, none at sea, Nyhavn after arrival; other boats illustrated/classic; Settings `ArtStyle` option applied and saved to config `display/art_style`.
+- **Role:** extends RefCounted; test suite (Visual Identity V01 D): owner cat PNG MD5s unchanged; Starling/Halcyon/Petrel `illustrated_visual_profile` in `<id>/illustrated` with all deck/cabin slots sourced from "file", classic profiles unchanged; `HatArt` slot fallback/assignment/`procedural_only`; `HarbourArt.for_port` (Copenhagen → one "Nyhavn" landmark, `MAX_LANDMARKS`, image-less landmarks skipped); art style switch (`SettingsManager.ART_CLASSIC`/`ART_ILLUSTRATED`) keeps `Layout` (collision, stations, spawns, markers) identical on deck and cabin, hat hook, provisions display, damage overlay; harbour dressing (signs = `HarbourFacilities.for_port` ids, Patrick Hand name sign, z-order, no collision, grocery/boatyard usable, Classic restores old pontoon), generic harbour at Kiel, none at sea, Nyhavn after arrival; other boats illustrated/classic; Settings `ArtStyle` option applied and saved to config `display/art_style`. I021: the generic-harbour check expects Kiel's look (one landmark titled "Gabled harbour town"), still with its own sign and three facility signs.
 - **Depends on:** app scene (`open_settings`), `t.board`, `VesselCatalog`, `VesselVisual`, `BoatArea` (`get_harbour_dressing`, `mooring`, `mooring_label`, `get_hat_hook`), `BoatFixture`, `HatArt`, `HarbourArt`, `HarbourLandmark`, `HarbourFacilities`, `HighlightProvider`, `GroceryMenu`, `BoatyardMenu`, `SettingsMenu`, `SettingsManager`, `TestWalkability`, `GameSession`, `Simulation`, `PortCatalog`.
 - **State:** Writes the art style to the test settings file; leaves it Illustrated.
 - **Lifecycle:** test suite in `tests/test_runner.gd`.
@@ -2867,6 +3066,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Lifecycle:** test suite in `tests/test_runner.gd`.
 - **Tests:** —
 - **Change risks:** Heavy reliance on private `WindLayer` internals and exact label/button texts ("1 h ▶", "Estimated conditions. Actual wind may differ."); frame-budget timing; screenshots `17_wind_*`, `34_*`.
+
+### `tests/suites/test_wider_world.gd`
+
+- **Role:** extends RefCounted; test suite for I021. Covers the 16 new harbours (catalogue count 239, description, GeoNames source, grocery, tiers, Danish name/description), the look table (every port has a look with an existing texture; NZ = Norway, Willemstad = Copenhagen, Hobart = Aberdeen; six European harbours with six looks; Essaouira/Zanzibar share stone town, Dakar does not; shared cached art; Danish look title), specials (== ports with own landmarks, 6; ordinary stay ordinary; notes and `WorldMap._special_line` in both languages), missing-art fallback (a broken `HarbourLooks` instance returns null, own art still shown), the 10 new fish (catalogue, `FishArt.has_art`, regions exist on the chart, candidates at Lunenburg/Zanzibar/Langkawi/Valletta/Ísafjörður/Dakar/St Helena/Stornoway, none off Kiel, prices, Danish names, a record round-trips), the three decor items (prices, Danish), old saves and a save in Zanzibar, then in the app: the moored deck's landmark title at Valletta/Dingle/Zanzibar/Copenhagen/Suva/Nuku'alofa (node count stable over repeated moorings), the arrival card (ArrivalCard with Picture, text, mouse ignored, Danish), and a route across the date line (Suva to Nuku'alofa).
+- **Depends on:** `src/app/app.tscn`, `HarbourLooks`, `HarbourArt`, `HarbourDressing`, `WorldMap`, `PortCatalog`, `FishingCatalog`, `FishingState`, `FishArt`, `HarbourTrades`, `SessionState`, `SaveManager`, `SeaRouter`, `SettingsManager`, `Loc`.
+- **State:** replaces the session state to moor in harbours; switches the language to `da` and back.
+- **Lifecycle:** test suite run by `tests/test_runner.gd`.
+- **Tests:** —
+- **Change risks:** catalogue count (239), specific look assignments and landmark titles, Danish strings ("Kapstaden", "Nordisk træhavn", "Helleflynder").
 
 ### `tests/suites/test_world_chart_render.gd`
 
@@ -3067,15 +3275,41 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —.
 - **Change risks:** method names passed as strings to `app.call`; 1.2 s timer for tooltip.
 
+### `tests/screenshots_i021.gd`
+
+- **Role:** extends Node; I021 evidence: the moored deck at a harbour of each look (Svolvær, Marstal, Dingle, Naples, Mykonos, Zanzibar, Dakar, Bora Bora, Horta) and each special harbour (Copenhagen, Valletta, Symi, Essaouira, Lunenburg, St Helena) at local 12:30; the arrival card (`App._on_arrived`) at Valletta and, in Danish, Zanzibar; the navigation chart by day and night (`open_chart_for_port(&"valletta")`, framed on Malta and on Symi with `select_port`) and the Dreamer's Map.
+- **Depends on:** `app.tscn`, `HarbourLooks`, `PortCatalog`, `GameSession` (`replace_state`, `enter_boat_area`), `UiTheme`, `SettingsManager`, `WindField.test_override`, `MapView.frame_geo_points`, `WorldMap.select_port`.
+- **State:** `user://test_saves`, `user://test_settings.cfg`; fixed wind 220°/8 kn; output `res://docs/screenshots/i021` or `--out=`.
+- **Lifecycle:** `xvfb-run godot --path . --rendering-driver opengl3 --resolution 1600x900 res://tests/screenshots_i021.tscn -- --out=DIR`. Prints `I021 SHOTS DONE`.
+- **Tests:** —.
+- **Change risks:** file names are referenced from the I021 report; harbour ids and framing rectangles are hard-coded.
+
+### `tests/one_clock_sea_trial.gd`
+
+- **Role:** extends Node (root of `one_clock_sea_trial.tscn`, `PROCESS_MODE_ALWAYS`); Operation One Clock diagnostic. Turns off `Simulation`, `UiTheme` and `app.day_night_watch` processing (and the current area's `Lighting` each frame) and calls `Simulation.tick(dt)`, `day_night_watch._process(dt)`, `UiTheme._process(dt)` and `Lighting._process(dt)` itself once per frame with the measured real delta, timing each; also records `viewport_get_measured_render_time_gpu/cpu`, evaluation points crossed (`EVALUATION_INTERVAL`), blend steps, `palette_changed` count, card/pause state, sun elevation, visible `PointLight2D` count, darkness, draw calls and render objects. Scenarios: `TRIAL` by default; `--all` adds 1x/5x/20x day/night, dawn/dusk with/without `TimePassage`, chart, isolation (`freeze_theme`/`freeze_lighting`), rapid speed changes, harbour dusk; `--only=a,b`, `--long_seconds=N`, `--out=FILE` (JSON, then quits).
+- **Depends on:** `app.tscn` (`start_new_game`, `router`, `modals`, `toasts`, `_show_current_boat_area`, `open_chart`, `close_chart`, `snap_light`, `time_passage`, `day_night_watch`), `GameSession` (`replace_state`, `plan_route_to(&"bergen")`, `depart`, `set_time_scale`, `set_paused`), `SessionState.TIME_SCALES`, `TimePassage.enabled`, `DayNightWatch.DAY_ABOVE/NIGHT_BELOW`, `BoatLighting` private `_darkness`, `UiTheme.blend`, `PortCatalog`, `GameVersion.describe()`.
+- **State:** scratch saves/settings (`user://test_saves`, `user://test_settings.cfg`); fixed wind 200°/11 kn; boards `starling_33`; writes `user://one_clock_sea_trial.txt` and sets the clipboard.
+- **Lifecycle:** F6 in the editor (results stay on screen until the window is closed) or command line with `--out` (quits). About five minutes for `TRIAL`.
+- **Tests:** none (diagnostic tool).
+- **Change risks:** depends on private App/BoatLighting names; a renamed member stops the trial, not the game. Must not stay in a build's normal flow (it is a separate scene).
+
 ### `tests/test_runner.gd`
 
-- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 73 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed.
+- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 79 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed. I021: registers `test_wider_world.gd` after `test_companion_remarks.gd`. I022: `test_captains_other_life` in `SUITES`; sets `GameSession.test_all_boats_owned = true` with `TimePassage.enabled = false`. I022: `AcademyGuide.enabled = false` at start; `test_academy` in SUITES after `test_captains_other_life`. `test_cabin_windows` in SUITES after `test_academy`. `test_steady_hands` in SUITES after `test_cabin_windows`. Golden Harbours: `test_golden_harbours` in `SUITES` after `test_steady_hands`.
 - **Depends on:** all `tests/suites/test_*.gd`; `SaveManager`, `SessionLog`, `SettingsManager`, `TimePassage`, `WindField`, `Simulation`, `GameSession`, `PortCatalog`, `SeaRouter`.
 - **State:** redirects `SaveManager.save_dir = user://test_saves`, `SessionLog.log_dir = user://test_diagnostics`, `SettingsManager.settings_path = user://test_settings.cfg`; `TimePassage.enabled = false`; language forced to `en` before each suite; before each suite `use_calm_wind()` and `Simulation.sea_encounters` true only for `test_captains_watch.gd` and `test_localization.gd`; scratch saves/settings deleted at start and end; `_exit_tree` calls `WindField.clear_default()`.
 - **Lifecycle:** `godot --headless --path . res://tests/test_runner.tscn [-- --only=a,b] [--skip=a,b] [--screenshots=DIR]` (filters match suite file-name substrings; screenshots only when rendered). `process_mode = ALWAYS`.
 - **Invariants:** suite API used by suites: `check`, `check_eq`, `frames`, `physics_frames`, `wait_until`, `press_action`, `press_key`, `hold_actions`, `click`, `click_at`, `make_route`, `screenshot`, fixtures `use_calm_wind`, `set_wind` (calls `Simulation.invalidate_estimates()`), `board(vessel_id, app)`; fields `passed`, `failed`, `current_suite`, `screenshot_dir`.
 - **Tests:** —.
 - **Change risks:** a new suite file must be added to `SUITES` or it never runs; suite order matters (shared autoload state between suites); the doc comment for `hold_actions` sits above `press_key`; `_reset_scratch_files` removes only files and empty subfolders.
+
+### `tools/art/capture_previews.gd`
+
+- **Role:** extends Node (root of `capture_previews.tscn`); The Captain's Illustrated Catalogue. Renders previews of `_draw()` art through the game: `decor_<id>` (one `CabinDecor` per `HarbourTrades.get_decor()` item on a `FLOOR` ColorRect, scale 2/3, 6-column grid), `boat_<id>_{moored,cabin,underway}` (whole screen resized to 1280 x 720; moored at Copenhagen 12:30 local, then all decor bought and shown, then `plan_route_to(&"gothenburg")` + `depart()` + `Simulation.advance(1800)` under a fixed 220°/11 kn `WindField.test_override` so the boats sail), and `chart_<symbol>_<day|night>` crops at `MapView.geo_to_screen` positions (Syracuse→Valletta route with one waypoint; Dreamer's Map with `visited_pins`). `_crop` scales canvas units (1920 x 1080 canvas) to image pixels.
+- **Depends on:** `src/app/app.tscn` (`start_new_game`, `router`, `modals`, `toasts`, `_show_current_boat_area`, `open_chart_for_port`, `open_dream_map`, `close_chart`), `GameSession` (`replace_state`, `buy_decor`, `set_cabin_decor`, `enter_boat_area`, `plan_route_to`, `depart`), `SessionState`, `PortCatalog`, `UiTheme._target_blend`, `WorldMap.get_map_view`, `MapView.frame_geo_points`/`visited_pins`; `SaveManager.save_dir`/`SettingsManager.settings_path` redirected to `user://test_*`.
+- **Lifecycle:** tool scene, needs a display: `xvfb-run -a godot --path . --rendering-driver opengl3 --resolution 1600x900 res://tools/art/capture_previews.tscn -- --out=DIR` (default `res://docs/art/previews`); quits after "PREVIEWS DONE". Output is read by `tools/art/build_contact_sheets.py`.
+- **Tests:** none (documentation tool); its output is checked by eye in `docs/art/ART_CONSISTENCY_REVIEW.md`.
+- **Change risks:** follows App/MapView internals (private `_show_current_boat_area`, `_target_blend`); a renamed method stops the capture, not the game. Crops assume the chart framing in `_capture_chart`.
 
 ### `tools/build_theme.gd`
 
@@ -3087,7 +3321,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tools/export_branding.gd`
 
-- **Role:** extends SceneTree; rasterises `res://assets/branding/<name>.svg` to `res://assets/branding/png/<name>_<height>.png` for the heights in `EXPORTS` (logo, logo on light, symbol, icon) with Godot's SVG renderer.
+- **Role:** extends SceneTree; rasterises `res://assets/branding/<name>.svg` to `res://assets/branding/png/<name>_<height>.png` for the heights in `EXPORTS` (logo, logo on light, symbol, icon) with Godot's SVG renderer. I022: `little_captains_hat_logo` also at 240 (the boot splash image); the existing PNGs re-export byte-identically.
 - **Depends on:** the branding SVGs.
 - **Lifecycle:** tool: `godot --headless --path . -s res://tools/export_branding.gd`; exit 1 on any missing/failed SVG.
 - **Tests:** `tests/suites/test_branding.gd` checks `png/little_captains_hat_logo_480.png` exists (indirect); `src/ui/loading_screen.gd` preloads `little_captains_hat_logo_480.png` and `little_captains_hat_logo_on_light_480.png`.

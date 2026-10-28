@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"galle"
+display_name = "Galle"
+country = "Sri Lanka"
+latitude = 6.0461
+longitude = 80.2103
+description = "Galle, Sri Lanka, beside the ramparts of its old fort, on the sea road across the Indian Ocean."
+importance = 2
+region = "indian_ocean"
+island = false
+source = "GeoNames Galle (6.0461, 80.2103), cities1000; UN/LOCODE LK GAL (no coordinate); I021"

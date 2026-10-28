@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"langkawi"
+display_name = "Langkawi"
+country = "Malaysia"
+latitude = 6.3265
+longitude = 99.8432
+description = "Kuah on Langkawi, Malaysia, among green limestone islands at the northern entrance of the Strait of Malacca."
+importance = 2
+region = "southeast_asia"
+island = true
+source = "GeoNames Langkawi (6.3265, 99.8432), cities1000; UN/LOCODE MY LGK 0622N 09948E; I021"

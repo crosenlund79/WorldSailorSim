@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hobart"
+display_name = "Hobart"
+country = "Australia"
+latitude = -42.8794
+longitude = 147.3294
+description = "Hobart, Tasmania, where old sandstone warehouses line the docks below Mount Wellington."
+importance = 2
+region = "pacific"
+island = true
+source = "GeoNames Hobart (-42.8794, 147.3294), cities1000; UN/LOCODE AU HBA 4252S 14718E; I021"

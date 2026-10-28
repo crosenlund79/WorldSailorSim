@@ -121,7 +121,7 @@ func _refresh_detail() -> void:
 		_detail.text = Loc.t("A pot of coffee on the little stove.\n\nNeeds nothing special.\nTakes %d minutes.\nJust for the pleasure of it.") % int(GameSession.COFFEE_MINUTES)
 		_cook_button.disabled = _cooking > 0.0 or _brewing > 0.0 or GameSession.recipe_refusal(get_selected_recipe().id) != "" \
 			or GameSession.cooking_refusal() != ""
-		_cook_button.text = Loc.t("Cook %s") % String(get_selected_recipe().name).to_lower()
+		_cook_button.text = Loc.t("Cook %s") % Loc.t(String(get_selected_recipe().name)).to_lower()
 		_coffee_button.disabled = _brewing > 0.0 or GameSession.coffee_refusal() != ""
 		return
 	var recipe := get_selected_recipe()
@@ -134,12 +134,12 @@ func _refresh_detail() -> void:
 	if int(recipe.fish) > 0:
 		gives = Loc.t("Turns the catch into food for the stores (up to %s). ") % Provisions.format_days(Recipes.MAX_FISH_DAYS) + gives
 	var refusal := GameSession.recipe_refusal(recipe.id)
-	_detail.text = Loc.t("%s\n\nNeeds: %s.\nTakes %d minutes.\n%s%s") % [recipe.text, ", ".join(needs) if not needs.is_empty() else Loc.t("nothing special"),
+	_detail.text = Loc.t("%s\n\nNeeds: %s.\nTakes %d minutes.\n%s%s") % [Loc.t(String(recipe.text)), ", ".join(needs) if not needs.is_empty() else Loc.t("nothing special"),
 		int(recipe.minutes), gives, ("\n\n" + refusal) if refusal != "" else ""]
 	_cook_button.disabled = _cooking > 0.0 or _brewing > 0.0 or refusal != "" or GameSession.cooking_refusal() != ""
 	_coffee_button.disabled = _cooking > 0.0 or _brewing > 0.0 or GameSession.coffee_refusal() != ""
 	_coffee_button.tooltip_text = GameSession.coffee_refusal()
-	_cook_button.text = Loc.t("Cook %s") % String(recipe.name).to_lower()
+	_cook_button.text = Loc.t("Cook %s") % Loc.t(String(recipe.name)).to_lower()
 
 
 func focus_default() -> void:

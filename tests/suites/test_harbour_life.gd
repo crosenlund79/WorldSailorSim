@@ -85,10 +85,12 @@ func _test_facility_data() -> void:
 		&"aeroskobing", &"juelsminde", &"ebeltoft",
 		# Iteration 16: the small island harbours abroad.
 		&"arrecife", &"bequia", &"puerto_ayora", &"taiohae", &"atuona", &"fakarava", &"bora_bora", &"avarua", &"pago_pago",
-		&"nukualofa", &"lautoka"]
+		&"nukualofa", &"lautoka",
+		# I021: the small harbours of the wider world.
+		&"dingle", &"isafjordur", &"symi", &"essaouira", &"st_helena"]
 	without.sort()
 	small.sort()
-	t.check(without == small, "[facilities] only Lohals and the small Danish and island harbours lack a boatyard (%s)" % [without])
+	t.check(without == small, "[facilities] only Lohals and the small Danish, island and fishing harbours lack a boatyard (%s)" % [without])
 	t.check(haul_outs > 0 and haul_outs < PortCatalog.get_default().ports.size() / 2,
 		"[facilities] only some harbours can haul out (%d of %d)" % [haul_outs, PortCatalog.get_default().ports.size()])
 	t.check(copenhagen.has(HarbourFacilities.HAUL_OUT) and copenhagen.get_tier() == HarbourFacilities.TIER_MAJOR,

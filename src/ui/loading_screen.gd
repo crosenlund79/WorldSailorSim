@@ -3,7 +3,9 @@ extends CanvasLayer
 ## The game's own start (Cozy Polish): after Godot's boot splash (an image
 ## the engine shows while it starts; nothing of the game can draw then), this
 ## screen shows the logo over the title illustration (Real Horizon: an
-## overcast sea, a lighthouse, a sloop under sail; by day or by night) -
+## overcast sea, a lighthouse, a sloop under sail) - always the main menu's
+## own picture (I022: it does not follow the time of day, so the start looks
+## like the menu it fades into) -
 ## while the game loads what it needs, naming each real step as it runs.
 ## The heaviest step (the routing charts) runs on a worker thread, so the
 ## screen keeps moving. It fades into the main menu as soon as the loading
@@ -13,10 +15,9 @@ extends CanvasLayer
 signal finished
 
 const FADE_SECONDS := 0.45
-const LOGO_DAY := preload("res://assets/branding/png/little_captains_hat_logo_on_light_480.png")
-const LOGO_NIGHT := preload("res://assets/branding/png/little_captains_hat_logo_480.png")
-const TITLE_DAY := preload("res://assets/ui/title_scene.png")
-const TITLE_NIGHT := preload("res://assets/ui/title_scene_night.png")
+const LOGO := preload("res://assets/branding/png/little_captains_hat_logo_480.png")
+## The main menu's own background (src/ui/main_menu.tscn, Background).
+const TITLE := preload("res://assets/ui/title_scene.png")
 
 ## Shown already in this run of the game.
 static var shown := false
@@ -40,7 +41,7 @@ func _ready() -> void:
 	shown = true
 	layer = 100
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_night = UiTheme.is_night()
+	_night = true  # the main menu's night look, whatever the hour
 	_canvas = Control.new()
 	_canvas.name = "Canvas"
 	_canvas.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -57,7 +58,7 @@ func _ready() -> void:
 	column.position.y -= 80.0
 	_canvas.add_child(column)
 	var logo := TextureRect.new()
-	logo.texture = LOGO_NIGHT  # white wordmark over the painted sea, day or night
+	logo.texture = LOGO  # the white wordmark, as on the menu
 	logo.custom_minimum_size = Vector2(440, 206)
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -66,11 +67,13 @@ func _ready() -> void:
 	var tagline := Label.new()
 	tagline.text = "Small boat. Wide world. Hold onto your hat."
 	tagline.theme_type_variation = &"DisplayTagline"
+	tagline.add_theme_color_override(&"font_color", UiTheme.color_at(&"ink_soft", 1.0))
 	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(tagline)
 	_status = Label.new()
 	_status.name = "Status"
 	_status.theme_type_variation = &"MutedLabel"
+	_status.add_theme_color_override(&"font_color", Color(UiTheme.color_at(&"ink_soft", 1.0), 0.8))
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status.custom_minimum_size = Vector2(520, 0)
 	column.add_child(_status)
@@ -126,13 +129,12 @@ func is_done() -> bool:
 
 
 ## The scene behind the logo: the title illustration (an overcast sea, a
-## headland with its lighthouse, a sloop under sail; the night version by
-## night), drifting very slowly, with a soft breathing light over the sea.
+## headland with its lighthouse, a sloop under sail), drifting very slowly, with a soft breathing light over the sea.
 func _draw_scene() -> void:
 	var size := _canvas.size
-	var picture: Texture2D = TITLE_NIGHT if _night else TITLE_DAY
+	var picture: Texture2D = TITLE
 	var scale := maxf(size.x / picture.get_width(), size.y / picture.get_height()) * 1.04
 	var drawn := picture.get_size() * scale
 	var drift := Vector2(sin(_time * 0.07) * 0.5 - 0.5, 0.0) * (drawn.x - size.x) * 0.5
 	_canvas.draw_texture_rect(picture, Rect2((size - drawn) / 2.0 + drift, drawn), false)
-	_canvas.draw_rect(Rect2(Vector2.ZERO, size), Color(UiTheme.color(&"surface"), 0.25 + 0.04 * sin(_time * 0.6)))
+	_canvas.draw_rect(Rect2(Vector2.ZERO, size), Color(UiTheme.color_at(&"surface", 1.0), 0.25 + 0.04 * sin(_time * 0.6)))

@@ -1,11 +1,13 @@
 class_name NewGameMenu
 extends ModalPanel
-## Starts a new game: the player picks the ship's companion (cat or dog).
-## The cat is preselected. The choice only affects who lives in the cabin.
+## Starts a new game: the player picks the ship's companion (cat or dog) and,
+## since I022, the difficulty (Standard preselected; DifficultyPicker). The cat
+## is preselected. The companion only affects who lives in the cabin.
 
-signal start_requested(companion_kind: StringName)
+signal start_requested(companion_kind: StringName, level: StringName)
 
 var companion_kind: StringName = CompanionState.DEFAULT_KIND
+var difficulty: DifficultyPicker
 
 @onready var _cat: Button = %CatButton
 @onready var _dog: Button = %DogButton
@@ -19,7 +21,16 @@ func _ready() -> void:
 	_dog.button_group = group
 	_cat.pressed.connect(select.bind(CompanionState.KIND_CAT))
 	_dog.pressed.connect(select.bind(CompanionState.KIND_DOG))
-	%StartButton.pressed.connect(func() -> void: start_requested.emit(companion_kind))
+	difficulty = DifficultyPicker.new()
+	var buttons := $Center/Panel/VBox/Buttons as Control
+	buttons.add_sibling(difficulty)
+	buttons.get_parent().move_child(difficulty, buttons.get_index())
+	var heading := Label.new()
+	heading.name = "DifficultyQuestion"
+	heading.text = "How forgiving should the sea be?"
+	difficulty.add_sibling(heading)
+	heading.get_parent().move_child(heading, difficulty.get_index())
+	%StartButton.pressed.connect(func() -> void: start_requested.emit(companion_kind, difficulty.level))
 	%CancelButton.pressed.connect(close)
 	select(CompanionState.DEFAULT_KIND)
 

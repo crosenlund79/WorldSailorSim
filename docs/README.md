@@ -4,9 +4,9 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 
 ## Where we are
 
-- **Current development version: 0.105b**, save format 12. This is [Revision 0.105b, Safe Harbours, Deep Waters & the Sprite Workshop](revisions/v0.105b/).
-- **Latest revision:** [report](revisions/v0.105b/REVISION_0_105B_REPORT.md), [requirement tracker](revisions/v0.105b/REVISION_0_105B_REQUIREMENTS.md), [Windows acceptance checklist](revisions/v0.105b/WINDOWS_ACCEPTANCE_0_105B.md) (pending), and the Captain's [assignment](revisions/v0.105b/REVISION_0_105B_ASSIGNMENT.md).
-- **Next planned iteration: Iteration 19, The Captain's Watch.** It is planned but **not started and not implemented**. Iterations 20 (A Boat of Your Own) and 21 (The Well-Trimmed Ship) are also planned. Their scope is set by the Captain; see [CAPTAINS_ORDERS.md](../CAPTAINS_ORDERS.md).
+- **Current development version: 0.109a**, save format 12. The latest iteration is [Iteration 23, Steady Hands & Golden Harbours](iterations/i023/); the next numbered iteration is I024.
+- **Latest iteration:** [I023 report](iterations/i023/ITERATION_23_REPORT.md) (its Windows checks are pending); before it [I022](iterations/i022/ITERATION_22_REPORT.md) and [I021](iterations/i021/ITERATION_21_REPORT.md).
+- **Before it:** [Revision 0.105b](revisions/v0.105b/), Iterations [19](iterations/i019/) and [20](iterations/i020/), and the Engine Room maintenance pass ([report](technical/ENGINE_ROOM_AND_COMPANION_POLISH_REPORT.md)). Windows acceptance of 0.105b, I018–I021 is pending. Future scope is set by the Captain; see [CAPTAINS_ORDERS.md](../CAPTAINS_ORDERS.md).
 
 ## Iterations
 
@@ -26,6 +26,9 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 | [18](iterations/i018/) The Joy of the Journey | 0.105a | [assignment](iterations/i018/ITERATION_18_ASSIGNMENT.md), [report](iterations/i018/ITERATION_18_REPORT.md), [requirements](iterations/i018/ITERATION_18_REQUIREMENTS.md), [Windows acceptance](iterations/i018/WINDOWS_ACCEPTANCE_18.md) (pending) |
 | [19](iterations/i019/) The Captain's Watch | 0.106a | [report](iterations/i019/ITERATION_19_REPORT.md) (traffic, radar, anchor alarms, VHF, English and Dansk; Windows acceptance pending) |
 | [20](iterations/i020/) A Boat of Your Own | 0.107a | [report](iterations/i020/ITERATION_20_REPORT.md) (fishmonger, chandlery, sailmaker, cabin things; Windows acceptance pending) |
+| [21](iterations/i021/) A Wider, Warmer World | 0.108a | [report](iterations/i021/ITERATION_21_REPORT.md), [harbour looks](iterations/i021/HARBOUR_LOOKS.md), [Windows acceptance](iterations/i021/WINDOWS_ACCEPTANCE_21.md) (pending) |
+| [22](iterations/i022/) The Captain's Other Life | 0.109a | [report](iterations/i022/ITERATION_22_REPORT.md), [Academy coverage](iterations/i022/CAPTAINS_ACADEMY_COVERAGE.md), [Windows acceptance](iterations/i022/WINDOWS_ACCEPTANCE_22.md) (pending) |
+| [23](iterations/i023/) Steady Hands & Golden Harbours | 0.109a | [report](iterations/i023/ITERATION_23_REPORT.md) (Windows checks in the report, pending), [screenshots](screenshots/steady_hands/) |
 | [Real Horizon](iterations/real_horizon/) Illustrated Mariner visual fork | 0.107a | [report](iterations/real_horizon/REAL_HORIZON_REPORT.md) (visual-only conversion; gameplay unchanged) |
 
 Iterations 7–11 have no separate documents in this repository. Iteration 15 (the performance pass) was skipped at the Captain's instruction.
@@ -46,6 +49,9 @@ Iterations 7–11 have no separate documents in this repository. Iteration 15 (t
 - [Cozy Polish injection report](technical/COZY_POLISH_INJECTION_REPORT.md): floating things at sea, the chart's zoom limit, the Kiel and Suez canals, the Q menu, coffee and the hat in hand, the remembered sleep, visited-harbour pins, compact panels and the loading screen.
 - [The Well-Run Ship performance report](technical/THE_WELL_RUN_SHIP_PERFORMANCE_REPORT.md): where the time went (the day/night theme stall), what is kept in memory and what is written to disk, the sleep, dawn and dusk cards, and Long Passage on the voyage map.
 - [Turbocharge performance report](technical/TURBOCHARGE_PERFORMANCE_REPORT.md) and the permanent [Performance Opportunity Register](technical/PERFORMANCE_OPPORTUNITIES.md): what was measured, what was optimized, and the ranked list of what could be done next.
+- [Operation One Clock](technical/ONE_CLOCK_PERFORMANCE_INVESTIGATION.md): fast time, dawn and dusk; where the frame time goes, three options, and the Windows sea trial.
+- [Operation Paperwork](technical/ENGINEERING_FRICTION_EXPERIMENT.md): one small change (a brass compass) timed from start to delivery: where the time went.
+- [Release readiness](technical/RELEASE_READINESS.md): the checklist for every build, and the content checker of [the Harbourmaster's Inspection](technical/HARBOURMASTERS_INSPECTION_REPORT.md) (`python tools/qa/check_game_content.py`).
 - [Localization](technical/LOCALIZATION.md): English and Dansk, how text is translated, the tools and the glossary.
 - **The Engine Room, the GDScript guides:** every script in the game, one entry each. [For the Captain, in English](technical/GDSCRIPT_GUIDE_EN.md), [for the Captain, in Danish](technical/GDSCRIPT_GUIDE_DA.md), and [the developer architecture reference](technical/GDSCRIPT_ARCHITECTURE.md) (dependencies, signals, state, invariants, tests, cross-system flows). Kept current with `python tools/docs/check_gdscript_guides.py`. How they were made, the companion's kind words, and the two test-reliability fixes: [Engine Room & Companion Polish report](technical/ENGINE_ROOM_AND_COMPANION_POLISH_REPORT.md).
 - [Developer guides](../DEV_GUIDES/README.md): step-by-step guides for art, companions, audio, weather, harbours, boat care, chart regions and life aboard, plus design principles for future user content ([MODDING_FUTURE.md](../DEV_GUIDES/MODDING_FUTURE.md)). They stay in `DEV_GUIDES/` because the game's in-game guide viewer reads them from there.
@@ -60,12 +66,13 @@ Iterations 7–11 have no separate documents in this repository. Iteration 15 (t
 - [Sprite Workshop: start here](../art_replacements/README_START_HERE.md) (for the artist) and its [index](../art_replacements/INDEX.md).
 - [Sprite Workshop report](artwork/SPRITE_WORKSHOP_REPORT.md): audit, sizes, priorities and counts.
 - [Art pipeline](artwork/ART_PIPELINE.md): where the art instructions live.
+- [The Captain's Illustrated Catalogue](art/ILLUSTRATED_ASSET_CATALOGUE.md): every picture in the game, where it lives and how it is made, with six [contact sheets](art/contact_sheets/), the [art consistency review](art/ART_CONSISTENCY_REVIEW.md) and the [report](art/ILLUSTRATED_CATALOGUE_REPORT.md). Rebuilt with `python3 tools/art/build_contact_sheets.py`.
 - [Original soundtrack](artwork/ORIGINAL_SOUNDTRACK_REPORT.md): the three pieces (*Home Upon the Waves*, *The Wind Knows the Way*, *Lanterns Across the Water*), how they were composed and rendered, their licence, and how the game chooses between them. Sources are in `tools/music/`.
 
 ## Benchmarks and screenshots
 
 - [Benchmarks](benchmarks/): JSON results by iteration and revision. Revision 0.105b's files record version, commit and label.
-- [Screenshots](screenshots/): by iteration (`iteration12/` … `iteration18/`) and revision (`revision_0102b/`, `revision_0_105b/`), plus the interface pass (`chartroom_ui/`). The older screenshots from before Iteration 12 are at the top of the folder.
+- [Screenshots](screenshots/): by iteration (`iteration12/` … `iteration18/`, `i021/`) and revision (`revision_0102b/`, `revision_0_105b/`), plus the interface pass (`chartroom_ui/`). The older screenshots from before Iteration 12 are at the top of the folder.
 
 ## About this library
 

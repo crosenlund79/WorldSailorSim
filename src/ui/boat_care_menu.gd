@@ -192,7 +192,7 @@ func _on_upgrade(id: String) -> void:
 		return
 	time_requested.emit(float(result.minutes))
 	SessionLog.write("upgrade_fitted", {"upgrade": id, "cost": result.cost, "port": String(GameSession.get_location_id())})
-	notify(Loc.t("%s fitted for %s.") % [BoatCare.get_upgrade(id).name, GameSession.format_money(int(result.cost))])
+	notify(Loc.t("%s fitted for %s.") % [Loc.t(String(BoatCare.get_upgrade(id).name)), GameSession.format_money(int(result.cost))])
 	refresh()
 
 

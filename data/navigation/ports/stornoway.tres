@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"stornoway"
+display_name = "Stornoway"
+country = "United Kingdom"
+latitude = 58.2093
+longitude = -6.3865
+description = "Stornoway on the Isle of Lewis, the little capital of the Outer Hebrides, where ferries and fishing boats share the inner harbour."
+importance = 2
+region = "british_isles"
+island = true
+source = "GeoNames Stornoway (58.2093, -6.3865), cities1000; UN/LOCODE GB STO 5813N 00622W; I021"

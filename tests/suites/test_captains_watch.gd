@@ -195,6 +195,22 @@ func _test_radar() -> void:
 		"[radar] a risk is described with what to do: \"%s\"" % text.replace("\n", " / "))
 	t.check(RadarPanel.colour_for(Simulation.RISK_DANGER) != RadarPanel.colour_for(Simulation.RISK_CAUTION)
 		and RadarPanel.colour_for(Simulation.RISK_CAUTION) != RadarPanel.colour_for(Simulation.RISK_NEARBY), "[radar] three distinct concern colours")
+	# Switched on at sea, then moored: it must not stay up where its Q-menu item
+	# (the only way to close it) is gone; it comes back on the next voyage.
+	if _depart(&"copenhagen", &"kiel") == "":
+		var scope := RadarPanel.new()
+		scope.on_deck = func() -> bool: return true
+		RadarPanel.shown = true
+		var at_sea := scope.should_show()
+		var moored := GameSession.get_state_snapshot()
+		moored.location_id = &"copenhagen"
+		moored.vessel_status = SessionState.STATUS_MOORED
+		moored.voyage = null
+		GameSession.replace_state(moored)
+		t.check(at_sea and not scope.should_show(), "[radar] switched on at sea, it goes away on mooring (no Radar item in harbour)")
+		t.check(_depart(&"copenhagen", &"kiel") == "" and scope.should_show(), "[radar] and it is back on the next voyage")
+		RadarPanel.shown = false
+		scope.free()
 	if app == null or app.get("hud") == null:
 		return
 	var panel: RadarPanel = app.hud.radar_panel

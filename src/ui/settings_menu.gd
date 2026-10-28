@@ -6,7 +6,9 @@ extends ModalPanel
 ## writes them to disk; leaving with unapplied changes asks before reverting
 ## to the last saved values.
 
-const BUS_LABELS := {&"Master": "Master", &"Music": "Music", &"Ambience": "Ambience", &"SFX": "Sound Effects", &"UI": "UI Sounds"}
+const BUS_LABELS := {&"Master": "Master", &"Music": "Music", &"Ambience": "Ambience", &"Wind": "Wind", &"SFX": "Sound Effects", &"UI": "UI Sounds"}
+## The Wind row's test: a few seconds of the breeze, on the Wind bus (I022).
+const WIND_TEST := preload("res://assets/audio/weather/wind_breeze.wav")
 const WINDOW_MODE_LABELS := {
 	SettingsManager.WINDOW_WINDOWED: "Windowed",
 	SettingsManager.WINDOW_FULLSCREEN: "Fullscreen",
@@ -32,6 +34,7 @@ var _course_view: CheckBox
 var _reduce_flashing: CheckBox
 var _flash: HSlider
 var _reduce_motion: CheckBox
+var _tips: CheckBox
 var _ui_light: OptionButton
 var _language: OptionButton
 
@@ -72,6 +75,10 @@ func _ready() -> void:
 	%DefaultsButton.pressed.connect(_on_defaults_pressed)
 	%ApplyButton.pressed.connect(_on_apply_pressed)
 	_back.pressed.connect(handle_back)
+	# Steady Hands: the sections scroll when the screen is too short for them
+	# (title, status and buttons always stay in view).
+	var box := $Center/Panel/VBox
+	FitScroll.wrap([box.get_node(^"AudioSection"), box.get_node(^"DisplaySection")] as Array[Control], $Center/Panel)
 	_sync_controls()
 
 
@@ -195,6 +202,19 @@ func _build_accessibility_rows() -> void:
 		SettingsManager.set_reduce_motion(pressed)
 		_refresh_status())
 	grid.add_child(_reduce_motion)
+	# I022, the Captain's Academy: the contextual tips on or off.
+	var tips_label := Label.new()
+	tips_label.name = "TipsLabel"
+	tips_label.text = "Tips"
+	grid.add_child(tips_label)
+	_tips = CheckBox.new()
+	_tips.name = "Tips"
+	_tips.text = "Show tips as you play"
+	_tips.tooltip_text = "Short tips the first time you meet something new. The Captain's Handbook (F1) has everything either way."
+	_tips.toggled.connect(func(pressed: bool) -> void:
+		SettingsManager.set_tips_enabled(pressed)
+		_refresh_status())
+	grid.add_child(_tips)
 	# Captain's Chartroom: the interface's day and night look.
 	var light_label := Label.new()
 	light_label.name = "UiLightLabel"
@@ -240,6 +260,7 @@ func _sync_controls() -> void:
 	_reduce_flashing.set_pressed_no_signal(SettingsManager.get_reduce_flashing())
 	_flash.set_value_no_signal(SettingsManager.get_flash_intensity())
 	_reduce_motion.set_pressed_no_signal(SettingsManager.get_reduce_motion())
+	_tips.set_pressed_no_signal(SettingsManager.get_tips_enabled())
 	_ui_light.select(SettingsManager.UI_LIGHTS.find(SettingsManager.get_ui_light()))
 	_language.select(SettingsManager.LANGUAGES.find(SettingsManager.get_language()))
 	_retranslate()
@@ -314,6 +335,8 @@ func _play_test_sound(bus: StringName) -> void:
 				AudioManager.play_music(music_test_stream, false)
 		&"Ambience":
 			AudioManager.play_one_shot(ambience_test_stream, AudioManager.BUS_AMBIENCE)
+		&"Wind":
+			AudioManager.play_one_shot(WIND_TEST, &"Wind")
 		&"SFX":
 			AudioManager.play_sfx(sfx_test_stream)
 		&"UI":

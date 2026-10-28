@@ -10,7 +10,9 @@ extends Node2D
 ## terracotta, flat roof terraces, pines) or a tropical harbour (concrete,
 ## painted corrugated roofs, palms). Marina signage for the services the
 ## harbour has (the grocery store; the boatyard with repairs; Go Ashore) and
-## the harbour's optional landmark illustrations (HarbourArt).
+## the harbour's illustration beyond the quay: its own landmarks (HarbourArt)
+## or the illustration of its look (HarbourLooks, I021); where neither covers
+## the quay, the archetype's generated town.
 ##
 ## Art only. BoatArea adds it to the deck's Surroundings/Mooring, so it is
 ## shown only in port, above the water and below the boat. It reads the
@@ -18,8 +20,8 @@ extends Node2D
 ## deck's stations for its positions, so it fits every boat's deck without
 ## changing any collision, station, spawn point or the mooring itself. While
 ## the Artwork setting is Classic it hides itself and the original pontoon
-## drawing shows instead. Harbours without HarbourArt get the same generic
-## harbour, without landmarks.
+## drawing shows instead. A harbour with neither its own art nor a look gets
+## the generic harbour, without an illustration.
 
 const INK := Color("#2A3236")
 const PLANK := Color("#8A8478")
@@ -55,7 +57,8 @@ const REGION_ARCHETYPES := {
 	"ionian": ARCHETYPE_MEDITERRANEAN, "levant": ARCHETYPE_MEDITERRANEAN, "atlantic_islands": ARCHETYPE_MEDITERRANEAN,
 	"caribbean": ARCHETYPE_TROPICAL, "pacific": ARCHETYPE_TROPICAL, "central_america": ARCHETYPE_TROPICAL,
 }
-const NORDIC_COUNTRIES := ["Denmark", "Sweden", "Norway", "Finland", "Iceland", "Faroe Islands", "Estonia", "Latvia"]
+## Country ids (lower case, spaces as underscores), not display text.
+const NORDIC_COUNTRIES := ["denmark", "sweden", "norway", "finland", "iceland", "faroe_islands", "estonia", "latvia"]
 ## Per archetype: quay paving, its joints, facade colours, roof colours, tree
 ## canopy, roof form ("gable", "barrel", "flat", "metal").
 const STYLES := {
@@ -161,7 +164,8 @@ func refresh() -> void:
 		sign_label.label_settings = _sign_text_settings() if illustrated else classic[1]
 	_port_id = GameSession.get_location_id()
 	_archetype = archetype_for(_port_id)
-	_art = HarbourArt.for_port(_port_id)
+	# The harbour's own landmarks, else the illustration of its look (I021).
+	_art = HarbourLooks.get_default().art_for(_port_id)
 	_landmarks = _art.get_landmarks() if _art else ([] as Array[HarbourLandmark])
 	_signs.clear()
 	var stations := _area.get_node_or_null(^"Layout/Stations")
@@ -188,7 +192,7 @@ static func archetype_for(port_id: StringName) -> StringName:
 	var port := PortCatalog.get_default().get_port(port_id) if not port_id.is_empty() else null
 	if port == null:
 		return ARCHETYPE_NORDIC
-	if port.country in NORDIC_COUNTRIES:
+	if port.country.to_lower().replace(" ", "_") in NORDIC_COUNTRIES:
 		return ARCHETYPE_NORDIC
 	return REGION_ARCHETYPES.get(port.region, ARCHETYPE_ATLANTIC)
 

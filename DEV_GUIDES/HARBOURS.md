@@ -94,6 +94,26 @@ UN/LOCODE country and location codes, importance, region, island flag, tier,
 a one-line description), run it, run `build_harbours.py`, then the harbour and
 routing tests.
 
+### A wider world (I021)
+
+Sixteen more harbours (Dingle, Stornoway, Ísafjörður, Lunenburg, St. John's,
+Valletta, Symi, Essaouira, Dakar, Jamestown on St Helena, Cape Town, Zanzibar,
+Port Louis, Galle, Langkawi, Hobart) were added with
+`tools/navigation/add_i021_harbours.py`, which carries each position (GeoNames,
+cross-checked against UN/LOCODE) in the script itself. New sea areas:
+`north_america`, `west_africa`, `south_atlantic`, `indian_ocean`,
+`southeast_asia` (add a new area to `REGIONS` in `test_harbours.gd`, and give
+the fish that live there that area in `data/fishing/fishing.json`).
+
+**Every harbour also needs a look**: what it looks like beyond the guest
+pontoon, set in `data/harbours/harbour_looks.json` (`harbours`: id → look).
+Choose the look by the place's buildings, materials, land and climate, not by
+its continent; the looks and every harbour's choice are listed in
+`docs/iterations/i021/HARBOUR_LOOKS.md`. A harbour with a view of its own (like
+Copenhagen's Nyhavn) has `data/harbours/<id>.tres` with its landmark and is
+listed under `special` with one line saying why; it gets a brass star on the
+chart. The illustrations are painted by `tools/harbours/paint_harbour_looks.py`.
+
 ## 2. The gangplank and the shore
 
 Nothing per boat is needed. `ShoreAccess` (`src/harbour/shore_access.gd`)

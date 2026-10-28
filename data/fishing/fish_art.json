@@ -32,6 +32,22 @@
     122.0
    ]
   },
+  "bluefish": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    97.9,
+    104.8,
+    12
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    388,
+    122.0
+   ]
+  },
   "bonito": {
    "canvas": [
     512,
@@ -56,6 +72,22 @@
    "eye": [
     104.2,
     98.1,
+    12
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    384,
+    122.0
+   ]
+  },
+  "dentex": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    95.6,
+    94.5,
     12
    ],
    "kind": "fish",
@@ -96,6 +128,22 @@
     122.0
    ]
   },
+  "giant_trevally": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    92.4,
+    93.2,
+    13
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    384,
+    122.0
+   ]
+  },
   "gilthead_bream": {
    "canvas": [
     512,
@@ -109,6 +157,38 @@
    "kind": "fish",
    "tail_pivot": [
     376,
+    122.0
+   ]
+  },
+  "grouper": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    96.6,
+    97.4,
+    12
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    380,
+    122.0
+   ]
+  },
+  "halibut": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    78.4,
+    96.7,
+    10
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    388,
     122.0
    ]
   },
@@ -183,6 +263,38 @@
     122.0
    ]
   },
+  "pollack": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    97.8,
+    103.6,
+    13
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    390,
+    122.0
+   ]
+  },
+  "red_mullet": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    99.4,
+    98.9,
+    12
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    388,
+    122.0
+   ]
+  },
   "rusty_tin": {
    "canvas": [
     512,
@@ -254,12 +366,60 @@
     122.0
    ]
   },
+  "spanish_mackerel": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    68.8,
+    112.6,
+    10
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    400,
+    122.0
+   ]
+  },
+  "striped_bass": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    82.3,
+    104.9,
+    12
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    392,
+    122.0
+   ]
+  },
   "tangled_rope": {
    "canvas": [
     512,
     256
    ],
    "kind": "junk"
+  },
+  "wahoo": {
+   "canvas": [
+    512,
+    256
+   ],
+   "eye": [
+    52.5,
+    116.5,
+    9
+   ],
+   "kind": "fish",
+   "tail_pivot": [
+    404,
+    122.0
+   ]
   },
   "yellowfin": {
    "canvas": [

@@ -16,7 +16,9 @@ const COAST_NM := 3.0
 const REGIONS := ["baltic", "scandinavia", "north_sea", "british_isles", "channel", "biscay", "iberia_atlantic",
 	"mediterranean", "adriatic", "ionian", "aegean", "north_atlantic", "levant",
 	# Iteration 16: international harbours.
-	"atlantic_islands", "caribbean", "central_america", "pacific"]
+	"atlantic_islands", "caribbean", "central_america", "pacific",
+	# I021: A Wider, Warmer World.
+	"north_america", "west_africa", "south_atlantic", "indian_ocean", "southeast_asia"]
 
 var t: Node
 var catalog: PortCatalog

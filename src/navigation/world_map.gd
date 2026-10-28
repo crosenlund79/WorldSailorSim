@@ -502,7 +502,7 @@ func _refresh_dream() -> void:
 		return
 	_set_text(_selection_title, "%s, %s" % [selected.display_name, selected.country])
 	var visited := Loc.t("Visited") if log.has_visited(selected.id) else Loc.t("Not visited yet")
-	_set_text(_selection_details, Loc.t("%s\n%s\n%s  ·  %s  ·  %d nm in a straight line") % [selected.description,
+	_set_text(_selection_details, Loc.t("%s\n%s\n%s  ·  %s  ·  %d nm in a straight line") % [selected.get_description() + _special_line(selected.id),
 		HarbourFacilities.describe_services(selected.id), visited,
 		GeoMath.format_position(selected.get_geo_position()),
 		roundi(GeoMath.distance_nm(GameSession.get_vessel_position(), selected.get_geo_position()))])
@@ -887,7 +887,7 @@ func _refresh() -> void:
 		# Captain's Chartroom: a compact summary (the services by name and the
 		# distance); the explanations and the coordinates are in the tooltip.
 		var away := roundi(GeoMath.distance_nm(GameSession.get_vessel_position(), selected.get_geo_position()))
-		_set_text(_selection_details, Loc.t("%s\n%s\n%d nm away in a straight line") % [selected.description,
+		_set_text(_selection_details, Loc.t("%s\n%s\n%d nm away in a straight line") % [selected.get_description() + _special_line(selected.id),
 			HarbourFacilities.describe_services(selected.id, true), away])
 		_selection_details.tooltip_text = Loc.t("%s\n%s  ·  %d nm in a straight line") % [HarbourFacilities.describe_services(selected.id),
 			GeoMath.format_position(selected.get_geo_position()), away]
@@ -1286,3 +1286,10 @@ func _build_wind_legend() -> void:
 		label.add_theme_font_size_override(&"font_size", 16)
 		bands.add_child(label)
 		lower = int(band[0]) if not is_inf(band[0]) else lower
+
+
+## A special harbour's line in the harbour details (I021): what makes it
+## special, in the current language; "" for any other harbour.
+static func _special_line(port_id: StringName) -> String:
+	var note := HarbourLooks.get_default().special_note(port_id)
+	return "\n" + Loc.t("Special harbour: %s") % note if note != "" else ""

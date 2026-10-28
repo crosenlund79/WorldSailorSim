@@ -317,7 +317,9 @@ func _test_log_panel() -> void:
 	_sail_to(&"kiel")
 	_sail_to(&"gothenburg")
 	await _settle()
-	t.check(Array(app.toasts.get_messages()).has("New harbour in the Captain's Log: Gothenburg (3 of %d visited)." % PortCatalog.get_default().ports.size()),
+	# (Gothenburg has a picture: the line is part of its Golden Harbour Moment card.)
+	var line := "New harbour in the Captain's Log: Gothenburg (3 of %d visited)." % PortCatalog.get_default().ports.size()
+	t.check(Array(app.toasts.get_messages()).filter(func(m: String) -> bool: return m.contains(line)).size() == 1,
 		"[log ui] a first visit is announced once, briefly (%s)" % [app.toasts.get_messages()])
 	_clear_toasts()
 	t.press_action(&"captains_log")

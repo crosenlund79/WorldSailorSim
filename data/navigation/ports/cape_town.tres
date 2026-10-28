@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"cape_town"
+display_name = "Cape Town"
+country = "South Africa"
+latitude = -33.9258
+longitude = 18.4232
+description = "Cape Town, beneath Table Mountain, the harbour for sailors on the long way round the Cape of Good Hope."
+importance = 1
+region = "south_atlantic"
+island = false
+source = "GeoNames Cape Town (-33.9258, 18.4232), cities1000; UN/LOCODE ZA CPT 3355S 01825E; I021"

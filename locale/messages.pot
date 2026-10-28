@@ -3,6 +3,374 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: Little Captain's Hat\n"
 
+#: data/academy/academy.json
+msgid "A Game Developer at Sea"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "A call on the VHF radio. Help if you can; some calls bring a forecast."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "A fish on the line: press {reel_in} and reel with good timing."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "A long passage: the passage panel lets hours pass quickly, and the voyage map shows the way."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "A weather warning stops fast time. The chart's Weather tab shows what is coming along the course."
+msgstr ""
+
+#: data/academy/academy.json src/ui/boat_care_menu.gd:137
+msgid "Aboard"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Anchoring"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "At anchor. If the anchor drags the alarm sounds; the windlass raises it again."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Below deck: things that light up can be used with {interact}. The wheel ({action_wheel}) has sleep, provisions, postcards and your little game."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Boats"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Click a harbour nearby and plan a course to it."
+msgstr ""
+
+#: data/academy/academy.json src/ui/hud.gd:188
+msgid "Controls"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Cook at the galley stove in the cabin; a meal takes a little time. Make coffee, carry the mug, and set it in the cup holder on deck."
+msgstr ""
+
+#: data/academy/academy.json src/ui/difficulty_menu.gd:13
+msgid "Difficulty"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Each harbour offers its own services: a grocery (food, water, a new hat, lures and the fishmonger), a boatyard (boat care, haul-out, chandlery, sailmaker and boats for sale) and Go Ashore. The arrival card says what is there."
+msgstr ""
+
+#: data/academy/academy.json src/boat/boat_area.gd:943
+msgid "Fishing"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Food and water"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Food and water are used every day, at sea and in harbour. The provisions locker in the cabin shows how many days are left; buy more at a grocery. The game warns you when stores run low."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Getting started"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Go back aboard and choose Set sail on the wheel."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Go on deck, open the chart, choose a harbour and plan a course, then set sail. Time runs while you sail: the buttons at the top of the screen pause it or make it run 5 or 20 times faster. The boat follows the course by itself; you can sleep, fish or cook on the way, and anything important will stop time and tell you."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Go on deck: walk to the companionway and press {interact}, or choose Go on deck on the wheel."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Harbour services"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "In harbour"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "In harbour the work station in the cabin offers remote work for pay by the hour. Voyages, new harbours, objectives, postcards and your little game earn renown; publish a travel update in harbour to share it, which also earns a little money."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "In harbour: services differ from port to port. The arrival card said what is here; the work station pays for remote work while moored."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "In the cabin, choose Work on your little game on the wheel. Pick a task (2 to 4 hours), answer its small question and work; milestones fill the devlog and earn renown, and the release brings the first sales. An interrupted session keeps the hours worked."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "In the cabin, choose Write a postcard on the wheel. Pick what it shows (harbours, catches, your companion, voyages, weather and evening light), the words and the layout, then make and publish it: it takes about two hours. Each subject earns renown once; every card goes in the scrapbook."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Let time run"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Life aboard"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Long passages"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Make it home on the cabin's wheel lets you place cabin things you have bought; the framed world map lets you dream of voyages and plan one from it."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Making the cabin home"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Mind the hat: strong wind on deck can blow it away. {captains_hat} takes it off."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Money, work and renown"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Night falls. The berth in the cabin is a fine place to sleep; anything important will wake you."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "On long passages the passage panel lets hours pass quickly while the voyage map shows the boat crossing the sea. Everything that would stop time still does."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Open the chart"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Open the chart at the navigation table or from the wheel. Click a harbour (or search for one) and plan a course; drag the course line to add a waypoint, and select a waypoint and press {delete_waypoint} to remove it. The tabs show the course, the weather along it and the details. Zoom with {map_zoom_in} and {map_zoom_out}."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Open the chart: Charts on the wheel, or the navigation table in the cabin."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Open the menu with {pause} to save in one of three slots or load. Aboard, {quicksave} quicksaves and {quickload} loads the quicksave."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Other ships sail too. If one is on a collision course a warning sounds and the radar opens by itself while the risk lasts. A call on the VHF radio can ask for help or bring a forecast."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Plan a course"
+msgstr ""
+
+#: data/academy/academy.json src/ui/postcard_menu.gd:28
+msgid "Postcards from the Sea"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Press {action_wheel} to open the action wheel. It shows what you can do here. Close it with {pause}."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Press {captains_log} to open the Captain's Log, then close it again."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Relaxed, Standard or Seasoned Captain changes starting money, how fast stores are used, wear, weather damage, costs and the rescue fee; the weather itself is the same. Change it any time from the menu: it counts from then on."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Renown earned! Publish a travel update in harbour to share it (the work station or the Captain's Log)."
+msgstr ""
+
+#: data/academy/academy.json src/navigation/vessel_profile.gd:21 src/ui/sailing_panel.gd:47
+msgid "Sailing"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Saving and loading"
+msgstr ""
+
+#: data/academy/academy.json src/app/app.gd:565 src/app/app.gd:665 src/navigation/world_map.tscn:343
+msgid "Set sail"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. On deck, {chartplotter} shows the chart plotter, and the wheel offers sailing details and the radar. {sail_trim} opens sail trim: well-trimmed sails are faster."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Set the rod on deck from its holder or the wheel and choose a lure. When a fish bites a bell rings: press {reel_in} and reel it in with good timing. Keep fish in the cool box, release them, sell them at the fishmonger or cook them."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Settings and tips"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Settings has the volumes (also the wind on its own), display, interface size and light, language and accessibility. Tips can be turned off there. This Handbook is always here: {handbook} or Captain's Handbook in the menu."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Sleep in the berth for 1 to 12 hours. The world goes on while you sleep, and anything important wakes you."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Sleeping"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Stores are running low: a grocery in harbour sells food and water."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The Captain's Log"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The Captain's hat"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The action wheel"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The boat sails the course by itself. Try 5× or 20× at the top of the screen; anything important stops time again."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The boat's condition and rescue"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The cabin"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The cabin has your berth (sleep), the navigation table (the chart), the provisions locker, the work station, the galley stove, the coffee table, the hat hook, the framed world map and the trophy board. Things you can use light up when you are close; press {interact}."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The chart and planning a course"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The chart: click a harbour to plan a course; drag the line to add a waypoint. The tabs show the weather and the details."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The galley and coffee"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The hull, rig and engine wear with miles, time and weather. A boatyard can service and repair them and haul the boat out. If the boat is badly damaged at sea you are rescued and brought to harbour, for a fee."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "The world has one clock. The buttons at the top pause time or run it at 1, 5 or 20 times. On long passages a passage panel can run hours per second. Sleeping, working and the pastimes pass hours at once: the screen fades, the clock counts, and you come back at normal speed. Warnings, a fish on the line, the anchor alarm, traffic, a radio call and arriving all stop time early."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "This harbour has a boatyard: boat care, a chandlery, a sailmaker and boats for sale."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Time and speed"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Traffic, radar and radio"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Traffic: a ship on a collision course. The radar shows it until the risk has passed."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Underway"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Underway! {sail_trim} trims the sails, {chartplotter} shows the chart plotter, and the time buttons at the top make the passage go faster."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Underway, the windlass on the foredeck (or Anchor on the wheel) drops the anchor where the bottom allows. The anchor alarm sounds if it drags. On the chart at the navigation table you can select a waypoint and press {anchorage_key} to make it an anchorage: the boat stops there and asks whether to anchor or sail on."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Up on deck"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Walk about"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Walk around the boat with {move}."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Walk with {move}. Press {interact} next to something that lights up to use it. {action_wheel} opens the action wheel with what you can do where you stand. {captains_log} opens the Captain's Log, {captains_hat} puts your hat on or takes it off, and {pause} opens the menu (and closes any window). {handbook} opens this Handbook."
+msgstr ""
+
+#: data/academy/academy.json src/navigation/world_map.gd:143 src/navigation/world_map.gd:948
+msgid "Weather"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Weather and safety"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Well done, Captain: you are on your way. Everything else is in the Captain's Handbook ({handbook})."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Wind and weather change with time and place; the chart's Weather tab shows what is coming along your course. A weather warning stops fast time and sleep. Strong wind and storms wear the boat and can damage it."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "You start with your first boat. At a boatyard you can buy another boat for its price; boats you own stay yours, and you can move aboard any of them at a boatyard."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Your cat or dog lives aboard, follows you between cabin and deck and naps where it likes. Walk up and press {interact} to pet it."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Your companion"
+msgstr ""
+
+#: data/academy/academy.json src/app/app.gd:357
+msgid "Your first voyage"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "Your game"
+msgstr ""
+
+#: data/academy/academy.json
+msgid "{action_wheel} opens a wheel with what makes sense where you are: in the cabin sleep, the world map, the chart table, provisions, postcards and your little game; on deck the charts, the fishing rod and, underway, the chart plotter, sailing details, radar, sail trim and anchor. On/off items show a check mark."
+msgstr ""
+
+#: data/academy/academy.json
+msgid "{captains_hat} puts the hat on or takes it off. On deck in strong wind it can blow away: the game warns you first, and below deck or ashore it is safe. A lost hat can be replaced at a grocery in harbour."
+msgstr ""
+
 #: data/boat/equipment.json
 msgid "A bigger anchor on heavier chain. Holds about 5 knots more wind before dragging."
 msgstr ""
@@ -76,6 +444,10 @@ msgid "Atlantic bonito"
 msgstr ""
 
 #: data/fishing/fishing.json
+msgid "Atlantic halibut"
+msgstr ""
+
+#: data/fishing/fishing.json
 msgid "Blacktip reef shark"
 msgstr ""
 
@@ -84,7 +456,19 @@ msgid "Blue shark"
 msgstr ""
 
 #: data/fishing/fishing.json
+msgid "Bluefish"
+msgstr ""
+
+#: data/fishing/fishing.json
 msgid "Cod"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Common dentex"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Dusky grouper"
 msgstr ""
 
 #: data/fishing/fishing.json
@@ -93,6 +477,10 @@ msgstr ""
 
 #: data/fishing/fishing.json
 msgid "Garfish"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Giant trevally"
 msgstr ""
 
 #: data/fishing/fishing.json
@@ -116,11 +504,19 @@ msgid "Mahi-mahi"
 msgstr ""
 
 #: data/fishing/fishing.json
+msgid "Narrow-barred Spanish mackerel"
+msgstr ""
+
+#: data/fishing/fishing.json
 msgid "Old boot"
 msgstr ""
 
 #: data/fishing/fishing.json
 msgid "Perch"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Pollack"
 msgstr ""
 
 #: data/fishing/fishing.json
@@ -160,7 +556,19 @@ msgid "Spoon lure"
 msgstr ""
 
 #: data/fishing/fishing.json
+msgid "Striped bass"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Striped red mullet"
+msgstr ""
+
+#: data/fishing/fishing.json
 msgid "Tangled rope"
+msgstr ""
+
+#: data/fishing/fishing.json
+msgid "Wahoo"
 msgstr ""
 
 #: data/fishing/fishing.json
@@ -175,8 +583,88 @@ msgstr ""
 msgid "Nyhavn"
 msgstr ""
 
+#: data/harbours/essaouira.tres:9
+msgid "The Skala"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Aegean island harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Gabled harbour town"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Mediterranean harbour town"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Nordic timber harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Stone harbour of the Atlantic coast"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Stone town harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Tropical harbour town"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Tropical island harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "Volcanic island harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival among the tiers of neoclassical houses at Gialos"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival at Nyhavn's painted harbour houses"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival at the red waterfront of the old fishing town"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival below the Skala, the old sea bastion"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival beneath the bastions of Grand Harbour"
+msgstr ""
+
+#: data/harbours/harbour_looks.json
+msgid "an illustrated arrival in Jamestown's valley between the cliffs"
+msgstr ""
+
+#: data/harbours/lunenburg.tres:9
+msgid "Lunenburg waterfront"
+msgstr ""
+
+#: data/harbours/st_helena.tres:9
+msgid "Jamestown"
+msgstr ""
+
+#: data/harbours/symi.tres:9
+msgid "Gialos"
+msgstr ""
+
 #: data/harbours/trades/trades.json
 msgid "A gimballed brass lamp. It does not light the cabin much, but it makes it cosy."
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "A jar of smooth green and blue sea glass, picked up on beaches along the way."
 msgstr ""
 
 #: data/harbours/trades/trades.json
@@ -192,6 +680,14 @@ msgid "A short shelf with a fiddle rail and a row of well-thumbed sea stories."
 msgstr ""
 
 #: data/harbours/trades/trades.json
+msgid "A small brass ship's barometer. The needle says what the sky is about to do."
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "A small model sloop on a wooden stand, rigged with real thread."
+msgstr ""
+
+#: data/harbours/trades/trades.json
 msgid "A soft sea blue, cut by the same pattern. Purely a look: the sails draw exactly as before."
 msgstr ""
 
@@ -200,11 +696,23 @@ msgid "A string of small signal flags. Read them right and they say \"welcome ab
 msgstr ""
 
 #: data/harbours/trades/trades.json
+msgid "An old brass compass in a gimballed bowl, fixed to the bulkhead. Purely for show: the real one is at the helm."
+msgstr ""
+
+#: data/harbours/trades/trades.json
 msgid "Basil, thyme and a stubborn chive, in a pot that sits snug against the hull."
 msgstr ""
 
 #: data/harbours/trades/trades.json
 msgid "Braided rug"
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "Brass barometer"
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "Brass compass"
 msgstr ""
 
 #: data/harbours/trades/trades.json
@@ -221,6 +729,14 @@ msgstr ""
 
 #: data/harbours/trades/trades.json
 msgid "Harbour blue"
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "Jar of sea glass"
+msgstr ""
+
+#: data/harbours/trades/trades.json
+msgid "Model ship"
 msgstr ""
 
 #: data/harbours/trades/trades.json
@@ -245,6 +761,10 @@ msgstr ""
 
 #: data/harbours/trades/trades.json
 msgid "The warm red-brown of the old working boats. Purely a look: the sails draw exactly as before."
+msgstr ""
+
+#: data/harbours/valletta.tres:9
+msgid "Grand Harbour bastions"
 msgstr ""
 
 #: data/navigation/canals.json
@@ -677,6 +1197,15 @@ msgctxt "place"
 msgid "Cannes"
 msgstr ""
 
+#: data/navigation/ports/cape_town.tres:12
+msgid "Cape Town, beneath Table Mountain, the harbour for sailors on the long way round the Cape of Good Hope."
+msgstr ""
+
+#: data/navigation/ports/cape_town.tres:8
+msgctxt "place"
+msgid "Cape Town"
+msgstr ""
+
 #: data/navigation/ports/capri.tres:12
 msgid "Capri, an island harbour on the Mediterranean."
 msgstr ""
@@ -803,6 +1332,15 @@ msgctxt "place"
 msgid "Cuxhaven"
 msgstr ""
 
+#: data/navigation/ports/dakar.tres:12
+msgid "Dakar, near the westernmost point of Africa, where painted pirogues come in beside a busy commercial port."
+msgstr ""
+
+#: data/navigation/ports/dakar.tres:8
+msgctxt "place"
+msgid "Dakar"
+msgstr ""
+
 #: data/navigation/ports/den_helder.tres:12
 msgid "Den Helder, a harbour on the North Sea."
 msgstr ""
@@ -819,6 +1357,15 @@ msgstr ""
 #: data/navigation/ports/dieppe.tres:8
 msgctxt "place"
 msgid "Dieppe"
+msgstr ""
+
+#: data/navigation/ports/dingle.tres:12
+msgid "Dingle, a small fishing harbour at the head of its bay in Ireland's far south-west, with painted shopfronts above the quay."
+msgstr ""
+
+#: data/navigation/ports/dingle.tres:8
+msgctxt "place"
+msgid "Dingle"
 msgstr ""
 
 #: data/navigation/ports/douglas.tres:12
@@ -873,6 +1420,15 @@ msgstr ""
 #: data/navigation/ports/ebeltoft.tres:8
 msgctxt "place"
 msgid "Ebeltoft"
+msgstr ""
+
+#: data/navigation/ports/essaouira.tres:12
+msgid "Essaouira on Morocco's Atlantic coast: blue fishing boats beneath the old sea bastion, and gulls over the Skala."
+msgstr ""
+
+#: data/navigation/ports/essaouira.tres:8
+msgctxt "place"
+msgid "Essaouira"
 msgstr ""
 
 #: data/navigation/ports/faaborg.tres:12
@@ -936,6 +1492,15 @@ msgstr ""
 #: data/navigation/ports/funchal.tres:8
 msgctxt "place"
 msgid "Funchal"
+msgstr ""
+
+#: data/navigation/ports/galle.tres:12
+msgid "Galle, Sri Lanka, beside the ramparts of its old fort, on the sea road across the Indian Ocean."
+msgstr ""
+
+#: data/navigation/ports/galle.tres:8
+msgctxt "place"
+msgid "Galle"
 msgstr ""
 
 #: data/navigation/ports/gdynia.tres:12
@@ -1055,6 +1620,15 @@ msgctxt "place"
 msgid "Heraklion"
 msgstr ""
 
+#: data/navigation/ports/hobart.tres:12
+msgid "Hobart, Tasmania, where old sandstone warehouses line the docks below Mount Wellington."
+msgstr ""
+
+#: data/navigation/ports/hobart.tres:8
+msgctxt "place"
+msgid "Hobart"
+msgstr ""
+
 #: data/navigation/ports/honningsvag.tres:12
 msgid "Honningsvåg, an island harbour on the Norwegian coast."
 msgstr ""
@@ -1116,6 +1690,15 @@ msgstr ""
 #: data/navigation/ports/ijmuiden.tres:8
 msgctxt "place"
 msgid "IJmuiden"
+msgstr ""
+
+#: data/navigation/ports/isafjordur.tres:12
+msgid "Ísafjörður, a fishing town on a sandspit in the fjords of Iceland's north-west, under steep mountains."
+msgstr ""
+
+#: data/navigation/ports/isafjordur.tres:8
+msgctxt "place"
+msgid "Ísafjörður"
 msgstr ""
 
 #: data/navigation/ports/izmir.tres:12
@@ -1289,6 +1872,15 @@ msgctxt "place"
 msgid "Lagos"
 msgstr ""
 
+#: data/navigation/ports/langkawi.tres:12
+msgid "Kuah on Langkawi, Malaysia, among green limestone islands at the northern entrance of the Strait of Malacca."
+msgstr ""
+
+#: data/navigation/ports/langkawi.tres:8
+msgctxt "place"
+msgid "Langkawi"
+msgstr ""
+
 #: data/navigation/ports/larnaca.tres:12
 msgid "Larnaca, an island harbour in the eastern Mediterranean."
 msgstr ""
@@ -1449,6 +2041,15 @@ msgstr ""
 #: data/navigation/ports/lulea.tres:8
 msgctxt "place"
 msgid "Luleå"
+msgstr ""
+
+#: data/navigation/ports/lunenburg.tres:12
+msgid "Lunenburg, Nova Scotia, an old fishing town of painted wooden houses climbing the hill above its red waterfront sheds."
+msgstr ""
+
+#: data/navigation/ports/lunenburg.tres:8
+msgctxt "place"
+msgid "Lunenburg"
 msgstr ""
 
 #: data/navigation/ports/malaga.tres:12
@@ -1802,6 +2403,15 @@ msgctxt "place"
 msgid "Ponta Delgada"
 msgstr ""
 
+#: data/navigation/ports/port_louis.tres:12
+msgid "Port Louis, Mauritius, a busy harbour town between green mountains and the Indian Ocean."
+msgstr ""
+
+#: data/navigation/ports/port_louis.tres:8
+msgctxt "place"
+msgid "Port Louis"
+msgstr ""
+
 #: data/navigation/ports/port_of_spain.tres:12
 msgid "Port of Spain, Trinidad, at the southern end of the Antilles."
 msgstr ""
@@ -2045,6 +2655,15 @@ msgctxt "place"
 msgid "St. George's"
 msgstr ""
 
+#: data/navigation/ports/st_helena.tres:12
+msgid "Jamestown, St Helena: one long street in a narrow valley between dark volcanic cliffs, alone in the South Atlantic."
+msgstr ""
+
+#: data/navigation/ports/st_helena.tres:8
+msgctxt "place"
+msgid "Jamestown"
+msgstr ""
+
 #: data/navigation/ports/st_helier.tres:12
 msgid "St Helier, an island harbour on the English Channel."
 msgstr ""
@@ -2052,6 +2671,15 @@ msgstr ""
 #: data/navigation/ports/st_helier.tres:8
 msgctxt "place"
 msgid "St Helier"
+msgstr ""
+
+#: data/navigation/ports/st_johns.tres:12
+msgid "St. John's, Newfoundland, reached through the narrow cliffs of the Narrows, with rows of colourful wooden houses above the harbour."
+msgstr ""
+
+#: data/navigation/ports/st_johns.tres:8
+msgctxt "place"
+msgid "St. John's"
 msgstr ""
 
 #: data/navigation/ports/st_peter_port.tres:12
@@ -2079,6 +2707,15 @@ msgstr ""
 #: data/navigation/ports/stege.tres:8
 msgctxt "place"
 msgid "Stege"
+msgstr ""
+
+#: data/navigation/ports/stornoway.tres:12
+msgid "Stornoway on the Isle of Lewis, the little capital of the Outer Hebrides, where ferries and fishing boats share the inner harbour."
+msgstr ""
+
+#: data/navigation/ports/stornoway.tres:8
+msgctxt "place"
+msgid "Stornoway"
 msgstr ""
 
 #: data/navigation/ports/stromstad.tres:12
@@ -2142,6 +2779,15 @@ msgstr ""
 #: data/navigation/ports/swinoujscie.tres:8
 msgctxt "place"
 msgid "Świnoujście"
+msgstr ""
+
+#: data/navigation/ports/symi.tres:12
+msgid "Symi, a small island harbour in the Dodecanese, ringed by tiers of pastel neoclassical houses."
+msgstr ""
+
+#: data/navigation/ports/symi.tres:8
+msgctxt "place"
+msgid "Symi"
 msgstr ""
 
 #: data/navigation/ports/syracuse.tres:12
@@ -2241,6 +2887,15 @@ msgstr ""
 #: data/navigation/ports/vaasa.tres:8
 msgctxt "place"
 msgid "Vaasa"
+msgstr ""
+
+#: data/navigation/ports/valletta.tres:12
+msgid "Valletta, Malta, where honey-coloured bastions rise straight out of the water of Grand Harbour."
+msgstr ""
+
+#: data/navigation/ports/valletta.tres:8
+msgctxt "place"
+msgid "Valletta"
 msgstr ""
 
 #: data/navigation/ports/venice.tres:12
@@ -2369,6 +3024,15 @@ msgctxt "place"
 msgid "Zakynthos"
 msgstr ""
 
+#: data/navigation/ports/zanzibar.tres:12
+msgid "Zanzibar's Stone Town, where dhows lie off coral-stone houses with carved wooden doors."
+msgstr ""
+
+#: data/navigation/ports/zanzibar.tres:8
+msgctxt "place"
+msgid "Zanzibar"
+msgstr ""
+
 #: data/navigation/ports/zeebrugge.tres:12
 msgid "Zeebrugge, a harbour on the North Sea."
 msgstr ""
@@ -2422,124 +3086,364 @@ msgstr ""
 msgid "South Funen Archipelago"
 msgstr ""
 
-#: data/navigation/world/land.json
-msgid "ARCTIC OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Azores"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Canary Islands"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Cape Verde"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Caribbean Sea"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Cook Islands"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Coral Sea"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Fiji"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "French Polynesia"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Galápagos"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Gulf of Mexico"
-msgstr ""
-
-#: data/navigation/world/land.json data/weather/wind_climate.json
-msgid "Hawaii"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "INDIAN OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Lesser Antilles"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Madeira"
-msgstr ""
-
-#: data/navigation/world/land.json data/weather/wind_climate.json
-msgid "Marquesas"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "NEW ZEALAND"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "NORTH AMERICA"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "NORTH ATLANTIC OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "NORTH PACIFIC OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "New Caledonia"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "SOUTH AMERICA"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "SOUTH ATLANTIC OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "SOUTH PACIFIC OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "SOUTHERN OCEAN"
-msgstr ""
-
-#: data/navigation/world/land.json data/weather/wind_climate.json
-msgid "Society Islands"
-msgstr ""
-
-#: data/navigation/world/land.json data/weather/weather_events.json
-msgid "Tasman Sea"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Tonga"
-msgstr ""
-
-#: data/navigation/world/land.json
-msgid "Tuamotu"
-msgstr ""
-
 #: data/navigation/world/world.json
 msgid "The world"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "A little further, and suddenly every storm is a good story rather than a bad day."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "A mystery update. Brave."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "A thousand words about the code"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Add a tiny feature"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Added the creak of the stairs, the wind at the gallery and a small tune on an accordion. The game feels like a place now."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Arrange the scene"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Balance the game"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Collect every seashell on the island"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Fix a funny bug"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Fog rolls in, the ships slow down, and the keeper has to light the fog bell too. It is harder now, but kind: nobody sinks, they only wait."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Found it: the tide pulled the ships home stern first. Fixed, with a small sigh of pride."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Hidden behind the menu buttons"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Juggle three lanterns"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Make the light reach a little further"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Make the ships faster in every weather"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Mysterious. Nobody can find the lighthouse."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Nothing at all: let them guess"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "On the rocks, a little to the left, with the sea in front"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Playtesters say the storms are too hard. What do you change?"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Prepare a small update"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Published Tiny Lighthouse 1.0 from a harbour café, with a slow connection and a fast heart. Kind messages are arriving. A few people even bought it."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Release: Tiny Lighthouse 1.0"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Remove storms completely"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Right in the middle, very large"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Ships to guide"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Short, clear and kind notes. Players will like that."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Sound and music"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Squalls and fog"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The hat is fine. The ships are not. The search continues."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The juggling is impressive, if rather off-topic."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The keeper walks"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The keeper waves. Ships wave back. Small, and exactly right."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The keeper's hat"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The lamp turns! It sweeps across the sea and every boat in the harbour blinks back. Tried it with the cabin lights off. Very pleased."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The light turns"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The little keeper can walk up the spiral stairs now. She stops at the top to look at the sea, which I did not program. I am choosing to call it a feature."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The moon's tide code"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The notes are longer than the game."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The sails are now a lovely blue. The ships still sail backwards."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The sails' colour"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The seashell counter now reaches 4,000. Perhaps too many shells."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The ships now zip about like dragonflies. Fun, but odd."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The ships sail backwards when the moon is full. Where do you look first?"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "The title screen breathes now: rocks, sea and a light that waits for you."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Three little ships now sail home if the light finds them in time. The cat watched the first one arrive and approved."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Tiny Lighthouse"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Very large indeed. It looks surprised."
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Wave at passing ships"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "What changed, in plain words, and a thank-you"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "What goes into the update notes?"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "What should the keeper be able to do next?"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Where should the lighthouse stand on the title screen?"
+msgstr ""
+
+#: data/pastimes/game_dev.json
+msgid "Without storms it is calm. Perhaps a little too calm."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "%s behind us, %s ahead. And then we arrived."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "%s to %s: another passage in the log."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "%s: worth every mile to get here."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "A catch"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "A harbour"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "A voyage"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Another day ends softly at %s."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Banner"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Caught today: a %s. Supper is sorted."
+msgstr ""
+
+#: data/pastimes/postcards.json src/ui/settings_menu.gd:20
+msgid "Classic"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Evening light"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Every voyage is better with a friend aboard."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "First mate, on watch (asleep)."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "From %s to %s, and the sea was kind."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Hello from %s!"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Lesson of the day: respect %s."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Look what came up on the line: a %s!"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Moored in %s. The kettle is on."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "One %s, one very happy captain."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Our companion"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Snapshot"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Sunset at %s. Nothing to add."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "The light at %s tonight."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "The real captain of this boat."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "There was %s out there. Glad to be in port."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "We met %s on the way. The boat held, and so did we."
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "Weather we met"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "a storm"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "heavy weather"
+msgstr ""
+
+#: data/pastimes/postcards.json
+msgid "rough weather"
+msgstr ""
+
+#: data/progression/difficulty.json
+msgid "Demanding seamanship: less money to start with, the crew eats and drinks more, the boat wears faster and takes heavy weather harder, harbour costs and the rescue fee are higher. The weather itself is the same."
+msgstr ""
+
+#: data/progression/difficulty.json
+msgid "Forgiving: more money to start with, food and water last longer, the boat wears more slowly, harbour costs and the rescue fee are lower."
+msgstr ""
+
+#: data/progression/difficulty.json
+msgid "Relaxed"
+msgstr ""
+
+#: data/progression/difficulty.json
+msgid "Seasoned Captain"
+msgstr ""
+
+#: data/progression/difficulty.json src/ui/boat_care_view.gd:50
+msgid "Standard"
+msgstr ""
+
+#: data/progression/difficulty.json
+msgid "The intended balance: the game as it was designed."
 msgstr ""
 
 #: data/progression/objectives.json
@@ -2859,6 +3763,10 @@ msgid "Southern Ocean, south of Africa and Australia"
 msgstr ""
 
 #: data/weather/weather_events.json
+msgid "Tasman Sea"
+msgstr ""
+
+#: data/weather/weather_events.json
 msgid "Western Mediterranean"
 msgstr ""
 
@@ -2959,6 +3867,10 @@ msgid "Gulf of Finland"
 msgstr ""
 
 #: data/weather/wind_climate.json
+msgid "Hawaii"
+msgstr ""
+
+#: data/weather/wind_climate.json
 msgid "Iberia inland"
 msgstr ""
 
@@ -2976,6 +3888,10 @@ msgstr ""
 
 #: data/weather/wind_climate.json
 msgid "Ligurian Sea"
+msgstr ""
+
+#: data/weather/wind_climate.json
+msgid "Marquesas"
 msgstr ""
 
 #: data/weather/wind_climate.json
@@ -3012,6 +3928,10 @@ msgstr ""
 
 #: data/weather/wind_climate.json
 msgid "Scandinavia inland"
+msgstr ""
+
+#: data/weather/wind_climate.json
+msgid "Society Islands"
 msgstr ""
 
 #: data/weather/wind_climate.json
@@ -3190,424 +4110,516 @@ msgstr ""
 msgid "Too close to the shore for the boat: keep a little further off."
 msgstr ""
 
-#: src/app/app.gd:1025
+#: src/app/app.gd:1048
+msgid "Fish on! Press R to reel in (the rod is on the stern rail)."
+msgstr ""
+
+#: src/app/app.gd:1060
+msgid "The fish got away before you reached the rod. The line is still out."
+msgstr ""
+
+#: src/app/app.gd:1086
 msgid "While cooking: %s"
 msgstr ""
 
-#: src/app/app.gd:1025
+#: src/app/app.gd:1086
 msgid "a fish is on the line!"
 msgstr ""
 
-#: src/app/app.gd:1026
+#: src/app/app.gd:1087
 msgid "a weather warning came in."
 msgstr ""
 
-#: src/app/app.gd:1026
+#: src/app/app.gd:1087
 msgid "the anchor alarm went."
 msgstr ""
 
-#: src/app/app.gd:1046 src/app/app.gd:502
+#: src/app/app.gd:1107 src/app/app.gd:563
 msgid "Sailing on along the course."
 msgstr ""
 
-#: src/app/app.gd:1096 src/core/simulation.gd:562
+#: src/app/app.gd:1157 src/app/app.gd:1170 src/core/simulation.gd:562
 msgid "Remote work needs a steady connection: moor in a harbour first."
 msgstr ""
 
-#: src/app/app.gd:1113
+#: src/app/app.gd:1179
+msgid "Interrupted: %s."
+msgstr ""
+
+#: src/app/app.gd:1179
 msgid "You worked %d h and earned %s. It is %s. Funds: %s.%s"
 msgstr ""
 
-#: src/app/app.gd:1115 src/app/app.gd:735
+#: src/app/app.gd:1181 src/app/app.gd:796
 msgid "  Time is still paused."
 msgstr ""
 
-#: src/app/app.gd:1158
+#: src/app/app.gd:1206
+msgid "Interrupted: %s"
+msgstr ""
+
+#: src/app/app.gd:1226
+msgid "a weather warning came in"
+msgstr ""
+
+#: src/app/app.gd:1228
+msgid "the bell on the rod rang: a fish is on"
+msgstr ""
+
+#: src/app/app.gd:1230
+msgid "the anchor alarm went"
+msgstr ""
+
+#: src/app/app.gd:1232
+msgid "the boat has arrived"
+msgstr ""
+
+#: src/app/app.gd:1234
+msgid "the boat is at the anchorage"
+msgstr ""
+
+#: src/app/app.gd:1236
+msgid "a traffic warning"
+msgstr ""
+
+#: src/app/app.gd:1238
+msgid "a call on the radio"
+msgstr ""
+
+#: src/app/app.gd:1240
+msgid "the rescue came"
+msgstr ""
+
+#: src/app/app.gd:1267
+msgid "Your postcard is published and in the scrapbook. It is %s."
+msgstr ""
+
+#: src/app/app.gd:1269
+msgid "Interrupted after %s: %s. The postcard is kept; finish it later from the cabin (Q, Write a postcard). It is %s."
+msgstr ""
+
+#: src/app/app.gd:1297
+msgid "Interrupted after %s: %s. The hours worked count; go on later from the cabin. It is %s."
+msgstr ""
+
+#: src/app/app.gd:1302
+msgid "Milestone: %s!"
+msgstr ""
+
+#: src/app/app.gd:1304
+msgid "The first sales: %s."
+msgstr ""
+
+#: src/app/app.gd:1305
+msgid "It is %s."
+msgstr ""
+
+#: src/app/app.gd:1356 src/ui/harbour_moment.gd:75
 msgid "Arrived in %s."
 msgstr ""
 
-#: src/app/app.gd:1194
+#: src/app/app.gd:1394
 msgid "New harbour in the Captain's Log: %s (%d of %d visited)."
 msgstr ""
 
-#: src/app/app.gd:1207
+#: src/app/app.gd:1438
 msgid "Secret achievement: %s. %s  +%d renown"
 msgstr ""
 
-#: src/app/app.gd:1213
+#: src/app/app.gd:1444
 msgid "+%d renown: %s."
 msgstr ""
 
-#: src/app/app.gd:1245
+#: src/app/app.gd:1476
 msgid "%s %s A new one is sold at the harbour grocery store."
 msgstr ""
 
-#: src/app/app.gd:1327
+#: src/app/app.gd:1560
 msgid "Travel update published: %d renown earned you %s. Funds: %s."
 msgstr ""
 
-#: src/app/app.gd:1334 src/boat/boat_area.gd:113 src/boat/boat_area.gd:1268 src/boat/boat_area.gd:662
+#: src/app/app.gd:1567 src/boat/boat_area.gd:113 src/boat/boat_area.gd:1333 src/boat/boat_area.gd:727
 msgid "Interactable"
 msgstr ""
 
-#: src/app/app.gd:1338
+#: src/app/app.gd:1571
 msgid "Interaction areas: %s"
 msgstr ""
 
-#: src/app/app.gd:1359
+#: src/app/app.gd:1592
 msgid "The boatyard is only open while you are moored in harbour."
 msgstr ""
 
-#: src/app/app.gd:1428
+#: src/app/app.gd:1659
+msgid "Buy the %s?"
+msgstr ""
+
+#: src/app/app.gd:1660
+msgid "The %s costs %s; you have %s. It is yours for good, and you move aboard at once. Your other boats stay yours."
+msgstr ""
+
+#: src/app/app.gd:1661 src/ui/grocery_menu.gd:75
+msgid "Buy"
+msgstr ""
+
+#: src/app/app.gd:1674
 msgid "Welcome aboard the %s."
 msgstr ""
 
-#: src/app/app.gd:333
+#: src/app/app.gd:358
+msgid "Would you like a short First Voyage? A small card shows one step at a time, from walking about to setting sail, and you can skip it whenever you like. The Captain's Handbook (%s) is always there either way."
+msgstr ""
+
+#: src/app/app.gd:359
+msgid "Begin"
+msgstr ""
+
+#: src/app/app.gd:359
+msgid "Skip"
+msgstr ""
+
+#: src/app/app.gd:392
 msgid "There is no saved game to continue."
 msgstr ""
 
-#: src/app/app.gd:341
+#: src/app/app.gd:400
 msgid "Load this game?"
 msgstr ""
 
-#: src/app/app.gd:342 src/app/app.gd:410 src/app/app.gd:419
+#: src/app/app.gd:401 src/app/app.gd:469 src/app/app.gd:478
 msgid "Progress since your last save will be lost."
 msgstr ""
 
-#: src/app/app.gd:353
+#: src/app/app.gd:412
 msgid "Could not load %s. %s"
 msgstr ""
 
-#: src/app/app.gd:357
+#: src/app/app.gd:416
 msgid "Loaded %s."
 msgstr ""
 
-#: src/app/app.gd:375
+#: src/app/app.gd:434
 msgid "There is no game to save."
 msgstr ""
 
-#: src/app/app.gd:377
+#: src/app/app.gd:436
 msgid "You can quicksave aboard the boat."
 msgstr ""
 
-#: src/app/app.gd:379
+#: src/app/app.gd:438
 msgid "Close the open window to quicksave."
 msgstr ""
 
-#: src/app/app.gd:381
+#: src/app/app.gd:440
 msgid "Stop the Long Passage to quicksave."
 msgstr ""
 
-#: src/app/app.gd:396
+#: src/app/app.gd:455
 msgid "Quicksaved (F9 to load)."
 msgstr ""
 
-#: src/app/app.gd:398
+#: src/app/app.gd:457
 msgid "Quicksave failed (%s). The previous quicksave was kept."
 msgstr ""
 
-#: src/app/app.gd:406
+#: src/app/app.gd:465
 msgid "No quicksave yet. Press F5 aboard to quicksave."
 msgstr ""
 
-#: src/app/app.gd:409
+#: src/app/app.gd:468
 msgid "Load the quicksave?"
 msgstr ""
 
-#: src/app/app.gd:418
+#: src/app/app.gd:477
 msgid "Return to main menu?"
 msgstr ""
 
-#: src/app/app.gd:419
+#: src/app/app.gd:478
 msgid "Leave without saving"
 msgstr ""
 
-#: src/app/app.gd:440
+#: src/app/app.gd:499
 msgid "Import Next Harbor saves?"
 msgstr ""
 
-#: src/app/app.gd:441
+#: src/app/app.gd:500
 msgid "%d save from Next Harbor, the game's earlier name, will be copied into free slots. The originals stay where they are, and no slot that is in use is overwritten."
 msgid_plural "%d saves from Next Harbor, the game's earlier name, will be copied into free slots. The originals stay where they are, and no slot that is in use is overwritten."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/app/app.gd:442
+#: src/app/app.gd:501
 msgid "%d saves from Next Harbor, the game's earlier name, will be copied into free slots. The originals stay where they are, and no slot that is in use is overwritten."
 msgstr ""
 
-#: src/app/app.gd:442
+#: src/app/app.gd:501
 msgid "Import"
 msgstr ""
 
-#: src/app/app.gd:463
+#: src/app/app.gd:522
 msgid "The chartplotter shows on deck while underway."
 msgstr ""
 
-#: src/app/app.gd:476
+#: src/app/app.gd:535
 msgid "Go below"
 msgstr ""
 
-#: src/app/app.gd:476
+#: src/app/app.gd:535
 msgid "Go on deck"
 msgstr ""
 
-#: src/app/app.gd:479
+#: src/app/app.gd:538
 msgid "Reel in!"
 msgstr ""
 
-#: src/app/app.gd:481 src/navigation/world_map.tscn:353 src/ui/sleep_menu.tscn:42 src/ui/sleep_menu.tscn:96
+#: src/app/app.gd:540 src/navigation/world_map.tscn:353 src/ui/sleep_menu.tscn:42 src/ui/sleep_menu.tscn:96
 msgid "Sleep"
 msgstr ""
 
-#: src/app/app.gd:482
+#: src/app/app.gd:541
 msgid "World map"
 msgstr ""
 
-#: src/app/app.gd:483
+#: src/app/app.gd:542
 msgid "Chart table"
 msgstr ""
 
-#: src/app/app.gd:484 src/ui/provisions_menu.tscn:42
+#: src/app/app.gd:543 src/ui/provisions_menu.tscn:42
 msgid "Provisions"
 msgstr ""
 
-#: src/app/app.gd:485
+#: src/app/app.gd:544
 msgid "Make it home"
 msgstr ""
 
-#: src/app/app.gd:489
+#: src/app/app.gd:545
+msgid "Write a postcard"
+msgstr ""
+
+#: src/app/app.gd:546
+msgid "Work on your little game"
+msgstr ""
+
+#: src/app/app.gd:550
 msgid "Chart plotter"
 msgstr ""
 
-#: src/app/app.gd:491
+#: src/app/app.gd:552
 msgid "Sailing details"
 msgstr ""
 
-#: src/app/app.gd:493 src/ui/radar_panel.gd:47
+#: src/app/app.gd:554 src/ui/radar_panel.gd:47
 msgid "Radar"
 msgstr ""
 
-#: src/app/app.gd:496
+#: src/app/app.gd:557
 msgid "Trim sails"
 msgstr ""
 
-#: src/app/app.gd:498 src/boat/boat_area.gd:886 src/ui/anchor_menu.gd:63
+#: src/app/app.gd:559 src/boat/boat_area.gd:951 src/ui/anchor_menu.gd:63
 msgid "Anchor"
 msgstr ""
 
-#: src/app/app.gd:500
+#: src/app/app.gd:561
 msgid "Sail on from the anchorage"
 msgstr ""
 
-#: src/app/app.gd:504 src/app/app.gd:604 src/navigation/world_map.tscn:343
-msgid "Set sail"
-msgstr ""
-
-#: src/app/app.gd:505
+#: src/app/app.gd:566
 msgid "Charts"
 msgstr ""
 
-#: src/app/app.gd:507 src/boat/boat_area.gd:878 src/ui/fishing_menu.gd:55
+#: src/app/app.gd:568 src/boat/boat_area.gd:943 src/ui/fishing_menu.gd:55
 msgid "Fishing rod"
 msgstr ""
 
-#: src/app/app.gd:514
+#: src/app/app.gd:575
 msgid "Coffee in the holder"
 msgstr ""
 
-#: src/app/app.gd:514
+#: src/app/app.gd:575
 msgid "Set coffee down"
 msgstr ""
 
-#: src/app/app.gd:516
+#: src/app/app.gd:577
 msgid "Finish the coffee"
 msgstr ""
 
-#: src/app/app.gd:518
+#: src/app/app.gd:579
 msgid "Take your coffee"
 msgstr ""
 
-#: src/app/app.gd:519 src/ui/captains_log_menu.gd:29 src/ui/hud.gd:40
+#: src/app/app.gd:580 src/ui/captains_log_menu.gd:29 src/ui/hud.gd:40
 msgid "Captain's Log"
 msgstr ""
 
-#: src/app/app.gd:530
+#: src/app/app.gd:591
 msgid "At anchor the sails are down."
 msgstr ""
 
-#: src/app/app.gd:530
+#: src/app/app.gd:591
 msgid "Sail trim is for sailing: set sail first."
 msgstr ""
 
-#: src/app/app.gd:542
+#: src/app/app.gd:603
 msgid "In the cabin"
 msgstr ""
 
-#: src/app/app.gd:543 src/ui/chart_plotter.gd:219 src/ui/sailing_panel.gd:114
+#: src/app/app.gd:604 src/ui/chart_plotter.gd:229 src/ui/sailing_panel.gd:114
 msgid "At anchor"
 msgstr ""
 
-#: src/app/app.gd:543
+#: src/app/app.gd:604
 msgid "At the helm"
 msgstr ""
 
-#: src/app/app.gd:543
+#: src/app/app.gd:604
 msgid "On deck"
 msgstr ""
 
-#: src/app/app.gd:578
+#: src/app/app.gd:639
 msgid "Leave the chart?"
 msgstr ""
 
-#: src/app/app.gd:579
+#: src/app/app.gd:640
 msgid "Your course changes have not been applied. The current course stays as it is."
 msgstr ""
 
-#: src/app/app.gd:580
+#: src/app/app.gd:641
 msgid "Discard changes"
 msgstr ""
 
-#: src/app/app.gd:580 src/ui/settings_menu.gd:88
+#: src/app/app.gd:641 src/ui/settings_menu.gd:95
 msgid "Keep editing"
 msgstr ""
 
-#: src/app/app.gd:592
+#: src/app/app.gd:653
 msgid "Plot a course at the chart table before setting sail."
 msgstr ""
 
-#: src/app/app.gd:596
+#: src/app/app.gd:657
 msgid " via %d waypoint"
 msgid_plural " via %d waypoints"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/app/app.gd:602
+#: src/app/app.gd:663
 msgid "Set sail for %s?"
 msgstr ""
 
-#: src/app/app.gd:603
+#: src/app/app.gd:664
 msgid "%d nm%s, about %s with the expected wind (estimate).\n\n%s"
 msgstr ""
 
-#: src/app/app.gd:608
+#: src/app/app.gd:669
 msgid "Underway to %s. The autopilot holds the course."
 msgstr ""
 
-#: src/app/app.gd:617
+#: src/app/app.gd:678
 msgid "At anchor. Raise the anchor at the windlass on the foredeck before sailing on."
 msgstr ""
 
-#: src/app/app.gd:630
+#: src/app/app.gd:691
 msgid "%.1f kn possible under sail in %d kn of wind"
 msgstr ""
 
-#: src/app/app.gd:633
+#: src/app/app.gd:694
 msgid "Sailing conditions favourable (%s). Sails set%s, engine stopped."
 msgstr ""
 
-#: src/app/app.gd:634
+#: src/app/app.gd:695
 msgid " with the spinnaker"
 msgstr ""
 
-#: src/app/app.gd:636
+#: src/app/app.gd:697
 msgid "Becalmed or head to wind (%s). Sails furled, engine started."
 msgstr ""
 
-#: src/app/app.gd:637
+#: src/app/app.gd:698
 msgid "Insufficient sailing performance (%s). Sails furled, engine started."
 msgstr ""
 
-#: src/app/app.gd:640
+#: src/app/app.gd:701
 msgid "Light wind (%s). The sails stay up a little longer; the engine starts if it does not improve."
 msgstr ""
 
-#: src/app/app.gd:641
+#: src/app/app.gd:702
 msgid "Sails are drawing well (%s). No change needed."
 msgstr ""
 
-#: src/app/app.gd:643
+#: src/app/app.gd:704
 msgid "The wind is filling in (%s). The engine runs a little longer before the sails go up."
 msgstr ""
 
-#: src/app/app.gd:644
+#: src/app/app.gd:705
 msgid "Insufficient sailing performance (%s). Continuing under engine."
 msgstr ""
 
-#: src/app/app.gd:656
+#: src/app/app.gd:717
 msgid "Apply or discard your course changes before sleeping."
 msgstr ""
 
-#: src/app/app.gd:712
+#: src/app/app.gd:773
 msgid "Woken by a weather warning"
 msgstr ""
 
-#: src/app/app.gd:714
+#: src/app/app.gd:775
 msgid "Woken by the bell on the rod"
 msgstr ""
 
-#: src/app/app.gd:716
+#: src/app/app.gd:777
 msgid "Woken by the anchor alarm"
 msgstr ""
 
-#: src/app/app.gd:718
+#: src/app/app.gd:779
 msgid "Woken: the boat has arrived"
 msgstr ""
 
-#: src/app/app.gd:720
+#: src/app/app.gd:781
 msgid "Woken at the anchorage"
 msgstr ""
 
-#: src/app/app.gd:722
+#: src/app/app.gd:783
 msgid "Woken by a traffic warning"
 msgstr ""
 
-#: src/app/app.gd:724
+#: src/app/app.gd:785
 msgid "Woken by a call on the radio"
 msgstr ""
 
-#: src/app/app.gd:738
+#: src/app/app.gd:799
 msgid "You were woken after %s by a weather warning. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:740
+#: src/app/app.gd:801
 msgid "You were woken after %s by the bell on the rod: a fish is on! Go up to the rod. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:742
+#: src/app/app.gd:803
 msgid "You were woken after %s by the anchor alarm: %s. Go up to the windlass. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:745
+#: src/app/app.gd:806
 msgid "You were woken after %s: the boat has arrived. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:747
+#: src/app/app.gd:808
 msgid "You were woken after %s: we've arrived at our anchorage. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:749
+#: src/app/app.gd:810
 msgid "You were woken after %s by a traffic warning. Go up on deck and keep a lookout. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:751
+#: src/app/app.gd:812
 msgid "You were woken after %s by a call for assistance on the radio. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:753
+#: src/app/app.gd:814
 msgid "You slept %s. It is %s.%s"
 msgstr ""
 
-#: src/app/app.gd:872 src/ui/grocery_menu.gd:133
+#: src/app/app.gd:933 src/ui/grocery_menu.gd:141
 msgid "The grocery store is in harbour; you are at sea."
-msgstr ""
-
-#: src/app/app.gd:987
-msgid "Fish on! Press R to reel in (the rod is on the stern rail)."
-msgstr ""
-
-#: src/app/app.gd:999
-msgid "The fish got away before you reached the rod. The line is still out."
 msgstr ""
 
 #: src/art/artwork_resolver.gd:104
@@ -3666,39 +4678,39 @@ msgstr ""
 msgid "OneShot%d"
 msgstr ""
 
-#: src/boat/boat_area.gd:1001 src/boat/boat_lighting.gd:38 src/interaction/highlight_resolver.gd:25
+#: src/boat/boat_area.gd:1066 src/boat/boat_lighting.gd:38 src/interaction/highlight_resolver.gd:25
 msgid "Table"
 msgstr ""
 
-#: src/boat/boat_area.gd:1020
+#: src/boat/boat_area.gd:1085
 msgid "Your coffee"
 msgstr ""
 
-#: src/boat/boat_area.gd:1295
+#: src/boat/boat_area.gd:1360
 msgid "Captain's hat"
 msgstr ""
 
-#: src/boat/boat_area.gd:364
+#: src/boat/boat_area.gd:428
 msgid "Visual/BoomVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:364
+#: src/boat/boat_area.gd:428
 msgid "Visual/HeadSailVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:364
+#: src/boat/boat_area.gd:428
 msgid "Visual/MainSailVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:364
+#: src/boat/boat_area.gd:428
 msgid "Visual/RiggingVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:365
+#: src/boat/boat_area.gd:429
 msgid "Visual/SpinnakerVisual"
 msgstr ""
 
-#: src/boat/boat_area.gd:570
+#: src/boat/boat_area.gd:635
 msgid "The cup holder, just the size of a mug. Make a coffee in the galley."
 msgstr ""
 
@@ -3706,24 +4718,12 @@ msgstr ""
 msgid "Take the helm"
 msgstr ""
 
-#: src/boat/boat_area.gd:677
-msgid "GUEST PONTOON · %s"
-msgstr ""
-
 #: src/boat/boat_area.gd:68
 msgid "Check sail configuration"
 msgstr ""
 
-#: src/boat/boat_area.gd:706 src/harbour/harbour_facilities.gd:133
-msgid "Go ashore"
-msgstr ""
-
 #: src/boat/boat_area.gd:71
 msgid "Put on captain's hat"
-msgstr ""
-
-#: src/boat/boat_area.gd:719
-msgid "GO ASHORE"
 msgstr ""
 
 #: src/boat/boat_area.gd:72 src/boat/boat_area.gd:73
@@ -3734,55 +4734,63 @@ msgstr ""
 msgid "Look at the empty hat hook"
 msgstr ""
 
-#: src/boat/boat_area.gd:878
-msgid "Fishing"
+#: src/boat/boat_area.gd:742
+msgid "GUEST PONTOON · %s"
 msgstr ""
 
-#: src/boat/boat_area.gd:901
+#: src/boat/boat_area.gd:771 src/harbour/harbour_facilities.gd:133
+msgid "Go ashore"
+msgstr ""
+
+#: src/boat/boat_area.gd:784
+msgid "GO ASHORE"
+msgstr ""
+
+#: src/boat/boat_area.gd:966
 msgid "Cup holder"
 msgstr ""
 
-#: src/boat/boat_area.gd:914 src/ui/cooking_menu.gd:70
+#: src/boat/boat_area.gd:979 src/ui/cooking_menu.gd:72
 msgid "Cook"
 msgstr ""
 
-#: src/boat/boat_area.gd:914
+#: src/boat/boat_area.gd:979
 msgid "Cook a meal or make coffee"
 msgstr ""
 
-#: src/boat/boat_area.gd:924
+#: src/boat/boat_area.gd:989
 msgid "Look at the trophy board"
 msgstr ""
 
-#: src/boat/boat_area.gd:924
+#: src/boat/boat_area.gd:989
 msgid "Trophies"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:104
+#: src/boat/boat_lighting.gd:106
 msgid "Lighting"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:118 src/interaction/highlight_resolver.gd:26
+#: src/boat/boat_lighting.gd:120 src/interaction/highlight_resolver.gd:26
 msgid "Pedestal"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:118 src/interaction/highlight_resolver.gd:26
+#: src/boat/boat_lighting.gd:120 src/interaction/highlight_resolver.gd:26
 msgid "Tiller"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:118 src/interaction/highlight_resolver.gd:26
+#: src/boat/boat_lighting.gd:120 src/interaction/highlight_resolver.gd:26
 msgid "Wheel"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:250 src/water/water_life.gd:152
+#: src/boat/boat_lighting.gd:252 src/water/water_life.gd:154
 msgid "Hull"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:250
+#: src/boat/boat_lighting.gd:252
 msgid "Lifeline"
 msgstr ""
 
-#: src/boat/boat_lighting.gd:39 src/interaction/highlight_resolver.gd:24 src/ui/cooking_menu.gd:42
+#: src/boat/boat_lighting.gd:39 src/interaction/highlight_resolver.gd:24 src/ui/cooking_menu.gd:44
 msgid "Galley"
 msgstr ""
 
@@ -3794,19 +4802,19 @@ msgstr ""
 msgid "Desk"
 msgstr ""
 
-#: src/boat/provision_display.gd:102
+#: src/boat/provision_display.gd:105
 msgid "FOOD · WATER"
 msgstr ""
 
-#: src/boat/sail_rig.gd:118
+#: src/boat/sail_rig.gd:123
 msgid "Mast"
 msgstr ""
 
-#: src/boat/sail_rig.gd:119
+#: src/boat/sail_rig.gd:124
 msgid "Tack"
 msgstr ""
 
-#: src/boat/sail_rig.gd:121
+#: src/boat/sail_rig.gd:126
 msgid "Traveller"
 msgstr ""
 
@@ -4132,593 +5140,637 @@ msgstr ""
 msgid "Pet %s"
 msgstr ""
 
-#: src/core/game_session.gd:1050
-msgid "That work is not needed now."
+#: src/core/academy.gd:16
+msgid "Delete"
 msgstr ""
 
-#: src/core/game_session.gd:1053 src/core/game_session.gd:1096 src/core/game_session.gd:1673 src/core/game_session.gd:1991
-msgid "Not enough money: %s needed."
+#: src/core/academy.gd:18
+msgid "Down"
 msgstr ""
 
-#: src/core/game_session.gd:1083 src/core/game_session.gd:1201 src/core/game_session.gd:1325 src/core/game_session.gd:1340
+#: src/core/academy.gd:18 src/ui/hud.gd:41
+msgid "Esc"
+msgstr ""
+
+#: src/core/academy.gd:18
+msgid "Escape"
+msgstr ""
+
+#: src/core/academy.gd:18
+msgid "Left"
+msgstr ""
+
+#: src/core/academy.gd:18
+msgid "Right"
+msgstr ""
+
+#: src/core/game_session.gd:1092
+msgid "Boat care: %s could do with a service at the next boatyard. (Captain's Log, Boat tab)"
+msgstr ""
+
+#: src/core/game_session.gd:1105 src/core/game_session.gd:1253 src/core/game_session.gd:1371 src/core/game_session.gd:1495
 msgid "No game is running."
 msgstr ""
 
-#: src/core/game_session.gd:1086
+#: src/core/game_session.gd:1107
+msgid "Boatyard work is done while moored in harbour."
+msgstr ""
+
+#: src/core/game_session.gd:1115
+msgid "The %s is already in perfect condition."
+msgstr ""
+
+#: src/core/game_session.gd:1118
+msgid "The engine was serviced recently."
+msgstr ""
+
+#: src/core/game_session.gd:1121
+msgid "The rigging and sails are in fine order."
+msgstr ""
+
+#: src/core/game_session.gd:1124 src/core/game_session.gd:1223 src/core/game_session.gd:1266 src/core/game_session.gd:1843
+msgid "Not enough money: %s needed."
+msgstr ""
+
+#: src/core/game_session.gd:1165
+msgid "First haul-out: %s"
+msgstr ""
+
+#: src/core/game_session.gd:1220
+msgid "That work is not needed now."
+msgstr ""
+
+#: src/core/game_session.gd:1256
 msgid "Unknown equipment."
 msgstr ""
 
-#: src/core/game_session.gd:1088
+#: src/core/game_session.gd:1258
 msgid "The %s already has it."
 msgstr ""
 
-#: src/core/game_session.gd:1090
+#: src/core/game_session.gd:1260
 msgid "Equipment is fitted while moored in harbour."
 msgstr ""
 
-#: src/core/game_session.gd:1188
+#: src/core/game_session.gd:1358
 msgid "Publishing needs a steady connection: moor in a harbour first."
 msgstr ""
 
-#: src/core/game_session.gd:1190
+#: src/core/game_session.gd:1360
 msgid "No unpublished renown yet: sail, explore and complete objectives to earn some."
 msgstr ""
 
-#: src/core/game_session.gd:1245
+#: src/core/game_session.gd:1415
 msgid "Beyond Danish waters: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1246
+#: src/core/game_session.gd:1416
 msgid "Your first international destination: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1247
+#: src/core/game_session.gd:1417
 msgid "Your first offshore crossing: %d nm to %s"
 msgstr ""
 
-#: src/core/game_session.gd:1248
+#: src/core/game_session.gd:1418
 msgid "Across the Atlantic to %s"
 msgstr ""
 
-#: src/core/game_session.gd:1249
+#: src/core/game_session.gd:1419
 msgid "Into the Pacific: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1250
+#: src/core/game_session.gd:1420
 msgid "French Polynesia: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1251
+#: src/core/game_session.gd:1421
 msgid "New Zealand: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1327
+#: src/core/game_session.gd:1497
 msgid "You have no fishing rod."
 msgstr ""
 
-#: src/core/game_session.gd:1329
+#: src/core/game_session.gd:1499
 msgid "You have no %s left. The harbour grocery store sells lures."
 msgstr ""
 
-#: src/core/game_session.gd:1331
+#: src/core/game_session.gd:1501
 msgid "Too fast to troll: %.1f kn. A trolled lure only works below %d kn; wait for a gentler stretch or anchor."
 msgstr ""
 
-#: src/core/game_session.gd:1380
+#: src/core/game_session.gd:1550
 msgid "The line is skipping on the surface at %.1f kn: too fast to troll. Bring it in, or wait for a gentler stretch."
 msgstr ""
 
-#: src/core/game_session.gd:1469
+#: src/core/game_session.gd:1639
 msgid "Snap! The line broke and the %s went with the fish."
 msgstr ""
 
-#: src/core/game_session.gd:1471 src/ui/fishing_menu.gd:467
+#: src/core/game_session.gd:1641 src/ui/fishing_menu.gd:467
 msgid "It got away."
 msgstr ""
 
-#: src/core/game_session.gd:1481
+#: src/core/game_session.gd:1651
 msgid "Into the bin with it."
 msgstr ""
 
-#: src/core/game_session.gd:1527
+#: src/core/game_session.gd:1697
 msgid "Your first fish: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1529
+#: src/core/game_session.gd:1699
 msgid "A new species: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1531
+#: src/core/game_session.gd:1701
 msgid "An exceptional fish: %s, %.1f kg"
 msgstr ""
 
-#: src/core/game_session.gd:1536 src/ui/fishing_menu.gd:306 src/ui/fishmonger_menu.gd:31
+#: src/core/game_session.gd:1706 src/ui/fishing_menu.gd:306 src/ui/fishmonger_menu.gd:31
 msgid "%s, %.1f kg"
 msgstr ""
 
-#: src/core/game_session.gd:1539
+#: src/core/game_session.gd:1709
 msgid "%s. That's quite a catch. Better let this one swim free."
 msgstr ""
 
-#: src/core/game_session.gd:1541
+#: src/core/game_session.gd:1711
 msgid "%s. Not one to keep by your preferences, so it goes back."
 msgstr ""
 
-#: src/core/game_session.gd:1543
+#: src/core/game_session.gd:1713
 msgid "%s. The cool box is full, so it goes back."
 msgstr ""
 
-#: src/core/game_session.gd:1622
+#: src/core/game_session.gd:1792
 msgid "Fish can be sold at a harbour fishmonger, while moored."
 msgstr ""
 
-#: src/core/game_session.gd:1625
+#: src/core/game_session.gd:1795
 msgid "That fish is no longer aboard."
 msgstr ""
 
-#: src/core/game_session.gd:1647
+#: src/core/game_session.gd:1817
 msgid "The cool box is empty."
 msgstr ""
 
-#: src/core/game_session.gd:1670
+#: src/core/game_session.gd:1840
 msgid "Unknown lure."
 msgstr ""
 
-#: src/core/game_session.gd:1707
+#: src/core/game_session.gd:1877
 msgid "The anchor is dragging: see to it first."
 msgstr ""
 
-#: src/core/game_session.gd:1710
+#: src/core/game_session.gd:1880
 msgid "Too lively for the stove (wind %d kn). Wait for calmer water, or anchor somewhere sheltered."
 msgstr ""
 
-#: src/core/game_session.gd:1732
+#: src/core/game_session.gd:1902
 msgid "There is no fresh water left aboard for coffee."
 msgstr ""
 
-#: src/core/game_session.gd:1746
+#: src/core/game_session.gd:1916
 msgid "Coffee by the open hatch, the anchor chain quiet in the water. The day can wait a little."
 msgstr ""
 
-#: src/core/game_session.gd:1747
+#: src/core/game_session.gd:1917
 msgid "Morning coffee at anchor"
 msgstr ""
 
-#: src/core/game_session.gd:1752
+#: src/core/game_session.gd:1922
 msgid "A hot mug at anchor. The boat swings gently around it."
 msgstr ""
 
-#: src/core/game_session.gd:1753
+#: src/core/game_session.gd:1923
 msgid "A late coffee by the lamp. The anchorage is dark and still."
 msgstr ""
 
-#: src/core/game_session.gd:1756
+#: src/core/game_session.gd:1926
 msgid "A mug of coffee at the helm, held carefully. The miles go by a little easier."
 msgstr ""
 
-#: src/core/game_session.gd:1759
+#: src/core/game_session.gd:1929
 msgid "Coffee aboard while the harbour wakes around you."
 msgstr ""
 
-#: src/core/game_session.gd:1760
+#: src/core/game_session.gd:1930
 msgid "Coffee aboard. Halyards tap along the pontoon."
 msgstr ""
 
-#: src/core/game_session.gd:1799
+#: src/core/game_session.gd:1969
 msgid "Your hands are full: the hat and a mug of coffee. Put your hat back on (H) or set the coffee down first."
 msgstr ""
 
-#: src/core/game_session.gd:1806 src/core/game_session.gd:1828
+#: src/core/game_session.gd:1976 src/core/game_session.gd:1998
 msgid "You have no coffee in hand."
 msgstr ""
 
-#: src/core/game_session.gd:1809
+#: src/core/game_session.gd:1979
 msgid "You set your coffee in the cup holder by the helm."
 msgstr ""
 
-#: src/core/game_session.gd:1811
+#: src/core/game_session.gd:1981
 msgid "You set your coffee down on the table."
 msgstr ""
 
-#: src/core/game_session.gd:1818
+#: src/core/game_session.gd:1988
 msgid "There is no coffee here."
 msgstr ""
 
-#: src/core/game_session.gd:1820
+#: src/core/game_session.gd:1990
 msgid "Your hands are full. Put your hat back on (H) first."
 msgstr ""
 
-#: src/core/game_session.gd:1822
+#: src/core/game_session.gd:1992
 msgid "You pick up your coffee. Still warm enough."
 msgstr ""
 
-#: src/core/game_session.gd:1830
+#: src/core/game_session.gd:2000
 msgid "You finish your coffee. Lovely."
 msgstr ""
 
-#: src/core/game_session.gd:1850
+#: src/core/game_session.gd:2020
 msgid "Unknown dish."
 msgstr ""
 
-#: src/core/game_session.gd:1852
+#: src/core/game_session.gd:2022
 msgid "Needs %d fish from the cool box."
 msgstr ""
 
-#: src/core/game_session.gd:1854
+#: src/core/game_session.gd:2024
 msgid "Not enough food in the stores."
 msgstr ""
 
-#: src/core/game_session.gd:1892
+#: src/core/game_session.gd:2062
 msgid "Your first meal from the galley: %s"
 msgstr ""
 
-#: src/core/game_session.gd:1894
+#: src/core/game_session.gd:2064
 msgid "Supper from your own catch"
 msgstr ""
 
-#: src/core/game_session.gd:1898 src/core/game_session.gd:2458 src/ui/cooking_menu.gd:240
+#: src/core/game_session.gd:2068 src/core/game_session.gd:2628 src/ui/cooking_menu.gd:242
 msgid "A quiet evening at anchor. Fresh fish for supper."
 msgstr ""
 
-#: src/core/game_session.gd:1942
+#: src/core/game_session.gd:2112
 msgid "The anchor is already down."
 msgstr ""
 
-#: src/core/game_session.gd:1944
+#: src/core/game_session.gd:2114
 msgid "In harbour the boat is moored: anchoring is for the coast between harbours."
 msgstr ""
 
-#: src/core/game_session.gd:1946
+#: src/core/game_session.gd:2116
 msgid "There is no Magic Anchor aboard."
 msgstr ""
 
-#: src/core/game_session.gd:1952
+#: src/core/game_session.gd:2122
 msgid "Deep water (%s, %s): too deep for the normal anchor to reach the bottom. The Magic Anchor could hold here."
 msgstr ""
 
-#: src/core/game_session.gd:1959 src/ui/chandlery_menu.gd:19
+#: src/core/game_session.gd:2129 src/ui/chandlery_menu.gd:19
 msgid "Magic Anchor"
 msgstr ""
 
-#: src/core/game_session.gd:1960
+#: src/core/game_session.gd:2130
 msgid "Multi-purpose Deep Anchor"
 msgstr ""
 
-#: src/core/game_session.gd:1961
+#: src/core/game_session.gd:2131
 msgid "For waters where the charts grow uncertain. A little engineering, a little seamanship, and a suspicious amount of nautical magic. Somehow it always finds a useful piece of seabed. (A fictional anchor: the game translates real-world depths into game-code magic. Not real seamanship.)"
 msgstr ""
 
-#: src/core/game_session.gd:1984
+#: src/core/game_session.gd:2154
 msgid "Unknown item."
 msgstr ""
 
-#: src/core/game_session.gd:1988
+#: src/core/game_session.gd:2158
 msgid "You already have it."
 msgstr ""
 
-#: src/core/game_session.gd:2006
+#: src/core/game_session.gd:2176
 msgid "You do not have that yet: the chandlery sells it."
 msgstr ""
 
-#: src/core/game_session.gd:2032
+#: src/core/game_session.gd:2202
 msgid "Unknown sailcloth."
 msgstr ""
 
-#: src/core/game_session.gd:2036
+#: src/core/game_session.gd:2206
 msgid "The sails are already that cloth."
 msgstr ""
 
-#: src/core/game_session.gd:2055 src/core/game_session.gd:2076
+#: src/core/game_session.gd:2225 src/core/game_session.gd:2246
 msgid "The Magic Anchor is already aboard."
 msgstr ""
 
-#: src/core/game_session.gd:2114
+#: src/core/game_session.gd:2284
 msgid "Choose 3, 5 or 7 times the depth of chain."
 msgstr ""
 
-#: src/core/game_session.gd:2144
+#: src/core/game_session.gd:2314
 msgid "Your first anchorage"
 msgstr ""
 
-#: src/core/game_session.gd:2174
+#: src/core/game_session.gd:2344
 msgid "You stopped the anchor dragging"
 msgstr ""
 
-#: src/core/game_session.gd:2233
+#: src/core/game_session.gd:2403
 msgid "Another vessel answers the call. The radio goes quiet."
 msgstr ""
 
-#: src/core/game_session.gd:2234 src/core/game_session.gd:2238
+#: src/core/game_session.gd:2404 src/core/game_session.gd:2408
 msgid "The call has been answered by another vessel."
 msgstr ""
 
-#: src/core/game_session.gd:2236
+#: src/core/game_session.gd:2406
 msgid "Answered a call on channel 16: %s"
 msgstr ""
 
-#: src/core/game_session.gd:2246
+#: src/core/game_session.gd:2416
 msgid "You answer and heave to nearby. The crew of %s wave across the water. The coastguard expects to be there in about %d hours."
 msgstr ""
 
-#: src/core/game_session.gd:2249
+#: src/core/game_session.gd:2419
 msgid "You read them the forecast. \"Thank you, skipper. Fair winds.\""
 msgstr ""
 
-#: src/core/game_session.gd:2287
+#: src/core/game_session.gd:2457
 msgid "The boat is not waiting at an anchorage."
 msgstr ""
 
-#: src/core/game_session.gd:2309
+#: src/core/game_session.gd:2479
 msgid "Deep water (%s, %s): only the Magic Anchor will hold here.%s"
 msgstr ""
 
-#: src/core/game_session.gd:2310
+#: src/core/game_session.gd:2480
 msgid " Open sea: no shelter from wind or waves."
 msgstr ""
 
-#: src/core/game_session.gd:2312
+#: src/core/game_session.gd:2482
 msgid "Good for the normal anchor (%s, %s; land %.1f nm away). How sheltered it is depends on the wind when you arrive."
 msgstr ""
 
-#: src/core/game_session.gd:2345
+#: src/core/game_session.gd:2515
 msgid "The anchor is not down."
 msgstr ""
 
-#: src/core/game_session.gd:2380
+#: src/core/game_session.gd:2550
 msgid "The anchor is holding well again."
 msgstr ""
 
-#: src/core/game_session.gd:2401
+#: src/core/game_session.gd:2571
 msgid "Anchor dragging! The boat is moving downwind. Let out more chain, set the anchor again or weigh anchor."
 msgstr ""
 
-#: src/core/game_session.gd:2406
+#: src/core/game_session.gd:2576
 msgid "The anchor is holding poorly as the wind rises. Check it: more chain helps."
 msgstr ""
 
-#: src/core/game_session.gd:2410 src/core/game_session.gd:2462
+#: src/core/game_session.gd:2580 src/core/game_session.gd:2632
 msgid "A night at anchor"
 msgstr ""
 
-#: src/core/game_session.gd:2444
+#: src/core/game_session.gd:2614
 msgid "Caught my first fish"
 msgstr ""
 
-#: src/core/game_session.gd:2446
+#: src/core/game_session.gd:2616
 msgid "First %s caught"
 msgstr ""
 
-#: src/core/game_session.gd:2448
+#: src/core/game_session.gd:2618
 msgid "An exceptional %s"
 msgstr ""
 
-#: src/core/game_session.gd:2451
+#: src/core/game_session.gd:2621
 msgid "New personal best: %s, %.1f kg"
 msgstr ""
 
-#: src/core/game_session.gd:2454
+#: src/core/game_session.gd:2624
 msgid "First meal cooked in the galley"
 msgstr ""
 
-#: src/core/game_session.gd:2456
+#: src/core/game_session.gd:2626
 msgid "Supper from my own catch"
 msgstr ""
 
-#: src/core/game_session.gd:2460
+#: src/core/game_session.gd:2630
 msgid "First anchorage of my own"
 msgstr ""
 
-#: src/core/game_session.gd:2464
+#: src/core/game_session.gd:2634
 msgid "Stopped the anchor dragging"
 msgstr ""
 
-#: src/core/game_session.gd:2466
+#: src/core/game_session.gd:2636
 msgid "Morning coffee at anchor. The day could wait a little."
 msgstr ""
 
-#: src/core/game_session.gd:2468
+#: src/core/game_session.gd:2638
 msgid "First haul-out: the bottom scrubbed clean"
 msgstr ""
 
-#: src/core/game_session.gd:2517
+#: src/core/game_session.gd:2687
 msgid "You have just been ashore. Come back a little later."
 msgstr ""
 
-#: src/core/game_session.gd:2521
+#: src/core/game_session.gd:2691
 msgid "That outing is not on offer here."
 msgstr ""
 
-#: src/core/game_session.gd:2526 src/core/game_session.gd:2673 src/core/game_session.gd:2890
+#: src/core/game_session.gd:2696 src/core/game_session.gd:2843 src/core/game_session.gd:3060
 msgid "Not enough money: %s needed, you have %s."
 msgstr ""
 
-#: src/core/game_session.gd:2532 src/core/game_session.gd:2578
+#: src/core/game_session.gd:2702 src/core/game_session.gd:2748
 msgid "Ashore in %s: %s"
 msgstr ""
 
-#: src/core/game_session.gd:2611
+#: src/core/game_session.gd:2781
 msgctxt "money"
 msgid "€%s"
 msgstr ""
 
-#: src/core/game_session.gd:2665
+#: src/core/game_session.gd:2835
 msgid "The grocery store is only reachable while moored in harbour."
 msgstr ""
 
-#: src/core/game_session.gd:2670 src/ui/grocery_menu.gd:135
+#: src/core/game_session.gd:2840 src/ui/grocery_menu.gd:143
 msgid "Food and water are already full."
 msgstr ""
 
-#: src/core/game_session.gd:2720
+#: src/core/game_session.gd:2890
 msgid "Provisions are running low: %s of food and water left."
 msgstr ""
 
-#: src/core/game_session.gd:2722
+#: src/core/game_session.gd:2892
 msgid "Provisions are critically low: less than a day of food or water left."
 msgstr ""
 
-#: src/core/game_session.gd:2724
+#: src/core/game_session.gd:2894
 msgid "You have run out of food or water. Head for a harbour and buy provisions before the next passage."
 msgstr ""
 
-#: src/core/game_session.gd:2764
+#: src/core/game_session.gd:2934
 msgid "You put on your captain's hat. Very distinguished."
 msgstr ""
 
-#: src/core/game_session.gd:2767
+#: src/core/game_session.gd:2937
 msgid "You hang your captain's hat on its hook."
 msgstr ""
 
-#: src/core/game_session.gd:2768
+#: src/core/game_session.gd:2938
 msgid "An empty hat hook. Replacement captain's hats are sold at the harbour grocery store (%s)."
 msgstr ""
 
-#: src/core/game_session.gd:2782
+#: src/core/game_session.gd:2952
 msgid "You take off your captain's hat and tuck it under your arm."
 msgstr ""
 
-#: src/core/game_session.gd:2785
+#: src/core/game_session.gd:2955
 msgid "You put your captain's hat back on."
 msgstr ""
 
-#: src/core/game_session.gd:2787
+#: src/core/game_session.gd:2957
 msgid "Your captain's hat hangs on its hook in the cabin."
 msgstr ""
 
-#: src/core/game_session.gd:2788
+#: src/core/game_session.gd:2958
 msgid "You have no captain's hat. The harbour grocery store sells replacements (%s)."
 msgstr ""
 
-#: src/core/game_session.gd:2840
+#: src/core/game_session.gd:3010
 msgid "Better hold onto your hat! The wind is %d kn%s. Go below, or press H to take it off."
 msgstr ""
 
-#: src/core/game_session.gd:2841 src/hat/hat_story.gd:97
+#: src/core/game_session.gd:3011 src/hat/hat_story.gd:97
 msgid ", gusting %d"
 msgstr ""
 
-#: src/core/game_session.gd:2883
+#: src/core/game_session.gd:3053
 msgid "Captain's hats are sold at the harbour grocery store, while moored in harbour."
 msgstr ""
 
-#: src/core/game_session.gd:2887
+#: src/core/game_session.gd:3057
 msgid "You already have your captain's hat."
 msgstr ""
 
-#: src/core/game_session.gd:2901
+#: src/core/game_session.gd:3071
 msgid "Bought a new captain's hat in %s for %s%s."
 msgstr ""
 
-#: src/core/game_session.gd:2903
+#: src/core/game_session.gd:3073
 msgid " (hat number %d)"
 msgstr ""
 
-#: src/core/game_session.gd:2937
+#: src/core/game_session.gd:3107
 msgid "The saved course to %s could not be recalculated and was removed."
 msgstr ""
 
-#: src/core/game_session.gd:3038
+#: src/core/game_session.gd:3208
 msgid "The chart has been updated. Your course was re-planned."
 msgstr ""
 
-#: src/core/game_session.gd:3039
+#: src/core/game_session.gd:3209
 msgid "The chart has been updated. Please plot your course again."
 msgstr ""
 
-#: src/core/game_session.gd:3041
+#: src/core/game_session.gd:3211
 msgid "The chart has been updated. The boat has been moved %.1f nm to nearby open water."
 msgstr ""
 
-#: src/core/game_session.gd:363
+#: src/core/game_session.gd:367
 msgid "The %s is only reachable while moored in harbour."
 msgstr ""
 
-#: src/core/game_session.gd:365
+#: src/core/game_session.gd:369
 msgid "There is no %s in %s."
 msgstr ""
 
-#: src/core/game_session.gd:379
-msgid "You can only change boats in harbour, not during a passage."
+#: src/core/game_session.gd:422
+msgid "Postcard: %s"
 msgstr ""
 
-#: src/core/game_session.gd:381
-msgid "The boatyard is only available in harbour."
+#: src/core/game_session.gd:458
+msgid "%s: %s"
 msgstr ""
 
-#: src/core/game_session.gd:386
+#: src/core/game_session.gd:517 src/core/game_session.gd:549
 msgid "Unknown boat '%s'."
 msgstr ""
 
-#: src/core/game_session.gd:414
+#: src/core/game_session.gd:519
+msgid "The %s is already yours."
+msgstr ""
+
+#: src/core/game_session.gd:521
+msgid "The %s costs %s; you have %s."
+msgstr ""
+
+#: src/core/game_session.gd:542
+msgid "You can only change boats in harbour, not during a passage."
+msgstr ""
+
+#: src/core/game_session.gd:544
+msgid "The boatyard is only available in harbour."
+msgstr ""
+
+#: src/core/game_session.gd:553
+msgid "The %s is not yours yet: buy it first (%s)."
+msgstr ""
+
+#: src/core/game_session.gd:581
 msgid "The saved boat '%s' is not available; you are aboard the %s."
 msgstr ""
 
-#: src/core/game_session.gd:433
+#: src/core/game_session.gd:600
 msgid "Let's raise the anchor before starting the engine."
 msgstr ""
 
-#: src/core/game_session.gd:500 src/core/game_session.gd:516
+#: src/core/game_session.gd:667 src/core/game_session.gd:683
 msgid "A course can only be planned in port."
 msgstr ""
 
-#: src/core/game_session.gd:503
+#: src/core/game_session.gd:670
 msgid "The vessel is not in a port."
 msgstr ""
 
-#: src/core/game_session.gd:505 src/navigation/sea_router.gd:320
+#: src/core/game_session.gd:672 src/navigation/sea_router.gd:320
 msgid "The vessel is already in %s."
 msgstr ""
 
-#: src/core/game_session.gd:520
+#: src/core/game_session.gd:687
 msgid "The course must start from %s."
 msgstr ""
 
-#: src/core/game_session.gd:520
+#: src/core/game_session.gd:687
 msgid "the vessel"
 msgstr ""
 
-#: src/core/game_session.gd:586
+#: src/core/game_session.gd:753
 msgid "The vessel is already underway."
 msgstr ""
 
-#: src/core/game_session.gd:589
+#: src/core/game_session.gd:756
 msgid "Plot a course at the chart table first."
 msgstr ""
 
-#: src/core/game_session.gd:591
+#: src/core/game_session.gd:758
 msgid "You are out of food or water. Buy provisions at the grocery store before setting sail."
 msgstr ""
 
-#: src/core/game_session.gd:594
+#: src/core/game_session.gd:761
 msgid "The planned course does not start here."
 msgstr ""
 
-#: src/core/game_session.gd:622
+#: src/core/game_session.gd:789
 msgid "The vessel is not underway."
-msgstr ""
-
-#: src/core/game_session.gd:924
-msgid "Boat care: %s could do with a service at the next boatyard. (Captain's Log, Boat tab)"
-msgstr ""
-
-#: src/core/game_session.gd:939
-msgid "Boatyard work is done while moored in harbour."
-msgstr ""
-
-#: src/core/game_session.gd:947
-msgid "The %s is already in perfect condition."
-msgstr ""
-
-#: src/core/game_session.gd:950
-msgid "The engine was serviced recently."
-msgstr ""
-
-#: src/core/game_session.gd:953
-msgid "The rigging and sails are in fine order."
-msgstr ""
-
-#: src/core/game_session.gd:995
-msgid "First haul-out: %s"
 msgstr ""
 
 #: src/core/loc.gd
@@ -4918,51 +5970,51 @@ msgstr ""
 msgid "English"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "April"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "August"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "February"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "January"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "July"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "June"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "March"
 msgstr ""
 
-#: src/core/loc.gd:22 src/core/loc.gd:24 src/ui/time_passage.gd:44 src/ui/trophy_menu.gd:10
+#: src/core/loc.gd:22 src/core/loc.gd:24 src/ui/time_passage.gd:45 src/ui/trophy_menu.gd:10
 msgid "May"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "October"
 msgstr ""
 
-#: src/core/loc.gd:22 src/ui/time_passage.gd:44
+#: src/core/loc.gd:22 src/ui/time_passage.gd:45
 msgid "September"
 msgstr ""
 
-#: src/core/loc.gd:23 src/ui/time_passage.gd:45
+#: src/core/loc.gd:23 src/ui/time_passage.gd:46
 msgid "December"
 msgstr ""
 
-#: src/core/loc.gd:23 src/ui/time_passage.gd:45
+#: src/core/loc.gd:23 src/ui/time_passage.gd:46
 msgid "November"
 msgstr ""
 
@@ -5010,31 +6062,31 @@ msgstr ""
 msgid "Sep"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Friday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Monday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Saturday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Sunday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Thursday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Tuesday"
 msgstr ""
 
-#: src/core/loc.gd:25 src/ui/time_passage.gd:46
+#: src/core/loc.gd:25 src/ui/time_passage.gd:47
 msgid "Wednesday"
 msgstr ""
 
@@ -5108,6 +6160,10 @@ msgstr ""
 
 #: src/core/objective_catalog.gd:99
 msgid "missing id"
+msgstr ""
+
+#: src/core/pastimes.gd:113
+msgid "at sea"
 msgstr ""
 
 #: src/core/provisions.gd:112
@@ -5375,27 +6431,27 @@ msgstr ""
 msgid "Two fish, bread, butter and a proper sit-down at the table."
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:101 src/harbour/harbour_dressing.gd:69
+#: src/harbour/harbour_dressing.gd:120 src/harbour/harbour_dressing.gd:152
 msgid "Line"
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:34 src/harbour/harbour_facilities.gd:127
-msgid "Groceries"
-msgstr ""
-
-#: src/harbour/harbour_dressing.gd:35
-msgid "Boatyard · Repairs"
-msgstr ""
-
-#: src/harbour/harbour_dressing.gd:36
-msgid "Go Ashore"
-msgstr ""
-
-#: src/harbour/harbour_dressing.gd:39 src/harbour/harbour_dressing.gd:71
+#: src/harbour/harbour_dressing.gd:122 src/harbour/harbour_dressing.gd:89
 msgid "Cleat"
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:39
+#: src/harbour/harbour_dressing.gd:84 src/harbour/harbour_facilities.gd:127
+msgid "Groceries"
+msgstr ""
+
+#: src/harbour/harbour_dressing.gd:85
+msgid "Boatyard · Repairs"
+msgstr ""
+
+#: src/harbour/harbour_dressing.gd:86
+msgid "Go Ashore"
+msgstr ""
+
+#: src/harbour/harbour_dressing.gd:89
 msgid "Plank"
 msgstr ""
 
@@ -5747,6 +6803,10 @@ msgstr ""
 msgid "Fellow ocean sailors"
 msgstr ""
 
+#: src/harbour/shore_events.gd:95
+msgid "The pontoons of {harbour} are full of boats with wind vanes and jerrycans lashed on deck: everyone here is crossing somewhere."
+msgstr ""
+
 #: src/harbour/shore_events.gd:97
 msgid "Compare passage plans"
 msgstr ""
@@ -5835,35 +6895,35 @@ msgstr ""
 msgid "about %d m"
 msgstr ""
 
-#: src/navigation/map_view.gd:1072 src/navigation/map_view.gd:682
+#: src/navigation/map_view.gd:1076 src/navigation/map_view.gd:686
 msgid "Coast"
 msgstr ""
 
-#: src/navigation/map_view.gd:1563
+#: src/navigation/map_view.gd:1567
 msgid "BLOCKED (not applied)"
 msgstr ""
 
-#: src/navigation/map_view.gd:1632
+#: src/navigation/map_view.gd:1655
 msgid "  (Magic Anchor)"
 msgstr ""
 
-#: src/navigation/map_view.gd:1632
+#: src/navigation/map_view.gd:1655
 msgid "%d  Anchorage%s"
 msgstr ""
 
-#: src/navigation/map_view.gd:259
+#: src/navigation/map_view.gd:263
 msgid "%s and %d more"
 msgstr ""
 
-#: src/navigation/map_view.gd:756
+#: src/navigation/map_view.gd:760
 msgid "East"
 msgstr ""
 
-#: src/navigation/map_view.gd:756
+#: src/navigation/map_view.gd:760
 msgid "Main"
 msgstr ""
 
-#: src/navigation/map_view.gd:756
+#: src/navigation/map_view.gd:760
 msgid "West"
 msgstr ""
 
@@ -6059,10 +7119,6 @@ msgstr ""
 msgid "Tidewater"
 msgstr ""
 
-#: src/navigation/vessel_profile.gd:21 src/ui/sailing_panel.gd:47
-msgid "Sailing"
-msgstr ""
-
 #: src/navigation/vessel_profile.gd:38
 msgid "Spinnaker"
 msgstr ""
@@ -6227,7 +7283,7 @@ msgstr ""
 msgid "%s\nWind %d° %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:1002 src/ui/hud.gd:281 src/ui/sailing_panel.gd:142
+#: src/navigation/world_map.gd:1002 src/ui/hud.gd:325 src/ui/sailing_panel.gd:142
 msgid "off the bow"
 msgstr ""
 
@@ -6307,12 +7363,12 @@ msgstr ""
 msgid "Zoom in to see wind details."
 msgstr ""
 
-#: src/navigation/world_map.gd:142 src/navigation/world_map.tscn:141
-msgid "Course"
+#: src/navigation/world_map.gd:1295
+msgid "Special harbour: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:143 src/navigation/world_map.gd:948
-msgid "Weather"
+#: src/navigation/world_map.gd:142 src/navigation/world_map.tscn:141
+msgid "Course"
 msgstr ""
 
 #: src/navigation/world_map.gd:144
@@ -6347,7 +7403,7 @@ msgstr ""
 msgid "Dreamer's Map"
 msgstr ""
 
-#: src/navigation/world_map.gd:427 src/ui/captains_log_menu.gd:333 src/ui/simple_panel.gd:26 src/ui/voyage_map.gd:122
+#: src/navigation/world_map.gd:427 src/ui/captains_log_menu.gd:333 src/ui/simple_panel.gd:26 src/ui/voyage_map.gd:123
 msgid "Title"
 msgstr ""
 
@@ -6489,11 +7545,11 @@ msgstr ""
 msgid "under sail"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:287
+#: src/navigation/world_map.gd:861 src/ui/hud.gd:331
 msgid "Arrived at"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:287
+#: src/navigation/world_map.gd:861 src/ui/hud.gd:331
 msgid "Moored at"
 msgstr ""
 
@@ -6711,7 +7767,7 @@ msgstr ""
 msgid "Show or hide the wind arrows and speed colours"
 msgstr ""
 
-#: src/navigation/world_map.tscn:411 src/ui/sail_trim_panel.gd:22
+#: src/navigation/world_map.tscn:411 src/ui/sail_trim_panel.gd:23 src/ui/settings_menu.gd:9
 msgid "Wind"
 msgstr ""
 
@@ -6873,7 +7929,7 @@ msgstr ""
 msgid "Too tight"
 msgstr ""
 
-#: src/ui/aboard_badge.gd:101 src/ui/aboard_badge.gd:87
+#: src/ui/aboard_badge.gd:102 src/ui/aboard_badge.gd:87
 msgid "Text"
 msgstr ""
 
@@ -6919,6 +7975,30 @@ msgstr ""
 
 #: src/ui/aboard_badge.gd:90
 msgid "Key"
+msgstr ""
+
+#: src/ui/academy_guide.gd:190
+msgid "Tip"
+msgstr ""
+
+#: src/ui/academy_guide.gd:211
+msgid "Read more"
+msgstr ""
+
+#: src/ui/academy_guide.gd:212
+msgid "Got it"
+msgstr ""
+
+#: src/ui/academy_guide.gd:214
+msgid "Skip the First Voyage"
+msgstr ""
+
+#: src/ui/academy_guide.gd:222
+msgid "First Voyage · %d of %d: %s"
+msgstr ""
+
+#: src/ui/academy_guide.gd:282
+msgid "First Voyage skipped. You can begin it again from the Captain's Handbook (%s)."
 msgstr ""
 
 #: src/ui/action_wheel.gd:26
@@ -7013,69 +8093,69 @@ msgstr ""
 msgid "Anchor up. The voyage continues."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:305
+#: src/ui/anchor_menu.gd:316
 msgid "The brass flukes unfold and feel for the seabed far below. Press E (or click the dial) as the needle crosses the green arc."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:327
+#: src/ui/anchor_menu.gd:338
 msgid "Try again"
 msgstr ""
 
-#: src/ui/anchor_menu.gd:333 src/ui/confirm_dialog.gd:14 src/ui/confirm_dialog.tscn:61 src/ui/modal_stack.gd:63
+#: src/ui/anchor_menu.gd:344 src/ui/confirm_dialog.gd:14 src/ui/confirm_dialog.tscn:61 src/ui/difficulty_menu.gd:19
 msgid "Cancel"
 msgstr ""
 
-#: src/ui/anchor_menu.gd:369
+#: src/ui/anchor_menu.gd:380
 msgid "%d good turn to set it down."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:369
+#: src/ui/anchor_menu.gd:380
 msgid "%d good turns to set it down in this wind."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:379
+#: src/ui/anchor_menu.gd:390
 msgid "The flukes found nothing to hold before the line went slack."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:392 src/ui/fishing_menu.gd:414
+#: src/ui/anchor_menu.gd:403 src/ui/fishing_menu.gd:414
 msgid "Perfect!"
 msgstr ""
 
-#: src/ui/anchor_menu.gd:395 src/ui/fishing_menu.gd:417
+#: src/ui/anchor_menu.gd:406 src/ui/fishing_menu.gd:417
 msgid "Good!"
 msgstr ""
 
-#: src/ui/anchor_menu.gd:401
+#: src/ui/anchor_menu.gd:412
 msgid "Missed - it skips over the bottom (%d min). %d try left."
 msgid_plural "Missed - it skips over the bottom (%d min). %d tries left."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/anchor_menu.gd:402
+#: src/ui/anchor_menu.gd:413
 msgid "Missed - it skips over the bottom (%d min). %d tries left."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:407
+#: src/ui/anchor_menu.gd:418
 msgid "Too many misses: the Magic Anchor has not bitten."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:409 src/ui/fishing_menu.gd:424
+#: src/ui/anchor_menu.gd:420 src/ui/fishing_menu.gd:424
 msgid "  %d more to go."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:414
+#: src/ui/anchor_menu.gd:425
 msgid "%s The boat is not anchored and drifts with the weather. Try again, or cancel."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:457
+#: src/ui/anchor_menu.gd:468
 msgid "It bites!"
 msgstr ""
 
-#: src/ui/anchor_menu.gd:463
+#: src/ui/anchor_menu.gd:474
 msgid "The %s is down and holding: %s."
 msgstr ""
 
-#: src/ui/anchor_menu.gd:465
+#: src/ui/anchor_menu.gd:476
 msgid " Out here it holds the boat's position - it is no shelter from the weather."
 msgstr ""
 
@@ -7119,7 +8199,7 @@ msgstr ""
 msgid "Our anchorage"
 msgstr ""
 
-#: src/ui/anchorage_prompt.gd:18
+#: src/ui/anchorage_prompt.gd:18 src/ui/game_dev_menu.gd:36
 msgid "Question"
 msgstr ""
 
@@ -7131,7 +8211,7 @@ msgstr ""
 msgid "Not yet"
 msgstr ""
 
-#: src/ui/anchorage_prompt.gd:24 src/ui/voyage_map.gd:140
+#: src/ui/anchorage_prompt.gd:24 src/ui/voyage_map.gd:141
 msgid "Sail on"
 msgstr ""
 
@@ -7141,10 +8221,6 @@ msgstr ""
 
 #: src/ui/boat_care_menu.gd:119
 msgid "Sold at the chandlery, next to the yard."
-msgstr ""
-
-#: src/ui/boat_care_menu.gd:137
-msgid "Aboard"
 msgstr ""
 
 #: src/ui/boat_care_menu.gd:137
@@ -7221,59 +8297,75 @@ msgstr ""
 msgid "%d fitted"
 msgstr ""
 
-#: src/ui/boat_care_view.gd:50
-msgid "Standard"
-msgstr ""
-
-#: src/ui/boatyard_menu.gd:121
+#: src/ui/boatyard_menu.gd:127
 msgid "Your boat, the %s: hull %s  ·  %s  ·  food %s, water %s"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:126
+#: src/ui/boatyard_menu.gd:132
 msgid "Boat care (%s)…"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:132 src/ui/provisions_menu.gd:45
+#: src/ui/boatyard_menu.gd:138 src/ui/provisions_menu.gd:45
 msgid "Grocery store (%s)…"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:133 src/ui/boatyard_menu.tscn:168 src/ui/provisions_menu.gd:46 src/ui/provisions_menu.tscn:115
+#: src/ui/boatyard_menu.gd:139 src/ui/boatyard_menu.tscn:168 src/ui/provisions_menu.gd:46 src/ui/provisions_menu.tscn:115
 msgid "Grocery store…"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:170
+#: src/ui/boatyard_menu.gd:176
 msgid "Condition %s"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:186
-msgid "Move aboard the %s"
-msgstr ""
-
-#: src/ui/boatyard_menu.gd:193 src/ui/boatyard_menu.gd:196 src/ui/boatyard_menu.gd:197
-msgid "%.1f kn"
-msgstr ""
-
-#: src/ui/boatyard_menu.gd:193
-msgid "Top speed under sail"
-msgstr ""
-
-#: src/ui/boatyard_menu.gd:195
-msgid "%d kn wind at %d°"
+#: src/ui/boatyard_menu.gd:190 src/ui/grocery_menu.gd:40
+msgid "Price"
 msgstr ""
 
 #: src/ui/boatyard_menu.gd:197
+msgid "This is your boat"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:199
+msgid "Move aboard the %s"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:201
+msgid "Buy the %s (%s)…"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:203
+msgid "%s needed to buy it"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:210 src/ui/boatyard_menu.gd:213 src/ui/boatyard_menu.gd:214
+msgid "%.1f kn"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:210
+msgid "Top speed under sail"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:212
+msgid "%d kn wind at %d°"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:214
 msgid "Under engine"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:72
-msgid "  (your boat)"
+#: src/ui/boatyard_menu.gd:270
+msgid "(your boat)"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:83
+#: src/ui/boatyard_menu.gd:271 src/ui/chandlery_menu.gd:57
+msgid "Yours"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:85
 msgid "Sailmaker…"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:84
+#: src/ui/boatyard_menu.gd:86
 msgid "Chandlery…"
 msgstr ""
 
@@ -7293,19 +8385,19 @@ msgstr ""
 msgid "Choose the boat you sail, look after your boat (repairs, services, haul-outs and equipment) or visit the grocery store. Your harbour, the time, your money and your companion stay with you."
 msgstr ""
 
-#: src/ui/cabin_home_menu.gd:13
+#: src/ui/cabin_home_menu.gd:17
 msgid "The small things that make the %s yours. Each appears in the cabin at once; put it away any time."
 msgstr ""
 
-#: src/ui/cabin_home_menu.gd:37
+#: src/ui/cabin_home_menu.gd:57
 msgid "At the chandlery (%s)"
 msgstr ""
 
-#: src/ui/cabin_home_menu.gd:40
+#: src/ui/cabin_home_menu.gd:60
 msgid "Put away"
 msgstr ""
 
-#: src/ui/cabin_home_menu.gd:40
+#: src/ui/cabin_home_menu.gd:60
 msgid "Show it"
 msgstr ""
 
@@ -7509,7 +8601,7 @@ msgstr ""
 msgid "%s nm  (%s)"
 msgstr ""
 
-#: src/ui/captains_log_menu.gd:73 src/ui/radar_panel.gd:149
+#: src/ui/captains_log_menu.gd:73 src/ui/radar_panel.gd:159
 msgid "%s nm"
 msgstr ""
 
@@ -7581,15 +8673,11 @@ msgstr ""
 msgid "Buy (%s)  ·  %d aboard"
 msgstr ""
 
-#: src/ui/chandlery_menu.gd:57
-msgid "Yours"
-msgstr ""
-
 #: src/ui/chandlery_menu.gd:82
 msgid "The Magic Anchor is aboard. Choose it at the windlass when the water is deep."
 msgstr ""
 
-#: src/ui/chandlery_menu.gd:88 src/ui/grocery_menu.gd:176
+#: src/ui/chandlery_menu.gd:88 src/ui/grocery_menu.gd:184
 msgid "Bought a %s. You have %d."
 msgstr ""
 
@@ -7597,35 +8685,35 @@ msgstr ""
 msgid "%s is yours. Show it aboard with \"Make it home\" (Q, in the cabin)."
 msgstr ""
 
-#: src/ui/chart_plotter.gd:221
+#: src/ui/chart_plotter.gd:231
 msgid "No course"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:223
+#: src/ui/chart_plotter.gd:233
 msgid "Destination %.1f nm  ·  course %03d°"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:225
+#: src/ui/chart_plotter.gd:235
 msgid "Next turn %.1f nm  ·  then %03d°"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:226
+#: src/ui/chart_plotter.gd:236
 msgid "Course now %03d°"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:227
+#: src/ui/chart_plotter.gd:237
 msgid "%s  ·  range %d nm"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:57
+#: src/ui/chart_plotter.gd:60
 msgid "Chartplotter"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:66 src/ui/radar_panel.gd:51
+#: src/ui/chart_plotter.gd:69 src/ui/radar_panel.gd:51
 msgid "Closer"
 msgstr ""
 
-#: src/ui/chart_plotter.gd:66 src/ui/radar_panel.gd:51
+#: src/ui/chart_plotter.gd:69 src/ui/radar_panel.gd:51
 msgid "Farther"
 msgstr ""
 
@@ -7641,71 +8729,71 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:119
+#: src/ui/cooking_menu.gd:121
 msgid "A pot of coffee on the little stove.\n\nNeeds nothing special.\nTakes %d minutes.\nJust for the pleasure of it."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:122 src/ui/cooking_menu.gd:140
+#: src/ui/cooking_menu.gd:124 src/ui/cooking_menu.gd:142
 msgid "Cook %s"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:128
+#: src/ui/cooking_menu.gd:130
 msgid "%d fish from the cool box (the oldest first)"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:130
+#: src/ui/cooking_menu.gd:132
 msgid "%s of groceries"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:131
+#: src/ui/cooking_menu.gd:133
 msgid "Well fed for %d hours: the stores last a little longer."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:133
+#: src/ui/cooking_menu.gd:135
 msgid "Turns the catch into food for the stores (up to %s). "
 msgstr ""
 
-#: src/ui/cooking_menu.gd:135
+#: src/ui/cooking_menu.gd:137
 msgid "%s\n\nNeeds: %s.\nTakes %d minutes.\n%s%s"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:135
+#: src/ui/cooking_menu.gd:137
 msgid "nothing special"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:208
+#: src/ui/cooking_menu.gd:210
 msgid "Coffee is ready."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:210
+#: src/ui/cooking_menu.gd:212
 msgid "Written in the Captain's Log: %s."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:235
+#: src/ui/cooking_menu.gd:237
 msgid "%s is ready."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:237
+#: src/ui/cooking_menu.gd:239
 msgid "The catch adds %s of food to the stores."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:238
+#: src/ui/cooking_menu.gd:240
 msgid "Well fed until %s."
 msgstr ""
 
-#: src/ui/cooking_menu.gd:43
+#: src/ui/cooking_menu.gd:45
 msgid "Rule"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:66
+#: src/ui/cooking_menu.gd:68
 msgid "Outcome"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:69
+#: src/ui/cooking_menu.gd:71
 msgid "Make coffee"
 msgstr ""
 
-#: src/ui/cooking_menu.gd:95
+#: src/ui/cooking_menu.gd:97
 msgid "Fish in the cool box: %d  ·  Food in the stores: %s"
 msgstr ""
 
@@ -7721,12 +8809,24 @@ msgstr ""
 msgid "This guide could not be read: %s"
 msgstr ""
 
-#: src/ui/dev_guides_menu.tscn:46 src/ui/main_menu.tscn:158
+#: src/ui/dev_guides_menu.tscn:46 src/ui/main_menu.tscn:166
 msgid "Developer guides"
 msgstr ""
 
 #: src/ui/dev_guides_menu.tscn:57
 msgid "Practical instructions from DEV_GUIDES/ in the project folder (shown in development builds only)."
+msgstr ""
+
+#: src/ui/difficulty_menu.gd:14
+msgid "A change counts from now on. Money already spent or earned and the state of your boat stay as they are."
+msgstr ""
+
+#: src/ui/difficulty_menu.gd:20 src/ui/settings_menu.tscn:166
+msgid "Apply"
+msgstr ""
+
+#: src/ui/difficulty_menu.gd:24
+msgid "Difficulty: %s, from now on."
 msgstr ""
 
 #: src/ui/fishing_menu.gd:101
@@ -8011,6 +9111,50 @@ msgstr ""
 msgid "Sold %d fish for %s."
 msgstr ""
 
+#: src/ui/game_dev_menu.gd:110
+msgid "This session takes %s of game time. Time passes as usual; an alarm or a warning interrupts it, and the hours worked still count."
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:112
+msgid "Interrupted last time: the rest of the session is waiting."
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:114
+msgid "Choose an answer first"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:114
+msgid "Go on working (%s)"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:114
+msgid "Work for %s"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:27
+msgid "Released! Every milestone is done; small updates still make it better."
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:28
+msgid "Milestone %d of %d: %s · %s of %s points"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:30
+msgid "Devlog"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:34
+msgid "%s (%d h)"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:40 src/ui/grocery_menu.gd:41 src/ui/publish_menu.gd:23 src/ui/time_passage.gd:84
+msgid "Note"
+msgstr ""
+
+#: src/ui/game_dev_menu.gd:58
+msgid "Devlog: nothing yet. Every game starts with a first small step."
+msgstr ""
+
 #: src/ui/go_ashore_menu.gd:100
 msgid "Seen"
 msgstr ""
@@ -8051,75 +9195,83 @@ msgstr ""
 msgid "%s  ·  %s  ·  %d min"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:124
+#: src/ui/go_ashore_menu.gd:93
+msgid "free"
+msgstr ""
+
+#: src/ui/grocery_menu.gd:101
+msgid "Buy lure"
+msgstr ""
+
+#: src/ui/grocery_menu.gd:132
 msgid "Aboard: food %s, water %s. Missing: %.1f days in all."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:126
+#: src/ui/grocery_menu.gd:134
 msgid "Price %s  ·  Funds %s"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:129
+#: src/ui/grocery_menu.gd:137
 msgid "Buy for %s"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:137
+#: src/ui/grocery_menu.gd:145
 msgid "Not enough money: you need %s. Remote work at the boat's work station earns %s an hour."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:140
+#: src/ui/grocery_menu.gd:148
 msgid "Food and water will be full (%d days each)."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:151
+#: src/ui/grocery_menu.gd:159
 msgid "Stock up (%s)"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:155
+#: src/ui/grocery_menu.gd:163
 msgid "Long passage: the %s is stocked for %d days, all she can stow."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:157
+#: src/ui/grocery_menu.gd:165
 msgid "Long passage: stow food and water for %d days each, all the %s can carry."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:167
+#: src/ui/grocery_menu.gd:175
 msgid "Your catch: %d fish in the cool box."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:168
+#: src/ui/grocery_menu.gd:176
 msgid "Your catch: the cool box is empty."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:169
+#: src/ui/grocery_menu.gd:177
 msgid "To the fishmonger (%s)…"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:183
+#: src/ui/grocery_menu.gd:191
 msgid "Buy captain's hat (%s)"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:186
+#: src/ui/grocery_menu.gd:194
 msgid "Captain's hats: you already have yours."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:188
+#: src/ui/grocery_menu.gd:196
 msgid "Captain's hats, %s. Not enough money right now."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:190
+#: src/ui/grocery_menu.gd:198
 msgid "A replacement captain's hat, %s. Hold onto this one."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:204
+#: src/ui/grocery_menu.gd:212
 msgid "Bought a new captain's hat for %s. Press H to put it on."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:211
+#: src/ui/grocery_menu.gd:219
 msgid "Bought food and water for %s. Stores full: %s each."
 msgstr ""
 
-#: src/ui/grocery_menu.gd:224
+#: src/ui/grocery_menu.gd:232
 msgid "Stocked up for a long passage for %s: %s of food and water."
 msgstr ""
 
@@ -8135,24 +9287,48 @@ msgstr ""
 msgid "Stores"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:40
-msgid "Price"
-msgstr ""
-
-#: src/ui/grocery_menu.gd:41 src/ui/publish_menu.gd:23 src/ui/time_passage.gd:83
-msgid "Note"
-msgstr ""
-
-#: src/ui/grocery_menu.gd:75
-msgid "Buy"
-msgstr ""
-
-#: src/ui/grocery_menu.gd:86
+#: src/ui/grocery_menu.gd:90
 msgid "Fishing lures"
 msgstr ""
 
-#: src/ui/grocery_menu.gd:97
-msgid "Buy lure"
+#: src/ui/handbook_menu.gd:20
+msgid "Captain's Handbook"
+msgstr ""
+
+#: src/ui/handbook_menu.gd:23
+msgid "Search the Handbook"
+msgstr ""
+
+#: src/ui/handbook_menu.gd:57
+msgid "Begin the First Voyage again"
+msgstr ""
+
+#: src/ui/handbook_menu.gd:61
+msgid "Show the tips again"
+msgstr ""
+
+#: src/ui/handbook_menu.gd:65
+msgid "The tips will show again as you come across each thing."
+msgstr ""
+
+#: src/ui/handbook_menu.gd:97
+msgid "Nothing found"
+msgstr ""
+
+#: src/ui/handbook_menu.gd:98
+msgid "No page mentions that. Try another word."
+msgstr ""
+
+#: src/ui/harbour_moment.gd:54
+msgid "Click to put it away"
+msgstr ""
+
+#: src/ui/harbour_moment.gd:64
+msgid "First visit"
+msgstr ""
+
+#: src/ui/harbour_moment.gd:64
+msgid "✦ Special harbour"
 msgstr ""
 
 #: src/ui/hat_badge.gd:16
@@ -8223,79 +9399,75 @@ msgstr ""
 msgid "Up she comes…"
 msgstr ""
 
-#: src/ui/hud.gd:164
-msgid "Controls"
-msgstr ""
-
-#: src/ui/hud.gd:257
+#: src/ui/hud.gd:301
 msgid "At anchor, %s  ·  bound for %s"
 msgstr ""
 
-#: src/ui/hud.gd:260
+#: src/ui/hud.gd:304
 msgid "Underway to %s"
 msgstr ""
 
-#: src/ui/hud.gd:261
+#: src/ui/hud.gd:305
 msgid "At anchor  ·  voyage paused"
 msgstr ""
 
-#: src/ui/hud.gd:262
+#: src/ui/hud.gd:306
 msgid "Underway  ·  %.1f kn"
 msgstr ""
 
-#: src/ui/hud.gd:263
+#: src/ui/hud.gd:307
 msgid "To %s  ·  %d nm to go"
 msgstr ""
 
-#: src/ui/hud.gd:264
+#: src/ui/hud.gd:308
 msgid "ETA about %s (estimate)"
 msgstr ""
 
-#: src/ui/hud.gd:272
+#: src/ui/hud.gd:316
 msgid "At the anchorage  ·  0.0 kn"
 msgstr ""
 
-#: src/ui/hud.gd:273 src/ui/sailing_panel.gd:130
+#: src/ui/hud.gd:317 src/ui/sailing_panel.gd:130
 msgid "Drop the anchor, or sail on (Q)"
 msgstr ""
 
-#: src/ui/hud.gd:274
+#: src/ui/hud.gd:318
 msgid "Sails down  ·  waiting at the anchorage"
 msgstr ""
 
-#: src/ui/hud.gd:276
+#: src/ui/hud.gd:320
 msgid "Raise the anchor at the windlass to sail on"
 msgstr ""
 
-#: src/ui/hud.gd:277
+#: src/ui/hud.gd:321
 msgid "%s  ·  %d × the depth of chain"
 msgstr ""
 
-#: src/ui/hud.gd:289 src/ui/hud.tscn:122
+#: src/ui/hud.gd:333 src/ui/hud.tscn:122
 msgid "Planned route"
 msgstr ""
 
-#: src/ui/hud.gd:297
+#: src/ui/hud.gd:341
 msgid "About %s with the expected wind  ·  set sail at the helm"
 msgstr ""
 
-#: src/ui/hud.gd:300
+#: src/ui/hud.gd:344
 msgid "Plot a course at the chart table"
 msgstr ""
 
-#: src/ui/hud.gd:327
+#: src/ui/hud.gd:370
 msgid "Hull %s   %s   Food %.1f d · Water %.1f d"
 msgstr ""
 
-#: src/ui/hud.gd:337
+#: src/ui/hud.gd:380
 msgid "Wind calm"
 msgstr ""
 
-#: src/ui/hud.gd:338
+#: src/ui/hud.gd:381
 msgid "Wind %s %d kn"
 msgstr ""
 
-#: src/ui/hud.gd:342
+#: src/ui/hud.gd:385
 msgid ", gusts %d"
 msgstr ""
 
@@ -8321,10 +9493,6 @@ msgstr ""
 
 #: src/ui/hud.gd:40
 msgid "rod"
-msgstr ""
-
-#: src/ui/hud.gd:41
-msgid "Esc"
 msgstr ""
 
 #: src/ui/hud.gd:41
@@ -8379,31 +9547,31 @@ msgstr ""
 msgid "Language_%s"
 msgstr ""
 
-#: src/ui/loading_screen.gd:114
+#: src/ui/loading_screen.gd:119
 msgid "Ready. Welcome aboard."
 msgstr ""
 
-#: src/ui/loading_screen.gd:65 src/ui/main_menu.tscn:75
+#: src/ui/loading_screen.gd:68 src/ui/main_menu.tscn:83
 msgid "Small boat. Wide world. Hold onto your hat."
 msgstr ""
 
-#: src/ui/loading_screen.gd:78
+#: src/ui/loading_screen.gd:83
 msgid "Reading the harbour list…"
 msgstr ""
 
-#: src/ui/loading_screen.gd:79
+#: src/ui/loading_screen.gd:84
 msgid "Unrolling the charts of the world…"
 msgstr ""
 
-#: src/ui/loading_screen.gd:80
+#: src/ui/loading_screen.gd:85
 msgid "Making the cabin ready…"
 msgstr ""
 
-#: src/ui/loading_screen.gd:91
+#: src/ui/loading_screen.gd:96
 msgid "%s  (%d of %d)"
 msgstr ""
 
-#: src/ui/loading_screen.gd:93
+#: src/ui/loading_screen.gd:98
 msgid "Loading: %s"
 msgstr ""
 
@@ -8411,7 +9579,7 @@ msgstr ""
 msgid "Version %s"
 msgstr ""
 
-#: src/ui/main_menu.gd:50 src/ui/main_menu.tscn:104
+#: src/ui/main_menu.gd:50 src/ui/main_menu.tscn:112
 msgid "No saved game yet"
 msgstr ""
 
@@ -8419,47 +9587,51 @@ msgstr ""
 msgid "Slot %d  ·  %s  ·  %s"
 msgstr ""
 
-#: src/ui/main_menu.tscn:111 src/ui/pause_menu.tscn:79 src/ui/save_load_menu.gd:23 src/ui/save_load_menu.tscn:43
-msgid "Load Game"
-msgstr ""
-
-#: src/ui/main_menu.tscn:117
-msgid "Copies your saves from Next Harbor (the game's earlier name). The originals stay where they are."
-msgstr ""
-
-#: src/ui/main_menu.tscn:118
-msgid "Import Next Harbor saves…"
-msgstr ""
-
-#: src/ui/main_menu.tscn:124 src/ui/pause_menu.tscn:85 src/ui/settings_menu.tscn:50
-msgid "Settings"
-msgstr ""
-
-#: src/ui/main_menu.tscn:130
-msgid "Quit"
-msgstr ""
-
-#: src/ui/main_menu.tscn:142
-msgid "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Patrick Hand (SIL OFL)"
-msgstr ""
-
-#: src/ui/main_menu.tscn:157
-msgid "Developer guides (development builds only)"
-msgstr ""
-
-#: src/ui/main_menu.tscn:92
+#: src/ui/main_menu.tscn:100
 msgid "New Game"
 msgstr ""
 
-#: src/ui/main_menu.tscn:98 src/ui/rescue_dialog.tscn:65
+#: src/ui/main_menu.tscn:106 src/ui/rescue_dialog.tscn:65
 msgid "Continue"
 msgstr ""
 
-#: src/ui/new_game_menu.gd:32
+#: src/ui/main_menu.tscn:119 src/ui/pause_menu.tscn:79 src/ui/save_load_menu.gd:23 src/ui/save_load_menu.tscn:43
+msgid "Load Game"
+msgstr ""
+
+#: src/ui/main_menu.tscn:125
+msgid "Copies your saves from Next Harbor (the game's earlier name). The originals stay where they are."
+msgstr ""
+
+#: src/ui/main_menu.tscn:126
+msgid "Import Next Harbor saves…"
+msgstr ""
+
+#: src/ui/main_menu.tscn:132 src/ui/pause_menu.tscn:85 src/ui/settings_menu.tscn:50
+msgid "Settings"
+msgstr ""
+
+#: src/ui/main_menu.tscn:138
+msgid "Quit"
+msgstr ""
+
+#: src/ui/main_menu.tscn:150
+msgid "Coastlines: Natural Earth (public domain)  ·  Fonts: Barlow, Barlow Condensed, Patrick Hand (SIL OFL)"
+msgstr ""
+
+#: src/ui/main_menu.tscn:165
+msgid "Developer guides (development builds only)"
+msgstr ""
+
+#: src/ui/new_game_menu.gd:30
+msgid "How forgiving should the sea be?"
+msgstr ""
+
+#: src/ui/new_game_menu.gd:43
 msgid "A ship's cat: likes the settee, the chart table and your berth. Purrs when petted."
 msgstr ""
 
-#: src/ui/new_game_menu.gd:34
+#: src/ui/new_game_menu.gd:45
 msgid "A ship's dog: naps on the cabin sole, by the steps or next to the settee. Pants happily when petted."
 msgstr ""
 
@@ -8491,7 +9663,7 @@ msgstr ""
 msgid "  (%d fish nibbled and swam off on the way.)"
 msgstr ""
 
-#: src/ui/passage_panel.gd:142 src/ui/voyage_map.gd:319
+#: src/ui/passage_panel.gd:142 src/ui/voyage_map.gd:320
 msgid "Long passage to %s"
 msgstr ""
 
@@ -8557,7 +9729,15 @@ msgid_plural "Let %d hours pass every second. Stops by itself when something nee
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/pause_menu.gd:29
+#: src/ui/pause_menu.gd:31
+msgid "Difficulty…"
+msgstr ""
+
+#: src/ui/pause_menu.gd:37
+msgid "Captain's Handbook (F1)"
+msgstr ""
+
+#: src/ui/pause_menu.gd:46
 msgid "Developer tests (F10)"
 msgstr ""
 
@@ -8579,6 +9759,54 @@ msgstr ""
 
 #: src/ui/pause_menu.tscn:91
 msgid "Return to Main Menu"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:127
+msgid "Nothing to send yet."
+msgstr ""
+
+#: src/ui/postcard_menu.gd:129
+msgid "Make and publish"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:135
+msgid "A first card of this subject earns %d renown."
+msgstr ""
+
+#: src/ui/postcard_menu.gd:136
+msgid "Already posted once: a card for the scrapbook, without renown."
+msgstr ""
+
+#: src/ui/postcard_menu.gd:137
+msgid "Writing, arranging and publishing a postcard takes about %s of game time. Time passes as usual, and an alarm or a warning interrupts it; the card is kept to finish later."
+msgstr ""
+
+#: src/ui/postcard_menu.gd:140
+msgid "Finish the card (%s)"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:140
+msgid "Make and publish (%s)"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:40
+msgid "What the card shows"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:44
+msgid "The words"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:45
+msgid "The layout"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:57
+msgid "Scrapbook (%d)"
+msgstr ""
+
+#: src/ui/postcard_menu.gd:59
+msgid "Throw away the unfinished card"
 msgstr ""
 
 #: src/ui/provisions_menu.gd:34
@@ -8645,32 +9873,32 @@ msgstr ""
 msgid "Publish for %s"
 msgstr ""
 
-#: src/ui/radar_panel.gd:117
+#: src/ui/radar_panel.gd:120
 msgid "No vessels in range. A clear sea."
 msgstr ""
 
-#: src/ui/radar_panel.gd:120
+#: src/ui/radar_panel.gd:123
 msgid "%s %s nm %s"
 msgstr ""
 
-#: src/ui/radar_panel.gd:123
+#: src/ui/radar_panel.gd:126
 msgid ", passes %s nm off in %d min"
 msgstr ""
 
-#: src/ui/radar_panel.gd:127
+#: src/ui/radar_panel.gd:130
 msgid "Collision risk: keep a sharp lookout and give way if needed."
 msgstr ""
 
-#: src/ui/radar_panel.gd:129
+#: src/ui/radar_panel.gd:132
 msgid "Keep an eye on it: it will pass close."
 msgstr ""
 
-#: src/ui/radar_panel.gd:148 src/weather/wind_field.gd
+#: src/ui/radar_panel.gd:158 src/weather/wind_field.gd
 msgctxt "compass"
 msgid "N"
 msgstr ""
 
-#: src/ui/reel_dial.gd:31
+#: src/ui/reel_dial.gd:29
 msgid "Click (or press E / Space) when the needle is in the green arc."
 msgstr ""
 
@@ -8694,47 +9922,47 @@ msgstr ""
 msgid "Rescued at Sea"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:21 src/ui/sailing_panel.gd:67
+#: src/ui/sail_trim_panel.gd:22 src/ui/sailing_panel.gd:67
 msgid "Sail trim"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:32
+#: src/ui/sail_trim_panel.gd:33
 msgid "Eased"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:45
+#: src/ui/sail_trim_panel.gd:46
 msgid "Sheeted in"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:47
+#: src/ui/sail_trim_panel.gd:48
 msgid "Feedback"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:50
+#: src/ui/sail_trim_panel.gd:51
 msgid "Leave it to the crew"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:51
+#: src/ui/sail_trim_panel.gd:52
 msgid "The crew keeps the sails sensibly trimmed: the boat sails as it always has. Trim by hand to sail a little faster (or slower)."
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:57
+#: src/ui/sail_trim_panel.gd:58
 msgid "A / D or arrows: ease or sheet in  ·  Space: leave it to the crew  ·  T or Esc: close"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:57
+#: src/ui/sail_trim_panel.gd:58
 msgid "Hint"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:77
+#: src/ui/sail_trim_panel.gd:79
 msgid "Wind %d kn, %d° on the %s (%s)"
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:80
+#: src/ui/sail_trim_panel.gd:82
 msgid "Under engine: the sails are not drawing."
 msgstr ""
 
-#: src/ui/sail_trim_panel.gd:84
+#: src/ui/sail_trim_panel.gd:86
 msgid "%s  ·  speed %+d %%"
 msgstr ""
 
@@ -8922,140 +10150,156 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/ui/settings_menu.gd:11
-msgid "Windowed"
+#: src/ui/scrapbook_menu.gd:16
+msgid "Scrapbook"
 msgstr ""
 
-#: src/ui/settings_menu.gd:110
+#: src/ui/scrapbook_menu.gd:22 src/ui/voyage_map.gd:124
+msgid "When"
+msgstr ""
+
+#: src/ui/scrapbook_menu.gd:57
+msgid "No postcards yet. Make one at the cabin table: Q, then Write a postcard."
+msgstr ""
+
+#: src/ui/scrapbook_menu.gd:60
+msgid "%d of %d · sent %s"
+msgstr ""
+
+#: src/ui/settings_menu.gd:117
 msgid "Test"
 msgstr ""
 
-#: src/ui/settings_menu.gd:111
+#: src/ui/settings_menu.gd:118
 msgid "Play a temporary test sound on the %s bus"
 msgstr ""
 
-#: src/ui/settings_menu.gd:12
-msgid "Fullscreen"
+#: src/ui/settings_menu.gd:13
+msgid "Windowed"
 msgstr ""
 
-#: src/ui/settings_menu.gd:125
+#: src/ui/settings_menu.gd:132
 msgid "Artwork"
 msgstr ""
 
-#: src/ui/settings_menu.gd:129
+#: src/ui/settings_menu.gd:136
 msgid "The illustrated look is a prototype on every boat and in harbour; Classic shows the earlier art."
 msgstr ""
 
-#: src/ui/settings_menu.gd:13
+#: src/ui/settings_menu.gd:14
+msgid "Fullscreen"
+msgstr ""
+
+#: src/ui/settings_menu.gd:15
 msgid "Borderless fullscreen"
 msgstr ""
 
-#: src/ui/settings_menu.gd:143
+#: src/ui/settings_menu.gd:150
 msgid "Sailing view"
 msgstr ""
 
-#: src/ui/settings_menu.gd:147
+#: src/ui/settings_menu.gd:154
 msgid "Boat faces its course"
 msgstr ""
 
-#: src/ui/settings_menu.gd:148
+#: src/ui/settings_menu.gd:155
 msgid "Underway the deck turns so the bow points along the course, north up. Off: the boat always points right."
 msgstr ""
 
-#: src/ui/settings_menu.gd:161
+#: src/ui/settings_menu.gd:168
 msgid "Flashing"
 msgstr ""
 
-#: src/ui/settings_menu.gd:165
+#: src/ui/settings_menu.gd:172
 msgid "Reduce flashing"
 msgstr ""
 
-#: src/ui/settings_menu.gd:166
+#: src/ui/settings_menu.gd:173
 msgid "Lightning shows as one soft glow, and highlights pulse once gently instead of blinking."
 msgstr ""
 
-#: src/ui/settings_menu.gd:17
-msgid "Illustrated (prototype)"
-msgstr ""
-
-#: src/ui/settings_menu.gd:173
+#: src/ui/settings_menu.gd:180
 msgid "Lightning flash"
 msgstr ""
 
-#: src/ui/settings_menu.gd:18
-msgid "Classic"
-msgstr ""
-
-#: src/ui/settings_menu.gd:181
+#: src/ui/settings_menu.gd:188
 msgid "How bright lightning flashes are (0 %: thunder only)."
 msgstr ""
 
-#: src/ui/settings_menu.gd:188
+#: src/ui/settings_menu.gd:19
+msgid "Illustrated (prototype)"
+msgstr ""
+
+#: src/ui/settings_menu.gd:195
 msgid "Motion"
 msgstr ""
 
-#: src/ui/settings_menu.gd:192
+#: src/ui/settings_menu.gd:199
 msgid "Reduce motion"
 msgstr ""
 
-#: src/ui/settings_menu.gd:193
+#: src/ui/settings_menu.gd:200
 msgid "Small decorative animations stay still (a landed fish's tail flick and bobbing)."
 msgstr ""
 
-#: src/ui/settings_menu.gd:201
+#: src/ui/settings_menu.gd:208
+msgid "Tips"
+msgstr ""
+
+#: src/ui/settings_menu.gd:212
+msgid "Show tips as you play"
+msgstr ""
+
+#: src/ui/settings_menu.gd:213
+msgid "Short tips the first time you meet something new. The Captain's Handbook (F1) has everything either way."
+msgstr ""
+
+#: src/ui/settings_menu.gd:221
 msgid "Interface light"
 msgstr ""
 
-#: src/ui/settings_menu.gd:205
+#: src/ui/settings_menu.gd:225
 msgid "Always day"
 msgstr ""
 
-#: src/ui/settings_menu.gd:205
+#: src/ui/settings_menu.gd:225
 msgid "Always night"
 msgstr ""
 
-#: src/ui/settings_menu.gd:205
+#: src/ui/settings_menu.gd:225
 msgid "Automatic (follows the day)"
 msgstr ""
 
-#: src/ui/settings_menu.gd:207
+#: src/ui/settings_menu.gd:227
 msgid "By day a sunlit instrument display, by night the same displays dimmed for dark eyes. Automatic follows the sun where the boat is."
 msgstr ""
 
-#: src/ui/settings_menu.gd:215
+#: src/ui/settings_menu.gd:235
 msgid "Language"
 msgstr ""
 
-#: src/ui/settings_menu.gd:254 src/ui/settings_menu.gd:67
+#: src/ui/settings_menu.gd:275 src/ui/settings_menu.gd:70
 msgid "Opens the folder with the technical session logs (for bug reports): %s"
 msgstr ""
 
-#: src/ui/settings_menu.gd:266
+#: src/ui/settings_menu.gd:287
 msgid "Muted"
 msgstr ""
 
-#: src/ui/settings_menu.gd:296
+#: src/ui/settings_menu.gd:317
 msgid "Settings saved."
 msgstr ""
 
-#: src/ui/settings_menu.gd:298
+#: src/ui/settings_menu.gd:319
 msgid "Settings could not be saved."
 msgstr ""
 
-#: src/ui/settings_menu.gd:306
+#: src/ui/settings_menu.gd:327
 msgid "Unapplied changes — press Apply to keep them."
 msgstr ""
 
-#: src/ui/settings_menu.gd:66
+#: src/ui/settings_menu.gd:69
 msgid "Diagnostic logs…"
-msgstr ""
-
-#: src/ui/settings_menu.gd:86
-msgid "Discard changes?"
-msgstr ""
-
-#: src/ui/settings_menu.gd:87
-msgid "Some settings have not been applied. Leaving now restores the previous settings."
 msgstr ""
 
 #: src/ui/settings_menu.gd:9
@@ -9068,6 +10312,14 @@ msgstr ""
 
 #: src/ui/settings_menu.gd:9
 msgid "UI Sounds"
+msgstr ""
+
+#: src/ui/settings_menu.gd:93
+msgid "Discard changes?"
+msgstr ""
+
+#: src/ui/settings_menu.gd:94
+msgid "Some settings have not been applied. Leaving now restores the previous settings."
 msgstr ""
 
 #: src/ui/settings_menu.tscn:104
@@ -9084,10 +10336,6 @@ msgstr ""
 
 #: src/ui/settings_menu.tscn:150
 msgid "Restore Defaults"
-msgstr ""
-
-#: src/ui/settings_menu.tscn:166
-msgid "Apply"
 msgstr ""
 
 #: src/ui/settings_menu.tscn:63
@@ -9150,28 +10398,28 @@ msgstr ""
 msgid "Fast time"
 msgstr ""
 
-#: src/ui/time_passage.gd:117
+#: src/ui/time_passage.gd:118
 msgctxt "date"
 msgid "%d %s %d"
 msgstr ""
 
-#: src/ui/time_passage.gd:123
+#: src/ui/time_passage.gd:124
 msgid "a %s"
 msgstr ""
 
-#: src/ui/time_passage.gd:123
+#: src/ui/time_passage.gd:124
 msgid "a %s evening"
 msgstr ""
 
-#: src/ui/time_passage.gd:80
+#: src/ui/time_passage.gd:81
 msgid "Date"
 msgstr ""
 
-#: src/ui/time_passage.gd:81
+#: src/ui/time_passage.gd:82
 msgid "Phrase"
 msgstr ""
 
-#: src/ui/time_passage.gd:82
+#: src/ui/time_passage.gd:83
 msgid "Clock"
 msgstr ""
 
@@ -9245,37 +10493,33 @@ msgstr ""
 msgid "Let another vessel answer"
 msgstr ""
 
-#: src/ui/voyage_map.gd:123
-msgid "When"
-msgstr ""
-
-#: src/ui/voyage_map.gd:124
+#: src/ui/voyage_map.gd:125
 msgid "Distance"
 msgstr ""
 
-#: src/ui/voyage_map.gd:134
+#: src/ui/voyage_map.gd:135
 msgid "Reason"
 msgstr ""
 
-#: src/ui/voyage_map.gd:140
+#: src/ui/voyage_map.gd:141
 msgid "Resume the passage from here."
 msgstr ""
 
-#: src/ui/voyage_map.gd:148
+#: src/ui/voyage_map.gd:149
 msgid "Let %d hour pass every second."
 msgid_plural "Let %d hours pass every second."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/voyage_map.gd:284 src/ui/voyage_map.gd:285
+#: src/ui/voyage_map.gd:285 src/ui/voyage_map.gd:286
 msgid "Normal time: "
 msgstr ""
 
-#: src/ui/voyage_map.gd:324
+#: src/ui/voyage_map.gd:325
 msgid "%s nm to go  ·  arriving about %s"
 msgstr ""
 
-#: src/ui/voyage_map.gd:329
+#: src/ui/voyage_map.gd:330
 msgid "Arrived."
 msgstr ""
 
@@ -9371,23 +10615,23 @@ msgstr ""
 msgid "SIDE DECK"
 msgstr ""
 
-#: src/vessels/vessel_definition.gd:61
+#: src/vessels/vessel_definition.gd:64
 msgid "no id"
 msgstr ""
 
-#: src/vessels/vessel_definition.gd:63
+#: src/vessels/vessel_definition.gd:66
 msgid "no performance profile"
 msgstr ""
 
-#: src/vessels/vessel_definition.gd:65
+#: src/vessels/vessel_definition.gd:68
 msgid "missing deck or cabin scene"
 msgstr ""
 
-#: src/water/water_life.gd:152
+#: src/water/water_life.gd:154
 msgid "Ama"
 msgstr ""
 
-#: src/water/water_life.gd:187
+#: src/water/water_life.gd:189
 msgid "Ripple"
 msgstr ""
 

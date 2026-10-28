@@ -14,6 +14,7 @@ id = &"starling_33"
 display_name = "Wing 33"
 hull_type = "monohull"
 description = "A sturdy 33 ft cruising sloop, a step up from the starter boat. Easy to handle, comfortable at sea and happy on every point of sail."
+price = 14000
 specs = Dictionary[String, String]({"Length": "10.1 m (33 ft)", "Beam": "3.4 m", "Accommodation": "Forward V-berth, saloon, galley", "Engine": "Single diesel", "Passage stores": "36 days"})
 performance = ExtResource("2_perf")
 deck_scene = ExtResource("3_deck")

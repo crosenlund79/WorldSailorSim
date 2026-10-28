@@ -1,0 +1,20 @@
+{
+	"note": "I022 difficulty: the same sea and weather for everyone; only these existing numbers change. A factor multiplies the Standard value. Read by src/core/difficulty.gd.",
+	"levels": {
+		"relaxed": {
+			"name": "Relaxed",
+			"text": "Forgiving: more money to start with, food and water last longer, the boat wears more slowly, harbour costs and the rescue fee are lower.",
+			"starting_funds": 15000, "provisions_use": 0.8, "wear": 0.6, "weather_damage": 0.6, "costs": 0.75, "rescue_fee": 0.5
+		},
+		"standard": {
+			"name": "Standard",
+			"text": "The intended balance: the game as it was designed.",
+			"starting_funds": 10000, "provisions_use": 1.0, "wear": 1.0, "weather_damage": 1.0, "costs": 1.0, "rescue_fee": 1.0
+		},
+		"seasoned": {
+			"name": "Seasoned Captain",
+			"text": "Demanding seamanship: less money to start with, the crew eats and drinks more, the boat wears faster and takes heavy weather harder, harbour costs and the rescue fee are higher. The weather itself is the same.",
+			"starting_funds": 7000, "provisions_use": 1.2, "wear": 1.4, "weather_damage": 1.3, "costs": 1.25, "rescue_fee": 2.0
+		}
+	}
+}

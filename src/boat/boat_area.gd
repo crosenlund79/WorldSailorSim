@@ -120,6 +120,8 @@ func _ready() -> void:
 	GameSession.voyage_arrived.connect(_on_voyage_arrived)
 	_setup_harbour_dressing()
 	_setup_water_life()
+	_setup_water_look()
+	_setup_cabin_windows()
 	_setup_anchor_ambience()
 	_setup_camera()
 	_setup_lighting()
@@ -169,6 +171,64 @@ func _setup_harbour_dressing() -> void:
 	if pontoon:
 		mooring.move_child(dressing, pontoon.get_index() + 1)
 	dressing.setup(self, mooring)
+
+
+## Softer water (I022, WaterLook): the water's colour, a little lighter in
+## shallow water, and faint sandy patches (ShallowWater) when moored or at
+## anchor, over the water and under the crests.
+func _setup_water_look() -> void:
+	var water := get_node_or_null(^"Surroundings/Water") as Polygon2D
+	if water == null:
+		return
+	_recolour_water()
+	GameSession.voyage_started.connect(_recolour_water)
+	GameSession.voyage_arrived.connect(_on_arrived_recolour_water)
+	GameSession.anchor_changed.connect(_recolour_water)
+	var shallows := ShallowWater.new()
+	shallows.name = "ShallowWater"
+	water.add_child(shallows)  # over the water, still under WaterLife (its next sibling)
+
+
+func _recolour_water() -> void:
+	var water := get_node_or_null(^"Surroundings/Water") as Polygon2D
+	if water:
+		water.color = WaterLook.water_colour(WaterLook.is_shallow())
+
+
+func _on_arrived_recolour_water(_port: StringName) -> void:
+	_recolour_water()
+
+
+## The world beyond the cabin windows (I022, CabinWindows): in the cabins
+## that have windows in their illustrated art, right above the cabin's wall
+## art and under the furniture.
+func _setup_cabin_windows() -> void:
+	if area_id != SessionState.AREA_INTERIOR:
+		return
+	var visual := get_node_or_null(^"Visual") as VesselVisual
+	var base := visual.get_slot(&"CabinBase") if visual else null
+	if base == null:
+		return
+	var windows := CabinWindows.new()
+	windows.name = "CabinWindows"
+	if not windows.setup(self, _vessel.id):
+		windows.free()
+		return
+	base.add_sibling(windows)
+	_update_cabin_windows()
+
+
+## The windows belong to the illustrated cabin art (their openings are in
+## its walls), so they show only with it.
+func _update_cabin_windows() -> void:
+	var windows := get_node_or_null(^"Visual/CabinWindows") as CabinWindows
+	var visual := get_node_or_null(^"Visual") as VesselVisual
+	if windows and visual:
+		windows.visible = visual.profile != null and not visual.profile.procedural_only and visual.profile.get_texture(&"CabinBase") != null
+
+
+func get_cabin_windows() -> CabinWindows:
+	return get_node_or_null(^"Visual/CabinWindows") as CabinWindows
 
 
 ## The animated water (art only) on decks, over the water, under everything else.
@@ -450,6 +510,7 @@ func _on_art_style_changed(_style: StringName) -> void:
 	if dressing:
 		dressing.refresh()
 	apply_visual_profile(_vessel.get_active_visual_profile())
+	_update_cabin_windows()
 	show_condition()
 	var provisions := get_node_or_null(^"ProvisionDisplay")
 	if provisions and provisions.has_method(&"refresh"):

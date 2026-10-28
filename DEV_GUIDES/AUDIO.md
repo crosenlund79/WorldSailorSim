@@ -16,6 +16,8 @@ Defined in `default_bus_layout.tres`:
 | Ambience | looping background sound per area (deck, cabin) | Settings → Ambience |
 | SFX | game sounds: interactions, engine, the companion's purr or panting | Settings → SFX |
 | UI | button clicks | Settings → UI |
+| Outside | the weather heard aboard (water along the hull, rain, thunder); sends to Ambience, with a low-pass filter that muffles it below deck | Ambience |
+| Wind | the wind (breeze and storm wind); sends to Outside, so it is muffled below deck too (I022) | Settings → Wind (100 % = the earlier balance) |
 
 `AudioManager` (`src/audio/audio_manager.gd`, an autoload) plays sounds on the
 right bus; scenes only say *what* to play. `SettingsManager` sets the bus volumes

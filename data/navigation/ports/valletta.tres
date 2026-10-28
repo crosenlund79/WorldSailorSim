@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"valletta"
+display_name = "Valletta"
+country = "Malta"
+latitude = 35.8997
+longitude = 14.5148
+description = "Valletta, Malta, where honey-coloured bastions rise straight out of the water of Grand Harbour."
+importance = 1
+region = "mediterranean"
+island = true
+source = "GeoNames Valletta (35.8997, 14.5148), cities1000; UN/LOCODE MT MLA 3553N 01430E; I021"

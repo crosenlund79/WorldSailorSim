@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"symi"
+display_name = "Symi"
+country = "Greece"
+latitude = 36.6155
+longitude = 27.8362
+description = "Symi, a small island harbour in the Dodecanese, ringed by tiers of pastel neoclassical houses."
+importance = 3
+region = "aegean"
+island = true
+source = "GeoNames Symi (36.6155, 27.8362), cities1000; UN/LOCODE GR SYM 3636N 02750E; I021"

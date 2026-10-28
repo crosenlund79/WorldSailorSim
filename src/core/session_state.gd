@@ -73,6 +73,14 @@ var vessel_id: StringName = VesselCatalog.STARTER_ID
 var companion := CompanionState.new()
 ## The voyage being sailed, or null when not underway.
 var voyage: Voyage
+## The boats the captain owns (I022; vessel ids). The one aboard is always
+## among them. Saves from before I022 own every boat: they could move aboard
+## any of them at a boatyard, and nothing is ever taken away.
+var owned_vessels: Array[StringName] = [VesselCatalog.STARTER_ID]
+## Postcards and the little game (I022; PastimesState). Older saves: none yet.
+var pastimes := PastimesState.new()
+## Relaxed, Standard or Seasoned Captain (I022; Difficulty). Older saves: Standard.
+var difficulty: StringName = Difficulty.STANDARD
 ## Euros (whole). Never negative.
 var funds := STARTING_FUNDS
 ## Food and water aboard (days).
@@ -106,8 +114,11 @@ var home := HomeState.new()
 
 
 static func create_new(start_location: StringName, start_area: StringName, start_spawn: StringName,
-		companion_kind: StringName = CompanionState.DEFAULT_KIND) -> SessionState:
+		companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> SessionState:
 	var state := SessionState.new()
+	state.difficulty = Difficulty.valid(level)
+	state.funds = Difficulty.starting_funds(state.difficulty)
+	state.owned_vessels = [state.vessel_id] as Array[StringName]
 	state.location_id = start_location
 	state.boat_area = start_area
 	state.spawn_point = start_spawn
@@ -133,6 +144,32 @@ static func get_area_display_name(area: StringName) -> String:
 	return Loc.t(AREA_NAMES.get(area, String(area).capitalize()))
 
 
+## The owned boats from a save's "fleet" section: known ids only, the boat
+## aboard always included; no section (a save from before I022) owns all.
+static func owned_from(fleet: Variant, aboard: StringName) -> Array[StringName]:
+	var catalog := VesselCatalog.get_default()
+	var owned: Array[StringName] = []
+	var saved: Variant = (fleet as Dictionary).get("owned") if fleet is Dictionary else null
+	if saved is Array:
+		for id: Variant in saved:
+			if (id is String or id is StringName) and catalog.has_vessel(StringName(id)) and not StringName(id) in owned:
+				owned.append(StringName(id))
+	else:
+		owned = catalog.get_ids()
+	if catalog.has_vessel(aboard) and not aboard in owned:
+		owned.append(aboard)
+	return owned
+
+
+## The owned boats as saved: always including the boat aboard (the same rule
+## as owned_from, so saving and loading give back exactly the same).
+func _owned_for_save() -> Array:
+	var ids := owned_vessels.map(func(id: StringName) -> String: return String(id))
+	if not String(vessel_id) in ids and VesselCatalog.get_default().has_vessel(vessel_id):
+		ids.append(String(vessel_id))
+	return ids
+
+
 func duplicate_state() -> SessionState:
 	var copy := SessionState.new()
 	copy.boat_area = boat_area
@@ -156,6 +193,9 @@ func duplicate_state() -> SessionState:
 	copy.vessel_id = vessel_id
 	copy.voyage = voyage.duplicate_voyage() if voyage else null
 	copy.funds = funds
+	copy.owned_vessels = owned_vessels.duplicate()
+	copy.difficulty = difficulty
+	copy.pastimes = pastimes.duplicate_state()
 	copy.provisions = provisions.duplicate_provisions()
 	copy.vessel_conditions = vessel_conditions.duplicate()
 	copy.damage_applied_until = damage_applied_until
@@ -220,6 +260,9 @@ func to_dict() -> Dictionary:
 			"damage_applied_until": damage_applied_until,
 		},
 		"economy": {"funds": funds},
+		"fleet": {"owned": _owned_for_save()},
+		"difficulty": String(difficulty),
+		"pastimes": pastimes.to_dict(),
 		"provisions": provisions.to_dict(),
 		"rescue": {"count": rescue_count, "last": last_rescue.duplicate(true)},
 		"log": captains_log.to_dict(),
@@ -387,6 +430,11 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 		state.boat_care[String(id)] = record
 	# I020, optional: older saves have plain cabins and classic sails.
 	state.home = HomeState.from_dict(data.get("home"))
+	# I022, optional: the boats owned (older saves own every boat, as they
+	# could move aboard any of them) and the difficulty (older saves: Standard).
+	state.owned_vessels = owned_from(data.get("fleet"), state.vessel_id)
+	state.difficulty = Difficulty.valid(data.get("difficulty"))
+	state.pastimes = PastimesState.from_dict(data.get("pastimes"))
 
 	var navigation: Variant = data.get("navigation")
 	if not navigation is Dictionary:

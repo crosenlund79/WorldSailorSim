@@ -90,7 +90,7 @@ func _process(delta: float) -> void:
 ## "Coffee and a pastry  ·  €6  ·  40 min" (free choices say so).
 static func _describe_choice(choice: Dictionary) -> String:
 	var cost := int(choice.cost)
-	return Loc.t("%s  ·  %s  ·  %d min") % [choice.label, GameSession.format_money(cost) if cost > 0 else "free", int(choice.minutes)]
+	return Loc.t("%s  ·  %s  ·  %d min") % [Loc.t(String(choice.label)), GameSession.format_money(cost) if cost > 0 else Loc.t("free"), int(choice.minutes)]
 
 
 ## Shows what happened; only Return remains.

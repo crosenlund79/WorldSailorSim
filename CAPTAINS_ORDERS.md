@@ -324,6 +324,29 @@ fields are optional):
 31. **All four boats receive decorative solar panels. No electrical,
     battery, charging or power-management mechanics are authorized.**
 
+### Iteration 21, A Wider, Warmer World
+
+The Captain has authorized (version 0.108a, save format 12 unchanged), after a
+verified checkpoint branch (`backup/post-engine-room-pre-i021`):
+
+- **More world in the existing systems, not more complexity**: about 12–20 real
+  harbours chosen for gaps along real routes (verified positions, real water
+  access, facilities in the existing tiers, English and Danish), about 8–12 real
+  fish in their real regions with art, and a few cabin things in I020's system.
+- **Harbours look like their place, never like their continent**: a small
+  library of original illustrated harbour looks chosen per harbour by its
+  architecture, materials, land and climate (a New Zealand harbour may look
+  Scandinavian), in the game's hand-drawn style; no placeholders presented as
+  finished art.
+- **Special harbours** (those with their own illustrated arrival) get a subtle
+  mark on the chart and a line saying why; ordinary services never make a
+  harbour special.
+- **Additional boats and the parrot and hamster companions only if complete and
+  safe**; otherwise a feasibility note. No second UI overhaul.
+- This iteration took the number 21. The earlier planned "The Well-Trimmed
+  Ship" remains a separately scoped future assignment (not started, not
+  cancelled).
+
 ### Iterations and versions
 
 - Iteration numbers are plain sequential integers: no letter suffixes and no
@@ -340,6 +363,7 @@ fields are optional):
 - Only the repository `crosenlund79/LittleCaptainsHat` is worked on. The archived
   Next Harbor repository and unrelated projects are never edited.
 - Use recoverable checkpoint commits. Never reset, force-push or discard work.
+  Major iterations have their own branches (see *Major iteration branches*).
 - A delivery states the version, the final commit, the branch, the report and
   the Windows checklist, and ends with the clickable branch link (mandatory).
 - The Captain's own workflow is: GitHub branch → Code → Download ZIP → extract →
@@ -362,6 +386,103 @@ fields are optional):
   `python tools/docs/check_gdscript_guides.py` and record the review with
   `--acknowledge PATH --note "..."`; a delivery leaves the checker passing.
   The code is the authority: a stale entry is fixed, never trusted.
+- **The Harbourmaster's Inspection.** Before every delivery, and after adding
+  or changing content, run `python tools/qa/check_game_content.py`: it must
+  report no FAIL. Its WARN and INFO findings are read and either fixed or
+  explained in the report; unused assets are listed for the Captain's review
+  and never deleted without his approval. Releases follow
+  `docs/technical/RELEASE_READINESS.md`.
+
+### Major iteration branches
+
+Every major numbered iteration (I022, I023, ...) has its own development
+branch and a permanent recovery branch of the completed iteration, so each one
+can be recovered, identified and downloaded on its own.
+
+**Major or minor.** Only a major iteration (a commissioned, numbered
+implementation assignment, see *Iterations and versions*) gets its own
+branches. These do **not**, unless the Captain says so: injections, small
+adjustments, cosmetic polish, hotfixes, and documentation or
+quality-assurance assignments. They are committed on the integration branch.
+
+**Names.** For iteration I022 (three digits, the same pattern after it):
+
+| Branch | Purpose |
+|---|---|
+| `iteration/i022` | Development of the iteration |
+| `release/i022` | The completed iteration, frozen |
+| `claude/friendly-fermat-dey23f` | The integration branch (unchanged): everything verified ends up here |
+
+**Starting a major iteration.**
+
+1. Identify the latest verified integration baseline (the integration
+   branch's remote head, with its tests passing).
+2. Make sure unrelated work is committed and pushed.
+3. Record the exact starting SHA (all 40 characters).
+4. Create `iteration/i022` at that SHA:
+   `git push origin <SHA>:refs/heads/iteration/i022`.
+5. Verify it remotely: `git ls-remote origin refs/heads/iteration/i022` must
+   show that SHA (and the GitHub branch list, when available).
+6. Develop the iteration on that branch only.
+
+If the branch cannot be created and verified, implementation does not begin.
+If the GitHub environment refuses a branch, an authorized GitHub
+integration/API route may be used; otherwise the work stops and the limitation
+is reported. A branch is never reported as existing until it has been seen on
+the remote.
+
+**Completing a major iteration.**
+
+1. Run the required tests (`docs/technical/RELEASE_READINESS.md`).
+2. Commit all of the iteration's changes.
+3. Push `iteration/i022` and verify its remote head.
+4. Create `release/i022` at that exact completed SHA:
+   `git push origin <SHA>:refs/heads/release/i022`.
+5. Verify it remotely (`git ls-remote`, as above).
+6. Record both full SHAs (start and completed) in the iteration report.
+
+**Release branches are immutable.** A `release/…` branch is never moved,
+reset, deleted, rebased or force-pushed, and nothing is committed to it. A
+correction found later belongs to new work (a hotfix on the integration
+branch, or the next iteration), never to the snapshot. The `backup/…`
+checkpoint branches follow the same rule.
+
+**Integration.** An iteration is integrated into
+`claude/friendly-fermat-dey23f` only after its tests and its release branch are
+verified. Before merging, check what the integration branch has gained since
+the iteration started (`git log <start SHA>..origin/claude/friendly-fermat-dey23f`)
+and whether the two can be combined cleanly; never assume it. Integrate with a
+normal merge commit (or a fast-forward when nothing was added meanwhile) so
+that both the completed iteration and later work are kept. A conflict where
+choosing either side would lose behaviour goes to the Captain. After
+integration, re-run the tests on the integration branch and verify its remote
+head.
+
+**Downloading an iteration as a ZIP.** On GitHub: open the repository, choose
+the branch (for example `release/i021`) in the branch selector, then Code →
+Download ZIP; or open
+`https://github.com/crosenlund79/LittleCaptainsHat/archive/refs/heads/release/i021.zip`
+(replace `i021` with the iteration). Extract it and open `project.godot` in
+Godot, as usual.
+
+**Git tags.** Tags are optional; the release branch is the authoritative
+snapshot. If a tag push fails (the GitHub environment may refuse tags), the
+tag is not reported as existing: the failure and its message are written in the
+report, the push is not forced, and the release branch is relied on. A tag can
+be added later, by the Captain on GitHub (Releases) or through an authorized
+route, at the release branch's SHA.
+
+**No destructive Git operations** on any shared branch: no force-push, no
+`reset --hard` of pushed work, no rebase or amend of pushed commits, no
+deleting or renaming `release/…`, `backup/…`, `iteration/…` or the
+integration branch, no rewriting of history. Mistakes are corrected by new
+commits. Only the Captain may decide otherwise, explicitly.
+
+**Iteration 21** was already under way when this policy was set and kept its
+branch and history. Its recovery branch `release/i021` was created at the final
+I021 commit, `04a76231581f5a6d0af22ce2c2c138842b869453`, and verified on GitHub.
+The pre-I021 checkpoint `backup/post-engine-room-pre-i021` (`ec84cfa`) is
+unchanged.
 
 ### Not now
 
@@ -451,3 +572,26 @@ Two; the wording was again not found in the repository in Iteration 18.
   stopping at anchor, decorative solar panels on all four boats, and Sprite
   Workshop Phase 1 (`art_replacements/`); see `docs/revisions/v0.105b/REVISION_0_105B_REPORT.md`,
   `docs/artwork/SPRITE_WORKSHOP_REPORT.md` and `docs/revisions/v0.105b/WINDOWS_ACCEPTANCE_0_105B.md`.
+- **Iteration 21, A Wider, Warmer World**, version 0.108a, save format 12
+  (unchanged): sixteen new harbours (Dingle to Hobart), nine original harbour
+  looks chosen per harbour plus six special harbours with their own illustrated
+  arrival and a brass star on the chart, the arrival card, ten new fish and
+  three cabin things; boats and the parrot and hamster deferred with
+  feasibility notes; see `docs/iterations/i021/ITERATION_21_REPORT.md`,
+  `docs/iterations/i021/HARBOUR_LOOKS.md` and
+  `docs/iterations/i021/WINDOWS_ACCEPTANCE_21.md`. Recovery branch:
+  `release/i021` (`04a76231581f5a6d0af22ce2c2c138842b869453`).
+- **Iteration 22, The Captain's Other Life**, version 0.109a, save format 12:
+  see `docs/iterations/i022/ITERATION_22_REPORT.md` and
+  `docs/iterations/i022/WINDOWS_ACCEPTANCE_22.md`. Recovery branch:
+  `release/i022` (`2baa01034fbaa956018c58e013b555be8213d77d`).
+- **Iteration 23, Steady Hands & Golden Harbours**, version 0.109a
+  (unchanged), save format 12: commissioned as a polish injection and
+  reclassified as I023 by the Captain after delivery. Trip Details no
+  longer moves under a weather warning; every window fits the screen,
+  closes with Esc and speaks Danish (a UI sweep test); the interface stays
+  readable at dusk and dawn; and the illustrated Golden Harbour Moment on a
+  first arrival. See `docs/iterations/i023/ITERATION_23_REPORT.md`. Branches
+  `iteration/i023` and recovery branch `release/i023`, both at the
+  delivered commit (`d4e2e7e56206b220f8839323186e0c06d2a4c589`).
+- **Next numbered major iteration: I024.**

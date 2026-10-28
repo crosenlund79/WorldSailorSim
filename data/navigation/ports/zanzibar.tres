@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"zanzibar"
+display_name = "Zanzibar"
+country = "Tanzania"
+latitude = -6.1639
+longitude = 39.1979
+description = "Zanzibar's Stone Town, where dhows lie off coral-stone houses with carved wooden doors."
+importance = 2
+region = "indian_ocean"
+island = true
+source = "GeoNames Zanzibar (-6.1639, 39.1979), cities1000; UN/LOCODE TZ ZNZ (no coordinate); I021"

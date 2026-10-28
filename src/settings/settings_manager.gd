@@ -19,8 +19,10 @@ signal language_changed(locale: StringName)
 
 const DEFAULT_PATH := "user://settings.cfg"
 
-const AUDIO_BUSES: Array[StringName] = [&"Master", &"Music", &"Ambience", &"SFX", &"UI"]
-const DEFAULT_VOLUMES := {&"Master": 80, &"Music": 70, &"Ambience": 70, &"SFX": 80, &"UI": 70}
+## Wind (I022): the wind's own share inside Ambience (its bus sends to the
+## muffled "Outside" bus); 100 % is the sound balance from before it existed.
+const AUDIO_BUSES: Array[StringName] = [&"Master", &"Music", &"Ambience", &"Wind", &"SFX", &"UI"]
+const DEFAULT_VOLUMES := {&"Master": 80, &"Music": 70, &"Ambience": 70, &"Wind": 100, &"SFX": 80, &"UI": 70}
 
 const WINDOW_WINDOWED := &"windowed"
 const WINDOW_FULLSCREEN := &"fullscreen"
@@ -203,6 +205,51 @@ func set_sleep_hours(hours: int, persist := true) -> void:
 var _sleep_hours_saved := true
 
 
+# --- The Captain's Academy (I022) ----------------------------------------------
+
+## Contextual tips on or off (a preference, in Settings).
+const DEFAULT_TIPS := true
+var _tips := DEFAULT_TIPS
+## The Academy's progress on this computer (not a preference: Restore
+## defaults keeps it): "first_voyage" ("" never offered, "active",
+## "skipped", "done"), "step" (the First Voyage step reached) and "seen"
+## (the tips already shown).
+var _academy := {"first_voyage": "", "step": 0, "seen": []}
+
+
+func get_tips_enabled() -> bool:
+	return _tips
+
+
+func set_tips_enabled(enabled: bool) -> void:
+	_tips = enabled
+
+
+func get_academy() -> Dictionary:
+	return _academy.duplicate(true)
+
+
+## Replaces the Academy's progress and writes the settings file.
+func set_academy(data: Dictionary) -> void:
+	_academy = _sanitize_academy(data)
+	save()
+
+
+static func _sanitize_academy(data: Variant) -> Dictionary:
+	var clean := {"first_voyage": "", "step": 0, "seen": []}
+	if not data is Dictionary:
+		return clean
+	var state := str(data.get("first_voyage", ""))
+	clean.first_voyage = state if state in ["", "active", "skipped", "done"] else ""
+	clean.step = maxi(int(data.get("step", 0)), 0) if _is_number(data.get("step", 0)) else 0
+	var seen: Variant = data.get("seen", [])
+	if seen is Array or seen is PackedStringArray:
+		for id: Variant in seen:
+			if id is String or id is StringName:
+				clean.seen.append(String(id))
+	return clean
+
+
 func get_ui_light() -> StringName:
 	return _ui_light
 
@@ -283,6 +330,7 @@ func snapshot() -> Dictionary:
 		"reduce_motion": _reduce_motion,
 		"ui_light": _ui_light,
 		"language": _language,
+		"tips": _tips,
 	}
 
 
@@ -300,6 +348,7 @@ func restore_snapshot(data: Dictionary) -> void:
 	_reduce_flashing = bool(data.get("reduce_flashing", DEFAULT_REDUCE_FLASHING))
 	_flash_intensity = clampi(int(data.get("flash_intensity", DEFAULT_FLASH_INTENSITY)), 0, 100)
 	_reduce_motion = bool(data.get("reduce_motion", DEFAULT_REDUCE_MOTION))
+	_tips = bool(data.get("tips", DEFAULT_TIPS))
 	var light := StringName(data.get("ui_light", DEFAULT_UI_LIGHT))
 	var light_changed := light != _ui_light and light in UI_LIGHTS
 	if light in UI_LIGHTS:
@@ -341,6 +390,10 @@ func save() -> Error:
 	if _language != &"":
 		config.set_value("interface", "language", String(_language))
 	config.set_value("gameplay", "sleep_hours", _sleep_hours)
+	config.set_value("interface", "tips", _tips)
+	config.set_value("academy", "first_voyage", String(_academy.first_voyage))
+	config.set_value("academy", "step", int(_academy.step))
+	config.set_value("academy", "seen", PackedStringArray(_academy.seen))
 	var err := config.save(settings_path)
 	if err != OK:
 		push_error("Could not save settings to %s (error %d)" % [settings_path, err])
@@ -382,6 +435,10 @@ func load_settings() -> void:
 	loaded["language"] = language if language in LANGUAGES else &""
 	var sleep: Variant = config.get_value("gameplay", "sleep_hours", DEFAULT_SLEEP_HOURS)
 	_sleep_hours = clampi(int(sleep), SLEEP_HOURS_MIN, SLEEP_HOURS_MAX) if _is_number(sleep) else DEFAULT_SLEEP_HOURS
+	var tips: Variant = config.get_value("interface", "tips", DEFAULT_TIPS)
+	loaded["tips"] = tips if tips is bool else DEFAULT_TIPS
+	_academy = _sanitize_academy({"first_voyage": config.get_value("academy", "first_voyage", ""),
+		"step": config.get_value("academy", "step", 0), "seen": config.get_value("academy", "seen", [])})
 	restore_snapshot(loaded)
 
 

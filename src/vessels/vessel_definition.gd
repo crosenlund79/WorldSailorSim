@@ -15,6 +15,9 @@ const HULL_TRIMARAN := &"trimaran"
 @export var display_name := ""
 @export_enum("monohull", "catamaran", "trimaran") var hull_type := "monohull"
 @export_multiline var description := ""
+## What the boat costs at a boatyard, in euros (I022). Every new game is given
+## the starter boat; the others are bought once and then kept for good.
+@export var price := 0
 ## Short facts shown in the boatyard, e.g. {"Length": "10.1 m (33 ft)"}.
 @export var specs: Dictionary[String, String] = {}
 ## Sailing polar, engine and propulsion-controller settings.
