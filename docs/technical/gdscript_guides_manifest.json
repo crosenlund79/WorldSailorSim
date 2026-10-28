@@ -58,9 +58,9 @@
    "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
   },
   "src/app/game_version.gd": {
-   "sha": "49985bcdcf73e160",
+   "sha": "bdf4d679c8d357cc",
    "reviewed": "2026-10-28",
-   "note": "I025: CHANNEL TEST on the release checkpoint (entry unchanged)"
+   "note": "I026: version 0.112a, i026 stage 01, DEV (entries unchanged)"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -1233,9 +1233,9 @@
    "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "6ceaf5ee64544423",
+   "sha": "1acbd5ecb1beabfb",
    "reviewed": "2026-10-28",
-   "note": "I025: version 0.111a, iteration i025"
+   "note": "I026: version 0.112a, i026 stage 01, DEV (entries unchanged)"
   },
   "tests/suites/test_build_label.gd": {
    "sha": "07a24bd0a5bd5ca2",
@@ -1338,9 +1338,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_diagnostics.gd": {
-   "sha": "9e6e374fb8dddf25",
+   "sha": "20455d857ad52281",
    "reviewed": "2026-10-28",
-   "note": "I025: version 0.111a, iteration i025"
+   "note": "I026: version 0.112a, i026 stage 01, DEV (entries unchanged)"
   },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",

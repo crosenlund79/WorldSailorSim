@@ -11,8 +11,8 @@ extends RefCounted
 ##
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
-const DISPLAY := "0.111a"
-const MACHINE := "0.111.1"
+const DISPLAY := "0.112a"
+const MACHINE := "0.112.1"
 
 ## The development build identity (the label in the window's bottom-right
 ## corner, BuildLabel): which major iteration this checkpoint belongs to, an
@@ -26,9 +26,9 @@ const MACHINE := "0.111.1"
 ##   CHANNEL DEV        work in progress; TEST = the verified snapshot that a
 ##                      release/iNNN branch points at
 const PROJECT_CODE := "LCH"
-const ITERATION := "i025"
-const STAGE := ""
-const CHANNEL := "TEST"
+const ITERATION := "i026"
+const STAGE := "01"
+const CHANNEL := "DEV"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public
 ## export turns it off with a feature-tag override in project.godot:

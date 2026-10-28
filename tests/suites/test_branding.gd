@@ -55,16 +55,16 @@ func _test_name_and_version() -> void:
 	t.check_eq(ProjectSettings.get_setting("application/config/name"), "Little Captain's Hat", "[brand] the game is called Little Captain's Hat")
 	t.check(String(ProjectSettings.get_setting("application/config/description")).contains("Next Harbor"),
 		"[brand] the description says it was developed as Next Harbor")
-	t.check_eq(GameVersion.DISPLAY, "0.111a", "[version] this release is 0.111a")
+	t.check_eq(GameVersion.DISPLAY, "0.112a", "[version] this release is 0.112a")
 	t.check_eq(ProjectSettings.get_setting("application/config/version"), GameVersion.DISPLAY,
 		"[version] project.godot carries the same version (saves record it)")
 	t.check(RegEx.create_from_string("^0\\.\\d{3}[a-z]$").search(GameVersion.DISPLAY) != null,
 		"[version] it follows the owner's convention 0.<milestone><letter>")
-	t.check_eq(GameVersion.MACHINE, "0.111.1", "[version] a numbers-only form for tools (a = 1)")
+	t.check_eq(GameVersion.MACHINE, "0.112.1", "[version] a numbers-only form for tools (a = 1)")
 	var commit := GameVersion.get_commit()
 	t.check(commit.is_empty() or RegEx.create_from_string("^[0-9a-f]{7}$").search(commit) != null,
 		"[version] the commit is read from the checkout without running git (%s)" % (commit if commit else "unknown"))
-	t.check(GameVersion.describe().begins_with("0.111a"), "[version] describe(): %s" % GameVersion.describe())
+	t.check(GameVersion.describe().begins_with("0.112a"), "[version] describe(): %s" % GameVersion.describe())
 	t.check_eq(SaveManager.SAVE_VERSION, 12, "[version] the save format has its own version (12), not the game's")
 	t.check_eq(String(ProjectSettings.get_setting("application/config/icon")), "res://assets/branding/little_captains_hat_icon.svg",
 		"[brand] the window icon is the hat")
@@ -194,7 +194,7 @@ func _test_main_menu() -> void:
 	t.check(tagline.text == "Small boat. Wide world. Hold onto your hat." and _font_path(tagline) == CONDENSED_MEDIUM,
 		"[brand] with the tagline, in Barlow Condensed")
 	var version := menu.find_child("Version", true, false) as Label
-	t.check(version.text.begins_with("Version 0.111a"), "[version] the menu shows the version (%s)" % version.text)
+	t.check(version.text.begins_with("Version 0.112a"), "[version] the menu shows the version (%s)" % version.text)
 	t.check(_font_path(version) == BARLOW or version.label_settings != null, "[fonts] the version stays in Barlow")
 	t.check(_font_path(menu.find_child("NewGameButton", true, false)).contains("Barlow"), "[fonts] menu buttons stay in Barlow")
 	t.check(String((menu.find_child("Credits", true, false) as Label).text).contains("Patrick Hand (SIL OFL)"), "[fonts] the credits name both fonts")
