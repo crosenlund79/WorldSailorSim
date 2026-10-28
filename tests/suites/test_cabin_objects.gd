@@ -68,7 +68,7 @@ func _stand_by(area: BoatArea, object: CabinObject) -> Vector2:
 				continue
 			area.player.position = p
 			area.player.velocity = Vector2.ZERO
-			area.player.set_facing((object.position - p).normalized()) if area.player.has_method(&"set_facing") else null
+			area.player.set_facing((object.position - p).normalized())
 			await t.physics_frames(4)
 			if area.player.get_focused_interactable() == object.interactable:
 				return p
