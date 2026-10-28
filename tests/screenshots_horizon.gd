@@ -52,7 +52,8 @@ func _shot(file_name: String, keep_toasts := false) -> void:
 	await get_tree().create_timer(0.6).timeout
 	await _frames(4)
 	await RenderingServer.frame_post_draw
-	get_viewport().get_texture().get_image().save_png("%s/%s.png" % [out, file_name])
+	var suffix := ("_" + vessel) if vessel != "" else ""
+	get_viewport().get_texture().get_image().save_png("%s/%s%s.png" % [out, file_name, suffix])
 	print("SHOT %s" % file_name)
 
 
@@ -112,9 +113,7 @@ func _run() -> void:
 	app.start_new_game()
 	await _idle()
 	if vessel != "":
-		var state := GameSession.get_state_snapshot()
-		state.vessel_id = StringName(vessel)
-		GameSession.replace_state(state)
+		GameSession.switch_vessel(StringName(vessel))
 	# Harbour by day.
 	_set_local_hour(11.0)
 	if _wanted("01"):

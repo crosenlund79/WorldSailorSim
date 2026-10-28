@@ -285,11 +285,22 @@ func get_holding_text() -> String:
 
 func _draw_set_bar() -> void:
 	var size := _set_bar.size
-	_set_bar.draw_rect(Rect2(Vector2(0, 8), Vector2(size.x, size.y - 16)), Color(0.12, 0.16, 0.18))
-	_set_bar.draw_rect(Rect2(Vector2(size.x * 0.35, 8), Vector2(size.x * 0.3, size.y - 16)), Color(0.48, 0.63, 0.36, 0.8))
-	_set_bar.draw_rect(Rect2(Vector2(size.x * 0.45, 8), Vector2(size.x * 0.1, size.y - 16)), Color(0.6, 0.8, 0.45))
+	# A linear gauge: a sunken track with fine ticks, the good zone in green,
+	# its middle brighter, and a white marker with a cyan edge.
+	var track := Rect2(Vector2(0, 8), Vector2(size.x, size.y - 16))
+	_set_bar.draw_rect(track, UiTheme.color(&"surface_sunken"))
+	var success := UiTheme.color(&"success")
+	_set_bar.draw_rect(Rect2(Vector2(size.x * 0.35, 8), Vector2(size.x * 0.3, size.y - 16)), Color(success, 0.35))
+	_set_bar.draw_rect(Rect2(Vector2(size.x * 0.45, 8), Vector2(size.x * 0.1, size.y - 16)), Color(success, 0.85))
+	var tick := Color(UiTheme.color(&"ink_soft"), 0.6)
+	for i in 21:
+		var tx := roundf(size.x * i / 20.0)
+		var major := i % 5 == 0
+		_set_bar.draw_line(Vector2(tx, 8), Vector2(tx, 8 + (6.0 if major else 3.0)), tick, 1.0)
+	_set_bar.draw_rect(track.grow(-0.5), UiTheme.color(&"border"), false, 1.0)
 	var x := get_marker() * size.x
-	_set_bar.draw_rect(Rect2(Vector2(x - 3, 0), Vector2(6, size.y)), Color(0.98, 0.95, 0.85))
+	_set_bar.draw_rect(Rect2(Vector2(x - 2, 0), Vector2(4, size.y)), UiTheme.color(&"title"))
+	_set_bar.draw_rect(Rect2(Vector2(x - 3, 0), Vector2(6, size.y)), UiTheme.color(&"accent"), false, 1.0)
 
 
 # --- The Magic Anchor (0.105b) ----------------------------------------------------------
@@ -468,10 +479,9 @@ func _magic_bit() -> void:
 
 
 const FLOURISH_SECONDS := 1.2
-const BRASS := Color("#d9a441")
 
 
-## A short brass glow round the dial as the Magic Anchor bites.
+## A short cyan pulse round the dial as the Magic Anchor bites.
 func _draw_flourish() -> void:
 	if _flourish <= 0.0:
 		return
@@ -479,5 +489,5 @@ func _draw_flourish() -> void:
 	var strength := (1.0 - t) * (0.5 if SettingsManager.get_reduce_flashing() else 0.9)
 	var radius := minf(_magic_dial.size.x, _magic_dial.size.y - 70.0) / 2.0 - 12.0
 	var center := Vector2(_magic_dial.size.x / 2.0, radius + 12.0)
-	_magic_dial.draw_arc(center, radius + 20.0 + 16.0 * t, 0.0, TAU, 96, Color(BRASS, strength), 5.0, true)
-	_magic_dial.draw_arc(center, radius + 8.0 + 8.0 * t, 0.0, TAU, 96, Color(BRASS, strength * 0.6), 3.0, true)
+	_magic_dial.draw_arc(center, radius + 20.0 + 16.0 * t, 0.0, TAU, 96, Color(UiTheme.color(&"accent"), strength), 3.0, true)
+	_magic_dial.draw_arc(center, radius + 8.0 + 8.0 * t, 0.0, TAU, 96, Color(UiTheme.color(&"accent"), strength * 0.6), 1.5, true)

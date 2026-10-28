@@ -21,6 +21,8 @@ signal coffee_made(result: Dictionary)
 ## Real seconds the little cooking animation runs before the meal is served.
 const COOK_SECONDS := 1.6
 
+const Instrument := preload("res://src/ui/instrument_draw.gd")
+
 var _recipes: ItemList
 var _detail: Label
 var _rule: Label
@@ -254,62 +256,80 @@ func get_outcome_text() -> String:
 
 
 ## The pan on the stove: it sizzles while cooking and steams afterwards.
+## A line pictogram (Real Horizon): white strokes on a sunken strip, gas
+## flames in instrument cyan, steam as faint white.
 func _draw_pan() -> void:
+	_draw_stove()
 	if _pot:
 		_draw_pot()
 		return
 	var c := Vector2(_pan.size.x / 2.0, _pan.size.y - 26.0)
-	_pan.draw_rect(Rect2(c + Vector2(-90, 14), Vector2(180, 10)), Color("#2c3436"))
+	var ink := UiTheme.color(&"ink")
 	var flame := _cooking > 0.0
 	if flame:
-		for k in 5:
-			var x := -40.0 + k * 20.0
-			var h := 6.0 + 3.0 * sin(_time * 18.0 + k)
-			_pan.draw_colored_polygon(PackedVector2Array([c + Vector2(x - 5, 14), c + Vector2(x, 14 - h), c + Vector2(x + 5, 14)]),
-				Color("#e0a84e"))
-	_pan.draw_rect(Rect2(c + Vector2(-56, -6), Vector2(112, 18)), Color("#1f2a2e"))
-	_pan.draw_rect(Rect2(c + Vector2(-52, -4), Vector2(104, 12)), Color("#55605f"))
-	_pan.draw_line(c + Vector2(56, 0), c + Vector2(110, -8), Color("#1f2a2e"), 5.0, true)
-	var food := Color("#c9a46a") if int(get_selected_recipe().fish) == 0 else Color("#e8d6b0")
-	_pan.draw_rect(Rect2(c + Vector2(-40, -9), Vector2(80, 6)), food)
+		_draw_flames(c, 5, -40.0, 20.0, 5.0)
+	# The pan: a shallow outline, the food a quiet fill, a long handle.
+	var food := UiTheme.color(&"ink_soft") if int(get_selected_recipe().fish) == 0 else UiTheme.color(&"ink")
+	_pan.draw_rect(Rect2(c + Vector2(-44, -7), Vector2(88, 5)), Color(food, 0.45))
+	_pan.draw_polyline(PackedVector2Array([c + Vector2(-56, -8), c + Vector2(-52, 10), c + Vector2(52, 10), c + Vector2(56, -8)]), ink, 2.0, true)
+	_pan.draw_line(c + Vector2(56, -2), c + Vector2(110, -10), ink, 2.0, true)
+	_pan.draw_circle(c + Vector2(104, -9), 2.0, UiTheme.color(&"accent"))
 	var steam := 1.0 if flame else clampf((_steam_until - _time) / 2.0, 0.0, 1.0)
 	if steam > 0.0:
 		for k in 5:
 			var phase := fmod(_time * 0.7 + k / 5.0, 1.0)
-			var p := c + Vector2(-30 + k * 15 + 6.0 * sin(_time * 2.0 + k), -12 - phase * 46.0)
-			_pan.draw_circle(p, 4.0 + phase * 7.0, Color(1, 1, 1, 0.3 * (1.0 - phase) * steam))
+			var p := c + Vector2(-30 + k * 15 + 6.0 * sin(_time * 2.0 + k), -14 - phase * 46.0)
+			_pan.draw_arc(p, 3.0 + phase * 6.0, 0.0, TAU, 16, Color(UiTheme.color(&"ink"), 0.35 * (1.0 - phase) * steam), 1.0, true)
+
+
+## The cooktop: a sunken strip with a hairline edge and fine burner marks.
+func _draw_stove() -> void:
+	var c := Vector2(_pan.size.x / 2.0, _pan.size.y - 26.0)
+	var top := Rect2(c + Vector2(-90, 14), Vector2(180, 10))
+	_pan.draw_rect(top, UiTheme.color(&"surface_sunken"))
+	_pan.draw_line(top.position, Vector2(top.end.x, top.position.y), UiTheme.color(&"border"), 1.0)
+	for k in 9:
+		var x := top.position.x + 10.0 + k * 20.0
+		_pan.draw_line(Vector2(x, top.position.y + 3.0), Vector2(x, top.end.y - 3.0), Color(UiTheme.color(&"ink_soft"), 0.35), 1.0)
+
+
+func _draw_flames(c: Vector2, count: int, first_x: float, step: float, half: float) -> void:
+	var cyan := UiTheme.color(&"accent")
+	for k in count:
+		var x := first_x + k * step
+		var h := 6.0 + 3.0 * sin(_time * 18.0 + k)
+		_pan.draw_colored_polygon(PackedVector2Array([c + Vector2(x - half, 14), c + Vector2(x, 14 - h), c + Vector2(x + half, 14)]),
+			Color(cyan, 0.85))
 
 
 ## The coffee pot on the stove (and a mug beside it once poured), steaming.
 func _draw_pot() -> void:
 	var c := Vector2(_pan.size.x / 2.0, _pan.size.y - 26.0)
-	_pan.draw_rect(Rect2(c + Vector2(-90, 14), Vector2(180, 10)), Color("#2c3436"))
+	var ink := UiTheme.color(&"ink")
 	var brewing := _brewing > 0.0
 	if brewing:
-		for k in 4:
-			var x := -46.0 + k * 14.0
-			var h := 5.0 + 3.0 * sin(_time * 18.0 + k)
-			_pan.draw_colored_polygon(PackedVector2Array([c + Vector2(x - 4, 14), c + Vector2(x, 14 - h), c + Vector2(x + 4, 14)]),
-				Color("#e0a84e"))
+		_draw_flames(c, 4, -46.0, 14.0, 4.0)
 	# The pot: a tapered body, a lid knob, a spout and a handle.
 	var pot := c + Vector2(-28, 0)
-	_pan.draw_colored_polygon(PackedVector2Array([pot + Vector2(-22, 12), pot + Vector2(22, 12), pot + Vector2(16, -30),
-		pot + Vector2(-16, -30)]), Color("#3a4a4f"))
-	_pan.draw_rect(Rect2(pot + Vector2(-18, -36), Vector2(36, 7)), Color("#2a3639"))
-	_pan.draw_circle(pot + Vector2(0, -40), 4.0, Color("#2a3639"))
-	_pan.draw_line(pot + Vector2(18, -18), pot + Vector2(34, -30), Color("#3a4a4f"), 5.0, true)
-	_pan.draw_arc(pot + Vector2(-24, -10), 11.0, PI * 0.5, PI * 1.5, 10, Color("#2a3639"), 4.0, true)
+	var body := PackedVector2Array([pot + Vector2(-22, 12), pot + Vector2(22, 12), pot + Vector2(16, -30), pot + Vector2(-16, -30)])
+	_pan.draw_colored_polygon(body, UiTheme.color(&"surface_raised"))
+	Instrument.outline(_pan, body, ink, 2.0)
+	_pan.draw_rect(Rect2(pot + Vector2(-18, -36), Vector2(36, 6)), ink, false, 1.5)
+	_pan.draw_circle(pot + Vector2(0, -40), 3.0, ink)
+	_pan.draw_line(pot + Vector2(18, -18), pot + Vector2(34, -30), ink, 2.0, true)
+	_pan.draw_arc(pot + Vector2(-24, -10), 11.0, PI * 0.5, PI * 1.5, 10, ink, 2.0, true)
+	_pan.draw_line(pot + Vector2(-18, -6), pot + Vector2(18, -6), UiTheme.color(&"accent"), 1.0, true)
 	var poured := not brewing and _outcome.visible
 	if poured:
-		# A warm mug beside the pot.
+		# A mug beside the pot.
 		var mug := c + Vector2(44, 2)
-		_pan.draw_rect(Rect2(mug + Vector2(-14, -16), Vector2(28, 28)), Color("#d9cfb8"))
-		_pan.draw_rect(Rect2(mug + Vector2(-11, -13), Vector2(22, 5)), Color("#5a3a24"))
-		_pan.draw_arc(mug + Vector2(16, -2), 7.0, -PI * 0.5, PI * 0.5, 8, Color("#d9cfb8"), 4.0, true)
+		_pan.draw_rect(Rect2(mug + Vector2(-14, -16), Vector2(28, 28)), ink, false, 2.0)
+		_pan.draw_rect(Rect2(mug + Vector2(-11, -12), Vector2(22, 4)), UiTheme.color(&"accent"))
+		_pan.draw_arc(mug + Vector2(16, -2), 7.0, -PI * 0.5, PI * 0.5, 8, ink, 2.0, true)
 	var steam := 1.0 if brewing else clampf((_steam_until - _time) / 2.0, 0.0, 1.0)
 	if steam > 0.0:
 		var from := (c + Vector2(44, -18)) if poured else (pot + Vector2(34, -32))
 		for k in 4:
 			var phase := fmod(_time * 0.6 + k / 4.0, 1.0)
 			var p := from + Vector2(5.0 * sin(_time * 2.0 + k * 1.7), -phase * 40.0)
-			_pan.draw_circle(p, 3.0 + phase * 6.0, Color(1, 1, 1, 0.32 * (1.0 - phase) * steam))
+			_pan.draw_arc(p, 3.0 + phase * 5.0, 0.0, TAU, 16, Color(ink, 0.38 * (1.0 - phase) * steam), 1.0, true)

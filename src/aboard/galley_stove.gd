@@ -8,7 +8,7 @@ extends Node2D
 const INK := Color("#1f2a2e")
 const STEEL := Color("#9aa7ab")
 const HOB := Color("#2c3436")
-const FLAME := Color("#e0a84e")
+const FLAME := Color("#6FA7D8")  # gas burns blue
 ## Real seconds the pan steams after cooking.
 const STEAM_SECONDS := 12.0
 

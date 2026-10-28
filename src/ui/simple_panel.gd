@@ -10,7 +10,7 @@ var _buttons: HBoxContainer
 func _build(title: String, width := 620.0) -> VBoxContainer:
 	var dim := ColorRect.new()
 	dim.name = "Dim"  # coloured by UiTheme (the modal backdrop)
-	dim.color = Color(0.03, 0.09, 0.12, 0.6)
+	dim.color = Color(0.04, 0.07, 0.09, 0.58)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	var center := CenterContainer.new()

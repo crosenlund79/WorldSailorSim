@@ -183,8 +183,8 @@ func _test_harbour_copenhagen() -> void:
 		"[harbour] the old pontoon drawing gives way to the illustration; the sign reads Groceries")
 	var label := deck.mooring_label
 	t.check(label.visible and label.text.contains("COPENHAGEN") and label.label_settings.font is FontVariation
-		and (label.label_settings.font as FontVariation).base_font.resource_path.ends_with("PatrickHand-Regular.ttf"),
-		"[harbour] the harbour name sign is hand-lettered (Patrick Hand)")
+		and (label.label_settings.font as FontVariation).base_font.resource_path.ends_with("BarlowCondensed-Medium.ttf"),
+		"[harbour] the harbour name sign is in the signage face (Barlow Condensed)")
 	t.check(dressing.get_parent() == mooring and dressing.get_index() > mooring.get_node("Pontoon").get_index()
 		and mooring.get_parent().get_index() < deck.get_node("Visual").get_index(), "[harbour] it is drawn over the water and under the boat")
 	t.check(dressing.find_children("*", "CollisionObject2D", true, false).is_empty()

@@ -27,8 +27,8 @@ var _tabs: TabContainer
 
 func _ready() -> void:
 	_build("Captain's Log", PANEL_SIZE.x)
-	# Hand lettering for the log's title and section headings (the display
-	# font, see tools/build_theme.gd); every figure stays in Barlow.
+	# Instrument lettering (Barlow Condensed, the display variations) for the
+	# log's title and section headings; every figure stays in Barlow.
 	(_box.get_node("Title") as Label).theme_type_variation = HEADING
 	_tabs = TabContainer.new()
 	_tabs.name = "Tabs"

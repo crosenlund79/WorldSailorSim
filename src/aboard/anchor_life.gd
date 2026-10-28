@@ -26,8 +26,8 @@ const WAKE_MIN_SLEEP_S := 3.0 * 3600.0
 const TINTS := {
 	PHASE_MORNING: Color(1.0, 0.94, 0.85),
 	PHASE_DAY: Color(1.0, 1.0, 1.0),
-	PHASE_EVENING: Color(1.0, 0.86, 0.72),
-	PHASE_NIGHT: Color(0.7, 0.74, 0.9),
+	PHASE_EVENING: Color(0.97, 0.89, 0.79),
+	PHASE_NIGHT: Color(0.66, 0.72, 0.86),
 }
 ## The cabin lamp's warm glow (alpha 0 in daylight).
 const LAMP := {

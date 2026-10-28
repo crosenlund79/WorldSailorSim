@@ -4,9 +4,8 @@ extends HBoxContainer
 ## alone: rarity as 1-4 filled pips with its name ("Rare"), the grade as a
 ## medal with its name ("Silver"). Sharks add "released"; junk shows neither.
 
-const PIP := Color("#e8c27a")
-const PIP_EMPTY := Color(0.86, 0.9, 0.9, 0.28)
-const MEDALS := {&"bronze": Color("#c08552"), &"silver": Color("#c9d1d6"), &"gold": Color("#e8c25a")}
+## Grade discs: muted metal tones on the dark panel (named in text as well).
+const MEDALS := {&"bronze": Color("#B4835A"), &"silver": Color("#B8C2C6"), &"gold": Color("#D2B05E")}
 
 var _pips: Control
 var _rarity_label: Label
@@ -33,6 +32,7 @@ func _ready() -> void:
 	_grade_label = Label.new()
 	_grade_label.name = "Grade"
 	add_child(_grade_label)
+	UiTheme.palette_changed.connect(_update)
 	_update()
 
 
@@ -62,18 +62,25 @@ func _update() -> void:
 	_medal.queue_redraw()
 
 
+## Rarity as a small bar gauge (like a signal-strength readout): rising
+## segments, the reached ones in instrument cyan.
 func _draw_pips() -> void:
 	var count := FishingCatalog.rarity_index(_rarity) + 1
+	var cyan := UiTheme.color(&"accent")
+	var empty := UiTheme.color(&"border")
 	for i in FishingCatalog.RARITY_ORDER.size():
-		var c := Vector2(8 + i * 16, 10)
-		var diamond := PackedVector2Array([c + Vector2(0, -7), c + Vector2(6, 0), c + Vector2(0, 7), c + Vector2(-6, 0)])
-		_pips.draw_colored_polygon(diamond, PIP if i < count else PIP_EMPTY)
+		var h := 6.0 + i * 3.0
+		var bar := Rect2(Vector2(3 + i * 16, 17 - h), Vector2(11, h))
+		if i < count:
+			_pips.draw_rect(bar, cyan)
+		else:
+			_pips.draw_rect(bar.grow(-0.5), empty, false, 1.0)
 
 
 func _draw_medal() -> void:
 	if not MEDALS.has(_grade):
 		return
 	var c := Vector2(11, 10)
-	_medal.draw_circle(c, 8.0, MEDALS[_grade])
-	_medal.draw_arc(c, 8.0, 0.0, TAU, 24, Color("#3a2f26"), 1.5, true)
-	_medal.draw_arc(c, 4.5, 0.0, TAU, 16, Color(1, 1, 1, 0.55), 1.2, true)
+	_medal.draw_circle(c, 7.5, MEDALS[_grade])
+	_medal.draw_arc(c, 7.5, 0.0, TAU, 24, UiTheme.color(&"surface_sunken"), 1.0, true)
+	_medal.draw_arc(c, 4.0, 0.0, TAU, 16, Color(UiTheme.color(&"surface_sunken"), 0.6), 1.0, true)

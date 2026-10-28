@@ -5,17 +5,15 @@ extends Control
 ## checks done and still needed (hooks along the bottom) and the grip left on
 ## the line (three knots). Clicking the dial is the same as the action key.
 ## Draws a ReelTiming; the menu steps it.
+##
+## Styled as a marine instrument (Real Horizon): a dark face with fine ticks,
+## the target arc in success green and its Perfect zone in muted gold (the
+## fishing hint calls it "the gold middle"), a white pointer, cyan for checks
+## done; amber only for a miss and a lost grip.
 
 signal pressed
 
-const RING := Color("#284a57")
-const RING_EDGE := Color("#16323c")
-const ARC := Color("#7ba05b")
-const PERFECT := Color("#f1d27a")
-const NEEDLE := Color("#f2eee3")
-const MISS := Color("#c8553d")
-const PIP_DONE := Color("#e8c27a")
-const PIP_TODO := Color(0.86, 0.9, 0.9, 0.35)
+const Instrument := preload("res://src/ui/instrument_draw.gd")
 const FLASH_SECONDS := 0.3
 
 var timing: TimingCheck
@@ -41,11 +39,11 @@ func _gui_input(event: InputEvent) -> void:
 func flash(outcome: StringName) -> void:
 	match outcome:
 		ReelTiming.PRESS_PERFECT:
-			_flash_colour = PERFECT
+			_flash_colour = UiTheme.color(&"caution")
 		ReelTiming.PRESS_HIT:
-			_flash_colour = ARC
+			_flash_colour = UiTheme.color(&"success")
 		ReelTiming.PRESS_MISS:
-			_flash_colour = MISS
+			_flash_colour = UiTheme.color(&"warning")
 		_:
 			return
 	_flash = FLASH_SECONDS
@@ -61,43 +59,50 @@ func _draw() -> void:
 		return
 	var radius := minf(size.x, size.y - 70.0) / 2.0 - 12.0
 	var center := Vector2(size.x / 2.0, radius + 12.0)
-	var width := 22.0
-	draw_circle(center, radius + width / 2.0 + 3.0, RING_EDGE)
-	draw_circle(center, radius - width / 2.0 - 3.0, Color(0.06, 0.13, 0.16))
-	draw_arc(center, radius, 0.0, TAU, 96, RING, width, true)
+	var width := 16.0
+	var ink := UiTheme.color(&"ink")
+	var soft := UiTheme.color(&"ink_soft")
+	# The face: dark glass, a hairline bezel, the track and fine ticks.
+	Instrument.face(self, center, radius + width / 2.0 + 6.0)
+	draw_arc(center, radius, 0.0, TAU, 96, UiTheme.color(&"track"), width, true)
+	Instrument.ticks(self, center, radius - width / 2.0 - 3.0, 0.0, 360.0, 10.0, 3, 4.0, 9.0)
 	# The target arc and its Perfect zone (angles: 0 = top, clockwise).
-	var mid := deg_to_rad(timing.target_deg - 90.0)
-	var half := deg_to_rad(timing.arc_deg / 2.0)
-	draw_arc(center, radius, mid - half, mid + half, 32, ARC, width, true)
-	var perfect_half := deg_to_rad(timing.get_perfect_deg() / 2.0)
-	draw_arc(center, radius, mid - perfect_half, mid + perfect_half, 16, PERFECT, width - 6.0, true)
+	var half := timing.arc_deg / 2.0
+	Instrument.arc(self, center, radius, timing.target_deg - half, timing.target_deg + half, Color(UiTheme.color(&"success"), 0.85), width)
+	var perfect_half := timing.get_perfect_deg() / 2.0
+	Instrument.arc(self, center, radius, timing.target_deg - perfect_half, timing.target_deg + perfect_half, UiTheme.color(&"caution"), width - 6.0)
+	# Hairline edges of the target, like limit marks on a gauge.
+	for edge in [timing.target_deg - half, timing.target_deg + half]:
+		var d := Instrument.dir(edge)
+		draw_line(center + d * (radius - width / 2.0), center + d * (radius + width / 2.0 + 4.0), ink, 1.5, true)
 	# The outcome flash around the ring.
 	if _flash > 0.0:
 		var strength := _flash / FLASH_SECONDS * (0.45 if SettingsManager.get_reduce_flashing() else 0.9)
-		draw_arc(center, radius + width / 2.0 + 6.0, 0.0, TAU, 96, Color(_flash_colour, strength), 6.0, true)
-	# The needle.
-	var a := deg_to_rad(timing.angle - 90.0)
-	var tip := center + Vector2(cos(a), sin(a)) * (radius + width / 2.0)
-	draw_line(center, tip, RING_EDGE, 9.0, true)
-	draw_line(center, tip, NEEDLE, 5.0, true)
-	draw_circle(center, 11.0, NEEDLE)
-	draw_circle(center, 6.0, RING_EDGE)
-	# Checks (hooks) along the bottom, and the line's grip (knots).
+		draw_arc(center, radius + width / 2.0 + 10.0, 0.0, TAU, 96, Color(_flash_colour, strength), 3.0, true)
+	# The pointer.
+	Instrument.pointer(self, center, timing.angle, radius + width / 2.0, UiTheme.color(&"title"), 3.0)
+	# Checks along the bottom (segments, filled cyan when done), and the
+	# line's grip (three marks, amber crossed when lost).
 	var base_y := center.y + radius + width / 2.0 + 30.0
 	var n := timing.checks_needed
 	for i in n:
 		var x := size.x / 2.0 + (i - (n - 1) / 2.0) * 34.0
 		var done := i < timing.hits
-		draw_circle(Vector2(x, base_y), 11.0, PIP_DONE if done else PIP_TODO)
-		draw_arc(Vector2(x, base_y), 11.0, 0.0, TAU, 24, RING_EDGE, 2.0, true)
+		var cell := Rect2(Vector2(x - 12, base_y - 9), Vector2(24, 18))
+		draw_rect(cell, UiTheme.color(&"accent") if done else UiTheme.color(&"surface_sunken"))
+		draw_rect(cell, UiTheme.color(&"accent") if done else UiTheme.color(&"border"), false, 1.0)
 		if done:
-			draw_line(Vector2(x - 5, base_y), Vector2(x - 1, base_y + 5), RING_EDGE, 3.0, true)
-			draw_line(Vector2(x - 1, base_y + 5), Vector2(x + 6, base_y - 5), RING_EDGE, 3.0, true)
+			var dark := UiTheme.color(&"action_text")
+			draw_line(Vector2(x - 5, base_y), Vector2(x - 1, base_y + 4), dark, 2.0, true)
+			draw_line(Vector2(x - 1, base_y + 4), Vector2(x + 6, base_y - 4), dark, 2.0, true)
 	for i in timing.line_control:
 		var x := size.x / 2.0 + (i - (timing.line_control - 1) / 2.0) * 26.0
 		var left := i < timing.get_line_control()
 		var knot := Vector2(x, base_y + 32.0)
-		draw_line(knot - Vector2(13, 0), knot + Vector2(13, 0), Color(0.86, 0.8, 0.66, 0.8), 3.0, true)
-		draw_circle(knot, 7.0, Color("#d9c49a") if left else Color(0.3, 0.3, 0.3, 0.6))
+		draw_line(knot - Vector2(11, 0), knot + Vector2(11, 0), Color(soft, 0.6), 1.0, true)
+		draw_circle(knot, 5.0, ink if left else UiTheme.color(&"surface_sunken"))
+		draw_arc(knot, 5.0, 0.0, TAU, 16, ink if left else Color(soft, 0.6), 1.0, true)
 		if not left:
-			draw_line(knot + Vector2(-5, -5), knot + Vector2(5, 5), MISS, 2.5, true)
+			var amber := UiTheme.color(&"warning")
+			draw_line(knot + Vector2(-5, -5), knot + Vector2(5, 5), amber, 2.0, true)
+			draw_line(knot + Vector2(-5, 5), knot + Vector2(5, -5), amber, 2.0, true)

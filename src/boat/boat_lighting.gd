@@ -20,16 +20,16 @@ extends Node2D
 ## Cost: a handful of PointLight2D nodes sharing one gradient texture, one
 ## colour blend a frame, a weather look-up every few game minutes.
 
-const LAMP_WARM := Color(1.0, 0.8, 0.56)
-const LAMP_GALLEY := Color(1.0, 0.86, 0.66)
-const LAMP_CHART := Color(1.0, 0.62, 0.45)
+const LAMP_WARM := Color(1.0, 0.85, 0.66)
+const LAMP_GALLEY := Color(1.0, 0.9, 0.76)
+const LAMP_CHART := Color(1.0, 0.36, 0.3)  # red night-vision chart light
 const DAY_HATCH := Color(0.86, 0.93, 1.0)
 const INSTRUMENT := Color(0.72, 0.86, 1.0)
 const NAV_RED := Color(1.0, 0.25, 0.2)
 const NAV_GREEN := Color(0.3, 1.0, 0.45)
 const NAV_WHITE := Color(1.0, 0.97, 0.9)
-const QUAY_LAMP := Color(1.0, 0.82, 0.55)
-const SHADOW := Color(0.05, 0.03, 0.02)
+const QUAY_LAMP := Color(1.0, 0.87, 0.68)
+const SHADOW := Color(0.02, 0.04, 0.05)
 ## Fixture names that carry a lamp in the cabin: name -> [colour, size, strength].
 ## Iteration 18: stronger, with a tighter falloff (pool_texture), so each lamp
 ## makes a warm pool and the floor between them and the corners stays dim -

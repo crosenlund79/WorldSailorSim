@@ -47,7 +47,7 @@ const DOG_FUR := Color("#9C6B45")
 const DOG_DARK := Color("#6E4A30")
 const DOG_LIGHT := Color("#E3D2B4")
 const OUTLINE := Color(0.06, 0.1, 0.12, 0.55)
-const HEART := Color("#E07A6A")
+const HEART := Color("#C97A6C")
 
 @export var purr_sound: AudioStream = preload("res://assets/audio/placeholder/companion_purr.wav")
 @export var dog_sound: AudioStream = preload("res://assets/audio/placeholder/companion_dog_pant.wav")

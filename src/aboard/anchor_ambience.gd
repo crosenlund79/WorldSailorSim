@@ -16,7 +16,7 @@ extends Node2D
 ## lamp strength) for the anchor's moments and its tests.
 
 const EASE_SECONDS := 2.5
-const LAMP_COLOUR := Color(1.0, 0.78, 0.45)
+const LAMP_COLOUR := Color(1.0, 0.85, 0.64)
 ## Rings of the soft glow (more rings: smoother falloff).
 const RINGS := 18
 

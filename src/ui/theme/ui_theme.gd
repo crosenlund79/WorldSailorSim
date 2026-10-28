@@ -319,7 +319,7 @@ func _build() -> void:
 	_boxes.clear()
 	_colors.clear()
 	theme.default_font = _font_body
-	# Buttons: raised parchment (day) / slate (night), brass edged.
+	# Buttons: flat instrument keys with a hairline edge.
 	_button_states(&"Button", &"button", &"button_hover", &"button_text")
 	_button_states(&"OptionButton", &"button", &"button_hover", &"button_text")
 	_button_states(&"BigButton", &"action", &"action_hover", &"action_text", Vector4(24, 12, 24, 12))

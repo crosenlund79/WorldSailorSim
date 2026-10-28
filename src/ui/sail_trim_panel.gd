@@ -9,6 +9,7 @@ extends SimplePanel
 ## T or Esc closes. Changes apply at once (GameSession.set_sail_trim).
 
 const STEP := 0.05
+const Instrument := preload("res://src/ui/instrument_draw.gd")
 
 var _slider: HSlider
 var _auto: CheckBox
@@ -57,6 +58,7 @@ func _ready() -> void:
 	_label("Hint", "A / D or arrows: ease or sheet in  ·  Space: leave it to the crew  ·  T or Esc: close", &"MutedLabel")
 	_button("CloseButton", "Close", close)
 	GameSession.sail_trim_changed.connect(refresh)
+	UiTheme.palette_changed.connect(_sketch.queue_redraw)
 	GameSession.propulsion_changed.connect(func(_mode: StringName) -> void: refresh())
 	refresh()
 
@@ -107,25 +109,30 @@ func _draw_sketch() -> void:
 	var propulsion := GameSession.get_propulsion()
 	var trim := GameSession.get_sail_trim()
 	var center := _sketch.size / 2.0 + Vector2(0, 6)
-	# Theme colours (Captain's Chartroom): readable on parchment and on slate.
+	# Instrument colours (Real Horizon): white figures on dark glass.
 	var ink := UiTheme.color(&"ink")
 	var wind_colour := UiTheme.color(&"ink_soft")
-	# The boat from above, bow up.
+	# A wind-angle dial round the boat: fine ticks every 10°, longer every 30°,
+	# and the no-go zone either side of the bow as a faint amber limit.
+	var dial_r := 92.0
+	_sketch.draw_arc(center, dial_r, 0.0, TAU, 96, UiTheme.color(&"border_soft"), 1.0, true)
+	Instrument.ticks(_sketch, center, dial_r, 0.0, 360.0, 10.0, 3, 3.0, 7.0)
+	Instrument.arc(_sketch, center, dial_r + 3.0, -40.0, 40.0, Color(UiTheme.color(&"warning"), 0.5), 2.0)
+	# The boat from above, bow up: a plan-view outline on sunken glass.
 	var hull := PackedVector2Array([center + Vector2(0, -78), center + Vector2(26, -30), center + Vector2(24, 50),
 		center + Vector2(14, 72), center + Vector2(-14, 72), center + Vector2(-24, 50), center + Vector2(-26, -30)])
-	_sketch.draw_colored_polygon(hull, Color("#8a5a35"))
-	var closed := hull.duplicate()
-	closed.append(hull[0])
-	_sketch.draw_polyline(closed, Color("#3a2a1e"), 2.5, true)
+	_sketch.draw_colored_polygon(hull, UiTheme.color(&"surface_sunken"))
+	Instrument.outline(_sketch, hull, ink, 1.5)
+	_sketch.draw_line(center + Vector2(0, -70), center + Vector2(0, 64), Color(ink, 0.18), 1.0)
 	var mast := center + Vector2(0, -24)
 	# The wind (an arrow toward the boat from where it comes).
 	var a := deg_to_rad(propulsion.true_wind_angle)
 	var from := Vector2(sin(a), -cos(a))
 	var tail := center + from * 150.0
 	var head := center + from * 96.0
-	_sketch.draw_line(tail, head, wind_colour, 4.0, true)
-	var side := (head - tail).normalized().orthogonal() * 9.0
-	_sketch.draw_colored_polygon(PackedVector2Array([head + (head - tail).normalized() * 14.0, head + side, head - side]), wind_colour)
+	_sketch.draw_line(tail, head, wind_colour, 2.0, true)
+	var side := (head - tail).normalized().orthogonal() * 7.0
+	_sketch.draw_colored_polygon(PackedVector2Array([head + (head - tail).normalized() * 12.0, head + side, head - side]), wind_colour)
 	_sketch.draw_string(get_theme_default_font(), tail + Vector2(-20, -10), "wind", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, wind_colour)
 	if propulsion.is_motoring():
 		_sketch.draw_circle(mast, 5.0, ink)
@@ -133,8 +140,9 @@ func _draw_sketch() -> void:
 	# The boom on the side away from the wind: sheeted in = along the boat.
 	var leeward := -1.0 if propulsion.true_wind_angle > 0.0 else 1.0
 	var best := SailTrim.best(propulsion.true_wind_angle, propulsion.wind_speed_kn)
-	for pair in [[best, Color(ink, 0.25), 4.0], [float(trim.value) if not trim.auto else best, UiTheme.color(&"accent"), 6.0]]:
+	for pair in [[best, Color(ink, 0.3), 2.0], [float(trim.value) if not trim.auto else best, UiTheme.color(&"accent"), 4.0]]:
 		var swing := deg_to_rad(lerpf(8.0, 80.0, (1.0 - float(pair[0])) / 2.0)) * leeward
 		var end: Vector2 = mast + Vector2(sin(swing), cos(swing)) * 88.0
 		_sketch.draw_line(mast, end, pair[1], pair[2], true)
-	_sketch.draw_circle(mast, 6.0, ink)
+	_sketch.draw_circle(mast, 4.0, UiTheme.color(&"surface_raised"))
+	_sketch.draw_arc(mast, 4.0, 0.0, TAU, 16, ink, 1.5, true)

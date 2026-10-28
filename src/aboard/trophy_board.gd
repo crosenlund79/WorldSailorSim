@@ -13,9 +13,9 @@ extends Node2D
 ## the board never redrew it. Empty slots are a recessed frame with a faint
 ## fish outline, so an empty place reads as "still to catch".
 
-const WOOD := Color("#8a5a35")
-const WOOD_DARK := Color("#5c3a22")
-const BRASS := Color("#c9a46a")
+const WOOD := Color("#5E4C3C")
+const WOOD_DARK := Color("#3F342A")
+const BRASS := Color("#A88F5A")
 const EMPTY := Color(0.94, 0.9, 0.8, 0.28)
 const FISH_COLOURS := {
 	"herring": Color("#9fb7c0"), "mackerel": Color("#4f8a8b"), "flatfish": Color("#a68b62"), "cod": Color("#9a8f6a"),
@@ -26,7 +26,7 @@ const FISH_COLOURS := {
 const SIZE := Vector2(132, 46)
 ## A slot's picture: 26 x 13 units, centred under its brass pin.
 const PICTURE := Vector2(26.0, 13.0)
-const SLOT_SHADE := Color(0.24, 0.14, 0.07, 0.35)
+const SLOT_SHADE := Color(0.12, 0.10, 0.08, 0.35)
 
 var _pictures: Array[Sprite2D] = []
 

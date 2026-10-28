@@ -37,7 +37,11 @@ const SHADOW := Color(0.04, 0.07, 0.09, 0.32)
 ## Depth of the quay drawn beyond the pontoon (scene units).
 const QUAY_DEPTH := 130.0
 ## Where the buildings start, beyond the quay edge (scene units).
-const TOWN_FROM := 74.0
+const TOWN_FROM := 46.0
+## The far side of the basin: a pontoon with neighbouring boats moored bow-in;
+## their bows stop this far short of our boat's art canvas (scene units).
+const FAR_CLEARANCE := 36.0
+const NEIGHBOUR_MAX_LENGTH := 300.0
 
 const ARCHETYPE_NORDIC := &"nordic"
 const ARCHETYPE_ATLANTIC := &"atlantic"
@@ -273,6 +277,7 @@ func _draw() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 17 + hash(_port_id)  # the same harbour every frame, its own per port
 	_draw_water(rng)
+	_draw_far_side(rng)
 	_draw_quay(rng)
 	_draw_town(rng)
 	for landmark in _landmarks:
@@ -297,6 +302,129 @@ func _draw_water(_rng: RandomNumberGenerator) -> void:
 	for k in 4:
 		var h := 10.0 + k * 9.0
 		draw_rect(Rect2(p.position.x - 60.0, p.position.y - h, p.size.x + 120.0, h), Color(0.05, 0.12, 0.14, 0.05))
+
+
+## Across the fairway: a pontoon parallel to ours with the neighbours' boats
+## lying alongside it - cruising yachts, and the archetype's own local boats
+## (a Nordic fishing cutter, an Atlantic trawler, a Mediterranean gozzo, a
+## tropical catamaran). Art only, clear of the boat and its stations.
+func _draw_far_side(rng: RandomNumberGenerator) -> void:
+	var visual := _area.get_node_or_null(^"Visual") as VesselVisual
+	var top := visual.canvas.position.y if visual else -_pontoon.position.y
+	var max_beam := NEIGHBOUR_MAX_LENGTH * 0.36
+	var row := top - FAR_CLEARANCE - max_beam  # the neighbours' outer side
+	var left := _pontoon.position.x - 200.0
+	var right := _pontoon.end.x + 200.0
+	draw_rect(Rect2(left + 6, row - 40 + 8, right - left, 34), SHADOW)
+	draw_rect(Rect2(left, row - 40, right - left, 34), PLANK.darkened(0.05))
+	draw_rect(Rect2(left, row - 40, right - left, 5), GALVANISED.darkened(0.1))
+	draw_rect(Rect2(left, row - 6, right - left, 4), RUBBER)
+	var x := left + rng.randf_range(10.0, 60.0)
+	while x < right - 80.0:
+		var local := rng.randf() < 0.3
+		var length := rng.randf_range(210.0, NEIGHBOUR_MAX_LENGTH)
+		var beam := length * rng.randf_range(0.3, 0.36)
+		var centre_y := row + beam / 2.0 + 4.0
+		_draw_rope(PackedVector2Array([Vector2(x + 30.0, centre_y - beam * 0.3), Vector2(x + 10.0, row - 8.0)]))
+		_draw_rope(PackedVector2Array([Vector2(x + length - 50.0, centre_y - beam * 0.3), Vector2(x + length - 20.0, row - 8.0)]))
+		# Drawn bow-up in their own frame, turned to lie bow east like ours.
+		draw_set_transform(Vector2(x, centre_y), -PI / 2.0)
+		if local:
+			_draw_local_boat(Vector2.ZERO, length, beam, rng)
+		else:
+			_draw_neighbour_yacht(Vector2.ZERO, length, beam, rng)
+		draw_set_transform(Vector2.ZERO)
+		x += length + rng.randf_range(30.0, 90.0)
+
+
+## The shadow offset in a boat's own frame (turned by -90 degrees): down-right on screen.
+const NEIGHBOUR_SHADOW := Vector2(-10, 7)
+
+
+## A cruising yacht seen from above, stern to the pontoon at `stern`, bow +y.
+func _draw_neighbour_yacht(stern: Vector2, length: float, beam: float, rng: RandomNumberGenerator) -> void:
+	var hull := PackedVector2Array()
+	var half := beam / 2.0
+	for k in 13:
+		var t := k / 12.0
+		var w := half * (0.86 + 0.14 * sin(t * PI * 0.9)) * (1.0 - pow(maxf(t - 0.55, 0.0) / 0.45, 1.7))
+		hull.append(stern + Vector2(-w, 6.0 + t * length))
+	for k in range(12, -1, -1):
+		var t := k / 12.0
+		var w := half * (0.86 + 0.14 * sin(t * PI * 0.9)) * (1.0 - pow(maxf(t - 0.55, 0.0) / 0.45, 1.7))
+		hull.append(stern + Vector2(w, 6.0 + t * length))
+	var offset := PackedVector2Array()
+	for q in hull:
+		offset.append(q + NEIGHBOUR_SHADOW)
+	draw_colored_polygon(offset, SHADOW)
+	draw_colored_polygon(hull, MarinePalette.FIBREGLASS)
+	var deck := PackedVector2Array()
+	for q in hull:
+		deck.append(stern + (q - stern - Vector2(0, length * 0.5)) * Vector2(0.86, 0.95) + Vector2(0, length * 0.5))
+	draw_colored_polygon(deck, MarinePalette.NON_SKID)
+	draw_rect(Rect2(stern + Vector2(-half * 0.55, 14), Vector2(beam * 0.55, length * 0.2)), MarinePalette.TEAK)  # cockpit
+	var roof := Rect2(stern + Vector2(-half * 0.48, 14 + length * 0.22), Vector2(beam * 0.48, length * 0.32))
+	draw_rect(roof, MarinePalette.FIBREGLASS.lightened(0.05))
+	draw_rect(roof, Color(INK, 0.35), false, 1.0)
+	if rng.randf() < 0.6:  # a sprayhood
+		draw_rect(Rect2(roof.position + Vector2(-2, -10), Vector2(roof.size.x + 4, 12)), MarinePalette.CANVAS_SPRAYHOOD)
+	draw_line(stern + Vector2(0, 14 + length * 0.24), stern + Vector2(0, 14 + length * 0.52), MarinePalette.CANVAS_SPRAYHOOD, 6.0)  # sail cover
+	draw_circle(stern + Vector2(0, 14 + length * 0.55), 4.0, MarinePalette.BRUSHED_STEEL)  # mast
+	draw_polyline(hull + PackedVector2Array([hull[0]]), Color(MarinePalette.BRUSHED_STEEL, 0.9), 1.6, true)
+
+
+## The archetype's own working or local boat.
+func _draw_local_boat(stern: Vector2, length: float, beam: float, rng: RandomNumberGenerator) -> void:
+	var colours := {ARCHETYPE_NORDIC: [Color("#7E3F34"), Color("#2F4F63")], ARCHETYPE_ATLANTIC: [Color("#2F4F63"), Color("#3E5A4A")],
+		ARCHETYPE_MEDITERRANEAN: [Color("#E3E2DA"), Color("#4A7A9A")], ARCHETYPE_TROPICAL: [Color("#E3E2DA"), Color("#5E7F72")]}
+	var pair: Array = colours.get(_archetype, colours[ARCHETYPE_NORDIC])
+	var half := beam / 2.0
+	if _archetype == ARCHETYPE_TROPICAL:
+		# A cruising catamaran: two hulls, a bridgedeck, a trampoline forward.
+		for side: float in [-1.0, 1.0]:
+			var h := Rect2(stern + Vector2(side * half * 1.3 - half * 0.35, 6), Vector2(half * 0.7, length))
+			draw_rect(Rect2(h.position + NEIGHBOUR_SHADOW, h.size), SHADOW)
+			draw_rect(h, MarinePalette.FIBREGLASS)
+		draw_rect(Rect2(stern + Vector2(-half * 1.3, 30), Vector2(half * 2.6, length * 0.5)), MarinePalette.NON_SKID)
+		draw_rect(Rect2(stern + Vector2(-half * 0.9, 40), Vector2(half * 1.8, length * 0.36)), MarinePalette.FIBREGLASS.lightened(0.05))
+		draw_rect(Rect2(stern + Vector2(-half * 0.95, 30 + length * 0.5), Vector2(half * 1.9, length * 0.4)), Color("#2A3A42"))
+		return
+	var hull := PackedVector2Array()
+	for k in 11:
+		var t := k / 10.0
+		hull.append(stern + Vector2(-half * (1.0 - pow(maxf(t - 0.5, 0.0) / 0.5, 2.0) * 0.9), 6.0 + t * length * 0.9))
+	hull.append(stern + Vector2(0, 6.0 + length * 0.96))
+	for k in range(10, -1, -1):
+		var t := k / 10.0
+		hull.append(stern + Vector2(half * (1.0 - pow(maxf(t - 0.5, 0.0) / 0.5, 2.0) * 0.9), 6.0 + t * length * 0.9))
+	var offset := PackedVector2Array()
+	for q in hull:
+		offset.append(q + NEIGHBOUR_SHADOW)
+	draw_colored_polygon(offset, SHADOW)
+	draw_colored_polygon(hull, pair[0])
+	var deck := PackedVector2Array()
+	for q in hull:
+		deck.append(stern + (q - stern - Vector2(0, length * 0.5)) * Vector2(0.84, 0.94) + Vector2(0, length * 0.5))
+	var deck_colour := Color("#8A8478") if _archetype == ARCHETYPE_MEDITERRANEAN else Color("#7D817F")
+	draw_colored_polygon(deck, deck_colour)
+	if _archetype == ARCHETYPE_MEDITERRANEAN:
+		# A wooden gozzo: varnished thwarts, a small canopy.
+		for k in 4:
+			draw_rect(Rect2(stern + Vector2(-half * 0.8, 30 + k * length * 0.18), Vector2(half * 1.6, 6)), MarinePalette.TEAK)
+		draw_rect(Rect2(stern + Vector2(-half * 0.7, 20), Vector2(half * 1.4, length * 0.22)), pair[1])
+	else:
+		# A fishing boat: the wheelhouse forward of the working deck, a net drum aft.
+		var house := Rect2(stern + Vector2(-half * 0.6, length * 0.45), Vector2(half * 1.2, length * 0.22))
+		draw_rect(Rect2(house.position + NEIGHBOUR_SHADOW * 0.7, house.size), SHADOW)
+		draw_rect(house, Color("#E3E4DE"))
+		draw_rect(Rect2(house.position + Vector2(3, house.size.y - 7), Vector2(house.size.x - 6, 5)), Color("#2A3A42"))
+		draw_circle(stern + Vector2(0, length * 0.16), half * 0.26, pair[1])
+		draw_circle(stern + Vector2(0, length * 0.16), half * 0.12, Color("#3A4044"))
+		draw_line(stern + Vector2(0, length * 0.7), stern + Vector2(0, length * 0.85), Color("#4A5054"), 4.0)
+	draw_polyline(hull + PackedVector2Array([hull[0]]), Color(INK, 0.5), 1.2, true)
+	# Name boards and the odd fender, in the region's colours.
+	if rng.randf() < 0.5:
+		draw_rect(Rect2(stern + Vector2(-half - 4, length * 0.3), Vector2(8, 16)), Color("#D9783A"))
 
 
 func _draw_quay(rng: RandomNumberGenerator) -> void:

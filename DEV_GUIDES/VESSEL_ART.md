@@ -35,6 +35,17 @@ data/vessels/<vessel_id>.tres            VesselDefinition: id, name, scenes, per
 
 ## 1. Art direction
 
+> **Real Horizon (this repository).** The boats are now drawn as real cruising
+> yachts: weathered white fibreglass topsides with a dark rubbing strake, grey
+> moulded non-skid decks with smooth gelcoat margins (`nonskid_deck()`),
+> weathered teak only in the cockpit, brushed-steel fittings, smoked acrylic
+> hatches, varnished marine-timber joinery and slate upholstery below
+> (`joinery()`, `cushions()`, `berth()`), thin translucent blue-grey linework and
+> form by tone (`tone_edges()`). See [ART_DIRECTION.md](ART_DIRECTION.md) for the
+> palette. The older notes below describe the storybook pass and its colours;
+> where they disagree, ART_DIRECTION.md wins. The canvases, slots, file names
+> and the replacement workflow are unchanged.
+
 - **Hand-drawn, top-down, warm.** The look is inspired by FlipTober-style
   illustration: confident ink lines that wobble a little, flat colour washes with
   some unevenness, and light hatching for shade. No photo textures and no hard

@@ -110,8 +110,8 @@ func _draw_icon() -> void:
 		for i in 3:
 			var y := center.y - 8.0 + i * 8.0
 			var x0 := 2.0 + fmod(_time * 30.0 + i * 9.0, 10.0)
-			_icon.draw_line(Vector2(x0 - 6, y), Vector2(x0, y), Color(0.85, 0.93, 0.95, 0.7), 1.5, true)
+			_icon.draw_line(Vector2(x0 - 6, y), Vector2(x0, y), Color(UiTheme.color(&"ink_soft"), 0.8), 1.0, true)
 	elif _state == STATE_MISSING:
 		HatArt.get_default().draw_slot(_icon, HatArt.SLOT_WORN, center, -PI / 2, 0.35, 1.15)
 		var font := get_theme_default_font()
-		_icon.draw_string(font, center + Vector2(-5, 8), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(1.0, 0.86, 0.62))
+		_icon.draw_string(font, center + Vector2(-5, 8), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, UiTheme.color(&"warning"))

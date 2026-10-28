@@ -8,13 +8,13 @@ extends Node2D
 ## "holder" (deck, with its bracket) or "table" (cabin).
 var place: StringName = &"holder"
 
-const RIM := Color("#2a2420")
-const MUG := Color("#efe4cc")
-const MUG_SHADE := Color("#cbbd9c")
+const RIM := Color("#2A3236")
+const MUG := Color("#E3E4DE")
+const MUG_SHADE := Color("#B8BBB5")
 const COFFEE := Color("#5a3a24")
 const COFFEE_SHINE := Color("#8a5d3c")
-const BRASS := Color("#b88a4a")
-const BRASS_DARK := Color("#6b4e2a")
+const BRASS := Color("#8E989B")
+const BRASS_DARK := Color("#545E62")
 
 
 func _ready() -> void:

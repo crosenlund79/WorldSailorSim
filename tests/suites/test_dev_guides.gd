@@ -5,7 +5,7 @@ extends RefCounted
 ## closes, and copes with missing files.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
-const GUIDES := ["README.md", "SPRITES.md", "COMPANION_ANIMATION.md", "VESSEL_ART.md", "AUDIO.md", "WEATHER.md", "CAPTAINS_HAT.md", "HARBOURS.md", "LIFE_ABOARD.md", "BOAT_CARE.md", "CHART_REGIONS.md", "MODDING_FUTURE.md"]
+const GUIDES := ["README.md", "SPRITES.md", "COMPANION_ANIMATION.md", "VESSEL_ART.md", "AUDIO.md", "WEATHER.md", "CAPTAINS_HAT.md", "HARBOURS.md", "LIFE_ABOARD.md", "BOAT_CARE.md", "CHART_REGIONS.md", "MODDING_FUTURE.md", "ART_DIRECTION.md"]
 ## Documents whose Markdown links are checked.
 const LINKED_DOCS := ["res://README.md", "res://docs/README.md", "res://docs/technical/ARCHITECTURE.md", "res://docs/artwork/ART_PIPELINE.md",
 	"res://docs/iterations/i004/ITERATION_004B_REPORT.md", "res://docs/iterations/i005/ITERATION_005A_REPORT.md",

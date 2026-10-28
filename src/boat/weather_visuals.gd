@@ -14,8 +14,8 @@ extends Node2D
 const SAMPLE_SECONDS := 0.5
 const MAX_STREAKS := 40
 const MAX_DROPS := 260
-const STREAK := Color(0.93, 0.97, 1.0)
-const DROP := Color(0.78, 0.86, 0.95)
+const STREAK := Color(0.88, 0.92, 0.93)
+const DROP := Color(0.80, 0.85, 0.88)
 
 var area: BoatArea
 ## Where the wind blows to, as a unit vector in boat coordinates, and its
@@ -107,8 +107,8 @@ func _draw() -> void:
 		var fade := sin(PI * s.z)
 		var length := 26.0 + wind_kn * 1.6
 		draw_line(at - wind_direction * length * 0.5, at + wind_direction * length * 0.5,
-			Color(STREAK, 0.16 * fade * strength), 1.6, true)
+			Color(STREAK, 0.08 * fade * strength), 1.2, true)
 	var slant := (Vector2(wind_direction.x * clampf(wind_kn * 6.0, 0.0, 220.0) * 0.4, 380.0)).normalized()
 	for d in _drops:
 		var at := Vector2(d.x, d.y)
-		draw_line(at, at + slant * d.z, Color(DROP, 0.35), 1.2, true)
+		draw_line(at, at + slant * d.z, Color(DROP, 0.28), 1.0, true)

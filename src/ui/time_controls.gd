@@ -57,11 +57,12 @@ func _sync() -> void:
 		(_buttons[scale] as Button).set_pressed_no_signal(not paused and scale == GameSession.get_time_scale())
 
 
-## Two vertical bars in the theme's cream (the universal pause symbol).
+## Two vertical bars in white (the universal pause symbol); the theme's
+## icon colour tints them like the button text.
 static func _pause_icon() -> ImageTexture:
 	var image := Image.create(16, 18, false, Image.FORMAT_RGBA8)
 	for y in 18:
 		for x in 16:
 			if x < 5 or x > 10:
-				image.set_pixel(x, y, Color("#EFE5CC"))
+				image.set_pixel(x, y, Color.WHITE)
 	return ImageTexture.create_from_image(image)

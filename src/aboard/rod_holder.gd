@@ -9,7 +9,7 @@ extends Node2D
 const INK := Color("#1f2a2e")
 const STEEL := Color("#9aa7ab")
 const ROD := Color("#2c3b3f")
-const CORK := Color("#c9a46a")
+const CORK := Color("#A89068")
 const REEL := Color("#5a6a6e")
 const LINE := Color(0.95, 0.95, 0.9, 0.55)
 

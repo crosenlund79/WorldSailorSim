@@ -1,8 +1,9 @@
 class_name VoyageMap
 extends CanvasLayer
 ## Long Passage as a journey (The Well-Run Ship): while the passage clock
-## runs (Simulation.start_passage) the game view fades away and an
-## illustrated atlas shows the voyage instead. The boat follows its planned
+## runs (Simulation.start_passage) the game view fades away and a
+## chartplotter-style overview (Real Horizon: dark sea, muted land, the track
+## sailed in instrument cyan) shows the voyage instead. The boat follows its planned
 ## route (the real path, Date Line and canals included: the line is the
 ## voyage's own route, the boat its real position), with the start, the
 ## destination, the date, the distance to go and the arrival estimate.
@@ -30,13 +31,13 @@ const TRACK_FPS := 12.0
 const MIN_SPAN := 0.06
 const MARGIN := 0.18
 
-const SEA_DAY := Color("#A9C3C0")
-const SEA_NIGHT := Color("#1B3A4C")
-const LAND_DAY := Color("#D9C79C")
-const LAND_NIGHT := Color("#3E4E52")
-const ROUTE_DONE := Color("#A4513A")
-const ROUTE_AHEAD := Color("#2A2420")
-const BOAT_COLOUR := Color("#1F3B4D")
+## The overview chart: a dark display chart by day, dimmed further at night.
+const SEA_DAY := Color("#1C3340")
+const SEA_NIGHT := Color("#0D1A21")
+const LAND_DAY := Color("#46524D")
+const LAND_NIGHT := Color("#29332F")
+## A faint graticule every GRID_DEGREES.
+const GRID_DEGREES := 10.0
 
 ## Set by App before adding: hidden and paused while the atlas shows.
 var screen: Node
@@ -420,6 +421,7 @@ func _draw_track() -> void:
 	if _route.size() < 2:
 		return
 	var ink := UiTheme.color(&"ink")
+	var cyan := UiTheme.color(&"accent")
 	var points := PackedVector2Array()
 	points.resize(_route.size())
 	for i in _route.size():
@@ -427,14 +429,15 @@ func _draw_track() -> void:
 	var progress := GameSession.get_voyage_progress_nm() if GameSession.is_underway() else (_cumulative[-1] if not _cumulative.is_empty() else 0.0)
 	var boat := _boat_unit(progress)
 	var split := GeoMath.segment_index_at(_cumulative, progress) if _cumulative.size() == _route.size() else 1
-	# Ahead: dashed; behind: a solid line in the route's red.
+	_draw_graticule()
+	# Ahead: a dashed white route; behind: the track sailed, solid cyan.
 	for i in range(split, points.size()):
 		var a := to_screen(boat) if i == split else points[i - 1]
-		_track.draw_dashed_line(a, points[i], Color(ROUTE_AHEAD.lerp(ink, UiTheme.blend), 0.8), 2.0, 8.0)
+		_track.draw_dashed_line(a, points[i], Color(ink, 0.75), 1.5, 8.0)
 	var done := PackedVector2Array(points.slice(0, split))
 	done.append(to_screen(boat))
 	if done.size() >= 2:
-		_track.draw_polyline(done, ROUTE_DONE, 3.0, true)
+		_track.draw_polyline(done, cyan, 2.5, true)
 	# Start and destination.
 	var catalog := PortCatalog.get_default()
 	var voyage := GameSession.get_voyage()
@@ -447,16 +450,36 @@ func _draw_track() -> void:
 	var dir := (ahead - at).normalized() if ahead.distance_to(at) > 0.5 else Vector2.RIGHT
 	var side := dir.orthogonal()
 	var hull := PackedVector2Array([at + dir * 13.0, at + side * 6.0 - dir * 7.0, at - dir * 9.0, at - side * 6.0 - dir * 7.0])
-	_track.draw_circle(at, 15.0, Color(1, 1, 1, 0.35))
-	_track.draw_colored_polygon(hull, BOAT_COLOUR if UiTheme.blend < 0.5 else Color("#F3E4C8"))
-	_track.draw_polyline(PackedVector2Array([hull[0], hull[1], hull[2], hull[3], hull[0]]), Color("#F3E4C8") if UiTheme.blend < 0.5 else BOAT_COLOUR, 1.5, true)
+	_track.draw_arc(at, 15.0, 0.0, TAU, 32, Color(cyan, 0.45), 1.0, true)
+	_track.draw_line(at + dir * 9.0, at + dir * 34.0, Color(cyan, 0.8), 1.5, true)  # heading line
+	_track.draw_colored_polygon(hull, UiTheme.color(&"title"))
+	_track.draw_polyline(PackedVector2Array([hull[0], hull[1], hull[2], hull[3], hull[0]]), UiTheme.color(&"surface_sunken"), 1.5, true)
 	if is_stopped():
-		_track.draw_arc(at, 22.0, 0.0, TAU, 32, Color(ROUTE_DONE, 0.9), 2.5, true)
+		_track.draw_arc(at, 22.0, 0.0, TAU, 32, Color(UiTheme.color(&"warning"), 0.9), 2.0, true)
+
+
+## Faint meridians and parallels (every GRID_DEGREES) under the route.
+func _draw_graticule() -> void:
+	var view := _track.size
+	var colour := Color(UiTheme.color(&"ink_soft"), 0.12)
+	var lon := -540.0  # the world and its copies east and west (unit x is linear in longitude)
+	while lon <= 540.0:
+		var x := to_screen(Vector2((lon + 180.0) / 360.0, 0.0)).x
+		if x >= 0.0 and x <= view.x:
+			_track.draw_line(Vector2(x, 0.0), Vector2(x, view.y), colour, 1.0)
+		lon += GRID_DEGREES
+	var lat := -80.0
+	while lat <= 80.0:
+		var y := to_screen(CabinWorldMap.to_unit(Vector2(0.0, lat))).y
+		if y >= 0.0 and y <= view.y:
+			_track.draw_line(Vector2(0.0, y), Vector2(view.x, y), colour, 1.0)
+		lat += GRID_DEGREES
 
 
 func _draw_port(at: Vector2, label: String, ink: Color) -> void:
-	_track.draw_circle(at, 6.0, ROUTE_DONE)
-	_track.draw_circle(at, 3.0, Color("#F6EBD5"))
+	_track.draw_circle(at, 6.0, UiTheme.color(&"surface_sunken"))
+	_track.draw_arc(at, 6.0, 0.0, TAU, 20, ink, 1.5, true)
+	_track.draw_circle(at, 2.5, UiTheme.color(&"accent"))
 	var font := ThemeDB.fallback_font if UiTheme.theme == null else UiTheme.theme.default_font
 	_track.draw_string_outline(font, at + Vector2(10, -8), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, 4, Color(_paper.color, 0.9))
 	_track.draw_string(font, at + Vector2(10, -8), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, ink)

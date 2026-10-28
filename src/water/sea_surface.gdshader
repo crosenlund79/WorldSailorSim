@@ -78,7 +78,7 @@ void fragment() {
 
 	// Chop: short wind waves, elongated across the wind.
 	float chop_scale = mix(0.022, 0.012, s) * mix(1.0, 1.6, shelter);
-	vec2 cp = vec2(u * chop_scale * 1.0, v * chop_scale * 0.45) - vec2(sea_time * mix(0.25, 1.1, s), 0.0);
+	vec2 cp = vec2(u * chop_scale * 1.0, v * chop_scale * 0.7) - vec2(sea_time * mix(0.25, 1.1, s), 0.0);
 	float chop = fbm(cp);
 	float chop_d = fbm(cp + vec2(0.07, 0.0)) - chop;
 	float chop_amp = mix(0.12, 0.65, s) * (1.0 - calm * 0.75);
@@ -87,7 +87,7 @@ void fragment() {
 	// lee faces darker.
 	vec2 light_dir = normalize(vec2(-0.6, -0.8));
 	float facing = dot(along, light_dir);
-	float slope = swell_slope * swell_amp * facing + chop_d * 9.0 * chop_amp;
+	float slope = swell_slope * swell_amp * facing + chop_d * 7.0 * chop_amp;
 	col = mix(col, light_colour.rgb, clamp(slope, 0.0, 1.0) * 0.55);
 	col = mix(col, shadow_colour.rgb, clamp(-slope, 0.0, 1.0) * 0.6);
 	col = mix(col, shadow_colour.rgb, (1.0 - patches) * 0.18 * (0.4 + s));
@@ -96,15 +96,38 @@ void fragment() {
 	float sheen = fbm(world * 0.0024 + vec2(0.0, sea_time * 0.01));
 	col = mix(col, light_colour.rgb, calm * smoothstep(0.55, 0.85, sheen) * 0.28);
 
-	// Whitecaps and streaks from about 20 kn.
-	float white = smoothstep(0.55, 0.95, s);
+	// Whitecaps from about 18 kn: scattered, short-lived breaking crests -
+	// small, sharp-edged, long across the wind and thin along it, broken up
+	// by fine noise - and thin streaks of old foam running down the wind.
+	float white = smoothstep(0.5, 0.9, s);
 	if (white > 0.0) {
-		// Breaking crests: ragged foam on the swell's crest line, broken up
-		// by fine noise; long thin streaks of old foam down the wind.
-		float lace = fbm(vec2(u * 0.03, v * 0.018) + vec2(sea_time * 0.2, 0.0));
-		float crest = smoothstep(0.9, 0.995, swell + (chop - 0.5) * 0.25) * smoothstep(0.5, 0.72, lace);
-		float streak = smoothstep(0.74, 0.86, noise(vec2(u * 0.0025, v * 0.11))) * smoothstep(0.4, 0.7, lace);
-		col = mix(col, foam_colour.rgb, clamp(crest * 0.8 + streak * 0.22, 0.0, 1.0) * white);
+		float cell_size = mix(150.0, 95.0, s);
+		vec2 q = vec2(u, v) / cell_size + vec2(-sea_time * 0.25, 0.0);
+		vec2 cell = floor(q);
+		vec2 f = fract(q) - 0.5;
+		float foam = 0.0;
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dy = -1; dy <= 1; dy++) {
+				vec2 c = cell + vec2(float(dx), float(dy));
+				float h = hash(c);
+				if (h > 0.25 + 0.55 * (1.0 - white)) {
+					continue;
+				}
+				vec2 centre = vec2(float(dx), float(dy)) + vec2(hash(c + 7.1), hash(c + 3.7)) - 0.5;
+				vec2 d = (f - centre) * vec2(cell_size / 6.0, cell_size / 44.0);
+				// A crescent bowed downwind, with a fading tail of foam behind it.
+				d.x += d.y * d.y * 0.1;
+				float life = 0.5 + 0.5 * sin(sea_time * 0.9 + h * 40.0);
+				float r = length(d) / (0.6 + life * 0.6);
+				float tail = (1.0 - smoothstep(0.0, 1.0, abs(d.y) / 1.2)) * smoothstep(-6.0, 0.0, d.x) * (1.0 - step(0.0, d.x)) * 0.35;
+				float cap = max(1.0 - smoothstep(0.45, 1.0, r), tail);
+				foam = max(foam, cap * smoothstep(0.15, 0.6, life));
+			}
+		}
+		float breakup = noise(world * 0.2 + vec2(sea_time * 0.8, 0.0)) * 0.6 + noise(world * 0.07) * 0.4;
+		foam *= smoothstep(0.22, 0.58, breakup) * 0.9;
+		float streak = smoothstep(0.78, 0.9, noise(vec2(u * 0.0022, v * 0.16))) * smoothstep(0.35, 0.65, noise(world * 0.03));
+		col = mix(col, foam_colour.rgb, clamp(foam * 0.92 + streak * 0.2 * white, 0.0, 1.0) * white);
 	}
 
 	// Sun glints on the chop.

@@ -3,7 +3,7 @@ class_name ProvisionDisplay
 extends Node2D
 ## The food and water stores in the cabin, drawn from the real quantities:
 ## four food items (a loaf, apples, a jar of preserves, a cheese) and four
-## water jugs, each standing for 3.5 days (Cozy Polish: real things, no longer
+## water jerrycans in a stores locker (Real Horizon: muted, real colours), each standing for 3.5 days (Cozy Polish: real things, no longer
 ## crates and cans). Full
 ## items are filled, used ones are outlines, so full, moderate, low and empty
 ## stores look different at a glance; low stores turn amber and empty ones
@@ -16,13 +16,13 @@ extends Node2D
 
 const ITEMS := 4
 const DAYS_PER_ITEM := Provisions.CAPACITY_DAYS / ITEMS
-const FOOD := Color("#C9A46A")
-const FOOD_DARK := Color("#7A5C3A")
-const WATER := Color("#5FA3B5")
-const WATER_DARK := Color("#2E5A66")
-const EMPTY := Color(0.94, 0.9, 0.8, 0.35)
-const LOW := Color("#E0A84E")
-const OUT := Color("#E06A4E")
+const FOOD := Color("#A88E68")
+const FOOD_DARK := Color("#5E4E3A")
+const WATER := Color("#6F98A5")
+const WATER_DARK := Color("#38535C")
+const EMPTY := Color(0.86, 0.88, 0.86, 0.3)
+const LOW := Color("#D49A4B")
+const OUT := Color("#C9634E")
 const LABEL_FONT: Font = preload("res://assets/fonts/Barlow-SemiBold.ttf")
 
 ## Rotation-free layout: crates in the top row, cans in the bottom row.
@@ -89,8 +89,11 @@ func _draw() -> void:
 		return
 	var width := item_spacing * ITEMS
 	var tray := Rect2(-width / 2.0 - 6.0, -24.0, width + 12.0, 48.0)
-	draw_rect(tray, Color(0.12, 0.09, 0.07, 0.55))
-	draw_rect(tray, _tint(minf(food_days, water_days), Color(0.06, 0.12, 0.16, 0.7)), false, 1.5)
+	# A stores locker: marine-timber bottom, a stainless fiddle rail round it.
+	draw_rect(Rect2(tray.position + Vector2(2, 3), tray.size), Color(0.02, 0.03, 0.04, 0.35))
+	draw_rect(tray, Color("#4A3F34"))
+	draw_rect(tray.grow(-2.0), Color("#5A4C3E"), false, 1.0)
+	draw_rect(tray, _tint(minf(food_days, water_days), Color("#8F9A9D")), false, 1.6)
 	var food_filled := filled_items(food_days)
 	var water_filled := filled_items(water_days)
 	for i in ITEMS:
@@ -98,24 +101,25 @@ func _draw() -> void:
 		# Food: recognisable things in turn (Cozy Polish), not crates.
 		_draw_food(FOOD_KINDS[i % FOOD_KINDS.size()], Vector2(x, -13.0), i < food_filled)
 		_draw_jug(Vector2(x, 5.0), i < water_filled)
-	var label_colour := _tint(minf(food_days, water_days), Color(0.94, 0.9, 0.8, 0.7))
+	var label_colour := _tint(minf(food_days, water_days), Color(0.86, 0.89, 0.88, 0.75))
 	draw_string(LABEL_FONT, Vector2(-width / 2.0 - 4.0, 22.0), Loc.t("FOOD · WATER"), HORIZONTAL_ALIGNMENT_LEFT, width + 8.0, 8, label_colour)
 
 
 ## The food slots, left to right: what a cruising galley keeps.
 const FOOD_KINDS: Array[StringName] = [&"bread", &"apples", &"jar", &"cheese"]
-const BREAD := Color("#C98F4E")
-const BREAD_DARK := Color("#7A4E26")
-const APPLE := Color("#B8402F")
-const APPLE_GREEN := Color("#8FA33E")
-const JAR_GLASS := Color(0.85, 0.9, 0.88, 0.55)
-const JAR_FILL := Color("#D9822B")
-const JAR_LID := Color("#B98A3E")
-const CHEESE := Color("#E8C25A")
-const CHEESE_RIND := Color("#B8892E")
-const JUG := Color("#E7DCC4")
-const JUG_DARK := Color("#6B5B45")
-const GHOST := Color(0.94, 0.9, 0.8, 0.3)
+const BREAD := Color("#A87B4F")
+const BREAD_DARK := Color("#6A4B30")
+const APPLE := Color("#8E3F33")
+const APPLE_GREEN := Color("#6E7A45")
+const JAR_GLASS := Color(0.80, 0.86, 0.86, 0.5)
+const JAR_FILL := Color("#A86B3A")
+const JAR_LID := Color("#8D9396")
+const CHEESE := Color("#CDB36E")
+const CHEESE_RIND := Color("#9A8248")
+## Water: translucent jerrycans with a grey cap.
+const JUG := Color("#C9D3D2")
+const JUG_DARK := Color("#56666B")
+const GHOST := Color(0.86, 0.88, 0.86, 0.28)
 
 
 func _draw_food(kind: StringName, c: Vector2, full: bool) -> void:
@@ -134,7 +138,7 @@ func _draw_food(kind: StringName, c: Vector2, full: bool) -> void:
 			for o in [Vector2(-3.4, 0.8), Vector2(3.2, 0.8), Vector2(0.0, -2.6)]:
 				if full:
 					draw_circle(c + o, 3.4, APPLE)
-					draw_circle(c + o + Vector2(-1.0, -1.0), 0.9, Color(1, 1, 1, 0.45))
+					draw_circle(c + o + Vector2(-1.0, -1.0), 0.8, Color(1, 1, 1, 0.25))
 				else:
 					draw_arc(c + o, 3.4, 0.0, TAU, 12, GHOST, 1.0, true)
 			if full:
@@ -145,7 +149,7 @@ func _draw_food(kind: StringName, c: Vector2, full: bool) -> void:
 				draw_rect(body, JAR_FILL)
 				draw_rect(body, JAR_GLASS, false, 1.0)
 				draw_rect(Rect2(c + Vector2(-5.0, -6.0), Vector2(10.0, 2.6)), JAR_LID)
-				draw_line(c + Vector2(-2.5, -1.5), c + Vector2(-2.5, 4.0), Color(1, 1, 1, 0.45), 1.0)
+				draw_line(c + Vector2(-2.5, -1.5), c + Vector2(-2.5, 4.0), Color(1, 1, 1, 0.3), 1.0)
 			else:
 				draw_rect(body, GHOST, false, 1.0)
 				draw_rect(Rect2(c + Vector2(-5.0, -6.0), Vector2(10.0, 2.6)), GHOST, false, 1.0)
@@ -173,7 +177,7 @@ func _draw_jug(c: Vector2, full: bool) -> void:
 	draw_polyline(_closed(body), JUG_DARK, 1.0, true)
 	draw_rect(Rect2(c + Vector2(-1.8, -6.0), Vector2(3.6, 2.2)), JUG_DARK)
 	draw_rect(Rect2(c + Vector2(-3.0, 1.0), Vector2(6.0, 5.5)), _tint(water_days, WATER))
-	draw_line(c + Vector2(-3.0, 1.0), c + Vector2(3.0, 1.0), Color(1, 1, 1, 0.6), 1.0)
+	draw_line(c + Vector2(-3.0, 1.0), c + Vector2(3.0, 1.0), Color(1, 1, 1, 0.35), 1.0)
 
 
 static func _oval(c: Vector2, radii: Vector2) -> PackedVector2Array:

@@ -12,19 +12,19 @@ extends Node2D
 ## chart table, a berth or the coffee spots. The same cabin always gives the
 ## same places.
 
-const INK := Color("#3B2F25")
-const RUG_A := Color("#B5654A")
-const RUG_B := Color("#D9B98A")
-const RUG_C := Color("#6E8C8A")
-const WOOD := Color("#8A5A36")
-const BRASS := Color("#C9A24A")
-const GLASS := Color(1.0, 0.92, 0.7, 0.85)
-const PAPER := Color("#E9DDBF")
-const SEA := Color("#7FA2AE")
-const LEAF := Color("#5F8A4A")
-const POT := Color("#B0603F")
-const FLAGS: Array[Color] = [Color("#C8453B"), Color("#E9C46A"), Color("#2F5D8A"), Color("#F2EEE3"), Color("#3E7D4E")]
-const BOOKS: Array[Color] = [Color("#7A3B2E"), Color("#2F5D8A"), Color("#3E7D4E"), Color("#C9A24A"), Color("#5A4A6A")]
+const INK := Color("#2A3236")
+const RUG_A := Color("#6F5C4E")
+const RUG_B := Color("#A9A293")
+const RUG_C := Color("#58676B")
+const WOOD := Color("#5E4C3C")
+const BRASS := Color("#A88F5A")
+const GLASS := Color(1.0, 0.93, 0.78, 0.8)
+const PAPER := Color("#DCDBD2")
+const SEA := Color("#A9BCC2")
+const LEAF := Color("#56664A")
+const POT := Color("#8A5A44")
+const FLAGS: Array[Color] = [Color("#B23A32"), Color("#D8B24A"), Color("#2A4F7A"), Color("#E8E8E2"), Color("#1E2328")]
+const BOOKS: Array[Color] = [Color("#6C4A40"), Color("#3E556A"), Color("#4F5E4A"), Color("#8E8064"), Color("#585560")]
 
 ## Keep this far from stations and companion spots (px), and this far apart.
 const CLEARANCE := 46.0
@@ -98,7 +98,7 @@ func _draw_lamp() -> void:
 	draw_circle(into * 12.0, 9.0, Color(GLASS, 0.25))
 	draw_circle(into * 12.0, 6.0, GLASS)
 	draw_arc(into * 12.0, 6.0, 0.0, TAU, 20, BRASS, 2.5, true)
-	draw_circle(into * 12.0, 2.0, Color("#F6D27A"))
+	draw_circle(into * 12.0, 2.0, Color("#F2DEB0"))
 
 
 func _draw_books() -> void:

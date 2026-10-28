@@ -10,16 +10,16 @@ extends PanelContainer
 ## vessel is a caution or a collision risk underway. Light: the traffic is
 ## asked a few times a second (Simulation.traffic_risks), never every frame,
 ## and the scope is a handful of draw calls. Not a certified instrument.
+##
+## Drawn like a modern radar display (Real Horizon): a dark face, hairline
+## range rings and fine bearing ticks, own ship in white, targets in cyan,
+## caution in yellow-amber and collision risk in warning amber (ringed twice,
+## never by colour alone).
 
 const RANGES: Array[float] = [3.0, 6.0, 12.0]
 const SCOPE_SIZE := 210.0
 const REFRESH_SECONDS := 0.2
-const SCOPE := Color("#12302C")
-const RING := Color(0.75, 0.88, 0.8, 0.3)
-const OWN := Color("#F2EEE3")
-const NEARBY := Color("#BFD8CE")
-const CAUTION := Color("#E9C46A")
-const DANGER := Color("#E9654A")
+const Instrument := preload("res://src/ui/instrument_draw.gd")
 
 ## Turned on by the captain (kept for the game run, not saved).
 static var shown := false
@@ -133,32 +133,44 @@ static func describe(risks: Array[Dictionary]) -> String:
 static func colour_for(risk: int) -> Color:
 	match risk:
 		Simulation.RISK_DANGER:
-			return DANGER
+			return UiTheme.color(&"warning")
 		Simulation.RISK_CAUTION:
-			return CAUTION
-	return NEARBY
+			return UiTheme.color(&"caution")
+	return UiTheme.color(&"accent")
 
 
 func _draw_scope() -> void:
 	var half := SCOPE_SIZE / 2.0
 	var centre := Vector2(half, half)
-	_scope.draw_circle(centre, half, SCOPE)
-	for f in [0.5, 1.0]:
-		_scope.draw_arc(centre, half * f - 1.0, 0.0, TAU, 48, RING, 1.0, true)
-	_scope.draw_string(ThemeDB.fallback_font, Vector2(half - 4.0, 14.0), Loc.t("N", "compass"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, RING * 2.0)
-	_scope.draw_string(ThemeDB.fallback_font, Vector2(half + 4.0, half - half * 0.5 + 12.0), Loc.t("%s nm") % Loc.decimal(get_range_nm() / 2.0, 1 if get_range_nm() < 4.0 else 0),
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, RING * 2.0)
-	# Our boat, along its heading when underway.
+	var soft := UiTheme.color(&"ink_soft")
+	var ring := Color(soft, 0.45)
+	Instrument.face(_scope, centre, half)
+	for f in [0.25, 0.5, 0.75]:
+		_scope.draw_arc(centre, (half - 4.0) * f, 0.0, TAU, 64, Color(ring, ring.a * (1.0 if f == 0.5 else 0.6)), 1.0, true)
+	# Bearing ticks every 10°, longer every 30°, and faint cross hairs.
+	Instrument.ticks(_scope, centre, half - 5.0, 0.0, 360.0, 10.0, 3, 3.0, 7.0)
+	_scope.draw_line(centre + Vector2(0, -half + 14.0), centre + Vector2(0, half - 14.0), Color(soft, 0.15), 1.0)
+	_scope.draw_line(centre + Vector2(-half + 14.0, 0), centre + Vector2(half - 14.0, 0), Color(soft, 0.15), 1.0)
+	var font := ThemeDB.fallback_font if UiTheme.theme == null else UiTheme.theme.default_font
+	_scope.draw_string(font, Vector2(half - 4.0, 26.0), Loc.t("N", "compass"), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, UiTheme.color(&"ink"))
+	_scope.draw_string(font, Vector2(half + 4.0, half - (half - 4.0) * 0.5 + 12.0), Loc.t("%s nm") % Loc.decimal(get_range_nm() / 2.0, 1 if get_range_nm() < 4.0 else 0),
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, soft)
+	# Our boat, along its heading when underway, with a heading line.
 	var heading := deg_to_rad(Simulation.get_current_heading()) if GameSession.is_underway() else 0.0
-	_draw_mark(centre, heading, OWN, 8.0)
+	var forward := Vector2(sin(heading), -cos(heading))
+	_scope.draw_line(centre, centre + forward * (half - 12.0), Color(UiTheme.color(&"title"), 0.5), 1.0, true)
+	_draw_mark(centre, heading, UiTheme.color(&"title"), 8.0)
 	for info in _risks:
 		var offset: Vector2 = info.offset_nm
 		var at := centre + Vector2(offset.x, -offset.y) / get_range_nm() * half
 		if at.distance_to(centre) > half:
 			continue
-		_draw_mark(at, deg_to_rad(float(info.course)), colour_for(int(info.risk)), 6.0)
+		var colour := colour_for(int(info.risk))
+		_draw_mark(at, deg_to_rad(float(info.course)), colour, 6.0)
 		if int(info.risk) >= Simulation.RISK_CAUTION:
-			_scope.draw_arc(at, 9.0, 0.0, TAU, 20, colour_for(int(info.risk)), 1.5, true)
+			_scope.draw_arc(at, 9.0, 0.0, TAU, 20, colour, 1.5, true)
+		if int(info.risk) >= Simulation.RISK_DANGER:
+			_scope.draw_arc(at, 13.0, 0.0, TAU, 24, colour, 1.0, true)
 
 
 func _draw_mark(at: Vector2, angle: float, colour: Color, size: float) -> void:

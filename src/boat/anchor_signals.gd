@@ -21,13 +21,13 @@ extends Node2D
 ## every view. Reads GameSession only (presentation; nothing is saved).
 
 const BALL := Color("#1c1c1e")
-const ROPE := Color("#c9b58c")
-const BUOY := Color("#e2683c")
-const BUOY_BAND := Color("#f2eee3")
+const ROPE := Color("#C9C3B2")
+const BUOY := Color("#D9783A")
+const BUOY_BAND := Color("#E6E7E1")
 const BOB_SPEED := 1.3
 const BALL_RADIUS := 12.0
-const BRASS := Color("#d9a441")
-const BRASS_DARK := Color("#7a5a22")
+const BRASS := Color("#B39858")
+const BRASS_DARK := Color("#6E5E3A")
 ## The Magic Anchor's line, drawn this long whatever the scope or depth.
 const MAGIC_LINE := 64.0
 const BUOY_ID := &"equipment.anchor.buoy"
@@ -118,7 +118,7 @@ func _draw() -> void:
 		draw_texture_rect(_buoy_art, get_buoy_rect(), false)
 	else:
 		draw_circle(buoy, 9.0, BUOY)
-		draw_arc(buoy, 9.0, 0.0, TAU, 20, Color("#3a2a1e"), 1.6, true)
+		draw_arc(buoy, 9.0, 0.0, TAU, 20, Color("#2A3236"), 1.6, true)
 		draw_line(buoy + Vector2(-8.0, 0), buoy + Vector2(8.0, 0), BRASS if magic else BUOY_BAND, 2.8, true)
 	if magic:
 		_draw_brass_mechanism()

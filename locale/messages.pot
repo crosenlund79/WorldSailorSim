@@ -9019,7 +9019,7 @@ msgid "Automatic (follows the day)"
 msgstr ""
 
 #: src/ui/settings_menu.gd:207
-msgid "By day the chartroom's parchment and brass, by night harbour dusk and lantern light. Automatic follows the sun where the boat is."
+msgid "By day a sunlit instrument display, by night the same displays dimmed for dark eyes. Automatic follows the sun where the boat is."
 msgstr ""
 
 #: src/ui/settings_menu.gd:215

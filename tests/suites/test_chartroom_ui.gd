@@ -73,8 +73,8 @@ func _test_theme_foundation() -> void:
 			variations.append(type)
 	t.check(variations.is_empty(), "[theme] the screens' variations exist%s" % ("" if variations.is_empty() else ": " + ", ".join(variations)))
 	var heading := theme.get_font(&"font", &"HeaderLabel") as FontVariation
-	t.check(heading != null and heading.base_font.resource_path.contains("PatrickHand") and theme.default_font.resource_path.contains("Barlow"),
-		"[type] headings are maritime (Patrick Hand); body text stays Barlow")
+	t.check(heading != null and heading.base_font.resource_path.contains("BarlowCondensed") and theme.default_font.resource_path.contains("Barlow"),
+		"[type] headings are instrument lettering (Barlow Condensed); body text stays Barlow")
 	# Contrast: body text on the panel surface, both moods (WCAG-style ratio).
 	var ratios := []
 	for night in [0.0, 1.0]:
@@ -103,10 +103,10 @@ func _button_fill() -> Color:
 func _test_modes_and_settings() -> void:
 	SettingsManager.set_ui_light(SettingsManager.UI_LIGHT_NIGHT)
 	await t.frames(1)
-	t.check(UiTheme.is_night() and _button_fill().is_equal_approx(UiTheme.color_at(&"button", 1.0)), "[mode] Always night: Harbor Dusk")
+	t.check(UiTheme.is_night() and _button_fill().is_equal_approx(UiTheme.color_at(&"button", 1.0)), "[mode] Always night: night mode")
 	SettingsManager.set_ui_light(SettingsManager.UI_LIGHT_DAY)
 	await t.frames(1)
-	t.check(not UiTheme.is_night() and _button_fill().is_equal_approx(UiTheme.color_at(&"button", 0.0)), "[mode] Always day: Vintage Chartroom")
+	t.check(not UiTheme.is_night() and _button_fill().is_equal_approx(UiTheme.color_at(&"button", 0.0)), "[mode] Always day: sunlit display")
 	# Stored in the settings file, not in the save.
 	SettingsManager.set_ui_light(SettingsManager.UI_LIGHT_NIGHT)
 	SettingsManager.save()

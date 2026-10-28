@@ -20,11 +20,14 @@ const RASTER := 96
 const ROWS_PER_FRAME := 8
 const REBUILD_FRACTION := 0.2
 const PLOT_SIZE := 260.0
-const WATER := Color("#16394A")
-const LAND := Color("#B9A982")
-const ROUTE := Color("#E8C27A")
-const BOAT := Color("#F2EEE3")
-const TEXT := Color(0.86, 0.9, 0.9)
+## Display chart colours (Real Horizon): a dark sea, muted olive-grey land,
+## the route in instrument cyan and own ship in white.
+const WATER := Color("#172C37")
+const LAND := Color("#4E5A52")
+const ROUTE := MarinePalette.INSTRUMENT_CYAN
+const BOAT := MarinePalette.DATA_WHITE
+const TEXT := Color("#B7C4C6")
+const Instrument := preload("res://src/ui/instrument_draw.gd")
 
 ## Shown or not, kept for the game run (not saved).
 static var shown := false
@@ -171,10 +174,16 @@ func _draw_plot() -> void:
 		var corner := _nm_offset(here, _raster_center) + Vector2(-_raster_range, _raster_range)
 		var size := Vector2.ONE * _raster_range * 2.0 / get_range_nm() * PLOT_SIZE / 2.0
 		_plot.draw_texture_rect(_texture, Rect2(_to_plot(corner), size), false)
-	# Range rings and north.
+	# Range rings, a bearing ring with fine ticks, and north.
 	var centre := rect.get_center()
-	_plot.draw_arc(centre, PLOT_SIZE / 4.0, 0.0, TAU, 48, Color(TEXT, 0.25), 1.0)
-	_plot.draw_string(ThemeDB.fallback_font, Vector2(PLOT_SIZE / 2.0 - 4.0, 14.0), "N", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, TEXT)
+	_plot.draw_arc(centre, PLOT_SIZE / 4.0, 0.0, TAU, 48, Color(TEXT, 0.25), 1.0, true)
+	_plot.draw_arc(centre, PLOT_SIZE / 2.0 - 8.0, 0.0, TAU, 96, Color(TEXT, 0.18), 1.0, true)
+	for i in 36:
+		var d := Instrument.dir(i * 10.0)
+		var length := 7.0 if i % 3 == 0 else 3.5
+		_plot.draw_line(centre + d * (PLOT_SIZE / 2.0 - 8.0), centre + d * (PLOT_SIZE / 2.0 - 8.0 - length), Color(TEXT, 0.6 if i % 3 == 0 else 0.35), 1.0, true)
+	var font := ThemeDB.fallback_font if UiTheme.theme == null else UiTheme.theme.default_font
+	_plot.draw_string(font, Vector2(PLOT_SIZE / 2.0 - 4.0, 28.0), "N", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, TEXT)
 	var voyage := GameSession.get_voyage()
 	if voyage and voyage.route and voyage.route.path.size() >= 2:
 		var points := PackedVector2Array()
@@ -192,11 +201,12 @@ func _draw_plot() -> void:
 		var turn := WorldMap.get_next_turn()
 		if not turn.is_empty():
 			var at := _to_plot(_nm_offset(here, turn.geo))
-			_plot.draw_arc(at, 6.0, 0.0, TAU, 20, ROUTE, 2.0)
-	# The boat, pointing along its heading (north up).
+			_plot.draw_arc(at, 6.0, 0.0, TAU, 20, ROUTE, 1.5, true)
+	# The boat, pointing along its heading (north up), with a heading line.
 	var heading := deg_to_rad(Simulation.get_current_heading())
 	var forward := Vector2(sin(heading), -cos(heading))
 	var side := Vector2(-forward.y, forward.x)
+	_plot.draw_line(centre + forward * 10.0, centre + forward * (PLOT_SIZE / 2.0 - 16.0), Color(BOAT, 0.55), 1.0, true)
 	_plot.draw_colored_polygon(PackedVector2Array([centre + forward * 10.0, centre - forward * 6.0 + side * 5.5,
 		centre - forward * 3.0, centre - forward * 6.0 - side * 5.5]), BOAT)
 	# The wind at the boat (where it blows to), top right.
@@ -208,7 +218,7 @@ func _draw_plot() -> void:
 		_plot.draw_line(base - d * 12.0, base + d * 12.0, WindLayer.color_for(wind.speed_kn), 3.0)
 		_plot.draw_colored_polygon(PackedVector2Array([base + d * 16.0, base + d * 6.0 + Vector2(-d.y, d.x) * 6.0,
 			base + d * 6.0 - Vector2(-d.y, d.x) * 6.0]), WindLayer.color_for(wind.speed_kn))
-	_plot.draw_rect(rect, Color(TEXT, 0.35), false, 1.0)
+	_plot.draw_rect(rect.grow(-0.5), Color(TEXT, 0.35), false, 1.0)
 
 
 func _describe() -> String:

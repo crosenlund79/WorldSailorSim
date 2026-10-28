@@ -204,7 +204,7 @@ func _build_accessibility_rows() -> void:
 	_ui_light.name = "UiLight"
 	for text in ["Automatic (follows the day)", "Always day", "Always night"]:
 		_ui_light.add_item(text)
-	_ui_light.tooltip_text = "By day the chartroom's parchment and brass, by night harbour dusk and lantern light. Automatic follows the sun where the boat is."
+	_ui_light.tooltip_text = "By day a sunlit instrument display, by night the same displays dimmed for dark eyes. Automatic follows the sun where the boat is."
 	_ui_light.item_selected.connect(func(index: int) -> void:
 		SettingsManager.set_ui_light(SettingsManager.UI_LIGHTS[index])
 		_refresh_status())

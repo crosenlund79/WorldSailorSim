@@ -18,14 +18,16 @@ extends Node2D
 ## Latitudes shown (the map is cropped like a wall chart: no polar caps).
 const NORTH := 78.0
 const SOUTH := -58.0
-const FRAME := Color("#6B4A2B")
-const FRAME_LIGHT := Color("#8A6440")
-const PAPER := Color("#E9DDBF")
-const SEA := Color("#A9C3C0")
-const LAND := Color("#CDB98C")
-const LAND_EDGE := Color("#9C8660")
-const PIN := Color("#B5452F")
-const BOAT := Color("#1F3B4D")
+# Real Horizon: a chart print of the world in a slim anodised frame, in the
+# paper chart's own colours (pale sea, buff land).
+const FRAME := Color("#5E676B")
+const FRAME_LIGHT := Color("#9AA3A6")
+const PAPER := Color("#DCDBD2")
+const SEA := Color("#BCCDD2")
+const LAND := Color("#D2C9A8")
+const LAND_EDGE := Color("#8C8670")
+const PIN := Color("#B5523F")
+const BOAT := Color("#1F2D38")
 const FRAME_WIDTH := 7.0
 
 static var _triangles := PackedVector2Array()

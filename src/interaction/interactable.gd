@@ -27,11 +27,11 @@ const COLLISION_LAYER := 1 << 2
 ## Node tinted while this interactable has focus.
 @export var highlight_target: NodePath = ^".."
 
-const HIGHLIGHT := Color(1.25, 1.18, 1.0)
+const HIGHLIGHT := Color(1.16, 1.2, 1.22)
 ## The focus highlight drawn around the object itself (Iteration 12): a warm
 ## glow and a fine cream outline that breathes gently.
-const GLOW := Color(1.0, 0.86, 0.55, 0.28)
-const OUTLINE := Color(1.0, 0.95, 0.82, 0.95)
+const GLOW := Color(0.55, 0.82, 0.88, 0.28)
+const OUTLINE := Color(0.86, 0.95, 0.97, 0.95)
 const DEBUG_AREA := Color(0.4, 0.9, 1.0, 0.55)
 
 ## Developer view (F8 with the developer tools): every interaction area drawn.

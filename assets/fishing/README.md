@@ -5,10 +5,11 @@ written descriptions of each species, with `tools/fishing/paint_fish.py`
 (Python 3, Pillow, numpy). No photographs, clip art or other source images
 were used. It falls under the same licence as the game's other original art.
 
-The style follows the ship's cat and dog (`tools/companions/paint_companions.py`):
-- ink lines just inside each shape;
-- soft colour washes lit from above, with a little grain;
-- a soft shadow.
+The style (Real Horizon) is a gouache field-guide plate, like the ship's cat
+and dog (`tools/companions/paint_companions.py`):
+- countershading (dark back, silvery flank, pale belly), fine scales and a wet sheen;
+- a thin translucent blue-grey edge line instead of ink; see-through fins with rays;
+- small realistic eyes; a soft shadow.
 
 ## Layers
 

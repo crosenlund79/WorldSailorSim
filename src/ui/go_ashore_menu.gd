@@ -8,7 +8,7 @@ extends SimplePanel
 
 signal choice_made(event_id: String, choice_index: int)
 
-const ICON_INK := Color("#342c26")
+const Instrument := preload("res://src/ui/instrument_draw.gd")
 
 var _offer := {}
 var _icon: Control
@@ -133,59 +133,76 @@ func get_text() -> String:
 
 # --- The little picture ----------------------------------------------------------
 
+## A line pictogram on a small data tile (Real Horizon): thin white strokes,
+## one cyan detail, nothing filled in bright colour.
 func _draw_icon() -> void:
 	var c := _icon.size / 2.0
-	_icon.draw_circle(c, 44.0, Color("#efe5cc"))
-	_icon.draw_arc(c, 44.0, 0, TAU, 40, ICON_INK, 2.0, true)
+	var rect := Rect2(c - Vector2(44, 44), Vector2(88, 88))
+	Instrument.tile(_icon, rect)
+	Instrument.corners(_icon, rect.grow(-4.0), 8.0, Color(UiTheme.color(&"accent"), 0.7))
+	var ink := UiTheme.color(&"ink")
+	var soft := Color(UiTheme.color(&"ink_soft"), 0.8)
+	var cyan := UiTheme.color(&"accent")
+	var w := Instrument.STROKE
 	var bob := sin(_time * 2.0) * 1.5
 	match _icon_id:
 		"cup":
-			_icon.draw_rect(Rect2(c + Vector2(-16, -6), Vector2(26, 24)), Color("#c8553d"))
-			_icon.draw_rect(Rect2(c + Vector2(-16, -6), Vector2(26, 24)), ICON_INK, false, 2.0)
-			_icon.draw_arc(c + Vector2(12, 6), 7.0, -PI / 2, PI / 2, 10, ICON_INK, 3.0, true)
+			Instrument.outline(_icon, PackedVector2Array([c + Vector2(-16, -6), c + Vector2(10, -6), c + Vector2(8, 18), c + Vector2(-14, 18)]), ink, w)
+			_icon.draw_arc(c + Vector2(11, 5), 6.0, -PI / 2, PI / 2, 10, ink, w, true)
+			_icon.draw_line(c + Vector2(-22, 22), c + Vector2(16, 22), soft, 1.0, true)
 			for i in 3:
 				var x := c.x - 10 + i * 7
-				_icon.draw_line(Vector2(x, c.y - 12 + bob), Vector2(x + 2, c.y - 22 + bob), Color(ICON_INK, 0.5), 2.0, true)
+				_icon.draw_line(Vector2(x, c.y - 12 + bob), Vector2(x + 2, c.y - 22 + bob), Color(cyan, 0.8), 1.5, true)
 		"bench":
-			_icon.draw_rect(Rect2(c + Vector2(-26, -4), Vector2(52, 8)), Color("#8a6a4a"))
-			_icon.draw_rect(Rect2(c + Vector2(-26, -16), Vector2(52, 6)), Color("#8a6a4a"))
-			for x in [-22.0, 18.0]:
-				_icon.draw_rect(Rect2(c + Vector2(x, 4), Vector2(4, 14)), ICON_INK)
+			_icon.draw_line(c + Vector2(-26, 0), c + Vector2(26, 0), ink, w, true)
+			_icon.draw_line(c + Vector2(-26, -14), c + Vector2(26, -14), ink, w, true)
+			for x in [-20.0, 20.0]:
+				_icon.draw_line(c + Vector2(x, -14), c + Vector2(x, 18), ink, w, true)
+			_icon.draw_line(c + Vector2(-30, 18), c + Vector2(30, 18), soft, 1.0, true)
+			_icon.draw_line(c + Vector2(-26, 0), c + Vector2(26, 0), cyan, 1.0, true)
 		"sailor":
-			_icon.draw_circle(c + Vector2(0, -12), 10.0, Color("#e8c4a0"))
-			_icon.draw_rect(Rect2(c + Vector2(-14, 0), Vector2(28, 24)), Color("#efe5cc"))
-			for i in 3:
-				_icon.draw_line(c + Vector2(-14, 4 + i * 7), c + Vector2(14, 4 + i * 7), Color("#2e4a6b"), 3.0)
-			_icon.draw_arc(c + Vector2(0, -12), 10.0, 0, TAU, 20, ICON_INK, 1.5, true)
+			_icon.draw_arc(c + Vector2(0, -14), 9.0, 0, TAU, 24, ink, w, true)
+			_icon.draw_arc(c + Vector2(0, 22), 18.0, PI * 1.1, PI * 1.9, 16, ink, w, true)
+			for i in 2:
+				_icon.draw_line(c + Vector2(-10, 9 + i * 6), c + Vector2(10, 9 + i * 6), cyan, 1.5, true)
 		"basket":
-			_icon.draw_colored_polygon(PackedVector2Array([c + Vector2(-20, -2), c + Vector2(20, -2), c + Vector2(14, 20), c + Vector2(-14, 20)]), Color("#e3c27a"))
-			_icon.draw_arc(c + Vector2(0, -2), 16.0, PI, TAU, 16, ICON_INK, 3.0, true)
-			_icon.draw_circle(c + Vector2(-7, -6), 6.0, Color("#c8553d"))
-			_icon.draw_circle(c + Vector2(7, -7), 5.5, Color("#7ba05b"))
+			Instrument.outline(_icon, PackedVector2Array([c + Vector2(-20, -2), c + Vector2(20, -2), c + Vector2(14, 20), c + Vector2(-14, 20)]), ink, w)
+			_icon.draw_arc(c + Vector2(0, -2), 16.0, PI, TAU, 16, ink, w, true)
+			_icon.draw_arc(c + Vector2(-7, -7), 5.0, 0, TAU, 14, cyan, 1.5, true)
+			_icon.draw_arc(c + Vector2(6, -8), 4.5, 0, TAU, 14, soft, 1.5, true)
+			_icon.draw_line(c + Vector2(-17, 9), c + Vector2(17, 9), soft, 1.0, true)
 		"view":
-			_icon.draw_colored_polygon(PackedVector2Array([c + Vector2(-34, 18), c + Vector2(-8, -18), c + Vector2(10, 6), c + Vector2(20, -6), c + Vector2(34, 18)]), Color("#7ba05b"))
-			_icon.draw_rect(Rect2(c + Vector2(-34, 18), Vector2(68, 10)), Color("#3f7880"))
-			_icon.draw_circle(c + Vector2(18, -22), 6.0, Color("#f2d58a"))
+			_icon.draw_polyline(PackedVector2Array([c + Vector2(-34, 16), c + Vector2(-8, -16), c + Vector2(6, 2), c + Vector2(18, -8),
+				c + Vector2(34, 16)]), ink, w, true)
+			for i in 3:
+				var y := c.y + 20 + i * 5
+				_icon.draw_line(Vector2(c.x - 30 + i * 6, y), Vector2(c.x + 30 - i * 6, y), Color(cyan, 0.9 - i * 0.25), 1.5, true)
+			_icon.draw_arc(c + Vector2(18, -24), 5.0, 0, TAU, 16, soft, 1.5, true)
 		"board":
-			_icon.draw_rect(Rect2(c + Vector2(-24, -20), Vector2(48, 34)), Color("#8a6a4a"))
+			_icon.draw_rect(Rect2(c + Vector2(-24, -20), Vector2(48, 34)), ink, false, w)
 			for i in 4:
-				var at := c + Vector2(-18 + (i % 2) * 20, -16 + (i / 2) * 15)
-				_icon.draw_rect(Rect2(at, Vector2(15, 11)), Color("#efe5cc").darkened(0.05 * i))
-			_icon.draw_rect(Rect2(c + Vector2(-3, 14), Vector2(6, 14)), ICON_INK)
+				var at := c + Vector2(-18 + (i % 2) * 20, -15 + (i / 2) * 15)
+				_icon.draw_rect(Rect2(at, Vector2(16, 10)), cyan if i == 0 else soft, false, 1.0)
+			_icon.draw_line(c + Vector2(0, 14), c + Vector2(0, 28), ink, w, true)
 		"gull":
 			for i in 3:
 				var at := c + Vector2(-18 + i * 18, -4 + (i % 2) * 10 + bob * (1 if i % 2 else -1))
-				_icon.draw_arc(at + Vector2(-5, 0), 5.0, PI, TAU, 8, ICON_INK, 2.5, true)
-				_icon.draw_arc(at + Vector2(5, 0), 5.0, PI, TAU, 8, ICON_INK, 2.5, true)
+				var colour := cyan if i == 1 else ink
+				_icon.draw_arc(at + Vector2(-5, 0), 5.0, PI, TAU, 8, colour, w, true)
+				_icon.draw_arc(at + Vector2(5, 0), 5.0, PI, TAU, 8, colour, w, true)
 		"boat":
-			_icon.draw_colored_polygon(PackedVector2Array([c + Vector2(-28, 6), c + Vector2(28, 6), c + Vector2(18, 20), c + Vector2(-18, 20)]), Color("#8a6a4a"))
-			_icon.draw_line(c + Vector2(0, 6), c + Vector2(0, -26), ICON_INK, 2.5)
-			_icon.draw_colored_polygon(PackedVector2Array([c + Vector2(2, -24), c + Vector2(22, 2), c + Vector2(2, 2)]), Color("#efe5cc").darkened(0.08))
+			Instrument.outline(_icon, PackedVector2Array([c + Vector2(-28, 6), c + Vector2(28, 6), c + Vector2(18, 18), c + Vector2(-18, 18)]), ink, w)
+			_icon.draw_line(c + Vector2(0, 6), c + Vector2(0, -26), ink, w, true)
+			Instrument.outline(_icon, PackedVector2Array([c + Vector2(3, -24), c + Vector2(22, 1), c + Vector2(3, 1)]), cyan, 1.5)
+			_icon.draw_line(c + Vector2(-34, 24 + bob * 0.5), c + Vector2(34, 24 + bob * 0.5), soft, 1.0, true)
 		"houses":
-			var colours := [Color("#d9a441"), Color("#c8553d"), Color("#3f6f8a"), Color("#7ba05b")]
 			for i in 4:
 				var x := c.x - 30 + i * 15
-				_icon.draw_rect(Rect2(x, c.y - 14 + (i % 2) * 4, 14, 32 - (i % 2) * 4), colours[i])
-				_icon.draw_rect(Rect2(x + 4, c.y - 6, 5, 5), Color("#efe5cc"))
+				var top := c.y - 14 + (i % 2) * 4
+				_icon.draw_polyline(PackedVector2Array([Vector2(x, c.y + 18), Vector2(x, top), Vector2(x + 7, top - 7),
+					Vector2(x + 14, top), Vector2(x + 14, c.y + 18)]), ink, 1.5, true)
+				_icon.draw_rect(Rect2(x + 4, c.y - 4, 6, 6), cyan if i == 2 else soft, false, 1.0)
+			_icon.draw_line(c + Vector2(-34, 18), c + Vector2(34, 18), ink, w, true)
 		_:
-			_icon.draw_circle(c, 10.0, ICON_INK)
+			_icon.draw_arc(c, 10.0, 0, TAU, 24, ink, w, true)
+			_icon.draw_circle(c, 3.0, cyan)

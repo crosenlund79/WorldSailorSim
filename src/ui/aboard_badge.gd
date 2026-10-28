@@ -89,7 +89,8 @@ func refresh() -> void:
 		UiTheme.tint(label, lines[id][1])
 		(panel.find_child("Key", true, false) as Label).visible = lines[id][2]
 		var urgent: bool = id == "bite" or lines[id][1] == RED
-		panel.modulate = Color(1.0, 0.85 + 0.15 * cos(_time * 8.0), 0.8 + 0.2 * cos(_time * 8.0)) if urgent else Color.WHITE
+		# A gentle cool pulse (the panel's text colour still says how urgent).
+		panel.modulate = Color(0.86 + 0.14 * cos(_time * 8.0), 1.0, 1.0) if urgent else Color.WHITE
 
 
 ## The visible indicators' texts (tests, screenshots).

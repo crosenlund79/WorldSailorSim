@@ -26,6 +26,7 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 | [18](iterations/i018/) The Joy of the Journey | 0.105a | [assignment](iterations/i018/ITERATION_18_ASSIGNMENT.md), [report](iterations/i018/ITERATION_18_REPORT.md), [requirements](iterations/i018/ITERATION_18_REQUIREMENTS.md), [Windows acceptance](iterations/i018/WINDOWS_ACCEPTANCE_18.md) (pending) |
 | [19](iterations/i019/) The Captain's Watch | 0.106a | [report](iterations/i019/ITERATION_19_REPORT.md) (traffic, radar, anchor alarms, VHF, English and Dansk; Windows acceptance pending) |
 | [20](iterations/i020/) A Boat of Your Own | 0.107a | [report](iterations/i020/ITERATION_20_REPORT.md) (fishmonger, chandlery, sailmaker, cabin things; Windows acceptance pending) |
+| [Real Horizon](iterations/real_horizon/) Illustrated Mariner visual fork | 0.107a | [report](iterations/real_horizon/REAL_HORIZON_REPORT.md) (visual-only conversion; gameplay unchanged) |
 
 Iterations 7–11 have no separate documents in this repository. Iteration 15 (the performance pass) was skipped at the Captain's instruction.
 

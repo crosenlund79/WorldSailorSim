@@ -5,8 +5,8 @@ extends Node2D
 ## only, no collision); BoatArea places this node there. The interaction
 ## (put on / hang up) is the cabin's `hat` station.
 
-const HOOK := Color("#b08a4e")
-const HOOK_DARK := Color("#5c4526")
+const HOOK := Color("#9AA3A6")  # stainless
+const HOOK_DARK := Color("#5A6266")
 
 var _stored := false
 

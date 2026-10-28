@@ -20,10 +20,14 @@ section. Notes added by developers are kept apart and marked as such.
 - **Cozy first.** A cozy sailing adventure about making a home on the water and
   exploring the world at your own pace. Coziness is the primary design
   principle.
-- **Visual direction.** Keep the illustrated direction: hand-drawn warmth,
-  imperfect ink outlines, warm muted colours, the illustrated fleet and marine
-  teak decking, lively water, and readable top-down gameplay. The Classic art
-  stays available as a setting.
+- **Visual direction (Operation Real Horizon, this repository).** An
+  illustrated, atmospheric sailing simulator: visual realism 7/10, "Illustrated
+  Mariner × Atmospheric Sailing Simulator", natural subdued sea colours,
+  believable boats, harbours and cabins, and a modern marine-electronics
+  interface. Entirely 2D; hand-illustrated character kept, no glossy
+  photorealism. Same gameplay; the creator-owned artwork pipeline is preserved;
+  one coherent visual identity. (Supersedes the earlier warm storybook
+  direction for this experimental fork; see DEV_GUIDES/ART_DIRECTION.md.)
 - **The Captain's artwork** is never overwritten.
 
 ### The fleet

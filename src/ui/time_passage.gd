@@ -35,11 +35,12 @@ const FADE_IN_SECONDS := 1.0
 const SLEEP_HOUR_SECONDS := 0.42
 ## How long a dawn or dusk card rests on the screen.
 const CARD_SECONDS := 2.2
-## The black: Harbor Dusk's deepest ink, not pure black.
-const NIGHT_INK := Color("#0A141C")
-const DATE_COLOUR := Color("#F3E4C8")
-const PHRASE_COLOUR := Color("#E9A84D")
-const CLOCK_COLOUR := Color("#A9BDCB")
+## The black: a display's darkest charcoal-navy, not pure black.
+const NIGHT_INK := Color("#0A1115")
+## Instrument figures on the dark: white date, cyan phrase, soft clock.
+const DATE_COLOUR := Color("#F0F3F1")
+const PHRASE_COLOUR := Color("#7FC3D0")
+const CLOCK_COLOUR := Color("#9DB0B5")
 
 const MONTHS := ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
 	"November", "December"]

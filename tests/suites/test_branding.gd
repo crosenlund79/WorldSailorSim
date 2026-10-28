@@ -8,6 +8,9 @@ const APP_SCENE := preload("res://src/app/app.tscn")
 const LEGACY_DIR := "user://test_legacy_userdata"
 const PATRICK := "res://assets/fonts/PatrickHand-Regular.ttf"
 const BARLOW := "res://assets/fonts/Barlow-Regular.ttf"
+## Real Horizon: display and heading type is Barlow Condensed (instrument lettering).
+const CONDENSED_MEDIUM := "res://assets/fonts/BarlowCondensed-Medium.ttf"
+const CONDENSED_SEMIBOLD := "res://assets/fonts/BarlowCondensed-SemiBold.ttf"
 
 var t: Node
 var app: Node
@@ -94,14 +97,16 @@ func _test_fonts_and_licence() -> void:
 	t.check_eq(theme.default_font.resource_path, BARLOW, "[fonts] Barlow is still the default UI font")
 	for variation in [&"DisplayTagline", &"DisplayHeader", &"DisplayName"]:
 		var font := theme.get_font(&"font", variation) as FontVariation
-		t.check(font != null and font.base_font.resource_path == PATRICK and not font.fallbacks.is_empty()
-			and font.fallbacks[0].resource_path == BARLOW, "[fonts] %s uses Patrick Hand, with Barlow as fallback" % variation)
-	# Captain's Chartroom: headings are maritime (Patrick Hand, Barlow fallback);
-	# body and muted text stay Barlow.
+		t.check(font != null and font.base_font.resource_path == CONDENSED_MEDIUM and not font.fallbacks.is_empty()
+			and font.fallbacks[0].resource_path == BARLOW, "[fonts] %s uses Barlow Condensed, with Barlow as fallback" % variation)
+	# Real Horizon: headings are instrument lettering (Barlow Condensed, Barlow
+	# fallback); body and muted text stay Barlow.
 	for variation in [&"HeaderLabel", &"TitleLabel"]:
 		var font := theme.get_font(&"font", variation) as FontVariation
-		t.check(font != null and font.base_font.resource_path == PATRICK and font.fallbacks[0].resource_path == BARLOW,
-			"[fonts] %s uses Patrick Hand, with Barlow as fallback" % variation)
+		t.check(font != null and font.base_font.resource_path == CONDENSED_SEMIBOLD and font.fallbacks[0].resource_path == BARLOW,
+			"[fonts] %s uses Barlow Condensed, with Barlow as fallback" % variation)
+	t.check(FileAccess.get_file_as_string("res://assets/fonts/OFL-BarlowCondensed.txt").contains("SIL Open Font License"),
+		"[fonts] Barlow Condensed is bundled with its licence")
 	for variation in [&"Label", &"MutedLabel"]:
 		var font := theme.get_font(&"font", variation)
 		var path := font.resource_path if font else BARLOW
@@ -186,8 +191,8 @@ func _test_main_menu() -> void:
 	var logo := menu.find_child("Logo", true, false) as TextureRect
 	t.check(logo.texture.resource_path == "res://assets/branding/little_captains_hat_logo.svg", "[brand] the main menu shows the new logo")
 	var tagline := menu.find_child("Tagline", true, false) as Label
-	t.check(tagline.text == "Small boat. Wide world. Hold onto your hat." and _font_path(tagline) == PATRICK,
-		"[brand] with the tagline, hand-lettered in Patrick Hand")
+	t.check(tagline.text == "Small boat. Wide world. Hold onto your hat." and _font_path(tagline) == CONDENSED_MEDIUM,
+		"[brand] with the tagline, in Barlow Condensed")
 	var version := menu.find_child("Version", true, false) as Label
 	t.check(version.text.begins_with("Version 0.107a"), "[version] the menu shows the version (%s)" % version.text)
 	t.check(_font_path(version) == BARLOW or version.label_settings != null, "[fonts] the version stays in Barlow")
@@ -236,8 +241,8 @@ func _test_import_from_main_menu() -> void:
 func _test_typography_in_game() -> void:
 	var menu: CaptainsLogMenu = app.open_captains_log()
 	await t.frames(2)
-	t.check_eq(_font_path(menu.find_child("Title", true, false)), PATRICK, "[fonts] the Captain's Log title is hand-lettered")
-	t.check_eq(_font_path(menu.find_child("RecentTitle", true, false)), PATRICK, "[fonts] so are its section headings")
+	t.check_eq(_font_path(menu.find_child("Title", true, false)), CONDENSED_MEDIUM, "[fonts] the Captain's Log title is in instrument lettering")
+	t.check_eq(_font_path(menu.find_child("RecentTitle", true, false)), CONDENSED_MEDIUM, "[fonts] so are its section headings")
 	t.check(_font_path(menu.find_child("DistanceValue", true, false)).contains("Barlow"), "[fonts] distances stay in Barlow")
 	t.check(_font_path(menu.find_child("RenownValue", true, false)).contains("Barlow"), "[fonts] renown figures stay in Barlow")
 	await t.screenshot("133_captains_log_display_headings")

@@ -51,7 +51,7 @@ const DEFAULT_FLASH_INTENSITY := 100
 ## fish's tail flick and bob); the information never depends on them.
 const DEFAULT_REDUCE_MOTION := false
 ## Interface light (Captain's Chartroom, after 0.105b): follow the game's own
-## daylight (Vintage Chartroom by day, Harbor Dusk by night), or pin one.
+## daylight (sunlit display by day, night mode by night), or pin one.
 const UI_LIGHT_AUTO := &"auto"
 const UI_LIGHT_DAY := &"day"
 const UI_LIGHT_NIGHT := &"night"
