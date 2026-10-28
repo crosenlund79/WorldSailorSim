@@ -22,6 +22,12 @@ var _facing := Vector2.RIGHT
 ## arms swing with the steps and rest when the player stands still.
 var _walk_phase := 0.0
 var _walk_amount := 0.0
+## A café's mug in hand (I026, the quay's café): drawn like the boat's own
+## mug, but it is the café's - nothing in the game state changes.
+var cafe_mug := false:
+	set(value):
+		cafe_mug = value
+		queue_redraw()
 
 @onready var _sensor: InteractionSensor = $InteractionSensor
 
@@ -117,4 +123,4 @@ func set_input_enabled(enabled: bool) -> void:
 func _draw() -> void:
 	var hat := get_hat_visual()
 	SailorDrawing.draw(self, _facing, get_swing(), hat != null and hat.get_shown_status() == HatState.CARRIED,
-		GameSession.is_active() and GameSession.is_carrying_coffee())
+		cafe_mug or (GameSession.is_active() and GameSession.is_carrying_coffee()))

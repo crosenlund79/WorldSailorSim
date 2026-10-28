@@ -13,9 +13,6 @@ extends SimplePanel
 ## Iteration 16: "Stock up for a long passage" fills both beyond the everyday
 ## 14 days, up to what this boat can stow (its passage stores).
 
-## The fishmonger next door (I020): App opens it on top.
-signal fishmonger_requested
-
 var _stores: Label
 var _price: Label
 var _note: Label
@@ -28,7 +25,6 @@ var _buy_hat: Button
 var _tackle: OptionButton
 var _buy_lure: Button
 var _catch_info: Label
-var _sell_catch: Button
 
 
 func _ready() -> void:
@@ -112,13 +108,8 @@ func _build_tackle() -> void:
 	_catch_info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_catch_info.custom_minimum_size = Vector2(300, 0)
 	catch_row.add_child(_catch_info)
-	# I020: the catch is sold at the fishmonger next door (one place, one
-	# transaction for selling fish).
-	_sell_catch = Button.new()
-	_sell_catch.name = "FishmongerButton"
-	_sell_catch.custom_minimum_size = Vector2(240, 0)
-	_sell_catch.pressed.connect(fishmonger_requested.emit)
-	catch_row.add_child(_sell_catch)
+	# I020: the catch is sold at the fishmonger (one place, one transaction
+	# for selling fish); since I026 at its own stall on the quay.
 
 
 func _on_funds_changed(_funds: int) -> void:
@@ -172,10 +163,10 @@ func _refresh_tackle(harbour: bool) -> void:
 	var total := 0
 	for fish in fishing.hold:
 		total += catalog.price(fish.species, float(fish.kg))
-	_catch_info.text = Loc.t("Your catch: %d fish in the cool box.") % fishing.hold.size() if not fishing.hold.is_empty() \
-		else Loc.t("Your catch: the cool box is empty.")
-	_sell_catch.text = Loc.t("To the fishmonger (%s)…") % GameSession.format_money(total)
-	_sell_catch.disabled = not harbour or not GameSession.has_facility(HarbourFacilities.FISHMONGER)
+	_catch_info.text = Loc.t("Your catch: the cool box is empty.") if fishing.hold.is_empty() else (
+		Loc.t("Your catch: %d fish in the cool box, worth about %s at the fishmonger's stall on the quay.") % [fishing.hold.size(),
+			GameSession.format_money(total)] if GameSession.has_facility(HarbourFacilities.FISHMONGER)
+		else Loc.t("Your catch: %d fish in the cool box.") % fishing.hold.size())
 
 
 func _on_buy_lure() -> void:

@@ -3145,6 +3145,34 @@ static func format_money(euros: int) -> String:
 	return Loc.t("€%s", "money") % grouped
 
 
+# --- The quay's café (I026 stage 02) ----------------------------------------------------
+# A coffee at the café on the quay: a small price, nothing else. The mug is
+# the café's (HarbourFront draws it in the Captain's hand); the boat's own
+# mug, the stores and the save are untouched.
+
+## Euros for a coffee at the café (Standard; scaled like other costs).
+const CAFE_COFFEE_PRICE := 4
+
+
+func cafe_coffee_price() -> int:
+	return maxi(1, ceili(CAFE_COFFEE_PRICE * Difficulty.factor("costs") - 1e-6))
+
+
+## Pays for a coffee at the café. Returns {"error", "price"}; nothing changes
+## on an error (not in harbour, not enough money).
+func buy_cafe_coffee() -> Dictionary:
+	if _state == null or not is_moored_in_harbour():
+		return {"error": Loc.t("The café is on the quay; you are not in harbour."), "price": 0}
+	var price := cafe_coffee_price()
+	if price > _state.funds:
+		return {"error": Loc.t("Not enough money: %s needed.") % format_money(price), "price": 0}
+	_state.funds -= price
+	_has_unsaved_changes = true
+	funds_changed.emit(_state.funds)
+	SessionLog.write("cafe_coffee", {"port": String(get_location_id()), "price": price, "funds": _state.funds})
+	return {"error": "", "price": price}
+
+
 # --- Provisions -----------------------------------------------------------------------
 
 ## A copy of the food and water aboard.

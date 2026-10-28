@@ -1,0 +1,23 @@
+{
+	"note": "Opening hours of the quay's businesses (I026 stage 02, BusinessHours). Hours are the harbour's local solar time (Daylight.local_solar_hours), 0-24, 'open' and 'close' as decimals (7.5 = 07:30). 'closed' lists local weekdays without opening (0 = Sunday). 'regions' shift the opening and closing by the harbour's archetype (HarbourDressing.archetype_for), 'tiers' by its service tier (HarbourFacilities.get_tier). Gameplay numbers, not claims about real businesses. The harbour office's after-hours hatch is always staffed.",
+	"businesses": {
+		"cafe": {"open": 7.0, "close": 18.0},
+		"grocery": {"open": 8.0, "close": 19.0},
+		"fishmonger": {"open": 7.0, "close": 15.0},
+		"boatyard": {"open": 7.0, "close": 16.0, "closed": [0]},
+		"chandlery": {"open": 9.0, "close": 17.0, "closed": [0]},
+		"sail_loft": {"open": 10.0, "close": 17.0, "closed": [0]},
+		"harbour_office": {"open": 8.0, "close": 17.0}
+	},
+	"regions": {
+		"nordic": {"open": 0.0, "close": -0.5},
+		"atlantic": {"open": 0.0, "close": 0.0},
+		"mediterranean": {"open": 0.5, "close": 2.0},
+		"tropical": {"open": -0.5, "close": -0.5}
+	},
+	"tiers": {
+		"small": {"open": 0.5, "close": -1.0},
+		"larger": {"open": 0.0, "close": 0.0},
+		"major": {"open": -0.5, "close": 1.0}
+	}
+}

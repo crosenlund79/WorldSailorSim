@@ -380,6 +380,8 @@ func update_weather_audio() -> void:
 		place = "deck" if area.area_id == SessionState.AREA_EXTERIOR else "inside"
 	elif GameSession.is_active() and router.current_screen is WorldMap:
 		place = "inside"
+	elif GameSession.is_active() and is_on_quay():
+		place = "deck"  # out in the open on the quay (I026)
 	if place.is_empty():
 		weather_audio.update(null, "", false, [])
 		return
@@ -440,7 +442,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			open_sail_trim()
 		return
 	if event.is_action_pressed(&"reel_in") and not event.is_echo():
-		if is_in_gameplay() and modals.is_empty() and not router.is_busy():
+		if is_in_gameplay() and modals.is_empty() and not router.is_busy() and not is_on_quay():
 			get_viewport().set_input_as_handled()
 			open_fishing()
 		return
@@ -456,7 +458,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if not modals.is_empty():
 		modals.handle_back()
-	elif router.current_screen is BoatArea:
+	elif router.current_screen is BoatArea or router.current_screen is HarbourFront:
 		open_pause_menu()
 	elif router.current_screen and router.current_screen.has_method(&"handle_back"):
 		router.current_screen.handle_back()
@@ -476,7 +478,7 @@ const ANCHOR_MOMENT_SECONDS := 5.5
 
 
 func is_in_gameplay() -> bool:
-	return GameSession.is_active() and router.current_screen is BoatArea
+	return GameSession.is_active() and (router.current_screen is BoatArea or router.current_screen is HarbourFront)
 
 
 # --- Main flow -------------------------------------------------------------------
@@ -599,7 +601,7 @@ var _last_quick_msec := -100000
 func quicksave_blocker() -> String:
 	if not GameSession.is_active():
 		return Loc.t("There is no game to save.")
-	if router.is_busy() or not router.current_screen is BoatArea:
+	if router.is_busy() or not (router.current_screen is BoatArea or router.current_screen is HarbourFront):
 		return Loc.t("You can quicksave aboard the boat.")
 	if not modals.is_empty():
 		return Loc.t("Close the open window to quicksave.")
@@ -694,6 +696,8 @@ func toggle_chartplotter() -> void:
 ## opens) for the on/off ones]. Existing actions only.
 func get_wheel_actions() -> Array[Dictionary]:
 	var actions: Array[Dictionary] = []
+	if is_on_quay():
+		return _quay_wheel_actions()
 	var area := router.current_screen as BoatArea
 	if area == null:
 		return actions
@@ -773,6 +777,10 @@ func open_action_wheel() -> ActionWheel:
 		return null
 	var area := router.current_screen as BoatArea
 	var wheel := ActionWheel.new()
+	if area == null:
+		wheel.setup(get_wheel_actions(), Loc.t("On the quay"))
+		modals.push(wheel)
+		return wheel
 	var title := Loc.t("In the cabin") if area.area_id == SessionState.AREA_INTERIOR else (
 		Loc.t("At anchor") if GameSession.is_anchored() else (Loc.t("At the helm") if GameSession.is_underway() else Loc.t("On deck")))
 	wheel.setup(get_wheel_actions(), title)
@@ -1054,7 +1062,7 @@ var day_night_watch: DayNightWatch
 ## True when a dawn or dusk card may cover the game: aboard or at the chart,
 ## no menu, no screen change, nothing else passing time on screen.
 func can_show_time_passage() -> bool:
-	return GameSession.is_active() and (router.current_screen is BoatArea or router.current_screen is WorldMap) \
+	return GameSession.is_active() and (router.current_screen is BoatArea or router.current_screen is WorldMap or is_on_quay()) \
 		and modals.is_empty() and not router.is_busy() and not _rescue_open and not is_instance_valid(time_passage)
 
 
@@ -1129,9 +1137,7 @@ func open_grocery() -> void:
 		_refuse_facility(HarbourFacilities.GROCERY)
 		return
 	SessionLog.write("facility", {"facility": "grocery", "outcome": "opened", "port": String(GameSession.get_location_id())})
-	var grocery := GroceryMenu.new()
-	grocery.fishmonger_requested.connect(open_fishmonger)
-	modals.push(grocery)
+	modals.push(GroceryMenu.new())
 
 
 # --- Harbour trades (I020) ------------------------------------------------------------------
@@ -1569,6 +1575,8 @@ func show_docking_arrival() -> void:
 	if not is_in_gameplay() or not modals.is_empty() or router.is_busy() or not GameSession.is_moored_in_harbour():
 		return
 	var area := router.current_screen as BoatArea
+	if area == null:
+		return  # on the quay (I026): the boat is already alongside
 	if area.area_id != SessionState.AREA_EXTERIOR:
 		GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"start")
 		router.change_screen(GameSession.get_vessel_definition().get_area_scene(SessionState.AREA_EXTERIOR), func(deck: BoatArea) -> void:
@@ -1748,7 +1756,7 @@ func toggle_captains_log() -> void:
 	if modals.get_top() is CaptainsLogMenu:
 		modals.get_top().close()
 		return
-	if not modals.is_empty() or not (router.current_screen is BoatArea or router.current_screen is WorldMap):
+	if not modals.is_empty() or not (router.current_screen is BoatArea or router.current_screen is WorldMap or is_on_quay()):
 		return
 	open_captains_log()
 
@@ -1822,10 +1830,7 @@ func open_boatyard() -> void:
 	SessionLog.write("facility", {"facility": "boatyard", "outcome": "opened", "port": String(GameSession.get_location_id())})
 	var menu := boatyard_menu_scene.instantiate() as BoatyardMenu
 	menu.vessel_chosen.connect(switch_vessel)
-	menu.grocery_requested.connect(open_grocery)
 	menu.care_requested.connect(open_boat_care)
-	menu.chandlery_requested.connect(open_chandlery)
-	menu.sailmaker_requested.connect(open_sailmaker)
 	modals.push(menu)
 
 
@@ -1924,6 +1929,235 @@ func open_load_menu() -> void:
 	modals.push(menu)
 
 
+# --- The quay (I026 stage 02, living harbours) -------------------------------------------
+# The harbour's waterfront (HarbourFront), up the pontoon's walkway: every
+# business in its own building, opening its existing menu in a shop-counter
+# frame (ShopCounter), on its own opening hours (BusinessHours). A screen
+# like the chart: GameSession keeps the Captain on deck, on the pontoon by
+# the walkway, so saving here saves them there and loading returns aboard.
+
+const HARBOUR_FRONT_SCENE := preload("res://src/harbour/harbour_front.tscn")
+## The business whose counter the open menus belong to (for the frame).
+var _quay_business: StringName = &""
+
+
+func is_on_quay() -> bool:
+	return router.current_screen is HarbourFront
+
+
+func get_quay() -> HarbourFront:
+	return router.current_screen as HarbourFront
+
+
+## Up the walkway to the quay (from the deck, moored in harbour).
+func open_quay() -> void:
+	if not GameSession.is_active() or router.is_busy() or not modals.is_empty() or not GameSession.is_moored_in_harbour():
+		var deck := router.current_screen as BoatArea
+		if deck:
+			deck.cancel_exit()
+		return
+	var area := router.current_screen as BoatArea
+	if area:
+		var back := area.get_walkway_return_point()
+		if back != Vector2.INF:
+			GameSession.set_player_position(back)
+	SessionLog.write("quay_enter", {"port": String(GameSession.get_location_id())})
+	router.change_screen(HARBOUR_FRONT_SCENE, _connect_harbour_front)
+
+
+## Back down the walkway: aboard, on the pontoon by the walkway.
+func leave_quay() -> void:
+	if not is_on_quay() or router.is_busy():
+		return
+	modals.clear()
+	_quay_business = &""
+	SessionLog.write("quay_leave", {"port": String(GameSession.get_location_id())})
+	_show_current_boat_area()
+
+
+func _connect_harbour_front(front: HarbourFront) -> void:
+	front.place_requested.connect(_on_quay_place)
+	front.leave_requested.connect(leave_quay)
+	front.message_requested.connect(notify)
+	front.interaction_prompt_changed.connect(hud.set_prompt)
+
+
+## A door (or the hatch, the noticeboard, the lane, the travel lift) on the
+## quay was used: its menu in its counter's frame, or - closed - the offer
+## to wait until it opens.
+func _on_quay_place(place: StringName) -> void:
+	var front := get_quay()
+	if front == null or router.is_busy() or not modals.is_empty():
+		return
+	var port := GameSession.get_location_id()
+	var now := GameSession.get_game_time()
+	_quay_business = place
+	match place:
+		QuayLayout.NOTICEBOARD:
+			open_noticeboard()
+		HarbourFront.HATCH:
+			open_harbour_office(true)
+		QuayLayout.LANE:
+			open_go_ashore()
+		HarbourFront.TRAVEL_LIFT:
+			_quay_business = QuayLayout.BOATYARD
+			if not BusinessHours.is_open(QuayLayout.BOATYARD, port, now):
+				ask_wait_until_open(QuayLayout.BOATYARD)
+			else:
+				open_boat_care()
+		_:
+			if not BusinessHours.is_open(place, port, now):
+				ask_wait_until_open(place)
+				return
+			match place:
+				QuayLayout.BOATYARD:
+					open_boatyard()
+				QuayLayout.CHANDLERY:
+					open_chandlery()
+				QuayLayout.SAIL_LOFT:
+					open_sailmaker()
+				QuayLayout.GROCERY:
+					open_grocery()
+				QuayLayout.FISHMONGER:
+					open_fishmonger()
+				QuayLayout.CAFE:
+					open_cafe()
+				QuayLayout.HARBOUR_OFFICE:
+					open_harbour_office(false)
+	_frame_quay_modal()
+
+
+## The menus that open from a counter on the quay get its frame.
+func _frame_quay_modal() -> void:
+	if not is_on_quay() or _quay_business.is_empty():
+		return
+	var top := modals.get_top()
+	if top == null or top.has_node(^"ShopCounter"):
+		return
+	if top is BoatyardMenu or top is BoatCareMenu or top is HaulOutPanel or top is TradePanel or top is GroceryMenu or top is CafeMenu \
+			or top is HarbourOfficeMenu or top is NoticeboardMenu or top is GoAshoreMenu:
+		ShopCounter.attach(top, _quay_business, get_quay().layout.archetype)
+
+
+## A closed door: when it opens, and the offer to wait for it (the time
+## passes as when working or sleeping; anything that needs the Captain
+## stops it). The harbour office's hatch is always open.
+func ask_wait_until_open(business: StringName) -> void:
+	var port := GameSession.get_location_id()
+	var now := GameSession.get_game_time()
+	var at := BusinessHours.next_opening(business, port, now)
+	var name := HarbourFront.business_name(business)
+	var wait: bool = await modals.confirm(Loc.t("%s: closed") % name,
+		Loc.t("It opens at %s local time, in %s. Wait on the quay until then? Time passes as usual, and anything that needs you will interrupt the wait.") % [
+			BusinessHours.format_hour(BusinessHours.local_hours(port, at)), Simulation.format_duration(at - now)],
+		Loc.t("Wait until it opens"), Loc.t("Not now"))
+	if wait:
+		await wait_until_open(business)
+
+
+## Waits on the quay until `business` opens (TimePassage, as sleeping).
+func wait_until_open(business: StringName) -> void:
+	var port := GameSession.get_location_id()
+	var now := GameSession.get_game_time()
+	var minutes := ceilf((BusinessHours.next_opening(business, port, now) - now) / 60.0) + 1.0
+	if minutes <= 1.0:
+		return
+	SessionLog.write("quay_wait", {"business": String(business), "minutes": minutes})
+	var result: Simulation.AdvanceResult = await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_ashore(minutes))
+	if result.stopped_by == Simulation.STOP_RESCUE:
+		return
+	var stopped := interruption_reason(result.stopped_by)
+	var clock := Simulation.format_game_time(GameSession.get_game_time())
+	if not stopped.is_empty():
+		notify(Loc.t("Interrupted: %s. It is %s.") % [stopped, clock])
+	else:
+		notify(Loc.t("%s is open now. It is %s.") % [HarbourFront.business_name(business), clock])
+	var front := get_quay()
+	if front:
+		front.refresh()
+
+
+## The café's counter: order a coffee and sit on the terrace.
+func open_cafe() -> CafeMenu:
+	if not is_on_quay() or not modals.is_empty():
+		return null
+	var menu := CafeMenu.new()
+	menu.order_requested.connect(_on_cafe_order)
+	modals.push(menu)
+	return menu
+
+
+func _on_cafe_order() -> void:
+	var front := get_quay()
+	if front == null:
+		return
+	if front.free_seat() < 0:
+		notify(Loc.t("Every table on the terrace is taken just now. Try again in a little while."))
+		return
+	var result := GameSession.buy_cafe_coffee()
+	if not String(result.error).is_empty():
+		notify(result.error)
+		return
+	modals.clear()
+	front.sit_at_cafe()
+	notify(Loc.t("A coffee on the terrace for %s. Stay as long as you like.") % GameSession.format_money(int(result.price)))
+
+
+## The harbour office (or, after hours, its hatch).
+func open_harbour_office(hatch: bool) -> HarbourOfficeMenu:
+	if not GameSession.is_active() or not modals.is_empty():
+		return null
+	var menu := HarbourOfficeMenu.new()
+	menu.hatch = hatch
+	var front := get_quay()
+	if front:
+		menu.layout = front.layout
+	menu.repair_requested.connect(_on_hatch_repair)
+	modals.push(menu)
+	return menu
+
+
+## The hatch's emergency repair: the yard's own repair, its time ashore.
+func _on_hatch_repair() -> void:
+	var result := GameSession.perform_service(BoatCare.SERVICE_REPAIR)
+	if not String(result.error).is_empty():
+		notify(result.error)
+		return
+	modals.clear()
+	notify(Loc.t("The yard's night man sees to the hull for %s. The work takes %s.") % [GameSession.format_money(int(result.cost)),
+		Simulation.format_duration(float(result.minutes) * 60.0)])
+	await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_ashore(float(result.minutes)))
+
+
+func open_noticeboard() -> NoticeboardMenu:
+	if not GameSession.is_active() or not modals.is_empty():
+		return null
+	var menu := NoticeboardMenu.new()
+	modals.push(menu)
+	return menu
+
+
+## The action wheel on the quay: back to the boat, standing up from the
+## café table, calling the companions aboard, the coffee mug, the log.
+func _quay_wheel_actions() -> Array[Dictionary]:
+	var actions: Array[Dictionary] = []
+	var front := get_quay()
+	var add := func(id: StringName, label: String, action: Callable) -> void:
+		actions.append({"id": id, "label": label, "action": action})
+	if front.is_seated():
+		add.call(&"stand_up", Loc.t("Stand up"), front.stand_up)
+	add.call(&"back_aboard", Loc.t("Back to the boat"), func() -> void: front.leave())
+	if GameSession.is_companion_ashore():
+		var ashore: Array[Dictionary] = []
+		for companion in GameSession.get_companions_ashore():
+			ashore.append(CompanionRemarks.identity(companion))
+		add.call(&"call_aboard", CompanionRemarks.call_all_aboard_label(ashore), recall_companion)
+	if GameSession.is_carrying_coffee():
+		add.call(&"coffee_finish", Loc.t("Finish the coffee"), func() -> void: notify(GameSession.finish_coffee()))
+	add.call(&"log", Loc.t("Captain's Log"), toggle_captains_log)
+	return actions
+
+
 # --- Screen wiring -----------------------------------------------------------------
 
 func _connect_main_menu(menu: MainMenu) -> void:
@@ -1964,6 +2198,7 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.trophies_requested.connect(open_trophies)
 	area.cooking_requested.connect(open_cooking)
 	area.anchor_requested.connect(open_anchor)
+	area.quay_requested.connect(open_quay)
 
 
 func _connect_world_map(map: WorldMap) -> void:
@@ -1978,7 +2213,7 @@ func _on_screen_changed(screen: Node) -> void:
 	var area := screen as BoatArea
 	SessionLog.write("screen", {"screen": String(screen.name) if screen else "", "area": String(area.area_id) if area else ""})
 	# The HUD's clock bar is the shared time control: also shown on the chart.
-	_hud_layer.visible = area != null or screen is WorldMap
+	_hud_layer.visible = area != null or screen is WorldMap or screen is HarbourFront
 	hud.set_chart_mode(screen is WorldMap)
 	# On the chart, notifications are centred over the map like the clock bar.
 	var toast_shift := -Hud.CHART_SIDEBAR_WIDTH / 2.0 if screen is WorldMap else 0.0
@@ -1987,6 +2222,9 @@ func _on_screen_changed(screen: Node) -> void:
 	hud.set_prompt("")
 	if area:
 		hud.set_area(area.area_id)
+		hud.refresh()
+	elif screen is HarbourFront:
+		hud.set_area_title(Loc.t("The quay"))
 		hud.refresh()
 	else:
 		AudioManager.stop_ambience()
@@ -2015,6 +2253,11 @@ func _on_modal_stack_changed(depth: int) -> void:
 	# Gameplay pauses while any menu is open over it. Menus, the HUD and
 	# notifications run with PROCESS_MODE_ALWAYS and stay responsive.
 	get_tree().paused = (depth > 0 and is_in_gameplay()) or _rescue_open
+	# I026: a menu opened from a counter on the quay wears its frame.
+	if depth == 0:
+		_quay_business = &""
+	else:
+		_frame_quay_modal()
 	if depth == 0 and router.current_screen is MainMenu:
 		var menu := router.current_screen as MainMenu
 		menu.refresh_saves()

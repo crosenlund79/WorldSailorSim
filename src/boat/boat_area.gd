@@ -31,6 +31,8 @@ signal work_requested
 signal grocery_requested
 ## The Go Ashore sign on the pontoon (Iteration 12) was used.
 signal go_ashore_requested
+## I026: the pontoon's walkway up to the quay (HarbourFront) was used.
+signal quay_requested
 ## The fishing rod on the stern rail (Iteration 13) was used.
 signal fishing_requested
 ## The windlass on the foredeck (Iteration 13) was used.
@@ -668,6 +670,9 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 			grocery_requested.emit()
 		&"go_ashore":
 			go_ashore_requested.emit()
+		WALKWAY_ID:
+			begin_exit()
+			quay_requested.emit()
 		&"fishing":
 			fishing_requested.emit()
 		&"anchor":
@@ -838,6 +843,7 @@ func _setup_shore() -> void:
 		go_label.name = "GoAshoreSign"
 		go_label.text = "GO ASHORE"
 		mooring.add_child(go_label)
+	_setup_walkway(stations, yard_label)
 	# The harbour's name is painted on the front of the pontoon, beside the
 	# gangplank, out of the way of the signs at the back.
 	if mooring_label:
@@ -861,19 +867,20 @@ func _update_shore() -> void:
 	if was_ashore and not in_port:
 		# Never leave the player on a pontoon that is no longer there.
 		place_player_at_spawn(&"from_boatyard")
-	var available := GameSession.get_harbour_facilities().get_ids() if in_port else ([] as Array[StringName])
-	var slots := _shore.get_service_slots(available.size())
-	var index := 0
-	for id: StringName in HarbourFacilities.ALL:
-		var station := _shore_stations.get(id) as Interactable
+	# I026: the harbour's businesses have moved up to the quay, each in its
+	# own building (HarbourFront); the pontoon keeps one way there, the
+	# walkway. The old service stations stay in the scenes, unused here.
+	var walkway_slot := _walkway_slot() if in_port else {}
+	for id: StringName in SIGN_LABELS:
+		var station := (_walkway if id == WALKWAY_ID else _shore_stations.get(id)) as Interactable
 		if station == null:
 			continue
-		var offered := id in available and index < slots.size()
+		var offered := id == WALKWAY_ID and not walkway_slot.is_empty()
 		if offered:
-			var slot: Dictionary = slots[index]
-			index += 1
-			station.position = slot.station
-			station.set_meta(&"sign_at", slot.sign)
+			station.position = walkway_slot.station
+			# The walkway itself runs up from the slot's place at the back of
+			# the pontoon; its sign stands beside it (HarbourDressing).
+			station.set_meta(&"sign_at", Vector2(walkway_slot.sign) + Vector2(HarbourDressing.WALKWAY_SIGN_SHIFT, 0.0))
 			var shape := station.get_node(^"CollisionShape2D") as CollisionShape2D
 			if not shape.has_meta(&"own_shape"):
 				shape.shape = shape.shape.duplicate()
@@ -903,6 +910,62 @@ func _set_station_available(station: Interactable, available: bool) -> void:
 
 func get_shore_access() -> ShoreAccess:
 	return _shore
+
+
+# --- The walkway to the quay (I026 stage 02) -----------------------------------------
+# The pontoon's way up to the quay (HarbourFront), where the harbour's
+# businesses have their own buildings: one station on the shore strip, a
+# little way along from the gangplank (clear of the dock box and the
+# companions' places), its marina sign at the back of the pontoon.
+
+## The walkway station's interaction id.
+const WALKWAY_ID := &"quay"
+## Its preferred distance from the gangplank (ShoreAccess.SLOT_OFFSETS).
+const WALKWAY_OFFSET := 215.0
+var _walkway: Interactable
+
+
+func _setup_walkway(stations: Node, yard_label: Label) -> void:
+	var walkway := Interactable.new()
+	walkway.name = "Walkway"
+	walkway.interaction_id = WALKWAY_ID
+	walkway.prompt = Loc.t("To the quay")
+	walkway.highlight_target = ^""
+	var shape := CollisionShape2D.new()
+	shape.name = "CollisionShape2D"
+	shape.shape = RectangleShape2D.new()
+	walkway.add_child(shape)
+	stations.add_child(walkway)
+	_walkway = walkway
+	if yard_label and mooring.get_node_or_null(^"QuaySign") == null:
+		var label := yard_label.duplicate() as Label
+		label.name = "QuaySign"
+		label.text = "TO THE QUAY"
+		mooring.add_child(label)
+
+
+## The shore slot the walkway takes ({} without one): the one WALKWAY_OFFSET
+## from the gangplank, else the first the strip has room for.
+func _walkway_slot() -> Dictionary:
+	var slots := _shore.get_service_slots(ShoreAccess.SLOT_OFFSETS.size())
+	for slot in slots:
+		if is_equal_approx(float(slot.station.x) - _shore.get_plank_x(), WALKWAY_OFFSET):
+			return slot
+	return slots[0] if not slots.is_empty() else {}
+
+
+## The walkway's station on the pontoon (null on decks without a shore).
+func get_walkway() -> Interactable:
+	return _walkway
+
+
+## Where the Captain stands on the pontoon by the walkway (area
+## coordinates): where a save made on the quay puts them, and where they
+## come back down.
+func get_walkway_return_point() -> Vector2:
+	if _walkway == null or _shore == null:
+		return Vector2.INF
+	return Vector2(_walkway.position.x, _shore.get_shore_rect().end.y - 30.0)
 
 
 ## The animal on the dock (I025): shown on decks with a shore.
@@ -996,8 +1059,8 @@ func get_shore_camera_target() -> float:
 	return maxf(_shore.get_pontoon_rect().end.y + 24.0 - visible_bottom, 0.0)
 
 
-## The mooring's sign label for each shore facility (classic art and text).
-const SIGN_LABELS := {&"grocery": "GrocerySign", &"boatyard": "BoatyardSign", &"go_ashore": "GoAshoreSign"}
+## The mooring's sign label for each shore station (classic art and text).
+const SIGN_LABELS := {&"grocery": "GrocerySign", &"boatyard": "BoatyardSign", &"go_ashore": "GoAshoreSign", &"quay": "QuaySign"}
 ## Screen pixels at the bottom taken by the HUD's prompt and shortcuts.
 const SHORE_HUD_MARGIN := 150.0
 

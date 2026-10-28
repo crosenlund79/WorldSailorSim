@@ -213,6 +213,12 @@ func set_area(area: StringName) -> void:
 	_area.text = SessionState.get_area_display_name(area)
 
 
+## I026: a place that is not a boat area (the quay) names itself.
+func set_area_title(text: String) -> void:
+	_area_id = SessionState.AREA_EXTERIOR
+	_area.text = text
+
+
 func set_prompt(text: String) -> void:
 	_prompt.text = text
 	_prompt_panel.visible = not text.is_empty() and not _chart_mode

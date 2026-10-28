@@ -1,0 +1,17 @@
+{
+	"note": "Small notes pinned on the quay's noticeboard (I026 stage 02, HarbourNotes). Cozy local colour only: no quests, no rewards, nothing that replaces a weather or safety warning. A few are chosen per harbour and week, deterministically.",
+	"notices": [
+		{"text": "Fresh bread in the mornings while it lasts."},
+		{"text": "Found on the pontoon: a blue fender with a white line. Ask at the harbour office."},
+		{"text": "Choir practice in the old net loft on Thursday evenings. All voices welcome."},
+		{"text": "Please walk slowly on the pontoons: the boards are slippery when wet."},
+		{"text": "The sailing club's dinghies are out on Saturday mornings. Keep a lookout in the fairway."},
+		{"text": "For sale: a pair of oars, well used, still good."},
+		{"text": "The harbour's flower boxes are looked after by volunteers. Thank you for leaving them be."},
+		{"text": "Lost: a child's red mitten, somewhere near the café."},
+		{"text": "Fishing from the quay is welcome away from the walkway and the travel lift."},
+		{"text": "Market on the square on the first Saturday of the month."},
+		{"text": "Fresh water at every pontoon. Please close the taps."},
+		{"text": "Thank you to everyone who helped haul out the old harbour launch."}
+	]
+}

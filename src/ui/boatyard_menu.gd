@@ -18,21 +18,14 @@ extends ModalPanel
 ## changes the text inside it. Long details scroll in their own area, and the
 ## services and buttons stay where they are.
 ##
-## Harbour services for the boat you are aboard: Boat care (Iteration 14:
-## repairs, services, haul-outs and equipment, in BoatCareMenu) and the
-## grocery store (provisions are bought there).
+## The yard's own service for the boat you are aboard: Boat care (Iteration
+## 14: repairs, services, haul-outs and equipment, in BoatCareMenu). Since
+## I026 the grocery store, the chandlery and the sail loft have their own
+## buildings on the quay (HarbourFront), so the yard is no longer their hub.
 
 signal vessel_chosen(vessel_id: StringName)
 ## The player wants Boat care (App opens it on top of the boatyard).
 signal care_requested
-## The player wants the grocery store (App opens it on top of the boatyard).
-signal grocery_requested
-## The harbour trades at the yard (I020): the chandlery and the sailmaker.
-signal chandlery_requested
-signal sailmaker_requested
-
-var _chandlery: Button
-var _sailmaker: Button
 
 ## Conditions used for the comparison table.
 const COMPARE_WIND_KN := 12.0
@@ -59,7 +52,6 @@ var _compare_cells := {}
 @onready var _condition: Label = %ConditionLabel
 @onready var _service_status: Label = %ServiceStatus
 @onready var _care: Button = %CareButton
-@onready var _grocery: Button = %GroceryButton
 
 
 func _ready() -> void:
@@ -80,10 +72,6 @@ func _ready() -> void:
 	_choose.pressed.connect(func() -> void: vessel_chosen.emit(selected.id))
 	%CloseButton.pressed.connect(close)
 	_care.pressed.connect(care_requested.emit)
-	_grocery.pressed.connect(grocery_requested.emit)
-	# I020: the yard's neighbours, beside Boat care.
-	_sailmaker = _trade_button("SailmakerButton", "Sailmaker…", sailmaker_requested.emit)
-	_chandlery = _trade_button("ChandleryButton", "Chandlery…", chandlery_requested.emit)
 	# Steady Hands: the boats, details and comparison scroll when the screen
 	# is too short (title, services and buttons always stay in view).
 	var box := _panel.get_node(^"VBox")
@@ -96,16 +84,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if is_visible_in_tree():
 		_update_services()
-
-
-func _trade_button(node_name: String, text: String, action: Callable) -> Button:
-	var button := Button.new()
-	button.name = node_name
-	button.text = text
-	button.custom_minimum_size = _care.custom_minimum_size
-	button.pressed.connect(action)
-	_care.add_sibling(button)
-	return button
 
 
 ## Keeps the panel at PANEL_SIZE, or as large as the window allows.
@@ -130,13 +108,6 @@ func _update_services() -> void:
 	var level := BoatCare.overall_level(GameSession.get_boat_care(), GameSession.get_condition(), GameSession.get_game_time())
 	_care.disabled = not GameSession.is_moored_in_harbour()
 	_care.text = "Boat care…" if level in [BoatCare.LEVEL_GOOD, BoatCare.LEVEL_COSMETIC] else Loc.t("Boat care (%s)…") % Loc.t(BoatCare.LEVEL_NAMES[level]).to_lower()
-	_sailmaker.visible = GameSession.has_facility(HarbourFacilities.SAILMAKER)
-	_chandlery.visible = GameSession.has_facility(HarbourFacilities.CHANDLERY)
-	var store := GameSession.has_facility(HarbourFacilities.GROCERY)
-	_grocery.disabled = not store or provisions.is_full(GameSession.get_passage_store_days())
-	_grocery.visible = store
-	_grocery.text = Loc.t("Grocery store (%s)…") % GameSession.format_money(GameSession.get_provisions_price()) \
-		if not provisions.is_full() else Loc.t("Grocery store…")
 
 
 ## Refreshes the condition shown after work done in Boat care.

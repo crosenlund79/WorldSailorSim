@@ -96,7 +96,9 @@ const STYLES := {
 ## of the classic pontoon drawing whose place the sign takes].
 const FACILITIES := {&"grocery": ["Groceries", &"basket", "GrocerySign"],
 	&"boatyard": ["Boatyard · Repairs", &"wrench", "BoatyardSign"],
-	&"go_ashore": ["Go Ashore", &"compass", "GoAshoreSign"]}
+	&"go_ashore": ["Go Ashore", &"compass", "GoAshoreSign"],
+	# I026: the walkway up to the quay, where the businesses now stand.
+	&"quay": ["To the quay", &"quay", "QuaySign"]}
 ## Original mooring nodes the illustration replaces while it is shown (the
 ## sign labels stay: they get the sign's text and the display font).
 const REPLACED_PREFIXES := ["Plank", "Cleat"]
@@ -181,6 +183,7 @@ func refresh() -> void:
 	_art = HarbourLooks.get_default().art_for(_port_id)
 	_landmarks = _art.get_landmarks() if _art else ([] as Array[HarbourLandmark])
 	_signs.clear()
+	_walkway_x = NAN
 	var stations := _area.get_node_or_null(^"Layout/Stations")
 	if stations:
 		for station: Interactable in stations.get_children():
@@ -194,6 +197,9 @@ func refresh() -> void:
 					at = label.position + label.size / 2.0
 				else:
 					at = Vector2(station.position.x, _pontoon.position.y + 30.0)
+				if station.interaction_id == WALKWAY_STATION:
+					# I026: the walkway runs up from beside its sign (BoatArea).
+					_walkway_x = station.position.x
 				_signs.append({"id": station.interaction_id, "at": at, "text": facility[0], "icon": facility[1], "label": label != null})
 	_update_sign_highlights()
 	queue_redraw()
@@ -298,6 +304,7 @@ func _draw() -> void:
 	for landmark in _landmarks:
 		_draw_landmark(landmark)
 	_draw_pontoon(rng)
+	_draw_walkway()
 	for line in _lines:
 		_draw_rope(line)
 	for cleat in _cleats:
@@ -1111,6 +1118,43 @@ func _draw_pontoon(rng: RandomNumberGenerator) -> void:
 	draw_rect(p, Color(INK, 0.6), false, 1.4)
 
 
+# --- The walkway to the quay (I026 stage 02) -----------------------------------------
+
+## The walkway station's interaction id (BoatArea.WALKWAY_ID), and how far
+## its sign stands beside it.
+const WALKWAY_STATION := &"quay"
+const WALKWAY_SIGN_SHIFT := 160.0
+const WALKWAY_HALF := 44.0
+## Where the walkway runs up from the pontoon (NAN: none shown).
+var _walkway_x := NAN
+
+
+func get_walkway_x() -> float:
+	return _walkway_x
+
+
+## An aluminium brow from the back of the pontoon up onto the quay, with
+## non-slip treads and hand rails (the walkway's own art).
+func _draw_walkway() -> void:
+	if is_nan(_walkway_x):
+		return
+	var top := _pontoon.end.y - ShoreAccess.SIGN_BAND + 4.0
+	var bottom := _pontoon.end.y + 6.0 + COPING + 30.0
+	var x0 := _walkway_x - WALKWAY_HALF
+	var x1 := _walkway_x + WALKWAY_HALF
+	draw_rect(Rect2(x0 + 6, top + 9, x1 - x0, bottom - top), SHADOW)
+	draw_rect(Rect2(x0, top, x1 - x0, bottom - top), Color("#A3AAAB"))
+	draw_rect(Rect2(x0, top, 4, bottom - top), Color("#6E7678"))
+	draw_rect(Rect2(x1 - 4, top, 4, bottom - top), Color("#6E7678"))
+	var y := top + 7.0
+	while y < bottom - 4.0:
+		draw_rect(Rect2(x0 + 6, y, x1 - x0 - 12, 3.0), Color("#3A4144"))
+		y += 11.0
+	for x: float in [x0 - 5.0, x1 + 5.0]:
+		draw_line(Vector2(x, top), Vector2(x, bottom + 4), Color(INK, 0.6), 3.0, true)
+		draw_line(Vector2(x, top), Vector2(x, bottom + 4), ROPE, 1.6, true)
+
+
 func _draw_rope(points: PackedVector2Array) -> void:
 	if points.size() < 2:
 		return
@@ -1169,6 +1213,11 @@ func _draw_icon(icon: StringName, at: Vector2) -> void:
 			draw_arc(at, 8.5, 0, TAU, 24, ink, 1.8, true)
 			draw_colored_polygon(PackedVector2Array([at + Vector2(0, -7), at + Vector2(2.6, 0), at + Vector2(-2.6, 0)]), Color("#B5523F"))
 			draw_colored_polygon(PackedVector2Array([at + Vector2(0, 7), at + Vector2(2.6, 0), at + Vector2(-2.6, 0)]), ink)
+		&"quay":  # steps up to a little house: the way to the quay
+			draw_colored_polygon(PackedVector2Array([at + Vector2(-2, -9), at + Vector2(8, -2), at + Vector2(-12, -2)]), ink)
+			draw_rect(Rect2(at + Vector2(-10, -2), Vector2(16, 8)), ink)
+			for k in 3:
+				draw_rect(Rect2(at + Vector2(-9 + k * 5, 6 - k * 2), Vector2(5, 3 + k * 2)), Color("#5AA8B8"))
 		&"wrench":
 			draw_line(at + Vector2(-7, 7), at + Vector2(4, -4), ink, 3.2, true)
 			draw_arc(at + Vector2(5.5, -5.5), 4.2, -PI * 0.25, PI * 1.25, 10, ink, 2.6, true)

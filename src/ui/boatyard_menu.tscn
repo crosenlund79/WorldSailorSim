@@ -45,7 +45,7 @@ text = "Boatyard"
 [node name="Info" type="Label" parent="Center/Panel/VBox"]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
-text = "Choose the boat you sail, look after your boat (repairs, services, haul-outs and equipment) or visit the grocery store. Your harbour, the time, your money and your companion stay with you."
+text = "Choose the boat you sail, or look after the one you have (repairs, services, haul-outs and equipment). Your harbour, the time, your money and your companion stay with you."
 autowrap_mode = 3
 
 [node name="Body" type="HBoxContainer" parent="Center/Panel/VBox"]
@@ -160,12 +160,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 text = "Boat care…"
-
-[node name="GroceryButton" type="Button" parent="Center/Panel/VBox/Services/Row"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 2
-text = "Grocery store…"
 
 [node name="Buttons" type="HBoxContainer" parent="Center/Panel/VBox"]
 layout_mode = 2
