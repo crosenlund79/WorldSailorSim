@@ -511,6 +511,7 @@ func _test_save_on_the_quay() -> void:
 	if deck:
 		t.check(deck.player.position.distance_to(deck.get_walkway_return_point()) < 40.0,
 			"[save] on the pontoon, by the walkway (%s)" % deck.player.position)
+	SaveManager.delete_slot(1)  # the slots stay empty for the suites after this one
 
 
 func _test_walk_back_down() -> void:

@@ -378,10 +378,11 @@ func _test_small_harbour_ui() -> void:
 	GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"start")
 	app._show_current_boat_area()
 	await _settle()
-	var deck := app.router.current_screen as BoatArea
-	# I026: the businesses stand on the quay, each in its own building.
+	t.check(app.router.current_screen is BoatArea, "[ui] Stege: aboard, moored")
+	# I026: the businesses stand on the quay, each in its own building (the
+	# deck is freed on the way up).
 	var front := await TestQuay.go_up(t, app)
-	t.check(deck != null and front != null and front.get_storefront(QuayLayout.BOATYARD) == null and front.get_station(QuayLayout.BOATYARD) == null
+	t.check(front != null and front.get_storefront(QuayLayout.BOATYARD) == null and front.get_station(QuayLayout.BOATYARD) == null
 		and front.get_station(HarbourFront.TRAVEL_LIFT) == null, "[ui] Stege, a small harbour: no boatyard on the quay")
 	app.leave_quay()
 	await _settle()

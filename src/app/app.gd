@@ -303,9 +303,10 @@ func _ready() -> void:
 	GameSession.anchor_moment.connect(_on_anchor_moment)
 	GameSession.fishing_warning.connect(func(warning: Dictionary) -> void: notify(String(warning.text)))
 	# Test weather never outlives the game it was made in.
-	GameSession.session_started.connect(DevTools.on_session_changed)
-	GameSession.state_replaced.connect(DevTools.on_session_changed)
-	GameSession.session_ended.connect(DevTools.on_session_changed)
+	# (static: connected once, however many Apps have run in this process)
+	for changed: Signal in [GameSession.session_started, GameSession.state_replaced, GameSession.session_ended]:
+		if not changed.is_connected(DevTools.on_session_changed):
+			changed.connect(DevTools.on_session_changed)
 	GameSession.provisions_warning.connect(func(_level: int, text: String) -> void: notify(text))
 	router.screen_changed.connect(_on_screen_changed)
 	weather_audio = WeatherAudio.new()
