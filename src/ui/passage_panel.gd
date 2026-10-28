@@ -11,7 +11,7 @@ extends PanelContainer
 ## anything. Shown underway on voyages of at least LONG_VOYAGE_NM.
 ##
 ## Captain's Chartroom: the distance, ETA and progress are in the route panel
-## and the speed and wind on the sailing panel, so those lines are kept (tests,
+## and (I026) the speed and wind on the instruments, so those lines are kept (tests,
 ## diagnostics) but not shown here; the boat line shows only when the boat
 ## wants care, and tight stores are shown in the warning colour.
 

@@ -211,11 +211,11 @@ func _run() -> void:
 		await _shot("26_fenders_stowed_underway")
 	if _wanted("09_") or _wanted("11_"):
 		await _shot("09_sailing_panel_and_11_shortcut_help")
-	ChartPlotter.shown = true
+	app.open_chartplotter()  # I026: the helm plotter, close up (was a HUD panel)
 	await _wait(1.0)
 	if _wanted("08_"):
 		await _shot("08_cockpit_chartplotter")
-	ChartPlotter.shown = false
+	app.modals.clear()
 	if _wanted("10_"):
 		app.open_action_wheel()
 		await _frames(6)

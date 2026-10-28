@@ -360,28 +360,31 @@ func _test_wheel() -> void:
 	Simulation.advance(600.0)
 	await _show(SessionState.AREA_EXTERIOR)
 	labels = _wheel_labels()
-	t.check(labels.get(&"sail_trim") == "Trim sails" and labels.get(&"chartplotter") == "Chart plotter" and labels.get(&"sailing_panel") == "Sailing details",
-		"[wheel] at the helm: \"Trim sails\", \"Chart plotter\", \"Sailing details\"")
-	ChartPlotter.shown = true
-	SailingPanel.collapsed = true
+	# I026: the plotter and the instruments are devices at the helm: their
+	# items open the focused views; the radar keeps its on/off check mark.
+	t.check(labels.get(&"sail_trim") == "Trim sails" and labels.get(&"chartplotter") == "Chart plotter" and labels.get(&"instruments") == "Instruments",
+		"[wheel] at the helm: \"Trim sails\", \"Chart plotter\", \"Instruments\"")
+	RadarPanel.shown = false
 	var wheel: ActionWheel = app.open_action_wheel()
 	await t.frames(3)
+	var radar := wheel.find_child("Action_radar", true, false) as Button
 	var plotter := wheel.find_child("Action_chartplotter", true, false) as Button
-	var details := wheel.find_child("Action_sailing_panel", true, false) as Button
-	t.check(plotter.get_meta(&"checked") == true and details.get_meta(&"checked") == false and plotter.icon != null and details.icon != null,
-		"[wheel] check marks show the real state: plotter on, details off")
+	t.check(radar.get_meta(&"checked") == false and radar.icon != null and not plotter.has_meta(&"checked"),
+		"[wheel] check marks show the real state: the radar off; the plotter opens a view (no check mark)")
 	await _quiet()
 	await t.screenshot("cozy_wheel_checks")
-	wheel.choose(wheel.items.map(func(i: Dictionary) -> StringName: return i.id).find(&"chartplotter"))
+	wheel.choose(wheel.items.map(func(i: Dictionary) -> StringName: return i.id).find(&"radar"))
 	await t.frames(3)
-	t.check(not ChartPlotter.shown, "[wheel] choosing it switches the plotter off")
-	# Changed elsewhere (the P key): the wheel shows it.
-	app.toggle_chartplotter()
+	t.check(RadarPanel.shown, "[wheel] choosing it switches the radar on")
+	# Changed elsewhere: the wheel shows it.
+	RadarPanel.shown = false
 	wheel = app.open_action_wheel()
 	await t.frames(3)
-	t.check((wheel.find_child("Action_chartplotter", true, false) as Button).get_meta(&"checked") == true, "[wheel] changed elsewhere, shown at once")
+	t.check((wheel.find_child("Action_radar", true, false) as Button).get_meta(&"checked") == false, "[wheel] changed elsewhere, shown at once")
+	wheel.choose(wheel.items.map(func(i: Dictionary) -> StringName: return i.id).find(&"chartplotter"))
+	await t.frames(4)
+	t.check(app.modals.get_top() is PlotterView, "[wheel] choosing the chart plotter opens the helm's plotter, close up")
 	app.modals.clear()
-	SailingPanel.collapsed = false
 
 
 # --- Coffee and the hat ----------------------------------------------------------------------

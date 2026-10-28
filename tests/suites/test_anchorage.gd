@@ -180,7 +180,8 @@ func _test_arrival_and_prompt() -> void:
 	t.check(app.modals.is_empty() and not app.is_anchorage_prompt_due(), "[wait] and the question is not asked again")
 	var wheel: Array = app.get_wheel_actions().map(func(a: Dictionary) -> StringName: return a.id)
 	t.check(&"anchor" in wheel and &"sail_on" in wheel, "[wait] the action wheel offers the anchor and \"Sail on\" (%s)" % [wheel])
-	t.check((app.hud.find_child("SailingPanel", true, false) as SailingPanel).get_value("speed").contains("anchorage"), "[wait] the sailing panel says so")
+	t.check(app.hud.instrument_cluster.get_value("speed").contains("anchorage") and app.hud.instrument_cluster.get_status_text().contains("sail on"),
+		"[wait] the instruments say so (%s)" % app.hud.instrument_cluster.get_status_text())
 	t.check(GameSession.get_fishing_mode() == FishingState.MODE_STATIONARY, "[wait] waiting there, one fishes from a still boat")
 	# Save while waiting, load: still waiting, no second prompt.
 	t.check_eq(SaveManager.save_to_slot(3, GameSession.get_state_snapshot()), OK, "(setup) saved at the anchorage")

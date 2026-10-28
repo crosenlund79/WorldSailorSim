@@ -2,9 +2,10 @@ extends RefCounted
 ## Operation Steady Hands: the interface stays put, inside the screen, closable
 ## and translated.
 ##
-## 1. The weather warning never moves Trip Details (the sailing panel): shown,
-##    hidden, updated with short and long texts, in English and Danish, by
-##    day and night, with Trip Details collapsed and expanded.
+## 1. The weather warning never moves the instruments (I026: they replaced
+##    Trip Details, the sailing panel): shown, hidden, updated with short and
+##    long texts, in English and Danish, by day and night, with each of the
+##    three instrument packages fitted.
 ## 2. A sweep over every window the game opens from its own entry points,
 ##    moored and underway, in English and Danish, at interface size 100 %
 ##    and 130 %. Each window must:
@@ -123,13 +124,15 @@ func _test_weather_does_not_move_trip_details() -> void:
 		SettingsManager.set_language(language)
 		for hour in [10.0, 23.0]:
 			await _start(true, &"exterior", hour)
-			for collapsed in [false, true]:
-				SailingPanel.collapsed = collapsed
+			for package_id: String in InstrumentPackage.get_ids():
+				GameSession.get_instruments().add_owned(package_id)
+				GameSession.fit_instrument_package(package_id)
+				var collapsed := package_id  # the label below names the package
 				await t.frames(3)
-				var trip: Control = hud.sailing_panel
+				var trip: Control = hud.instrument_cluster
 				var route := hud.get_node("RoutePanel") as Control
 				var warning := hud.get_node("WarningPanel") as Control
-				if not t.check(trip.visible, "(setup) Trip Details shows underway"):
+				if not t.check(trip.visible, "(setup) the instruments show underway"):
 					return
 				var before := screen_rect(trip)
 				var moved: Array[String] = []
@@ -149,16 +152,16 @@ func _test_weather_does_not_move_trip_details() -> void:
 					await t.frames(2)
 					if not screen_rect(trip).is_equal_approx(before):
 						moved.append("hidden: %s" % [screen_rect(trip)])
-				t.check(moved.is_empty(), "[trip details] %s, %02d:00, %s: the weather warning shown, updated and hidden 12 times never moves Trip Details %s" % [
-					language, int(hour), "collapsed" if collapsed else "expanded", moved])
-				t.check(overlaps.is_empty(), "[trip details] %s, %02d:00, %s: the warning never covers Trip Details or the route panel, and stays on screen %s" % [
-					language, int(hour), "collapsed" if collapsed else "expanded", overlaps])
-				if language == &"da" and hour == 10.0 and not collapsed:
+				t.check(moved.is_empty(), "[instruments] %s, %02d:00, %s: the weather warning shown, updated and hidden 12 times never moves the instruments %s" % [
+					language, int(hour), collapsed, moved])
+				t.check(overlaps.is_empty(), "[instruments] %s, %02d:00, %s: the warning never covers the instruments or the route panel, and stays on screen %s" % [
+					language, int(hour), collapsed, overlaps])
+				if language == &"da" and hour == 10.0 and collapsed == InstrumentPackage.CLASSIC:
 					hud.show_warning(texts[3])
 					await t.frames(2)
 					await t.screenshot("steady_trip_details_with_warning_da")
 					hud.hide_warning()
-	SailingPanel.collapsed = false
+	GameSession.fit_instrument_package(InstrumentPackage.CLASSIC)
 	SettingsManager.set_language(&"en")
 
 
@@ -180,6 +183,8 @@ func _openers() -> Array:
 		["Grocery", false, &"exterior", func() -> void: app.open_grocery()],
 		["Fishmonger", false, &"exterior", func() -> void: app.open_fishmonger()],
 		["Chandlery", false, &"exterior", func() -> void: app.open_chandlery()],
+		["Instruments (moored)", false, &"exterior", func() -> void: app.open_instruments()],
+		["Chartplotter (moored)", false, &"exterior", func() -> void: app.open_chartplotter()],
 		["Sailmaker", false, &"exterior", func() -> void: app.open_sailmaker()],
 		["Go ashore", false, &"exterior", func() -> void: app.open_go_ashore()],
 		["Boatyard", false, &"exterior", func() -> void: app.open_boatyard()],
@@ -196,6 +201,16 @@ func _openers() -> Array:
 		["Scrapbook", false, &"exterior", func() -> void: app.modals.push(ScrapbookMenu.new())],
 		["Confirm dialog", false, &"exterior", func() -> void: app.modals.confirm(Loc.t("Load this game?"), Loc.t("Progress since your last save will be lost."), "Load")],
 		["Action wheel (underway)", true, &"exterior", func() -> void: app.open_action_wheel()],
+		["Instruments (Classic)", true, &"exterior", func() -> void: app.open_instruments()],
+		["Instruments (Modern Cruiser)", true, &"exterior", func() -> void:
+			GameSession.get_instruments().add_owned(InstrumentPackage.MODERN)
+			GameSession.fit_instrument_package(InstrumentPackage.MODERN)
+			app.open_instruments()],
+		["Instruments (Offshore Navigator)", true, &"exterior", func() -> void:
+			GameSession.get_instruments().add_owned(InstrumentPackage.OFFSHORE)
+			GameSession.fit_instrument_package(InstrumentPackage.OFFSHORE)
+			app.open_instruments()],
+		["Chartplotter", true, &"exterior", func() -> void: app.open_chartplotter()],
 		["Sail trim", true, &"exterior", func() -> void: app.open_sail_trim()],
 		["Anchor", true, &"exterior", func() -> void: app.open_anchor()],
 		["Fishing (underway)", true, &"exterior", func() -> void: app.open_fishing()],
@@ -321,10 +336,10 @@ static func _text_of(control: Control) -> String:
 # --- 3. The HUD ---------------------------------------------------------------------------------------------
 
 ## HUD pieces that must never cover each other (when both show).
-const HUD_PAIRS := [["RoutePanel", "SailingPanel"], ["RoutePanel", "WarningPanel"], ["SailingPanel", "WarningPanel"],
-	["SailingPanel", "PassagePanel"], ["WarningPanel", "PassagePanel"], ["ClockPanel", "RoutePanel"], ["ClockPanel", "AreaPanel"],
-	["PromptPanel", "Controls"], ["ChartPlotter", "Controls"], ["RadarPanel", "Controls"], ["AreaPanel", "HatBadge"],
-	["PromptPanel", "RadarPanel"], ["PromptPanel", "ChartPlotter"], ["ChartPlotter", "RadarPanel"], ["PromptPanel", "PassagePanel"]]
+const HUD_PAIRS := [["RoutePanel", "InstrumentCluster"], ["RoutePanel", "WarningPanel"], ["InstrumentCluster", "WarningPanel"],
+	["InstrumentCluster", "PassagePanel"], ["WarningPanel", "PassagePanel"], ["ClockPanel", "RoutePanel"], ["ClockPanel", "AreaPanel"],
+	["ClockPanel", "InstrumentCluster"], ["PromptPanel", "Controls"], ["RadarPanel", "Controls"], ["AreaPanel", "HatBadge"],
+	["PromptPanel", "RadarPanel"], ["PromptPanel", "PassagePanel"], ["InstrumentCluster", "RadarPanel"]]
 
 
 func _check_hud(label: String) -> void:
@@ -332,7 +347,6 @@ func _check_hud(label: String) -> void:
 	for underway in [false, true]:
 		await _start(underway, &"exterior")
 		app.hud.show_warning(Loc.t("Gale warning: wind rising to 35 kn within 3 h."))
-		ChartPlotter.shown = true
 		RadarPanel.shown = true
 		await t.frames(4)
 		var pieces := {}
@@ -356,9 +370,8 @@ func _check_hud(label: String) -> void:
 			if pieces.has(pair[0]) and pieces.has(pair[1]) and (pieces[pair[0]] as Rect2).grow(-1.0).intersects(pieces[pair[1]]):
 				problems.append("%s covers %s" % pair)
 		app.hud.hide_warning()
-		ChartPlotter.shown = false
 		RadarPanel.shown = false
-	t.check(problems.is_empty(), "[hud %s] moored and underway, with a warning, the chart plotter and the radar: all inside the screen, no named pair covers the other %s" % [
+	t.check(problems.is_empty(), "[hud %s] moored and underway, with a warning, the instruments and the radar: all inside the screen, no named pair covers the other %s" % [
 		label, problems])
 
 
@@ -478,9 +491,9 @@ func _test_transitions() -> void:
 	await t.frames(3)
 	app.modals.handle_back()
 	await t.frames(2)
-	t.check(opened and app.modals.is_empty() and not app.hud.sailing_panel.visible and not app.hud.radar_panel.visible,
-		"[context] sail trim open when the boat is moored closes (by itself or with Esc); Trip Details and the radar go away (opened %s, open %d, trip %s, radar %s, underway %s)" % [
-			opened, app.modals.depth(), app.hud.sailing_panel.visible, app.hud.radar_panel.visible, GameSession.is_underway()])
+	t.check(opened and app.modals.is_empty() and not app.hud.instrument_cluster.visible and not app.hud.radar_panel.visible,
+		"[context] sail trim open when the boat is moored closes (by itself or with Esc); the instruments and the radar go away (opened %s, open %d, instruments %s, radar %s, underway %s)" % [
+			opened, app.modals.depth(), app.hud.instrument_cluster.visible, app.hud.radar_panel.visible, GameSession.is_underway()])
 	RadarPanel.shown = false
 	# The wheel open when a warning arrives: both close their own way.
 	await _start(true, &"exterior")
