@@ -323,8 +323,11 @@ companions ashore · 13 cabin realism (13b, 13c other boats) · 14 a harbour
 before/after (Naples) · 15 neighbouring boats at scale (Kiel) · 16 the
 cabin windows as plain glass by day and night · 17 the faded water
 outside the cabin · 18 the laptop with the *Aboard* history · 19 the
-build identifier. More harbours and boats before/after, and every cabin
-before/after, in `visual/`. Motion (`motion/`): frame strips of the girl's
+build identifier. More harbours and boats before/after in `visual/`,
+with every cabin before (`cabin_<boat>_before_*`) and after
+(`i025_cabin_<boat>`; the Wing 33 in 16/16b). The first cabin "after"
+images, taken while the windows still showed the outside, were replaced
+when the Captain chose plain glass. Motion (`motion/`): frame strips of the girl's
 three resolutions (the conure's flight to her shoulder), the welcome home
 and a pair moment; reproducible by running `test_more_room_aboard` with
 `--screenshots=DIR` and `tools/qa/film_strip.py`.
