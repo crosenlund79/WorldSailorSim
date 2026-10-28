@@ -256,3 +256,41 @@ orphans, no new autoload connections, startup unchanged (823 vs 826 ms).
 Nothing to change now; a Windows reading on the deck decides together with
 #10. If the companion ever shows up in a profile: its clip frames are small
 ImageTextures (≤ 320 px), and only one companion is drawn at a time.
+
+### 12. I025: the faded sea outside the cabin, and the windows made plain glass (measured)
+
+Same session, Linux software rendering (llvmpipe, 1600×900),
+`tests/benchmark_wrs.tscn --turbo`, three builds back to back:
+`cfc9b52` (before I025), I025 with the live window views (`2c2d297`) and
+I025 with plain-glass windows (the Captain's revision). Files
+`docs/benchmarks/i025_before_rendered.json`, `i025_live_rendered.json`,
+`i025_after_rendered.json`. Mean frame time, ms:
+
+| Scenario | before | live windows | plain glass |
+|---|---|---|---|
+| walk in the cabin, day | 67.1 | 89.4 | 85.6 |
+| sleep 4 h across sunrise | 66.7 | 93.4 | 86.5 |
+| sleep 4 h across sunset | 82.4 | 102.8 | 98.4 |
+| sleep 8 h across midnight | 80.6 | 101.9 | 97.5 |
+| sailing 1× (deck) | 67.7 | 63.0 | 62.2 |
+| chart open, idle | 47.5 | 46.2 | 46.3 |
+| Long Passage, 12 h per s | 41.3 | 37.7 | 39.3 |
+
+- **The plain-glass windows** saved 4-7 % in the cabin scenes against the
+  live views (and they are never redrawn while the Captain walks; one
+  redraw of six windows is about 0.1 ms of CPU, `test_cabin_windows`).
+- **The faded sea round the hull** (`CabinSeaBackdrop`, the deck's own sea
+  shader under a veil) is most of I025's cabin cost on a CPU rasterizer:
+  +25-40 % against the starting build. On llvmpipe every shaded pixel is CPU
+  work (as in #10); on a GPU it is expected to be small. The shader already
+  skips the floor area the cabin art covers.
+- **Drift:** run-to-run noise on this machine is large; the deck walk in
+  harbour, whose code did not change between the last two builds, moved
+  67 → 86 ms. Differences under about 10 % are not findings here.
+- **Structure:** about 60-70 more objects and +8 MB static memory from the
+  start (cabin art and the dock/companion nodes), flat across the 20 session
+  rounds; no orphans.
+- **Options if a Windows reading says it matters:** draw the faded sea at
+  a lower resolution or update it a few times a second; or a static faded
+  sea texture tinted by the hour (the windows already went this way). The
+  Captain decides after seeing it on the GPU.
