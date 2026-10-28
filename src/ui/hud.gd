@@ -1,8 +1,10 @@
 class_name Hud
 extends Control
 ## Gameplay overlay shared by both boat areas: area and location, game clock
-## with time acceleration, voyage status (destination, speed, progress, ETA),
-## weather warnings, the interaction prompt and a menu button.
+## with time acceleration, the planned route in port, the boat's instruments
+## underway (I026: InstrumentCluster, in the fitted package's look: speed,
+## heading, wind, the route, distance and ETA), weather warnings, the
+## interaction prompt and a menu button.
 ##
 ## The HUD only reads state; it refreshes its text every frame from
 ## GameSession, so it can never drift from the simulation.
@@ -15,6 +17,8 @@ signal menu_requested
 signal chart_requested
 ## The Long Passage panel's Save button (Iteration 16).
 signal save_requested
+## I026: an instrument was clicked (the focused InstrumentView).
+signal instruments_requested
 
 @onready var _area: Label = %AreaLabel
 @onready var _location: Label = %LocationLabel
@@ -28,6 +32,7 @@ signal save_requested
 @onready var _progress: ProgressBar = %VoyageProgress
 @onready var _propulsion: Label = %PropulsionLabel
 @onready var _wind: Label = %WindLabel
+@onready var _route_box: Control = $RoutePanel/HBox/VBox
 @onready var _prompt_panel: Control = %PromptPanel
 @onready var _prompt: Label = %PromptLabel
 @onready var _warning_panel: Control = %WarningPanel
@@ -52,10 +57,10 @@ var hat_badge: HatBadge
 var aboard_badge: AboardBadge
 ## Long Passage (Iteration 16): bottom right, underway on long voyages.
 var passage_panel: PassagePanel
-## Iteration 17: the sailing panel (right, underway) and the chartplotter
-## (left, on deck underway, P or the action wheel).
-var sailing_panel: SailingPanel
-var chart_plotter: ChartPlotter
+## I026: the instruments (right, underway, on deck and in the cabin). They
+## replace Iteration 17's sailing panel; the chartplotter is the helm's
+## device now (PlotterView), no longer a HUD panel.
+var instrument_cluster: InstrumentCluster
 var radar_panel: RadarPanel
 var _area_id: StringName
 var _planned_key := ""
@@ -91,20 +96,14 @@ func _ready() -> void:
 	passage_panel.chart_requested.connect(chart_requested.emit)
 	passage_panel.save_requested.connect(save_requested.emit)
 	add_child(passage_panel)
-	sailing_panel = SailingPanel.new()
-	sailing_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE)
-	sailing_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	sailing_panel.offset_right = -24.0
-	sailing_panel.offset_top = 150.0
-	add_child(sailing_panel)
-	chart_plotter = ChartPlotter.new()
-	chart_plotter.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_MINSIZE)
-	chart_plotter.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	chart_plotter.offset_left = 24.0
-	chart_plotter.offset_bottom = -64.0
-	chart_plotter.on_deck = func() -> bool: return _area_id == SessionState.AREA_EXTERIOR
-	add_child(chart_plotter)
-	# The radar (I019): bottom left, beside the chartplotter when both show.
+	instrument_cluster = InstrumentCluster.new()
+	instrument_cluster.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE)
+	instrument_cluster.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	instrument_cluster.offset_right = -RIGHT_MARGIN
+	instrument_cluster.offset_top = 100.0
+	instrument_cluster.view_requested.connect(instruments_requested.emit)
+	add_child(instrument_cluster)
+	# The radar (I019): bottom left.
 	radar_panel = RadarPanel.new()
 	radar_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_MINSIZE)
 	radar_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
@@ -148,19 +147,15 @@ func get_controls_text() -> String:
 func _process(_delta: float) -> void:
 	if is_visible_in_tree():
 		refresh()
-	if radar_panel:
-		var left := 24.0 + (chart_plotter.size.x + 12.0 if chart_plotter.visible else 0.0)
-		if not is_equal_approx(radar_panel.offset_left, left):
-			radar_panel.offset_left = left
 	_keep_prompt_clear()
 
 
 ## The interaction prompt sits centred at the bottom, but steps right of the
-## chartplotter and the radar when they would reach it (Steady Hands: at a
-## large interface size the radar covered "Go below").
+## radar when it would reach it (Steady Hands: at a large interface size the
+## radar covered "Go below").
 func _keep_prompt_clear() -> void:
 	var left_edge := 0.0
-	for panel: Control in [chart_plotter, radar_panel]:
+	for panel: Control in [radar_panel]:
 		if panel and panel.visible:
 			left_edge = maxf(left_edge, panel.position.x + panel.size.x)
 	var shift := 0.0
@@ -186,11 +181,11 @@ var _warning_pending := false
 func set_chart_mode(enabled: bool) -> void:
 	_chart_mode = enabled
 	for node_name in ["AreaPanel", "RoutePanel", "PromptPanel", "Controls", "HatBadge", "AboardBadge", "PassagePanel",
-			"SailingPanel", "ChartPlotter", "RadarPanel"]:
+			"InstrumentCluster", "RadarPanel"]:
 		var node := get_node_or_null(node_name) as Control
 		if node == null:
 			continue
-		if node_name in ["HatBadge", "AboardBadge", "PassagePanel", "SailingPanel", "ChartPlotter", "RadarPanel"]:
+		if node_name in ["HatBadge", "AboardBadge", "PassagePanel", "InstrumentCluster", "RadarPanel"]:
 			node.process_mode = Node.PROCESS_MODE_DISABLED if enabled else Node.PROCESS_MODE_INHERIT
 			if enabled:
 				node.hide()
@@ -249,21 +244,21 @@ func get_route_text() -> String:
 	return _route.text
 
 
-## The right-hand column, top to bottom: the route panel, Trip Details (the
-## sailing panel, underway) and a weather warning. Each piece hangs only from
-## the ones above it, so a warning appearing, changing its text or being
-## dismissed never moves Trip Details (Steady Hands: before, Trip Details
-## was pushed down below every warning, and a long warning, e.g. in Danish,
-## ran over it because the warning's height was assumed to be 124 px). The
-## warning takes the height its text needs. Cheap: offsets are only written
-## when they change.
+## The right-hand column, top to bottom: the route panel (underway only its
+## Menu button), the instruments (I026, underway) and a weather warning.
+## Each piece hangs only from the ones above it, so a warning appearing,
+## changing its text or being dismissed never moves the instruments (Steady
+## Hands: before, Trip Details was pushed down below every warning, and a
+## long warning, e.g. in Danish, ran over it because the warning's height
+## was assumed to be 124 px). The warning takes the height its text needs.
+## Cheap: offsets are only written when they change.
 func _stack_right_column() -> void:
 	var route_panel := $RoutePanel as Control
 	# Never under the clock: at a large interface size on a 16:9 screen the
 	# route panel gives up width (its lines end in "…") rather than overlap.
 	var clock := $ClockPanel as Control
 	var room := size.x - RIGHT_MARGIN - (clock.position.x + clock.size.x) - COLUMN_GAP
-	var wanted := ROUTE_PANEL_WIDTH if _route.visible else ROUTE_PANEL_COMPACT
+	var wanted := ROUTE_PANEL_WIDTH if _route.visible else (ROUTE_PANEL_COMPACT if _wind.visible else ROUTE_PANEL_MENU_ONLY)
 	var width := minf(wanted, maxf(room, ROUTE_PANEL_COMPACT))
 	if not is_equal_approx(route_panel.offset_left, -(width + RIGHT_MARGIN)):
 		route_panel.offset_left = -(width + RIGHT_MARGIN)
@@ -271,9 +266,9 @@ func _stack_right_column() -> void:
 	if route_panel.size.y > route_panel.get_combined_minimum_size().y + 0.5:
 		route_panel.offset_bottom = route_panel.offset_top
 	var below_route := route_panel.offset_top + route_panel.size.y + COLUMN_GAP
-	if not is_equal_approx(sailing_panel.offset_top, below_route):
-		sailing_panel.offset_top = below_route
-	var warning_top := sailing_panel.offset_top + sailing_panel.size.y + COLUMN_GAP if sailing_panel.visible else below_route
+	if not is_equal_approx(instrument_cluster.offset_top, below_route):
+		instrument_cluster.offset_top = below_route
+	var warning_top := instrument_cluster.offset_top + instrument_cluster.size.y + COLUMN_GAP if instrument_cluster.visible else below_route
 	if not is_equal_approx(_warning_panel.offset_top, warning_top):
 		_warning_panel.offset_top = warning_top
 		_warning_panel.offset_bottom = warning_top  # grows to fit its text
@@ -295,43 +290,25 @@ func refresh() -> void:
 	var status_style := &"WarningLabel" if alarm else &"MutedLabel"
 	if _status.theme_type_variation != status_style:
 		_status.theme_type_variation = status_style
-	var wind := Simulation.get_wind_at(GameSession.get_vessel_position())
-	_wind.text = describe_wind(wind)
 	if GameSession.is_underway():
 		var destination := catalog.get_display_name(GameSession.get_voyage_destination_id())
-		var remaining := GameSession.get_voyage_remaining_nm()
-		var total := GameSession.get_voyage_total_nm()
-		var propulsion := GameSession.get_propulsion()
 		if GameSession.is_anchored():
 			# I019: the anchor's condition at a glance.
 			_location.text = Loc.t("At anchor, %s  ·  bound for %s") % [Loc.t(AnchorSite.holding_text(GameSession.get_anchor().holding)).to_lower(),
 				destination]
 		else:
 			_location.text = Loc.t("Underway to %s") % destination
-		_route_caption.text = "At anchor  ·  voyage paused" if GameSession.is_anchored() else \
-			Loc.format("Underway  ·  %.1f kn", GameSession.get_vessel_speed_kn())
-		_route.text = Loc.t("To %s  ·  %d nm to go") % [destination, roundi(remaining)]
-		_route_detail.text = Loc.t("ETA about %s (estimate)") % Simulation.format_game_time(Simulation.get_eta())
-		_propulsion.text = propulsion.describe()
-		# Speed, sails and wind are on the sailing panel underway: the route
-		# panel keeps to the voyage (and the holding, at anchor).
-		_propulsion.visible = GameSession.is_anchored()
+		# I026: the route, distance, ETA, speed, wind and the anchor are on the
+		# instruments (InstrumentCluster) underway: the route panel keeps only
+		# its Menu button, and nothing here is worked out twice.
+		_set_route_lines(false)
+		_propulsion.visible = false
 		_wind.visible = false
-		_set_route_lines(true)
-		if GameSession.is_holding_at_anchorage():
-			_route_caption.text = "At the anchorage  ·  0.0 kn"
-			_route_detail.text = "Drop the anchor, or sail on (Q)"
-			_propulsion.text = "Sails down  ·  waiting at the anchorage"
-		if GameSession.is_anchored():
-			_route_detail.text = "Raise the anchor at the windlass to sail on"
-			_propulsion.text = Loc.t("%s  ·  %d × the depth of chain") % [AnchorSite.holding_text(GameSession.get_anchor().holding),
-				GameSession.get_anchor().scope]
-		var side := PropulsionState.wind_side(propulsion.true_wind_angle)
-		if not GameSession.is_anchored():
-			_wind.text += "  ·  %d° %s" % [roundi(absf(propulsion.true_wind_angle)), side if side else Loc.t("off the bow")]
-		_progress.visible = true
-		_progress.value = 100.0 * (1.0 - remaining / total) if total > 0.0 else 100.0
+		_progress.visible = false
+		_route_box.visible = false
 	else:
+		_route_box.visible = true
+		_wind.text = describe_wind(Simulation.get_wind_at(GameSession.get_vessel_position()))
 		var location := GameSession.get_location()
 		var arrived := GameSession.get_vessel_status() == SessionState.STATUS_ARRIVED
 		_location.text = "%s %s" % [Loc.t("Arrived at") if arrived else Loc.t("Moored at"), location.display_name if location else "?"]
@@ -359,10 +336,12 @@ func refresh() -> void:
 ## it shrinks to the wind and the menu button.
 const ROUTE_PANEL_WIDTH := 536.0
 const ROUTE_PANEL_COMPACT := 300.0
+## Underway (I026): only the Menu button.
+const ROUTE_PANEL_MENU_ONLY := 120.0
 
 
 func _set_route_lines(shown: bool) -> void:
-	if _route.visible != shown:
+	if _route.visible != shown or _route_caption.visible != shown:
 		_route_caption.visible = shown
 		_route.visible = shown
 		_route_detail.visible = shown

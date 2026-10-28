@@ -287,6 +287,7 @@ func _ready() -> void:
 	hud.menu_requested.connect(open_pause_menu)
 	hud.chart_requested.connect(open_chart_from_warning)
 	hud.save_requested.connect(open_save_menu)
+	hud.instruments_requested.connect(open_instruments)
 	GameSession.notice.connect(notify)
 	Simulation.weather_warning.connect(_on_weather_warning)
 	Simulation.traffic_alert.connect(_on_traffic_alert)
@@ -450,7 +451,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"chartplotter") and not event.is_echo():
 		if is_in_gameplay() and modals.is_empty() and not router.is_busy():
 			get_viewport().set_input_as_handled()
-			toggle_chartplotter()
+			open_chartplotter()
+		return
+	if event.is_action_pressed(&"instruments") and not event.is_echo():
+		if is_in_gameplay() and modals.is_empty() and not router.is_busy():
+			get_viewport().set_input_as_handled()
+			open_instruments()
 		return
 	if not event.is_action_pressed(&"pause") or event.is_echo():
 		return
@@ -685,11 +691,27 @@ func open_chart() -> void:
 
 # --- Action wheel and chartplotter (Iteration 17) --------------------------------------
 
-## The chartplotter on deck (shown underway): on or off.
-func toggle_chartplotter() -> void:
-	ChartPlotter.shown = not ChartPlotter.shown
-	if ChartPlotter.shown and not (GameSession.is_underway() and _is_on_deck()):
-		notify(Loc.t("The chartplotter shows on deck while underway."))
+# --- Marine electronics (I026 stage 03) ----------------------------------------------------------
+
+## The helm's chartplotter, close up (P, the action wheel, the plotter at
+## the helm). Aboard, in harbour or at sea; Esc closes.
+func open_chartplotter() -> PlotterView:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var view := PlotterView.new()
+	modals.push(view)
+	return view
+
+
+## The instruments, close up: the fitted package's units with their pages
+## and the package selector (I, the action wheel, a click on the HUD's
+## instruments or on the units at the helm). Esc closes.
+func open_instruments() -> InstrumentView:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var view := InstrumentView.new()
+	modals.push(view)
+	return view
 
 
 ## The actions that make sense here, for the action wheel:
@@ -717,13 +739,16 @@ func get_wheel_actions() -> Array[Dictionary]:
 		# I024: postcards, travel updates, the little game and the achievements
 		# all live on the laptop now (one item instead of two).
 		add.call(&"laptop", Loc.t("Laptop"), func() -> void: open_laptop.call_deferred())
+		if GameSession.is_underway():
+			# I026: the instruments from below (the essentials never need a walk).
+			add.call(&"instruments", Loc.t("Instruments"), func() -> void: open_instruments.call_deferred())
 	else:
 		if GameSession.is_underway():
 			# On/off items show a check mark read from the setting itself (Cozy Polish).
-			add.call(&"chartplotter", Loc.t("Chart plotter"), toggle_chartplotter)
-			actions.back().checked = func() -> bool: return ChartPlotter.shown
-			add.call(&"sailing_panel", Loc.t("Sailing details"), func() -> void: SailingPanel.collapsed = not SailingPanel.collapsed)
-			actions.back().checked = func() -> bool: return not SailingPanel.collapsed
+			# I026: the plotter and the instruments are devices at the helm now
+			# (their focused views); the radar stays an on/off display.
+			add.call(&"chartplotter", Loc.t("Chart plotter"), func() -> void: open_chartplotter.call_deferred())
+			add.call(&"instruments", Loc.t("Instruments"), func() -> void: open_instruments.call_deferred())
 			add.call(&"radar", "Radar", func() -> void: RadarPanel.shown = not RadarPanel.shown)
 			actions.back().checked = func() -> bool: return RadarPanel.shown
 			if not GameSession.is_anchored():
@@ -915,6 +940,7 @@ func open_sleep_menu() -> void:
 	var menu := sleep_menu_scene.instantiate() as SleepMenu
 	menu.sleep_requested.connect(sleep_for)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.TEAK)  # I026: by the berth
 
 
 ## Sleeps by advancing the normal simulation; stops early on arrival or a
@@ -1124,6 +1150,7 @@ func open_provisions() -> void:
 	var menu := provisions_menu_scene.instantiate() as ProvisionsMenu
 	menu.grocery_requested.connect(open_grocery)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.TEAK)  # I026: the locker, opened
 
 
 ## The harbour grocery store (on top of whatever menu asked for it). In
@@ -1148,7 +1175,7 @@ func open_fishmonger() -> FishmongerMenu:
 	return _open_trade(HarbourFacilities.FISHMONGER, FishmongerMenu.new()) as FishmongerMenu
 
 
-## The chandlery (at the boatyard).
+## The chandlery (its own storefront on the quay since I026; electronics too).
 func open_chandlery() -> ChandleryMenu:
 	var menu := ChandleryMenu.new()
 	menu.time_requested.connect(_spend_yard_time)
@@ -1275,6 +1302,7 @@ func open_cooking() -> CookingMenu:
 	menu.cooked.connect(_on_meal_cooked)
 	menu.coffee_made.connect(func(result: Dictionary) -> void: Simulation.spend_time_aboard(float(result.minutes), true))
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.STEEL)  # I026: at the stove
 	SessionLog.write("galley_open", {"refusal": GameSession.cooking_refusal(), "fish": GameSession.get_fishing().hold.size()})
 	return menu
 
@@ -1340,7 +1368,9 @@ func _on_anchor_alarm(alarm: Dictionary) -> void:
 func open_trophies() -> void:
 	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
 		return
-	modals.push(TrophyMenu.new())
+	var board := TrophyMenu.new()
+	modals.push(board)
+	FocusFrame.attach(board, FocusFrame.Kind.TEAK)  # I026: the board, up close
 
 
 ## A harbour service that is not offered here (Iteration 12): say so, log it.
@@ -1476,7 +1506,7 @@ func make_postcard() -> void:
 	if outcome.done:
 		notify(Loc.t("Your postcard is published and in the scrapbook. It is %s.") % now)
 	else:
-		notify(Loc.t("Interrupted after %s: %s. The postcard is kept; finish it later from the cabin (Q, Write a postcard). It is %s.") % [
+		notify(Loc.t("Interrupted after %s: %s. The postcard is kept; finish it later on the laptop in the cabin (Publications). It is %s.") % [
 			Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by), now])
 
 
@@ -1531,6 +1561,7 @@ func _on_traffic_alert(info: Dictionary) -> void:
 func _on_vhf_call(call: Dictionary) -> void:
 	AudioManager.play_sfx(FishingSounds.bite(), FishingSounds.DB)
 	_pending_vhf = call
+	_update_vhf_lamp()
 	if not GameSession.is_asleep() and GameSession.get_time_scale() > 1 and not is_instance_valid(voyage_map):
 		GameSession.set_time_scale(1)
 
@@ -1769,7 +1800,58 @@ func open_captains_log() -> CaptainsLogMenu:
 	menu.name = "CaptainsLogMenu"
 	menu.publish_requested.connect(open_publish_menu)
 	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.BOOK)  # I026: the logbook (L opens the same book)
 	return menu
+
+
+# --- The things a sailor uses below (I026, CabinObject) -----------------------------
+
+## A cabin object was used (BoatArea.cabin_object_requested): its focused view.
+func open_cabin_object(kind: StringName) -> ModalPanel:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	match kind:
+		CabinObject.LOGBOOK:
+			return open_captains_log()
+		CabinObject.VHF:
+			return open_vhf_set()
+		CabinObject.SYSTEMS:
+			var systems := SystemsView.new()
+			systems.name = "SystemsView"
+			modals.push(systems)
+			FocusFrame.attach(systems, FocusFrame.Kind.ELECTRIC)
+			return systems
+		CabinObject.CHEST:
+			return open_cabin_home()
+		CabinObject.POSTCARD:
+			var scrapbook := ScrapbookMenu.new()
+			scrapbook.name = "ScrapbookMenu"
+			modals.push(scrapbook)
+			FocusFrame.attach(scrapbook, FocusFrame.Kind.TEAK)
+			return scrapbook
+	return null
+
+
+## The VHF set at the nav station: channel 16, a call waiting (answered here
+## with the same dialog), the weather broadcast.
+func open_vhf_set() -> VhfSetView:
+	var view := VhfSetView.new(_pending_vhf)
+	view.name = "VhfSetView"
+	view.answer_requested.connect(func(call: Dictionary) -> void:
+		_pending_vhf = {}
+		_update_vhf_lamp()
+		show_vhf_dialog.call_deferred(call))
+	modals.push(view)
+	FocusFrame.attach(view, FocusFrame.Kind.RADIO)
+	return view
+
+
+## The VHF set's lamp blinks while a call waits.
+func _update_vhf_lamp() -> void:
+	var area := router.current_screen as BoatArea
+	var radio := area.get_cabin_object(CabinObject.VHF) if area else null
+	if radio:
+		radio.call_waiting = not _pending_vhf.is_empty()
 
 
 ## The travel-update dialog (from the Captain's Log or the work station), on
@@ -2200,6 +2282,11 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.cooking_requested.connect(open_cooking)
 	area.anchor_requested.connect(open_anchor)
 	area.quay_requested.connect(open_quay)
+	area.cabin_object_requested.connect(func(kind: StringName) -> void: open_cabin_object(kind))
+	area.trim_requested.connect(func() -> void: open_sail_trim())
+	_update_vhf_lamp.call_deferred()
+	area.instruments_requested.connect(open_instruments)
+	area.chartplotter_requested.connect(open_chartplotter)
 
 
 func _connect_world_map(map: WorldMap) -> void:

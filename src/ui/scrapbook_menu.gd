@@ -54,7 +54,7 @@ func _show() -> void:
 	_previous.disabled = page <= 0
 	_next.disabled = page >= cards.size() - 1
 	if cards.is_empty():
-		_when.text = Loc.t("No postcards yet. Make one at the cabin table: Q, then Write a postcard.")
+		_when.text = Loc.t("No postcards yet. Make one on the laptop in the cabin (Publications).")
 		return
 	view.card = cards[page]
 	_when.text = Loc.t("%d of %d · sent %s") % [page + 1, cards.size(), Simulation.format_game_time(float(cards[page].time))]

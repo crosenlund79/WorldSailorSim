@@ -423,8 +423,8 @@ func _test_helm_and_sails() -> void:
 	t.check(_toast_contains("Sailing conditions favourable"), "[helm] and says so")
 	await t.wait_until(func() -> bool: return not rig.is_furled() and absf(rig.set_amount - 1.0) < 0.01, 5.0)
 	t.check(not AudioManager.is_loop_playing(app.ENGINE_LOOP), "[helm] the engine sound stops")
-	app.hud.refresh()
-	t.check((app.hud.find_child("PropulsionLabel", true, false) as Label).text.begins_with("Under sail"), "[helm] the HUD shows sailing")
+	app.hud.instrument_cluster.refresh()
+	t.check(app.hud.instrument_cluster.get_value("propulsion").begins_with("Under sail"), "[helm] the instruments show sailing")
 	await t.press_action(&"interact")
 	t.check(GameSession.are_sails_set() and _toast_contains("Sails are drawing well"), "[helm] checking again changes nothing")
 

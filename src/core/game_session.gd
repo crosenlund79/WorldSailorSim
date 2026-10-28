@@ -95,6 +95,8 @@ signal boat_care_changed
 signal home_changed
 ## I022: a boat was bought (the owned boats changed).
 signal fleet_changed
+## I026: an instrument package was bought or fitted, or a display's page changed.
+signal instruments_changed
 ## I022: the difficulty was changed during the game.
 signal difficulty_changed(level: StringName)
 ## A loaded position or course was invalid under the current chart and was
@@ -3745,3 +3747,89 @@ func note_companion_petted(kind: StringName) -> void:
 		return
 	if not "pet" in _state.anchor.moments:
 		_record_moment("pet", "pet", String(AnchorLife.PET_LINES.get(kind, "")))
+
+
+# --- Marine electronics (I026 stage 03) --------------------------------------------------------
+
+## The instrument packages owned and fitted (InstrumentState).
+func get_instruments() -> InstrumentState:
+	return _state.instruments if _state else InstrumentState.new()
+
+
+## The package fitted to `vessel_id` (the boat aboard by default): Classic
+## unless another was fitted.
+func get_instrument_package(vessel_id: StringName = &"") -> InstrumentPackage:
+	if _state == null:
+		return InstrumentPackage.get_package(InstrumentPackage.CLASSIC)
+	return InstrumentPackage.get_package(_state.instruments.get_fitted(vessel_id if vessel_id != &"" else _state.vessel_id))
+
+
+func owns_instrument_package(id: String) -> bool:
+	return _state != null and _state.instruments.owns(id)
+
+
+## Why package `id` cannot be bought and fitted now, or "".
+func instrument_refusal(id: String) -> String:
+	if _state == null:
+		return Loc.t("No game is running.")
+	var package := InstrumentPackage.find(id)
+	if package == null:
+		return Loc.t("Unknown item.")
+	if _state.instruments.owns(id):
+		return Loc.t("You already have it.")
+	if not has_facility(HarbourFacilities.CHANDLERY):
+		return facility_refusal(HarbourFacilities.CHANDLERY)
+	if package.price > _state.funds:
+		return Loc.t("Not enough money: %s needed.") % format_money(package.price)
+	return ""
+
+
+## Buys package `id` at the chandlery and fits it to the boat aboard: paid
+## in full or not at all. It is the Captain's from then on (any boat, never
+## lost). Returns "" or why not.
+func buy_instrument_package(id: String) -> String:
+	var refusal := instrument_refusal(id)
+	if refusal != "":
+		return refusal
+	var package := InstrumentPackage.find(id)
+	_state.funds -= package.price
+	_state.instruments.add_owned(id)
+	_state.instruments.set_fitted(_state.vessel_id, id)
+	_has_unsaved_changes = true
+	SessionLog.write("instruments_bought", {"package": id, "cost": package.price, "vessel": String(_state.vessel_id),
+		"port": String(_state.location_id)})
+	funds_changed.emit(_state.funds)
+	instruments_changed.emit()
+	return ""
+
+
+## Fits an owned package to the boat aboard (anywhere: the units are swapped
+## on the same brackets). Returns "" or why not.
+func fit_instrument_package(id: String) -> String:
+	if _state == null:
+		return Loc.t("No game is running.")
+	if not InstrumentPackage.is_known(id):
+		return Loc.t("Unknown item.")
+	if not _state.instruments.owns(id):
+		return Loc.t("The chandlery sells it.")
+	if _state.instruments.get_fitted(_state.vessel_id) == id:
+		return ""
+	_state.instruments.set_fitted(_state.vessel_id, id)
+	_has_unsaved_changes = true
+	SessionLog.write("instruments_fitted", {"package": id, "vessel": String(_state.vessel_id)})
+	instruments_changed.emit()
+	return ""
+
+
+## Shows `page` on display `index` of the fitted package (a preference, kept
+## in the save).
+func set_instrument_page(index: int, page: String) -> void:
+	if _state == null:
+		return
+	var package := get_instrument_package()
+	if index < 0 or index >= package.default_pages.size() or not page in package.slot_pages(index) \
+			or _state.instruments.get_pages(package)[index] == page:
+		return
+	_state.instruments.set_page(package, index, page)
+	_has_unsaved_changes = true
+	instruments_changed.emit()

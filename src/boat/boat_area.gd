@@ -41,6 +41,14 @@ signal anchor_requested
 signal cooking_requested
 ## The trophy board in the cabin (Iteration 13) was used.
 signal trophies_requested
+## I026: a cabin object was used (CabinObject: logbook, VHF set, systems
+## panel, sea chest, postcard); App opens its focused view.
+signal cabin_object_requested(kind: StringName)
+## I026: the sheet winch was used (WinchProp): sail trim.
+signal trim_requested
+## I026: the cockpit instruments or the helm's chartplotter were used (E or a click).
+signal instruments_requested
+signal chartplotter_requested
 signal message_requested(text: String)
 ## Prompt text for the focused interactable, or "" when nothing is in range.
 signal interaction_prompt_changed(prompt: String)
@@ -110,9 +118,12 @@ func _ready() -> void:
 	SettingsManager.art_style_changed.connect(_on_art_style_changed)
 	_setup_shore()
 	_setup_aboard_gear()
+	_setup_cockpit_instruments()  # I026: the instruments and the plotter at the helm
 	_place_player()
 	player.focus_changed.connect(_on_player_focus_changed)
 	_setup_second_companion()  # I025: a node for a second companion (before the connections below)
+	_setup_cabin_objects()  # I026: the logbook, the VHF set, ... (before the connections below)
+	_setup_winch()  # I026: the sheet winch where the sails are trimmed (before the connections below)
 	for node in find_children("*", "Interactable", true, false):
 		(node as Interactable).interacted.connect(_on_interacted)
 	AudioManager.play_ambience(ambience)
@@ -459,6 +470,28 @@ func _setup_laptop() -> void:
 	LaptopProp.place(self, station)
 
 
+## The things a sailor uses below (I026, CabinObject), placed from this
+## cabin's own furniture.
+func _setup_cabin_objects() -> void:
+	if area_id != SessionState.AREA_INTERIOR:
+		return
+	CabinObject.place_all(self)
+
+
+## The sheet winch on deck (I026, WinchProp): E trims the sails.
+func _setup_winch() -> void:
+	if area_id == SessionState.AREA_EXTERIOR:
+		WinchProp.place(self)
+
+
+func get_winch() -> WinchProp:
+	return get_node_or_null(^"Winch") as WinchProp
+
+
+func get_cabin_object(kind: StringName) -> CabinObject:
+	return get_node_or_null(NodePath("CabinObject_%s" % kind)) as CabinObject
+
+
 func get_laptop() -> LaptopProp:
 	return get_node_or_null(^"Laptop") as LaptopProp
 
@@ -681,8 +714,14 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 			cooking_requested.emit()
 		&"trophies":
 			trophies_requested.emit()
+		&"chartplotter":
+			chartplotter_requested.emit()
 		&"hat":
 			message_requested.emit(GameSession.use_hat_hook())
+		&"trim":
+			trim_requested.emit()
+		&"logbook", &"vhf", &"systems", &"keepsakes", &"postcard":
+			cabin_object_requested.emit(interactable.interaction_id)
 		&"cup_holder", &"coffee_table":
 			if GameSession.is_carrying_coffee() and interactable.interaction_id == &"cup_holder":
 				message_requested.emit(GameSession.put_coffee_down())
@@ -1532,3 +1571,78 @@ func wind_direction_on_deck() -> Vector2:
 
 func _on_player_focus_changed(interactable: Interactable) -> void:
 	interaction_prompt_changed.emit(interactable.prompt if interactable else "")
+
+
+# --- Marine electronics (I026 stage 03) --------------------------------------------------------
+
+## The fitted instrument package at the helm, on every deck: the plotter by
+## the wheel or the tiller (with its station, E) and the instruments on the
+## bulkhead, placed from the deck's own fixtures (cockpit_layout).
+func _setup_cockpit_instruments() -> void:
+	var stations := get_node_or_null(^"Layout/Stations")
+	var collision := get_node_or_null(^"Layout/Collision")
+	if area_id != SessionState.AREA_EXTERIOR or stations == null or collision == null:
+		return
+	var package := GameSession.get_instrument_package()
+	var layout := cockpit_layout(collision, stations, package.cockpit_unit)
+	if layout.is_empty():
+		return
+	var cockpit := CockpitInstruments.new()
+	cockpit.name = "CockpitInstruments"
+	cockpit.plotter_at = layout.plotter
+	cockpit.units_at.assign(layout.units)
+	add_child(cockpit)
+	move_child(cockpit, get_node(^"Layout").get_index())
+	cockpit.add_child(HighlightProvider.create(&"chartplotter", HighlightResolver.rounded_rect(cockpit.plotter_rect().grow(1.0), 2.0)))
+	cockpit.plotter_clicked.connect(chartplotter_requested.emit)
+	cockpit.instruments_clicked.connect(instruments_requested.emit)
+	var station := _add_station(stations, "Chartplotter", &"chartplotter", "Use the chartplotter", layout.station, 18.0)
+	station.focus_priority = -1  # never takes E from the helm or the companionway unless closer
+
+
+## Where the cockpit electronics go on a deck, from its fixtures (deck
+## units, about 1 cm): {"plotter", "units": [3 centres], "station"}, or {}
+## without a helm.
+##   - a wheel on a pedestal (monohulls): the plotter on the pedestal's
+##     guard, the instruments on the bulkhead by the companionway;
+##   - a wheel at the bulkhead (the catamaran): the plotter on the bulkhead
+##     just inboard of the wheel, the instruments inboard of it;
+##   - a tiller: the plotter on the bulkhead to port of the companionway,
+##     the instruments to starboard of it.
+## The instruments keep clear of the centreline (the boom and the hatch).
+static func cockpit_layout(collision: Node, stations: Node, unit_size := 11.0) -> Dictionary:
+	var helm := stations.get_node_or_null(^"Helm") as Node2D
+	if helm == null:
+		return {}
+	var roof := collision.get_node_or_null(^"Coachroof") as BoatFixture
+	if roof == null:
+		roof = collision.get_node_or_null(^"Saloon") as BoatFixture
+	var aft_x := helm.position.x + 120.0
+	if roof:
+		aft_x = INF
+		for p in roof.get_points():
+			aft_x = minf(aft_x, roof.position.x + p.x)
+	var spacing := unit_size + 3.0
+	var pedestal := collision.get_node_or_null(^"Pedestal") as Node2D
+	var wheel := collision.get_node_or_null(^"Wheel") as Node2D
+	var plotter: Vector2
+	var station: Vector2
+	var units: Array[Vector2] = []
+	if pedestal:
+		plotter = pedestal.position + Vector2(3.0, 0.0)
+		station = pedestal.position + Vector2(30.0, 0.0)
+	elif wheel:
+		var inboard := -signf(wheel.position.y) if not is_zero_approx(wheel.position.y) else -1.0
+		plotter = Vector2(aft_x - 5.0, wheel.position.y + inboard * 36.0)
+		station = plotter + Vector2(-24.0, 0.0)
+		for k in 3:
+			units.append(Vector2(aft_x + 4.0, plotter.y + inboard * (26.0 + k * spacing)))
+	else:
+		plotter = Vector2(aft_x + 6.0, -40.0)
+		station = plotter + Vector2(-30.0, 0.0)
+	if units.is_empty():
+		# On top of the bulkhead over the companionway, to starboard of the
+		# centreline (where the boom and the hatch run).
+		for k in 3:
+			units.append(Vector2(aft_x + 4.0, 9.0 + unit_size / 2.0 + k * (unit_size + 1.0)))
+	return {"plotter": plotter, "units": units, "station": station}

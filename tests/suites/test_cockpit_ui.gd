@@ -1,13 +1,14 @@
 extends RefCounted
-## Iteration 17 (HUD, NAV-8): the cockpit.
-## - The sailing panel underway: speed, heading (on the planned course), wind
-##   now, the next leg's course and forecast wind (labelled an estimate), the
-##   time and distance to the next turn, or "no more turns" before the
-##   destination; collapsible; clear of the other panels.
+## Iteration 17 (HUD, NAV-8): the cockpit; I026 stage 03: the instruments.
+## - The instruments underway (they replaced the sailing panel): speed,
+##   heading (on the planned course), wind now, the next leg's course and
+##   forecast wind (labelled an estimate), the time and distance to the next
+##   turn, or "no more turns" before the destination; clear of the other
+##   panels; a click opens the focused view (Esc closes).
 ## - A new course of more than 5° gets a short highlight; nothing otherwise.
-## - The chartplotter (P or the action wheel): on deck underway only, coast
-##   from the navigation raster around the boat, the voyage's course and next
-##   turn; it never builds the world chart.
+## - The chartplotter (P or the action wheel): the helm's plotter close up,
+##   coast from the navigation raster around the boat, the voyage's course
+##   and next turn; it never builds the world chart; Esc closes it.
 ## - The action wheel (Q): the actions for where the captain is, keyboard
 ##   and mouse, nothing under it reacts; its key is in the help strip.
 
@@ -29,18 +30,16 @@ func run(runner: Node) -> void:
 	app.start_new_game()
 	await _settle()
 	t.check("Q actions" in app.hud.get_controls_text(), "[help] the help strip shows the action wheel key (%s)" % app.hud.get_controls_text())
-	t.check(not app.hud.sailing_panel.visible, "[panel] no sailing panel in harbour")
+	t.check(not app.hud.instrument_cluster.visible, "[instruments] not on the HUD in harbour")
 	t.set_wind(270.0, 14.0)
 	GameSession.plan_route_to(&"las_palmas")
 	GameSession.depart()
 	Simulation.advance(1800.0)
 	await _show(DECK)
-	await _test_sailing_panel()
+	await _test_instruments()
 	await _test_course_change_pulse()
 	await _test_chartplotter()
 	await _test_action_wheel()
-	ChartPlotter.shown = false
-	SailingPanel.collapsed = false
 	Simulation.auto_advance = true
 	app.queue_free()
 	await t.frames(2)
@@ -64,35 +63,35 @@ func _show(area: StringName, spawn := &"start") -> BoatArea:
 	return app.router.current_screen as BoatArea
 
 
-func _test_sailing_panel() -> void:
-	var panel: SailingPanel = app.hud.sailing_panel
+func _test_instruments() -> void:
+	var panel: InstrumentCluster = app.hud.instrument_cluster
 	await t.frames(2)
-	t.check(panel.visible, "[panel] underway, the sailing panel is shown")
-	t.check(panel.get_value("speed").begins_with("%.1f kn" % GameSession.get_vessel_speed_kn()), "[panel] speed: %s" % panel.get_value("speed"))
+	panel.refresh()
+	t.check(panel.visible, "[instruments] underway, the instruments are shown")
+	t.check(panel.get_value("speed").begins_with("%.1f kn" % GameSession.get_vessel_speed_kn()), "[instruments] speed: %s" % panel.get_value("speed"))
 	t.check(panel.get_value("heading").begins_with("%03d°" % roundi(Simulation.get_current_heading())) and "planned course" in panel.get_value("heading"),
-		"[panel] heading: %s" % panel.get_value("heading"))
+		"[instruments] heading: %s" % panel.get_value("heading"))
 	var wind := Simulation.get_wind_at(GameSession.get_vessel_position())
-	t.check(panel.get_value("wind").begins_with(Hud.describe_wind(wind).trim_prefix("Wind ")), "[panel] wind now: %s" % panel.get_value("wind"))
+	t.check(panel.get_value("wind").begins_with(Hud.describe_wind(wind).trim_prefix("Wind ")), "[instruments] wind now: %s" % panel.get_value("wind"))
 	var turn := WorldMap.get_next_turn()
 	t.check("forecast" in panel.get_value("next_leg") and "(estimate)" in panel.get_value("next_leg")
-		and panel.get_value("next_leg").begins_with("%03d°" % roundi(turn.next_course)), "[panel] next leg: %s" % panel.get_value("next_leg"))
-	t.check(("%.1f nm" % float(turn.nm)) in panel.get_value("turn") and "→" in panel.get_value("turn"), "[panel] next turn: %s" % panel.get_value("turn"))
-	t.check("(estimate)" in panel.get_value("remaining"), "[panel] distance to go and ETA, an estimate: %s" % panel.get_value("remaining"))
+		and panel.get_value("next_leg").begins_with("%03d°" % roundi(turn.next_course)), "[instruments] next leg: %s" % panel.get_value("next_leg"))
+	t.check(("%.1f nm" % float(turn.nm)) in panel.get_value("turn") and "→" in panel.get_value("turn"), "[instruments] next turn: %s" % panel.get_value("turn"))
+	t.check("(estimate)" in panel.get_value("remaining"), "[instruments] distance to go and ETA, an estimate: %s" % panel.get_value("remaining"))
 	# Clear of the route panel and the Long Passage panel.
 	var rect := panel.get_global_rect()
 	var route := (app.hud.get_node("RoutePanel") as Control).get_global_rect()
 	var passage: Control = app.hud.passage_panel
 	t.check(not rect.intersects(route) and (not passage.visible or not rect.intersects(passage.get_global_rect())),
-		"[panel] it does not overlap the route or Long Passage panels")
-	await t.screenshot("17_sailing_panel")
-	# Collapsible.
-	await t.click(panel.find_child("Collapse", true, false))
+		"[instruments] they do not overlap the route or Long Passage panels")
+	await t.screenshot("i026_instruments_hud")
+	# A click on an instrument: the focused view; Esc closes it.
+	await t.click(panel.get_units()[0])
+	await t.frames(3)
+	t.check(app.modals.get_top() is InstrumentView, "[instruments] a click opens the focused view")
+	await t.press_action(&"pause")
 	await t.frames(2)
-	t.check(not (panel.find_child("NextLeg", true, false) as Control).visible and (panel.find_child("Speed", true, false) as Control).visible,
-		"[panel] collapsed: the essentials stay, the details go")
-	await t.click(panel.find_child("Collapse", true, false))
-	await t.frames(2)
-	t.check((panel.find_child("NextLeg", true, false) as Control).visible, "[panel] and back")
+	t.check(app.modals.is_empty(), "[instruments] Esc closes it")
 	# No fictitious turn on the last leg.
 	var voyage := GameSession.get_voyage()
 	var cumulative := voyage.get_cumulative()
@@ -101,9 +100,10 @@ func _test_sailing_panel() -> void:
 	state.voyage.progress_nm = last_leg_start + 0.5
 	state.vessel_position = state.voyage.get_position()
 	GameSession.replace_state(state)
-	await t.frames(3)
-	t.check(panel.get_value("turn").begins_with("No more turns") and not (panel.find_child("NextLeg", true, false) as Control).visible,
-		"[panel] on the last leg: %s" % panel.get_value("turn"))
+	await t.frames(2)
+	panel.refresh()
+	t.check(panel.get_value("turn").begins_with("No more turns") and panel.get_value("next_leg") == "",
+		"[instruments] on the last leg: %s" % panel.get_value("turn"))
 	state = GameSession.get_state_snapshot()
 	state.voyage.progress_nm = 20.0
 	state.vessel_position = state.voyage.get_position()
@@ -112,7 +112,7 @@ func _test_sailing_panel() -> void:
 
 
 func _test_course_change_pulse() -> void:
-	var panel: SailingPanel = app.hud.sailing_panel
+	var panel: InstrumentCluster = app.hud.instrument_cluster
 	await t.get_tree().create_timer(2.0).timeout  # the jump back above was a course change
 	var pulses := 0
 	for i in 30:
@@ -124,8 +124,9 @@ func _test_course_change_pulse() -> void:
 	var turned := false
 	for i in 300:
 		Simulation.advance(300.0)
+		panel.refresh()
 		await t.frames(1)
-		if absf(angle_difference(deg_to_rad(start), deg_to_rad(Simulation.get_current_heading()))) > deg_to_rad(SailingPanel.COURSE_CHANGE_DEG):
+		if absf(angle_difference(deg_to_rad(start), deg_to_rad(Simulation.get_current_heading()))) > deg_to_rad(InstrumentCluster.COURSE_CHANGE_DEG):
 			turned = true
 			break
 	t.check(turned and panel.is_pulsing(), "[pulse] a new course from the autopilot gets a short highlight")
@@ -134,27 +135,32 @@ func _test_course_change_pulse() -> void:
 
 
 func _test_chartplotter() -> void:
-	var plotter: ChartPlotter = app.hud.chart_plotter
-	ChartPlotter.shown = false
-	await t.frames(2)
-	t.check(not plotter.visible, "[plotter] hidden until asked for")
+	t.check(app.hud.find_child("ChartPlotter", true, false) == null, "[plotter] no plotter panel on the HUD (it is the helm's device)")
 	await t.press_action(&"chartplotter")
 	await t.frames(2)
-	t.check(ChartPlotter.shown and plotter.visible, "[plotter] P shows it on deck underway")
-	t.check(await t.wait_until(func() -> bool: return plotter.is_raster_ready(), 5.0), "[plotter] the coast raster is built in a few frames")
+	var view := app.modals.get_top() as PlotterView
+	if not t.check(view != null, "[plotter] P opens the helm's chartplotter, close up"):
+		return
+	var plotter := view.plotter
+	t.check(await t.wait_until(func() -> bool: return plotter.is_raster_ready(), 8.0), "[plotter] the coast raster is built in a few frames")
 	var turn := WorldMap.get_next_turn()
 	t.check(("%.1f nm" % float(turn.nm)) in plotter.get_info_text(), "[plotter] it shows the next turn of the voyage: %s" % plotter.get_info_text().replace("\n", " | "))
 	t.check(app.find_children("*", "MapView", true, false).is_empty() and not app.router.current_screen is WorldMap,
 		"[plotter] no world chart was built for it")
-	plotter.change_range(1)
-	t.check(await t.wait_until(func() -> bool: return plotter.is_raster_ready(), 5.0), "[plotter] a new range is rebuilt too")
-	await t.screenshot("17_chartplotter")
-	var cabin := await _show(CABIN)
+	await t.click(view.find_child("ZoomOut", true, false))
+	t.check(await t.wait_until(func() -> bool: return plotter.is_raster_ready(), 8.0), "[plotter] a new range is rebuilt too")
+	t.check(view.get_value("range") == "%d nm" % roundi(plotter.get_range_nm()), "[plotter] its range key changes the range (%s)" % view.get_value("range"))
+	await t.screenshot("i026_chartplotter")
+	await t.press_action(&"pause")
 	await t.frames(2)
-	t.check(cabin != null and not plotter.visible, "[plotter] not shown in the cabin")
+	t.check(app.modals.is_empty(), "[plotter] Esc closes it")
+	ChartPlotter.range_index = 1
+	await _show(CABIN)
+	await t.press_action(&"chartplotter")
+	await t.frames(2)
+	t.check(app.modals.get_top() is PlotterView, "[plotter] P shows it from the cabin too (a repeater at the chart table)")
+	app.modals.clear()
 	await _show(DECK, &"from_cabin")
-	await t.frames(2)
-	t.check(plotter.visible, "[plotter] back on deck it is there again")
 
 
 func _wheel() -> ActionWheel:
@@ -184,11 +190,12 @@ func _test_action_wheel() -> void:
 	wheel.select(index - 1)
 	await t.press_action(&"move_right")
 	t.check(wheel.get_selected_id() == &"chartplotter", "[wheel] D moves to the next action")
-	var shown := ChartPlotter.shown
 	await t.press_action(&"interact")
 	await t.frames(3)
-	t.check(app.modals.is_empty() and ChartPlotter.shown != shown, "[wheel] E uses it (the chartplotter toggled) and the wheel closes")
+	t.check(app.modals.get_top() is PlotterView and app.modals.depth() == 1, "[wheel] E uses it (the chartplotter opens) and the wheel closes")
 	t.check(deck.player.position.distance_to(before) < 2.0, "[wheel] the captain did not move meanwhile")
+	app.modals.clear()
+	await t.frames(2)
 	# Esc closes; nothing under it reacts.
 	await t.press_action(&"action_wheel")
 	await t.frames(2)
