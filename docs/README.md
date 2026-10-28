@@ -4,8 +4,8 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 
 ## Where we are
 
-- **Current development version: 0.110a**, save format 12, in the Real Horizon edition (repository `crosenlund79/WorldSailorSim` since the Great Handover; see [DEVELOPMENT_HISTORY.md](DEVELOPMENT_HISTORY.md) and the [Real Horizon report](iterations/real_horizon/REAL_HORIZON_REPORT.md)). The latest iteration is [I024, The Company We Keep](iterations/i024/); the next numbered iteration is I025 (not yet commissioned). Every running build names itself in the window's bottom-right corner (`LCH · i024 · DEV · <commit>`; `TEST` on a release snapshot) - see the Captain's Orders, *Build identifier*.
-- **Latest iteration:** [I024 report](iterations/i024/ITERATION_24_REPORT.md) (its Windows checks are pending; [UI panel audit](iterations/i024/UI_PANEL_AUDIT.md)); before it [I023](iterations/i023/ITERATION_23_REPORT.md), [I022](iterations/i022/ITERATION_22_REPORT.md) and [I021](iterations/i021/ITERATION_21_REPORT.md).
+- **Current development version: 0.111a**, save format 12, in the Real Horizon edition (repository `crosenlund79/WorldSailorSim` since the Great Handover; see [DEVELOPMENT_HISTORY.md](DEVELOPMENT_HISTORY.md) and the [Real Horizon report](iterations/real_horizon/REAL_HORIZON_REPORT.md)). The latest iteration is [I025, A Little More Room Aboard](iterations/i025/); the next numbered iteration is I026 (not yet commissioned). Every running build names itself in the window's bottom-right corner (`LCH · i025 · DEV · <commit>`; `TEST` on a release snapshot) - see the Captain's Orders, *Build identifier*.
+- **Latest iteration:** [I025 report](iterations/i025/ITERATION_25_REPORT.md) (its [Windows checks](iterations/i025/WINDOWS_ACCEPTANCE_25.md) are pending); before it [I024](iterations/i024/ITERATION_24_REPORT.md), [I023](iterations/i023/ITERATION_23_REPORT.md), [I022](iterations/i022/ITERATION_22_REPORT.md) and [I021](iterations/i021/ITERATION_21_REPORT.md).
 - **Before it:** [Revision 0.105b](revisions/v0.105b/), Iterations [19](iterations/i019/) and [20](iterations/i020/), and the Engine Room maintenance pass ([report](technical/ENGINE_ROOM_AND_COMPANION_POLISH_REPORT.md)). Windows acceptance of 0.105b, I018–I021 is pending. Future scope is set by the Captain; see [CAPTAINS_ORDERS.md](../CAPTAINS_ORDERS.md).
 
 ## Iterations
@@ -31,6 +31,7 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 | [23](iterations/i023/) Steady Hands & Golden Harbours | 0.109a | [report](iterations/i023/ITERATION_23_REPORT.md) (Windows checks in the report, pending), [screenshots](screenshots/steady_hands/) |
 | [Real Horizon](iterations/real_horizon/) Illustrated sailing realism (not numbered) | 0.109a | [report](iterations/real_horizon/REAL_HORIZON_REPORT.md) (visual conversion, then the Great Handover with I021–I023 merged; [history](DEVELOPMENT_HISTORY.md)) |
 | [24](iterations/i024/) The Company We Keep | 0.110a | [report](iterations/i024/ITERATION_24_REPORT.md) (Windows checks in the report, pending), [screenshots](screenshots/i024/), [UI panel audit](iterations/i024/UI_PANEL_AUDIT.md) |
+| [25](iterations/i025/) A Little More Room Aboard | 0.111a | [report](iterations/i025/ITERATION_25_REPORT.md), [Windows acceptance](iterations/i025/WINDOWS_ACCEPTANCE_25.md) (pending), [screenshots](screenshots/i025/) |
 
 Iterations 7–11 have no separate documents in this repository. Iteration 15 (the performance pass) was skipped at the Captain's instruction.
 

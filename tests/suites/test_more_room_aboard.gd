@@ -303,7 +303,11 @@ func _test_encounter_scene(kind: StringName) -> void:
 	var shore := deck.get_shore_access()
 	var box := dock.get_box_position()
 	t.check(shore.is_off_the_boat(box) and absf(box.x - shore.get_plank_x()) > 250.0, "[dock] its box stands on the pontoon, away from the gangplank and services")
-	t.check(dock.animal.is_sprite_mode() and dock.animal.visible and dock.animal.position.distance_to(box) < 60.0, "[dock] the %s is drawn at its box" % kind)
+	var drawn := Rect2()
+	for p in dock.animal.get_local_outline():
+		drawn = Rect2(p, Vector2.ZERO) if drawn.size == Vector2.ZERO and drawn.position == Vector2.ZERO else drawn.expand(p)
+	t.check(dock.animal.is_sprite_mode() and dock.animal.visible and dock.animal.position.distance_to(box) < 60.0 and absf(drawn.get_center().x) < 30.0,
+		"[dock] the %s is drawn at its box (at %s, box %s, drawn %s, facing %d)" % [kind, dock.animal.position.round(), box.round(), drawn, dock.animal.facing])
 	if kind == CompanionState.KIND_PARROT:
 		t.check(dock.animal.position.is_equal_approx(box + DockBox.RIM), "[dock] the conure perches on the open box's rim")
 	deck.player.position = box + Vector2(-70.0 * signf(box.x - shore.get_plank_x()), 6.0)
@@ -387,18 +391,21 @@ func _test_not_now(kind: StringName) -> void:
 	await t.frames(3)
 	t.check(app.router.current_screen == deck and dock.is_farewell() and GameSession.get_companion_count() == 0
 		and GameSession.get_dock_encounter().is_empty(), "[not now] the Captain stays on deck; the %s goes back to the dock" % kind)
-	await _film("film_girl_%s" % kind, 14, 1.2)
-	Engine.time_scale = 4.0
+	# Rendered runs play it at its real pace (for the screenshots and the film).
+	Engine.time_scale = 4.0 if DisplayServer.get_name() == "headless" else 1.0
+	await t.wait_until(func() -> bool: return dock.girl != null, 40.0)
+	await _film("film_girl_%s" % kind, 12, 0.8)
 	var met: bool = await t.wait_until(func() -> bool: return dock.girl != null and not dock.girl.is_walking() and dock.girl.waving > 0.5, 40.0)
 	t.check(met, "[the girl] she comes along the pontoon and waves")
 	await t.wait_until(func() -> bool: return dock.animal != null and not dock.animal.is_walking() and dock.animal.position.distance_to(dock.girl.position) < 40.0, 20.0)
 	if dock.girl:
-		t.check(dock.animal.position.distance_to(dock.girl.position) < 40.0, "[the girl] the %s goes to her" % kind)
+		t.check(dock.animal.position.distance_to(dock.girl.position) < 40.0, "[the girl] the %s goes to her (%s, she is at %s, the box at %s)"
+			% [kind, dock.animal.position.round(), dock.girl.position.round(), dock.get_box_position().round()])
 		if kind == CompanionState.KIND_PARROT:
 			t.check(dock.animal.position.distance_to(dock.girl.get_shoulder()) < 6.0, "[the girl] the conure lands on her shoulder")
 		await t.screenshot("i025_girl_with_%s" % kind)
 	await t.wait_until(func() -> bool: return dock.girl != null and dock.girl.carrying_box and dock.girl.is_walking(), 20.0)
-	await t.frames(20)
+	await t.frames(8)
 	await t.screenshot("i025_girl_leaving_%s" % kind)
 	var finished: bool = await t.wait_until(func() -> bool: return dock.animal == null and not dock.is_farewell(), 60.0)
 	Engine.time_scale = 1.0

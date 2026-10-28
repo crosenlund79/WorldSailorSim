@@ -22,7 +22,8 @@ and are never merged back into one chain.
 | Great Handover (Operation New Horizon, not numbered) | 0.109a | WorldSailorSim | merge of `81d2526` into Real Horizon: `9b3c44f650ad9d7e887e7832c8c3ab9899da2845`; the handover ends at the head of `claude/friendly-fermat-dey23f` after its fast-forward (this commit or the next docs-only one) |
 | I024 The Company We Keep: living companions (Ragdoll, Pug, parrot), shore visits, the achievement collection, the cabin laptop | 0.110a | WorldSailorSim | started at `41130c04e168239a082202f3d147ace543620f55`; `release/i024` at the final tested commit ([report](iterations/i024/ITERATION_24_REPORT.md)) |
 | Build identifier (small adjustment after I024) | 0.110a | WorldSailorSim | the bottom-right `LCH · i024 · DEV` label from `GameVersion`; on `claude/captains-hat-visual-redesign-cgoy5o` |
-| I025 | — | WorldSailorSim | next major iteration, not yet commissioned |
+| I025 A Little More Room Aboard: found companions (no pet at start, dock encounters, adoption, the girl, two companions), a more believable Real Horizon | 0.111a | WorldSailorSim | started at `cfc9b52b9541fd024d6eb3c7bde3c836bd947439`; `release/i025` at the final tested commit ([report](iterations/i025/ITERATION_25_REPORT.md)) |
+| I026 | — | WorldSailorSim | next major iteration, not yet commissioned |
 
 ## The Great Handover (2026-10-28)
 

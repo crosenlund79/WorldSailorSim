@@ -656,4 +656,14 @@ Two; the wording was again not found in the repository in Iteration 18.
   milestones; the cabin laptop as the home of renown, publications and the
   achievements. See `docs/iterations/i024/ITERATION_24_REPORT.md`. Branches
   `iteration/i024` and recovery branch `release/i024`.
-- **Next numbered major iteration: I025** (not yet commissioned).
+- **Iteration 25, A Little More Room Aboard**, version 0.111a, save format 12
+  (unchanged): new games start without a companion; now and then an animal
+  waits on the dock in a small open box (a Ragdoll, a Pug or a conure), a
+  few kind gestures and it follows, and at the companionway the Captain
+  adopts it (name, gender) or lets it go home with a little girl; up to two
+  companions with their own identities, places, pair moments and a combined
+  morning line; the laptop records where each came aboard; cabins, cabin
+  windows on every boat, the water outside, harbour houses and neighbouring
+  boats made more believable. See `docs/iterations/i025/ITERATION_25_REPORT.md`.
+  Branches `iteration/i025` (from `cfc9b52`) and recovery branch `release/i025`.
+- **Next numbered major iteration: I026** (not yet commissioned).

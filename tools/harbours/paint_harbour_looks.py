@@ -44,6 +44,8 @@ SS, FINAL = 4, 2
 W, H = 1150, 110
 LINE = (42, 50, 54)          # thin blue-grey line (marine palette LINE)
 SHADOW = (14, 20, 26)
+HAZE = (203, 211, 208)       # sea haze (marine palette SEA_HAZE)
+HAZE_FROM = 64               # where the haze starts, down the picture (units)
 _L = np.array([-0.46, -0.55, 0.70])
 LIGHT3 = _L / np.linalg.norm(_L)
 LIGHT2 = (-0.8, -0.6)  # towards the light, in the picture plane
@@ -192,8 +194,9 @@ TEX.update({"pantile": _pantile, "tin": _tin, "thatch": _thatch, "render": _rend
 
 
 class Painter:
-    def __init__(self, seed):
+    def __init__(self, seed, sk=1.0):
         self.seed = seed
+        self.sk = sk  # shadow scale: true-scale buildings cast longer, softer shadows (I025)
         self.rng = random.Random(seed)
         self.layers = {"ground": Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))}
         for name, *_ in LAYERS:
@@ -238,13 +241,16 @@ class Painter:
         self._draw(L, [(cx - rx, cy - ry), (cx + rx, cy + ry)], a, lambda d, q: d.ellipse(q, fill=ink))
 
     def _poly_local(self, pts, col, a):
-        d, px0, py0, orient = self._local
+        d, px0, py0, orient, k = self._local
+        pts = [(u * k, v * k) for u, v in pts]
         if orient == "v":
             pts = [(v, u) for u, v in pts]
         d.polygon([(x * SS - px0, y * SS - py0) for x, y in pts], fill=tuple(col[:3]) + (a,))
 
-    def plane(self, L, pts, col, tex=None, orient="h", origin=None):
-        """A flat surface (roof plane, wall top, paving) filled with a material."""
+    def plane(self, L, pts, col, tex=None, orient="h", origin=None, tk=1.0):
+        """A flat surface (roof plane, wall top, paving) filled with a material; `tk`
+        scales the material's courses and joints (I025: tiles, slates and setts at
+        their real size)."""
         xs = [q[0] for q in pts]
         ys = [q[1] for q in pts]
         bx0, by0, bx1, by1 = min(xs) - 1, min(ys) - 1, max(xs) + 1, max(ys) + 1
@@ -253,7 +259,7 @@ class Painter:
         tile = Image.new("RGB", (bw, bh), tuple(col[:3]))  # RGB, so translucent strokes blend
         if tex:
             d = ImageDraw.Draw(tile, "RGBA")
-            self._local = (d, px0, py0, orient)
+            self._local = (d, px0, py0, orient, tk)
 
             def xy(u, v):
                 return ((u, v) if orient == "h" else (v, u))
@@ -278,13 +284,26 @@ class Painter:
             else:
                 u0, u1, v0, v1 = by0, by1, bx0, bx1
                 o = bx0 + 1 if origin is None else origin
+            if tk != 1.0:
+                R0, Ln0, E0 = R, Ln, E
+
+                def R(a, b, c, e, cc, al=255):
+                    R0(a * tk, b * tk, c * tk, e * tk, cc, al)
+
+                def Ln(a, b, c, e, cc, al, w):
+                    Ln0(a * tk, b * tk, c * tk, e * tk, cc, al, w * tk * 0.45)
+
+                def E(u, v, ru, rv, cc, al=255):
+                    E0(u * tk, v * tk, ru * tk, rv * tk, cc, al)
+
+                u0, u1, v0, v1, o = u0 / tk, u1 / tk, v0 / tk, v1 / tk, o / tk
             TEX[tex](self, R, Ln, E, u0, u1, v0, v1, col, o)
         mask = Image.new("L", (bw, bh), 0)
         ImageDraw.Draw(mask).polygon([(x * SS - px0, y * SS - py0) for x, y in pts], fill=255)
         self.layers[L].paste(tile.convert("RGBA"), (px0, py0), mask)
 
-    def box(self, L, x, y, w, h, col, tex=None, orient="h", origin=None):
-        self.plane(L, [(x, y), (x + w, y), (x + w, y + h), (x, y + h)], col, tex, orient, origin)
+    def box(self, L, x, y, w, h, col, tex=None, orient="h", origin=None, tk=1.0):
+        self.plane(L, [(x, y), (x + w, y), (x + w, y + h), (x, y + h)], col, tex, orient, origin, tk)
 
     def sphere(self, L, cx, cy, r, col, ry=None, amb=0.42, rough=0.0, a=1.0, gain=1.15):
         """A shaded dome / lump / drum seen from above, lit from the upper left."""
@@ -572,13 +591,14 @@ class Painter:
         self.rect("ground", x0, 4.0, x1 - x0, 0.6, shade(col, 0.66), 200)
 
     # --- output ---------------------------------------------------------------------
-    def save(self, rel, fade=8.0):
+    def save(self, rel, fade=8.0, haze=0.0):
         base = self.layers["ground"]
         for name, (dx, dy), blur, k in LAYERS:
             lay = self.layers[name]
             a = np.asarray(lay.getchannel("A"))
             if not a.any():
                 continue
+            dx, dy, blur = dx * self.sk, dy * self.sk, blur * math.sqrt(self.sk)
             ox, oy = int(dx * SS), int(dy * SS)
             s = np.zeros_like(a)
             s[oy:, ox:] = a[:a.shape[0] - oy, :a.shape[1] - ox]
@@ -597,6 +617,9 @@ class Painter:
         arr[..., :3] *= (1 + (low[..., None] - 0.5) * 0.07)  # gentle weathering
         arr[..., :3] += (g.random((hh, ww)) - 0.5)[..., None] * 9  # fine grain
         arr[..., :3] = np.clip(arr[..., :3], 0, 255)
+        if haze:  # atmospheric distance: the back of the picture towards the sea haze
+            t = np.clip((np.arange(hh, dtype=np.float32) / SS - HAZE_FROM) / (H - HAZE_FROM), 0, 1)[:, None, None]
+            arr[..., :3] = arr[..., :3] * (1 - haze * t) + np.array(HAZE, np.float32) * haze * t
         if fade:
             ramp = np.clip(np.minimum(np.arange(ww), np.arange(ww)[::-1]) / (fade * SS), 0, 1)
             arr[..., 3] *= ramp[None, :]
@@ -607,856 +630,511 @@ class Painter:
         print("wrote", rel)
 
 
-# --- Archetypes ------------------------------------------------------------------------
+# --- I025: the harbour at its real size -----------------------------------------------
+#
+# The decks are drawn at about 1 cm per scene unit (the Starling 33's 10 m hull is 1000
+# units), so a waterfront house of 5-9 m frontage is 500-900 units wide and the strip
+# (1150 x 110 units) holds one or two buildings and a lane. Only its top half shows in
+# play, so each place is carried by what is there: the quay's material, the facade's
+# colour and its window heads, doors and shutters at their real size, and the roof's
+# material and form. The top 14 units stay clear for HarbourDressing's granite coping;
+# the house fronts stand on the dressing's own facade line (FRONT); the back of the
+# picture fades a little towards the sea haze, with less detail (atmospheric distance).
+
+TK_ROOF = 12.0     # roof materials: tile courses ~28 units, slates ~20, pantile rolls ~31
+SK = 6.0           # shadows of true-scale buildings
+GROUND_Y, FRONT, EAVES = 14.0, 26.0, 52.0
+OVER = 10.0        # the eaves' overhang past the walls
+FRAME_WHITE = (232, 230, 222)
+GLASS = (52, 60, 66)
+
+
+def ground(p, col, tex, tk):
+    """The look's own quay surface between the coping and the house fronts, and on
+    under the lanes."""
+    p.box("ground", 0, GROUND_Y, W, H - GROUND_Y, col, tex, tk=tk)
+    p.rect("ground", 0, GROUND_Y, W, 1.2, shade(col, 0.7), 150)
+    p.rect("ground", 0, FRONT - 3, W, 3, shade(col, 0.76), 150)  # the gutter along the fronts
+
+
+def front(p, x, w, facade, tex=None, tk=1.0, pitch=250.0, win=100.0, frame=FRAME_WHITE, shutter=None, doors=None,
+          arch=False, L="roof", glass=GLASS):
+    """The top of the water-facing wall below the eaves (the boat's slight look-down):
+    window heads about 1 m wide at their real spacing, shutters folded back, doors."""
+    p.box(L, x, FRONT, w, EAVES - FRONT, facade, tex, tk=tk)
+    n = max(1, int(round(w / pitch)))
+    doors = doors or {}
+    for c in range(n):
+        cx = x + (c + 0.5) * w / n
+        if c in doors:
+            dw = 130.0
+            p.rect(L, cx - dw / 2, FRONT + 3, dw, EAVES - FRONT - 3, doors[c])
+            if arch:
+                p.ellipse(L, cx, FRONT + 4, dw / 2, 5, shade(facade, 0.9))
+            p.line(L, [(cx, FRONT + 6), (cx, EAVES)], shade(doors[c], 0.6), 160, 1.2)
+            continue
+        wy0, wy1 = FRONT + 6, EAVES - 5
+        if shutter:
+            p.rect(L, cx - win / 2 - 46, wy0, 42, wy1 - wy0, shutter)
+            p.rect(L, cx + win / 2 + 4, wy0, 42, wy1 - wy0, shutter)
+            for k in range(1, 5):  # louvres
+                p.line(L, [(cx - win / 2 - 46, wy0 + k * 3.4), (cx - win / 2 - 4, wy0 + k * 3.4)], shade(shutter, 0.7), 120, 0.6)
+                p.line(L, [(cx + win / 2 + 4, wy0 + k * 3.4), (cx + win / 2 + 46, wy0 + k * 3.4)], shade(shutter, 0.7), 120, 0.6)
+        p.rect(L, cx - win / 2, wy0, win, wy1 - wy0, glass)
+        if arch:
+            p.ellipse(L, cx, wy0, win / 2, 4, glass)
+        if frame:  # the frame, and glazing bars dividing each casement into small lights
+            p.rect(L, cx - win / 2 - 3, wy0 - 3, win + 6, 3, frame)
+            p.rect(L, cx - win / 2 - 3, wy0, 3, wy1 - wy0, frame)
+            p.rect(L, cx + win / 2, wy0, 3, wy1 - wy0, frame)
+            p.rect(L, cx - 1.5, wy0, 3, wy1 - wy0, frame)
+            p.rect(L, cx - win / 2, (wy0 + wy1) / 2 - 1.2, win, 2.4, frame)
+            cols = max(1, int(round((win / 2) / 11.5)))
+            for side in (-1, 1):
+                for k in range(1, cols):
+                    bx = cx + side * (1.5 + k * (win / 2 - 1.5) / cols)
+                    p.rect(L, bx - 1.2, wy0, 2.4, wy1 - wy0, frame)
+    p.rect(L, x, FRONT, w, 1.0, shade(facade, 1.15), 160)
+    p.rect(L, x, EAVES - 5, w, 5, SHADOW, 70)  # the eaves' shadow on the wall
+    p.rect(L, x, FRONT, 2.5, EAVES - FRONT, shade(facade, 1.12), 160)
+    p.rect(L, x + w - 2.5, FRONT, 2.5, EAVES - FRONT, shade(facade, 0.7), 160)
+
+
+def roof_ridge(p, x, w, roof, tex, L="roof", over=OVER, gutter=(118, 122, 122)):
+    """A pitched roof with its ridge along the quay (beyond the picture): the near plane
+    facing the light, a zinc gutter along the eaves."""
+    p.box(L, x - over, EAVES, w + 2 * over, H - EAVES, shade(roof, 1.06), tex, "h", EAVES, tk=TK_ROOF)
+    p.rect(L, x - over, EAVES + 3, w + 2 * over, 2.0, shade(roof, 1.25), 150)
+    p.rect(L, x - over, EAVES - 1, w + 2 * over, 4.5, gutter)
+    p.rect(L, x - over, EAVES - 1, w + 2 * over, 1.2, shade(gutter, 1.3))
+    p.rect(L, x - over, EAVES, 4, H - EAVES, shade(roof, 1.25), 150)
+    p.rect(L, x + w + over - 4, EAVES, 4, H - EAVES, shade(roof, 0.6), 150)
+
+
+def roof_gable(p, x, w, roof, tex, L="roof", barge=None, over=OVER):
+    """A pitched roof end-on to the quay: the left plane lit, the right in shade, the
+    ridge running away from the water."""
+    mid = x + w / 2
+    p.box(L, x - over, EAVES, mid - x + over, H - EAVES, shade(roof, 1.12), tex, "v", x - over, tk=TK_ROOF)
+    p.box(L, mid, EAVES, x + w + over - mid, H - EAVES, shade(roof, 0.76), tex, "v", mid, tk=TK_ROOF)
+    p.rect(L, mid - 6, EAVES, 12, H - EAVES, shade(roof, 0.92))
+    p.rect(L, mid - 6, EAVES, 3, H - EAVES, shade(roof, 1.2), 150)
+    p.line(L, [(mid + 6, EAVES), (mid + 6, H)], shade(roof, 0.45), 160, 1.0)
+    if barge:  # bargeboards along the verges, a little of them showing
+        p.rect(L, x - over, EAVES, 7, H - EAVES, barge)
+        p.rect(L, x + w + over - 7, EAVES, 7, H - EAVES, shade(barge, 0.75))
+
+
+def roof_hip(p, x, w, roof, tex, L="roof", over=OVER):
+    """A hipped roof: the near plane between the two hips, the hip ends either side."""
+    x0, x1 = x - over, x + w + over
+    i = H - EAVES
+    p.plane(L, [(x0, EAVES), (x1, EAVES), (x1 - i, H), (x0 + i, H)], shade(roof, 1.04), tex, "h", EAVES, tk=TK_ROOF)
+    p.plane(L, [(x0, EAVES), (x0 + i, H), (x0, H)], shade(roof, 1.16), tex, "v", x0, tk=TK_ROOF)
+    p.plane(L, [(x1, EAVES), (x1, H), (x1 - i, H)], shade(roof, 0.7), tex, "v", x1 - i, tk=TK_ROOF)
+    p.line(L, [(x0, EAVES), (x0 + i, H)], shade(roof, 1.35), 170, 1.6)
+    p.line(L, [(x1, EAVES), (x1 - i, H)], shade(roof, 0.5), 170, 1.6)
+    p.rect(L, x0, EAVES - 1, x1 - x0, 4.5, (118, 122, 122))
+
+
+def roof_flat(p, x, w, col, floor="flags", tk=8.0, parapet=18.0, L="roof", edge=None):
+    """A roof terrace: the parapet's lit top, the floor inside in its shadow."""
+    p.box(L, x, EAVES - 2, w, H - EAVES + 2, shade(col, 0.95), floor, tk=tk)
+    p.rect(L, x, EAVES - 2, w, parapet, edge or shade(col, 1.06))
+    p.rect(L, x, EAVES - 2, parapet, H - EAVES + 2, edge or shade(col, 1.08))
+    p.rect(L, x + w - parapet, EAVES - 2, parapet, H - EAVES + 2, shade(edge or col, 0.82))
+    p.rect(L, x + parapet, EAVES - 2 + parapet, w - 2 * parapet, 9, SHADOW, 55)
+    p.rect(L, x + parapet, EAVES - 2 + parapet, 9, H, SHADOW, 45)
+    p.rect(L, x, EAVES - 2, w, 1.5, shade(edge or col, 1.2), 200)
+
+
+def gable_face(p, x, w, facade, kind="stepped", h=40.0, tex=None, tk=1.0, coping=(206, 202, 190), L="detail"):
+    """A gable rising above the eaves, leaning back over the roof in the tilted top-down
+    view: stepped, curved (neck) or a classical pediment."""
+    mid = x + w / 2
+    if kind == "stepped":
+        n = 4
+        pts = [(x, EAVES)]
+        for k in range(n):
+            xa = x + (k + 0.3) * (w / 2) / (n + 0.3)
+            pts += [(xa, EAVES + h * k / n), (xa, EAVES + h * (k + 1) / n)]
+        pts.append((mid - w * 0.06, EAVES + h))
+        right = [(2 * mid - qx, qy) for qx, qy in reversed(pts)]
+        pts = pts + [(mid + w * 0.06, EAVES + h)] + right[1:]
+    elif kind == "neck":
+        pts = [(x, EAVES)]
+        for k in range(9):
+            t = k / 8
+            pts.append((x + w * 0.3 * t, EAVES + h * 0.55 * math.sin(t * math.pi / 2)))
+        pts += [(mid - w * 0.14, EAVES + h), (mid + w * 0.14, EAVES + h)]
+        for k in range(8, -1, -1):
+            t = k / 8
+            pts.append((x + w - w * 0.3 * t, EAVES + h * 0.55 * math.sin(t * math.pi / 2)))
+    else:  # a pediment or a plain gable
+        pts = [(x, EAVES), (mid, EAVES + h), (x + w, EAVES)]
+    p.plane(L, pts, facade, tex, tk=tk)
+    p.line(L, pts, coping, 230, 3.0)
+    p.line(L, [(qx + 1.5, qy + 2.5) for qx, qy in pts], SHADOW, 80, 1.6)
+    if kind == "pediment":
+        p.line(L, [(x, EAVES + 1.5), (x + w, EAVES + 1.5)], coping, 230, 3.0)
+
+
+def cornice(p, x, w, col=(236, 232, 222), L="detail"):
+    """A classical cornice along the eaves (neoclassical fronts)."""
+    p.rect(L, x - OVER, EAVES - 3, w + 2 * OVER, 9, col)
+    p.rect(L, x - OVER, EAVES + 6, w + 2 * OVER, 3, SHADOW, 70)
+
+
+def chimney(p, x, y, w, d, col, pots=2, L="detail"):
+    p.rect(L, x, y, w, d, col)
+    p.rect(L, x, y, w, 2.5, shade(col, 1.2))
+    p.rect(L, x, y, 2.5, d, shade(col, 1.15))
+    p.rect(L, x + w - 2.5, y, 2.5, d, shade(col, 0.7))
+    for i in range(pots):
+        cx = x + (i + 0.5) * w / pots
+        p.sphere(L, cx, y + d / 2, min(11.0, w / pots * 0.36), (140, 92, 70), amb=0.5)
+        p.ellipse(L, cx, y + d / 2, 5, 5, (30, 28, 26))
+
+
+def dormer(p, x, w, roof, face, tex="tile", L="detail"):
+    """A dormer on the near roof plane: its little face and window, a gabled roof."""
+    y = EAVES + 16
+    p.rect(L, x, y, w, 16, face)
+    p.rect(L, x + w * 0.22, y + 4, w * 0.56, 12, GLASS)
+    p.rect(L, x + w * 0.22 - 2, y + 2, w * 0.56 + 4, 2, FRAME_WHITE)
+    mid = x + w / 2
+    p.box(L, x - 6, y + 16, w / 2 + 6, H - y - 16, shade(roof, 1.14), tex, "v", x - 6, tk=TK_ROOF)
+    p.box(L, mid, y + 16, w / 2 + 6, H - y - 16, shade(roof, 0.8), tex, "v", mid, tk=TK_ROOF)
+    p.rect(L, mid - 3, y + 16, 6, H - y - 16, shade(roof, 0.9))
+
+
+def skylight(p, x, roof, L="detail"):
+    p.rect(L, x, EAVES + 22, 56, 80, shade(roof, 0.55))
+    p.rect(L, x + 5, EAVES + 27, 46, 70, (58, 72, 82))
+    p.rect(L, x + 5, EAVES + 27, 46, 4, (120, 136, 146), 160)
+
+
+def lamp(p, x, y=20.0):
+    p.sphere("detail", x, y, 6, (58, 64, 68), amb=0.45)
+
+
+# --- The nine looks ----------------------------------------------------------------------
 
 def nordic_timber():
-    """Painted timber houses and boat sheds (falu red, ochre, white) with steep black and
-    red roofs, a granite quay, a fishing shed on piles over the water: the fishing
-    harbours of Scandinavia, the Faroes and Iceland, and timber towns elsewhere."""
-    p = Painter(2101)
-    rng = p.rng
-    Q = 19
-    p.box("ground", 0, Q, W, H - Q, (104, 108, 90), "grass")
-    p.box("ground", 0, 0, W, Q, (134, 134, 128), "slabs")
-    p.quay_edge(0, W, (134, 134, 128))
-    pier0, pier1 = 700, 782
-    # the fishing shed on piles: the quay is cut back to the water there
-    p.layers["ground"].paste((0, 0, 0, 0), (pier0 * SS, 0, pier1 * SS, (Q + 1) * SS))
-    p.rect("ground", pier0 + 6, 3, pier1 - pier0 - 2, Q - 1, SHADOW, 60)  # its shadow on the water
-    for px in range(pier0 + 4, pier1 - 2, 9):
-        for py in (2, 9, 16):
-            p.sphere("ground", px, py, 1.1, (70, 62, 54), amb=0.45)
-    walls = [(122, 52, 42), (174, 140, 80), (210, 206, 194), (122, 52, 42), (96, 58, 46), (166, 128, 74), (204, 198, 184),
-             (128, 112, 92)]
-    roofs_black = [(66, 68, 70), (74, 76, 76), (60, 62, 64)]
-    roofs_red = [(118, 70, 58), (126, 78, 62)]
-    x = 6.0
-    i = 0
-    while x < W - 30:
-        if x + 66 > pier0 - 6 and x < pier1 + 6:
-            x = pier1 + 8
-        shed = i % 3 != 1
-        if shed:  # a boat shed, gable-end to the water, boarded
-            w = rng.uniform(32, 46)
-            d = rng.uniform(46, 62)
-            facade = walls[i % len(walls)]
-            roof = rng.choice(roofs_black + roofs_red)
-            p.lip(x, Q + 1, w, 7, facade, "board", 1, glass=(58, 46, 40), frame=shade(facade, 1.25) if facade[0] < 150 else (240, 238, 230))
-            p.gable_roof(x, Q + 8, w, d - 8, roof, "tile" if roof in roofs_red else "shingle")
-            p.gable_face(x, Q + 8, w, facade, "plain", h=min(8, w * 0.2), coping=(220, 216, 206), tex="board")
-        else:  # a timber house with its ridge along the quay
-            w = rng.uniform(48, 66)
-            d = rng.uniform(40, 52)
-            facade = walls[(i + 2) % len(walls)]
-            roof = rng.choice(roofs_black + roofs_red)
-            p.lip(x, Q + 3, w, 7.5, facade, "board", None, frame=(226, 224, 216))
-            p.ridge_roof(x, Q + 10.5, w, d - 10.5, roof, "tile" if roof in roofs_red else "shingle", 0.48)
-            p.chimney(x + w * rng.uniform(0.3, 0.7), Q + 10.5 + (d - 10.5) * 0.48 - 2, 4.4, 3.6, (120, 112, 104), 1)
-            if rng.random() < 0.5:
-                p.dormer(x + w * 0.4, Q + 11, 9, 9, roof, facade, "shingle")
-        x += w + rng.uniform(5, 16)
-        if rng.random() < 0.45:  # a birch or rowan behind
-            p.tree(x - rng.uniform(0, 6), rng.uniform(80, 98), rng.uniform(8, 12), (98, 118, 78))
-        i += 1
-    # the shed on piles, and its plank landing
-    p.box("roof", pier0 + 2, 1, pier1 - pier0 - 4, 7, (110, 96, 78), "board")
-    p.lip(pier0 + 4, 8, pier1 - pier0 - 8, 7, (122, 52, 42), "board", 2, glass=(56, 44, 38), frame=(206, 200, 188))
-    p.gable_roof(pier0 + 4, 15, pier1 - pier0 - 8, 44, (66, 68, 70), "shingle")
-    p.gable_face(pier0 + 4, 15, pier1 - pier0 - 8, (122, 52, 42), "plain", h=9, coping=(218, 214, 204), tex="board")
-    for k in range(3):  # fish boxes and a coil of rope on the quay
-        bx = rng.uniform(40, 680)
-        p.box("detail", bx, 8, 7, 5, rng.choice([(150, 156, 160), (110, 132, 140), (176, 150, 100)]))
-        p.rect("detail", bx, 8, 7, 0.5, (220, 220, 214), 160)
-    p.sphere("detail", 820, 10, 2.6, (150, 136, 108), amb=0.5, rough=0.3)
-    p.bollards(5.5, 30, W - 20, 96)
-    p.save("assets/harbours/looks/nordic_timber.png")
+    """A small tarred boathouse (naust) gable-end to the water, its doors on the quay, and
+    a painted timber house with white window frames and a red tile roof, a birch in the
+    lane: the fishing harbours of Scandinavia, the Faroes and Iceland, and timber towns
+    elsewhere (Atlantic Canada, New Zealand)."""
+    p = Painter(2101, SK)
+    ground(p, (128, 128, 122), "slabs", 6.0)
+    # the boathouse: falu red boarding, black tarred roof, double doors
+    red = (122, 52, 42)
+    front(p, 24, 430, red, "board", 10.0, pitch=430, doors={0: (70, 46, 38)}, frame=None)
+    roof_gable(p, 24, 430, (62, 64, 66), "shingle", barge=(226, 222, 212))
+    # the birch in the lane
+    p.tree(520, 128, 120, (112, 128, 84))
+    # the house: ochre boarding, red tile, a dormer and a chimney
+    ochre = (184, 150, 88)
+    front(p, 572, 560, ochre, "board", 10.0, pitch=230, frame=FRAME_WHITE)
+    roof_ridge(p, 572, 560, (126, 76, 60), "tile")
+    dormer(p, 660, 150, (126, 76, 60), ochre)
+    chimney(p, 900, 92, 56, 56, (118, 110, 104), 1)
+    p.sphere("detail", 300, 19, 8, (150, 138, 112), amb=0.5, rough=0.3)  # a coil of rope by the doors
+    p.box("detail", 120, 15, 60, 9, (90, 116, 132))  # a fish box
+    p.save("assets/harbours/looks/nordic_timber.png", haze=0.12)
 
 
 def gabled_waterfront():
-    """Brick and rendered townhouses with stepped and curved gables shown at their roof
-    ends, red tile and a few dark glazed roofs over a granite-sett quay, and a church
-    tower with a green copper spire: Danish and German harbour towns, the Hanseatic
-    Baltic, the Low Countries and Dutch-built waterfronts."""
-    p = Painter(2102)
-    rng = p.rng
-    Q = 21
-    p.box("ground", 0, Q, W, H - Q, (118, 116, 106), "setts")
-    p.box("ground", 0, 0, W, Q, (128, 128, 122), "setts")
-    p.quay_edge(0, W, (132, 132, 126))
-    p.box("ground", 0, Q - 3, W, 3, (122, 74, 60), "brick")  # the brick gutter band
-    facades = [(132, 68, 54), (184, 152, 100), (204, 196, 174), (112, 62, 52), (150, 90, 66), (166, 170, 152), (196, 176, 136),
-               (124, 76, 62)]
-    roofs = [(134, 74, 58), (144, 84, 64), (128, 70, 56), (66, 66, 66), (140, 80, 62)]
-    kinds = ["stepped", "neck", "plain", "stepped", "neck", "stepped", "plain"]
-    x = 6.0
-    i = 0
-    tower_x = 560
-    while x < W - 28:
-        if abs(x - tower_x) < 34:
-            x = tower_x + 36
-        facade = facades[i % len(facades)]
-        brick = facade in ((132, 68, 54), (112, 62, 52), (150, 90, 66), (124, 76, 62))
-        roof = rng.choice(roofs)
-        if i % 5 == 2:  # a broad merchant's house, ridge along the quay
-            w = rng.uniform(56, 72)
-            p.lip(x, Q + 1, w, 8, facade, "brick" if brick else "render", None)
-            p.ridge_roof(x, Q + 9, w, 50, roof, "tile", 0.46)
-            p.dormer(x + w / 2 - 6, Q + 9.5, 12, 10, roof, facade)
-            p.chimney(x + 3, Q + 9 + 23 - 2, 5, 4, (128, 82, 66))
-            p.chimney(x + w - 8, Q + 9 + 23 - 2, 5, 4, (128, 82, 66))
-        else:  # a narrow town house, gable to the water
-            w = rng.uniform(30, 44)
-            d = rng.uniform(52, 66)
-            p.lip(x, Q + 1, w, 8, facade, "brick" if brick else "render", 2 if w < 38 else 3)
-            p.gable_roof(x, Q + 9, w, d, roof, "tile")
-            p.gable_face(x, Q + 9, w, facade, kinds[i % len(kinds)], h=min(10, w * 0.26), tex="brick" if brick else None,
-                         coping=(206, 202, 190))
-            p.chimney(x + w / 2 - 2.5, Q + 9 + d * 0.6, 5, 4, (128, 82, 66), 2)
-        x += w + rng.uniform(0, 1.2)
-        if rng.random() < 0.18:
-            x += rng.uniform(6, 9)  # a narrow lane down to the quay
-        i += 1
-    # the church: brick nave behind, a square tower with a green copper spire
-    p.lip(tower_x - 30, Q + 1, 60, 9, (128, 70, 56), "brick", 2, arch=True, frame=None)
-    p.gable_roof(tower_x - 30, Q + 10, 60, 70, (126, 74, 60), "tile")
-    p.tower(tower_x - 13, Q + 1, 26, (128, 70, 56), (118, 146, 130), None, 8, n=8, wall_tex="brick")
-    for _ in range(5):
-        p.tree(rng.uniform(40, W - 40), rng.uniform(88, 104), rng.uniform(9, 13), (90, 108, 76))
-    p.bollards(6, 24, W - 20, 90)
-    p.save("assets/harbours/looks/gabled_waterfront.png")
+    """A brick town house gable-end to the water with a stepped gable, and a broad
+    rendered merchant's house with its ridge along the quay, red tile, a dormer and two
+    chimneys, over granite setts: Danish and German harbour towns, the Hanseatic Baltic,
+    the Low Countries, and Dutch- and Cape Dutch-built waterfronts."""
+    p = Painter(2102, SK)
+    ground(p, (124, 124, 118), "setts", 3.6)
+    brick = (132, 70, 56)
+    front(p, 16, 480, brick, "brick", 7.0, pitch=170, win=90)
+    roof_gable(p, 16, 480, (134, 76, 60), "tile")
+    gable_face(p, 16, 480, brick, "stepped", 30, "brick", 7.0)
+    ochre = (196, 168, 112)
+    front(p, 506, 630, ochre, "render", 6.0, pitch=210, win=96, doors={1: (70, 76, 82)})
+    roof_ridge(p, 506, 630, (140, 82, 62), "tile")
+    dormer(p, 740, 160, (140, 82, 62), ochre)
+    chimney(p, 520, 88, 60, 50, (128, 82, 66))
+    chimney(p, 1060, 88, 60, 50, (128, 82, 66))
+    p.save("assets/harbours/looks/gabled_waterfront.png", haze=0.12)
 
 
 def atlantic_stone():
-    """Grey granite and sandstone terraces with slate roofs and big chimney stacks on the
-    party walls, a few whitewashed or colour-washed fronts, behind a granite quay with
-    heavy capstones and iron bollards: Scotland, Ireland, Wales, Brittany, Galicia, the
-    Channel Islands and old stone ports like Hobart's."""
-    p = Painter(2103)
-    rng = p.rng
-    Q = 22
-    p.box("ground", 0, Q, W, H - Q, (114, 116, 106), "grass")
-    p.box("ground", 0, 0, W, Q, (132, 132, 126), "slabs")
-    p.quay_edge(0, W, (128, 128, 122))
-    fronts = [(150, 148, 142), (172, 156, 128), (212, 210, 202), (140, 140, 136), (200, 194, 172), (164, 176, 180), (156, 150, 138),
-              (196, 186, 160)]
-    stones = ((150, 148, 142), (172, 156, 128), (140, 140, 136), (156, 150, 138))
-    slates = [(78, 84, 90), (86, 90, 96), (72, 76, 82)]
-    x = 6.0
-    i = 0
-    while x < W - 40:
-        ws = [rng.uniform(34, 48) for _ in range(rng.randint(3, 5))]  # a terrace under one slate roof
-        while ws and x + sum(ws) > W - 6:
-            ws.pop()
-        if not ws:
-            break
-        tw = sum(ws)
-        d = rng.uniform(42, 50)
-        slate = rng.choice(slates)
-        ry = Q + 10 + d * 0.47
-        xx = x
-        for k, w in enumerate(ws):
-            front = fronts[(i + k) % len(fronts)]
-            p.lip(xx, Q + 2, w, 8, front, "ashlar" if front in stones else "render", 2)
-            p.ridge_roof(xx, Q + 10, w, d, shade(slate, rng.uniform(0.94, 1.06)), "slate", 0.47, verge=False,
-                         ridge_cap=(112, 108, 102))
-            if k:
-                p.line("roof", [(xx, Q + 2), (xx, Q + 10 + d)], LINE, 70, 0.3)
-            if rng.random() < 0.22:
-                p.dormer(xx + w / 2 - 5, Q + 10.5, 10, 9, slate, (206, 204, 196), "slate")
-            elif rng.random() < 0.3:  # a skylight
-                p.rect("detail", xx + w * 0.3, Q + 13, 4, 5, (70, 80, 88))
-                p.rect("detail", xx + w * 0.3, Q + 13, 4, 0.6, (170, 176, 178))
-            xx += w
-        p.rect("roof", x, Q + 10, 0.8, d, shade(slate, 1.3), 170)
-        p.rect("roof", x + tw - 0.8, Q + 10, 0.8, d, shade(slate, 0.6), 170)
-        xx = x
-        for k in range(len(ws) + 1):  # chimney stacks astride the party walls and gables
-            p.chimney(xx - (0 if k == 0 else 7 if k == len(ws) else 3.5), ry - 2.5, 7, 5,
-                      (138, 134, 126) if rng.random() < 0.6 else (166, 150, 124), rng.choice((2, 3, 4)))
-            if k < len(ws):
-                p.rect("detail", xx, Q + 10 + d, 0.9, H - Q - 10 - d, (150, 148, 140))  # back-yard walls
-                xx += ws[k]
-        x += tw + rng.uniform(7, 12)  # a wynd between terraces
-        i += len(ws)
-    for bx in range(28, W - 20, 64):
-        p.sphere("detail", bx, 6.5, 1.6, (52, 56, 58), amb=0.4)
-    for k in range(3):  # lobster creels stacked on the quay
-        bx = rng.uniform(60, W - 80)
-        for j in range(3):
-            p.box("detail", bx + j * 5, 10, 4.4, 6, (120, 98, 70))
-            p.line("detail", [(bx + j * 5, 13), (bx + j * 5 + 4.4, 13)], (80, 64, 46), 160, 0.3)
-    p.save("assets/harbours/looks/atlantic_stone.png")
+    """A granite terrace: grey ashlar and a white-rendered house with sash windows, grey
+    slate roofs and a big chimney stack on the party wall: Scotland, Ireland, Wales,
+    Brittany, Normandy, Galicia, the Channel Islands, Helsinki's stone quays and Hobart's
+    sandstone warehouses."""
+    p = Painter(2103, SK)
+    ground(p, (122, 124, 120), "flags", 8.0)
+    granite = (150, 148, 140)
+    front(p, 12, 600, granite, "ashlar", 8.0, pitch=220, win=92, doors={1: (52, 74, 92)})
+    roof_ridge(p, 12, 600, (80, 86, 92), "slate")
+    white = (222, 220, 212)
+    front(p, 612, 528, white, "render", 6.0, pitch=230, win=92)
+    roof_ridge(p, 612, 528, (74, 80, 86), "slate")
+    chimney(p, 560, 76, 120, 58, (136, 134, 126), 3)  # the stack on the party wall
+    skylight(p, 300, (80, 86, 92))
+    p.save("assets/harbours/looks/atlantic_stone.png", haze=0.12)
 
 
 def mediterranean():
-    """Warm rendered houses (ochre, cream, faded rose) with green and grey shutters under
-    terracotta pantiles, hip and pitched, a church with its bell tower seen from above,
-    café awnings on a pale limestone quay, umbrella pines behind: Italy, southern France,
-    Spain, Portugal, Croatia, mainland Greece, Türkiye, Cyprus and Malta."""
-    p = Painter(2104)
-    rng = p.rng
-    Q = 22
-    p.box("ground", 0, Q, W, H - Q, (168, 156, 132), "flags")
-    p.box("ground", 0, 0, W, Q, (188, 180, 162), "flags")
-    p.quay_edge(0, W, (184, 176, 158))
-    walls = [(204, 168, 112), (216, 204, 178), (196, 140, 112), (208, 186, 140), (186, 150, 118), (218, 210, 190), (198, 122, 92)]
-    shutters = [(92, 112, 94), (110, 122, 130), (122, 96, 76), (98, 118, 104)]
-    tiles = [(162, 100, 78), (170, 114, 88), (152, 94, 74), (164, 108, 84), (146, 100, 84)]
-    church = 500
-    x = 6.0
-    i = 0
-    while x < W - 26:
-        if church - 70 < x < church + 64:
-            x = church + 64
-        w = rng.uniform(38, 58)
-        d = rng.uniform(40, 56)
-        wall = walls[i % len(walls)]
-        tile = rng.choice(tiles)
-        yo = Q + 1 + rng.uniform(0, 1.5)
-        p.lip(x, yo, w, 8, wall, "render", None, glass=(62, 60, 58), frame=None, shutter=shutters[i % len(shutters)])
-        if rng.random() < 0.45:
-            p.hip_roof(x, yo + 8, w, d, tile, "pantile")
-        else:
-            p.ridge_roof(x, yo + 8, w, d, tile, "pantile", 0.5, ridge_cap=shade(tile, 0.96))
-        if rng.random() < 0.4:
-            p.chimney(x + w * rng.uniform(0.2, 0.7), yo + 8 + d * 0.6, 4, 3.4, shade(wall, 0.92), 1)
-        if rng.random() < 0.35:  # a café awning over the quay
-            p.awning(x + 4, yo - 9, w - 8, 9, (186, 172, 146), (150, 82, 66) if rng.random() < 0.4 else None)
-        x += w + rng.uniform(0, 2)
-        if rng.random() < 0.15:
-            x += rng.uniform(5, 8)
-        if rng.random() < 0.22:
-            p.tree(x + rng.uniform(-10, 10), rng.uniform(86, 100), rng.uniform(13, 17), (84, 100, 70), lumps=8)
-        i += 1
-    # the church: a nave gable-end to the water with a pediment, and its bell tower
-    p.lip(church - 64, Q + 1, 70, 10, (212, 196, 160), "ashlar", 1, arch=True, frame=None, glass=(70, 62, 54))
-    p.gable_roof(church - 64, Q + 11, 70, 76, (158, 100, 80), "pantile")
-    p.gable_face(church - 64, Q + 11, 70, (214, 198, 164), "pediment", h=12, coping=(232, 224, 206), tex="ashlar")
-    p.tower(church + 18, Q + 1, 30, (206, 188, 150), (160, 100, 78), "pantile", 10, openings=2)
-    for _ in range(4):
-        p.tree(rng.uniform(40, W - 40), rng.uniform(94, 106), rng.uniform(10, 14), (88, 104, 72), lumps=7)
-    p.bollards(6, 20, W - 20, 110, (78, 76, 72))
-    p.save("assets/harbours/looks/mediterranean.png")
+    """An ochre house with green shutters under terracotta pantiles, a lane, and a pale
+    house with a roof terrace, a pergola and a lemon tree in a pot, over limestone flags:
+    Italy, southern France and the French Atlantic's limestone towns, Spain, Portugal,
+    Croatia, mainland Greece, Türkiye, Cyprus and Malta."""
+    p = Painter(2104, SK)
+    ground(p, (196, 186, 166), "flags", 9.0)
+    ochre = (214, 178, 124)
+    front(p, 14, 560, ochre, "render", 6.0, pitch=270, win=96, frame=None, shutter=(84, 108, 86))
+    roof_ridge(p, 14, 560, (170, 100, 72), "pantile", gutter=(160, 96, 70))
+    pale = (226, 216, 196)
+    front(p, 676, 460, pale, "render", 6.0, pitch=230, win=96, frame=None, shutter=(96, 122, 136), doors={0: (108, 84, 62)})
+    roof_flat(p, 676, 460, (214, 204, 186), "flags", 9.0)
+    for px in range(720, 1100, 70):  # a pergola's beams
+        p.rect("detail", px, 74, 9, 36, (120, 100, 78))
+    p.rect("detail", 712, 74, 400, 8, (120, 100, 78))
+    p.tree(1080, 98, 32, (96, 114, 72), lumps=5)  # a lemon tree in its pot
+    p.tree(625, 140, 100, (86, 100, 66))  # a pine over the lane
+    p.save("assets/harbours/looks/mediterranean.png", haze=0.12)
 
 
 def aegean_island():
-    """Whitewashed cubic houses packed close with flat roofs at different heights, blue
-    doors and shutters as small accents, outside stairs, a chapel with its blue dome,
-    bougainvillea, a quay of flagstones with whitewashed joints and the dry terraced hill
-    behind: the Cyclades and the small Greek islands."""
-    p = Painter(2105)
-    rng = p.rng
-    Q = 20
-    p.box("ground", 0, Q, W, H - Q, (178, 166, 136), "grass")
-    for k in range(7):  # dry-stone terrace walls on the hill behind
-        y = 84 + k * 4.2
-        p.line("ground", [(0, y + rng.uniform(-1, 1))] + [(xx, y + rng.uniform(-1.5, 1.5)) for xx in range(60, W + 60, 60)],
-               (146, 132, 104), 170, 0.6)
-    p.box("ground", 0, 0, W, Q, (176, 172, 162), "flags")
-    for xx in range(0, W, 9):  # the whitewashed joints
-        p.line("ground", [(xx + rng.uniform(-2, 2), 4.5), (xx + rng.uniform(-2, 2), Q)], (232, 230, 224), 140, 0.4)
-    p.quay_edge(0, W, (200, 198, 190))
-    p.rect("ground", 0, 0, W, 1.2, (236, 234, 228), 230)
-    white = (230, 228, 220)
-    blues = [(64, 98, 128), (72, 106, 134), (70, 118, 116), (64, 98, 128)]
-    chapel = 640
-    for row in (1, 0):  # the row behind first, so the front row's shadows fall on it
-        x = 4.0 + row * 9
-        i = row * 3
-        while x < W - 20:
-            if row == 0 and chapel - 46 < x < chapel + 36:
-                x = chapel + 36
-            w = rng.uniform(22, 38)
-            d = rng.uniform(22, 32)
-            L = "roof2" if (rng.random() < 0.45) != (row == 1) else "roof"
-            yo = (Q + 1 + rng.uniform(0, 3)) if row == 0 else (Q + 34 + rng.uniform(0, 8))
-            accent = blues[i % len(blues)]
-            p.lip(x, yo, w, 7 if row == 0 else 8, white, "render", max(1, int(w / 14)), glass=accent, frame=None, L=L,
-                  shutter=accent if rng.random() < 0.3 else None)
-            ly = yo + (7 if row == 0 else 8)
-            p.flat_roof(x, ly, w, d, white, 1.1, L)
-            if rng.random() < 0.35:
-                p.stair_hut(x + rng.uniform(2, w - 11), ly + rng.uniform(3, d - 11), 9, 8, white, accent, "detail")
-            elif rng.random() < 0.4:
-                p.tank(x + w * rng.uniform(0.3, 0.8), ly + d * rng.uniform(0.3, 0.7), 2.0)
-            if rng.random() < 0.3:  # an outside stair up to the roof, along the side wall
-                for k in range(5):
-                    p.rect("detail", x + w - 0.5 + k * 0.1, ly + 2 + k * 2.2, 3.2, 2.0, shade(white, 1.02 - k * 0.03))
-                    p.rect("detail", x + w - 0.5, ly + 3.6 + k * 2.2, 3.2, 0.4, (180, 178, 170))
-            if rng.random() < 0.22:  # bougainvillea over a doorway
-                p.tree(x + rng.uniform(2, w - 2), yo + rng.uniform(-1, 3), rng.uniform(2.6, 3.6), (138, 74, 98), lumps=4, L="detail")
-            x += w + rng.uniform(0.3, 2.5)
-            if rng.random() < 0.16:
-                x += rng.uniform(5, 8)  # a stepped lane up from the quay
-            i += 1
-    # the chapel: white walls, a blue dome on its drum, a small bell gable
-    p.lip(chapel - 44, Q + 1, 40, 8, white, "render", 1, glass=(64, 98, 128), frame=None, arch=True)
-    p.flat_roof(chapel - 44, Q + 9, 40, 40, (236, 234, 228), 1.0)
-    p.sphere("roof2", chapel - 24, Q + 29, 13, (228, 226, 220), amb=0.6, gain=0.8)
-    p.sphere("tall", chapel - 24, Q + 29, 11, (70, 104, 136), amb=0.38)
-    p.sphere("tall", chapel - 24, Q + 29, 1.6, (232, 230, 224), amb=0.6)
-    p.box("detail", chapel - 34, Q + 9, 20, 3, (236, 234, 228))
-    p.rect("detail", chapel - 26, Q + 9.5, 4, 2, (90, 84, 76))
-    for _ in range(7):  # olive trees on the hill
-        p.tree(rng.uniform(30, W - 30), rng.uniform(92, 106), rng.uniform(5, 8), (118, 124, 98), lumps=5)
-    for _ in range(4):  # tables under a vine on the quay
-        p.awning(rng.uniform(40, W - 80), 7, rng.uniform(20, 30), 9, (150, 156, 112))
-    p.save("assets/harbours/looks/aegean_island.png")
+    """A whitewashed house with a blue door and shutters under a flat roof, whitewashed
+    steps up the lane, and the white chapel with its blue dome: the Cyclades and the
+    small Greek islands."""
+    p = Painter(2105, SK)
+    ground(p, (190, 186, 176), "flags", 7.0)
+    for x in range(0, W, 46):  # the whitewashed joints of the paving
+        p.line("ground", [(x, GROUND_Y), (x, FRONT - 3)], (240, 238, 232), 150, 1.4)
+    white = (236, 234, 228)
+    blue = (54, 98, 140)
+    front(p, 16, 500, white, "render", 5.0, pitch=250, win=86, frame=None, shutter=blue, doors={1: blue})
+    roof_flat(p, 16, 500, (230, 228, 220), "render", 5.0, parapet=20)
+    p.box("ground", 520, FRONT, 100, H - FRONT, (226, 222, 214), "flags", tk=6.0)  # the stepped lane
+    for y in range(int(FRONT), H, 18):
+        p.rect("ground", 520, y, 100, 2.5, (250, 248, 244), 220)
+    # the chapel: whitewashed front with an arched blue door, a barrel vault, the dome
+    front(p, 630, 500, white, "render", 5.0, pitch=500, doors={0: blue}, arch=True)
+    p.box("roof", 630, EAVES - 2, 500, H - EAVES + 2, (232, 230, 224), "render", tk=5.0)
+    p.rect("roof", 630, EAVES - 2, 500, 3, (248, 246, 240), 220)
+    p.sphere("tall", 880, 196, 150, (58, 104, 150), amb=0.48, gain=1.05)
+    p.sphere("detail", 1080, 70, 18, (190, 160, 90), amb=0.5)  # the bell in its gable
+    p.save("assets/harbours/looks/aegean_island.png", haze=0.10)
 
 
 def stone_town():
-    """Lime-washed and sand-coloured masonry with flat roof terraces, parapets, stair huts
-    and courtyards, a square minaret, behind a crenellated sea wall: Morocco's Atlantic
-    coast and the Swahili coast's stone towns."""
-    p = Painter(2106)
-    rng = p.rng
-    p.box("ground", 0, 0, W, H, (170, 156, 128), "flags")
-    # the sea wall: a broad wall-walk with merlons along the water side
-    stone = (182, 166, 134)
-    p.box("roof", 0, 0, W, 12, stone, "ashlar")
-    p.rect("roof", 0, 0, W, 0.8, shade(stone, 1.2), 220)
-    p.rect("roof", 0, 12, W, 0.8, shade(stone, 0.66), 220)
-    for mx in range(2, W - 4, 8):
-        p.box("detail", mx, 0.6, 5, 3, shade(stone, 1.08), "ashlar")
-        p.rect("detail", mx, 0.6, 5, 0.5, shade(stone, 1.22))
-    walls = [(216, 210, 194), (200, 182, 148), (222, 216, 202), (206, 188, 150), (212, 204, 186)]
-    doors = [(66, 96, 126), (92, 70, 52), (70, 104, 96), (92, 70, 52)]
-    Y0 = 18
-    minaret = 820
-    x = 4.0
-    i = 0
-    while x < W - 24:
-        if minaret - 6 < x < minaret + 30:
-            x = minaret + 30
-        w = rng.uniform(36, 62)
-        d = rng.uniform(40, 60)
-        wall = walls[i % len(walls)]
-        tall = rng.random() < 0.35
-        L = "roof2" if tall else "roof"
-        Y0 = 18 + rng.uniform(-1, 3)
-        p.lip(x, Y0, w, 7, wall, "render", max(1, int(w / 18)), glass=doors[i % len(doors)], frame=None, arch=True, L=L)
-        p.flat_roof(x, Y0 + 7, w, d, wall, 1.3, L)
-        if w > 48 and rng.random() < 0.5:  # a courtyard open to the sky, with a tree
-            cx, cy = x + w / 2, Y0 + 7 + d / 2
-            p.box(L, cx - 8, cy - 7, 16, 14, (150, 136, 112), "flags")
-            p.rect(L, cx - 8, cy - 7, 16, 2, SHADOW, 90)
-            p.rect(L, cx - 8, cy - 7, 2, 14, SHADOW, 70)
-            if rng.random() < 0.5:
-                p.palm(cx + 1, cy, 8, (98, 114, 76))
-            else:
-                p.tree(cx + 1, cy, 6, (92, 110, 74), L="tree")
-        elif rng.random() < 0.5:
-            p.stair_hut(x + rng.uniform(3, w - 14), Y0 + 7 + rng.uniform(3, 12), 11, 10, wall, doors[(i + 1) % len(doors)], "detail")
-        if rng.random() < 0.4:  # washing on a line across the terrace
-            wy = Y0 + 7 + rng.uniform(16, d - 6)
-            p.line("detail", [(x + 4, wy), (x + w - 4, wy)], (110, 104, 96), 200, 0.25)
-            for k in range(rng.randint(3, 6)):
-                p.rect("detail", x + 6 + k * 5, wy, 3, 2.2, rng.choice([(226, 222, 212), (160, 92, 78), (96, 116, 140), (188, 170, 120)]))
-        if rng.random() < 0.3:
-            p.tank(x + w * 0.8, Y0 + 7 + d * 0.3, 2.0, (150, 150, 146))
-        x += w + rng.uniform(0, 1.2)
-        if rng.random() < 0.18:
-            x += rng.uniform(4, 7)
-        i += 1
-    # the square minaret with its lantern
-    p.lip(minaret, Y0 - 1, 24, 6, (204, 188, 150), "ashlar", 1, glass=(70, 62, 54), frame=None, arch=True, L="roof2")
-    p.box("roof2", minaret, Y0 + 5, 24, 24, (204, 188, 150), "ashlar")
-    for mx in range(0, 24, 4):
-        p.rect("tall", minaret + mx, Y0 + 5, 2.6, 2, (98, 128, 108))
-    p.box("tall", minaret + 6, Y0 + 11, 12, 12, (210, 196, 162), "ashlar")
-    p.facets("tall", minaret + 12, Y0 + 17, 6, 4, (98, 128, 108), rot=-math.pi * 3 / 4)
-    p.sphere("tall", minaret + 12, Y0 + 17, 1.3, (176, 156, 96), amb=0.5)
-    for k in range(4):  # cannon on the wall-walk
-        gx = 90 + k * 270
-        p.box("detail", gx, 4.5, 3.4, 9, (72, 76, 68))
-        p.rect("detail", gx, 4.5, 1.0, 9, (110, 114, 100))
-    p.save("assets/harbours/looks/stone_town.png")
+    """Lime-washed masonry with a carved timber door and a roof terrace behind a
+    crenellated parapet, a warm ochre house beside it: Morocco's Atlantic coast and the
+    Swahili coast's stone towns."""
+    p = Painter(2106, SK)
+    ground(p, (176, 168, 150), "flags", 9.0)
+    lime = (222, 214, 196)
+    front(p, 14, 600, lime, "render", 5.0, pitch=300, win=80, frame=None, glass=(70, 64, 56),
+          shutter=(64, 102, 112), doors={1: (98, 70, 48)}, arch=True)
+    roof_flat(p, 14, 600, (216, 206, 186), "render", 5.0, parapet=22)
+    for mx in range(14, 614, 60):  # the parapet's crenellations
+        p.rect("detail", mx, EAVES - 2, 30, 20, shade(lime, 1.04))
+    warm = (204, 172, 140)
+    front(p, 686, 450, warm, "render", 5.0, pitch=225, win=80, frame=None, glass=(70, 64, 56), shutter=(64, 102, 112))
+    roof_flat(p, 686, 450, (200, 176, 146), "flags", 8.0, parapet=20)
+    p.box("detail", 760, 80, 140, 30, (110, 92, 70), "board", tk=8.0)  # a timber screen on the terrace
+    p.save("assets/harbours/looks/stone_town.png", haze=0.12)
 
 
 def tropical_town():
-    """Low houses under painted corrugated tin (red oxide, green, galvanised grey), each
-    with a veranda roof along the front, pastel walls, palms and dark mango trees, a
-    concrete quay with a timber wharf: the Caribbean, West Africa, the Indian Ocean,
-    Central America and the larger Pacific towns."""
-    p = Painter(2107)
-    rng = p.rng
-    Q = 21
-    p.box("ground", 0, Q, W, H - Q, (118, 116, 84), "grass")
-    p.box("ground", 0, 0, W, Q, (162, 160, 152), "slabs")
-    p.quay_edge(0, W, (158, 156, 148))
-    p.box("ground", 300, 0, 120, Q, (122, 106, 86), "board", "v")  # a timber wharf section
-    p.rect("ground", 300, 0, 120, 1.0, (150, 136, 112), 220)
-    walls = [(198, 180, 128), (128, 156, 146), (196, 160, 146), (212, 206, 190), (152, 168, 124), (178, 146, 160), (140, 156, 176)]
-    tins = [(136, 76, 62), (92, 114, 100), (150, 154, 150), (106, 126, 136), (128, 84, 66), (160, 162, 156)]
-    x = 8.0
-    i = 0
-    while x < W - 30:
-        w = rng.uniform(36, 52)
-        d = rng.uniform(34, 46)
-        wall = walls[i % len(walls)]
-        tin = rng.choice(tins)
-        yo = Q + 3 + rng.uniform(0, 4)
-        p.lip(x + 2, yo, w - 4, 6, wall, "board" if rng.random() < 0.4 else "render", None, glass=(60, 64, 62), frame=(214, 212, 204),
-              shutter=shade(wall, 0.75))
-        # the veranda roof, lower and lighter, on its posts
-        p.box("roof", x - 2, yo + 6, w + 4, 8, shade(tin, 1.1), "tin", "h", yo + 6)
-        p.rect("roof", x - 2, yo + 6, w + 4, 0.6, shade(tin, 1.3), 200)
-        p.line("roof", [(x - 2, yo + 14), (x + w + 2, yo + 14)], shade(tin, 0.5), 160, 0.4)
-        p.hip_roof(x, yo + 14, w, d, tin, "tin")
-        x += w + rng.uniform(10, 22)
-        if rng.random() < 0.6:
-            p.palm(x - rng.uniform(4, 10), rng.uniform(40, 86), rng.uniform(14, 18))
-        if rng.random() < 0.45:
-            p.tree(x - rng.uniform(0, 8), rng.uniform(80, 100), rng.uniform(12, 16), (64, 86, 58), lumps=9)
-        i += 1
-    for _ in range(3):  # painted wooden boats drawn up on the quay
-        p.boat(rng.uniform(40, 280), 11, 18, 5.5, rng.choice([(150, 70, 58), (70, 110, 118), (190, 170, 100)]), ang=0.0)
-    p.bollards(6, 450, W - 20, 100)
-    p.save("assets/harbours/looks/tropical_town.png")
+    """A sea-green timber house with a veranda under a red tin roof, a palm in the lane,
+    and a small yellow chattel house with louvred shutters under galvanised tin: the
+    Caribbean, West Africa, the Indian Ocean, Central America and the larger Pacific
+    towns."""
+    p = Painter(2107, SK)
+    ground(p, (150, 150, 142), "flags", 9.0)
+    green = (156, 186, 172)
+    front(p, 14, 520, green, "board", 10.0, pitch=260, win=96, frame=FRAME_WHITE, shutter=(80, 112, 126), doors={1: (110, 86, 64)})
+    p.box("roof", 4, EAVES, 540, 40, (150, 82, 70), "tin", "v", 4, tk=TK_ROOF)  # the veranda roof
+    p.rect("roof", 4, EAVES + 40, 540, 3, (100, 56, 48))
+    p.box("roof", 4, EAVES + 43, 540, H - EAVES - 43, (138, 74, 64), "tin", "v", 4, tk=TK_ROOF)
+    p.palm(640, 136, 150)
+    yellow = (224, 206, 146)
+    front(p, 734, 400, yellow, "board", 10.0, pitch=200, win=86, frame=FRAME_WHITE, shutter=(84, 118, 104))
+    roof_hip(p, 734, 400, (160, 166, 168), "tin")
+    p.save("assets/harbours/looks/tropical_town.png", haze=0.12)
 
 
 def tropical_island():
-    """Small timber houses under tin and thatched fale roofs among coconut palms, on a
-    sand beach in place of a paved quay, an outrigger canoe drawn up: the islands of
-    Polynesia, the Cook Islands, Tonga and the Grenadines."""
-    p = Painter(2108)
-    rng = p.rng
-    B = 26
-    p.box("ground", 0, B - 4, W, H - B + 4, (108, 118, 84), "grass")
-    for _ in range(40):  # sandy paths and darker scrub in the grass
-        p.ellipse("ground", rng.uniform(0, W), rng.uniform(B + 4, H), rng.uniform(6, 20), rng.uniform(2, 5),
-                  rng.choice([(150, 146, 116), (90, 102, 70), (122, 128, 92)]), 110)
-    p.box("ground", 0, 0, W, B, (206, 196, 168), "sand")
-    p.box("ground", 0, 0, W, 4, (164, 156, 136), "sand")  # wet sand at the water's edge
-    for k in range(0, W, 6):  # the lapping edge and wrack line, irregular
-        p.ellipse("ground", k + rng.uniform(0, 6), rng.uniform(4, 5.5), rng.uniform(3, 6), 1.2, (178, 170, 148), 220)
-        if rng.random() < 0.3:
-            p.ellipse("ground", k, rng.uniform(8, 11), rng.uniform(1, 3), 0.5, (126, 116, 92), 160)
-    # the beach fades into the water at the top
-    g = p.layers["ground"]
-    a = np.asarray(g, np.uint8).copy()
-    ramp = np.clip(np.arange(a.shape[0]) / (2.5 * SS), 0, 1)
-    a[..., 3] = (a[..., 3] * ramp[:, None]).astype(np.uint8)
-    p.layers["ground"] = Image.fromarray(a, "RGBA")
-    p.draws["ground"] = ImageDraw.Draw(p.layers["ground"], "RGBA")
-    k = 0.0
-    while k < W:  # the edge of the bush behind the beach, in clumps
-        if rng.random() < 0.6:
-            for _ in range(rng.randint(1, 3)):
-                p.tree(k + rng.uniform(0, 14), B + rng.uniform(0, 7), rng.uniform(4, 7), (88, 104, 70), lumps=4)
-        k += rng.uniform(18, 46)
-    thatch = (170, 148, 106)
-    walls = [(186, 160, 118), (206, 204, 192), (164, 178, 162), (196, 184, 156)]
-    x = 20.0
-    i = 0
-    while x < W - 50:
-        if i % 3 != 1:  # an open-sided fale under a thatched hip roof
-            w = rng.uniform(30, 40)
-            d = rng.uniform(22, 30)
-            yo = B + rng.uniform(4, 14)
-            p.hip_roof(x, yo, w, d, thatch, "thatch")
-        else:  # a small timber house under tin
-            w = rng.uniform(28, 36)
-            d = rng.uniform(22, 28)
-            yo = B + rng.uniform(4, 12)
-            p.lip(x, yo, w, 5, walls[i % len(walls)], "board", 2, glass=(58, 60, 58), frame=(220, 218, 210))
-            p.ridge_roof(x, yo + 5, w, d, rng.choice([(140, 80, 66), (110, 128, 120), (150, 152, 146)]), "tin", 0.5)
-        x += w + rng.uniform(26, 50)
-        for _ in range(rng.randint(1, 3)):
-            p.palm(x - rng.uniform(6, 22), rng.uniform(16, 96), rng.uniform(13, 18), (96, 116, 72))
-        i += 1
-    # an outrigger canoe and a dinghy drawn up on the sand
-    p.boat(240, 13, 30, 4.4, (120, 98, 74), (150, 128, 96))
-    for s in (-8, 8):
-        p.line("detail", [(240 + s, 13), (240 + s, 21)], (110, 92, 70), 230, 0.6)
-    p.box("detail", 230, 20.5, 22, 2.2, (128, 108, 82))
-    p.boat(760, 12, 16, 6, (196, 194, 184), (168, 160, 140))
-    p.save("assets/harbours/looks/tropical_island.png")
+    """A beach landing: palms, a small painted timber house with a tin roof and a thatched
+    open house on posts: the islands of Polynesia, the Cook Islands, Tonga and the
+    Grenadines."""
+    p = Painter(2108, SK)
+    ground(p, (214, 200, 168), "sand", 1.0)
+    p.rect("ground", 0, GROUND_Y, W, 6, (190, 178, 150), 140)  # the wet sand by the water's edge
+    p.palm(110, 120, 150)
+    p.palm(250, 62, 120)
+    blue = (110, 150, 168)
+    front(p, 340, 400, blue, "board", 10.0, pitch=133, win=86, frame=FRAME_WHITE, doors={1: (226, 222, 210)})
+    roof_ridge(p, 340, 400, (150, 84, 70), "tin")
+    # the thatched fale: an open house on posts under a thatched hip roof
+    for px in (820, 960, 1100):
+        p.sphere("detail", px, 40, 9, (108, 86, 62), amb=0.5)
+    roof_hip(p, 800, 340, (176, 150, 100), "thatch")
+    p.save("assets/harbours/looks/tropical_island.png", haze=0.10)
 
 
 def volcanic_island():
-    """Black basalt quay and dark lava rock at the shore, green slopes divided into small
-    fields by black stone walls, a few white houses with dark basalt corners and red
-    tile roofs, and a white church with basalt trim: the Azores, Madeira, Lanzarote, the
-    Galápagos, the Marquesas, Samoa and St Helena."""
-    p = Painter(2109)
-    rng = p.rng
-    Q = 18
-    p.box("ground", 0, Q, W, H - Q, (150, 146, 136), "flags")  # the village's street
-    greens = [(98, 120, 80), (110, 128, 84), (88, 110, 74), (122, 130, 88), (78, 98, 66), (104, 124, 78)]
-    rows = [52 + k * 12 for k in range(6)]
+    """Black basalt paving, a white house with dark basalt corners and window surrounds
+    under a red tile hip roof, a hydrangea hedge in the lane, and a white gable-end house
+    with basalt trim: the Azores, Madeira, Lanzarote, the Galápagos, the Marquesas,
+    Samoa and St Helena."""
+    p = Painter(2109, SK)
+    ground(p, (74, 72, 70), "blocks", 8.0)
+    white = (230, 228, 220)
+    basalt = (58, 56, 54)
+    front(p, 14, 560, white, "render", 5.0, pitch=240, win=90, frame=basalt, doors={1: (84, 58, 44)})
+    for ex in (14, 554):
+        p.rect("roof", ex, FRONT, 20, EAVES - FRONT, basalt)
+    roof_hip(p, 14, 560, (160, 96, 74), "tile")
+    for k in range(4):  # hydrangeas along the lane
+        p.tree(616 + k * 22, 44 + (k % 2) * 24, 22, (104, 128, 176), lumps=4)
+    p.tree(640, 120, 60, (84, 110, 70))
+    front(p, 700, 436, white, "render", 5.0, pitch=218, win=90, frame=basalt)
+    for ex in (700, 1116):
+        p.rect("roof", ex, FRONT, 20, EAVES - FRONT, basalt)
+    roof_gable(p, 700, 436, (152, 92, 72), "tile", barge=basalt)
+    p.save("assets/harbours/looks/volcanic_island.png", haze=0.12)
 
-    def edge(k, x):
-        return rows[k] + 3 * math.sin(x / 70 + k * 1.7)
 
-    for k in range(len(rows) - 1):  # small fields between black stone walls up the slope
-        xa = -10.0
-        while xa < W + 10:
-            xb = xa + rng.uniform(26, 64)
-            cell = [(xa, edge(k, xa)), (xb, edge(k, xb)), (xb, edge(k + 1, xb)), (xa, edge(k + 1, xa))]
-            p.plane("ground", cell, rng.choice(greens), "grass")
-            p.line("ground", [(xb, edge(k, xb)), (xb, edge(k + 1, xb))], (46, 46, 44), 230, 0.8)
-            xa = xb
-    first = [(x, edge(0, x)) for x in range(-10, W + 20, 10)]
-    p.plane("ground", [(-10, Q)] + [(W + 20, Q)] + first[::-1], (104, 122, 82), "grass")
-    for k in range(len(rows)):
-        pts = [(x, edge(k, x)) for x in range(-10, W + 20, 10)]
-        p.line("ground", pts, (46, 46, 44), 240, 0.9)
-        p.line("ground", [(x, y - 0.5) for x, y in pts], (120, 118, 112), 110, 0.3)
-    p.box("ground", 0, 0, W, Q, (70, 68, 66), "blocks")
-    p.rect("ground", 0, 0, W, 0.8, (110, 108, 104), 220)
-    # lava rock at the shore on both sides of the harbour
-    for x0, x1 in ((0, 250), (880, W)):
-        pts = [(x0, 0), (x1, 0)]
-        xx = x1
-        while xx > x0:
-            pts.append((xx, rng.uniform(22, 46)))
-            xx -= rng.uniform(10, 24)
-        pts.append((x0, 40))
-        p.plane("roof", pts, (66, 62, 60), "rock")
-    tile = (154, 94, 74)
-    white = (226, 224, 216)
-    church = 600
+# --- Landmarks of the special harbours ------------------------------------------------------
 
-    def house(hx, yo, w, d, L="roof"):
-        p.lip(hx, yo, w, 6, white, "render", max(1, int(w / 14)), glass=(66, 84, 96), frame=None, L=L)
-        p.rect(L, hx, yo, 2, 6, (54, 52, 50))
-        p.rect(L, hx + w - 2, yo, 2, 6, (54, 52, 50))
-        if rng.random() < 0.5:
-            p.ridge_roof(hx, yo + 6, w, d, shade(tile, rng.uniform(0.94, 1.06)), "tile", 0.5, L=L)
-            p.chimney(hx + w * 0.72, yo + 6 + d * 0.5 - 2, 4, 4, white, 1)
+def nyhavn():
+    """Copenhagen, Nyhavn: the cobbled quay and three of the 17th- and 18th-century town
+    houses in Nyhavn's own colours - ochre, oxblood and faded blue - with white window
+    frames, red tile and dark slate roofs, dormers and chimneys."""
+    p = Painter(1673, SK)  # the year Nyhavn was dug
+    ground(p, (132, 134, 128), "setts", 3.6)
+    houses = [(14, 380, (196, 156, 86), (134, 86, 70), "tile", "ridge"),
+              (394, 340, (128, 62, 52), (134, 86, 70), "tile", "gable"),
+              (734, 402, (104, 128, 144), (70, 76, 82), "slate", "ridge")]
+    for x, w, facade, roof, tex, form in houses:
+        front(p, x, w, facade, "render", 6.0, pitch=180, win=86, doors={0: (66, 58, 52)} if form == "gable" else None)
+        if form == "gable":
+            roof_gable(p, x, w, roof, tex, barge=shade(facade, 1.1))
         else:
-            p.hip_roof(hx, yo + 6, w, d, shade(tile, rng.uniform(0.94, 1.06)), "tile", L)
+            roof_ridge(p, x, w, roof, tex)
+            dormer(p, x + w * 0.32, 130, roof, facade, tex)
+    chimney(p, 300, 90, 54, 48, (118, 90, 76))
+    chimney(p, 1060, 88, 54, 48, (118, 90, 76))
+    p.save("assets/harbours/copenhagen/nyhavn.png", haze=0.10)
 
-    x = 262.0
-    while x < 868:  # the village along the harbour
-        if church - 34 < x < church + 82:
-            x = church + 82
-        w = rng.uniform(24, 40)
-        if x + w > 870:
-            break
-        house(x, Q + 2 + rng.uniform(0, 4), w, rng.uniform(20, 28))
-        x += w + rng.uniform(1, 12)
-    for hx in (296, 380, 470, 700, 790):  # a second row up the street
-        house(hx + rng.uniform(-10, 10), Q + 34 + rng.uniform(0, 6), rng.uniform(24, 34), rng.uniform(16, 22))
-    for _ in range(7):  # farmhouses among the fields
-        house(rng.choice((rng.uniform(20, 220), rng.uniform(900, W - 50))), rng.uniform(56, 86), rng.uniform(20, 28), 16)
-    # the white church with black basalt trim, gable to the sea, and its tower
-    p.lip(church - 30, Q + 2, 50, 9, (230, 228, 220), "render", 1, glass=(56, 54, 52), frame=None, arch=True)
-    for ex in (church - 30, church + 18):
-        p.rect("roof", ex, Q + 2, 2, 9, (54, 52, 50))
-    p.gable_roof(church - 30, Q + 11, 50, 52, (150, 92, 72), "tile")
-    p.gable_face(church - 30, Q + 11, 50, (230, 228, 220), "pediment", h=10, coping=(60, 58, 56))
-    p.tower(church + 22, Q + 1, 22, (230, 228, 220), (150, 92, 72), "tile", 8)
-    for ex, ey, ew, eh in ((church + 22, Q + 9, 1.4, 22), (church + 42.6, Q + 9, 1.4, 22)):
-        p.rect("roof2", ex, ey, ew, eh, (54, 52, 50))
-    for _ in range(14):  # trees and hedges between the fields
-        p.tree(rng.uniform(30, W - 30), rng.uniform(56, 106), rng.uniform(5, 9), (70, 94, 62), lumps=5)
-    p.bollards(5, 270, 870, 80, (40, 40, 40))
-    p.save("assets/harbours/looks/volcanic_island.png")
-
-
-# --- Landmarks of the special harbours --------------------------------------------------
 
 def valletta_bastions():
-    """Valletta: the honey limestone bastions straight out of Grand Harbour - the tall
-    scarp lit by the sun, the rounded cordon, the parapet and wall-walk, sentry boxes
-    (gardjoli) at the salient points - and behind them the dense flat roofs of the city
-    over deep, shaded streets, with closed timber balconies (gallariji) on the fronts,
-    the Carmelite dome and St Paul's spire."""
-    p = Painter(1566)  # the year Valletta was founded
-    rng = p.rng
+    """Valletta: the Grand Harbour waterfront under the bastions - the honey limestone
+    stores of the 1750s with their arched doors painted red, green, blue and ochre and
+    small-paned windows between them, the flat limestone roof with its parapet; the
+    bastion wall rises beyond."""
+    p = Painter(1566, SK)  # the year Valletta was founded
     stone = (206, 182, 132)
-    p.box("ground", 0, 12, W, H - 12, (118, 104, 82), "flags")  # the streets, deep in shade; the sea to the wall's foot
-    # the curtain wall: scarp, cordon, parapet and wall-walk
-    p.box("roof", 0, 12, W, 9, shade(stone, 1.08), "ashlar")
-    p.rect("roof", 0, 21, W, 1.4, shade(stone, 1.26))
-    p.rect("roof", 0, 22.4, W, 0.9, SHADOW, 90)
-    p.box("roof", 0, 23.3, W, 3.2, shade(stone, 1.04), "ashlar")
-    p.box("roof", 0, 26.5, W, 9, shade(stone, 0.92), "flags")
-    p.rect("roof", 0, 26.5, W, 1.4, SHADOW, 70)
-    p.rect("roof", 0, 35, W, 0.8, shade(stone, 0.7))
-    for ex in range(20, W, 34):  # embrasures in the parapet
-        p.rect("roof", ex, 23.3, 3, 3.2, shade(stone, 0.62))
-    for bx in (170, 560, 960):  # the bastions, jutting out towards the water
-        a, b = 82, 46
-        p.plane("roof", [(bx - a, 12), (bx - b, 0.4), (bx - b, 12)], shade(stone, 1.2), "ashlar")
-        p.plane("roof", [(bx - b, 0.4), (bx + b, 0.4), (bx + b, 12), (bx - b, 12)], shade(stone, 1.1), "ashlar")
-        p.plane("roof", [(bx + b, 0.4), (bx + a, 12), (bx + b, 12)], shade(stone, 0.86), "ashlar")
-        top = [(bx - a + 12, 21), (bx - b + 6, 9), (bx + b - 6, 9), (bx + a - 12, 21)]
-        p.plane("roof", top + [(bx + a - 12, 27), (bx - a + 12, 27)], shade(stone, 0.96), "flags")
-        p.line("roof", top, shade(stone, 1.3), 255, 1.2)  # the cordon round the salient
-        p.line("roof", [(q[0], q[1] + 1.2) for q in top], SHADOW, 90, 0.8)
-        p.line("roof", [(bx - a, 12), (bx - b, 0.4), (bx + b, 0.4), (bx + a, 12)], LINE, 70, 0.3)
-        for sx in (bx - b + 3, bx + b - 3):  # gardjola: a hexagonal sentry box with its little dome
-            p.facets("detail", sx, 4.0, 3.2, 6, shade(stone, 1.06))
-            p.sphere("detail", sx, 4.0, 2.2, shade(stone, 1.05), amb=0.5)
-    # the city behind: flat-roofed blocks between straight streets
-    roofs = [(206, 182, 132), (216, 200, 160), (196, 176, 136), (186, 178, 160), (210, 190, 146)]
-    balconies = [(92, 112, 92), (124, 70, 58), (86, 102, 118), (146, 128, 92), (92, 112, 92)]
-    for row, (y0, y1) in enumerate(((40, 72), (77, H + 2))):
-        x = 3.0 + row * 22
-        while x < W - 10:
-            blockw = min(rng.uniform(80, 120), W - 3 - x)
-            xx = x
-            while xx < x + blockw - 10:
-                w = min(rng.uniform(15, 28), x + blockw - xx)
-                L = "roof2" if rng.random() < 0.35 else "roof"
-                col = rng.choice(roofs)
-                p.lip(xx, y0, w, 5, shade(col, 0.96), "ashlar", max(1, int(w / 10)), glass=(70, 64, 56), frame=None, L=L)
-                p.flat_roof(xx, y0 + 5, w, y1 - y0 - 5, col, 1.0, L, "flags")
-                if rng.random() < 0.65:  # a gallarija, the closed timber balcony
-                    gw = min(w - 3, rng.uniform(7, 11))
-                    gx = xx + rng.uniform(1.5, max(1.6, w - gw - 1.5))
-                    bc = rng.choice(balconies)
-                    p.box("detail", gx, y0 - 2.6, gw, 4.0, bc, "board", "v")
-                    p.rect("detail", gx, y0 - 2.6, gw, 0.6, shade(bc, 1.3))
-                if rng.random() < 0.35:
-                    p.stair_hut(xx + 2, y0 + 8, 7, 7, col, (90, 80, 66), "detail")
-                if rng.random() < 0.35:
-                    p.tank(xx + w * 0.7, y0 + (y1 - y0) * 0.65, 1.6, (176, 172, 164))
-                xx += w
-            x += blockw + 5  # a straight street running up from the harbour
-    # the Carmelite church's dome on its drum, and St Paul's spire
-    p.sphere("roof2", 430, 72, 24, shade(stone, 1.0), amb=0.55, gain=0.9)
-    p.sphere("tall", 430, 72, 19, (148, 148, 144), amb=0.36)
-    for k in range(12):
-        a = 2 * math.pi * k / 12
-        p.line("tall", [(430 + 4 * math.cos(a), 72 + 4 * math.sin(a)), (430 + 18.5 * math.cos(a), 72 + 18.5 * math.sin(a))],
-               (110, 110, 108), 120, 0.4)
-    p.sphere("tall", 430, 72, 4.2, shade(stone, 1.05), amb=0.5)
-    p.tower(752, 42, 18, shade(stone, 1.02), shade(stone, 0.98), None, 6, n=8)
-    p.save("assets/harbours/valletta/grand_harbour.png")
+    ground(p, (176, 162, 134), "flags", 9.0)
+    doors = {0: (138, 58, 48), 2: (60, 96, 74), 4: (54, 82, 118), 6: (180, 140, 62)}
+    front(p, 10, 1130, stone, "ashlar", 8.0, pitch=141, win=80, doors=doors, arch=True, frame=(226, 218, 196))
+    for k in (0, 2, 4, 6):  # the stone arches round the doors
+        cx = 10 + (k + 0.5) * 1130 / 8
+        p.ellipse("roof", cx, FRONT + 3, 80, 6, shade(stone, 1.12))
+    roof_flat(p, 10, 1130, (196, 176, 136), "flags", 9.0, parapet=22, edge=shade(stone, 1.06))
+    p.box("roof2", 10, 92, 1130, 18, shade(stone, 1.1), "ashlar", tk=8.0)  # the foot of the bastion
+    p.save("assets/harbours/valletta/grand_harbour.png", haze=0.10)
 
 
 def symi_harbour():
-    """Symi: tiers of neoclassical houses at Gialos in ochre, rose, cream and soft grey,
-    pediments facing the harbour and tiled hip roofs, stepping up the hill with stair
-    lanes between them, and the clock tower on the quay."""
-    p = Painter(1881)  # the clock tower's year
-    rng = p.rng
-    Q = 20
-    p.box("ground", 0, Q, W, H - Q, (176, 166, 144), "flags")
-    p.box("ground", 0, 0, W, Q, (186, 180, 166), "flags")
-    p.quay_edge(0, W, (190, 184, 170))
-    walls = [(202, 166, 112), (196, 150, 132), (216, 206, 182), (166, 172, 170), (186, 130, 98), (208, 186, 142), (178, 160, 150),
-             (224, 220, 208)]
-    tiles = [(160, 98, 76), (150, 94, 74), (168, 110, 86), (142, 96, 80)]
-    clock = 560
-    tiers = ((Q + 1, 7, "roof", 24), (Q + 33, 9, "roof2", 22), (Q + 64, 10, "roof2", 26))
-    for tier in (2, 1, 0):  # back to front, so each tier's shadow falls on the one above
-        y0, lip, L, dd = tiers[tier]
-        x = 4.0 + tier * 11
-        i = tier * 3
-        while x < W - 20:
-            if tier == 0 and clock - 6 < x + 30 and x < clock + 24:
-                x = clock + 24
-            w = rng.uniform(28, 44)
-            d = dd + rng.uniform(-3, 3)
-            yo = y0 + rng.uniform(-1.5, 2)
-            wall = walls[i % len(walls)]
-            tile = rng.choice(tiles)
-            p.lip(x, yo, w, lip, wall, "render", max(2, int(w / 12)), glass=(70, 92, 96), frame=(230, 226, 214), L=L,
-                  trim=(232, 228, 216))
-            ly = yo + lip
-            kind = rng.random()
-            if kind < 0.3:
-                p.gable_roof(x, ly, w, d, tile, "tile", L)
-                p.gable_face(x, ly, w, wall, "pediment", h=min(6, w * 0.15), coping=(234, 230, 220))
-            elif kind < 0.88:
-                p.hip_roof(x, ly, w, d, tile, "tile", L)
-            else:
-                p.flat_roof(x, ly, w, d, (222, 218, 206), 1.0, L)
-            x += w + rng.uniform(0.5, 3)
-            if rng.random() < 0.2:  # a stepped lane up the hill
-                for k in range(int(dd / 2.5)):
-                    p.rect("ground", x + 0.5, y0 + lip + k * 2.5, 5, 0.5, (150, 140, 120), 200)
-                x += 6
-            i += 1
-    p.tower(clock, 3, 16, (222, 212, 188), (150, 94, 74), "tile", 5)
-    p.ellipse("roof2", clock + 8, 5.5, 1.6, 1.4, (238, 236, 228))  # the clock face
-    for k in range(4):  # café awnings along the quay
-        p.awning(70 + k * 280 + rng.uniform(-20, 20), 9, 30, 8, (192, 182, 160))
-    p.save("assets/harbours/symi/gialos.png")
+    """Symi, Gialos: neoclassical captains' houses - ochre and salmon render with white
+    pilasters and cornices, tall shuttered windows - under tiled hip roofs, a lane of
+    steps between them."""
+    p = Painter(1832, SK)
+    ground(p, (198, 190, 172), "flags", 8.0)
+    ochre = (214, 170, 112)
+    front(p, 14, 520, ochre, "render", 6.0, pitch=173, win=84, frame=FRAME_WHITE, shutter=(70, 104, 112), doors={1: (88, 70, 56)})
+    roof_hip(p, 14, 520, (168, 98, 72), "tile")
+    cornice(p, 14, 520)
+    p.box("ground", 540, FRONT, 80, H - FRONT, (214, 208, 196), "flags", tk=6.0)
+    for y in range(int(FRONT), H, 18):
+        p.rect("ground", 540, y, 80, 2.5, (240, 236, 228), 200)
+    salmon = (206, 150, 126)
+    front(p, 628, 510, salmon, "render", 6.0, pitch=170, win=84, frame=FRAME_WHITE, shutter=(84, 112, 104))
+    roof_hip(p, 628, 510, (164, 96, 70), "tile")
+    cornice(p, 628, 510)
+    for ex in (14, 530, 628, 1134):  # the white pilasters at the corners
+        p.rect("detail", ex - 2, FRONT, 10, EAVES - FRONT, (236, 232, 222))
+    p.save("assets/harbours/symi/gialos.png", haze=0.10)
 
 
 def essaouira_skala():
-    """Essaouira: the Skala, the ochre sea rampart with its merlons and the row of old
-    bronze cannon pointing out to sea, a square bastion tower, and the white medina with
-    blue doors and shutters behind."""
-    p = Painter(1765)
-    rng = p.rng
-    stone = (176, 148, 108)
-    p.box("ground", 0, 0, W, H, (180, 166, 136), "flags")
-    WW = 22
-    p.box("roof", 0, 0, W, WW, shade(stone, 0.98), "slabs")
-    p.box("roof", 0, 0, W, 4, shade(stone, 1.1), "ashlar")
-    p.rect("roof", 0, 0, W, 0.8, shade(stone, 1.24))
-    p.rect("roof", 0, WW - 0.8, W, 0.8, shade(stone, 0.66))
-    for mx in range(3, W - 6, 26):  # merlons with embrasures between, cannon in each
-        p.box("detail", mx, 0.5, 17, 5.5, shade(stone, 1.06), "ashlar")
-        p.rect("detail", mx, 0.5, 17, 0.7, shade(stone, 1.25))
-        p.rect("detail", mx + 16.3, 0.5, 0.7, 5.5, shade(stone, 0.75))
-    for gx in range(23, W - 10, 26):
-        p.box("detail", gx - 3, 9, 6, 7, (104, 82, 60), "board", "v")  # the carriage
-        p.box("detail", gx - 1.6, 1.0, 3.2, 12, (84, 92, 78))
-        p.rect("detail", gx - 1.6, 1.0, 1.0, 12, (122, 130, 108))
-        p.ellipse("detail", gx, 1.4, 1.9, 1.0, (70, 76, 64))
-    # the square bastion tower at the north end
-    p.box("roof2", 880, 0, 80, 40, shade(stone, 1.02), "slabs")
-    p.rect("roof2", 880, 0, 80, 0.8, shade(stone, 1.24))
-    for mx in range(882, 958, 9):
-        p.box("tall", mx, 0, 6, 3, shade(stone, 1.08), "ashlar")
-    for my in range(5, 38, 9):
-        p.box("tall", 880, my, 3, 6, shade(stone, 1.12), "ashlar")
-        p.box("tall", 957, my, 3, 6, shade(stone, 0.9), "ashlar")
-    # the medina behind: white terraces, a few ochre houses, blue accents
-    walls = [(226, 224, 216), (230, 228, 222), (204, 186, 150), (224, 220, 210), (218, 214, 204)]
-    blue = (66, 100, 134)
-    for row, (y0, y1) in enumerate(((WW + 4, 66), (70, H + 2))):
-        x = 4.0 + row * 14
-        i = row
-        while x < W - 16:
-            if row == 0 and 872 < x + 40 and x < 962:
-                x = 962
-            w = rng.uniform(28, 48)
-            wall = walls[i % len(walls)]
-            L = "roof2" if rng.random() < 0.35 else "roof"
-            p.lip(x, y0, w, 5.5, wall, "render", max(1, int(w / 16)), glass=blue if rng.random() < 0.6 else (72, 64, 56), frame=None,
-                  arch=True, L=L)
-            p.flat_roof(x, y0 + 5.5, w, y1 - y0 - 5.5, wall, 1.1, L)
-            if rng.random() < 0.4:
-                p.stair_hut(x + rng.uniform(2, w - 12), y0 + 9, 10, 9, wall, blue, "detail")
-            if rng.random() < 0.3:
-                p.tank(x + w * 0.7, y0 + 22, 1.8, (160, 160, 156))
-            x += w + rng.uniform(0, 1.5)
-            if rng.random() < 0.15:
-                x += 5
-            i += 1
-    for _ in range(3):
-        p.palm(rng.uniform(80, 860), rng.uniform(70, 100), 9, (100, 112, 74))
-    p.save("assets/harbours/essaouira/skala.png")
+    """Essaouira: the Skala, the old sea bastion - the crenellated parapet along the
+    water, the stone wall-walk behind it and the bronze cannons on their timber carriages
+    pointing out to sea through the embrasures."""
+    p = Painter(1765, SK)
+    stone = (178, 164, 136)
+    ground(p, (150, 140, 118), "blocks", 8.0)
+    p.box("roof", 0, GROUND_Y, W, 30, shade(stone, 1.04), "ashlar", tk=8.0)  # the parapet
+    p.rect("roof", 0, GROUND_Y, W, 2.5, shade(stone, 1.25), 200)
+    embrasures = [120, 400, 680, 960]
+    for ex in embrasures:
+        p.rect("roof", ex - 34, GROUND_Y, 68, 30, (118, 108, 90))
+    p.box("ground", 0, GROUND_Y + 30, W, H - GROUND_Y - 30, (164, 152, 128), "flags", tk=9.0)  # the wall-walk
+    p.rect("ground", 0, GROUND_Y + 30, W, 10, SHADOW, 60)
+    for ex in embrasures:  # a cannon on its carriage in each embrasure, muzzle to the sea
+        p.box("detail", ex - 52, 54, 104, 70, (110, 88, 64), "board", "v", tk=8.0)
+        p.sphere("detail", ex - 44, 92, 14, (84, 70, 52), amb=0.45)
+        p.sphere("detail", ex + 44, 92, 14, (84, 70, 52), amb=0.45)
+        barrel = [(ex - 15, 22), (ex + 15, 22), (ex + 20, 100), (ex - 20, 100)]
+        p.poly("detail", barrel, (70, 84, 74))
+        p.poly("detail", [(ex - 15, 22), (ex - 5, 22), (ex - 7, 100), (ex - 20, 100)], (104, 122, 104))
+        p.ellipse("detail", ex, 22, 15, 5, (40, 44, 40))
+    p.save("assets/harbours/essaouira/skala.png", haze=0.10)
 
 
 def lunenburg_waterfront():
-    """Lunenburg: the red timber fish stores and chandleries of the old fishing town,
-    gable-end to the wharves with white trim and black roofs, and behind them the
-    painted houses with the town's 'bump' dormers and a white church spire."""
-    p = Painter(1753)  # the town's founding
-    rng = p.rng
-    Q = 22
-    p.box("ground", 0, Q, W, H - Q, (118, 116, 104), "grass")
-    p.box("ground", 0, 0, W, Q, (118, 104, 86), "board", "v")
-    p.rect("ground", 0, 0, W, 1.0, (152, 138, 114), 220)
-    for px in range(4, W, 12):
-        p.sphere("ground", px, 1.6, 1.1, (82, 74, 64), amb=0.45)
-    red = (138, 60, 50)
-    stores = [red, red, (172, 140, 80), red, (110, 120, 128), red]
-    x = 14.0
-    i = 0
-    while x < W - 80:
-        w = rng.uniform(64, 92)
-        d = rng.uniform(40, 50)
-        col = stores[i % len(stores)]
-        p.lip(x, Q + 1, w, 8, col, "board", 3, frame=(230, 228, 220), trim=(228, 226, 218))
-        p.rect("roof", x, Q + 1, 1.2, 8, (228, 226, 218))
-        p.rect("roof", x + w - 1.2, Q + 1, 1.2, 8, (228, 226, 218))
-        p.gable_roof(x, Q + 9, w, d, (70, 72, 74), "shingle")
-        p.gable_face(x, Q + 9, w, col, "plain", h=10, coping=(232, 230, 222), tex="board")
-        x += w + rng.uniform(14, 26)
-        i += 1
-    houses = [(184, 150, 84), (104, 120, 136), (130, 146, 118), (132, 66, 56), (212, 206, 192), (150, 110, 120), (96, 128, 128)]
-    x = 6.0
-    i = 0
-    while x < W - 30:  # the painted houses up the hill, with their bump dormers
-        w = rng.uniform(34, 46)
-        y0 = 76 + rng.uniform(-2, 3)
-        col = houses[i % len(houses)]
-        p.lip(x, y0, w, 6, col, "board", 2, frame=(230, 228, 220), L="roof2")
-        p.ridge_roof(x, y0 + 6, w, 30, (78, 80, 82), "shingle", 0.48, L="roof2")
-        p.dormer(x + w / 2 - 5, y0, 10, 12, (78, 80, 82), col, "shingle")
-        x += w + rng.uniform(4, 10)
-        if rng.random() < 0.3:
-            p.tree(x - 2, 104, 8, (90, 110, 76))
-        i += 1
-    p.tower(1000, 62, 16, (226, 224, 216), (222, 220, 212), None, 5, n=8, wall_tex="board")  # the white church spire
-    for _ in range(3):  # dories at the wharf
-        p.boat(rng.uniform(40, W - 60), 11, 16, 5, (196, 190, 176), (138, 116, 86))
-    p.save("assets/harbours/lunenburg/waterfront.png")
+    """Lunenburg: the big ox-blood red fishing warehouses of the waterfront, clapboard
+    with white trim, gable-end to the wharf, over the timber wharf, and a smaller ochre
+    building with black trim beside them."""
+    p = Painter(1753, SK)
+    ground(p, (128, 112, 92), "board", 9.0)
+    red = (136, 52, 42)
+    front(p, 14, 680, red, "board", 9.0, pitch=227, win=96, frame=FRAME_WHITE, doors={1: (226, 222, 212)})
+    roof_gable(p, 14, 680, (64, 66, 68), "shingle", barge=(232, 228, 218))
+    ochre = (206, 168, 84)
+    front(p, 760, 376, ochre, "board", 9.0, pitch=188, win=90, frame=(40, 40, 40))
+    roof_gable(p, 760, 376, (66, 68, 70), "shingle", barge=(44, 44, 44))
+    for bx in (60, 400, 860):  # bollards of timber on the wharf
+        p.sphere("detail", bx, 20, 12, (96, 82, 64), amb=0.45)
+    p.save("assets/harbours/lunenburg/waterfront.png", haze=0.10)
 
 
 def st_helena_jamestown():
-    """Jamestown, St Helena: the town's one street of Georgian houses squeezed into a
-    narrow valley between steep dark volcanic cliffs, the sea wall and landing, the
-    church at the valley mouth, and the long straight stair of Jacob's Ladder."""
-    p = Painter(1659)
+    """St Helena, Jamestown: the wharf's basalt paving, a Georgian house in cream render
+    with a grey hipped roof, and the dark cliff of the valley's side rising beside it."""
+    p = Painter(1659, SK)
+    ground(p, (88, 86, 82), "blocks", 8.0)
+    cream = (222, 212, 186)
+    front(p, 14, 620, cream, "render", 6.0, pitch=207, win=88, frame=FRAME_WHITE, doors={1: (70, 84, 72)})
+    roof_hip(p, 14, 620, (100, 104, 104), "slate")
+    pts = [(700, GROUND_Y + 4), (W, GROUND_Y)]
+    xx = W
     rng = p.rng
-    V0, V1 = 450, 700
-    p.box("ground", V0 - 40, 0, V1 - V0 + 80, H, (150, 140, 120), "flags")
-    p.box("ground", V0 - 40, 0, V1 - V0 + 80, 9, (120, 118, 112), "blocks")  # the sea wall
-    p.rect("ground", V0 - 40, 0, V1 - V0 + 80, 0.8, (160, 158, 150), 220)
-    cliff = (82, 72, 66)
-    for side in (0, 1):  # the two cliffs, falling to the sea
-        if side == 0:
-            pts = [(0, 0), (V0 - 6, 0), (V0 + 6, 20), (V0 + 4, 60), (V0 + 14, H), (0, H)]
-        else:
-            pts = [(W, 0), (V1 + 6, 0), (V1 - 6, 24), (V1 - 2, 60), (V1 - 12, H), (W, H)]
-        p.plane("roof", pts, cliff, "rock")
-        edge = pts[1:5] if side == 0 else pts[1:5]
-        p.line("roof", edge, (40, 36, 34), 160, 0.8)
-    relief = Image.new("RGBA", (W * SS, H * SS), (0, 0, 0, 0))
-    rd = ImageDraw.Draw(relief, "RGBA")
-    for side in (0, 1):  # the cliffs' relief: ridges lit on their left, gullies in shade
-        for _ in range(14):
-            gx = rng.uniform(20, V0 - 50) if side == 0 else rng.uniform(V1 + 40, W - 20)
-            pts = [(gx, rng.uniform(-4, 6))]
-            while pts[-1][1] < H + 6:
-                pts.append((pts[-1][0] + rng.uniform(-6, 6), pts[-1][1] + rng.uniform(6, 14)))
-            wd = rng.uniform(6, 14)
-            lit = [(x - wd * rng.uniform(0.6, 1.0), y) for x, y in pts]
-            dark = [(x + wd * rng.uniform(0.6, 1.0), y) for x, y in pts]
-            rd.polygon([(x * SS, y * SS) for x, y in pts + lit[::-1]], fill=(222, 206, 180, 50))
-            rd.polygon([(x * SS, y * SS) for x, y in pts + dark[::-1]], fill=SHADOW + (80,))
-    relief = relief.filter(ImageFilter.GaussianBlur(2.5 * SS))
-    ra = np.asarray(relief, np.uint8).copy()
-    ra[..., 3] = (ra[..., 3].astype(np.float32) * (np.asarray(p.layers["roof"].getchannel("A"), np.float32) / 255)).astype(np.uint8)
-    p.layers["roof"].alpha_composite(Image.fromarray(ra, "RGBA"))
-    for _ in range(40):  # scrub and green ledges clinging to the cliffs
-        gx = rng.choice((rng.uniform(20, V0 - 30), rng.uniform(V1 + 30, W - 20)))
-        p.tree(gx, rng.uniform(14, H - 6), rng.uniform(2.5, 5), (96, 108, 78), lumps=3, L="detail")
-    # Jacob's Ladder: a straight stair up the western cliff
-    a, b = (V0 + 2, 64), (V0 - 150, H + 2)
-    p.line("detail", [a, b], (196, 190, 176), 255, 2.4)
-    for k in range(60):
-        t = k / 60
-        x, y = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
-        p.line("detail", [(x - 0.4, y - 1.4), (x + 0.4, y + 1.4)], (130, 124, 112), 200, 0.25)
-    walls = [(222, 218, 206), (212, 196, 152), (196, 204, 194), (220, 206, 190), (214, 212, 202)]
-    roofs = [(84, 88, 94), (128, 74, 64), (92, 96, 100)]
-    # the church at the valley mouth, then the houses up the street
-    p.lip(V0 + 8, 11, 44, 8, (214, 208, 196), "ashlar", 2, arch=True, frame=None)
-    p.ridge_roof(V0 + 8, 19, 44, 34, (84, 88, 94), "slate", 0.5)
-    p.tower(V0 + 12, 2, 15, (214, 208, 196), (84, 88, 94), "slate", 5)
-    for row, y0 in enumerate((12, 52, 84)):
-        x = V0 + (60 if row == 0 else 20 + row * 6)
-        i = row * 2
-        while x < V1 - 28 - row * 4:
-            w = rng.uniform(24, 34)
-            col = walls[i % len(walls)]
-            p.lip(x, y0, w, 7, col, "render", 2, frame=(236, 234, 226))
-            if rng.random() < 0.5:
-                p.hip_roof(x, y0 + 7, w, 26, rng.choice(roofs), "slate")
-            else:
-                p.ridge_roof(x, y0 + 7, w, 26, rng.choice(roofs), "slate", 0.5)
-            x += w + rng.uniform(0.5, 2)
-            i += 1
-    for _ in range(4):
-        p.tree(rng.uniform(V0 + 40, V1 - 40), rng.uniform(44, 50), rng.uniform(5, 7), (86, 106, 72))
-    p.save("assets/harbours/st_helena/jamestown.png", fade=0)
+    while xx > 700:
+        pts.append((xx, H))
+        xx -= rng.uniform(40, 90)
+    pts += [(700, H), (680, 60)]
+    p.plane("tall", [(690, GROUND_Y + 6), (W, GROUND_Y + 2), (W, H), (720, H), (680, 64)], (96, 84, 72), "rock", tk=6.0)
+    for _ in range(6):  # scrub on the cliff
+        p.tree(rng.uniform(760, W - 30), rng.uniform(40, 100), rng.uniform(14, 26), (92, 106, 70), lumps=4)
+    p.save("assets/harbours/st_helena/jamestown.png", fade=0, haze=0.10)
 
 
 ALL = {f.__name__: f for f in (nordic_timber, gabled_waterfront, atlantic_stone, mediterranean, aegean_island, stone_town,
-                               tropical_town, tropical_island, volcanic_island, valletta_bastions, symi_harbour,
+                               tropical_town, tropical_island, volcanic_island, nyhavn, valletta_bastions, symi_harbour,
                                essaouira_skala, lunenburg_waterfront, st_helena_jamestown)}
 
 if __name__ == "__main__":

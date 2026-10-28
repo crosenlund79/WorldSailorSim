@@ -57,8 +57,11 @@ not amber; night is a deep blue-grey with warm lamps and cool LED instruments.
   panels) at a scale that reads at 1×.
 - **Colour:** natural and subdued. Saturation comes from small accents (a red
   ensign, a yellow buoy, an orange fender, nav lights), never whole surfaces.
-- **Proportion:** real objects at real sizes. A scene unit is about 2.5 cm;
-  the captain is 40 units across the shoulders.
+- **Proportion:** real objects at real sizes. A scene unit is about 1 cm
+  (measured on the boats as painted in I025: the Starling 33's hull is 1000
+  units for 10 m); the captain is 40 units across the shoulders. Harbour
+  houses, quay fittings and neighbouring boats use the same scale
+  (`HarbourDressing.METRE`).
 - **Avoid:** parchment, brass frames, toy-round buttons, hand-lettered UI,
   glossy photo textures, 3D renders, global desaturation filters.
 

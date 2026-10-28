@@ -17,9 +17,9 @@ const TAPE := Color("#9A7348")
 const INK := Color(0.12, 0.12, 0.1, 0.6)
 const SHADOW := Color(0.02, 0.04, 0.05, 0.24)
 ## Half the opening's width, its depth (top view) and the front wall's height.
-const HALF_WIDTH := 24.0
-const DEPTH := 18.0
-const WALL := 14.0
+const HALF_WIDTH := 15.0
+const DEPTH := 11.0
+const WALL := 9.0
 ## The front rim's middle, relative to the box's ground point (a perch).
 const RIM := Vector2(0.0, -WALL)
 
@@ -44,22 +44,22 @@ static func _opening() -> PackedVector2Array:
 
 static func draw_back(canvas: CanvasItem) -> void:
 	var o := _opening()
-	canvas.draw_colored_polygon(PackedVector2Array([Vector2(-HALF_WIDTH - 2, 2), Vector2(HALF_WIDTH + 6, 2),
-		Vector2(HALF_WIDTH + 8, -6), Vector2(-HALF_WIDTH, -6)]), SHADOW)
+	canvas.draw_colored_polygon(PackedVector2Array([Vector2(-HALF_WIDTH - 1, 2), Vector2(HALF_WIDTH + 5, 2),
+		Vector2(HALF_WIDTH + 6, -5), Vector2(-HALF_WIDTH, -5)]), SHADOW)
 	# Back flap folded out (leaning back), side flaps folded out sideways.
-	var back_flap := PackedVector2Array([o[0], o[1], o[1] + Vector2(3, -11), o[0] + Vector2(-3, -11)])
+	var back_flap := PackedVector2Array([o[0], o[1], o[1] + Vector2(2, -7), o[0] + Vector2(-2, -7)])
 	canvas.draw_colored_polygon(back_flap, CARD_DARK)
 	canvas.draw_polyline(_closed(back_flap), INK, 1.0, true)
 	for left in [true, false]:
 		var a: Vector2 = o[0] if left else o[1]
 		var b: Vector2 = o[3] if left else o[2]
-		var out := Vector2(-10.0 if left else 10.0, 3.0)
+		var out := Vector2(-6.5 if left else 6.5, 2.0)
 		var flap := PackedVector2Array([a, b, b + out, a + out + Vector2(0, -2)])
 		canvas.draw_colored_polygon(flap, CARD_LIGHT if left else CARD)
 		canvas.draw_polyline(_closed(flap), INK, 1.0, true)
 	# The inside, darker towards the back.
 	canvas.draw_colored_polygon(o, INSIDE)
-	canvas.draw_colored_polygon(PackedVector2Array([o[0], o[1], o[1] + Vector2(0, 6), o[0] + Vector2(0, 6)]), INSIDE.darkened(0.2))
+	canvas.draw_colored_polygon(PackedVector2Array([o[0], o[1], o[1] + Vector2(0, 4), o[0] + Vector2(0, 4)]), INSIDE.darkened(0.2))
 
 
 static func draw_front(canvas: CanvasItem) -> void:
@@ -67,11 +67,11 @@ static func draw_front(canvas: CanvasItem) -> void:
 	var wall := PackedVector2Array([o[3], o[2], Vector2(HALF_WIDTH, 0), Vector2(-HALF_WIDTH, 0)])
 	canvas.draw_colored_polygon(wall, CARD)
 	# Light on the left, a darker crease at the bottom.
-	canvas.draw_colored_polygon(PackedVector2Array([o[3], o[3] + Vector2(10, 0), Vector2(-HALF_WIDTH + 10, 0), Vector2(-HALF_WIDTH, 0)]), Color(CARD_LIGHT, 0.5))
-	canvas.draw_line(Vector2(-HALF_WIDTH, -1.5), Vector2(HALF_WIDTH, -1.5), Color(CARD_DARK, 0.7), 1.5, true)
+	canvas.draw_colored_polygon(PackedVector2Array([o[3], o[3] + Vector2(7, 0), Vector2(-HALF_WIDTH + 7, 0), Vector2(-HALF_WIDTH, 0)]), Color(CARD_LIGHT, 0.5))
+	canvas.draw_line(Vector2(-HALF_WIDTH, -1.0), Vector2(HALF_WIDTH, -1.0), Color(CARD_DARK, 0.7), 1.2, true)
 	# A strip of tape down the middle and the front flap, folded down over it.
-	canvas.draw_rect(Rect2(-3.5, -WALL, 7.0, WALL), TAPE)
-	var flap := PackedVector2Array([o[3], o[2], o[2] + Vector2(1, 5), o[3] + Vector2(-1, 5)])
+	canvas.draw_rect(Rect2(-2.5, -WALL, 5.0, WALL), TAPE)
+	var flap := PackedVector2Array([o[3], o[2], o[2] + Vector2(1, 3), o[3] + Vector2(-1, 3)])
 	canvas.draw_colored_polygon(flap, CARD_LIGHT)
 	canvas.draw_polyline(_closed(wall), INK, 1.1, true)
 	canvas.draw_polyline(_closed(flap), INK, 0.9, true)

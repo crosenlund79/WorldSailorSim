@@ -22,7 +22,7 @@ extends Node
 
 ## How far from the gangplank the box stands (between the service slots at
 ## ±215 and ±430, clear of the companions' places on the pontoon).
-const BOX_OFFSET := 320.0
+const BOX_OFFSET := 300.0
 ## How close it keeps to the Captain while following.
 const FOLLOW_GAP := 38.0
 const FOLLOW_START := 70.0
@@ -96,12 +96,14 @@ func refresh() -> void:
 func _build(animal_kind: StringName, port: String) -> void:
 	kind = animal_kind
 	var strip := shore.get_shore_rect()
-	_side = 1.0 if absi(hash(port)) % 2 == 0 else -1.0
+	# Downstream of the gangplank, away from the harbour's name painted on
+	# the pontoon on the other side (BoatArea), near the pontoon's edge.
+	_side = 1.0
 	var x := shore.get_plank_x() + BOX_OFFSET * _side
-	if x > strip.end.x - 40.0 or x < strip.position.x + 40.0:
-		_side = -_side
+	if x > strip.end.x - 40.0:
+		_side = -1.0
 		x = shore.get_plank_x() + BOX_OFFSET * _side
-	_box_at = Vector2(clampf(x, strip.position.x + 40.0, strip.end.x - 40.0), strip.position.y + strip.size.y * 0.5)
+	_box_at = Vector2(clampf(x, strip.position.x + 40.0, strip.end.x - 40.0), strip.position.y + minf(30.0, strip.size.y * 0.4))
 	_box_back = DockBox.new()
 	_box_back.name = "DockBoxBack"
 	_box_back.part = DockBox.Part.BACK
@@ -134,10 +136,10 @@ func _build(animal_kind: StringName, port: String) -> void:
 func _home() -> Vector2:
 	match kind:
 		CompanionState.KIND_DOG:
-			return _box_at + Vector2((DockBox.HALF_WIDTH + 20.0) * -_side, 4.0)
+			return _box_at + Vector2((DockBox.HALF_WIDTH + 14.0) * -_side, 3.0)
 		CompanionState.KIND_PARROT:
 			return _box_at + DockBox.RIM
-	return _box_at + Vector2(0.0, -5.0)
+	return _box_at + Vector2(0.0, -DockBox.WALL * 0.45)
 
 
 func _clear() -> void:

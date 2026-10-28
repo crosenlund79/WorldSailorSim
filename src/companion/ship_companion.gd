@@ -983,8 +983,10 @@ func _draw_texture_in(texture: Texture2D, rect: Rect2, flip: bool, alpha: float,
 	rect.position.y = bottom - rect.size.y
 	if flip:
 		# Mirrored about the ground point (x = 0), so it turns on the spot.
+		# A negative width flips the texture but is still drawn from the
+		# rect's position to the right (I025: the extra shift that drew every
+		# left-facing animal one width to the right is gone).
 		rect.position.x = -rect.end.x
-		rect.position.x += rect.size.x
 		rect.size.x = -rect.size.x
 	draw_texture_rect(texture, rect, false, Color(1, 1, 1, alpha))
 

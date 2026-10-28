@@ -2,6 +2,8 @@
 
 > **Real Horizon (Great Handover):** the looks and special harbours were repainted top-down in the official style by `tools/harbours/paint_harbour_looks.py`; the choice of look per harbour below is unchanged. See `DEV_GUIDES/ART_DIRECTION.md`.
 
+> **I025 (A Little More Room Aboard):** repainted again at the boats' true scale (about 1 cm per scene unit): each strip now shows one or two full-size buildings of its region rather than a row of small houses, and the generated town behind it uses the same scale (`HarbourDressing.METRE`). The choice of look per harbour is unchanged.
+
 What every harbour looks like beyond the guest pontoon, as set in `data/harbours/harbour_looks.json` (the source; this page is generated from it). Looks are chosen per harbour by its buildings, materials, land and climate, never by the continent alone: New Zealand's timber towns share the Nordic look, Willemstad's and Cape Town's gabled waterfronts share Denmark's, Hobart's sandstone docks share Scotland's stone, and Dakar does not look like Morocco.
 
 Each look is one original illustration painted by `tools/harbours/paint_harbour_looks.py` in the hand-drawn style of Copenhagen's Nyhavn strip (2300 × 220 px, drawn 1150 × 110 scene units beyond the quay). The same illustration is shared by every harbour of that look, loaded the first time it is needed and kept.
