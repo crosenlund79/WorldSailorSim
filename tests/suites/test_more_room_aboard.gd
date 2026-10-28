@@ -120,6 +120,7 @@ func _test_old_saves() -> void:
 	file.store_string(fixture)
 	file.close()
 	var loaded := SaveManager.load_from_slot(3)
+	SaveManager.delete_slot(3)  # the slots stay empty for the suites after this one
 	if t.check(loaded.is_ok(), "[old saves] the pre-I024 save loads"):
 		var state := loaded.state
 		t.check(state.companions.size() == 1 and state.companion.kind == CompanionState.KIND_DOG and state.companion.id == 1,
