@@ -123,6 +123,7 @@ func _ready() -> void:
 	_setup_water_life()
 	_setup_water_look()
 	_setup_cabin_windows()
+	CabinSeaBackdrop.attach(self)  # I025: the faded sea outside the cabin (nothing on deck)
 	_setup_anchor_ambience()
 	_setup_camera()
 	_setup_lighting()

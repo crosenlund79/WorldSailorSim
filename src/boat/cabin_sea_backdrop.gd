@@ -21,9 +21,11 @@ extends Node2D
 ## and leaving out the cabin sole, which the opaque cabin art covers), one
 ## small vertex-coloured mesh for the veil, one rectangle for the pontoon; the
 ## veil is rebuilt only when the light changes (checked every
-## REFRESH_SECONDS). Measured on the software renderer (llvmpipe, 1600x900,
-## Wing 33 cabin): about +40 ms a frame with the whole rectangle shaded,
-## see the report in docs for the cut mesh.
+## REFRESH_SECONDS). The shader is the deck's own, which the deck draws over
+## the whole screen; here it covers less (the sole is cut out). Measured on
+## the software renderer (llvmpipe, 1600x900, Wing 33 cabin, same session):
+## about 68 -> 94 ms a frame with it, against 108 -> 149 ms before the sole
+## was cut out (not measured on a GPU or on Windows).
 ##
 ## BoatArea adds it with one call: CabinSeaBackdrop.attach(self).
 
