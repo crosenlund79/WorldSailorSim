@@ -2,8 +2,9 @@
 
 *Illustrated Mariner × Atmospheric Sailing Simulator. Visual realism 7/10.*
 
-A visual-only conversion of Little Captain's Hat in this experimental
-repository. Gameplay, data, saves and the creator-art pipeline are unchanged.
+A visual-only conversion of Little Captain's Hat, made official at the Great
+Handover (Operation New Horizon), when I021–I023 were merged into it; see
+[DEVELOPMENT_HISTORY.md](../../DEVELOPMENT_HISTORY.md). Gameplay, data, saves and the creator-art pipeline are unchanged.
 The art direction is in [DEV_GUIDES/ART_DIRECTION.md](../../../DEV_GUIDES/ART_DIRECTION.md).
 
 ## What was transformed
@@ -33,7 +34,7 @@ Go Ashore, the reel and the voyage overview.
 
 - The **Classic** artwork setting still shows the old procedural placeholder art (it
   is the fallback the creator pipeline keeps; the default is the new look).
-- Harbour towns are generated per archetype; only Copenhagen has a landmark.
+- Harbour towns: the I021 harbour looks and six special harbours (repainted top-down at the handover) cover most harbours; the rest show the generated regional town.
 - The neighbours across the fairway are simple and only partly in view on the larger boats.
 - Weather has no cloud-cover simulation, so "overcast" is derived from the weather class.
 
@@ -43,4 +44,4 @@ Go Ashore, the reel and the voyage overview.
   changes: sailcloth colours in `data/harbours/trades/trades.json`.
 - Creator art untouched: `Visuals/` and `art_replacements/` were not modified; every
   generated file keeps its path, canvas and id, so ArtworkResolver replacements still win.
-- Tests: 4704 checks; style assertions updated for the new fonts and the new guide.
+- Tests at the conversion: 4704 checks; style assertions updated for the new fonts and the new guide. The post-merge regression is in the handover report.

@@ -3,39 +3,39 @@
  "about": "Fingerprints of each .gd file when its entries in the three GDScript guides were last reviewed. Update only with tools/docs/check_gdscript_guides.py --acknowledge after a review.",
  "scripts": {
   "src/aboard/anchor_ambience.gd": {
-   "sha": "3dfc0a174dea3fac",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "3a13b442a65a2a67",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/anchor_life.gd": {
-   "sha": "637eeb0cca991aaa",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "1087c1e52ef51c96",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/cabin_decor.gd": {
-   "sha": "3035fb8687a36b97",
-   "reviewed": "2026-10-27",
-   "note": "brass compass; second placement pass"
+   "sha": "4da7b54c5175a6cf",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/coffee_mug.gd": {
-   "sha": "7591f61fef11b354",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "42b60049c7a8c78b",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/galley_stove.gd": {
-   "sha": "8bb043abd03c4904",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "8d2c5593bbd17ab7",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/rod_holder.gd": {
-   "sha": "ba8c39aa4ff2e659",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "01bdf46aa4fe1b26",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/trophy_board.gd": {
-   "sha": "4aca6f2400527c05",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "5f2413950233dae4",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/windlass.gd": {
    "sha": "4b5be5feae75a0b8",
@@ -72,6 +72,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/art/marine_palette.gd": {
+   "sha": "80d79e76b9672d30",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+  },
   "src/audio/audio_manager.gd": {
    "sha": "1b0cb38f92bb1b44",
    "reviewed": "2026-10-27",
@@ -88,14 +93,14 @@
    "note": "I022 wind volume"
   },
   "src/boat/anchor_signals.gd": {
-   "sha": "a24007421ad50d1e",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "79921fe486ec7a6c",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/boat_area.gd": {
-   "sha": "e0cc46c5d9189453",
-   "reviewed": "2026-10-27",
-   "note": "I022 ShallowWater under WaterLife"
+   "sha": "63da22503fd000f0",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/boat_fixture.gd": {
    "sha": "cb427e4ff17e7ac7",
@@ -103,19 +108,19 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/boat/boat_lighting.gd": {
-   "sha": "4fef49be7390cc64",
+   "sha": "616fa0444b924ab5",
    "reviewed": "2026-10-28",
-   "note": "Golden Harbours: static overcast_of shared"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/cabin_windows.gd": {
-   "sha": "43f83f9030a83b7d",
+   "sha": "5e4dc46d656955d6",
    "reviewed": "2026-10-28",
-   "note": "Uses BoatLighting.overcast_of"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/cabin_world_map.gd": {
-   "sha": "7af0d7e4aa6154f0",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "25405b12759b9069",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/fender_stowage.gd": {
    "sha": "315aff909bba2830",
@@ -123,14 +128,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/boat/provision_display.gd": {
-   "sha": "0fd4202c19bcd94e",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "5bb0e05cf0dfaa45",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/sail_rig.gd": {
-   "sha": "88ec65f04dbc67f1",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "2a2d6c26a99cee67",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/shallow_water.gd": {
    "sha": "ad93d276dcd70921",
@@ -173,9 +178,9 @@
    "note": "I022 windows and softer water"
   },
   "src/boat/weather_visuals.gd": {
-   "sha": "3d92b4ff77547e19",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "19159ef017a7f210",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat_care/boat_care.gd": {
    "sha": "f64897cac45ebfbd",
@@ -213,9 +218,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/companion/ship_companion.gd": {
-   "sha": "a57819c1d9f31bbb",
-   "reviewed": "2026-10-27",
-   "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
+   "sha": "707ab304a7f62f35",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/core/academy.gd": {
    "sha": "382366535e0b01c1",
@@ -378,9 +383,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_dressing.gd": {
-   "sha": "70091c165d333657",
-   "reviewed": "2026-10-27",
-   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
+   "sha": "a2a3ff6196419885",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/harbour/harbour_facilities.gd": {
    "sha": "89468fd9d1acf16e",
@@ -398,14 +403,14 @@
    "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
   },
   "src/harbour/harbour_trades.gd": {
-   "sha": "7f7cd0c7d12d1f2a",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "f15228d421b2cb1a",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/harbour/shore_access.gd": {
-   "sha": "4d797172dd771675",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "bf9b38f0b54f16bf",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/harbour/shore_events.gd": {
    "sha": "66c4502529141751",
@@ -428,14 +433,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/hat/hat_drawing.gd": {
-   "sha": "538e63408f0a0f19",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "9f02ea5d0a1c0f0c",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/hat/hat_hook.gd": {
-   "sha": "89b7a756899dab05",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "91e3e156926d7bcf",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/hat/hat_story.gd": {
    "sha": "3b7a963503043da3",
@@ -458,9 +463,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/interaction/interactable.gd": {
-   "sha": "ea800ba5922f5652",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "e52b9f599c698ff0",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/interaction/interaction_sensor.gd": {
    "sha": "26b448b60c4dc21a",
@@ -498,9 +503,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/map_view.gd": {
-   "sha": "4f1eb4670aa6116d",
-   "reviewed": "2026-10-27",
-   "note": "I021: special star outside the selection ring (entry still accurate)"
+   "sha": "ed78d23a1a451c32",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/navigation/nav_grid.gd": {
    "sha": "630855214a2c8a0d",
@@ -548,9 +553,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/weather_legend.gd": {
-   "sha": "78fbad1df8da5777",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "01cd41ce5bab6be4",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/navigation/weather_style.gd": {
    "sha": "18a0829eb7ec0423",
@@ -588,9 +593,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/player/sailor_drawing.gd": {
-   "sha": "09860300810d9dbb",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "3dbeae4873a1329c",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/sailing/propulsion_controller.gd": {
    "sha": "613e110f5aa90235",
@@ -613,9 +618,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/settings/settings_manager.gd": {
-   "sha": "04c83e38b8fc4fcd",
-   "reviewed": "2026-10-27",
-   "note": "I022 Captain's Academy"
+   "sha": "b8807019fbeb2a26",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/skills/timing_check.gd": {
    "sha": "9128e4ade8419976",
@@ -623,9 +628,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/aboard_badge.gd": {
-   "sha": "6e4c251ca656e9a5",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "eb5847aaec317297",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/academy_guide.gd": {
    "sha": "aab82ccffc44ac4c",
@@ -638,9 +643,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/anchor_menu.gd": {
-   "sha": "57dbe19f810164dc",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "1d4772714e8a6317",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/anchorage_prompt.gd": {
    "sha": "0b3ab1054038da6d",
@@ -668,14 +673,14 @@
    "note": "Steady Hands (UI reliability)"
   },
   "src/ui/captains_log_menu.gd": {
-   "sha": "b31e5c66eb208430",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "abac252a9a9a60ba",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/catch_badge.gd": {
-   "sha": "38bc607b427410d0",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "1fef5190dc61a0c4",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/chandlery_menu.gd": {
    "sha": "3b23d76bd1ef2610",
@@ -683,9 +688,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/chart_plotter.gd": {
-   "sha": "323268798a3a3641",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "79f223fe8ce37376",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/confirm_dialog.gd": {
    "sha": "bbb4419200262f72",
@@ -693,9 +698,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/cooking_menu.gd": {
-   "sha": "a1e2c92bb2e72ec1",
+   "sha": "e49668a1bfdade9e",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands (UI reliability)"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/dev_guides_menu.gd": {
    "sha": "bf781211bd6f3dd9",
@@ -733,9 +738,9 @@
    "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/ui/go_ashore_menu.gd": {
-   "sha": "aec8dedf030fcb58",
+   "sha": "08ce3142d28b9104",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands (UI reliability)"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/grocery_menu.gd": {
    "sha": "99a7046b0e3715df",
@@ -748,14 +753,14 @@
    "note": "I022 Captain's Academy"
   },
   "src/ui/harbour_moment.gd": {
-   "sha": "f41862bc84b6dc10",
+   "sha": "611267f0011c4fb6",
    "reviewed": "2026-10-28",
-   "note": "New: Golden Harbour Moment card"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/hat_badge.gd": {
-   "sha": "debcc2db31dc2766",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "2a2ec9d467bfda9e",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/haul_out_panel.gd": {
    "sha": "a7feead3de6eacde",
@@ -763,14 +768,19 @@
    "note": "Steady Hands (UI reliability)"
   },
   "src/ui/haul_out_scene.gd": {
-   "sha": "ecbfbfa941ccc25b",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "fdc270e8e76b3c38",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/hud.gd": {
    "sha": "b963edadbe5e9522",
    "reviewed": "2026-10-28",
    "note": "Steady Hands (UI reliability)"
+  },
+  "src/ui/instrument_draw.gd": {
+   "sha": "5bc575b51871d081",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/language_picker.gd": {
    "sha": "5174b4aa42a259ea",
@@ -778,9 +788,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/loading_screen.gd": {
-   "sha": "26b7a70fe9312e57",
-   "reviewed": "2026-10-27",
-   "note": "I022 navy loading screen"
+   "sha": "a19337a583a9a6ae",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/main_menu.gd": {
    "sha": "d0658dd78d228e31",
@@ -823,9 +833,9 @@
    "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/ui/postcard_view.gd": {
-   "sha": "a7bdedc3d9586c55",
-   "reviewed": "2026-10-27",
-   "note": "I022 pastimes and the one clock for hours-long tasks"
+   "sha": "2dbb6c96fcf358fe",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/provisions_menu.gd": {
    "sha": "0048b26b1806f0f1",
@@ -838,14 +848,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/radar_panel.gd": {
-   "sha": "3ad0d7f5ee70845b",
-   "reviewed": "2026-10-27",
-   "note": "radar only underway"
+   "sha": "f39b00f95cfa464b",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/reel_dial.gd": {
-   "sha": "07855b87c8f876dc",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "ba5768a0edc27325",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/rescue_dialog.gd": {
    "sha": "4744edd8a4a648e2",
@@ -853,9 +863,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/sail_trim_panel.gd": {
-   "sha": "6db2ba3ee7ff6391",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "78a0279c6a5317f2",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/sailing_panel.gd": {
    "sha": "351d82bc24c92b8e",
@@ -878,14 +888,14 @@
    "note": "I022 pastimes and the one clock for hours-long tasks"
   },
   "src/ui/settings_menu.gd": {
-   "sha": "68933c341e68dd82",
+   "sha": "bfff2724ac0a13b2",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands (UI reliability)"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/simple_panel.gd": {
-   "sha": "fd078dfabae6e16d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "c2f4b9e2faf0cc4e",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/sleep_menu.gd": {
    "sha": "736d30f7a51f9fb6",
@@ -893,19 +903,19 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/theme/ui_theme.gd": {
-   "sha": "716a85ea0f70a435",
+   "sha": "6876c684e9dfafb2",
    "reviewed": "2026-10-28",
-   "note": "Steady Hands: day/night switch at mid-twilight with hysteresis; text roles snap"
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/time_controls.gd": {
-   "sha": "f9f3d32d9ad81c31",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "ee316d1909222f11",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/time_passage.gd": {
-   "sha": "e8d1c5168ba46b48",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "138ad8502c6c04e2",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/toasts.gd": {
    "sha": "7eabb30c11ff288d",
@@ -933,9 +943,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/voyage_map.gd": {
-   "sha": "c6c90beae462f3b0",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "374a6e8eeac70f9d",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/work_menu.gd": {
    "sha": "af73498594e3d7cb",
@@ -952,10 +962,15 @@
    "reviewed": "2026-10-27",
    "note": "I022 boats and difficulty"
   },
+  "src/water/sea_surface.gd": {
+   "sha": "9700dfbfc9dad7a0",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+  },
   "src/water/water_life.gd": {
-   "sha": "5bd4e07881db7e38",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "41b0cc9117e1e64e",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/weather/weather_event.gd": {
    "sha": "7eb9a0ca687426b1",
@@ -988,9 +1003,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/world/daylight.gd": {
-   "sha": "8553cf8013e97662",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "1451bdfab8aefd18",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/benchmark.gd": {
    "sha": "5c1d2f8f5205cb11",
@@ -1092,6 +1107,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "tests/screenshots_horizon.gd": {
+   "sha": "3c90274bfba35494",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+  },
   "tests/screenshots_i021.gd": {
    "sha": "4d3ac015a0b94d0e",
    "reviewed": "2026-10-27",
@@ -1133,9 +1153,9 @@
    "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "32d73f7c86071676",
-   "reviewed": "2026-10-27",
-   "note": "I022 version 0.109a"
+   "sha": "bb5cce0d78ad1e3b",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_cabin_windows.gd": {
    "sha": "9ce202d5cda1ec1f",
@@ -1173,9 +1193,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_chartroom_ui.gd": {
-   "sha": "699e9f25255792e3",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "2d672eb94839cfdd",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_coastal_depth.gd": {
    "sha": "e87be42ae2076a8b",
@@ -1223,9 +1243,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_dev_guides.gd": {
-   "sha": "e5d1bc1c5f3b1a8a",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "72b9f82066f1a038",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_diagnostics.gd": {
    "sha": "85e1c8b0085b1e52",
@@ -1443,9 +1463,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_visual_prototype.gd": {
-   "sha": "a8a49ae7a3bc9efe",
-   "reviewed": "2026-10-27",
-   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
+   "sha": "3972a55c811a1f78",
+   "reviewed": "2026-10-28",
+   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "tests/suites/test_voyage_persistence.gd": {
    "sha": "8a7b116f4bb8814e",

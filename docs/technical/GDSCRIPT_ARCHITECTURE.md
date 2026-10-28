@@ -258,6 +258,17 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** none direct; indirect via `app.router` in app-instancing suites (e.g. `tests/suites/test_anchor_life.gd`).
 - **Change risks:** callers rely on `is_busy()` to gate input; ignored changes during a transition are silent (warning only); making it awaitable differently breaks tests that wait on `router.is_busy()`.
 
+### `src/art/marine_palette.gd`
+
+- **Role:** class_name `MarinePalette`, extends RefCounted; Real Horizon's shared material colours (constants) and `sea_colour(coastal, storm)`.
+- **Depends on:** Nothing. Mirrored for the painters by `tools/art/marine_palette.py`.
+- **State:** None.
+- **Lifecycle:** Static use only.
+- **Performance:** Constants.
+- **Invariants:** Materials in neutral daylight; light and weather are applied on top (BoatLighting, SeaSurface), never baked in.
+- **Tests:** Indirect (every deck scene in the suites draws with it).
+- **Change risks:** Global look; keep the Python palette in step.
+
 ### `src/core/academy.gd`
 
 - **Role:** class_name `Academy`, extends RefCounted, static only (I022). Data: `data()`, `categories()`, `pages()`, `page(id)`, `category_title`, `search(query)` (all words in Loc.t title + `fill(text)` + chapter). Keys: `key(action)` (InputMap events → `DisplayServer.keyboard_get_keycode_from_physical` except headless → `OS.get_keycode_string`, arrows/Esc via `ARROWS`; "move" = WASD / arrows; `FIXED_KEYS` handbook F1, quicksave F5, quickload F9, delete_waypoint Delete, anchorage_key M), `fill(text)` (Loc.t then `{name}` → `key(name)`). Progress: states `NEVER_OFFERED` "", `ACTIVE`, `SKIPPED`, `DONE`; `first_voyage_state`, `current_step`, `begin_first_voyage`, `skip_first_voyage`, `complete_step`, `steps()`, `tip(id)`, `is_tip_seen`, `mark_tip_seen`, `reset_tips`.
@@ -753,6 +764,28 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Invariants:** The committed course is untouched until Apply, and only a valid draft (plus valid anchorages) can be applied. Waypoints released on land snap to `nearest_navigable` within `WAYPOINT_SNAP_NM` or are removed. Dream mode samples no weather and changes nothing.
 - **Tests:** `tests/suites/test_chartroom_ui.gd`, `test_navigation_views.gd`, `test_anchorage.gd`, `test_anchorage_overlay.gd`, `test_chart_and_pause.gd`, `test_gameplay_flow.gd`, `test_route_wrap.gd`, `test_regions.gd`, `test_weather_ui.gd`, `test_wind_overlay.gd`, `test_cozy_polish.gd`, `test_harbour_chart.gd`, and others; benchmarks `tests/benchmark*.gd`; screenshots `tests/screenshots_16/17/18.gd`.
 - **Change risks:** Many tests drive it through public methods (`plot_course_to`, `insert_waypoint`, `apply_course`, `toggle_anchorage`, `search_harbours`) and node names (`HarbourSearch`, `AnchorageToggle`, `WindTimeLabel`); `_setup_dream` disconnects the first `map_clicked` connection by position.
+
+### `src/ui/instrument_draw.gd`
+
+- **Role:** Script without class_name (preloaded), static drawing helpers for instrument-style UI: dial face and bezel, ticks, arcs, pointer, data tile, corner brackets, outlines, arrow heads.
+- **Depends on:** `UiTheme.color()` roles; called with a `CanvasItem`.
+- **State:** None.
+- **Lifecycle:** `preload` from `ReelDial`, `SailTrimPanel`, `RadarPanel`, `ChartPlotter`, `GoAshoreMenu`, `CookingMenu`, `HaulOutScene`, `AnchorMenu`.
+- **Performance:** Immediate-mode draw calls inside the callers' `_draw`.
+- **Invariants:** Colours come from theme roles so day/night follows `palette_changed`.
+- **Tests:** Indirect (`test_fishing2.gd`, `test_sail_trim.gd`, `test_captains_watch.gd` draw these panels).
+- **Change risks:** Shared look of every dial.
+
+### `src/water/sea_surface.gd`
+
+- **Role:** class_name `SeaSurface`, extends Node; drives `src/water/sea_surface.gdshader` on a deck's `Surroundings/Water` Polygon2D.
+- **Depends on:** `BoatArea` (`get_view_heading`), `Simulation.get_weather_at_vessel`, `GameSession` (`is_underway`, `is_anchored`, `get_vessel_speed_kn`, `get_vessel_position`, `get_game_time`), `Daylight.sun_elevation`, `WeatherAudio.rain_level`, `WeatherModel` classes, `MarinePalette`.
+- **State:** Targets and eased values (`sea_state`, `shelter`, `storm`, `rain`, `sun`), wind direction, accumulated `_flow`, shader time.
+- **Lifecycle:** Created in `BoatArea._setup_water_life()` before `WaterLife`; enlarges the Water polygon to ±EXTENT and sets its material. The polygon's `color` (WaterLook, I022) is kept but the shader writes the final colour.
+- **Performance:** One canvas-item shader pass over the water (a few value-noise lookups per pixel, a 3×3 cell loop for whitecaps); one weather sample per 0.5 s; no textures.
+- **Invariants:** Presentation only; real-time, never writes game state.
+- **Tests:** Indirect via deck scenes (`test_cabin_windows.gd` checks the polygon colour, which is unchanged).
+- **Change risks:** Fill-rate on low-end GPUs (full-screen fragment work); keep the noise loops small.
 
 ### `src/weather/weather_event.gd`
 
@@ -2018,7 +2051,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/loading_screen.gd`
 
-- **Role:** `class_name LoadingScreen`, extends CanvasLayer (layer 100, `PROCESS_MODE_ALWAYS`); start-up splash that warms caches. I022: `_night` is always true; the sky and sea are drawn as two vertex-coloured polygons with the main menu's gradient (`SKY_TOP/SKY_LOW/SEA_TOP/SEA_LOW`, horizon `HORIZON` 0.62) and the night logo `LOGO` (480) at 400×188; tagline and status take `ink_soft` night colours. project.godot's boot splash: navy `bg_color`, `stretch_mode=0` (native size), `little_captains_hat_logo_240.png`.
+- **Role:** `class_name LoadingScreen`, extends CanvasLayer (layer 100, `PROCESS_MODE_ALWAYS`); start-up splash that warms caches. I022: `_night` is always true; Real Horizon: draws the menu's own title picture (`assets/ui/title_scene.png`) with a slow drift with the main menu's gradient (`SKY_TOP/SKY_LOW/SEA_TOP/SEA_LOW`, horizon `HORIZON` 0.62) and the night logo `LOGO` (480) at 400×188; tagline and status take `ink_soft` night colours. project.godot's boot splash: navy `bg_color`, `stretch_mode=0` (native size), `little_captains_hat_logo_240.png`.
 - **Depends on:** `UiTheme.color_at(role, 1.0)` (night colours only), `PortCatalog.get_default()`, `SeaRouter.get_default()` (on `WorkerThreadPool`), `VesselCatalog.get_default()`, branding PNGs (preloaded), `Loc`.
 - **Signals:** declares `finished` (after fade, before `queue_free`).
 - **State:** static `shown` (once per process); `_step`, `_task`, `_done`.
@@ -2366,6 +2399,17 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ## Test suites
 
+### `tests/screenshots_horizon.gd`
+
+- **Role:** Manual screenshot tour (scene `tests/screenshots_horizon.tscn`), not part of the test runner.
+- **Depends on:** `App`, `GameSession` (`switch_vessel`, `plan_route_to`, `depart`, `replace_state`), `Simulation`, `WindField.test_override`, `WeatherFixtures`, `SeaSurface`, `UiTheme`.
+- **State:** Output folder, filters.
+- **Lifecycle:** Run by hand under Xvfb; quits when done.
+- **Performance:** n/a.
+- **Invariants:** Uses `user://test_saves` and the test settings file only.
+- **Tests:** It is a tool.
+- **Change risks:** None to the game.
+
 ### `tests/suites/test_academy.gd`
 
 - **Role:** extends RefCounted; I022 suite. `_test_data` (chapters, page links, `{placeholder}` validity via RegEx, no "press X" letters, 8 steps), `_test_keys_and_search` (E/Esc/L/F1, move, fill, search, Danish completeness and search "anker"), `_test_settings` (sanitizing, save/load, restore_defaults keeps progress), then with `app.tscn` and `AcademyGuide.enabled = true`: `_test_offer` (ConfirmDialog on the first new game, Esc = skip, once, `load_slot` never offers), `_test_first_voyage` (drives each step: InputEventAction move_up into `_input`, wheel, log, deck, chart, `plan_route_to`, `depart`, time scale 5), `_test_tips` (pause menu and HUD warning defer; close + 20 s gap; once; tips off; Read more → `HandbookMenu.shown_page`), `_test_handbook` (F1 via `_unhandled_input`, search, pause menu button, Close back to the pause menu, FirstVoyageButton). Screenshots i022_academy_offer, _first_voyage, _chart_step, _tip, i022_handbook.
@@ -2434,7 +2478,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_branding.gd`
 
-- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.108a", MACHINE "0.108.1", commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Patrick Hand headings with Barlow fallback, Barlow body), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
+- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.108a", MACHINE "0.108.1", commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Barlow Condensed headings and display with Barlow fallback, Barlow body; Patrick Hand bundled), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
 - **Depends on:** `src/app/app.tscn`, `assets/ui/next_harbor_theme.tres`, `GameVersion`, `SaveManager`, `LegacySaves`, `GameSession`, `HatState`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`, `ProjectSettings`.
 - **State:** writes v9 legacy saves under `user://test_legacy_userdata/saves` via `LegacySaves.legacy_dir_override` (reset and cleaned at the end); deletes save slots 1–3.
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
@@ -2506,7 +2550,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_chartroom_ui.gd`
 
-- **Role:** extends RefCounted; test suite for the Chartroom UI theme. Covers `UiTheme` roles in `PALETTES`, theme type variations, fonts (Patrick Hand headings, Barlow body), WCAG contrast ≥ 4.5 by day and night, the `ui_light` modes saved in settings.cfg `[interface]` and never in the save, Automatic following the boat's local daylight with an eased blend and no idle `palette_changed`, an open Settings window surviving a mood change, HUD slimming in port and underway, the chart map-button variations and a compact destination summary, the boat care menu, an unobstructed fishing `ReelDial`, and the `UiTheme.tint` adapter.
+- **Role:** extends RefCounted; test suite for the Chartroom UI theme. Covers `UiTheme` roles in `PALETTES`, theme type variations, fonts (Barlow Condensed headings, Barlow body), WCAG contrast ≥ 4.5 by day and night, the `ui_light` modes saved in settings.cfg `[interface]` and never in the save, Automatic following the boat's local daylight with an eased blend and no idle `palette_changed`, an open Settings window surviving a mood change, HUD slimming in port and underway, the chart map-button variations and a compact destination summary, the boat care menu, an unobstructed fishing `ReelDial`, and the `UiTheme.tint` adapter.
 - **Depends on:** `src/app/app.tscn`, `UiTheme` (incl. private `_target_blend`), `SettingsManager`, `GameSession` (injects private `_pending_bite`), `Hud`, `WorldMap`, `BoatCareMenu`, `FishingMenu`, `ReelDial`, `FishingCatalog`, `ModalPanel`.
 - **Signals:** connects to `UiTheme.palette_changed` temporarily.
 - **State:** writes the test settings file; resets `ui_light` to AUTO at the end.

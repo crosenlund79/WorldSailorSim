@@ -1,10 +1,13 @@
 # Art direction: Real Horizon
 
-*Illustrated Mariner × Atmospheric Sailing Simulator. Visual realism 7/10.*
+**Illustrated sailing realism. Cozy at heart.** About 7/10 realism, entirely 2D.
 
-This fork of Little Captain's Hat replaces the warm storybook look with a
-grounded, atmospheric one: a cruising yacht on a grey-blue sea, drawn by a
-maritime illustrator. Gameplay is unchanged; only presentation moved.
+The official look of Little Captain's Hat (made official at the Great
+Handover): a cruising yacht on a grey-blue sea, drawn by a maritime
+illustrator. It is more believable and mature than the old storybook look,
+and it must still feel cozy: calm pacing, a warm, welcoming life aboard,
+small discoveries. Do not drift back toward the storybook look; do not push
+toward photorealism for its own sake. Cozy first, less is more.
 
 ## The picture we are making
 
@@ -71,7 +74,9 @@ not amber; night is a deep blue-grey with warm lamps and cool LED instruments.
 
 ## Replacing the art (unchanged pipeline)
 
-Everything here is provisional art made by generators. The creator's own
+The generated art is approved by the Captain; it does not automatically need
+replacing. Generators overwrite their outputs, so re-run one only when a task
+asks for that art to change, and never over a layer the Captain has replaced. The creator's own
 drawings always win: `art_replacements/` (ArtworkResolver, READY rows) takes
 priority over the generated files in `assets/`, and the generated files keep
 the same paths, canvases and ids. See [SPRITES.md](SPRITES.md) and
@@ -82,4 +87,7 @@ the same paths, canvases and ids. See [SPRITES.md](SPRITES.md) and
 | Boat decks and cabins | `tools/vessels/paint_illustrated_vessel.py`, `paint_illustrated_starling.py` (toolkit `illustrate.py`) |
 | Sea surface | `src/water/sea_surface.gd` + `src/water/sea_surface.gdshader` (runtime) |
 | Harbour quays and towns | `src/harbour/harbour_dressing.gd` (runtime, regional archetypes) |
+| Harbour looks and special harbours (I021) | `tools/harbours/paint_harbour_looks.py`, `tools/harbours/paint_copenhagen_landmark.py` |
+| Fish, cat and dog | `tools/fishing/paint_fish.py`, `tools/companions/paint_companions.py` |
+| Title scene and logo | `tools/branding/paint_title_scene.py`, `tools/branding/make_horizon_branding.py` |
 | UI | `src/ui/theme/ui_theme.gd` (role palette) |

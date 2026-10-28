@@ -113,7 +113,10 @@ func _run() -> void:
 	app.start_new_game()
 	await _idle()
 	if vessel != "":
-		GameSession.switch_vessel(StringName(vessel))
+		GameSession.test_all_boats_owned = true  # I022 ownership: the tour may show any boat
+		var refusal := GameSession.switch_vessel(StringName(vessel))
+		if refusal != "":
+			push_warning("screenshots_horizon: %s" % refusal)
 	# Harbour by day.
 	_set_local_hour(11.0)
 	if _wanted("01"):

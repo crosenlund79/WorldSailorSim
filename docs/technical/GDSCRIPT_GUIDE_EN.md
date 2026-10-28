@@ -178,6 +178,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Every time the screen changes.
 - **If you change it:** Screen changes, fade timing and the "busy" check that many windows wait for.
 
+### `src/art/marine_palette.gd`
+
+**Purpose:** The shared colours of the Real Horizon look, in one place.
+- **What it does:** Named material colours (sea, sky, fibreglass, steel, teak, timber, quay stone, instrument panels, cyan, amber, lamp light) and `sea_colour()` for a coastal/stormy sea. Every procedural drawing takes its materials from here; the Python painters use the same values (`tools/art/marine_palette.py`).
+- **Works with:** `SeaSurface`, `HarbourDressing`, `CabinWindows`, `PostcardView`, and the art direction in `DEV_GUIDES/ART_DIRECTION.md`.
+- **Keeps:** Nothing; constants only.
+- **When it runs:** Whenever something is drawn with these colours.
+- **If you change it:** The look of the sea, harbours and props everywhere at once; keep it in step with the Python palette.
+
 ### `src/core/academy.gd`
 
 **Purpose:** The Captain's Academy's content and progress (I022): the Captain's Handbook, the First Voyage and the tips.
@@ -585,6 +594,24 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** When the chart table or the cabin's map is opened.
 - **If you change it:** How course planning works, and the chart screen's layout and buttons.
 
+### `src/ui/instrument_draw.gd`
+
+**Purpose:** Small shared drawing helpers for instrument-style UI (Real Horizon).
+- **What it does:** Draws dial faces with a bezel and tick marks, arcs, slim pointers, data tiles, corner brackets, outlines and arrow heads in the theme's colours, so the reel, sail trim, radar, chart plotter and pictograms look like one set of marine instruments.
+- **Works with:** `ReelDial`, `SailTrimPanel`, `RadarPanel`, `ChartPlotter`, `GoAshoreMenu`, `CookingMenu`, `HaulOutScene`, `UiTheme`.
+- **Keeps:** Nothing; static helpers (loaded with preload, no class name).
+- **When it runs:** While those panels draw.
+- **If you change it:** Every instrument dial at once.
+
+### `src/water/sea_surface.gd`
+
+**Purpose:** The illustrated sea around the boat (Real Horizon).
+- **What it does:** Puts the sea shader (`sea_surface.gdshader`) on the deck's Water polygon and feeds it the wind direction and sea state at the boat, harbour shelter, storminess, rain and sunlight, easing slowly so weather rolls in. Swell and chop follow the wind; whitecaps and foam streaks appear from about 18 kn.
+- **Works with:** `BoatArea` (creates it), `Simulation` (weather at the boat), `GameSession`, `Daylight`, `WeatherAudio` (rain), `MarinePalette`.
+- **Keeps:** The current and target sea state, shelter, storm, rain and sun, and how far the pattern has flowed aft.
+- **When it runs:** On deck, every frame (one weather sample every 0.5 s).
+- **If you change it:** How the sea looks in every weather; presentation only, the simulation is never touched.
+
 ### `src/weather/weather_event.gd`
 
 **Purpose:** One piece of dangerous weather: a gale area, thunderstorm risk area, thunderstorm or tropical cyclone.
@@ -653,7 +680,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/aboard/cabin_decor.gd`
 
 **Purpose:** Draws one of the Captain's cosy cabin things (rug, herbs, framed chart, oil lamp, book shelf, flag bunting) and finds a good place for each.
-- **What it does:** Each item is drawn in simple hand-drawn shapes, with no collision. A placement helper puts wall things along the hull sides, alternating starboard and port, and the rug on open floor near the middle, always clear of stations and the companion's resting spots. The same cabin always gives the same places. Since I021 it also draws a model ship, a jar of sea glass and a brass barometer, and since Operation Paperwork a brass compass. Things that find no wall on the first try get a second look, from inside each hull and a little closer together, so all ten fit in every cabin; nothing already placed moves.
+- **What it does:** Each item is drawn in simple shapes in the Real Horizon materials, with no collision. A placement helper puts wall things along the hull sides, alternating starboard and port, and the rug on open floor near the middle, always clear of stations and the companion's resting spots. The same cabin always gives the same places. Since I021 it also draws a model ship, a jar of sea glass and a brass barometer, and since Operation Paperwork a brass compass. Things that find no wall on the first try get a second look, from inside each hull and a little closer together, so all ten fit in every cabin; nothing already placed moves.
 - **Works with:** `BoatArea` (creates and places them), `HarbourTrades` (the list of decor items and whether each goes on wall or floor), `CabinHomeMenu` (where the Captain chooses them).
 - **Keeps:** Which item it is and which wall side it hangs on.
 - **When it runs:** In the cabin, when it loads or when the Captain changes the chosen decor.
@@ -662,7 +689,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/aboard/coffee_mug.gd`
 
 **Purpose:** Draws the Captain's coffee mug where it stands: in the cup holder by the helm on deck, or on the cabin table.
-- **What it does:** On deck it always draws the brass cup holder, and the mug inside it when the coffee is there. It redraws when the coffee moves. It also offers a mug drawing that the sailor figure uses when carrying the coffee.
+- **What it does:** On deck it always draws the stainless cup holder, and the mug inside it when the coffee is there. It redraws when the coffee moves. It also offers a mug drawing that the sailor figure uses when carrying the coffee.
 - **Works with:** `GameSession` (where the coffee is), `BoatArea` (creates the holder and the table mug), `SailorDrawing` (borrows the mug drawing).
 - **Keeps:** Only which place it shows ("holder" or "table").
 - **When it runs:** Whenever you are on deck or in the cabin.
@@ -941,7 +968,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/water/water_life.gd`
 
-**Purpose:** Makes the water around the boat come alive with small hand-drawn movements.
+**Purpose:** Makes the water around the boat come alive with small movements, as accents over the illustrated sea (`SeaSurface`).
 - **What it does:** In harbour: ripple rings, wavelets, glints, water lapping at the hull and pontoon, and a few floating things that fit the harbour (marina, coastal or city). At sea: wave crests set by the wind (white crests from 20 kn) streaming past with the boat's speed, and floating seaweed, driftwood and feathers. Only shown with the illustrated art style.
 - **Works with:** `BoatArea`, `GameSession`, `Simulation` (wind at the boat), `HarbourArt`, `PortCatalog`, `SettingsManager`.
 - **Keeps:** A fixed number of waves, drifters and rings, reused all the time, and the wind it last read.
@@ -1196,7 +1223,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/harbour/harbour_dressing.gd`
 
 **Purpose:** Draws the illustrated harbour around the moored boat: pontoon, ropes, cleats, stone quay, water ripples, service signs and landmarks.
-- **What it does:** Reads where the existing pontoon, mooring lines and stations are, and paints a hand-drawn harbour over them with wooden signs for the grocery store, boatyard and Go Ashore. With the Artwork setting on "Classic" it hides itself and the old simple drawing shows. It also tells the lighting where the quay lamps and pontoon lights are. Since I021 the view beyond the quay comes from HarbourLooks: the harbour's own landmark, or the illustration of its look.
+- **What it does:** Reads where the existing pontoon, mooring lines and stations are, and paints the harbour over them seen from above (Real Horizon): a floating pontoon, marina signs for the grocery store, boatyard and Go Ashore, the quay and town in one of four regional archetypes, and neighbours moored across the fairway; the harbour's look or own landmark (HarbourLooks) covers the town where it has one. With the Artwork setting on "Classic" it hides itself and the old simple drawing shows. It also tells the lighting where the quay lamps and pontoon lights are. Since I021 the view beyond the quay comes from HarbourLooks: the harbour's own landmark, or the illustration of its look.
 - **Works with:** `BoatArea` (which adds it), `HarbourArt` and `HarbourLandmark`, `SettingsManager` (art style), `GameSession` (which harbour), `HighlightProvider`/`HighlightResolver` (sign glow), `Interactable` stations.
 - **Keeps:** Shapes it read from the deck, the current signs and landmarks, and the classic sign texts so it can switch back.
 - **When it runs:** Whenever the boat is moored in a harbour and the deck is shown; refreshed when the harbour or setting changes.
@@ -1286,7 +1313,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/hat/hat_drawing.gd`
 
 **Purpose:** The simple built-in drawing of the captain's hat, seen from above.
-- **What it does:** Draws a white crown, a navy band, a shiny black peak and a small brass badge with a slightly wobbly ink outline, so it fits the hand-drawn look. Used whenever there is no picture for the hat.
+- **What it does:** Draws a white crown, a navy band, a shiny black peak and a small brass badge with a thin, translucent outline, in the Real Horizon look. Used whenever there is no picture for the hat.
 - **Works with:** `HatArt` (calls it as the fallback).
 - **Keeps:** Nothing; only colours.
 - **When it runs:** Whenever the hat is drawn without a picture.
@@ -1294,7 +1321,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/hat/hat_hook.gd`
 
-**Purpose:** The brass hook in the cabin where the captain's hat hangs.
+**Purpose:** The stainless hook in the cabin where the captain's hat hangs.
 - **What it does:** Draws the hook, and the hat on it while the hat is stored. It glows when the cabin's hat station is selected.
 - **Works with:** `GameSession` (the hat's state), `HatArt`, `HighlightResolver`; placed at each cabin's `Layout/HatSpot` by `BoatArea`.
 - **Keeps:** Only whether the hat is hanging there right now.
@@ -1855,7 +1882,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/theme/ui_theme.gd`
 
 **Purpose:** The game's look for all menus and panels, with a day mood and a night mood.
-- **What it does:** Builds the colours and shapes of buttons, panels and text from a palette (parchment and brass by day, midnight blue and lantern amber by night). It follows the sun where the boat is: day until the middle of the evening twilight, night until the middle of the morning twilight, with an easy change of a few seconds in between (or it stays day or night if the settings say so). It no longer sits half-way through the whole twilight, where text and panel became the same grey, and text colours never mix: they switch at the middle of the change (Steady Hands). Other screens ask it for colours.
+- **What it does:** Builds the colours and shapes of buttons, panels and text from a palette (Real Horizon marine electronics: charcoal-navy panels, white figures, cyan accents, amber for warnings; a sunlit display by day, the same dimmed by night). It follows the sun where the boat is: day until the middle of the evening twilight, night until the middle of the morning twilight, with an easy change of a few seconds in between (or it stays day or night if the settings say so). It no longer sits half-way through the whole twilight, where text and panel became the same grey, and text colours never mix: they switch at the middle of the change (Steady Hands). Other screens ask it for colours.
 - **Works with:** `SettingsManager` (interface light), `GameSession`, `Daylight`, and nearly every screen that draws its own pictures.
 - **Keeps:** The current day/night blend and the theme pieces it has built.
 - **When it runs:** Always (an autoload: a script Godot starts automatically and that always exists).
@@ -1944,6 +1971,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ## Automated test suites
 
+### `tests/screenshots_horizon.gd`
+
+**Purpose:** Takes the Real Horizon screenshot tour from the running game.
+- **What it does:** Starts a game and captures the title, harbour, cabin by day and night, the chart, sailing in light air, a breeze, a gale, dusk and night, sail trim and an arrival in Kiel; optionally for one boat (`--vessel=`) or some shots (`--only=`).
+- **Works with:** `App`, `GameSession`, `Simulation`, `WindField`, `WeatherFixtures`, `SeaSurface`.
+- **Keeps:** Nothing between runs; uses the test save and settings files.
+- **When it runs:** Only when run by hand (see the script's header).
+- **If you change it:** Only the screenshots.
+
 ### `tests/suites/test_academy.gd`
 
 **Purpose:** Checks the Captain's Academy (I022).
@@ -2010,7 +2046,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Purpose:** Checks the game's name, version number, fonts, save folder, and copying old Next Harbor saves.
-- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.108a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that the hand-lettered Patrick Hand font is used only for headings (Barlow for everything else). It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
+- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.108a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that headings and display text use Barlow Condensed (Real Horizon) and Barlow everything else; Patrick Hand stays bundled with its licence. It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
 - **Works with:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Keeps:** Nothing of its own (it makes a temporary pretend Next Harbor folder and removes it).
 - **When it runs:** Only in tests.

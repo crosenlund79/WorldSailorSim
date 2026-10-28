@@ -20,14 +20,19 @@ section. Notes added by developers are kept apart and marked as such.
 - **Cozy first.** A cozy sailing adventure about making a home on the water and
   exploring the world at your own pace. Coziness is the primary design
   principle.
-- **Visual direction (Operation Real Horizon, this repository).** An
-  illustrated, atmospheric sailing simulator: visual realism 7/10, "Illustrated
-  Mariner × Atmospheric Sailing Simulator", natural subdued sea colours,
-  believable boats, harbours and cabins, and a modern marine-electronics
-  interface. Entirely 2D; hand-illustrated character kept, no glossy
-  photorealism. Same gameplay; the creator-owned artwork pipeline is preserved;
-  one coherent visual identity. (Supersedes the earlier warm storybook
-  direction for this experimental fork; see DEV_GUIDES/ART_DIRECTION.md.)
+- **Art direction: Illustrated sailing realism. Cozy at heart.** (Real
+  Horizon, made the official direction at the Great Handover.) About 7/10
+  realism, entirely 2D: natural, subdued sea colours; believable boat
+  proportions and equipment; atmospheric weather; realistic marine materials;
+  grounded harbour architecture; practical yacht interiors; a modern
+  marine-electronics interface; clear, restrained typography; a warm,
+  welcoming sense of life aboard. Never drift back toward the old storybook
+  look; never push toward photorealism for its own sake. Cozy first, less is
+  more. Details: `DEV_GUIDES/ART_DIRECTION.md`.
+- **Approved generated art is protected.** The Captain approves Real Horizon's
+  generated appearance; it does not need replacing. The generators in
+  `tools/` overwrite their outputs, so they are re-run only when a task asks
+  for that art to change, and never over a layer the Captain has replaced.
 - **The Captain's artwork** is never overwritten.
 
 ### The fleet
@@ -360,7 +365,10 @@ verified checkpoint branch (`backup/post-engine-room-pre-i021`):
 
 ### Working rules
 
-- Only the repository `crosenlund79/LittleCaptainsHat` is worked on. The archived
+- Only the repository `crosenlund79/WorldSailorSim` is worked on (canonical
+  since the Great Handover; see *Repository migration*). The original
+  `crosenlund79/LittleCaptainsHat` is the read-only historical source for
+  pre-migration releases (to be archived by the Captain), and the archived
   Next Harbor repository and unrelated projects are never edited.
 - Use recoverable checkpoint commits. Never reset, force-push or discard work.
   Major iterations have their own branches (see *Major iteration branches*).
@@ -461,8 +469,11 @@ head.
 **Downloading an iteration as a ZIP.** On GitHub: open the repository, choose
 the branch (for example `release/i021`) in the branch selector, then Code →
 Download ZIP; or open
-`https://github.com/crosenlund79/LittleCaptainsHat/archive/refs/heads/release/i021.zip`
-(replace `i021` with the iteration). Extract it and open `project.godot` in
+`https://github.com/crosenlund79/WorldSailorSim/archive/refs/heads/release/i024.zip`
+(replace `i024` with the iteration). Releases before the migration that exist
+only in the original repository (`release/i023`) are downloaded from
+`https://github.com/crosenlund79/LittleCaptainsHat`; they are not recreated
+here. Extract it and open `project.godot` in
 Godot, as usual.
 
 **Git tags.** Tags are optional; the release branch is the authoritative
@@ -483,6 +494,26 @@ branch and history. Its recovery branch `release/i021` was created at the final
 I021 commit, `04a76231581f5a6d0af22ce2c2c138842b869453`, and verified on GitHub.
 The pre-I021 checkpoint `backup/post-engine-room-pre-i021` (`ec84cfa`) is
 unchanged.
+
+### Repository migration (Operation New Horizon)
+
+The Captain made Real Horizon the official edition and moved development
+permanently to `crosenlund79/WorldSailorSim` (created by GitHub Import from
+`crosenlund79/LittleCaptainsHat`; the commits up to I023 are the same objects,
+so the history is shared, but the two repositories are separate and are never
+merged back).
+
+- **Integration branch:** `claude/friendly-fermat-dey23f` in WorldSailorSim
+  (as before). It holds Real Horizon merged with everything through I023.
+- **Next major iteration: I024**, on `iteration/i024` / `release/i024` in
+  WorldSailorSim, following *Major iteration branches*.
+- **Historical branches are not duplicated.** `release/i021`, `release/i022`,
+  `iteration/i022` and the `backup/…` branches came across with the import and
+  stay untouched; `iteration/i023` and `release/i023` exist only in the
+  original repository, which remains their home. The Real Horizon conversion
+  and the handover were not numbered iterations.
+- The record of the handover (SHAs, parity, limitations) is
+  `docs/DEVELOPMENT_HISTORY.md`.
 
 ### Not now
 
@@ -594,4 +625,10 @@ Two; the wording was again not found in the repository in Iteration 18.
   first arrival. See `docs/iterations/i023/ITERATION_23_REPORT.md`. Branches
   `iteration/i023` and recovery branch `release/i023`, both at the
   delivered commit (`d4e2e7e56206b220f8839323186e0c06d2a4c589`).
+- **Real Horizon** (not a numbered iteration), version 0.109a, save format
+  12 (unchanged): the visual conversion to illustrated sailing realism, then
+  the Great Handover (Operation New Horizon): I021–I023 merged into it and
+  development moved to `crosenlund79/WorldSailorSim`. See
+  `docs/iterations/real_horizon/REAL_HORIZON_REPORT.md` and
+  `docs/DEVELOPMENT_HISTORY.md`.
 - **Next numbered major iteration: I024.**

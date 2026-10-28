@@ -180,6 +180,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Hver gang skærmen skifter.
 - **Hvis du ændrer det:** Skærmskift, overtoningens tid og "optaget"-tjekket, som mange vinduer venter på.
 
+### `src/art/marine_palette.gd`
+
+**Formål:** De fælles farver i Real Horizon-udseendet, samlet ét sted.
+- **Hvad det gør:** Navngivne materialefarver (hav, himmel, glasfiber, stål, teak, træ, kajsten, instrumentpaneler, cyan, rav, lampelys) og `sea_colour()` til et kyst- eller stormvejrshav. Al proceduremæssig tegning tager sine materialer herfra; Python-malerne bruger de samme værdier (`tools/art/marine_palette.py`).
+- **Arbejder sammen med:** `SeaSurface`, `HarbourDressing`, `CabinWindows`, `PostcardView` og stilguiden i `DEV_GUIDES/ART_DIRECTION.md`.
+- **Holder styr på:** Intet; kun konstanter.
+- **Hvornår det kører:** Når noget tegnes med disse farver.
+- **Hvis du ændrer det:** Havets, havnenes og tingenes udseende overalt på én gang; hold den i trit med Python-paletten.
+
 ### `src/core/academy.gd`
 
 **Formål:** Skipperskolens indhold og fremskridt (I022): Skipperens håndbog, den første sejlads og tipsene.
@@ -587,6 +596,24 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når kortbordet eller kahyttens kort åbnes.
 - **Hvis du ændrer det:** Hvordan kursplanlægning virker, og søkort-skærmens opbygning og knapper.
 
+### `src/ui/instrument_draw.gd`
+
+**Formål:** Små fælles tegnehjælpere til instrumentlignende brugerflade (Real Horizon).
+- **Hvad det gør:** Tegner instrumentskiver med kant og streger, buer, slanke visere, datafelter, hjørnebeslag, omrids og pilespidser i temaets farver, så hjul, sejltrim, radar, kortplotter og piktogrammer ligner ét sæt marineinstrumenter.
+- **Arbejder sammen med:** `ReelDial`, `SailTrimPanel`, `RadarPanel`, `ChartPlotter`, `GoAshoreMenu`, `CookingMenu`, `HaulOutScene`, `UiTheme`.
+- **Holder styr på:** Intet; statiske hjælpere (indlæst med preload, intet klassenavn).
+- **Hvornår det kører:** Mens de paneler tegnes.
+- **Hvis du ændrer det:** Alle instrumentskiver på én gang.
+
+### `src/water/sea_surface.gd`
+
+**Formål:** Det illustrerede hav omkring båden (Real Horizon).
+- **Hvad det gør:** Sætter havets shader (`sea_surface.gdshader`) på dækkets vandpolygon og giver den vindretning og søgang ved båden, havnens læ, stormvejr, regn og sollys, så vejret glider langsomt ind. Dønning og krusninger følger vinden; skumtoppe og skumstriber kommer fra omkring 18 kn.
+- **Arbejder sammen med:** `BoatArea` (opretter den), `Simulation` (vejret ved båden), `GameSession`, `Daylight`, `WeatherAudio` (regn), `MarinePalette`.
+- **Holder styr på:** Nuværende og ønsket søgang, læ, storm, regn og sol, og hvor langt mønsteret er strømmet agterud.
+- **Hvornår det kører:** På dækket, hvert billede (én vejrprøve hvert 0,5 s).
+- **Hvis du ændrer det:** Hvordan havet ser ud i alt slags vejr; kun visning, simuleringen røres aldrig.
+
 ### `src/weather/weather_event.gd`
 
 **Formål:** Ét stykke farligt vejr: et kulingområde, et område med tordenrisiko, et tordenvejr eller en tropisk cyklon.
@@ -655,7 +682,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/aboard/cabin_decor.gd`
 
 **Formål:** Tegner en af Kaptajnens hyggelige ting i kahytten (tæppe, krydderurter, indrammet søkort, olielampe, bogreol, signalflag) og finder en god plads til hver.
-- **Hvad det gør:** Hver ting tegnes med enkle, håndtegnede former og har ingen kollision (man kan gå hen over den). En hjælpefunktion sætter vægting langs skrogets sider, skiftevis styrbord og bagbord, og tæppet på åbent gulv nær midten, altid fri af stationer og ledsagerens hvilepladser. Den samme kahyt giver altid de samme pladser. Siden I021 tegner den også et modelskib, et glas med havglas og et barometer i messing, og siden Operation Paperwork et kompas i messing. Ting, der ikke finder en væg i første forsøg, får et nyt kig, også inde fra hvert skrog og lidt tættere sammen, så alle ti får plads i hver kahyt; intet, der allerede har en plads, flytter sig.
+- **Hvad det gør:** Hver ting tegnes med enkle former i Real Horizon-materialerne og har ingen kollision (man kan gå hen over den). En hjælpefunktion sætter vægting langs skrogets sider, skiftevis styrbord og bagbord, og tæppet på åbent gulv nær midten, altid fri af stationer og ledsagerens hvilepladser. Den samme kahyt giver altid de samme pladser. Siden I021 tegner den også et modelskib, et glas med havglas og et barometer i messing, og siden Operation Paperwork et kompas i messing. Ting, der ikke finder en væg i første forsøg, får et nyt kig, også inde fra hvert skrog og lidt tættere sammen, så alle ti får plads i hver kahyt; intet, der allerede har en plads, flytter sig.
 - **Arbejder sammen med:** `BoatArea` (opretter og placerer dem), `HarbourTrades` (listen over pynteting, og om de hører til på væg eller gulv), `CabinHomeMenu` (hvor Kaptajnen vælger dem).
 - **Holder styr på:** Hvilken ting den er, og hvilken side den hænger på.
 - **Hvornår det kører:** I kahytten, når den indlæses, eller når Kaptajnen ændrer valget af pynt.
@@ -664,7 +691,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/aboard/coffee_mug.gd`
 
 **Formål:** Tegner Kaptajnens kaffekrus, hvor det står: i kopholderen ved roret på dækket eller på bordet i kahytten.
-- **Hvad det gør:** På dækket tegner den altid messingkopholderen og kruset i den, når kaffen står der. Den tegner igen, når kaffen flyttes. Den har også en krus-tegning, som sømandsfiguren bruger, når den bærer kaffen.
+- **Hvad det gør:** På dækket tegner den altid kopholderen i rustfrit stål og kruset i den, når kaffen står der. Den tegner igen, når kaffen flyttes. Den har også en krus-tegning, som sømandsfiguren bruger, når den bærer kaffen.
 - **Arbejder sammen med:** `GameSession` (hvor kaffen er), `BoatArea` (opretter kopholderen og kruset på bordet), `SailorDrawing` (låner krus-tegningen).
 - **Holder styr på:** Kun hvilket sted den viser ("holder" eller "table").
 - **Hvornår det kører:** Når du er på dækket eller i kahytten.
@@ -943,7 +970,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/water/water_life.gd`
 
-**Formål:** Får vandet omkring båden til at leve med små, håndtegnede bevægelser.
+**Formål:** Får vandet omkring båden til at leve med små bevægelser, som accenter oven på det illustrerede hav (`SeaSurface`).
 - **Hvad det gør:** I havn: ringe i vandet, små bølger, glimt, vand der skvulper mod skrog og ponton, og et par drivende ting, der passer til havnen (marina, kyst eller by). Til søs: bølgetoppe styret af vinden (hvide toppe fra 20 kn), der strømmer forbi med bådens fart, og drivende tang, drivtømmer og fjer. Vises kun med den illustrerede grafikstil.
 - **Arbejder sammen med:** `BoatArea`, `GameSession`, `Simulation` (vinden ved båden), `HarbourArt`, `PortCatalog`, `SettingsManager`.
 - **Holder styr på:** Et fast antal bølger, drivende ting og ringe, som genbruges hele tiden, og den vind, den sidst læste.
@@ -1198,7 +1225,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/harbour/harbour_dressing.gd`
 
 **Formål:** Tegner den illustrerede havn omkring den fortøjede båd: flydebro, fortøjninger, klamper, stenkaj, krusninger i vandet, skilte for havnens tilbud og vartegn.
-- **Hvad det gør:** Læser, hvor den eksisterende flydebro, fortøjningerne og stationerne er, og maler en håndtegnet havn oven på dem med træskilte for købmanden, bådeværftet og Gå i land. Står indstillingen Grafik på "Classic", skjuler den sig, og den gamle enkle tegning vises. Den fortæller også belysningen, hvor kajens lygter og broens lys er. Siden I021 kommer udsigten bag kajen fra HarbourLooks: havnens eget vartegn eller illustrationen for dens udseende.
+- **Hvad det gør:** Læser, hvor den eksisterende flydebro, fortøjningerne og stationerne er, og maler havnen oven på dem set fra oven (Real Horizon): en flydebro, marinaskilte for købmanden, bådeværftet og Gå i land, kajen og byen i en af fire regionale typer og naboer fortøjet på den anden side af løbet; havnens udseende eller eget vartegn (HarbourLooks) dækker byen, hvor den har et. Står indstillingen Grafik på "Classic", skjuler den sig, og den gamle enkle tegning vises. Den fortæller også belysningen, hvor kajens lygter og broens lys er. Siden I021 kommer udsigten bag kajen fra HarbourLooks: havnens eget vartegn eller illustrationen for dens udseende.
 - **Arbejder sammen med:** `BoatArea` (som tilføjer den), `HarbourArt` og `HarbourLandmark`, `SettingsManager` (grafikstil), `GameSession` (hvilken havn), `HighlightProvider`/`HighlightResolver` (skiltenes glød), `Interactable`-stationer.
 - **Holder styr på:** Former den har læst fra dækket, de aktuelle skilte og vartegn samt de klassiske skilttekster, så den kan skifte tilbage.
 - **Hvornår det kører:** Når båden ligger fortøjet i en havn, og dækket vises; opdateres når havnen eller indstillingen skifter.
@@ -1288,7 +1315,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/hat/hat_drawing.gd`
 
 **Formål:** Den enkle indbyggede tegning af kaptajnshuen set ovenfra.
-- **Hvad det gør:** Tegner en hvid puld, et marineblåt bånd, en blank sort skygge og et lille messingmærke med en let ujævn blækstreg, så den passer til det håndtegnede udtryk. Bruges, når der ikke er et billede af huen.
+- **Hvad det gør:** Tegner en hvid puld, et marineblåt bånd, en blank sort skygge og et lille messingmærke med en tynd, gennemsigtig kontur i Real Horizon-udtrykket. Bruges, når der ikke er et billede af huen.
 - **Arbejder sammen med:** `HatArt` (kalder den som reserve).
 - **Holder styr på:** Intet; kun farver.
 - **Hvornår det kører:** Hver gang huen tegnes uden et billede.
@@ -1296,7 +1323,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/hat/hat_hook.gd`
 
-**Formål:** Messingknagen i kahytten, hvor kaptajnshuen hænger.
+**Formål:** Knagen i rustfrit stål i kahytten, hvor kaptajnshuen hænger.
 - **Hvad det gør:** Tegner knagen, og huen på den, mens huen er hængt op. Den lyser op, når kahyttens hue-station er valgt.
 - **Arbejder sammen med:** `GameSession` (huens tilstand), `HatArt`, `HighlightResolver`; placeres ved hver kahyts `Layout/HatSpot` af `BoatArea`.
 - **Holder styr på:** Kun om huen hænger der lige nu.
@@ -1857,7 +1884,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/theme/ui_theme.gd`
 
 **Formål:** Spillets udseende for alle menuer og paneler, med en dagstemning og en natstemning.
-- **Hvad det gør:** Bygger farver og former for knapper, paneler og tekst ud fra en palet (pergament og messing om dagen, midnatsblåt og ravgult lanternelys om natten). Det følger solen, der hvor båden er: dag indtil midten af aftenens tusmørke, nat indtil midten af morgenens, med et roligt skift på et par sekunder imellem (eller det bliver ved dag eller nat, hvis indstillingerne siger det). Det står ikke længere halvvejs gennem hele tusmørket, hvor tekst og panel blev samme grå, og tekstfarver blandes aldrig: de skifter midt i skiftet (Steady Hands). Andre skærme spørger det om farver.
+- **Hvad det gør:** Bygger farver og former for knapper, paneler og tekst ud fra en palet (Real Horizon-marineelektronik: trækulsblå paneler, hvide tal, cyan accenter, rav til advarsler; et sollyst display om dagen, det samme dæmpet om natten). Det følger solen, der hvor båden er: dag indtil midten af aftenens tusmørke, nat indtil midten af morgenens, med et roligt skift på et par sekunder imellem (eller det bliver ved dag eller nat, hvis indstillingerne siger det). Det står ikke længere halvvejs gennem hele tusmørket, hvor tekst og panel blev samme grå, og tekstfarver blandes aldrig: de skifter midt i skiftet (Steady Hands). Andre skærme spørger det om farver.
 - **Arbejder sammen med:** `SettingsManager` (grænsefladens lys), `GameSession`, `Daylight` og næsten alle skærme, der tegner deres egne billeder.
 - **Holder styr på:** Den nuværende blanding af dag og nat og de temadele, det har bygget.
 - **Hvornår det kører:** Altid (en autoload: et script Godot starter automatisk, og som altid findes).
@@ -1946,6 +1973,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ## Automatiske testsuiter
 
+### `tests/screenshots_horizon.gd`
+
+**Formål:** Tager Real Horizon-skærmbillederne fra det kørende spil.
+- **Hvad det gør:** Starter et spil og tager titelbilledet, havnen, kahytten dag og nat, søkortet, sejlads i let luft, frisk brise og kuling, skumring og nat, sejltrim og en ankomst til Kiel; eventuelt for én båd (`--vessel=`) eller nogle billeder (`--only=`).
+- **Arbejder sammen med:** `App`, `GameSession`, `Simulation`, `WindField`, `WeatherFixtures`, `SeaSurface`.
+- **Holder styr på:** Intet mellem kørsler; bruger testens gemte spil og indstillinger.
+- **Hvornår det kører:** Kun når det køres i hånden (se scriptets hoved).
+- **Hvis du ændrer det:** Kun skærmbillederne.
+
 ### `tests/suites/test_academy.gd`
 
 **Formål:** Tester Skipperskolen (I022).
@@ -2012,7 +2048,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Formål:** Tjekker spillets navn, versionsnummer, skrifttyper, mappen til gemte spil og kopiering af gamle gemte spil fra Next Harbor.
-- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.108a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den håndskrevne skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
+- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.108a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
 - **Arbejder sammen med:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Holder styr på:** Intet af sit eget (den laver en midlertidig, opdigtet Next Harbor-mappe og fjerner den igen).
 - **Hvornår det kører:** Kun i test.
