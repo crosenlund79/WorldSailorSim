@@ -1,0 +1,352 @@
+{
+	"format": "next_harbor_save",
+	"game_version": "0.109a",
+	"saved_at_unix": 1793205225.15607,
+	"saved_at_utc": "2026-10-28T16:33:45Z",
+	"session": {
+		"anchor": {
+			"active": false,
+			"alarm": false,
+			"alarm_level": 0,
+			"anchored_at": 0.0,
+			"bonus_kn": 0.0,
+			"checked_until": 1777622400.0,
+			"depth_m": -1.0,
+			"depth_source": "",
+			"dragged_nm": 0.0,
+			"dragged_this_stay": false,
+			"good_since": -1.0,
+			"holding": "well",
+			"kind": "normal",
+			"moments": [],
+			"position": {
+				"lat": 0.0,
+				"lon": 0.0
+			},
+			"scope": 5,
+			"set_quality": 0.5
+		},
+		"boat": {
+			"area": "interior"
+		},
+		"boat_care": {
+			"arctic_wanderer_26": {
+				"engine_hours": 52.80445682326994,
+				"history": [],
+				"hull_cleaned_at": 1777622400.0,
+				"rig_wear": 5.9794343007399195,
+				"upgrades": []
+			}
+		},
+		"clock": {
+			"game_time": 1777839129.0702,
+			"paused": false,
+			"time_scale": 1
+		},
+		"companion": {
+			"area": "cabin",
+			"deck_spot": 0,
+			"kind": "dog",
+			"moves": 18,
+			"next_move_time": 1777849440.0,
+			"spot": "cabin_floor"
+		},
+		"difficulty": "standard",
+		"economy": {
+			"funds": 10226
+		},
+		"fishing": {
+			"checked_until": 1777622400.0,
+			"hold": [],
+			"junk_caught": 0,
+			"keep_min_grade": "",
+			"keep_min_rarity": "common",
+			"line_mode": "stationary",
+			"line_out": false,
+			"line_since": 0.0,
+			"lure": "spinner",
+			"lures": {
+				"spinner": 2
+			},
+			"next_uid": 1,
+			"passage_posture": "all",
+			"records": {},
+			"released": 0,
+			"rod": true,
+			"sharks_released": 0,
+			"sold": 0,
+			"total_caught": 0,
+			"trophies": []
+		},
+		"fleet": {
+			"owned": [
+				"arctic_wanderer_26"
+			]
+		},
+		"galley": {
+			"coffee": "",
+			"last_meal": "",
+			"last_meal_at": 0.0,
+			"meals_cooked": 0,
+			"well_fed_until": 0.0
+		},
+		"hat": {
+			"bought_at": -1.0,
+			"bought_count": 0,
+			"checked_until": 1777839120.0,
+			"history": [],
+			"lost_count": 0,
+			"serial": 1,
+			"spent": 0,
+			"status": "stored",
+			"strain": 0.0,
+			"voyage_lost": false,
+			"voyage_worn_hazard": 0,
+			"warned": false,
+			"warned_at": 0.0
+		},
+		"home": {
+			"owned_decor": [],
+			"vessels": {}
+		},
+		"log": {
+			"arrivals": 2,
+			"longest": {
+				"complete": true,
+				"damage": 0.0,
+				"departed": 1777729524.3189363,
+				"ended": 1777839129.0702,
+				"from": "kiel",
+				"from_position": {
+					"lat": 54.33000183105469,
+					"lon": 10.152000427246094
+				},
+				"nm": 151.74609304038384,
+				"outcome": "arrived",
+				"to": "copenhagen",
+				"vessel": "arctic_wanderer_26",
+				"worst_hazard": 0
+			},
+			"total_nm": 303.3482331770707,
+			"visited": {
+				"copenhagen": {
+					"arrivals": 1,
+					"first": 1777622400.0
+				},
+				"kiel": {
+					"arrivals": 1,
+					"first": 1777729524.3189363
+				}
+			},
+			"voyages": [
+				{
+					"complete": true,
+					"damage": 2.340338214918148,
+					"departed": 1777622400.0,
+					"ended": 1777729524.3189363,
+					"from": "copenhagen",
+					"from_position": {
+						"lat": 55.69200134277344,
+						"lon": 12.60099983215332
+					},
+					"nm": 151.60214013668687,
+					"outcome": "arrived",
+					"to": "kiel",
+					"vessel": "arctic_wanderer_26",
+					"worst_hazard": 2
+				},
+				{
+					"complete": true,
+					"damage": 0.0,
+					"departed": 1777729524.3189363,
+					"ended": 1777839129.0702,
+					"from": "kiel",
+					"from_position": {
+						"lat": 54.33000183105469,
+						"lon": 10.152000427246094
+					},
+					"nm": 151.74609304038384,
+					"outcome": "arrived",
+					"to": "copenhagen",
+					"vessel": "arctic_wanderer_26",
+					"worst_hazard": 0
+				}
+			],
+			"voyages_completed": 2
+		},
+		"navigation": {
+			"location_id": "copenhagen",
+			"planned_route": null,
+			"voyage": null
+		},
+		"pastimes": {
+			"draft": {},
+			"game": {
+				"log": [],
+				"milestone": 0,
+				"points": 0.0,
+				"sessions": 0,
+				"task": {}
+			},
+			"postcards": [
+				{
+					"caption": 0,
+					"kind": "harbour",
+					"layout": "classic",
+					"place": "Kiel",
+					"subject": "kiel",
+					"time": 1777729524.3189363
+				}
+			]
+		},
+		"player": {
+			"spawn_point": "start"
+		},
+		"progress": {
+			"completed": {
+				"clean_150": {
+					"count": 1,
+					"first": 1777839129.0702,
+					"last_event": 1777839129.0702
+				},
+				"distance_100": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				},
+				"first_voyage": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				},
+				"heavy_weather": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				},
+				"new_harbour": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				},
+				"postcard:harbour:kiel": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				},
+				"visit_kiel": {
+					"count": 1,
+					"first": 1777729524.3189363,
+					"last_event": 1777729524.3189363
+				}
+			},
+			"lifetime_renown": 143,
+			"publications": 1,
+			"published_euros": 226,
+			"published_renown": 113,
+			"recent": [
+				{
+					"id": "first_voyage",
+					"reward": 20,
+					"time": 1777729524.3189363,
+					"title": "Cast off"
+				},
+				{
+					"id": "visit_kiel",
+					"reward": 15,
+					"time": 1777729524.3189363,
+					"title": "Across the Western Baltic"
+				},
+				{
+					"id": "distance_100",
+					"reward": 25,
+					"time": 1777729524.3189363,
+					"title": "The first hundred miles"
+				},
+				{
+					"id": "new_harbour",
+					"reward": 10,
+					"time": 1777729524.3189363,
+					"title": "New horizons"
+				},
+				{
+					"id": "heavy_weather",
+					"reward": 40,
+					"time": 1777729524.3189363,
+					"title": "Heavy weather"
+				},
+				{
+					"id": "postcard:harbour:kiel",
+					"reward": 3,
+					"time": 1777729524.3189363,
+					"title": "Postcard: a harbour"
+				},
+				{
+					"id": "clean_150",
+					"reward": 30,
+					"time": 1777839129.0702,
+					"title": "Not a scratch"
+				}
+			],
+			"unpublished_renown": 30
+		},
+		"provisions": {
+			"food_days": 11.49156168750094,
+			"warning_level": 0,
+			"water_days": 11.49156168750094
+		},
+		"rescue": {
+			"count": 0,
+			"last": {}
+		},
+		"vessel": {
+			"conditions": {
+				"arctic_wanderer_26": 97.65966178508185
+			},
+			"damage_applied_until": 1777839000.0,
+			"id": "arctic_wanderer_26",
+			"position": {
+				"lat": 55.69200134277344,
+				"lon": 12.60099983215332
+			},
+			"propulsion": {
+				"average_potential_kn": 0.0,
+				"engine_reason": "",
+				"favorable_seconds": 0.0,
+				"heading_deg": 0.0,
+				"initialised": false,
+				"last_evaluation_time": 0.0,
+				"mode": "sail",
+				"mode_seconds": 0.0,
+				"potential_kn": 0.0,
+				"speed_kn": 0.0,
+				"spinnaker": false,
+				"stall_seconds": 0.0,
+				"true_wind_angle": 0.0,
+				"wind_from_deg": 0.0,
+				"wind_speed_kn": 0.0
+			},
+			"sail_trim": {
+				"auto": true,
+				"value": 0.0
+			},
+			"status": "arrived"
+		},
+		"weather": {
+			"exposure": {
+				"classification": "fair",
+				"event_id": "",
+				"level": 0,
+				"peak_gust_kn": 0.0,
+				"peak_sustained_kn": 0.0,
+				"since": 1777839129.0702,
+				"updated_at": 1777839129.0702
+			},
+			"model_version": 1
+		},
+		"wind": {
+			"seed": 1
+		}
+	},
+	"version": 12
+}

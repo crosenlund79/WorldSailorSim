@@ -32,6 +32,7 @@ func run(runner: Node) -> void:
 	Simulation.auto_advance = false
 	WeatherFixtures.use([])
 	_test_state_and_saves()
+	_test_pre_i024_save()
 	_test_remarks_and_languages()
 	_test_speed_tracking()
 	_test_collection()
@@ -100,6 +101,42 @@ func _test_state_and_saves() -> void:
 	for kind in CompanionState.KINDS:
 		sizes[kind] = CompanionVisualSet.for_kind(kind).display_size
 	t.check(sizes.cat < 100.0 and sizes.dog < sizes.cat and sizes.parrot < sizes.dog, "[proportions] cat %s, dog %s, parrot %s (was 100)" % [sizes.cat, sizes.dog, sizes.parrot])
+
+
+## A real save written by the build before I024 (tests/fixtures/save_pre_i024.json:
+## a dog without a name, a voyage to Kiel and back, a postcard, one travel
+## update) loads with everything kept, and its history shows honestly.
+func _test_pre_i024_save() -> void:
+	var fixture := FileAccess.get_file_as_string("res://tests/fixtures/save_pre_i024.json")
+	var before: Dictionary = JSON.parse_string(fixture).session
+	SaveManager.save_dir = "user://test_saves"
+	DirAccess.make_dir_recursive_absolute(SaveManager.save_dir)
+	var file := FileAccess.open(SaveManager.save_dir.path_join("slot_3.json"), FileAccess.WRITE)
+	file.store_string(fixture)
+	file.close()
+	var loaded := SaveManager.load_from_slot(3)
+	if not t.check(loaded.is_ok(), "[saves] the pre-I024 save loads (%s)" % loaded.error):
+		return
+	var state := loaded.state
+	t.check(state.companion.kind == CompanionState.KIND_DOG and state.companion.name == "" and state.companion.gender == &""
+		and state.companion.spot == StringName(before.companion.spot), "[saves] its dog is there (a Pug now), same spot, no name invented")
+	t.check(state.progress.lifetime_renown == int(before.progress.lifetime_renown) and state.progress.unpublished_renown == int(before.progress.unpublished_renown)
+		and state.progress.publications == int(before.progress.publications) and state.progress.completed.keys() == (before.progress.completed as Dictionary).keys(),
+		"[saves] renown %d, publications and every earned record kept" % state.progress.lifetime_renown)
+	t.check(state.pastimes.postcards.size() == (before.pastimes.postcards as Array).size(), "[saves] the postcards kept")
+	var catalog := AchievementCatalog.get_default()
+	var cast_off := catalog.unlock_of(catalog.get_achievement("first_voyage"), state.progress)
+	t.check(float(cast_off.time) == float(before.progress.completed.first_voyage.first) and AchievementCatalog.describe_where(cast_off) == "Location not recorded",
+		"[history] 'Cast off' from the older save: its real date, 'Location not recorded'")
+	var going_public := catalog.unlock_of(catalog.get_achievement("going_public"), state.progress)
+	t.check(AchievementCatalog.describe_when(going_public) == "Previously unlocked", "[history] its travel update: 'Going public', previously unlocked")
+	t.check(state.progress.is_completed(&"visit_kiel") and not catalog.collection(state.progress).any(func(e: Dictionary) -> bool: return e.achievement.id == "visit_kiel"),
+		"[saves] a retired goal stays earned in the history, not in the collection")
+	t.check_eq(SaveManager.save_to_slot(3, state), OK, "(setup) saved again")
+	var again := SaveManager.load_from_slot(3)
+	t.check(again.is_ok() and again.state.progress.to_dict() == state.progress.to_dict() and again.state.companion.to_dict() == state.companion.to_dict(),
+		"[saves] and saves and loads again unchanged")
+	SaveManager.delete_slot(3)
 
 
 func _test_remarks_and_languages() -> void:

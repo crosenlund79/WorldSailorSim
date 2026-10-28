@@ -325,6 +325,15 @@ func _test_companionway_transitions() -> void:
 ## sometimes sits right there, and E would pet it instead of using the hatch
 ## (the intermittent "ended on deck" failure): it is moved aside first.
 func _to_hatch(spot: Vector2, prompt: String) -> void:
+	# The companion following the Captain through the companionway is
+	# pettable on its way (the Captain's wish); since I024 it walks at its real
+	# pace, so let a walk in progress finish first, in simulated time, rather
+	# than racing it for the E key at the hatch.
+	var walker := app.router.current_screen.get_node_or_null(^"Companion") as ShipCompanion
+	for i in 3600:
+		if walker == null or not walker.is_walking():
+			break
+		walker._process(1.0 / 60.0)
 	await _move_player_to(spot)
 	if app.hud.get_prompt() != prompt:
 		var companion := app.router.current_screen.get_node_or_null(^"Companion") as Node2D

@@ -268,9 +268,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "4b6c115c829c2501",
+   "sha": "ef75c436c9434a6a",
    "reviewed": "2026-10-28",
-   "note": "I024: AchievementCatalog cache cleared on exit too"
+   "note": "I024: wake-line day reset on a new game"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -1238,9 +1238,9 @@
    "note": "I024: laptop, clips, wording and retired-goal adjustments"
   },
   "tests/suites/test_companion_deck.gd": {
-   "sha": "67c1710da370c26f",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "48090b160076469b",
+   "reviewed": "2026-10-28",
+   "note": "I024: pivot is the ground point; walks at stride pace; pre-I024 save fixture"
   },
   "tests/suites/test_companion_remarks.gd": {
    "sha": "2dd480dabf28b0e4",
@@ -1248,9 +1248,9 @@
    "note": "Companion remarks: new helper and suite; petting branch and ShipCompanion.take_remark reviewed"
   },
   "tests/suites/test_company_we_keep.gd": {
-   "sha": "bc36a765b765e7b2",
+   "sha": "7081fd27dc7d94cd",
    "reviewed": "2026-10-28",
-   "note": "I024: new entry, The Company We Keep suite"
+   "note": "I024: pre-I024 save fixture"
   },
   "tests/suites/test_cozy_patch.gd": {
    "sha": "129afee3a93726c5",
@@ -1303,9 +1303,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_gameplay_flow.gd": {
-   "sha": "7459c2f3dede03f7",
+   "sha": "b5b04233c48364a7",
    "reviewed": "2026-10-28",
-   "note": "Companion moved aside at the hatch; no-teleport limit follows elapsed time"
+   "note": "I024: let a companion walk finish before the hatch round trips"
   },
   "tests/suites/test_golden_harbours.gd": {
    "sha": "745f5217db84dccc",
@@ -1463,9 +1463,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_sprite_workshop.gd": {
-   "sha": "8c7062a4806df0e1",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "05e4bf8109a4fd28",
+   "reviewed": "2026-10-28",
+   "note": "I024: pivot is the ground point; walks at stride pace; pre-I024 save fixture"
   },
   "tests/suites/test_steady_hands.gd": {
    "sha": "7b470a7b047c0ace",

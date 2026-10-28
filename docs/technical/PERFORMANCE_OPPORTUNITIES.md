@@ -239,3 +239,20 @@ godot --headless --path . res://tests/test_runner.tscn -- --only=turbocharge
   second. Each is a visual trade-off for the Captain to see first.
 - **Status:** measured on Linux software rendering; awaiting a Windows reading
   before any change.
+
+### 11. I024 companions and laptop (measured, no action)
+
+Same session, Linux software rendering (llvmpipe), `tests/benchmark_wrs.tscn`
+`--turbo`: `41130c0` (before) against I024 (after), files
+`docs/benchmarks/i024_before_rendered.json` and `i024_after_rendered.json`.
+Mean frame times moved between −6 % and +12 % per scenario (cabin walk −1 %,
+sailing 1× +0 %, deck walk in harbour +4 %, the deck after a long session
++12 %); scenes that show neither the companion nor the laptop (the chart, the
+long-passage map) moved by +5–8 % too, so much of the difference is run
+order on a CPU rasterizer rather than I024. Structure: about 80 more objects
+and 13 more resources from the start (the companion's clip frames, the badge
+textures when the laptop opens), +1.5 MB, flat across 20 session rounds; no
+orphans, no new autoload connections, startup unchanged (823 vs 826 ms).
+Nothing to change now; a Windows reading on the deck decides together with
+#10. If the companion ever shows up in a profile: its clip frames are small
+ImageTextures (≤ 320 px), and only one companion is drawn at a time.
