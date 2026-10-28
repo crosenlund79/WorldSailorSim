@@ -220,7 +220,66 @@ errors).
 
 ## Tests and results
 
-RESULTS_PLACEHOLDER
+All on Linux (Godot 4.7.2, headless; screenshots and benchmark with Xvfb and
+software OpenGL). Not Windows acceptance.
+
+- **Full regression** (`tests/test_runner.tscn`, 81 suites): **5129 checks
+  passed, 0 failed**, no script errors. On the way, one intermittent failure
+  was investigated, not waved away: the hatch round trips in
+  `test_gameplay_flow` could race the companion for the E key while it walks
+  through the companionway at its new, real pace (petting it while it walks
+  is a Captain's wish from Cozy Patch, so the test now lets a walk finish
+  first); and the new suite had been registered after `test_gameplay_flow`,
+  which quits the game, so it now runs before it (the rule is written in the
+  architecture guide).
+- **New suite** `test_company_we_keep` (about 120 checks): kinds, names and
+  genders; older saves; **a real save written by the build before I024**
+  (`tests/fixtures/save_pre_i024.json`: its dog, renown, records,
+  postcards and travel update kept, dated history with "Location not
+  recorded", "Previously unlocked", saved and loaded again unchanged);
+  English and Danish lines; clip counts, animated idles, petting responses,
+  half an hour of varied behaviour per kind, turn-then-walk facing left at
+  stride speed; parrot takeoff, flight with height, landing on the perch,
+  hop; following ashore (dog and parrot), refusal naming the companion,
+  call aboard from the wheel and from the departure question, departure
+  after; waking by the berth over six nights with an occasional line;
+  passage talk over six days (never in the first hours, 6-18 remarks, none
+  in a burst, a full gap after reloading, never over a warning); speed
+  tracking (50 minutes then the engine: nothing; a full hour at 9.5 kn:
+  7 and 9, not 12; paid once; thresholds within the boats' real top
+  speeds); the collection (size, no empty category, badges, unlocked-first
+  ordering by date, filters, time/place/boat saved and loaded, honest
+  fallbacks, retired goals out of the collection); the laptop on every
+  boat, its apps on its screen, greyed and locked badges, the detail with
+  date and Kiel, the category filter, the postcard composer making a card,
+  Esc order, Danish.
+- **Updated suites** (behaviour changed on purpose, not weakened): the
+  companion art (clips, ground-point pivot), petting prompt wording, the
+  cabin's move now walked, the work station is the laptop, the wheel's
+  *Laptop* item, the Log's retired goal, the walk pace on deck, the
+  version.
+- **Saves:** `SAVE_VERSION` 12 unchanged; new fields optional
+  (companion `name`, `gender`, `shore` read as aboard; record `at` and `r`;
+  `records`); the save suites and the real older save pass.
+- **Content checker:** 31/31 PASS, 0 WARN. **Languages:** 2841 messages,
+  all translated in Danish, 0 errors. **Guides:** 315 scripts reviewed;
+  **links:** 0 broken.
+- **Performance** (same session, `41130c0` against I024, software
+  rendering): mean frame times −6 % to +12 % by scenario, with scenes that
+  draw neither the companion nor the laptop moving as much (run drift on a
+  CPU rasterizer); about 80 more objects and +1.5 MB from the start, flat
+  over 20 session rounds, no orphans or new connections; startup unchanged.
+  Recorded as #11 in
+  [PERFORMANCE_OPPORTUNITIES.md](../../technical/PERFORMANCE_OPPORTUNITIES.md);
+  files in `docs/benchmarks/i024_*_rendered.json`.
+
+**Release checklist** ([RELEASE_READINESS.md](../../technical/RELEASE_READINESS.md)):
+1 content 0 FAIL ✓ · 2 English/Danish ✓ · 3 assets (checker, import) ✓ ·
+4 saves ✓ · 5 full regression ✓ · 6 same-session performance ✓ ·
+7 guides and links, report, index and Captain's Orders ✓ · 8 Windows
+acceptance written, **pending** · 9 `iteration/i024` from the recorded start
+and `release/i024` at the final commit, verified remotely, nothing
+force-pushed ✓ · 10 limitations below ✓
 
 ## Screenshots
 
@@ -235,23 +294,9 @@ category (with unlocked-first sorting), 14 voyage history, 15 Danish.
 Close-ups (`…b_…closeup`) are enlarged crops of the same frames. Animation:
 `animation/companion_clips.gif` and `tests/companion_animation_preview.tscn`.
 
-## Windows acceptance (pending, the Captain's own trial)
+## Windows acceptance
 
-1. New game with each companion (name and gender, or none); the animals'
-   size beside the Captain and the furniture.
-2. Watch each animal for a few minutes in the cabin and on deck: walking,
-   turning, sitting, grooming or preening, sleeping and waking; the parrot
-   flying between perches.
-3. Walk ashore in a harbour; the companion follows; try to set sail - the
-   game asks to call it aboard first.
-4. Sleep a night: the companion by the berth, sometimes a morning line.
-5. A passage of several days: the Captain's remarks now and then, never
-   over a warning.
-6. The laptop in each cabin: open, the four apps, a postcard, a travel
-   update, Esc; Danish; a large interface size.
-7. Load an I023 save: the companion (now a Ragdoll or Pug), its name if it
-   had one, money, renown, achievements (dated, "Location not recorded"),
-   postcards.
+**Pending** (the Captain's own trial): [WINDOWS_ACCEPTANCE_24.md](WINDOWS_ACCEPTANCE_24.md).
 
 ## Known limitations
 
@@ -262,5 +307,9 @@ Close-ups (`…b_…closeup`) are enlarged crops of the same frames. Animation:
   not dedicated perches; it flies straight between them.
 - The Pug's curled-tail wag is subtle at game size; the cat's face is mostly
   hidden while grooming.
+- While the companion walks through the companionway right beside the
+  Captain, E may pet it instead of using the hatch for that moment (petting
+  a walking companion is allowed by design); pressing again goes through.
+  It walks at a real pace now, so this is a little more likely than before.
 - Speed records start counting from I024: earlier fast sailing was never
   measured, so it is not shown.

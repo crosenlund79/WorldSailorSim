@@ -1543,9 +1543,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/test_runner.gd": {
-   "sha": "97e99e43297d1714",
+   "sha": "b6f0381da7bb7da4",
    "reviewed": "2026-10-28",
-   "note": "I024: test_company_we_keep in SUITES (80 suites)"
+   "note": "I024: test_company_we_keep runs before test_gameplay_flow, which quits the game and must stay last"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",
