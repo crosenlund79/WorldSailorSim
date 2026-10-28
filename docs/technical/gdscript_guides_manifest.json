@@ -58,9 +58,9 @@
    "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
   },
   "src/app/game_version.gd": {
-   "sha": "64f6bad50e654c33",
+   "sha": "49985bcdcf73e160",
    "reviewed": "2026-10-28",
-   "note": "I025: version 0.111a, iteration i025"
+   "note": "I025: CHANNEL TEST on the release checkpoint (entry unchanged)"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -208,9 +208,9 @@
    "note": "I024: animated clips (frames/fps/loop, get_frames), clip constants, walk/fly speed, parrot set"
   },
   "src/companion/companion_remarks.gd": {
-   "sha": "ba6973244e1acf70",
+   "sha": "15a03376e24a1a3d",
    "reviewed": "2026-10-28",
-   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
+   "note": "I025: one note when two identically named companions are called aboard"
   },
   "src/companion/companion_state.gd": {
    "sha": "b3f6a02199f38107",
@@ -308,9 +308,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "41c582744f114d6d",
+   "sha": "63cc89d504673ad2",
    "reviewed": "2026-10-28",
-   "note": "I025: pair answer on passages, adoption needs a following animal, the adoption dialog answers when closed from outside"
+   "note": "I025: one note when two identically named companions are called aboard"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -1433,9 +1433,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_more_room_aboard.gd": {
-   "sha": "31242b43bd660053",
+   "sha": "f0bc3e4ae886cb14",
    "reviewed": "2026-10-28",
-   "note": "I025 revision: cabin windows are plain glass (no live view); comments and tests follow; the I025 suite removes its fixture save"
+   "note": "I025: one note when two identically named companions are called aboard"
   },
   "tests/suites/test_navigation_views.gd": {
    "sha": "c36a50d31a9388d3",

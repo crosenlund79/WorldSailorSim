@@ -28,7 +28,7 @@ const MACHINE := "0.111.1"
 const PROJECT_CODE := "LCH"
 const ITERATION := "i025"
 const STAGE := ""
-const CHANNEL := "DEV"
+const CHANNEL := "TEST"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public
 ## export turns it off with a feature-tag override in project.godot:

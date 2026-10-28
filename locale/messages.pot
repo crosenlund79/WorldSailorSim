@@ -5424,127 +5424,131 @@ msgstr ""
 msgid "%s strolls back up the gangplank."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:251
-msgid "%s snuggled up against you."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:252
-msgid "%s was curled up at the end of the berth."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:253
-msgid "%s kneaded the blanket until you opened your eyes."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:254
-msgid "A quiet purr came from the end of the berth."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:257
-msgid "%s licked your nose."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:258
-msgid "%s was curled up beside your feet."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:259
-msgid "%s's tail thumped the blanket as you stirred."
+#: src/companion/companion_remarks.gd:250
+msgid "Both are back aboard."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:260
-msgid "A small snore came from the foot of the berth."
+msgid "%s snuggled up against you."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:261
+msgid "%s was curled up at the end of the berth."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:262
+msgid "%s kneaded the blanket until you opened your eyes."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:263
-msgid "%s greeted the morning with a little chirp."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:264
-msgid "%s was perched nearby when you opened your eyes."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:265
-msgid "%s whistled softly, just like the kettle."
+msgid "A quiet purr came from the end of the berth."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:266
+msgid "%s licked your nose."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:267
+msgid "%s was curled up beside your feet."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:268
+msgid "%s's tail thumped the blanket as you stirred."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:269
+msgid "A small snore came from the foot of the berth."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:272
+msgid "%s greeted the morning with a little chirp."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:273
+msgid "%s was perched nearby when you opened your eyes."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:274
+msgid "%s whistled softly, just like the kettle."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:275
 msgid "A cheerful chirp came from the perch by the berth."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:294
+#: src/companion/companion_remarks.gd:303
 msgid "%s had claimed your pillow, and %s was asleep at your feet."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:294
+#: src/companion/companion_remarks.gd:303
 msgid "%s was curled up on the blanket; %s snored softly beside it."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:295
+#: src/companion/companion_remarks.gd:304
 msgid "%s licked your nose while %s watched from the end of the berth."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:295
+#: src/companion/companion_remarks.gd:304
 msgid "%s was asleep at your feet; %s had claimed your pillow."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:296
+#: src/companion/companion_remarks.gd:305
 msgid "%s chirped softly while %s stretched."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:296
+#: src/companion/companion_remarks.gd:305
 msgid "%s whistled good morning; %s answered with a yawn."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:297
+#: src/companion/companion_remarks.gd:306
 msgid "%s stretched while %s chirped softly from its perch."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:297
+#: src/companion/companion_remarks.gd:306
 msgid "%s thumped the blanket with its tail; %s whistled back."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:298
+#: src/companion/companion_remarks.gd:307
 msgid "%s chirped from its perch; %s pretended not to hear."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:298
+#: src/companion/companion_remarks.gd:307
 msgid "%s greeted the morning; %s opened one eye."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:299
+#: src/companion/companion_remarks.gd:308
 msgid "%s purred at the end of the berth while %s preened nearby."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:299
+#: src/companion/companion_remarks.gd:308
 msgid "%s was curled up beside you, and %s chirped from its perch."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:300
+#: src/companion/companion_remarks.gd:309
 msgid "%s and %s were curled up together at the end of the berth."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:300
+#: src/companion/companion_remarks.gd:309
 msgid "%s had your pillow and %s your feet."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:301
+#: src/companion/companion_remarks.gd:310
 msgid "%s and %s were piled up together at your feet."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:301
+#: src/companion/companion_remarks.gd:310
 msgid "%s licked your nose; %s was still snoring."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:302
+#: src/companion/companion_remarks.gd:311
 msgid "%s and %s chirped back and forth by the berth."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:302
+#: src/companion/companion_remarks.gd:311
 msgid "%s and %s sat side by side on the perch, fluffed up."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:304
+#: src/companion/companion_remarks.gd:313
 msgid "%s and %s were waiting by the berth when you woke."
 msgstr ""
 
@@ -5552,44 +5556,16 @@ msgstr ""
 msgid "You're looking especially cozy today."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:329
-msgid "Good sailing weather, isn't it, %s?"
-msgstr ""
-
 #: src/companion/companion_remarks.gd:33
 msgid "What a lovely little purr."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:330
-msgid "Comfortable there?"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:331
-msgid "Let's see what the wind does."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:332
-msgid "Settled in already, %s?"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:333
-msgid "Nice and steady, this."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:334
-msgid "Another tack or two and we're well on our way."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:335
-msgid "Keep an eye on things for me, %s."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:336
-msgid "Not a bad start, is it?"
+#: src/companion/companion_remarks.gd:338
+msgid "Good sailing weather, isn't it, %s?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:339
-msgid "Think we'll find a good breakfast in the next harbour?"
+msgid "Comfortable there?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:34
@@ -5597,159 +5573,167 @@ msgid "There's my favourite little sailor."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:340
-msgid "You've got the best seat on this boat."
+msgid "Let's see what the wind does."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:341
-msgid "I wonder what everyone back home is doing."
+msgid "Settled in already, %s?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:342
-msgid "Another day of blue, %s."
+msgid "Nice and steady, this."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:343
-msgid "You've found your sea legs, haven't you?"
+msgid "Another tack or two and we're well on our way."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:344
-msgid "I could get used to this, couldn't you?"
+msgid "Keep an eye on things for me, %s."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:345
-msgid "Fresh bread. That's what I'd like. Fresh bread."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:346
-msgid "We've come a fair way together, %s."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:347
-msgid "Same old sea, different every hour."
+msgid "Not a bad start, is it?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:348
-msgid "Don't tell anyone I talk to you this much."
+msgid "Think we'll find a good breakfast in the next harbour?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:349
+msgid "You've got the best seat on this boat."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:35
 msgid "The ship's cat, on watch as ever."
 msgstr ""
 
+#: src/companion/companion_remarks.gd:350
+msgid "I wonder what everyone back home is doing."
+msgstr ""
+
 #: src/companion/companion_remarks.gd:351
-msgid "Funny how familiar the sound of the sea becomes."
+msgid "Another day of blue, %s."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:352
-msgid "I suppose it's just you and me out here."
+msgid "You've found your sea legs, haven't you?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:353
-msgid "You're not much help with the navigation, are you?"
+msgid "I could get used to this, couldn't you?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:354
-msgid "I think we've discussed the weather quite enough."
+msgid "Fresh bread. That's what I'd like. Fresh bread."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:355
-msgid "Do you dream about land, %s?"
+msgid "We've come a fair way together, %s."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:356
-msgid "I've stopped counting the waves. You?"
+msgid "Same old sea, different every hour."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:357
-msgid "Whatever happens, %s, we're in this together."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:358
-msgid "You're better company than most people I know."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:359
-msgid "I'll miss these quiet watches when we're ashore."
+msgid "Don't tell anyone I talk to you this much."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:360
-msgid "Remember the last harbour? Feels like a month ago."
+msgid "Funny how familiar the sound of the sea becomes."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:361
-msgid "Tell me honestly, %s: am I talking to myself?"
+msgid "I suppose it's just you and me out here."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:362
-msgid "One day we'll tell stories about this passage."
+msgid "You're not much help with the navigation, are you?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:363
+msgid "I think we've discussed the weather quite enough."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:364
+msgid "Do you dream about land, %s?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:365
+msgid "I've stopped counting the waves. You?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:366
+msgid "Whatever happens, %s, we're in this together."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:367
-msgid "Don't shed on the charts, please."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:367
-msgid "You've claimed that cushion for good, haven't you?"
+msgid "You're better company than most people I know."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:368
-msgid "Nine lives, and you chose to spend this one at sea."
+msgid "I'll miss these quiet watches when we're ashore."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:369
-msgid "No, there are no squirrels out here."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:369
-msgid "Snoring again? You and the bilge pump both."
+msgid "Remember the last harbour? Feels like a month ago."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:370
-msgid "Best first mate a captain could ask for."
+msgid "Tell me honestly, %s: am I talking to myself?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:371
-msgid "Was that you, or the winch?"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:371
-msgid "Watch the halyards, little one."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:372
-msgid "You've learnt every sound on this boat, haven't you?"
+msgid "One day we'll tell stories about this passage."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:376
-msgid "Good girl, %s."
+msgid "Don't shed on the charts, please."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:376
+msgid "You've claimed that cushion for good, haven't you?"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:377
-msgid "Good lad, %s."
+msgid "Nine lives, and you chose to spend this one at sea."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:378
+msgid "No, there are no squirrels out here."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:378
+msgid "Snoring again? You and the bilge pump both."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:379
+msgid "Best first mate a captain could ask for."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:38
 msgid "Who's a good dog?"
 msgstr ""
 
+#: src/companion/companion_remarks.gd:380
+msgid "Was that you, or the winch?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:380
+msgid "Watch the halyards, little one."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:381
+msgid "You've learnt every sound on this boat, haven't you?"
+msgstr ""
+
 #: src/companion/companion_remarks.gd:385
-msgid "%s gives you a slow blink."
+msgid "Good girl, %s."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:386
-msgid "%s answers with a small meow."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:387
-msgid "%s purrs."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:388
-msgid "The tip of %s's tail twitches."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:389
-msgid "%s ignores you completely."
+msgid "Good lad, %s."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:39
@@ -5757,82 +5741,102 @@ msgid "There's my faithful first mate!"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:394
-msgid "%s tilts a curious head."
+msgid "%s gives you a slow blink."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:395
-msgid "%s's tail thumps the cabin sole."
+msgid "%s answers with a small meow."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:396
-msgid "%s gives a small, approving woof."
+msgid "%s purrs."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:397
-msgid "%s sighs and settles down again."
+msgid "The tip of %s's tail twitches."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:398
+msgid "%s ignores you completely."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:40
 msgid "Best crew on the seven seas, that's you."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:402
-msgid "%s chirps back."
-msgstr ""
-
 #: src/companion/companion_remarks.gd:403
-msgid "%s whistles a little tune."
+msgid "%s tilts a curious head."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:404
-msgid "%s fluffs up and settles."
+msgid "%s's tail thumps the cabin sole."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:405
-msgid "%s turns to look at you."
+msgid "%s gives a small, approving woof."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:406
-msgid "%s clicks, exactly like the winch."
+msgid "%s sighs and settles down again."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:41
 msgid "That tail could power the boat."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:417
+#: src/companion/companion_remarks.gd:411
+msgid "%s chirps back."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:412
+msgid "%s whistles a little tune."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:413
+msgid "%s fluffs up and settles."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:414
+msgid "%s turns to look at you."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:415
+msgid "%s clicks, exactly like the winch."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:426
 msgid "Well, you two seem to have this voyage figured out."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:418
+#: src/companion/companion_remarks.gd:427
 msgid "%s, I think %s has stolen your favourite spot."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:419
+#: src/companion/companion_remarks.gd:428
 msgid "%s, are you encouraging %s?"
 msgstr ""
 
-#: src/companion/companion_remarks.gd:420
+#: src/companion/companion_remarks.gd:429
 msgid "You two get along better than most crews I know."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:421
+#: src/companion/companion_remarks.gd:430
 msgid "%s and %s, the finest crew afloat."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:422
+#: src/companion/companion_remarks.gd:431
 msgid "Days at sea, and you two still find something to look at."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:423
+#: src/companion/companion_remarks.gd:432
 msgid "%s, %s - I'm glad you're both aboard."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:427
+#: src/companion/companion_remarks.gd:436
 msgid "%s glances at the other, then at you."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:427
+#: src/companion/companion_remarks.gd:436
 msgid "%s settles down a little closer."
 msgstr ""
 
@@ -5844,123 +5848,123 @@ msgstr ""
 msgid "Those are very fine feathers."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:454 src/companion/companion_remarks.gd:489
-msgid "“%s”"
-msgstr ""
-
 #: src/companion/companion_remarks.gd:46
 msgid "Easy there, bright eyes."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:507
+#: src/companion/companion_remarks.gd:463 src/companion/companion_remarks.gd:498
+msgid "“%s”"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:516
 msgid "A Ragdoll peeks over the edge of the box. You hold out a hand and let it sniff."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:508
+#: src/companion/companion_remarks.gd:517
 msgid "You find a few treats in your pocket. The Ragdoll eats them, very politely."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:509
-msgid "You trail a bit of rope along the planks. The Ragdoll pounces, then purrs."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:512
-msgid "The little Pug wriggles all over as you crouch down to say hello."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:513
-msgid "A biscuit from your pocket disappears in one happy crunch."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:514
-msgid "You toss a knot of rope a little way. The Pug brings it back, very proud."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:517
-msgid "The conure tilts its head and gives a soft chirp as you say hello."
-msgstr ""
-
 #: src/companion/companion_remarks.gd:518
-msgid "You offer a few seeds on your palm. The conure takes them, one by one."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:519
-msgid "You whistle a little tune. The conure whistles it back, nearly right."
+msgid "You trail a bit of rope along the planks. The Ragdoll pounces, then purrs."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:52
 msgid "You're looking especially cozy today, %s."
 msgstr ""
 
+#: src/companion/companion_remarks.gd:521
+msgid "The little Pug wriggles all over as you crouch down to say hello."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:522
+msgid "A biscuit from your pocket disappears in one happy crunch."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:523
+msgid "You toss a knot of rope a little way. The Pug brings it back, very proud."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:526
+msgid "The conure tilts its head and gives a soft chirp as you say hello."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:527
+msgid "You offer a few seeds on your palm. The conure takes them, one by one."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:528
+msgid "You whistle a little tune. The conure whistles it back, nearly right."
+msgstr ""
+
 #: src/companion/companion_remarks.gd:53
 msgid "What a lovely little purr, %s."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:536
-msgid "Say hello to the Pug"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:538
-msgid "Say hello to the conure"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:539
-msgid "Say hello to the Ragdoll"
 msgstr ""
 
 #: src/companion/companion_remarks.gd:54
 msgid "The ship's cat, on watch as ever. Good %s."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:541
+#: src/companion/companion_remarks.gd:545
+msgid "Say hello to the Pug"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:547
+msgid "Say hello to the conure"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:548
+msgid "Say hello to the Ragdoll"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:550
 msgid "Offer a treat"
 msgstr ""
 
-#: src/companion/companion_remarks.gd:542
+#: src/companion/companion_remarks.gd:551
 msgid "Play a little"
 msgstr ""
 
-#: src/companion/companion_remarks.gd:551 src/companion/dock_encounter_scene.gd:220
+#: src/companion/companion_remarks.gd:560 src/companion/dock_encounter_scene.gd:220
 msgid "It looks as if it would like to come with you."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:565
-msgid "You sit on the pontoon for a while. The Pug comes and leans against your leg."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:567
-msgid "You sit on the pontoon for a while. The conure hops a little closer."
-msgstr ""
-
-#: src/companion/companion_remarks.gd:568
-msgid "You sit on the pontoon for a while. The Ragdoll comes a little closer."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:57
 msgid "Who's the best companion, %s?"
 msgstr ""
 
-#: src/companion/companion_remarks.gd:575
-msgid "The little Pug has followed you all the way home. Would you like to welcome it aboard?"
+#: src/companion/companion_remarks.gd:574
+msgid "You sit on the pontoon for a while. The Pug comes and leans against your leg."
+msgstr ""
+
+#: src/companion/companion_remarks.gd:576
+msgid "You sit on the pontoon for a while. The conure hops a little closer."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:577
-msgid "The little conure has followed you all the way home. Would you like to welcome it aboard?"
-msgstr ""
-
-#: src/companion/companion_remarks.gd:578
-msgid "The Ragdoll has followed you all the way home. Would you like to welcome it aboard?"
+msgid "You sit on the pontoon for a while. The Ragdoll comes a little closer."
 msgstr ""
 
 #: src/companion/companion_remarks.gd:58
 msgid "That tail could power the boat, %s."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:589
+#: src/companion/companion_remarks.gd:584
+msgid "The little Pug has followed you all the way home. Would you like to welcome it aboard?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:586
+msgid "The little conure has followed you all the way home. Would you like to welcome it aboard?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:587
+msgid "The Ragdoll has followed you all the way home. Would you like to welcome it aboard?"
+msgstr ""
+
+#: src/companion/companion_remarks.gd:598
 msgid "Welcomed %s aboard in %s."
 msgstr ""
 
-#: src/companion/companion_remarks.gd:590
+#: src/companion/companion_remarks.gd:599
 msgid "Welcomed %s aboard."
 msgstr ""
 

@@ -242,6 +242,15 @@ static func recalled(who: Dictionary) -> String:
 	return Loc.t("%s strolls back up the gangplank.") % subject(who)
 
 
+## The recall notes of every companion called back, as one note (I025): two
+## identical notes (two parrots both called Kiwi, two unnamed Pugs) become
+## "Both are back aboard." rather than the same sentence twice.
+static func recalled_all(lines: Array[String]) -> String:
+	if lines.size() == 2 and lines[0] == lines[1]:
+		return Loc.t("Both are back aboard.")
+	return " ".join(lines)
+
+
 # --- Waking up (I024) ------------------------------------------------------------
 
 ## A small observation when the Captain wakes: lines with the subject (%s:

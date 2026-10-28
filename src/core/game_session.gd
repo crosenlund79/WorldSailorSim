@@ -830,7 +830,7 @@ func recall_companion() -> String:
 	for companion in _state.companions:
 		if companion.area == CompanionState.AREA_SHORE:
 			lines.append(_recall(companion))
-	return " ".join(lines)
+	return CompanionRemarks.recalled_all(lines)
 
 
 func _recall(companion: CompanionState) -> String:
