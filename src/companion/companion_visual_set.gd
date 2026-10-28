@@ -19,12 +19,31 @@ extends Resource
 ## never modified.
 
 ## Where the set for each kind lives: res://data/companions/<kind>_visuals.tres.
-## A kind without a set (currently the dog) keeps its procedural drawing.
+## A kind without a set keeps its procedural drawing (since I024 every kind
+## has one: the cat, the dog and the parrot, each with animated clips).
 const PATH_PATTERN := "res://data/companions/%s_visuals.tres"
 const POSE_RESTING := &"resting"
 const POSE_SLEEPING := &"sleeping"
 const POSE_ALERT := &"alert"
 const POSE_STRETCHING := &"stretching"
+## I024 clips (a set may have any of them; missing ones are simply not played).
+const POSE_WALK := &"walk"
+const POSE_TURN := &"turn"
+const POSE_SIT := &"sit"
+const POSE_LIE_DOWN := &"lie_down"
+const POSE_WAKE := &"wake"
+const POSE_GROOM := &"groom"
+const POSE_PET := &"pet"
+const POSE_SETTLE := &"settle"
+const POSE_TAIL_WAG := &"tail_wag"
+const POSE_BLINK := &"blink"
+const POSE_HEAD_TURN := &"head_turn"
+const POSE_HOP := &"hop"
+const POSE_TAKEOFF := &"takeoff"
+const POSE_FLY := &"fly"
+const POSE_LAND := &"land"
+const POSE_RUFFLE := &"ruffle"
+const POSE_PREEN := &"preen"
 
 @export var kind: StringName
 ## Sprite Workshop id prefix for this companion's poses (0.105b): a valid PNG
@@ -48,6 +67,13 @@ const POSE_STRETCHING := &"stretching"
 ## Images are scaled down to at most this many pixels on their longer side
 ## when loaded (the companion is small on screen; this saves memory).
 @export_range(32, 2048, 1) var max_texture_size := 320
+
+@export_group("Movement")
+## Walking speed in scene units per second, matched to the walk clip's stride
+## so the feet do not slide (0: the game's default).
+@export_range(0.0, 200.0, 0.5) var walk_speed := 0.0
+## Flying speed (birds), scene units per second.
+@export_range(0.0, 400.0, 1.0) var fly_speed := 0.0
 
 @export_group("Behaviour")
 ## Seconds (real time, min..max) spent resting between idle changes.
@@ -94,26 +120,63 @@ func get_pose_names() -> Array[StringName]:
 	return names
 
 
-## The prepared texture of `pose`, or null when its image is missing or
-## unreadable (a warning names the file).
+## The prepared texture of `pose` (its first frame), or null when its image
+## is missing or unreadable (a warning names the file).
 func get_texture(pose: StringName) -> Texture2D:
 	var art := get_pose_art(pose)
 	if art == null or art.image_path.is_empty():
 		return null
-	if workshop_id != "":
-		var replacement := ArtworkResolver.get_artwork(StringName("%s.%s" % [workshop_id, pose]))
-		if replacement:
-			var replaced_key := "workshop|%s.%s" % [workshop_id, pose]
-			if not _cache.has(replaced_key):
-				_cache[replaced_key] = ImageTexture.create_from_image(prepare_image(replacement.get_image()))
-			return _cache[replaced_key]
-	var key := "%s|%d|%s|%.3f" % [art.image_path, max_texture_size, remove_background, background_tolerance]
+	var replacement := _workshop_texture(pose)
+	if replacement:
+		return replacement
+	return _texture_for_path(art.image_path, pose)
+
+
+## Every frame of `pose`'s clip (I024), frame 0 first: [] when its first
+## image is missing; a frame that is missing is left out (with a warning).
+## A Sprite Workshop replacement replaces the whole clip with its one image.
+func get_frames(pose: StringName) -> Array[Texture2D]:
+	var out: Array[Texture2D] = []
+	var first := get_texture(pose)
+	if first == null:
+		return out
+	out.append(first)
+	if _workshop_texture(pose):
+		return out
+	var art := get_pose_art(pose)
+	for path in art.frames:
+		var texture := _texture_for_path(path, pose)
+		if texture:
+			out.append(texture)
+	return out
+
+
+## The pose's own clip settings: {"fps", "loop"}.
+func get_clip_settings(pose: StringName) -> Dictionary:
+	var art := get_pose_art(pose)
+	return {"fps": art.fps if art else 8.0, "loop": art.loop if art else true}
+
+
+func _workshop_texture(pose: StringName) -> Texture2D:
+	if workshop_id == "":
+		return null
+	var replacement := ArtworkResolver.get_artwork(StringName("%s.%s" % [workshop_id, pose]))
+	if replacement == null:
+		return null
+	var replaced_key := "workshop|%s.%s" % [workshop_id, pose]
+	if not _cache.has(replaced_key):
+		_cache[replaced_key] = ImageTexture.create_from_image(prepare_image(replacement.get_image()))
+	return _cache[replaced_key]
+
+
+func _texture_for_path(path: String, pose: StringName) -> Texture2D:
+	var key := "%s|%d|%s|%.3f" % [path, max_texture_size, remove_background, background_tolerance]
 	if _cache.has(key):
 		return _cache[key]
-	var image := _read_image(art.image_path)
+	var image := _read_image(path)
 	var texture: Texture2D = null
 	if image == null:
-		push_warning("Companion art '%s': pose '%s' image %s is missing or unreadable; that pose falls back." % [kind, pose, art.image_path])
+		push_warning("Companion art '%s': pose '%s' image %s is missing or unreadable; that pose falls back." % [kind, pose, path])
 	else:
 		texture = ImageTexture.create_from_image(prepare_image(image))
 	_cache[key] = texture

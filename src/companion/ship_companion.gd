@@ -7,9 +7,9 @@ extends Node2D
 ##
 ## Where it rests comes from the cabin's layout: the marker named after the
 ## spot under `spots_path` (Layout/CompanionSpots), so every vessel places its
-## own spots. It moves instantly between its resting spots when the schedule
-## says so (no walking, no pathfinding, no collision, so it never blocks the
-## player).
+## own spots. When the schedule moves it while you watch, it walks (the parrot
+## flies) there; out of view, asleep or at high time speed it is simply there.
+## No pathfinding in the cabin and no collision, so it never blocks the player.
 ##
 ## Look: when the kind has a CompanionVisualSet (data/companions/<kind>_visuals.tres,
 ## the cat and, since Iteration 13, the dog) the companion shows pose images: resting most of the
@@ -23,13 +23,24 @@ extends Node2D
 ## a small reaction: the cat purrs and shows a few hearts; the dog pants softly
 ## and wags its tail.
 ##
+## I024 (The Company We Keep): three kinds (a Ragdoll cat, a Pug, a small
+## parrot), and the poses are animated clips (CompanionPoseArt frames): the
+## logical `pose` (resting, sleeping, alert, stretching, sit, groom, ...)
+## chooses the clip, short transition clips (lie down, wake, turn, settle,
+## takeoff, land) play in between, and walking uses the walk clip at the
+## stride's own speed so the feet do not slide. It faces where it goes (the
+## art faces right; it is mirrored for left). The parrot flies between its
+## perches (takeoff, flight with a little height, landing) and hops short
+## distances. Ashore (CompanionState.AREA_SHORE) the deck companion follows
+## the Captain down the gangplank to a place on the pontoon.
+##
 ## Iteration 18: the companion can also be on deck (CompanionState.area). The
 ## deck has its own ShipCompanion (`on_deck`, built by BoatArea) resting at
 ## the deck's safe places (DeckCompanionSpots); the cabin one shows only while
 ## the companion is below. When it changes area while you watch, it walks:
 ## up from the companionway to its place, between places, or back to the
-## companionway and below - along paths that stay aboard. Walking is a short
-## glide in its alert pose (no pathfinding every frame).
+## companionway and below - along paths that stay aboard (since I024 with the
+## walk clip at the stride's speed; see above).
 
 signal petted(kind: StringName)
 signal pose_changed(pose: StringName)
@@ -51,6 +62,7 @@ const HEART := Color("#C97A6C")
 
 @export var purr_sound: AudioStream = preload("res://assets/audio/placeholder/companion_purr.wav")
 @export var dog_sound: AudioStream = preload("res://assets/audio/placeholder/companion_dog_pant.wav")
+@export var parrot_sound: AudioStream = preload("res://assets/audio/placeholder/companion_parrot_chirp.wav")
 
 ## A preview (e.g. in the New Game dialog): just the drawing, no
 ## interaction and no session state.
@@ -66,7 +78,24 @@ var visual_set: CompanionVisualSet
 ## The pose shown now (sprite mode only).
 var pose: StringName = CompanionVisualSet.POSE_RESTING
 
-var _textures := {}             # pose -> Texture2D (only poses that loaded)
+var _textures := {}             # pose -> Texture2D, frame 0 (only poses that loaded)
+var _clips := {}                # pose -> Array[Texture2D] (I024 animation frames)
+## The clip drawn now (usually the pose's own; a transition plays first).
+var clip: StringName = CompanionVisualSet.POSE_RESTING
+var _clip_time := 0.0
+var _clip_rate := 1.0
+var _clip_queue: Array[StringName] = []
+## +1 facing right (as drawn), -1 mirrored.
+var facing := 1.0
+var _previous_flip := false
+var _previous_rect := Rect2()
+## Parrot flight: height above the ground point while flying (scene units).
+var _lift := 0.0
+var _flying := false
+## Seconds the walk waits before moving (a turn or a takeoff plays first).
+var _walk_delay := 0.0
+var _turn_flip_at := -1.0
+var _blink_left := 4.0
 var _pose_left := 0.0           # seconds until the next idle change
 var _previous_texture: Texture2D
 var _previous_pose: StringName
@@ -85,6 +114,16 @@ var settled := false
 var on_deck := false
 var deck_spots: DeckCompanionSpots
 const WALK_SPEED := 60.0
+const FLY_SPEED := 140.0
+## How high the parrot flies over the cabin and deck (scene units).
+const FLY_HEIGHT := 22.0
+## The parrot hops instead of flying when the distance is this short.
+const HOP_DISTANCE := 34.0
+## How far the hop clip moves the bird forward on its 256 px canvas.
+const HOP_DRIFT_PX := 15.0
+## Ashore: its places on the pontoon, as offsets along the shore from the
+## gangplank (clear of the service stations at ±215).
+const SHORE_OFFSETS: Array[float] = [-80.0, 95.0, -150.0]
 var _walk := PackedVector2Array()
 var _walk_index := 0
 var _walking_out := false
@@ -146,11 +185,12 @@ func _process(delta: float) -> void:
 ## the deck) it stops for the moment of petting, then walks on.
 func pet() -> void:
 	_reaction = REACTION_SECONDS
-	AudioManager.play_sfx(purr_sound if kind == CompanionState.KIND_CAT else dog_sound)
+	AudioManager.play_sfx(get_sound())
 	if is_walking():
 		_walk_pause = REACTION_SECONDS
 	if is_sprite_mode():
-		# Walking it keeps its walking look (alert) until it arrives.
+		# Walking it keeps its walking look (alert) until it arrives; resting,
+		# it plays its petting response (the pet clip, else the alert look).
 		set_pose(CompanionVisualSet.POSE_ALERT, 60.0 if is_walking() else maxf(visual_set.alert_seconds, REACTION_SECONDS))
 	GameSession.note_companion_petted(kind)
 	petted.emit(kind)
@@ -196,16 +236,35 @@ func show_kind(companion_kind: StringName) -> void:
 	queue_redraw()
 
 
+## Its resting spot changed (the schedule, or waking by the berth). In view
+## it walks (or flies) there; out of view it is simply there.
 func _on_companion_moved(_spot: StringName) -> void:
-	if not is_walking():
-		_sync()
+	if is_walking():
+		return
+	var companion := GameSession.get_companion()
+	if companion == null:
+		return
+	if not on_deck and companion.area == CompanionState.AREA_CABIN and is_visible_in_tree() and is_sprite_mode() \
+			and companion.kind == kind and not GameSession.is_asleep() and GameSession.get_time_scale() <= 1:
+		spot = companion.spot
+		_start_walk(position, _rest_position())
+		return
+	_sync()
 
 
-## Up on deck, down below, or to another place on deck (Iteration 18).
+## True when the companion's `area` is shown by this node: the cabin's, or
+## the deck's (which also shows it ashore, on the pontoon beside the boat).
+func _shows(area: StringName) -> bool:
+	return area in [CompanionState.AREA_DECK, CompanionState.AREA_SHORE] if on_deck else area == CompanionState.AREA_CABIN
+
+
+## Up on deck, down below, ashore, or to another place (Iteration 18, I024).
 func _on_area_changed(area: StringName) -> void:
-	var here := CompanionState.AREA_DECK if on_deck else CompanionState.AREA_CABIN
+	if GameSession.is_asleep():
+		_sync()  # it moved while the Captain slept: simply there
+		return
 	var shown := is_visible_in_tree()
-	if area == here:
+	if _shows(area):
 		# Arriving here (or moving to another place here): walk in.
 		var target := _rest_position()
 		var start := position if shown and not _walking_out else _entry_position()
@@ -223,19 +282,99 @@ func is_walking() -> bool:
 	return _walk_index < _walk.size()
 
 
+## True while the parrot is in the air.
+func is_flying() -> bool:
+	return _flying
+
+
+func _is_bird() -> bool:
+	return kind == CompanionState.KIND_PARROT
+
+
 func _start_walk(from: Vector2, to: Vector2) -> void:
 	position = from
-	_walk = deck_spots.path(from, to) if on_deck and deck_spots else PackedVector2Array([from, to])
+	_walk = _route(from, to)
 	_walk_index = 1
-	if is_sprite_mode():
-		set_pose(CompanionVisualSet.POSE_ALERT, 60.0)
+	_walk_delay = 0.0
+	_turn_flip_at = -1.0
+	_flying = false
+	if not is_sprite_mode():
+		return
+	set_pose(CompanionVisualSet.POSE_ALERT, 60.0)
+	var dx := to.x - from.x
+	if _is_bird():
+		if from.distance_to(to) <= HOP_DISTANCE and has_clip(CompanionVisualSet.POSE_HOP):
+			_face(dx)
+			_play_clip(CompanionVisualSet.POSE_HOP)
+		else:
+			_face(dx)
+			_flying = true
+			_walk = PackedVector2Array([from, to])  # it flies: no path around fittings
+			if has_clip(CompanionVisualSet.POSE_TAKEOFF):
+				_play_clip(CompanionVisualSet.POSE_TAKEOFF, [CompanionVisualSet.POSE_FLY])
+				_walk_delay = clip_length(CompanionVisualSet.POSE_TAKEOFF) * 0.6
+			else:
+				_play_clip(CompanionVisualSet.POSE_FLY)
+		return
+	var first := _walk[mini(1, _walk.size() - 1)]
+	var turning := absf(first.x - from.x) > 6.0 and signf(first.x - from.x) != facing
+	if turning and has_clip(CompanionVisualSet.POSE_TURN):
+		# A real turn: the body comes round (the clip faces the viewer at its
+		# middle, where the drawing is mirrored), then it walks.
+		_play_clip(CompanionVisualSet.POSE_TURN, [CompanionVisualSet.POSE_WALK])
+		_walk_delay = clip_length(CompanionVisualSet.POSE_TURN)
+		_turn_flip_at = _walk_delay * 0.5
+	else:
+		_face(first.x - from.x)
+		_play_clip(CompanionVisualSet.POSE_WALK if has_clip(CompanionVisualSet.POSE_WALK) else CompanionVisualSet.POSE_ALERT)
+
+
+## The way from `from` to `to`: on deck around the fittings; ashore down the
+## gangplank (and back up); in the cabin straight.
+func _route(from: Vector2, to: Vector2) -> PackedVector2Array:
+	if not on_deck or deck_spots == null:
+		return PackedVector2Array([from, to])
+	var shore := _shore_access()
+	var from_shore := shore != null and shore.is_off_the_boat(from)
+	var to_shore := shore != null and shore.is_off_the_boat(to)
+	if shore == null or (not from_shore and not to_shore):
+		return deck_spots.path(from, to)
+	var top := Vector2(shore.get_plank_x(), shore.get_rail_y() - 14.0)
+	var bottom := shore.get_landing_point()
+	if from_shore and to_shore:
+		return PackedVector2Array([from, to])
+	var points := PackedVector2Array()
+	if to_shore:
+		points = deck_spots.path(from, top)
+		points.append(bottom)
+		points.append(to)
+	else:
+		points = PackedVector2Array([from, bottom])
+		points.append_array(deck_spots.path(top, to))
+	return points
+
+
+func _shore_access() -> ShoreAccess:
+	var area := get_parent() as BoatArea
+	var shore := area.get_shore_access() if area else null
+	return shore if shore and shore.is_valid() and shore.is_active() else null
 
 
 func _advance_walk(delta: float) -> void:
-	var step := WALK_SPEED * delta
+	if _walk_delay > 0.0:
+		_walk_delay -= delta
+		if _turn_flip_at >= 0.0 and _clip_time >= _turn_flip_at:
+			_turn_flip_at = -1.0
+			facing = -facing
+		return
+	var speed := _walk_speed()
+	var step := speed * delta
+	var start := _walk[0]
+	var end := _walk[_walk.size() - 1]
 	while step > 0.0 and is_walking():
 		var target := _walk[_walk_index]
 		var d := position.distance_to(target)
+		_face(target.x - position.x)
 		if d <= step:
 			position = target
 			step -= d
@@ -243,11 +382,20 @@ func _advance_walk(delta: float) -> void:
 		else:
 			position += (target - position) / d * step
 			step = 0.0
+	if _flying:
+		# Up and over, down again at the end (FLY_HEIGHT at most).
+		var rise := minf(position.distance_to(start), position.distance_to(end))
+		_lift = minf(FLY_HEIGHT, rise * 0.6)
+		if has_clip(CompanionVisualSet.POSE_LAND) and clip != CompanionVisualSet.POSE_LAND \
+				and position.distance_to(end) <= speed * clip_length(CompanionVisualSet.POSE_LAND) * 0.8:
+			_play_clip(CompanionVisualSet.POSE_LAND)
 	update_highlight()
 	if is_walking():
 		return
 	_walk = PackedVector2Array()
 	_walk_index = 0
+	_lift = 0.0
+	_flying = false
 	if _walking_out:
 		_walking_out = false
 		visible = false
@@ -260,6 +408,24 @@ func _advance_walk(delta: float) -> void:
 	_update_interactable()
 
 
+func _walk_speed() -> float:
+	if visual_set == null:
+		return WALK_SPEED
+	if _flying:
+		return visual_set.fly_speed if visual_set.fly_speed > 0.0 else FLY_SPEED
+	if _is_bird():
+		# A hop covers its distance in one hop clip.
+		var length := maxf(clip_length(CompanionVisualSet.POSE_HOP), 0.3)
+		return maxf(HOP_DISTANCE / length, 20.0)
+	return visual_set.walk_speed if visual_set.walk_speed > 0.0 else WALK_SPEED
+
+
+## Faces the way of a move along x (small moves keep the facing).
+func _face(dx: float) -> void:
+	if absf(dx) > 2.0:
+		facing = signf(dx)
+
+
 ## Where it comes in and goes out: the companionway.
 func _entry_position() -> Vector2:
 	if on_deck and deck_spots:
@@ -269,9 +435,21 @@ func _entry_position() -> Vector2:
 
 func _rest_position() -> Vector2:
 	var companion := GameSession.get_companion()
+	if on_deck and companion.area == CompanionState.AREA_SHORE:
+		var shore := _shore_access()
+		if shore:
+			return get_shore_spot(shore, companion.deck_spot)
 	if on_deck and deck_spots:
 		return deck_spots.get_spot(companion.deck_spot)
 	return get_spot_position(companion.spot)
+
+
+## Its place `index` on the pontoon (I024): beside the gangplank, on the
+## walkable strip, clear of the service stations.
+static func get_shore_spot(shore: ShoreAccess, index: int) -> Vector2:
+	var strip := shore.get_shore_rect()
+	var x := clampf(shore.get_plank_x() + SHORE_OFFSETS[clampi(index, 0, SHORE_OFFSETS.size() - 1)], strip.position.x + 30.0, strip.end.x - 30.0)
+	return Vector2(x, strip.position.y + strip.size.y * 0.42)
 
 
 ## Pettable whenever it is shown here, resting or walking (also on its way
@@ -286,7 +464,12 @@ func is_reacting() -> bool:
 
 
 func get_sound() -> AudioStream:
-	return purr_sound if kind == CompanionState.KIND_CAT else dog_sound
+	match kind:
+		CompanionState.KIND_DOG:
+			return dog_sound
+		CompanionState.KIND_PARROT:
+			return parrot_sound
+	return purr_sound
 
 
 ## True when pose images are shown (false: procedural drawing).
@@ -294,22 +477,122 @@ func is_sprite_mode() -> bool:
 	return _textures.has(CompanionVisualSet.POSE_RESTING)
 
 
-## The texture shown for `pose_name` (falls back to resting), or null.
+## The texture shown for `pose_name` (its first frame; falls back to
+## resting), or null.
 func get_pose_texture(pose_name: StringName) -> Texture2D:
 	return _textures.get(pose_name, _textures.get(CompanionVisualSet.POSE_RESTING))
 
 
+## True when the art has a clip for `clip_name`.
+func has_clip(clip_name: StringName) -> bool:
+	return _clips.has(clip_name)
+
+
+## How long one run of a clip takes (seconds at its own fps).
+func clip_length(clip_name: StringName) -> float:
+	if not _clips.has(clip_name) or visual_set == null:
+		return 0.0
+	return (_clips[clip_name] as Array).size() / maxf(float(visual_set.get_clip_settings(clip_name).fps), 0.5)
+
+
+## The frame of the clip drawn now.
+func get_clip_texture() -> Texture2D:
+	var frames: Array = _clips.get(clip, _clips.get(CompanionVisualSet.POSE_RESTING, []))
+	if frames.is_empty():
+		return get_pose_texture(pose)
+	var settings := visual_set.get_clip_settings(clip if _clips.has(clip) else CompanionVisualSet.POSE_RESTING)
+	var index := int(_clip_time * float(settings.fps))
+	if settings.loop:
+		index = posmod(index, frames.size())
+	else:
+		index = mini(index, frames.size() - 1)
+	return frames[index]
+
+
 ## Shows `pose_name` for `seconds` (then the idle behaviour continues). A pose
-## without an image shows the resting image instead.
+## without an image shows the resting image instead. A short transition clip
+## may play first (lying down, waking, settling).
 func set_pose(pose_name: StringName, seconds := -1.0) -> void:
+	var before := pose
 	if pose_name != pose:
-		_previous_texture = get_pose_texture(pose)
-		_previous_pose = pose
-		_fade = 0.0 if visual_set and visual_set.fade_seconds > 0.0 else 1.0
 		pose = pose_name
 		pose_changed.emit(pose)
-		update_highlight()
 	_pose_left = seconds if seconds >= 0.0 else _idle_duration(pose_name)
+	if pose_name == before and clip != CompanionVisualSet.POSE_WALK:
+		return
+	if is_walking() and pose_name == CompanionVisualSet.POSE_ALERT and not is_reacting():
+		return  # walking: its walk (or flight) clip goes on
+	var shown := _pose_clip(pose_name)
+	var intro: Array[StringName] = []
+	match pose_name:
+		CompanionVisualSet.POSE_RESTING:
+			if before == CompanionVisualSet.POSE_SLEEPING:
+				intro = [CompanionVisualSet.POSE_WAKE]
+			elif before in [CompanionVisualSet.POSE_SIT, CompanionVisualSet.POSE_TAIL_WAG] or clip == CompanionVisualSet.POSE_WALK:
+				intro = [CompanionVisualSet.POSE_LIE_DOWN]
+		CompanionVisualSet.POSE_SLEEPING:
+			if settled or spot == CompanionState.WAKE_SPOT:
+				intro = [CompanionVisualSet.POSE_SETTLE]
+		CompanionVisualSet.POSE_STRETCHING:
+			if before == CompanionVisualSet.POSE_SLEEPING:
+				intro = [CompanionVisualSet.POSE_WAKE]
+	var queue: Array[StringName] = []
+	for c in intro:
+		if has_clip(c):
+			queue.append(c)
+	queue.append(shown)
+	_play_clip(queue[0], queue.slice(1))
+	# A once-clip that is the pose itself (a stretch, a ruffle) is spread over
+	# the pose's time, a little slower, rather than ending early.
+	if queue.size() == 1 and has_clip(shown) and not bool(visual_set.get_clip_settings(shown).loop) and _pose_left > 0.0:
+		_clip_rate = clampf(clip_length(shown) / _pose_left, 0.4, 1.0)
+	update_highlight()
+
+
+## The clip that shows `pose_name`: petted, its petting response.
+func _pose_clip(pose_name: StringName) -> StringName:
+	if pose_name == CompanionVisualSet.POSE_ALERT and is_reacting() and has_clip(CompanionVisualSet.POSE_PET):
+		return CompanionVisualSet.POSE_PET
+	return pose_name if has_clip(pose_name) else CompanionVisualSet.POSE_RESTING
+
+
+## Starts drawing `clip_name` (then the clips in `then`, in order), with a
+## short cross-fade from what was drawn.
+func _play_clip(clip_name: StringName, then: Array[StringName] = []) -> void:
+	if not is_sprite_mode():
+		return
+	var current := get_clip_texture()
+	if clip_name != clip or not then.is_empty():
+		_previous_texture = current
+		_previous_pose = clip
+		_previous_flip = _is_flipped(clip)
+		_previous_rect = visual_set.get_draw_rect(clip, current) if current else Rect2()
+		_fade = 0.0 if visual_set and visual_set.fade_seconds > 0.0 else 1.0
+	clip = clip_name if has_clip(clip_name) else CompanionVisualSet.POSE_RESTING
+	_clip_queue = then
+	_clip_time = 0.0
+	_clip_rate = 1.0
+
+
+## A response to the Captain's words (I024, CompanionRemarks.response()):
+## plays `clip_name` as a short moment, then it carries on. Nothing when it
+## is asleep, walking, or has no such clip.
+func respond(clip_name: StringName) -> bool:
+	if not is_sprite_mode() or is_walking() or pose == CompanionVisualSet.POSE_SLEEPING or clip_name == &"":
+		return false
+	if clip_name == CompanionVisualSet.POSE_RESTING:
+		_play_clip(CompanionVisualSet.POSE_RESTING)
+		return true
+	if not has_clip(clip_name):
+		return false
+	var seconds := maxf(clip_length(clip_name), 2.4)
+	if clip_name in [CompanionVisualSet.POSE_ALERT, CompanionVisualSet.POSE_PET, CompanionVisualSet.POSE_TAIL_WAG] and not preview:
+		AudioManager.play_sfx(get_sound())  # a purr, a pant, a chirp (the parrot never speaks)
+	if clip_name == CompanionVisualSet.POSE_ALERT:
+		set_pose(CompanionVisualSet.POSE_ALERT, seconds)
+	else:
+		set_pose(clip_name, seconds)
+	return true
 
 
 ## Runs the pose behaviour for `delta` seconds (called every frame; tests
@@ -319,15 +602,23 @@ func advance_behaviour(delta: float) -> void:
 		return
 	if visual_set.fade_seconds > 0.0:
 		_fade = minf(_fade + delta / visual_set.fade_seconds, 1.0)
+	_advance_clip(delta)
 	# Looking up when the player comes close (not while napping or reacting).
 	var focused := interactable != null and interactable.is_focused()
-	if focused and not _was_focused and pose == CompanionVisualSet.POSE_RESTING \
+	if focused and not _was_focused and pose == CompanionVisualSet.POSE_RESTING and not is_walking() \
 			and visual_set.approach_alert_cooldown > 0.0 and _time >= _alert_ready_at:
 		_alert_ready_at = _time + visual_set.approach_alert_cooldown
 		set_pose(CompanionVisualSet.POSE_ALERT, visual_set.alert_seconds * 0.75)
 	_was_focused = focused
+	# The parrot blinks now and then while it sits (the pose stays resting).
+	if pose == CompanionVisualSet.POSE_RESTING and clip == CompanionVisualSet.POSE_RESTING and has_clip(CompanionVisualSet.POSE_BLINK) and not is_walking():
+		_blink_left -= delta
+		if _blink_left <= 0.0:
+			_blink_left = _rng.randf_range(3.0, 8.0)
+			_play_clip(CompanionVisualSet.POSE_BLINK, [CompanionVisualSet.POSE_RESTING] as Array[StringName])
+			_fade = 1.0
 	_pose_left -= delta
-	if _pose_left > 0.0:
+	if _pose_left > 0.0 or is_walking():
 		return
 	if settled and _textures.has(CompanionVisualSet.POSE_SLEEPING) and pose != CompanionVisualSet.POSE_SLEEPING:
 		# Settled at anchor: whatever it was doing, back to its nap.
@@ -335,20 +626,48 @@ func advance_behaviour(delta: float) -> void:
 		return
 	match pose:
 		CompanionVisualSet.POSE_RESTING:
+			var extras := _idle_extras()
 			if _rng.randf() < visual_set.sleep_chance and _textures.has(CompanionVisualSet.POSE_SLEEPING):
 				set_pose(CompanionVisualSet.POSE_SLEEPING)
-			elif _textures.has(CompanionVisualSet.POSE_STRETCHING):
-				set_pose(CompanionVisualSet.POSE_STRETCHING)
+			elif not extras.is_empty():
+				set_pose(extras[_rng.randi() % extras.size()])
 			else:
 				set_pose(CompanionVisualSet.POSE_RESTING)
 		CompanionVisualSet.POSE_SLEEPING:
-			# Waking up: usually a stretch first.
-			if _rng.randf() < 0.5 and _textures.has(CompanionVisualSet.POSE_STRETCHING):
-				set_pose(CompanionVisualSet.POSE_STRETCHING)
+			# Waking up: usually a stretch (or, for the bird, a ruffle) first.
+			var after := CompanionVisualSet.POSE_RUFFLE if _is_bird() else CompanionVisualSet.POSE_STRETCHING
+			if _rng.randf() < 0.5 and _textures.has(after):
+				set_pose(after)
 			else:
 				set_pose(CompanionVisualSet.POSE_RESTING)
 		_:
 			set_pose(CompanionVisualSet.POSE_RESTING)
+
+
+## What it does between rests, by kind (only clips the art has). The
+## stretch stays in every mammal's list.
+func _idle_extras() -> Array[StringName]:
+	var wanted: Array[StringName] = []
+	match kind:
+		CompanionState.KIND_DOG:
+			wanted = [CompanionVisualSet.POSE_STRETCHING, CompanionVisualSet.POSE_TAIL_WAG, CompanionVisualSet.POSE_SIT, CompanionVisualSet.POSE_STRETCHING]
+		CompanionState.KIND_PARROT:
+			wanted = [CompanionVisualSet.POSE_PREEN, CompanionVisualSet.POSE_RUFFLE, CompanionVisualSet.POSE_HEAD_TURN, CompanionVisualSet.POSE_STRETCHING]
+		_:
+			wanted = [CompanionVisualSet.POSE_STRETCHING, CompanionVisualSet.POSE_GROOM, CompanionVisualSet.POSE_SIT, CompanionVisualSet.POSE_STRETCHING]
+	return wanted.filter(func(p: StringName) -> bool: return _textures.has(p))
+
+
+func _advance_clip(delta: float) -> void:
+	_clip_time += delta * _clip_rate
+	if _clip_queue.is_empty() or not has_clip(clip):
+		return
+	var settings := visual_set.get_clip_settings(clip)
+	if not settings.loop and _clip_time >= clip_length(clip):
+		var next: StringName = _clip_queue.pop_front()
+		var rest := _clip_queue.duplicate()
+		_play_clip(next, rest)
+		_fade = 1.0  # transitions are drawn to meet: no fade between them
 
 
 func _idle_duration(pose_name: StringName) -> float:
@@ -357,10 +676,16 @@ func _idle_duration(pose_name: StringName) -> float:
 	match pose_name:
 		CompanionVisualSet.POSE_SLEEPING:
 			return _rng.randf_range(visual_set.sleep_seconds.x, visual_set.sleep_seconds.y) * (SETTLED_SLEEP_FACTOR if settled else 1.0)
-		CompanionVisualSet.POSE_STRETCHING:
-			return visual_set.stretch_seconds
+		CompanionVisualSet.POSE_STRETCHING, CompanionVisualSet.POSE_RUFFLE, CompanionVisualSet.POSE_HEAD_TURN:
+			return maxf(visual_set.stretch_seconds, clip_length(pose_name))
 		CompanionVisualSet.POSE_ALERT:
 			return visual_set.alert_seconds
+		CompanionVisualSet.POSE_GROOM, CompanionVisualSet.POSE_PREEN:
+			return _rng.randf_range(4.0, 8.0)
+		CompanionVisualSet.POSE_SIT:
+			return _rng.randf_range(8.0, 18.0)
+		CompanionVisualSet.POSE_TAIL_WAG:
+			return _rng.randf_range(2.6, 4.0)
 		_:
 			return _rng.randf_range(visual_set.rest_seconds.x, visual_set.rest_seconds.y)
 
@@ -368,46 +693,40 @@ func _idle_duration(pose_name: StringName) -> float:
 ## Loads the pose images of the current kind (missing ones are skipped with a
 ## warning; without a resting image the procedural drawing is used).
 func _load_visuals() -> void:
-	_textures.clear()
-	visual_set = CompanionVisualSet.for_kind(kind)
-	if visual_set == null:
-		return
-	for pose_name in visual_set.get_pose_names():
-		var texture := visual_set.get_texture(pose_name)
-		if texture:
-			_textures[pose_name] = texture
-	if not _textures.has(CompanionVisualSet.POSE_RESTING):
-		if not visual_set.get_pose_names().is_empty():
-			push_warning("Companion art '%s' has no usable 'resting' image; using the procedural %s." % [kind, CompanionState.display_name(kind)])
-		_textures.clear()
-		return
+	use_visual_set(CompanionVisualSet.for_kind(kind), false)
+	if visual_set and not _textures.has(CompanionVisualSet.POSE_RESTING) and not visual_set.get_pose_names().is_empty():
+		push_warning("Companion art '%s' has no usable 'resting' image; using the procedural %s." % [kind, CompanionState.display_name(kind)])
 	_rng.seed = hash(String(kind) + String(spot))
-	_previous_texture = null
-	_fade = 1.0
-	pose = CompanionVisualSet.POSE_RESTING
 	_pose_left = _idle_duration(pose)
-	update_highlight()
 
 
 ## Uses `visual_set_override` instead of the kind's set (tests and tools; a
 ## null set shows the procedural drawing).
-func use_visual_set(visual_set_override: CompanionVisualSet) -> void:
+func use_visual_set(visual_set_override: CompanionVisualSet, refresh := true) -> void:
 	_textures.clear()
+	_clips.clear()
 	visual_set = visual_set_override
 	if visual_set:
 		for pose_name in visual_set.get_pose_names():
-			var texture := visual_set.get_texture(pose_name)
-			if texture:
-				_textures[pose_name] = texture
+			var frames := visual_set.get_frames(pose_name)
+			if not frames.is_empty():
+				_textures[pose_name] = frames[0]
+				_clips[pose_name] = frames
 		if not _textures.has(CompanionVisualSet.POSE_RESTING):
 			_textures.clear()
+			_clips.clear()
 	pose = CompanionVisualSet.POSE_RESTING
+	clip = CompanionVisualSet.POSE_RESTING
+	_clip_queue = []
+	_clip_time = 0.0
+	_clip_rate = 1.0
 	_previous_texture = null
 	_fade = 1.0
 	_pose_left = _idle_duration(pose)
 	_sync_rotation()
 	update_highlight()
-	queue_redraw()
+	if refresh:
+		queue_redraw()
 
 
 ## Shows the companion from the session state (kind and resting spot).
@@ -422,8 +741,7 @@ func _sync() -> void:
 		_load_visuals()
 	kind = companion.kind
 	spot = companion.spot
-	var here := CompanionState.AREA_DECK if on_deck else CompanionState.AREA_CABIN
-	visible = companion.area == here
+	visible = _shows(companion.area)
 	_walk = PackedVector2Array()
 	_walk_index = 0
 	_walking_out = false
@@ -431,7 +749,7 @@ func _sync() -> void:
 	position = _rest_position()
 	_sync_rotation()
 	update_highlight()
-	interactable.prompt = Loc.t("Pet %s") % CompanionState.display_name(kind)
+	interactable.prompt = CompanionRemarks.pet_prompt(CompanionRemarks.identity(companion))
 	_update_interactable()
 
 
@@ -455,14 +773,18 @@ static var _hulls := {}
 ## get_highlight_outline(); pose changes update the focus glow directly.
 func get_local_outline() -> PackedVector2Array:
 	if is_sprite_mode():
-		var texture := get_pose_texture(pose)
-		var rect := visual_set.get_draw_rect(pose, texture)
+		var shown: StringName = clip if _clips.has(clip) else CompanionVisualSet.POSE_RESTING
+		var texture: Texture2D = _clips[shown][0]
+		var rect := visual_set.get_draw_rect(shown, texture)
+		rect.position.y -= _lift
+		var mirror := _is_flipped(shown)
 		var hull := silhouette(texture)
 		if hull.size() >= 3:
 			var points := PackedVector2Array()
 			var size := texture.get_size()
 			for p in hull:
-				points.append(rect.position + p / size * rect.size)
+				var at := rect.position + p / size * rect.size
+				points.append(Vector2(-at.x, at.y) if mirror else at)
 			var grown := Geometry2D.offset_polygon(points, HIGHLIGHT_MARGIN, Geometry2D.JOIN_ROUND)
 			return grown[0] if not grown.is_empty() else points
 		return HighlightResolver.rounded_rect(rect, 10.0)
@@ -519,7 +841,7 @@ func get_spot_position(spot_id: StringName) -> Vector2:
 	return marker.position
 
 
-## Where the current pose image is drawn (local), for tests and tools.
+## Where the current pose image is drawn (local, unmirrored), for tests and tools.
 func get_pose_rect(pose_name: StringName = pose) -> Rect2:
 	var texture := get_pose_texture(pose_name)
 	return visual_set.get_draw_rect(pose_name, texture) if texture and visual_set else Rect2()
@@ -542,23 +864,47 @@ func _draw() -> void:
 
 
 func _draw_pose() -> void:
-	# Breathing: a very small vertical swell from the bottom (slower asleep).
+	# Breathing lives in the clips now; a still pose (art without frames, e.g.
+	# the Captain's own drawing) keeps the very small vertical swell.
 	var rate := 0.18 if pose == CompanionVisualSet.POSE_SLEEPING else 0.25
-	var swell := 0.012 * sin(_time * TAU * rate)
+	var still := (_clips.get(clip, []) as Array).size() <= 1
+	var swell := 0.012 * sin(_time * TAU * rate) if still else 0.0
+	var lift := Vector2(0.0, -_lift)
+	if _lift > 0.5:
+		# A faint shadow stays on the ground below the flying bird.
+		var shadow := visual_set.display_size * 0.16
+		draw_colored_polygon(_ellipse(Vector2.ZERO, Vector2(shadow, shadow * 0.4)), Color(0.08, 0.12, 0.14, 0.18 * (1.0 - _lift / (FLY_HEIGHT * 2.0))))
 	if _previous_texture and _fade < 1.0:
-		_draw_pose_texture(_previous_pose, _previous_texture, 1.0 - _fade, swell)
-	_draw_pose_texture(pose, get_pose_texture(pose), _fade if _previous_texture else 1.0, swell)
+		var rect := _previous_rect
+		rect.position += lift
+		_draw_texture_in(_previous_texture, rect, _previous_flip, 1.0 - _fade, swell)
+	var texture := get_clip_texture()
+	if texture:
+		var rect := visual_set.get_draw_rect(clip, texture)
+		rect.position += lift
+		if clip == CompanionVisualSet.POSE_HOP:
+			# The hop is drawn moving forward on its canvas; the node itself
+			# carries the bird, so that drift is taken out (no jump back).
+			var length := maxf(clip_length(clip), 0.01)
+			rect.position.x -= HOP_DRIFT_PX * visual_set.display_size / 256.0 * clampf(_clip_time / length, 0.0, 1.0)
+		_draw_texture_in(texture, rect, _is_flipped(clip), _fade if _previous_texture else 1.0, swell)
 
 
-func _draw_pose_texture(pose_name: StringName, texture: Texture2D, alpha: float, swell: float) -> void:
+## Mirrored when it faces left (and when the pose's art says so).
+func _is_flipped(clip_name: StringName) -> bool:
+	var art := visual_set.get_pose_art(clip_name) if visual_set else null
+	return (art != null and art.flip_h) != (facing < 0.0)
+
+
+func _draw_texture_in(texture: Texture2D, rect: Rect2, flip: bool, alpha: float, swell: float) -> void:
 	if texture == null or alpha <= 0.0:
 		return
-	var rect := visual_set.get_draw_rect(pose_name, texture)
 	var bottom := rect.end.y
 	rect.size.y *= 1.0 + swell
 	rect.position.y = bottom - rect.size.y
-	var art := visual_set.get_pose_art(pose_name)
-	if art and art.flip_h:
+	if flip:
+		# Mirrored about the ground point (x = 0), so it turns on the spot.
+		rect.position.x = -rect.end.x
 		rect.position.x += rect.size.x
 		rect.size.x = -rect.size.x
 	draw_texture_rect(texture, rect, false, Color(1, 1, 1, alpha))

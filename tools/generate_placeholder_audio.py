@@ -152,6 +152,31 @@ write("companion_purr.wav", purr(1.6, 0.4))
 write("companion_dog_pant.wav", dog_pant(1.6, 0.3))
 
 
+def parrot_chirp(dur, amp):
+    """I024: a small parrot's two soft chirps and a short whistle (a
+    green-cheeked conure, not a squawking macaw)."""
+    n = int(dur * RATE)
+    out = [0.0] * n
+    # (start s, length s, from Hz, to Hz, level)
+    notes = [(0.02, 0.07, 2900, 3600, 0.8), (0.14, 0.06, 3100, 3800, 0.7), (0.34, 0.22, 2200, 2700, 0.55)]
+    for start, length, f0, f1, level in notes:
+        i0, m = int(start * RATE), int(length * RATE)
+        phase = 0.0
+        for k in range(m):
+            if i0 + k >= n:
+                break
+            u = k / m
+            f = f0 + (f1 - f0) * math.sin(u * math.pi / 2)
+            phase += 2 * math.pi * f / RATE
+            env = math.sin(math.pi * u) ** 1.5
+            out[i0 + k] += level * env * (math.sin(phase) + 0.18 * math.sin(2 * phase))
+    peak = max(abs(s) for s in out) or 1.0
+    return [s / peak * amp for s in out]
+
+
+write("companion_parrot_chirp.wav", parrot_chirp(0.7, 0.28))
+
+
 def storm_wind(dur, amp):
     """Strong wind in the rigging (Iteration 005a): bright gusting noise with a
     faint whistle, crossfaded to loop. Played louder the stronger the wind."""

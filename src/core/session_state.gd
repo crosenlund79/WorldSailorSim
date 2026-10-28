@@ -114,7 +114,8 @@ var home := HomeState.new()
 
 
 static func create_new(start_location: StringName, start_area: StringName, start_spawn: StringName,
-		companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD) -> SessionState:
+		companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
+		companion_name := "", companion_gender: StringName = &"") -> SessionState:
 	var state := SessionState.new()
 	state.difficulty = Difficulty.valid(level)
 	state.funds = Difficulty.starting_funds(state.difficulty)
@@ -125,7 +126,7 @@ static func create_new(start_location: StringName, start_area: StringName, start
 	state.game_time = get_start_time()
 	state.weather_exposure.reset(state.game_time)
 	state.damage_applied_until = state.game_time
-	state.companion = CompanionState.create(companion_kind, state.game_time)
+	state.companion = CompanionState.create(companion_kind, state.game_time, companion_name, companion_gender)
 	state.captains_log = CaptainsLog.create(start_location, state.game_time)
 	state.hat = HatState.create(state.game_time)
 	state.fishing.checked_until = state.game_time

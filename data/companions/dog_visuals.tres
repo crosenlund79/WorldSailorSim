@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CompanionVisualSet" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="CompanionVisualSet" load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://src/companion/companion_visual_set.gd" id="1_set"]
 [ext_resource type="Script" path="res://src/companion/companion_pose_art.gd" id="2_pose"]
@@ -6,26 +6,104 @@
 [sub_resource type="Resource" id="Pose_resting"]
 script = ExtResource("2_pose")
 pose = &"resting"
-image_path = "res://assets/companions/dog/resting.png"
+image_path = "res://assets/companions/dog/resting_00.png"
+frames = Array[String](["res://assets/companions/dog/resting_01.png", "res://assets/companions/dog/resting_02.png", "res://assets/companions/dog/resting_03.png", "res://assets/companions/dog/resting_04.png", "res://assets/companions/dog/resting_05.png", "res://assets/companions/dog/resting_06.png", "res://assets/companions/dog/resting_07.png"])
+fps = 5.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_walk"]
+script = ExtResource("2_pose")
+pose = &"walk"
+image_path = "res://assets/companions/dog/walk_00.png"
+frames = Array[String](["res://assets/companions/dog/walk_01.png", "res://assets/companions/dog/walk_02.png", "res://assets/companions/dog/walk_03.png", "res://assets/companions/dog/walk_04.png", "res://assets/companions/dog/walk_05.png", "res://assets/companions/dog/walk_06.png", "res://assets/companions/dog/walk_07.png"])
+fps = 10.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_turn"]
+script = ExtResource("2_pose")
+pose = &"turn"
+image_path = "res://assets/companions/dog/turn_00.png"
+frames = Array[String](["res://assets/companions/dog/turn_01.png", "res://assets/companions/dog/turn_02.png", "res://assets/companions/dog/turn_03.png"])
+fps = 10.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_sit"]
+script = ExtResource("2_pose")
+pose = &"sit"
+image_path = "res://assets/companions/dog/sit_00.png"
+frames = Array[String](["res://assets/companions/dog/sit_01.png", "res://assets/companions/dog/sit_02.png", "res://assets/companions/dog/sit_03.png", "res://assets/companions/dog/sit_04.png", "res://assets/companions/dog/sit_05.png"])
+fps = 5.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_lie_down"]
+script = ExtResource("2_pose")
+pose = &"lie_down"
+image_path = "res://assets/companions/dog/lie_down_00.png"
+frames = Array[String](["res://assets/companions/dog/lie_down_01.png", "res://assets/companions/dog/lie_down_02.png", "res://assets/companions/dog/lie_down_03.png"])
+fps = 8.0
+loop = false
 
 [sub_resource type="Resource" id="Pose_sleeping"]
 script = ExtResource("2_pose")
 pose = &"sleeping"
-image_path = "res://assets/companions/dog/sleeping.png"
+image_path = "res://assets/companions/dog/sleeping_00.png"
+frames = Array[String](["res://assets/companions/dog/sleeping_01.png", "res://assets/companions/dog/sleeping_02.png", "res://assets/companions/dog/sleeping_03.png", "res://assets/companions/dog/sleeping_04.png", "res://assets/companions/dog/sleeping_05.png"])
+fps = 3.0
+loop = true
 
-[sub_resource type="Resource" id="Pose_alert"]
+[sub_resource type="Resource" id="Pose_wake"]
 script = ExtResource("2_pose")
-pose = &"alert"
-image_path = "res://assets/companions/dog/alert.png"
+pose = &"wake"
+image_path = "res://assets/companions/dog/wake_00.png"
+frames = Array[String](["res://assets/companions/dog/wake_01.png", "res://assets/companions/dog/wake_02.png", "res://assets/companions/dog/wake_03.png"])
+fps = 6.0
+loop = false
 
 [sub_resource type="Resource" id="Pose_stretching"]
 script = ExtResource("2_pose")
 pose = &"stretching"
-image_path = "res://assets/companions/dog/stretching.png"
+image_path = "res://assets/companions/dog/stretching_00.png"
+frames = Array[String](["res://assets/companions/dog/stretching_01.png", "res://assets/companions/dog/stretching_02.png", "res://assets/companions/dog/stretching_03.png", "res://assets/companions/dog/stretching_04.png", "res://assets/companions/dog/stretching_05.png"])
+fps = 6.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_tail_wag"]
+script = ExtResource("2_pose")
+pose = &"tail_wag"
+image_path = "res://assets/companions/dog/tail_wag_00.png"
+frames = Array[String](["res://assets/companions/dog/tail_wag_01.png", "res://assets/companions/dog/tail_wag_02.png", "res://assets/companions/dog/tail_wag_03.png", "res://assets/companions/dog/tail_wag_04.png", "res://assets/companions/dog/tail_wag_05.png"])
+fps = 12.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_alert"]
+script = ExtResource("2_pose")
+pose = &"alert"
+image_path = "res://assets/companions/dog/alert_00.png"
+frames = Array[String](["res://assets/companions/dog/alert_01.png", "res://assets/companions/dog/alert_02.png", "res://assets/companions/dog/alert_03.png", "res://assets/companions/dog/alert_04.png", "res://assets/companions/dog/alert_05.png"])
+fps = 6.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_pet"]
+script = ExtResource("2_pose")
+pose = &"pet"
+image_path = "res://assets/companions/dog/pet_00.png"
+frames = Array[String](["res://assets/companions/dog/pet_01.png", "res://assets/companions/dog/pet_02.png", "res://assets/companions/dog/pet_03.png", "res://assets/companions/dog/pet_04.png", "res://assets/companions/dog/pet_05.png"])
+fps = 8.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_settle"]
+script = ExtResource("2_pose")
+pose = &"settle"
+image_path = "res://assets/companions/dog/settle_00.png"
+frames = Array[String](["res://assets/companions/dog/settle_01.png", "res://assets/companions/dog/settle_02.png", "res://assets/companions/dog/settle_03.png", "res://assets/companions/dog/settle_04.png", "res://assets/companions/dog/settle_05.png"])
+fps = 6.0
+loop = false
 
 [resource]
 script = ExtResource("1_set")
 kind = &"dog"
 workshop_id = "pet.dog"
-display_size = 116.0
-poses = Array[ExtResource("2_pose")]([SubResource("Pose_resting"), SubResource("Pose_sleeping"), SubResource("Pose_alert"), SubResource("Pose_stretching")])
+poses = Array[ExtResource("2_pose")]([SubResource("Pose_resting"), SubResource("Pose_walk"), SubResource("Pose_turn"), SubResource("Pose_sit"), SubResource("Pose_lie_down"), SubResource("Pose_sleeping"), SubResource("Pose_wake"), SubResource("Pose_stretching"), SubResource("Pose_tail_wag"), SubResource("Pose_alert"), SubResource("Pose_pet"), SubResource("Pose_settle")])
+display_size = 56.0
+pivot = Vector2(0.5, 0.625)
+walk_speed = 11.0

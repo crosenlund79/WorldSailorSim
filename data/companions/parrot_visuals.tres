@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="CompanionVisualSet" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://src/companion/companion_visual_set.gd" id="1_set"]
+[ext_resource type="Script" path="res://src/companion/companion_pose_art.gd" id="2_pose"]
+
+[sub_resource type="Resource" id="Pose_resting"]
+script = ExtResource("2_pose")
+pose = &"resting"
+image_path = "res://assets/companions/parrot/resting_00.png"
+frames = Array[String](["res://assets/companions/parrot/resting_01.png", "res://assets/companions/parrot/resting_02.png", "res://assets/companions/parrot/resting_03.png", "res://assets/companions/parrot/resting_04.png", "res://assets/companions/parrot/resting_05.png"])
+fps = 4.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_blink"]
+script = ExtResource("2_pose")
+pose = &"blink"
+image_path = "res://assets/companions/parrot/blink_00.png"
+frames = Array[String](["res://assets/companions/parrot/blink_01.png", "res://assets/companions/parrot/blink_02.png"])
+fps = 10.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_head_turn"]
+script = ExtResource("2_pose")
+pose = &"head_turn"
+image_path = "res://assets/companions/parrot/head_turn_00.png"
+frames = Array[String](["res://assets/companions/parrot/head_turn_01.png", "res://assets/companions/parrot/head_turn_02.png", "res://assets/companions/parrot/head_turn_03.png", "res://assets/companions/parrot/head_turn_04.png", "res://assets/companions/parrot/head_turn_05.png"])
+fps = 6.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_hop"]
+script = ExtResource("2_pose")
+pose = &"hop"
+image_path = "res://assets/companions/parrot/hop_00.png"
+frames = Array[String](["res://assets/companions/parrot/hop_01.png", "res://assets/companions/parrot/hop_02.png", "res://assets/companions/parrot/hop_03.png", "res://assets/companions/parrot/hop_04.png", "res://assets/companions/parrot/hop_05.png"])
+fps = 10.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_takeoff"]
+script = ExtResource("2_pose")
+pose = &"takeoff"
+image_path = "res://assets/companions/parrot/takeoff_00.png"
+frames = Array[String](["res://assets/companions/parrot/takeoff_01.png", "res://assets/companions/parrot/takeoff_02.png", "res://assets/companions/parrot/takeoff_03.png"])
+fps = 12.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_fly"]
+script = ExtResource("2_pose")
+pose = &"fly"
+image_path = "res://assets/companions/parrot/fly_00.png"
+frames = Array[String](["res://assets/companions/parrot/fly_01.png", "res://assets/companions/parrot/fly_02.png", "res://assets/companions/parrot/fly_03.png", "res://assets/companions/parrot/fly_04.png", "res://assets/companions/parrot/fly_05.png"])
+fps = 12.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_land"]
+script = ExtResource("2_pose")
+pose = &"land"
+image_path = "res://assets/companions/parrot/land_00.png"
+frames = Array[String](["res://assets/companions/parrot/land_01.png", "res://assets/companions/parrot/land_02.png", "res://assets/companions/parrot/land_03.png"])
+fps = 12.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_ruffle"]
+script = ExtResource("2_pose")
+pose = &"ruffle"
+image_path = "res://assets/companions/parrot/ruffle_00.png"
+frames = Array[String](["res://assets/companions/parrot/ruffle_01.png", "res://assets/companions/parrot/ruffle_02.png", "res://assets/companions/parrot/ruffle_03.png", "res://assets/companions/parrot/ruffle_04.png", "res://assets/companions/parrot/ruffle_05.png"])
+fps = 10.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_preen"]
+script = ExtResource("2_pose")
+pose = &"preen"
+image_path = "res://assets/companions/parrot/preen_00.png"
+frames = Array[String](["res://assets/companions/parrot/preen_01.png", "res://assets/companions/parrot/preen_02.png", "res://assets/companions/parrot/preen_03.png", "res://assets/companions/parrot/preen_04.png", "res://assets/companions/parrot/preen_05.png", "res://assets/companions/parrot/preen_06.png", "res://assets/companions/parrot/preen_07.png"])
+fps = 8.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_sleeping"]
+script = ExtResource("2_pose")
+pose = &"sleeping"
+image_path = "res://assets/companions/parrot/sleeping_00.png"
+frames = Array[String](["res://assets/companions/parrot/sleeping_01.png", "res://assets/companions/parrot/sleeping_02.png", "res://assets/companions/parrot/sleeping_03.png"])
+fps = 2.0
+loop = true
+
+[sub_resource type="Resource" id="Pose_wake"]
+script = ExtResource("2_pose")
+pose = &"wake"
+image_path = "res://assets/companions/parrot/wake_00.png"
+frames = Array[String](["res://assets/companions/parrot/wake_01.png", "res://assets/companions/parrot/wake_02.png", "res://assets/companions/parrot/wake_03.png"])
+fps = 6.0
+loop = false
+
+[sub_resource type="Resource" id="Pose_alert"]
+script = ExtResource("2_pose")
+pose = &"alert"
+image_path = "res://assets/companions/parrot/alert_00.png"
+frames = Array[String](["res://assets/companions/parrot/alert_01.png", "res://assets/companions/parrot/alert_02.png", "res://assets/companions/parrot/alert_03.png", "res://assets/companions/parrot/alert_04.png", "res://assets/companions/parrot/alert_05.png"])
+fps = 8.0
+loop = true
+
+[resource]
+script = ExtResource("1_set")
+kind = &"parrot"
+workshop_id = "pet.parrot"
+poses = Array[ExtResource("2_pose")]([SubResource("Pose_resting"), SubResource("Pose_blink"), SubResource("Pose_head_turn"), SubResource("Pose_hop"), SubResource("Pose_takeoff"), SubResource("Pose_fly"), SubResource("Pose_land"), SubResource("Pose_ruffle"), SubResource("Pose_preen"), SubResource("Pose_sleeping"), SubResource("Pose_wake"), SubResource("Pose_alert")])
+display_size = 50.0
+pivot = Vector2(0.5, 0.6875)
+fly_speed = 110.0

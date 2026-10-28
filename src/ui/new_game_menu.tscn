@@ -68,6 +68,14 @@ theme_type_variation = &"MenuItem"
 toggle_mode = true
 text = "Dog"
 
+[node name="ParrotButton" type="Button" parent="Center/Panel/VBox/Choice"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MenuItem"
+toggle_mode = true
+text = "Parrot"
+
 [node name="PreviewBox" type="Control" parent="Center/Panel/VBox"]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
@@ -86,6 +94,26 @@ layout_mode = 2
 theme_type_variation = &"MutedLabel"
 text = ""
 autowrap_mode = 3
+
+[node name="NameRow" type="HBoxContainer" parent="Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="Center/Panel/VBox/NameRow"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="Center/Panel/VBox/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Optional"
+max_length = 20
+
+[node name="GenderPicker" type="OptionButton" parent="Center/Panel/VBox/NameRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 
 [node name="Buttons" type="HBoxContainer" parent="Center/Panel/VBox"]
 layout_mode = 2
