@@ -191,10 +191,14 @@ func _test_hud_underway() -> void:
 	GameSession.depart()
 	Simulation.advance(600.0)
 	await t.frames(3)
-	t.check(hud.sailing_panel.visible and not (hud.find_child("WindLabel", true, false) as Control).visible
-		and not (hud.find_child("PropulsionLabel", true, false) as Control).visible and (hud.find_child("RouteLabel", true, false) as Control).visible,
-		"[hud] underway: speed, sails and wind on the sailing panel only; the route panel keeps to the voyage")
-	t.check(hud.get_route_text().contains("Kiel"), "[hud] %s" % hud.get_route_text())
+	# I026: underway the instruments carry the route, speed and wind; the
+	# route panel keeps only its Menu button (nothing shown twice).
+	hud.instrument_cluster.refresh()
+	t.check(hud.instrument_cluster.visible and not (hud.find_child("WindLabel", true, false) as Control).visible
+		and not (hud.find_child("PropulsionLabel", true, false) as Control).visible and not (hud.find_child("RouteLabel", true, false) as Control).visible
+		and (hud.find_child("MenuButton", true, false) as Control).is_visible_in_tree(),
+		"[hud] underway: the route, speed and wind on the instruments only; the route panel keeps its Menu button")
+	t.check(hud.instrument_cluster.get_value("route").contains("Kiel"), "[hud] %s" % hud.instrument_cluster.get_value("route"))
 
 
 func _test_chart() -> void:

@@ -5,6 +5,9 @@ extends TradePanel
 ## the same way, once per boat), the Magic Anchor (once, for every boat),
 ## lures (the fishing catalogue's), and a few things for the cabin (once;
 ## the Captain's own, to show on any boat with "Make it home").
+## I026: Electronics, the instrument packages (InstrumentPackage), bought
+## once and fitted to the boat aboard; an owned package is fitted again here
+## (or in the instruments' focused view) for nothing.
 ## Every purchase is whole or nothing, never more than the Captain has.
 
 signal time_requested(minutes: float)
@@ -18,6 +21,7 @@ func _ready() -> void:
 		_row(id, Loc.t(String(upgrade.name)), Loc.t(String(upgrade.text)), _fit.bind(id))
 	_row("magic_anchor", "Magic Anchor",
 		"A clever anchor for deep water, where an ordinary one cannot reach the bottom. For every boat you sail.", _buy_magic)
+	_add_electronics()
 	_heading("FishingHeading", "Fishing tackle")
 	for lure: Dictionary in FishingCatalog.get_default().lures:
 		_row("lure_%s" % lure.id, Loc.t(String(lure.name)), Loc.t(String(lure.text)), _buy_lure.bind(String(lure.id)))
@@ -59,6 +63,7 @@ func refresh() -> void:
 		else:
 			button.text = Loc.t("Buy (%s)") % GameSession.format_money(int(item.price))
 			button.disabled = not open or int(item.price) > funds
+	_refresh_electronics(open, funds)
 
 
 func _fit(id: String) -> void:
@@ -97,4 +102,47 @@ func _buy_decor(id: String) -> void:
 		return
 	SessionLog.write("decor_bought", {"item": id, "port": String(GameSession.get_location_id())})
 	notify(Loc.t("%s is yours. Show it aboard with \"Make it home\" (Q, in the cabin).") % Loc.t(String(HarbourTrades.get_decor_item(id).name)))
+	refresh()
+
+
+# --- Electronics (I026 stage 03) ---------------------------------------------------------------
+
+func _add_electronics() -> void:
+	_heading("ElectronicsHeading", "Electronics")
+	for package in InstrumentPackage.get_all():
+		_row("instruments_%s" % package.id, package.get_display_name(), package.get_text(), _on_instruments.bind(package.id))
+	if not GameSession.instruments_changed.is_connected(refresh):
+		GameSession.instruments_changed.connect(refresh)
+
+
+func _refresh_electronics(open: bool, funds: int) -> void:
+	var fitted := GameSession.get_instrument_package().id
+	for package in InstrumentPackage.get_all():
+		var button := _rows.get("instruments_%s" % package.id) as Button
+		if button == null:
+			continue
+		if package.id == fitted:
+			button.text = "Fitted"
+			button.disabled = true
+		elif GameSession.owns_instrument_package(package.id):
+			button.text = "Fit it (yours)"
+			button.disabled = false
+		else:
+			button.text = Loc.t("Buy and fit (%s)") % GameSession.format_money(package.price)
+			button.disabled = not open or package.price > funds
+
+
+func _on_instruments(id: String) -> void:
+	var package := InstrumentPackage.get_package(id)
+	var owned := GameSession.owns_instrument_package(id)
+	var error := GameSession.fit_instrument_package(id) if owned else GameSession.buy_instrument_package(id)
+	if error != "":
+		notify(error)
+		return
+	var boat := GameSession.get_vessel_definition().display_name
+	if owned:
+		notify(Loc.t("%s fitted to the %s.") % [package.get_display_name(), boat])
+	else:
+		SessionLog.write("upgrade_fitted", {"upgrade": "instruments_%s" % id, "cost": package.price, "port": String(GameSession.get_location_id()), "shop": "chandlery"})
+		notify(Loc.t("%s fitted to the %s for %s. It is yours for any boat.") % [package.get_display_name(), boat, GameSession.format_money(package.price)])
 	refresh()

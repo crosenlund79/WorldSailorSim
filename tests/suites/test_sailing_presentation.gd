@@ -122,18 +122,21 @@ func _test_motoring_and_engine_audio() -> void:
 	await t.screenshot("22b_cabin_motoring")
 
 
+## I026: underway these readouts are the instruments' (InstrumentCluster; in
+## words in the focused view), no longer the route panel's.
 func _test_hud() -> void:
-	app.hud.refresh()
-	var propulsion := (app.hud.find_child("PropulsionLabel", true, false) as Label).text
-	var wind := (app.hud.find_child("WindLabel", true, false) as Label).text
+	var instruments: InstrumentCluster = app.hud.instrument_cluster
+	instruments.refresh()
+	var propulsion := instruments.get_value("propulsion")
+	var wind := instruments.get_value("wind")
 	t.check(propulsion.begins_with("Motoring") and "insufficient sailing performance" in propulsion,
 		"[hud] shows motoring and why (%s)" % propulsion)
-	t.check(wind.begins_with("Wind ") and " kn" in wind and ("port" in wind or "starboard" in wind or "off the bow" in wind),
+	t.check(" kn" in wind and ("port" in wind or "starboard" in wind or "off the bow" in wind),
 		"[hud] shows the local wind and its angle (%s)" % wind)
-	t.check("ETA about" in (app.hud.find_child("RouteDetail", true, false) as Label).text, "[hud] shows a wind-aware ETA")
+	t.check("ETA about" in instruments.get_value("eta"), "[hud] shows a wind-aware ETA")
 	_force(PropulsionState.MODE_SAIL, 135.0)
-	app.hud.refresh()
-	propulsion = (app.hud.find_child("PropulsionLabel", true, false) as Label).text
+	instruments.refresh()
+	propulsion = instruments.get_value("propulsion")
 	t.check(propulsion.begins_with("Under sail · broad reach") and "spinnaker" in propulsion, "[hud] shows sailing and the spinnaker (%s)" % propulsion)
 	await t.screenshot("22c_cabin_hud_sailing")
 

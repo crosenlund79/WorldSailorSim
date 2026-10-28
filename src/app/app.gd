@@ -287,6 +287,7 @@ func _ready() -> void:
 	hud.menu_requested.connect(open_pause_menu)
 	hud.chart_requested.connect(open_chart_from_warning)
 	hud.save_requested.connect(open_save_menu)
+	hud.instruments_requested.connect(open_instruments)
 	GameSession.notice.connect(notify)
 	Simulation.weather_warning.connect(_on_weather_warning)
 	Simulation.traffic_alert.connect(_on_traffic_alert)
@@ -447,7 +448,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"chartplotter") and not event.is_echo():
 		if is_in_gameplay() and modals.is_empty() and not router.is_busy():
 			get_viewport().set_input_as_handled()
-			toggle_chartplotter()
+			open_chartplotter()
+		return
+	if event.is_action_pressed(&"instruments") and not event.is_echo():
+		if is_in_gameplay() and modals.is_empty() and not router.is_busy():
+			get_viewport().set_input_as_handled()
+			open_instruments()
 		return
 	if not event.is_action_pressed(&"pause") or event.is_echo():
 		return
@@ -682,11 +688,27 @@ func open_chart() -> void:
 
 # --- Action wheel and chartplotter (Iteration 17) --------------------------------------
 
-## The chartplotter on deck (shown underway): on or off.
-func toggle_chartplotter() -> void:
-	ChartPlotter.shown = not ChartPlotter.shown
-	if ChartPlotter.shown and not (GameSession.is_underway() and _is_on_deck()):
-		notify(Loc.t("The chartplotter shows on deck while underway."))
+# --- Marine electronics (I026 stage 03) ----------------------------------------------------------
+
+## The helm's chartplotter, close up (P, the action wheel, the plotter at
+## the helm). Aboard, in harbour or at sea; Esc closes.
+func open_chartplotter() -> PlotterView:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var view := PlotterView.new()
+	modals.push(view)
+	return view
+
+
+## The instruments, close up: the fitted package's units with their pages
+## and the package selector (I, the action wheel, a click on the HUD's
+## instruments or on the units at the helm). Esc closes.
+func open_instruments() -> InstrumentView:
+	if not is_in_gameplay() or router.is_busy() or not modals.is_empty():
+		return null
+	var view := InstrumentView.new()
+	modals.push(view)
+	return view
 
 
 ## The actions that make sense here, for the action wheel:
@@ -712,13 +734,16 @@ func get_wheel_actions() -> Array[Dictionary]:
 		# I024: postcards, travel updates, the little game and the achievements
 		# all live on the laptop now (one item instead of two).
 		add.call(&"laptop", Loc.t("Laptop"), func() -> void: open_laptop.call_deferred())
+		if GameSession.is_underway():
+			# I026: the instruments from below (the essentials never need a walk).
+			add.call(&"instruments", Loc.t("Instruments"), func() -> void: open_instruments.call_deferred())
 	else:
 		if GameSession.is_underway():
 			# On/off items show a check mark read from the setting itself (Cozy Polish).
-			add.call(&"chartplotter", Loc.t("Chart plotter"), toggle_chartplotter)
-			actions.back().checked = func() -> bool: return ChartPlotter.shown
-			add.call(&"sailing_panel", Loc.t("Sailing details"), func() -> void: SailingPanel.collapsed = not SailingPanel.collapsed)
-			actions.back().checked = func() -> bool: return not SailingPanel.collapsed
+			# I026: the plotter and the instruments are devices at the helm now
+			# (their focused views); the radar stays an on/off display.
+			add.call(&"chartplotter", Loc.t("Chart plotter"), func() -> void: open_chartplotter.call_deferred())
+			add.call(&"instruments", Loc.t("Instruments"), func() -> void: open_instruments.call_deferred())
 			add.call(&"radar", "Radar", func() -> void: RadarPanel.shown = not RadarPanel.shown)
 			actions.back().checked = func() -> bool: return RadarPanel.shown
 			if not GameSession.is_anchored():
@@ -2023,6 +2048,8 @@ func _connect_boat_area(area: BoatArea) -> void:
 	area.anchor_requested.connect(open_anchor)
 	area.cabin_object_requested.connect(func(kind: StringName) -> void: open_cabin_object(kind))
 	_update_vhf_lamp.call_deferred()
+	area.instruments_requested.connect(open_instruments)
+	area.chartplotter_requested.connect(open_chartplotter)
 
 
 func _connect_world_map(map: WorldMap) -> void:

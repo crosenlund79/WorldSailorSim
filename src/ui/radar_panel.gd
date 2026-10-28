@@ -99,7 +99,7 @@ func should_show() -> bool:
 		return false
 	# Only underway, where its Q-menu item is: switched on at sea it never
 	# stays up in harbour with no way to close it; the choice is kept for the
-	# next voyage (as the chartplotter).
+	# next voyage.
 	return GameSession.is_underway() and (shown or get_concern() >= Simulation.RISK_CAUTION)
 
 

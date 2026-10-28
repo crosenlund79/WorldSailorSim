@@ -9480,6 +9480,30 @@ msgstr "Mad om bord"
 
 msgid "Water aboard"
 msgstr "Vand om bord"
+# I026 stage 03: marine electronics
+msgid "{action_wheel} opens a wheel with what makes sense where you are: in the cabin sleep, the world map, the chart table, provisions and the laptop; on deck the charts, the fishing rod and, underway, the chart plotter, the instruments, radar, sail trim and anchor. On/off items show a check mark."
+msgstr "{action_wheel} åbner et hjul med det, der giver mening, hvor du er: i kahytten søvn, verdenskortet, kortbordet, proviant og laptoppen; på dæk søkortene, fiskestangen og, under sejlads, kortplotteren, instrumenterne, radar, sejltrim og anker. Tænd/sluk-punkter viser et flueben."
+
+msgid "Set sail from the wheel once a course is planned. The boat sails the course by itself. The instruments show the speed, the heading, the wind and the route, on deck and in the cabin; {instruments} (or a click on them) shows them close up with their pages, and {chartplotter} the chartplotter at the helm. The wheel offers the radar, and a chandlery sells better instruments. {sail_trim} opens sail trim: well-trimmed sails are faster."
+msgstr "Sæt sejl fra hjulet, når en kurs er lagt. Båden sejler kursen af sig selv. Instrumenterne viser fart, kurs, vind og rute, på dækket og i kahytten; {instruments} (eller et klik på dem) viser dem tæt på med deres sider, og {chartplotter} kortplotteren ved roret. Hjulet tilbyder radaren, og en skibshandel sælger bedre instrumenter. {sail_trim} åbner sejltrim: godt trimmede sejl er hurtigere."
+
+msgid "Underway! {sail_trim} trims the sails, {instruments} shows the instruments close up, {chartplotter} the chartplotter, and the time buttons at the top make the passage go faster."
+msgstr "Undervejs! {sail_trim} trimmer sejlene, {instruments} viser instrumenterne tæt på, {chartplotter} kortplotteren, og tidsknapperne øverst får sejladsen til at gå hurtigere."
+
+msgid "A 12-inch multifunction display at the helm with configurable layouts: overview, sailing, navigation and weather, the same data in more ways."
+msgstr "Et 12-tommers multifunktionsdisplay ved roret med layouts, du selv vælger: overblik, sejlads, navigation og vejr, de samme data på flere måder."
+
+msgid "Analogue dials for speed, heading and wind, and a small LCD repeater for the route. Warm, simple and fitted to every boat."
+msgstr "Analoge skiver til fart, kurs og vind og et lille LCD-display til ruten. Varmt, enkelt og monteret på alle både."
+
+msgid "Modern Cruiser"
+msgstr "Moderne Cruiser"
+
+msgid "Offshore Navigator"
+msgstr "Offshore-navigatør"
+
+msgid "Three compact colour displays with selectable pages, and a 9-inch chartplotter at the helm. Crisp by day, red at night."
+msgstr "Tre kompakte farvedisplays med sider, du kan vælge, og en 9-tommers kortplotter ved roret. Skarpe om dagen, røde om natten."
 
 msgid "Instruments"
 msgstr "Instrumenter"
@@ -9510,3 +9534,261 @@ msgstr "På din kurs, %s: %s, %d sm forude."
 
 msgid "Plan a course at the chart table to hear what the forecast holds on the way."
 msgstr "Planlæg en kurs ved kortbordet for at høre, hvad vejrudsigten byder på undervejs."
+msgid "Use the chartplotter"
+msgstr "Brug kortplotteren"
+
+msgid "The chandlery sells it."
+msgstr "Skibshandlen sælger den."
+
+msgid "Depth %s (game estimate)"
+msgstr "Dybde %s (spillets skøn)"
+
+msgid "calm"
+msgstr "stille"
+
+msgid "+%d h %s"
+msgstr "+%d t %s"
+
+msgid "No hazards on the course in the next %d hours"
+msgstr "Ingen farer på kursen de næste %d timer"
+
+msgid "%s on the course in about %d h"
+msgstr "%s på kursen om ca. %d t"
+
+msgid "0 kn  ·  moored"
+msgstr "0 kn  ·  fortøjet"
+
+msgid "Moored at %s"
+msgstr "Fortøjet i %s"
+
+msgctxt "instrument"
+msgid "PORT"
+msgstr "BB"
+
+msgctxt "instrument"
+msgid "STBD"
+msgstr "SB"
+
+msgctxt "instrument"
+msgid "MOORED"
+msgstr "FORTØJET"
+
+msgctxt "instrument"
+msgid "AT ANCHOR"
+msgstr "FOR ANKER"
+
+msgctxt "instrument"
+msgid "AT THE ANCHORAGE"
+msgstr "VED ANKERPLADS"
+
+msgctxt "instrument"
+msgid "UNDER ENGINE"
+msgstr "FOR MOTOR"
+
+msgctxt "instrument"
+msgid "UNDER SAIL"
+msgstr "FOR SEJL"
+
+msgctxt "instrument"
+msgid "BOAT SPEED"
+msgstr "FART"
+
+msgctxt "instrument"
+msgid "HEADING"
+msgstr "KURS"
+
+msgctxt "instrument"
+msgid "TRUE WIND"
+msgstr "SAND VIND"
+
+msgctxt "instrument"
+msgid "ROUTE"
+msgstr "RUTE"
+
+msgctxt "instrument"
+msgid "NEXT TURN"
+msgstr "NÆSTE SVING"
+
+msgctxt "instrument"
+msgid "WEATHER"
+msgstr "VEJR"
+
+msgctxt "instrument"
+msgid "SAIL TRIM"
+msgstr "SEJLTRIM"
+
+msgctxt "instrument"
+msgid "OVERVIEW"
+msgstr "OVERBLIK"
+
+msgctxt "instrument"
+msgid "SAILING"
+msgstr "SEJLADS"
+
+msgctxt "instrument"
+msgid "NAVIGATION"
+msgstr "NAVIGATION"
+
+msgctxt "instrument"
+msgid "KNOTS"
+msgstr "KNOB"
+
+msgctxt "instrument"
+msgid "KN"
+msgstr "KN"
+
+msgctxt "instrument"
+msgid "CALM"
+msgstr "STILLE"
+
+msgctxt "instrument"
+msgid "SPEED"
+msgstr "FART"
+
+msgctxt "instrument"
+msgid "WIND"
+msgstr "VIND"
+
+msgctxt "instrument"
+msgid "CHAIN %d×"
+msgstr "KÆDE %d×"
+
+msgctxt "instrument"
+msgid "ABOUT %d M"
+msgstr "CA. %d M"
+
+msgctxt "instrument"
+msgid "DEPTH"
+msgstr "DYBDE"
+
+msgctxt "instrument"
+msgid "ESTIMATE"
+msgstr "SKØN"
+
+msgctxt "instrument"
+msgid "NM"
+msgstr "SM"
+
+msgctxt "instrument"
+msgid "THEN"
+msgstr "SÅ"
+
+msgctxt "instrument"
+msgid "IN"
+msgstr "OM"
+
+msgctxt "instrument"
+msgid "WIND THERE"
+msgstr "VIND DÉR"
+
+msgctxt "instrument"
+msgid "NONE"
+msgstr "INGEN"
+
+msgctxt "instrument"
+msgid "TO %s"
+msgstr "TIL %s"
+
+msgctxt "instrument"
+msgid "ETA"
+msgstr "ANK."
+
+msgctxt "instrument"
+msgid "NOW"
+msgstr "NU"
+
+msgctxt "instrument"
+msgid "+%d H"
+msgstr "+%d T"
+
+msgctxt "instrument"
+msgid "WIND ANGLE"
+msgstr "VINDVINKEL"
+
+msgctxt "instrument"
+msgid "ANCHORAGE"
+msgstr "ANKERPLADS"
+
+msgctxt "instrument"
+msgid "WAITING"
+msgstr "VENTER"
+
+msgctxt "instrument"
+msgid "NO MORE TURNS"
+msgstr "IKKE FLERE SVING"
+
+msgctxt "instrument"
+msgid "ENGINE"
+msgstr "MOTOR"
+
+msgctxt "instrument"
+msgid "G%d"
+msgstr "S%d"
+
+msgctxt "instrument"
+msgid "TO GO"
+msgstr "TILBAGE"
+
+msgctxt "instrument"
+msgid "NEW COURSE"
+msgstr "NY KURS"
+
+msgctxt "instrument"
+msgid "WIND NOW"
+msgstr "VIND NU"
+
+msgctxt "instrument"
+msgid "GUSTS %d"
+msgstr "STØD %d"
+
+msgctxt "instrument"
+msgid "FORECAST HERE (ESTIMATE)"
+msgstr "PROGNOSE HER (SKØN)"
+
+msgid "Electronics"
+msgstr "Elektronik"
+
+msgid "Fit it (yours)"
+msgstr "Monter den (din)"
+
+msgid "Buy and fit (%s)"
+msgstr "Køb og monter (%s)"
+
+msgid "%s fitted to the %s."
+msgstr "%s monteret på %s."
+
+msgid "%s fitted to the %s for %s. It is yours for any boat."
+msgstr "%s monteret på %s for %s. Den er din til alle dine både."
+
+msgid "Instruments (I): click for the full view"
+msgstr "Instrumenter (I): klik for at se dem tæt på"
+
+msgid "Outlook"
+msgstr "Udsigt"
+
+msgid "Sails and engine"
+msgstr "Sejl og motor"
+
+msgid "More instrument packages are sold at a chandlery."
+msgstr "Flere instrumentpakker sælges i en skibshandel."
+
+msgid "Previous page"
+msgstr "Forrige side"
+
+msgid "Next page"
+msgstr "Næste side"
+
+msgid "The instrument packages you own: fitted to this boat at once"
+msgstr "Instrumentpakkerne, du ejer: monteres på denne båd med det samme"
+
+msgid "Plan a course at the chart table, or with Charts on the action wheel (Q)."
+msgstr "Læg en kurs ved kortbordet eller med Søkort på handlingshjulet (Q)."
+
+msgid "%.1f nm  →  %03d°"
+msgstr "%.1f sm  →  %03d°"
+
+msgid "%d nm"
+msgstr "%d sm"
+
+msgid "Range"
+msgstr "Skala"

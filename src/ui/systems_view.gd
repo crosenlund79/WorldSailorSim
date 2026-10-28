@@ -51,8 +51,9 @@ static func rows() -> Array:
 	var provisions := GameSession.get_provisions()
 	out.append([Loc.t("Food aboard"), Loc.n("%d day", "%d days", int(provisions.food_days)) % int(provisions.food_days)])
 	out.append([Loc.t("Water aboard"), Loc.n("%d day", "%d days", int(provisions.water_days)) % int(provisions.water_days)])
-	if GameSession.has_method(&"get_instrument_package_name"):
-		out.append([Loc.t("Instruments"), String(GameSession.call(&"get_instrument_package_name"))])
+	var instruments := GameSession.get_instrument_package()
+	if instruments:
+		out.append([Loc.t("Instruments"), "%s %s" % [InstrumentPackage.brand(), Loc.t(instruments.name)]])
 	return out
 
 

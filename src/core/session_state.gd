@@ -133,6 +133,9 @@ var boat_care := {}
 ## A boat of your own (I020): cabin things and sailcloth, per boat. Optional
 ## in saves (older saves: plain cabins, classic sails).
 var home := HomeState.new()
+## Marine electronics (I026): the instrument packages owned and fitted to
+## each boat. Optional in saves (older saves: Classic everywhere).
+var instruments := InstrumentState.new()
 
 
 static func create_new(start_location: StringName, start_area: StringName, start_spawn: StringName,
@@ -240,6 +243,7 @@ func duplicate_state() -> SessionState:
 	for id: String in boat_care:
 		copy.boat_care[id] = (boat_care[id] as BoatCareState).duplicate_state()
 	copy.home = home.duplicate_home()
+	copy.instruments = instruments.duplicate_state()
 	return copy
 
 
@@ -334,6 +338,7 @@ func _to_dict() -> Dictionary:
 		"anchor": anchor.to_dict(),
 		"boat_care": _boat_care_dict(),
 		"home": home.to_dict(),
+		"instruments": instruments.to_dict(),
 		"navigation": {
 			"location_id": String(location_id),
 			"planned_route": planned_route.to_dict() if planned_route else null,
@@ -503,6 +508,8 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 		state.boat_care[String(id)] = record
 	# I020, optional: older saves have plain cabins and classic sails.
 	state.home = HomeState.from_dict(data.get("home"))
+	# I026, optional: the instrument packages (older saves: Classic, nothing owned).
+	state.instruments = InstrumentState.from_dict(data.get("instruments"))
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).
 	state.owned_vessels = owned_from(data.get("fleet"), state.vessel_id)

@@ -1,0 +1,28 @@
+{
+	"note": "I026 stage 03, marine electronics: the three instrument packages (src/electronics/instrument_package.gd). An original, fictional maker (Skerry Marine); no real brand, product or screen. Every package shows the same authoritative data (speed, heading, wind, the route, the next turn, the weather); premium packages add presentations and convenience, never data the cheaper one lacks. 'units' is the HUD cluster's arrangement: 'dials' (analogue dials and a small LCD repeater), 'displays' (square displays with selectable pages) or 'mfd' (one multifunction display with layouts). 'pages' are the pages each display can show (InstrumentFace); 'slots', where given, are the pages each display chooses from, so the essentials (speed and heading, wind, the route) always stay on the HUD. Sizes are real centimetres (the deck's scale, about 1 cm per unit): 'cockpit_unit' the instrument displays on the bulkhead, 'plotter' the chartplotter at the helm. Colours are the housing and the screen by day and by night. Prices in euros (gameplay numbers); Classic is fitted to every boat and free.",
+	"brand": "SKERRY",
+	"packages": [
+		{"id": "classic", "name": "Classic", "model": "SKERRY Classic", "price": 0, "units": "dials",
+			"text": "Analogue dials for speed, heading and wind, and a small LCD repeater for the route. Warm, simple and fitted to every boat.",
+			"pages": ["route", "turn", "weather", "trim"], "default_pages": ["route"],
+			"cockpit_unit": 11, "plotter": [15, 10],
+			"housing": "#1C2124", "housing_edge": "#5E6A6E", "screen": "#C9CDB4", "screen_night": "#1A0E0B",
+			"ink": "#202620", "ink_night": "#E0563A", "accent": "#C8553D", "accent_night": "#E0563A",
+			"dial_face": "#16191B", "dial_ink": "#ECE6D6", "dial_ink_night": "#D9543A"},
+		{"id": "modern_cruiser", "name": "Modern Cruiser", "model": "SKERRY Cruise 4", "price": 680, "units": "displays",
+			"text": "Three compact colour displays with selectable pages, and a 9-inch chartplotter at the helm. Crisp by day, red at night.",
+			"pages": ["speed", "heading", "wind", "route", "turn", "weather", "trim"], "default_pages": ["speed", "wind", "route"],
+			"slots": [["speed", "heading", "trim"], ["wind", "weather"], ["route", "turn"]],
+			"cockpit_unit": 11, "plotter": [24, 15],
+			"housing": "#0E1215", "housing_edge": "#3C474D", "screen": "#0B1014", "screen_night": "#050303",
+			"ink": "#F2F5F4", "ink_night": "#D8442E", "accent": "#8EC9F0", "accent_night": "#B8382A",
+			"dial_face": "#0B1014", "dial_ink": "#F2F5F4", "dial_ink_night": "#D8442E"},
+		{"id": "offshore_navigator", "name": "Offshore Navigator", "model": "SKERRY Navigator 12", "price": 1480, "units": "mfd",
+			"text": "A 12-inch multifunction display at the helm with configurable layouts: overview, sailing, navigation and weather, the same data in more ways.",
+			"pages": ["overview", "sailing", "navigation", "weather"], "default_pages": ["overview"],
+			"cockpit_unit": 11, "plotter": [31, 20],
+			"housing": "#15191C", "housing_edge": "#7D898D", "screen": "#101B22", "screen_night": "#070B0E",
+			"ink": "#E8EEEC", "ink_night": "#8FA2A6", "accent": "#5AA8B8", "accent_night": "#3C7380",
+			"dial_face": "#0C151B", "dial_ink": "#E8EEEC", "dial_ink_night": "#8FA2A6"}
+	]
+}
