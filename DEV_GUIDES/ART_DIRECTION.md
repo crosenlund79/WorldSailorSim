@@ -61,7 +61,8 @@ not amber; night is a deep blue-grey with warm lamps and cool LED instruments.
   (measured on the boats as painted in I025: the Starling 33's hull is 1000
   units for 10 m); the captain is 40 units across the shoulders. Harbour
   houses, quay fittings and neighbouring boats use the same scale
-  (`HarbourDressing.METRE`).
+  (`HarbourDressing.METRE`); cabin interiors are painted by the shared
+  `tools/vessels/cabin_joinery.py` (see `VESSEL_ART.md`).
 - **Avoid:** parchment, brass frames, toy-round buttons, hand-lettered UI,
   glossy photo textures, 3D renders, global desaturation filters.
 

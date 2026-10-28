@@ -91,6 +91,14 @@ sails stay procedural.
   `assets/vessels/starling_33/illustrated/deck/` or `.../cabin/` (same canvas and
   size as §2). Re-running the painter overwrites that folder, so do not run it
   once drawings are there.
+- **Cabin interiors (I025):** both painters now draw every cabin through the
+  shared `tools/vessels/cabin_joinery.py` (gelcoat edge, headlining and
+  battens, teak-and-holly sole, joinery, cushions, berths, galley, chart
+  table, framed window recesses), from the cabin scene's own shapes. The
+  cockpit or foredeck seen beyond a cabin is copied from that boat's deck
+  art, so re-run the cabin painter after the deck art changes. Windows are
+  placed in `data/vessels/cabin_windows.json` (`CabinWindows`) and the sea
+  around the hull is `CabinSeaBackdrop`.
 - **Every other boat** (0.100b) has the same kind of profile,
   `data/vessels/<id>_visuals_illustrated.tres`, with layers in
   `assets/vessels/<id>/illustrated/`, painted by the generic
