@@ -135,8 +135,11 @@ func _test_views() -> void:
 	# The systems panel: only what the game keeps.
 	var rows := SystemsView.rows()
 	var labels := rows.map(func(r: Array) -> String: return String(r[0]))
-	t.check(labels.has("Hull and bottom") and labels.has("Food aboard") and labels.has("Water aboard") and not labels.any(func(l: String) -> bool: return l.containsn("battery") or l.containsn("fuel")),
-		"[systems] hull, care survey, food and water - no invented battery or fuel (%s)" % [labels])
+	# I027: fuel is simulated now (bought, burned by the engine), so the panel
+	# shows it; a battery is still not kept, so it is still not shown.
+	t.check(labels.has("Hull and bottom") and labels.has("Food aboard") and labels.has("Water aboard") and labels.has("Fuel")
+		and not labels.any(func(l: String) -> bool: return l.containsn("battery")),
+		"[systems] hull, care survey, food, water and fuel (I027) - no invented battery (%s)" % [labels])
 	await t.frames(2)
 
 

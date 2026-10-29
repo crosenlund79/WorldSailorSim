@@ -1,0 +1,20 @@
+{
+	"note": "Between Horizons (I027, The Cost of the Wind): the running costs of a life afloat, in one place. Read by Economy (src/core/economy.gd). Prices are gameplay numbers in euros, scaled by the difficulty's 'costs' factor (Difficulty), not claims about real harbours. Fuel: price per litre by the harbour's region (HarbourDressing.archetype_for) and a small harbour's extra; each boat's tank and its burn at cruising revs (the engine's speed in VesselProfile). Harbour dues: per metre of the boat's length per night moored in a harbour (by the harbour's service tier and region); a short stop under grace_hours pays nothing; anchoring is free. Existing prices stay where they were (provisions: GameSession.PROVISION_PRICE_PER_DAY; boat care: data/boat/equipment.json and BoatCare; boats: data/vessels/*.tres; chandlery: data/harbours/trades/trades.json, data/electronics/instrument_packages.json) - measured before any is changed.",
+	"fuel": {
+		"price_per_litre_eur": {"nordic": 2.05, "atlantic": 1.95, "mediterranean": 1.9, "tropical": 1.6},
+		"tier_factor": {"small": 1.1, "larger": 1.0, "major": 0.97},
+		"low_warning_share": 0.25
+	},
+	"vessels": {
+		"arctic_wanderer_26": {"fuel_tank_l": 45, "fuel_burn_lph": 2.2},
+		"starling_33": {"fuel_tank_l": 120, "fuel_burn_lph": 3.2},
+		"petrel_36": {"fuel_tank_l": 70, "fuel_burn_lph": 4.0},
+		"halcyon_40": {"fuel_tank_l": 380, "fuel_burn_lph": 7.0}
+	},
+	"default_vessel": {"fuel_tank_l": 100, "fuel_burn_lph": 3.0},
+	"harbour_dues": {
+		"per_metre_night_eur": {"small": 1.6, "larger": 2.4, "major": 3.2},
+		"region_factor": {"nordic": 1.0, "atlantic": 1.0, "mediterranean": 1.35, "tropical": 1.1},
+		"grace_hours": 6
+	}
+}

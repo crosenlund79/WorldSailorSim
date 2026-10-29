@@ -13,6 +13,7 @@ const REASON_NONE := &""
 const REASON_POOR := &"poor"        # averaged sailing performance too low
 const REASON_STALL := &"stall"      # becalmed or head to wind
 const REASON_START := &"start"      # conditions too poor when leaving
+const REASON_CHOSEN := &"chosen"    # I027: the Captain motors to windward
 
 var mode: StringName = MODE_SAIL
 var engine_reason: StringName = REASON_NONE
@@ -75,6 +76,8 @@ static func wind_side(angle: float) -> String:
 func describe() -> String:
 	if is_motoring():
 		var why := Loc.t("becalmed or head to wind") if engine_reason == REASON_STALL else Loc.t("insufficient sailing performance")
+		if engine_reason == REASON_CHOSEN:
+			why = Loc.t("motoring to windward, as you chose")
 		return Loc.format("Motoring · %s · %.1f kn", [why, speed_kn])
 	var text := Loc.format("Under sail · %s · %.1f kn", [point_of_sail_name(true_wind_angle), speed_kn])
 	return text + Loc.t(" · spinnaker set") if spinnaker else text

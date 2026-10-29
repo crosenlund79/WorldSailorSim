@@ -34,13 +34,15 @@ extends RefCounted
 ## `trim_factor` (SailTrim.factor, Iteration 18) scales the sailing speed
 ## only: the potential and every decision above use the sailing model as is.
 ##
+## `engine_available` (I027): false with an empty tank - the boat sails, even
+## becalmed, until fuel is bought.
 ## `stop_above_kn` (I027): the engine -> sail threshold for this evaluation,
 ## when not the profile's engine_stop_above_kn - while beating, a sail on the
 ## tack that is clearly better than the start threshold is enough (a boat
 ## close-hauled never reaches its reaching speed); -1 = the profile's.
 static func evaluate(state: PropulsionState, profile: VesselProfile, now: float, heading_deg: float,
 		wind: WindField.Sample, reset_history := false, reassess := false, trim_factor := 1.0,
-		stop_above_kn := -1.0) -> PropulsionState:
+		stop_above_kn := -1.0, engine_available := true) -> PropulsionState:
 	var stop_above := profile.engine_stop_above_kn if stop_above_kn < 0.0 else stop_above_kn
 	var next := state.duplicate_state()
 	var angle := WindField.relative_angle(heading_deg, wind.from_deg)
@@ -70,6 +72,11 @@ static func evaluate(state: PropulsionState, profile: VesselProfile, now: float,
 			next.favorable_seconds = 0.0
 		_decide(next, profile, potential, reassess, stop_above)
 
+	# I027: an empty tank leaves the sails, whatever the rules would choose.
+	if not engine_available and next.is_motoring():
+		next.mode = PropulsionState.MODE_SAIL
+		next.engine_reason = PropulsionState.REASON_NONE
+		next.mode_seconds = 0.0
 	next.potential_kn = potential
 	next.speed_kn = profile.engine_speed_kn if next.is_motoring() else potential * trim_factor
 	next.last_evaluation_time = now

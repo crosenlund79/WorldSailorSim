@@ -140,6 +140,7 @@ func _draw() -> void:
 	for at in get_lamp_positions():
 		_draw_lamp_post(at)
 	_draw_travel_lift()
+	_draw_fuel_pump(layout.fuel_berth)
 	if layout.has_business(QuayLayout.NOTICEBOARD):
 		_draw_noticeboard(layout.noticeboard)
 
@@ -253,6 +254,20 @@ func get_lift_dock() -> Rect2:
 	if layout.lift == Vector2.ZERO:
 		return Rect2()
 	return Rect2(layout.lift.x + 140.0, QuayLayout.EDGE_Y - 230.0, layout.lift.y - layout.lift.x - 280.0, 232.0)
+
+
+## The fuel berth's pump (I027): a slim cabinet seen from above, its hose
+## coiled on the coping and a small plate, in the harbour's light.
+func _draw_fuel_pump(at: Vector2) -> void:
+	if at == Vector2.ZERO:
+		return
+	draw_rect(Rect2(at + Vector2(-13, -11), Vector2(28, 24)), Color(0, 0, 0, 0.25))
+	draw_rect(Rect2(at + Vector2(-14, -13), Vector2(28, 24)), Color("#B5452F"))
+	draw_rect(Rect2(at + Vector2(-11, -10), Vector2(22, 8)), Color("#2B3236"))
+	draw_rect(Rect2(at + Vector2(-9, -9), Vector2(18, 5)), Color("#9FD6B4"))
+	draw_rect(Rect2(at + Vector2(-14, 9), Vector2(28, 3)), Color("#7E2F22"))
+	draw_arc(at + Vector2(22, 4), 7.0, 0.0, TAU, 18, Color("#22282B"), 2.0, true)
+	draw_line(at + Vector2(14, 0), at + Vector2(16, 3), Color("#22282B"), 2.0, true)
 
 
 func _draw_travel_lift() -> void:

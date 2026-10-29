@@ -758,6 +758,13 @@ func get_wheel_actions() -> Array[Dictionary]:
 			actions.back().checked = func() -> bool: return RadarPanel.shown
 			if not GameSession.is_anchored():
 				add.call(&"sail_trim", Loc.t("Trim sails"), func() -> void: open_sail_trim.call_deferred())
+				# I027: the choice to windward - motor straight up, at a fuel cost.
+				add.call(&"motor_upwind", Loc.t("Motor to windward"), func() -> void:
+					GameSession.set_motor_upwind(not GameSession.is_motoring_upwind())
+					Simulation.evaluate_propulsion(false, true)
+					notify(Loc.t("To windward the engine takes over while there is fuel.") if GameSession.is_motoring_upwind()
+						else Loc.t("To windward the boat beats under sail.")))
+				actions.back().checked = func() -> bool: return GameSession.is_motoring_upwind()
 				# I027: tacking or gybing by hand while the autopilot zigzags.
 				var course := GameSession.get_voyage_course()
 				if int(course.get("tack_side", 0)) != 0 and not GameSession.get_propulsion().is_motoring():
@@ -2104,6 +2111,8 @@ func _on_quay_place(place: StringName) -> void:
 	match place:
 		QuayLayout.NOTICEBOARD:
 			open_noticeboard()
+		HarbourFront.FUEL:
+			open_fuel_berth()
 		HarbourFront.HATCH:
 			open_harbour_office(true)
 		QuayLayout.LANE:
@@ -2236,6 +2245,16 @@ func _on_hatch_repair() -> void:
 	notify(Loc.t("The yard's night man sees to the hull for %s. The work takes %s.") % [GameSession.format_money(int(result.cost)),
 		Simulation.format_duration(float(result.minutes) * 60.0)])
 	await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_ashore(float(result.minutes)))
+
+
+## The fuel berth's pump on the quay (I027): open at any hour.
+func open_fuel_berth() -> FuelMenu:
+	if not GameSession.is_active() or not modals.is_empty() or not GameSession.is_moored_in_harbour():
+		return null
+	var menu := FuelMenu.new()
+	modals.push(menu)
+	FocusFrame.attach(menu, FocusFrame.Kind.STEEL)
+	return menu
 
 
 func open_noticeboard() -> NoticeboardMenu:

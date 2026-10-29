@@ -10087,3 +10087,107 @@ msgstr "%03d°  ·  tilbage mod den planlagte kurs"
 
 msgid "Tacking"
 msgstr "Krydsning"
+
+msgid "Motor to windward"
+msgstr "Motor op mod vinden"
+
+msgid "To windward the engine takes over while there is fuel."
+msgstr "Op mod vinden tager motoren over, så længe der er brændstof."
+
+msgid "To windward the boat beats under sail."
+msgstr "Op mod vinden krydser båden for sejl."
+
+msgid "Fuel is sold at a harbour's fuel berth."
+msgstr "Brændstof sælges ved en havns tankanlæg."
+
+msgid "The tank is full."
+msgstr "Tanken er fuld."
+
+msgid "Not enough money for fuel."
+msgstr "Ikke penge nok til brændstof."
+
+msgid "Fuel is getting low: about %d nm left under engine."
+msgstr "Brændstoffet er ved at slippe op: ca. %d sm tilbage for motor."
+
+msgid "The fuel tank is empty: the boat sails on under sail alone until you can buy fuel."
+msgstr "Brændstoftanken er tom: båden sejler videre for sejl alene, til du kan købe brændstof."
+
+msgid "Harbour dues: %d night, %s."
+msgid_plural "Harbour dues: %d nights, %s."
+msgstr[0] "Havnepenge: %d nat, %s."
+msgstr[1] "Havnepenge: %d nætter, %s."
+
+msgid "The harbourmaster lets the rest go this time."
+msgstr "Havnefogeden lader resten gå denne gang."
+
+msgid "Fuel berth"
+msgstr "Tankanlæg"
+
+msgid "Fuel berth · %s a litre"
+msgstr "Tankanlæg · %s pr. liter"
+
+msgid "€%.2f"
+msgstr "%.2f €"
+
+msgid "motoring to windward, as you chose"
+msgstr "for motor op mod vinden, som du valgte"
+
+msgid "In the tank: %d of %d litres  ·  about %d nm under engine"
+msgstr "I tanken: %d af %d liter  ·  ca. %d sm for motor"
+
+msgid "Fuel here: %s a litre. Your funds: %s."
+msgstr "Brændstof her: %s pr. liter. Dine penge: %s."
+
+msgid "Fill up: %d litres (%s)"
+msgstr "Fyld op: %d liter (%s)"
+
+msgid "Add %d litres (%s)"
+msgstr "Tilføj %d liter (%s)"
+
+msgid "%d litres of fuel for %s. The tank holds %d litres now."
+msgstr "%d liter brændstof for %s. Tanken rummer nu %d liter."
+
+msgid "fuel"
+msgstr "brændstof"
+
+msgid "harbour dues"
+msgstr "havnepenge"
+
+msgid "provisions"
+msgstr "proviant"
+
+msgid "boat care"
+msgstr "bådpleje"
+
+msgid "haul-out"
+msgstr "optagning"
+
+msgid "equipment"
+msgstr "udstyr"
+
+msgid "Running costs"
+msgstr "Driftsomkostninger"
+
+msgid "Harbour dues: %s a night for the %s, paid when you leave. Anchoring is free."
+msgstr "Havnepenge: %s pr. nat for %s, betales når du sejler. Det er gratis at ankre."
+
+msgid "Fuel at the berth: %s a litre. In the tank: %d of %d litres, about %d nm under engine."
+msgstr "Brændstof ved tankanlægget: %s pr. liter. I tanken: %d af %d liter, ca. %d sm for motor."
+
+msgid "The last 30 days: no costs yet."
+msgstr "De sidste 30 dage: ingen udgifter endnu."
+
+msgid "other"
+msgstr "andet"
+
+msgid "The last 30 days: %s."
+msgstr "De sidste 30 dage: %s."
+
+msgid "Fuel %d %%"
+msgstr "Brændstof %d %%"
+
+msgid "%d of %d litres  ·  about %d nm under engine"
+msgstr "%d af %d liter  ·  ca. %d sm for motor"
+
+msgid "Fuel"
+msgstr "Brændstof"

@@ -51,6 +51,9 @@ static func rows() -> Array:
 	var provisions := GameSession.get_provisions()
 	out.append([Loc.t("Food aboard"), Loc.n("%d day", "%d days", int(provisions.food_days)) % int(provisions.food_days)])
 	out.append([Loc.t("Water aboard"), Loc.n("%d day", "%d days", int(provisions.water_days)) % int(provisions.water_days)])
+	# I027: the fuel, and how far it goes under engine.
+	out.append([Loc.t("Fuel"), Loc.t("%d of %d litres  ·  about %d nm under engine") % [roundi(GameSession.get_fuel_l()),
+		roundi(GameSession.get_fuel_tank_l()), roundi(GameSession.get_fuel_range_nm())]])
 	var instruments := GameSession.get_instrument_package()
 	if instruments:
 		out.append([Loc.t("Instruments"), "%s %s" % [InstrumentPackage.brand(), Loc.t(instruments.name)]])

@@ -10,6 +10,8 @@ signal session_started
 signal session_ended
 ## Emitted after a loaded state has replaced the current one.
 signal state_replaced
+## I027: the fuel in the tank changed (bought, burned).
+signal fuel_changed
 signal boat_area_changed(area: StringName)
 ## `route` is a PlannedRoute, or null when the route was cleared.
 signal route_changed(route: PlannedRoute)
@@ -151,6 +153,7 @@ func _exit_tree() -> void:
 func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
 		companion_name := "", companion_gender: StringName = &"") -> void:
 	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind, level, companion_name, companion_gender)
+	_state.moored_since = _state.game_time  # I027: moored from the start
 	_companion_wake_day = -1
 	_has_unsaved_changes = false
 	_asleep = false
@@ -186,6 +189,9 @@ func replace_state(new_state: SessionState) -> void:
 	_complete_legacy_route()
 	_recover_location()
 	_check_vessel()
+	# I027: a save from before harbour dues starts counting now, never back.
+	if _state.moored_since <= 0.0 and is_moored_in_harbour():
+		_state.moored_since = _state.game_time
 	_asleep = false
 	_update_anchor_life(false)
 	if not was_active:
@@ -469,7 +475,7 @@ func work_on_game(task_id: String, choice: int, minutes: float) -> Dictionary:
 			int(Pastimes.game_data().get("renown_per_milestone", 4)))
 		if int(game.milestone) >= stones.size():
 			out.euros = int(Pastimes.game_data().get("release_euros", 0))
-			_state.funds += out.euros
+			_money(int(out.euros), "game_project")
 			funds_changed.emit(_state.funds)
 		if not out.award.is_empty():
 			renown_awarded.emit([out.award])
@@ -529,7 +535,7 @@ func buy_vessel(vessel_id: StringName) -> String:
 		return Loc.t("The %s is already yours.") % vessel.display_name
 	if vessel.price > _state.funds:
 		return Loc.t("The %s costs %s; you have %s.") % [vessel.display_name, format_money(vessel.price), format_money(_state.funds)]
-	_state.funds -= vessel.price
+	_money(-int(vessel.price), "boat_purchase")
 	_state.owned_vessels.append(vessel_id)
 	_state.get_boat_care(vessel_id)
 	_has_unsaved_changes = true
@@ -1104,6 +1110,8 @@ func depart() -> String:
 	if ashore != "":
 		return ashore
 	_end_dock_encounter()  # I025: an animal still waiting stays on its dock
+	_charge_harbour_dues(location)  # I027: the nights moored here, once
+	_state.ledger.open(_state.game_time, String(location.id))
 	_state.voyage = Voyage.create(route, _state.game_time)
 	_state.hat.voyage_worn_hazard = 0
 	_state.hat.voyage_lost = false
@@ -1301,6 +1309,8 @@ func complete_voyage() -> void:
 	# Moored first, so the renown records note the harbour they were earned in (I024).
 	_state.location_id = destination.id
 	_state.vessel_position = destination.get_geo_position()
+	_state.moored_since = _state.game_time  # I027: harbour dues from now
+	_state.ledger.close(_state.game_time, String(destination.id), _state.voyage.tack_count, "arrived")
 	var awards := _award_objectives(record, new_harbour)
 	awards.append_array(_award_world_firsts(record, destination))
 	_roll_dock_encounter(destination)  # I025: now and then, a box on the dock
@@ -1418,7 +1428,7 @@ func rescue() -> void:
 	_state.fishing.line_out = false
 	_pending_bite = {}
 	var fee := mini(roundi(SessionState.RESCUE_FEE * Difficulty.factor("rescue_fee")), _state.funds)
-	_state.funds -= fee
+	_money(-int(fee), "rescue")
 	var record := CaptainsLog.make_record(_state.voyage, _state.game_time, _state.vessel_id, CaptainsLog.OUTCOME_RESCUED)
 	_state.captains_log.record_voyage(record)
 	var awards := _award_objectives(record, false)
@@ -1478,8 +1488,10 @@ func _wear(elapsed: float, nm: float) -> void:
 	var before := [BoatCare.area_level(BoatCare.AREA_RIG, care, get_condition(), _state.game_time),
 		BoatCare.area_level(BoatCare.AREA_ENGINE, care, get_condition(), _state.game_time)]
 	var wear := Difficulty.factor("wear")  # I022 (Standard: 1.0)
+	_state.ledger.record_distance(nm, _state.propulsion.is_motoring())
 	if _state.propulsion.is_motoring():
 		care.engine_hours += elapsed / 3600.0 * wear
+		_burn_fuel(elapsed)
 	else:
 		care.rig_wear = minf(care.rig_wear + BoatCare.rig_wear_for(nm, _state.propulsion.wind_speed_kn, care) * wear, 100.0)
 	var after := [BoatCare.area_level(BoatCare.AREA_RIG, care, get_condition(), _state.game_time),
@@ -1490,6 +1502,141 @@ func _wear(elapsed: float, nm: float) -> void:
 			if after[i] == BoatCare.LEVEL_RECOMMENDED and before[i] != after[i]:
 				notice.emit.call_deferred(Loc.t("Boat care: %s could do with a service at the next boatyard. (Captain's Log, Boat tab)") % \
 					Loc.t(BoatCare.AREA_NAMES[[BoatCare.AREA_RIG, BoatCare.AREA_ENGINE][i]]).to_lower())
+
+
+# --- Money, fuel and harbour dues (I027, The Cost of the Wind) -------------------
+
+## Every change of money goes through here, once: the funds and the
+## career's books (CareerLedger, by source).
+func _money(amount: int, source: String) -> void:
+	if _state == null or amount == 0:
+		return
+	_state.funds += amount
+	_state.ledger.record_money(_state.game_time, source, amount, _state.funds)
+
+
+func get_ledger() -> CareerLedger:
+	return _state.ledger.duplicate_ledger() if _state else CareerLedger.new()
+
+
+## Litres in the tank of the boat aboard (a boat not yet listed: full).
+func get_fuel_l() -> float:
+	if _state == null:
+		return 0.0
+	return float(_state.fuel.get(_state.vessel_id, Economy.tank_l(_state.vessel_id)))
+
+
+func get_fuel_tank_l() -> float:
+	return Economy.tank_l(_state.vessel_id) if _state else 0.0
+
+
+## True while the engine has fuel to run on.
+func has_fuel() -> bool:
+	return get_fuel_l() > 0.01
+
+
+## About how far the fuel in the tank goes under engine (nm).
+func get_fuel_range_nm() -> float:
+	if _state == null:
+		return 0.0
+	return get_fuel_l() / Economy.burn_lph(_state.vessel_id) * get_vessel_profile().engine_speed_kn
+
+
+## The Captain's choice to windward (I027): motor straight up a leg the boat
+## would otherwise beat up (faster, at a fuel cost), or beat under sail.
+func is_motoring_upwind() -> bool:
+	return _state != null and _state.motor_upwind
+
+
+func set_motor_upwind(enabled: bool) -> void:
+	if _state == null or _state.motor_upwind == enabled:
+		return
+	_state.motor_upwind = enabled
+	_has_unsaved_changes = true
+	SessionLog.write("motor_upwind", {"enabled": enabled})
+
+
+## Fuel price per litre where the boat lies (with the difficulty's costs), or 0.
+func get_fuel_price() -> float:
+	if _state == null or not is_moored_in_harbour():
+		return 0.0
+	return Economy.fuel_price_per_litre(_state.location_id) * Difficulty.factor("costs")
+
+
+## Buys fuel at the harbour's fuel berth: `litres` (or -1 to fill the tank),
+## as much as the money allows. Returns {"error", "litres", "price"}.
+func buy_fuel(litres := -1.0) -> Dictionary:
+	if _state == null or not is_moored_in_harbour():
+		return {"error": Loc.t("Fuel is sold at a harbour's fuel berth."), "litres": 0.0, "price": 0}
+	var space := get_fuel_tank_l() - get_fuel_l()
+	var want := space if litres < 0.0 else minf(litres, space)
+	if want < 0.05:
+		return {"error": Loc.t("The tank is full."), "litres": 0.0, "price": 0}
+	var per_litre := get_fuel_price()
+	var affordable := floorf(_state.funds / per_litre * 10.0) / 10.0 if per_litre > 0.0 else want
+	want = minf(want, affordable)
+	if want < 0.05:
+		return {"error": Loc.t("Not enough money for fuel."), "litres": 0.0, "price": 0}
+	var price := ceili(want * per_litre)
+	_money(-price, "fuel")
+	funds_changed.emit(_state.funds)
+	_state.fuel[_state.vessel_id] = get_fuel_l() + want
+	_state.ledger.fuel_bought_l += want
+	SessionLog.write("fuel_bought", {"litres": snappedf(want, 0.1), "price": price, "port": String(_state.location_id)})
+	_has_unsaved_changes = true
+	fuel_changed.emit()
+	return {"error": "", "litres": want, "price": price}
+
+
+## The engine burns fuel while it runs (from _wear, the same step that moves
+## the boat under engine). Tells the Captain when it runs low and when dry.
+func _burn_fuel(elapsed: float) -> void:
+	var before := get_fuel_l()
+	if before <= 0.0:
+		return
+	var burned := minf(Economy.burn_lph(_state.vessel_id) * elapsed / 3600.0, before)
+	var after := before - burned
+	_state.fuel[_state.vessel_id] = after
+	_state.ledger.fuel_burned_l += burned
+	var low := Economy.low_fuel_share() * get_fuel_tank_l()
+	if before > low and after <= low and after > 0.01:
+		notice.emit.call_deferred(Loc.t("Fuel is getting low: about %d nm left under engine.") % roundi(get_fuel_range_nm()))
+	if after <= 0.01:
+		_state.fuel[_state.vessel_id] = 0.0
+		notice.emit.call_deferred(Loc.t("The fuel tank is empty: the boat sails on under sail alone until you can buy fuel."))
+		SessionLog.write("fuel_empty", {"lon": snappedf(_state.vessel_position.x, 0.01), "lat": snappedf(_state.vessel_position.y, 0.01)})
+	fuel_changed.emit.call_deferred()
+
+
+## Harbour dues for the nights moored in `port` (charged once, on leaving):
+## what the money allows; the rest the harbourmaster lets go (nobody is
+## stranded by dues). Returns {"nights", "price", "waived"}.
+func _charge_harbour_dues(port: PortData) -> Dictionary:
+	var out := {"nights": 0, "price": 0, "waived": 0}
+	if port == null:
+		return out
+	var nights := Economy.nights(port.id, _state.moored_since, _state.game_time)
+	_state.moored_since = 0.0
+	if nights <= 0:
+		return out
+	var due := ceili(Economy.dues_per_night(port.id, get_vessel_profile().length_ft) * nights * Difficulty.factor("costs"))
+	var paid := mini(due, maxi(_state.funds, 0))
+	_money(-paid, "harbour_dues")
+	if paid > 0:
+		funds_changed.emit(_state.funds)
+	out = {"nights": nights, "price": paid, "waived": due - paid}
+	SessionLog.write("harbour_dues", {"port": String(port.id), "nights": nights, "paid": paid, "waived": due - paid})
+	if paid > 0 or due > 0:
+		notice.emit.call_deferred(Loc.n("Harbour dues: %d night, %s.", "Harbour dues: %d nights, %s.", nights) % [nights, format_money(paid)] +
+			(" " + Loc.t("The harbourmaster lets the rest go this time.") if due > paid else ""))
+	return out
+
+
+## The dues for one night here for the boat aboard (with the costs), or 0.
+func get_harbour_dues_per_night() -> int:
+	if _state == null or not is_moored_in_harbour():
+		return 0
+	return ceili(Economy.dues_per_night(_state.location_id, get_vessel_profile().length_ft) * Difficulty.factor("costs"))
 
 
 ## Which yard a service or upgrade needs: the boatyard, or a yard that can
@@ -1556,7 +1703,7 @@ func perform_service(service: StringName) -> Dictionary:
 			care.hull_cleaned_at = _state.game_time
 			_state.set_condition(_state.vessel_id, VesselCondition.FULL)
 			condition_changed.emit(get_condition())
-	_state.funds -= int(quote.cost)
+	_money(-int(int(quote.cost)), "maintenance")
 	care.add_history(_state.game_time, String(service), String(get_location_id()), int(quote.cost))
 	result.cost = int(quote.cost)
 	result.minutes = float(quote.minutes)
@@ -1633,7 +1780,7 @@ func haul_out(extras: Array[StringName] = []) -> Dictionary:
 				care.upgrades.append("hard_antifouling")
 	var hauled := perform_service(BoatCare.SERVICE_HAUL_OUT)
 	var extras_cost := int(quote.cost) - int(hauled.cost)
-	_state.funds -= extras_cost
+	_money(-int(extras_cost), "haul_out")
 	for i in range(1, quote.items.size()):
 		care.add_history(_state.game_time, "haul_out_extra:" + String(extras[i - 1]), String(get_location_id()), int(quote.items[i][1]))
 	result.cost = int(quote.cost)
@@ -1679,7 +1826,7 @@ func install_upgrade(id: String) -> Dictionary:
 	var care := _state.get_boat_care(_state.vessel_id)
 	var price := upgrade_price(id)
 	care.upgrades.append(id)
-	_state.funds -= price
+	_money(-int(price), "equipment")
 	care.add_history(_state.game_time, "upgrade:" + id, String(get_location_id()), price)
 	result.cost = price
 	result.minutes = BoatCare.UPGRADE_MINUTES
@@ -1778,7 +1925,7 @@ func publish_travel_update() -> Dictionary:
 	progress.publications += 1
 	progress.published_renown += renown
 	progress.published_euros += euros
-	_state.funds += euros
+	_money(int(euros), "publishing")
 	progress.mark(&"publish:first", _state.game_time, _here())  # I024: the collection's "Going public"
 	_has_unsaved_changes = true
 	var info := {"error": "", "renown": renown, "euros": euros, "funds_after": _state.funds}
@@ -2208,7 +2355,7 @@ func sell_fish(uid: int) -> Dictionary:
 	var price := FishingCatalog.get_default().price(fish.species, float(fish.kg))
 	_state.fishing.hold.remove_at(index)
 	_state.fishing.sold += 1
-	_state.funds += price
+	_money(int(price), "fishing")
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
 	fishing_changed.emit()
@@ -2233,7 +2380,7 @@ func sell_catch() -> Dictionary:
 	var count := _state.fishing.hold.size()
 	_state.fishing.hold.clear()
 	_state.fishing.sold += count
-	_state.funds += total
+	_money(int(total), "fishing")
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
 	fishing_changed.emit()
@@ -2252,7 +2399,7 @@ func buy_lure(lure_id: String) -> String:
 	var price := int(lure.price)
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed.") % format_money(price)
-	_state.funds -= price
+	_money(-int(price), "fishing_gear")
 	_state.fishing.lures[lure_id] = _state.fishing.get_lure_count(lure_id) + 1
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
@@ -2570,7 +2717,7 @@ func buy_decor(id: String) -> String:
 	var price := int(item.price)
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed.") % format_money(price)
-	_state.funds -= price
+	_money(-int(price), "cabin")
 	_state.home.owned_decor.append(id)
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
@@ -2618,7 +2765,7 @@ func order_sail_cloth(cloth: String) -> String:
 	var price := sail_cloth_price(cloth)
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed.") % format_money(price)
-	_state.funds -= price
+	_money(-int(price), "sails")
 	_state.home.set_sails(_state.vessel_id, cloth)
 	_has_unsaved_changes = true
 	if price > 0:
@@ -2639,7 +2786,7 @@ func buy_magic_anchor() -> String:
 	var price := HarbourTrades.get_magic_anchor_price()
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed.") % format_money(price)
-	_state.funds -= price
+	_money(-int(price), "equipment")
 	funds_changed.emit(_state.funds)
 	return fit_magic_anchor()
 
@@ -2822,7 +2969,7 @@ func answer_vhf(call: Dictionary, accept: bool) -> Dictionary:
 	result.renown = int(call.renown)
 	if call.kind == VhfRadio.KIND_ASSIST:
 		_state.voyage.standby_until = _state.game_time + float(call.hours) * 3600.0
-		_state.funds += int(call.money)
+		_money(int(int(call.money)), "assist_reward")
 		result.money = int(call.money)
 		result.text = Loc.t("You answer and heave to nearby. The crew of %s wave across the water. The coastguard expects to be there in about %d hours.") % [String(call.vessel), int(call.hours)]
 		funds_changed.emit(_state.funds)
@@ -3113,7 +3260,7 @@ func apply_shore_choice(event_id: String, choice_index: int) -> Dictionary:
 	var title := Loc.t("Ashore in %s: %s") % [harbour_name, event.title]
 	var renown := int(choice.renown) if first else 0
 	if cost > 0:
-		_state.funds -= cost
+		_money(-int(cost), "shore")
 	if renown > 0:
 		_state.progress.award(key, title, renown, _state.game_time, _here())
 	else:
@@ -3213,7 +3360,7 @@ func buy_cafe_coffee() -> Dictionary:
 	var price := cafe_coffee_price()
 	if price > _state.funds:
 		return {"error": Loc.t("Not enough money: %s needed.") % format_money(price), "price": 0}
-	_state.funds -= price
+	_money(-int(price), "cafe")
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
 	SessionLog.write("cafe_coffee", {"port": String(get_location_id()), "price": price, "funds": _state.funds})
@@ -3280,7 +3427,7 @@ func buy_provisions(target := Provisions.CAPACITY_DAYS) -> String:
 	var price := get_provisions_price(target)
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed, you have %s.") % [format_money(price), format_money(_state.funds)]
-	_state.funds -= price
+	_money(-int(price), "provisions")
 	_state.provisions.restock(target)
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
@@ -3299,7 +3446,7 @@ func pay_remote_work(hours: int) -> int:
 	if _state == null or hours <= 0:
 		return 0
 	var earned := hours * REMOTE_WORK_PAY_PER_HOUR
-	_state.funds += earned
+	_money(int(earned), "remote_work")
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
 	return earned
@@ -3498,7 +3645,7 @@ func buy_hat() -> String:
 	if price > _state.funds:
 		return Loc.t("Not enough money: %s needed, you have %s.") % [format_money(price), format_money(_state.funds)]
 	var hat := _state.hat
-	_state.funds -= price
+	_money(-int(price), "hat")
 	hat.status = HatState.CARRIED
 	hat.serial += 1
 	hat.bought_count += 1
@@ -3842,7 +3989,7 @@ func buy_instrument_package(id: String) -> String:
 	if refusal != "":
 		return refusal
 	var package := InstrumentPackage.find(id)
-	_state.funds -= package.price
+	_money(-int(package.price), "equipment")
 	_state.instruments.add_owned(id)
 	_state.instruments.set_fitted(_state.vessel_id, id)
 	_has_unsaved_changes = true

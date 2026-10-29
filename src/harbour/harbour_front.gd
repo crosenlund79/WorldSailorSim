@@ -33,6 +33,8 @@ signal interaction_prompt_changed(prompt: String)
 
 const HATCH := &"hatch"
 const TRAVEL_LIFT := &"travel_lift"
+## The fuel berth's pump (I027).
+const FUEL := &"fuel"
 const WALKWAY := &"walkway"
 ## The camera: the screen's zoom (true scale, like the decks) and the height
 ## it keeps (the facades above, the water's edge below).
@@ -162,6 +164,7 @@ func _build_walls() -> void:
 	for bench in ground.get_bench_positions():
 		_box(body, Rect2(bench + Vector2(-80, -20), Vector2(160, 40)))
 	_box(body, Rect2(layout.noticeboard + Vector2(-70, -12), Vector2(140, 16)))
+	_box(body, Rect2(layout.fuel_berth + Vector2(-14, -13), Vector2(28, 24)))
 	for front in layout.fronts:
 		var x0 := float(front.x0)
 		var w := float(front.x1) - x0
@@ -238,6 +241,10 @@ func _build_stations() -> void:
 		var station := _add_station(holder, TRAVEL_LIFT, Vector2(dock.get_center().x, dock.position.y - 24.0), Vector2(dock.size.x + 60.0, 60))
 		station.prompt = "Ask about a haul-out"
 		station.set_highlight_outline_global.call_deferred(ground.get_lift_outline())
+	var pump := _add_station(holder, FUEL, layout.fuel_berth + Vector2(0.0, -26.0), Vector2(90, 70))
+	pump.prompt = "Fuel berth"
+	pump.set_highlight_outline_global.call_deferred(PackedVector2Array([to_global(layout.fuel_berth + Vector2(-17, -16)),
+		to_global(layout.fuel_berth + Vector2(17, -16)), to_global(layout.fuel_berth + Vector2(17, 14)), to_global(layout.fuel_berth + Vector2(-17, 14))]))
 	var walkway := _add_station(holder, WALKWAY, Vector2(0.0, QuayLayout.EDGE_Y - 34.0), Vector2(120, 60))
 	walkway.prompt = "Back to the boat"
 	walkway.focus_priority = -1
@@ -367,6 +374,8 @@ func refresh() -> void:
 		var station := stations[place] as Interactable
 		if place in QuayLayout.BUSINESSES:
 			station.prompt = prompt_for(place)
+		elif place == FUEL:
+			station.prompt = Loc.t("Fuel berth · %s a litre") % Loc.format("€%.2f", GameSession.get_fuel_price())
 	var focused := player.get_focused_interactable()
 	if focused:
 		interaction_prompt_changed.emit(focused.prompt)

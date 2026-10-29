@@ -66,6 +66,9 @@ var haul_out := false
 var fronts: Array[Dictionary] = []
 ## The noticeboard's place on the promenade (its post's foot).
 var noticeboard := Vector2.ZERO
+## The fuel berth (I027): a pump at the coping by the walkway's head, in
+## every harbour (a card pump, open at any hour).
+var fuel_berth := Vector2.ZERO
 ## The travel lift's dock in the quay edge: x range (empty without one).
 var lift := Vector2.ZERO
 ## The quay's walkable x range.
@@ -132,6 +135,7 @@ func _build(port_id_: StringName) -> void:
 	right = x + 40.0
 	fronts.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.x0) < float(b.x0))
 	noticeboard = Vector2(-WALKWAY_HALF - 130.0, 150.0)
+	fuel_berth = Vector2(WALKWAY_HALF + 232.0, EDGE_Y - 24.0)
 	var cafe := get_front(CAFE)
 	if not cafe.is_empty():
 		var n := 3 if tier == HarbourFacilities.TIER_SMALL else 4

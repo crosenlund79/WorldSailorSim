@@ -44,6 +44,7 @@ func _ready() -> void:
 	scroll.add_child(column)
 	_section(column, "HoursList", Loc.t("Opening hours (local time)"), HarbourNotes.hours_lines(layout, GameSession.get_game_time()))
 	_section(column, "ForecastList", Loc.t("The forecast"), HarbourNotes.forecast_lines(port_id, GameSession.get_game_time()))
+	_section(column, "CostsList", Loc.t("Running costs"), running_cost_lines())
 	var notes := HarbourNotes.local_notes(port_id)
 	if not notes.is_empty():
 		_section(column, "AboutList", Loc.t("About the harbour"), notes)
@@ -66,6 +67,51 @@ func _ready() -> void:
 		GameSession.funds_changed.connect(func(_f: int) -> void: refresh())
 	_button("CloseButton", "Close", close)
 	refresh()
+
+
+## The running costs of the boat aboard (I027): the dues here, fuel here and
+## its range, and the last 30 days' costs from the career's books.
+static func running_cost_lines() -> Array[String]:
+	var lines: Array[String] = []
+	var boat := GameSession.get_vessel_definition()
+	lines.append(Loc.t("Harbour dues: %s a night for the %s, paid when you leave. Anchoring is free.") % [
+		GameSession.format_money(GameSession.get_harbour_dues_per_night()), boat.display_name if boat else ""])
+	lines.append(Loc.t("Fuel at the berth: %s a litre. In the tank: %d of %d litres, about %d nm under engine.") % [
+		Loc.format("€%.2f", GameSession.get_fuel_price()), roundi(GameSession.get_fuel_l()), roundi(GameSession.get_fuel_tank_l()),
+		roundi(GameSession.get_fuel_range_nm())])
+	var month := GameSession.get_ledger().expenses_since(GameSession.get_game_time() - 30.0 * 86400.0)
+	if month.is_empty():
+		lines.append(Loc.t("The last 30 days: no costs yet."))
+	else:
+		var parts: Array[String] = []
+		for source: String in ["fuel", "harbour_dues", "provisions", "maintenance", "haul_out", "equipment"]:
+			if month.has(source):
+				parts.append("%s %s" % [cost_name(source), GameSession.format_money(int(month[source]))])
+		var other := 0
+		for source: String in month:
+			if not source in ["fuel", "harbour_dues", "provisions", "maintenance", "haul_out", "equipment"]:
+				other += int(month[source])
+		if other > 0:
+			parts.append("%s %s" % [Loc.t("other"), GameSession.format_money(other)])
+		lines.append(Loc.t("The last 30 days: %s.") % ", ".join(parts))
+	return lines
+
+
+static func cost_name(source: String) -> String:
+	match source:
+		"fuel":
+			return Loc.t("fuel")
+		"harbour_dues":
+			return Loc.t("harbour dues")
+		"provisions":
+			return Loc.t("provisions")
+		"maintenance":
+			return Loc.t("boat care")
+		"haul_out":
+			return Loc.t("haul-out")
+		"equipment":
+			return Loc.t("equipment")
+	return source
 
 
 func _section(column: VBoxContainer, node_name: String, heading: String, lines: Array[String]) -> void:

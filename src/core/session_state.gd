@@ -136,6 +136,16 @@ var home := HomeState.new()
 ## Marine electronics (I026): the instrument packages owned and fitted to
 ## each boat. Optional in saves (older saves: Classic everywhere).
 var instruments := InstrumentState.new()
+## I027, The Cost of the Wind: fuel in each boat's tank (vessel id ->
+## litres; a boat not listed has a full tank), the career's books, and when
+## the boat moored in its present harbour (for harbour dues; 0 = not moored
+## or before I027). All optional in a save.
+var fuel := {}
+var ledger := CareerLedger.new()
+var moored_since := 0.0
+## I027: the Captain's choice to windward - motor straight up (fuel) rather
+## than beat under sail. Optional in a save (false: sail when the wind allows).
+var motor_upwind := false
 
 
 static func create_new(start_location: StringName, start_area: StringName, start_spawn: StringName,
@@ -244,6 +254,10 @@ func duplicate_state() -> SessionState:
 		copy.boat_care[id] = (boat_care[id] as BoatCareState).duplicate_state()
 	copy.home = home.duplicate_home()
 	copy.instruments = instruments.duplicate_state()
+	copy.fuel = fuel.duplicate()
+	copy.ledger = ledger.duplicate_ledger()
+	copy.moored_since = moored_since
+	copy.motor_upwind = motor_upwind
 	return copy
 
 
@@ -339,6 +353,10 @@ func _to_dict() -> Dictionary:
 		"boat_care": _boat_care_dict(),
 		"home": home.to_dict(),
 		"instruments": instruments.to_dict(),
+		"fuel": fuel.duplicate(),
+		"ledger": ledger.to_dict(),
+		"moored_since": moored_since,
+		"motor_upwind": motor_upwind,
 		"navigation": {
 			"location_id": String(location_id),
 			"planned_route": planned_route.to_dict() if planned_route else null,
@@ -510,6 +528,17 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	state.home = HomeState.from_dict(data.get("home"))
 	# I026, optional: the instrument packages (older saves: Classic, nothing owned).
 	state.instruments = InstrumentState.from_dict(data.get("instruments"))
+	# I027 (optional): fuel by boat, the career ledger, moored since.
+	var fuel_data: Variant = data.get("fuel", {})
+	if fuel_data is Dictionary:
+		for id: Variant in fuel_data:
+			var litres: Variant = fuel_data[id]
+			if (litres is int or litres is float) and is_finite(float(litres)) and float(litres) >= 0.0:
+				state.fuel[StringName(id)] = float(litres)
+	state.ledger = CareerLedger.from_dict(data.get("ledger"))
+	var moored: Variant = data.get("moored_since", 0.0)
+	state.moored_since = float(moored) if (moored is int or moored is float) and is_finite(float(moored)) else 0.0
+	state.motor_upwind = data.get("motor_upwind", false) is bool and data.get("motor_upwind", false)
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).
 	state.owned_vessels = owned_from(data.get("fleet"), state.vessel_id)

@@ -457,7 +457,22 @@ func evaluate_propulsion(reset_history := false, reassess := false) -> void:
 	var factor := SailTrim.factor(trim.auto, trim.value, WindField.relative_angle(heading, wind.from_deg), wind.speed_kn)
 	var beating := int(GameSession.get_voyage_course().tack_side) != 0
 	var stop_above := profile.engine_start_below_kn + CourseMaker.BEAT_STOP_MARGIN_KN if beating else -1.0
-	var state := PropulsionController.evaluate(before, profile, now, heading, wind, reset_history, reassess, factor, stop_above)
+	var state := PropulsionController.evaluate(before, profile, now, heading, wind, reset_history, reassess, factor, stop_above,
+		GameSession.has_fuel())
+	# The Captain's choice to motor to windward (I027): a leg the boat would
+	# beat up is motored straight, while there is fuel.
+	if beating and GameSession.is_motoring_upwind() and GameSession.has_fuel() and not state.is_motoring():
+		state.mode = PropulsionState.MODE_ENGINE
+		state.engine_reason = PropulsionState.REASON_CHOSEN
+		state.mode_seconds = 0.0
+		state.speed_kn = profile.engine_speed_kn
+		state.spinnaker = false
+	elif state.engine_reason == PropulsionState.REASON_CHOSEN and not (beating and GameSession.is_motoring_upwind()):
+		# The choice withdrawn, or the leg no longer to windward: back to the rules.
+		state.mode = PropulsionState.MODE_SAIL
+		state.engine_reason = PropulsionState.REASON_NONE
+		state.mode_seconds = 0.0
+		state.speed_kn = state.potential_kn * factor
 	# Under engine the boat motors along its line (back to it, if off it);
 	# sailing, it sails the tack or the line.
 	var course := GameSession.get_voyage_course()
