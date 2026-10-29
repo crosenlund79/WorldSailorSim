@@ -813,9 +813,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/boatyard_menu.gd": {
-   "sha": "355a6d6eb53a5d71",
+   "sha": "5609fef62af78de8",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 3: comparison rows for guests, private cabins and passages; details keep Sleeps and Aboard"
   },
   "src/ui/build_label.gd": {
    "sha": "cb300b7a22b3c20a",
@@ -1163,9 +1163,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/vessels/accommodation.gd": {
-   "sha": "636197caa7f9222a",
+   "sha": "c6042e6711441cff",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 3: comparison rows for guests, private cabins and passages; details keep Sleeps and Aboard"
   },
   "src/vessels/vessel_catalog.gd": {
    "sha": "b51fa4224c437b56",
@@ -1388,9 +1388,9 @@
    "note": "Steady Hands (UI reliability)"
   },
   "tests/suites/test_accommodation.gd": {
-   "sha": "18d19be46003045e",
+   "sha": "36eaa535597c639c",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 3: comparison rows for guests, private cabins and passages; details keep Sleeps and Aboard"
   },
   "tests/suites/test_anchor_life.gd": {
    "sha": "f614f6fddeb778d6",
@@ -1763,9 +1763,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "tests/suites/test_vessels.gd": {
-   "sha": "33e290d555b31162",
+   "sha": "9d6925b5c72f1db1",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 3: comparison rows for guests, private cabins and passages; details keep Sleeps and Aboard"
   },
   "tests/suites/test_visual_prototype.gd": {
    "sha": "c03749cd50615d97",

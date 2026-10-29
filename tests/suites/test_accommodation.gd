@@ -223,15 +223,23 @@ func _test_boatyard() -> void:
 			for row: Array in Accommodation.describe_rows(id):
 				if not texts.has(String(row[0])) or not texts.has(String(row[1])):
 					problems.append("%s: %s" % [id, row[0]])
+			var compare := PackedStringArray()
+			for child in (yard.find_child("Comparison", true, false) as GridContainer).get_children():
+				compare.append((child as Label).text)
+			for row: Array in BoatyardMenu.compare_rows(VesselCatalog.get_default().get_vessel(id)).slice(-3):
+				if not compare.has(String(row[0])) or not compare.has(String(row[1])):
+					problems.append("%s: comparison %s" % [id, row[0]])
+				if language == &"da" and not STEADY.english_phrase(String(row[0])).is_empty():
+					problems.append("%s: comparison in English %s" % [id, row[0]])
 			if language == &"da":
 				for text in texts:
 					var phrase := STEADY.english_phrase(text)
 					if not phrase.is_empty():
 						problems.append("%s shows English %s" % [id, phrase])
-			var panel := specs.get_parent() as Control
-			if not app.get_viewport().get_visible_rect().encloses(panel.get_global_rect()):
-				problems.append("%s: the details leave the screen" % id)
-		t.check(problems.is_empty(), "[boatyard %s] every boat shows its berths, guests, life aboard and passages, inside the screen %s" % [language, problems])
+			var grid := yard.find_child("Comparison", true, false) as Control
+			if not app.get_viewport().get_visible_rect().encloses(grid.get_global_rect()):
+				problems.append("%s: the comparison leaves the screen" % id)
+		t.check(problems.is_empty(), "[boatyard %s] every boat shows its berths and life aboard, and the comparison its guests, private cabins and passages %s" % [language, problems])
 		yard.select(&"halcyon_40")
 		await t.frames(2)
 		await t.screenshot("i027_boatyard_accommodation_%s" % language)

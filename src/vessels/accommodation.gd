@@ -132,7 +132,9 @@ static func _cabin(vessel_id: StringName, cabin_id: String) -> Dictionary:
 	return {}
 
 
-## The boatyard's lines about life aboard: [label, value] rows.
+## The boatyard's lines about life aboard: [label, value] rows (who sleeps
+## where; comfort, the skipper's cabin, heads). Guests, private cabins and
+## passages are in its comparison of all the boats (BoatyardMenu.compare_rows).
 static func describe_rows(vessel_id: StringName) -> Array:
 	var data := of(vessel_id)
 	var berths := PackedStringArray()
@@ -142,18 +144,23 @@ static func describe_rows(vessel_id: StringName) -> Array:
 		counted[label] = int(counted.get(label, 0)) + 1
 	for label: String in counted:
 		berths.append(Loc.t(label) if int(counted[label]) == 1 else "%d × %s" % [int(counted[label]), Loc.t(label)])
-	var guests := Loc.t("%d by day, %d overnight") % [safe_guest_count(vessel_id), overnight_guest_count(vessel_id)]
-	var cabins := private_guest_cabins(vessel_id)
-	guests += "; " + (Loc.n("%d private guest cabin", "%d private guest cabins", cabins) % cabins if cabins > 0 else Loc.t("no private cabin"))
 	var life := PackedStringArray([comfort_name(comfort_tier(vessel_id))])
 	if skipper_has_privacy(vessel_id):
 		life.append(Loc.t("the skipper's own cabin"))
 	var heads := heads_count(vessel_id)
 	life.append(Loc.n("%d heads", "%d heads", heads) % heads if heads > 0 else Loc.t("no enclosed heads"))
 	return [[Loc.t("Sleeps"), "%d: %s" % [sleeping_places(vessel_id), ", ".join(berths)]],
-		[Loc.t("Guests"), guests],
-		[Loc.t("Aboard"), ", ".join(life)],
-		[Loc.t("Suited to"), passage_name(passage_suitability(vessel_id))]]
+		[Loc.t("Aboard"), ", ".join(life)]]
+
+
+## One word for the boatyard's comparison: "Coastal", "Offshore", "Ocean".
+static func passage_short(kind: StringName) -> String:
+	match kind:
+		PASSAGE_OCEAN:
+			return Loc.t("Ocean")
+		PASSAGE_OFFSHORE:
+			return Loc.t("Offshore")
+	return Loc.t("Coastal")
 
 
 static func comfort_name(tier: StringName) -> String:
@@ -164,11 +171,3 @@ static func comfort_name(tier: StringName) -> String:
 			return Loc.t("Comfortable")
 	return Loc.t("Simple and snug")
 
-
-static func passage_name(kind: StringName) -> String:
-	match kind:
-		PASSAGE_OCEAN:
-			return Loc.t("Ocean passages")
-		PASSAGE_OFFSHORE:
-			return Loc.t("Offshore passages; oceans by way of island harbours")
-	return Loc.t("Coastal hops")

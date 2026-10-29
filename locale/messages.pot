@@ -10125,11 +10125,23 @@ msgstr ""
 msgid "Under engine"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:246
+#: src/ui/boatyard_menu.gd:193
+msgid "Guests by day / overnight"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:194
+msgid "Private guest cabins"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:195
+msgid "Suited to"
+msgstr ""
+
+#: src/ui/boatyard_menu.gd:251
 msgid "(your boat)"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:247 src/ui/chandlery_menu.gd:61
+#: src/ui/boatyard_menu.gd:252 src/ui/chandlery_menu.gd:61
 msgid "Yours"
 msgstr ""
 
@@ -12614,68 +12626,46 @@ msgstr ""
 msgid "You finish at about %s.\nFunds now %s, afterwards %s.\nFood and water used: %s each."
 msgstr ""
 
-#: src/vessels/accommodation.gd:145
-msgid "%d by day, %d overnight"
-msgstr ""
-
-#: src/vessels/accommodation.gd:147
-msgid "%d private guest cabin"
-msgid_plural "%d private guest cabins"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/vessels/accommodation.gd:147
-msgid "no private cabin"
-msgstr ""
-
-#: src/vessels/accommodation.gd:150
+#: src/vessels/accommodation.gd:149
 msgid "the skipper's own cabin"
 msgstr ""
 
-#: src/vessels/accommodation.gd:152
+#: src/vessels/accommodation.gd:151
 msgid "%d heads"
 msgid_plural "%d heads"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/vessels/accommodation.gd:152
+#: src/vessels/accommodation.gd:151
 msgid "no enclosed heads"
 msgstr ""
 
-#: src/vessels/accommodation.gd:153
+#: src/vessels/accommodation.gd:152
 msgid "Sleeps"
 msgstr ""
 
-#: src/vessels/accommodation.gd:154
-msgid "Guests"
-msgstr ""
-
-#: src/vessels/accommodation.gd:156
-msgid "Suited to"
+#: src/vessels/accommodation.gd:160
+msgid "Ocean"
 msgstr ""
 
 #: src/vessels/accommodation.gd:162
+msgid "Offshore"
+msgstr ""
+
+#: src/vessels/accommodation.gd:163
+msgid "Coastal"
+msgstr ""
+
+#: src/vessels/accommodation.gd:169
 msgid "Spacious"
 msgstr ""
 
-#: src/vessels/accommodation.gd:164
+#: src/vessels/accommodation.gd:171
 msgid "Comfortable"
 msgstr ""
 
-#: src/vessels/accommodation.gd:165
+#: src/vessels/accommodation.gd:172
 msgid "Simple and snug"
-msgstr ""
-
-#: src/vessels/accommodation.gd:171
-msgid "Ocean passages"
-msgstr ""
-
-#: src/vessels/accommodation.gd:173
-msgid "Offshore passages; oceans by way of island harbours"
-msgstr ""
-
-#: src/vessels/accommodation.gd:174
-msgid "Coastal hops"
 msgstr ""
 
 #: src/vessels/arctic_wanderer_26/cabin_visual.tscn:309

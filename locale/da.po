@@ -10219,17 +10219,6 @@ msgstr "Denne passage er længere, end %s kan have mad og vand til (%d dage). Et
 msgid "The fuel tank is %d %% full. A full tank carries her through calms and can shorten the passage."
 msgstr "Brændstoftanken er %d %% fuld. En fuld tank bærer hende gennem stilleperioder og kan gøre passagen kortere."
 
-msgid "%d by day, %d overnight"
-msgstr "%d om dagen, %d om natten"
-
-msgid "%d private guest cabin"
-msgid_plural "%d private guest cabins"
-msgstr[0] "%d privat gæstekahyt"
-msgstr[1] "%d private gæstekahytter"
-
-msgid "no private cabin"
-msgstr "ingen privat kahyt"
-
 msgid "the skipper's own cabin"
 msgstr "skipperens egen kahyt"
 
@@ -10244,9 +10233,6 @@ msgstr "intet lukket toilet"
 msgid "Sleeps"
 msgstr "Sovepladser"
 
-msgid "Guests"
-msgstr "Gæster"
-
 msgid "Suited to"
 msgstr "Egnet til"
 
@@ -10259,11 +10245,17 @@ msgstr "Komfortabel"
 msgid "Simple and snug"
 msgstr "Enkel og hyggelig"
 
-msgid "Ocean passages"
-msgstr "Oceanpassager"
+msgid "Guests by day / overnight"
+msgstr "Gæster dag / nat"
 
-msgid "Offshore passages; oceans by way of island harbours"
-msgstr "Passager på åbent hav; oceaner via havne på øerne"
+msgid "Private guest cabins"
+msgstr "Private gæstekahytter"
 
-msgid "Coastal hops"
-msgstr "Korte ture langs kysten"
+msgid "Ocean"
+msgstr "Ocean"
+
+msgid "Offshore"
+msgstr "Åbent hav"
+
+msgid "Coastal"
+msgstr "Kyst"

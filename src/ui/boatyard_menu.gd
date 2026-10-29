@@ -188,6 +188,11 @@ static func compare_rows(vessel: VesselDefinition) -> Array:
 		rows.append([Loc.t("%d kn wind at %d°") % [COMPARE_WIND_KN, angle],
 			Loc.format("%.1f kn", profile.sail_speed_kn(COMPARE_WIND_KN, angle))])
 	rows.append([Loc.t("Under engine"), Loc.format("%.1f kn", profile.engine_speed_kn)])
+	# I027 Tier 3: who it carries and where it goes (Accommodation).
+	var cabins := Accommodation.private_guest_cabins(vessel.id)
+	rows.append([Loc.t("Guests by day / overnight"), "%d / %d" % [Accommodation.safe_guest_count(vessel.id), Accommodation.overnight_guest_count(vessel.id)]])
+	rows.append([Loc.t("Private guest cabins"), str(cabins) if cabins > 0 else "–"])
+	rows.append([Loc.t("Suited to"), Accommodation.passage_short(Accommodation.passage_suitability(vessel.id))])
 	return rows
 
 

@@ -145,7 +145,10 @@ func _test_performance_profiles() -> void:
 	t.check(mono.angle_efficiency(42.0) > cat.angle_efficiency(42.0), "[performance] the monohull points higher than the catamaran")
 	t.check(cat.engine_speed_kn > mono.engine_speed_kn and cat.engine_speed_kn > tri.engine_speed_kn, "[performance] the catamaran's twin engines are the strongest")
 	var rows := BoatyardMenu.compare_rows(catalog.get_vessel(&"petrel_36"))
-	t.check(rows.size() == 5 and rows[0][1] == "%.1f kn" % tri.max_sail_speed_kn, "[performance] the boatyard comparison is computed from the profile")
+	# I027 Tier 3: five sailing rows, then guests, private cabins and passages (Accommodation).
+	t.check(rows.size() == 8 and rows[0][1] == "%.1f kn" % tri.max_sail_speed_kn and rows[5][1] == "%d / %d" % [
+		Accommodation.safe_guest_count(&"petrel_36"), Accommodation.overnight_guest_count(&"petrel_36")],
+		"[performance] the boatyard comparison is computed from the profile and the accommodation data")
 
 
 func _test_sprite_fallback_order() -> void:

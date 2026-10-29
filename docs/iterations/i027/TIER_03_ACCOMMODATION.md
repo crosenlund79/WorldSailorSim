@@ -77,15 +77,22 @@ dues and burns more. The Clam is the roomiest but not the best sailer.
 
 ## The boatyard shows it
 
-Under each boat's specs the boatyard now shows four rows, in English and
-Danish:
-- **Sleeps**
-- **Guests** (by day, overnight, private cabins)
-- **Aboard** (comfort, the skipper's cabin, heads)
-- **Suited to**
+The boatyard shows it in two places, in English and Danish:
+- **The comparison of all four boats ("How they sail")** gains three rows
+  under the speeds: *Guests by day / overnight* (3 / 2, 5 / 2, 7 / 4, 4 / 2),
+  *Private guest cabins* (only the Clam 40: 1) and *Suited to* (Offshore,
+  Ocean).
+- **The selected boat's details** gain two rows:
+  - *Sleeps*: the count and the berths, e.g. "4: V-berth, 2 × Saloon
+    settee";
+  - *Aboard*: comfort, the skipper's own cabin and the heads, e.g. "Simple
+    and snug, no enclosed heads".
 
 The free-text "Accommodation" line in the boats' specs was replaced by these
-rows, so it cannot disagree with the data.
+rows, so it cannot disagree with the data. On a small screen at 130 % the
+boatyard scrolls, as it did before.
+
+Screenshots: `docs/screenshots/i027/tier3`.
 
 ## The Pacific, as the Captain asked
 
