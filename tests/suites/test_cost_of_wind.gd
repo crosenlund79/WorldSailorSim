@@ -264,6 +264,43 @@ func _test_fuel_berth() -> void:
 			await t.screenshot("i027_fuel_berth")
 		app.modals.clear()
 	t.check(Hud.describe_status().contains("Fuel"), "[hud] the fuel on the status line ('%s')" % Hud.describe_status())
+	# The action wheel under way holds a dozen items without overlapping, at
+	# the promised sizes and scales (I027 added Tack now and Motor to windward).
+	app.modals.clear()
+	app.leave_quay()
+	await t.wait_until(func() -> bool: return not app.router.is_busy(), 5.0)
+	GameSession.plan_route_to(&"gothenburg")
+	GameSession.depart()
+	GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"from_cabin")
+	app._show_current_boat_area()
+	await t.wait_until(func() -> bool: return not app.router.is_busy() and app.router.current_screen is BoatArea, 5.0)
+	var root := t.get_tree().root
+	var original := root.size
+	var overlaps: Array[String] = []
+	for setup: Array in [[Vector2i(1280, 720), 1.0], [Vector2i(1280, 720), 1.3], [Vector2i(1024, 768), 1.3]]:
+		root.size = setup[0]
+		SettingsManager.set_ui_scale(setup[1])
+		await t.frames(3)
+		var wheel: ActionWheel = app.open_action_wheel()
+		await t.frames(4)
+		if wheel == null:
+			overlaps.append("%s: no wheel" % [setup])
+			continue
+		var rects: Array[Rect2] = []
+		for b: Button in wheel._buttons:
+			rects.append(b.get_global_rect())
+		var screen := wheel.get_global_rect().grow(1.0)
+		for i in rects.size():
+			if not screen.encloses(rects[i]):
+				overlaps.append("%s: %s off screen" % [setup, wheel._buttons[i].text])
+			for j in range(i + 1, rects.size()):
+				if rects[i].grow(-2.0).intersects(rects[j].grow(-2.0)):
+					overlaps.append("%s: %s / %s" % [setup, wheel._buttons[i].text, wheel._buttons[j].text])
+		app.modals.clear()
+		await t.frames(2)
+	SettingsManager.set_ui_scale(1.0)
+	root.size = original
+	t.check(overlaps.is_empty(), "[wheel] under way its %d items never overlap at 1280x720 and 1024x768, 100 and 130 %% %s" % [app.get_wheel_actions().size(), overlaps])
 	var lines := HarbourOfficeMenu.running_cost_lines()
 	t.check(lines.size() >= 3 and lines[0].contains("a night") and lines[1].contains("litre"), "[office] running costs: %s" % [lines])
 	app.queue_free()

@@ -1684,7 +1684,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/action_wheel.gd`
 
 **Purpose:** The ring of actions that opens with Q.
-- **What it does:** Places the actions that make sense where you are (helm, cabin, at anchor, in harbour) in a ring; arrow keys or A/D move round it, E/Enter chooses, Q or Esc closes. On/off items show a check box.
+- **What it does:** Places the actions that make sense where you are (helm, cabin, at anchor, in harbour) in a ring; arrow keys or A/D move round it, E/Enter chooses, Q or Esc closes. On/off items show a check box. I027: the wheel grows with the number of items (under way it can hold a dozen) so no two ever overlap, and stays on the screen at every interface size.
 - **Works with:** `App` (which gives it the list from `App.get_wheel_actions()`), `ModalPanel` / the modal stack, `UiTheme`.
 - **Keeps:** Only the list of actions it was given and which one is selected.
 - **When it runs:** When you press Q (or open it) during play.
@@ -2584,7 +2584,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_cost_of_wind.gd`
 
 **Purpose:** Checks fuel and the running costs (I027).
-- **What it does:** Checks the balance file, fuel burned only under engine, an empty tank leaving the sails (no free engine, never stranded), buying fuel (fill up, with little money, Relaxed cheaper, none at sea), harbour dues (nights, a short stop, waived beyond the money), the books and a voyage's record, motoring to windward against beating, everything through a save and an older save, and the fuel berth on the quay with its menu, the status line and the harbour office's running costs.
+- **What it does:** Checks the balance file, fuel burned only under engine, an empty tank leaving the sails (no free engine, never stranded), buying fuel (fill up, with little money, Relaxed cheaper, none at sea), harbour dues (nights, a short stop, waived beyond the money), the books and a voyage's record, motoring to windward against beating, everything through a save and an older save, and the fuel berth on the quay with its menu, the status line and the harbour office's running costs. It also checks that the action wheel under way never overlaps its items at the promised sizes and scales.
 - **Works with:** `Economy`, `GameSession`, `Simulation`, `CareerLedger`, `SessionState`, `HarbourFront`, `FuelMenu`, `HarbourOfficeMenu`, `Hud`, the quay helper.
 - **Keeps:** Nothing of its own.
 - **When it runs:** Only in tests.
@@ -3414,7 +3414,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/screenshots_i027.gd`
 
 **Purpose:** Takes the pictures that show I027 working in the running game.
-- **What it does:** Starts a new game, sets sail for Gothenburg with the wind on the nose and photographs the boat beating on deck, the instruments with the tack and the progress made good, the chartplotter, the deck after a tack by hand and the action wheel with "Tack now". `--shots=` picks some.
+- **What it does:** Starts a new game, sets sail for Gothenburg with the wind on the nose and photographs the boat beating on deck, the instruments with the tack and the progress made good, the chartplotter, the deck after a tack by hand and the action wheel with "Tack now". `--shots=` picks some. Tier 2 shots (10-14, docs/screenshots/i027/tier2): the fuel berth's pump on the quay, its menu, the harbour office's running costs, the wheel's Motor to windward and the status line's fuel.
 - **Works with:** the app scene, `Simulation`, `GameSession`, `InstrumentView`, `PlotterView`, the action wheel.
 - **Keeps:** Nothing; it writes PNG files (test saves and settings only).
 - **When it runs:** Only by hand, with a real screen or Xvfb: `res://tests/screenshots_i027.tscn -- [--out=DIR] [--shots=a,b]`.

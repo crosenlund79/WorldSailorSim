@@ -1686,7 +1686,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/action_wheel.gd`
 
 **Formål:** Ringen af handlinger, der åbner med Q.
-- **Hvad det gør:** Lægger de handlinger, der giver mening, hvor du er (ved roret, i kahytten, for anker, i havn), i en ring; piletaster eller A/D flytter rundt, E/Enter vælger, Q eller Esc lukker. Tænd/sluk-punkter viser et afkrydsningsfelt.
+- **Hvad det gør:** Lægger de handlinger, der giver mening, hvor du er (ved roret, i kahytten, for anker, i havn), i en ring; piletaster eller A/D flytter rundt, E/Enter vælger, Q eller Esc lukker. Tænd/sluk-punkter viser et afkrydsningsfelt. I027: hjulet vokser med antallet af punkter (under sejlads kan det rumme et dusin), så ingen to nogensinde overlapper, og det bliver på skærmen ved alle grænsefladestørrelser.
 - **Arbejder sammen med:** `App` (som giver listen fra `App.get_wheel_actions()`), `ModalPanel` / modal-stakken (stakken af åbne vinduer), `UiTheme`.
 - **Holder styr på:** Kun listen af handlinger, den har fået, og hvilken der er valgt.
 - **Hvornår det kører:** Når du trykker Q (eller åbner det) under spillet.
@@ -2586,7 +2586,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_cost_of_wind.gd`
 
 **Formål:** Tester brændstof og driftsomkostningerne (I027).
-- **Hvad det gør:** Tester balancefilen, brændstof brugt kun for motor, en tom tank der overlader det til sejlene (ingen gratis motor, aldrig strandet), køb af brændstof (fyld op, med få penge, Relaxed billigere, intet til søs), havnepenge (nætter, et kort ophold, eftergivet ud over pengene), regnskabet og en rejses oversigt, motor op mod vinden mod krydsning, det hele gennem et gemt spil og et ældre gemt spil, og tankanlægget på kajen med sin menu, statuslinjen og havnekontorets driftsomkostninger.
+- **Hvad det gør:** Tester balancefilen, brændstof brugt kun for motor, en tom tank der overlader det til sejlene (ingen gratis motor, aldrig strandet), køb af brændstof (fyld op, med få penge, Relaxed billigere, intet til søs), havnepenge (nætter, et kort ophold, eftergivet ud over pengene), regnskabet og en rejses oversigt, motor op mod vinden mod krydsning, det hele gennem et gemt spil og et ældre gemt spil, og tankanlægget på kajen med sin menu, statuslinjen og havnekontorets driftsomkostninger. Den tester også, at handlingshjulet under sejlads aldrig lader sine punkter overlappe ved de lovede størrelser og skaleringer.
 - **Arbejder sammen med:** `Economy`, `GameSession`, `Simulation`, `CareerLedger`, `SessionState`, `HarbourFront`, `FuelMenu`, `HarbourOfficeMenu`, `Hud`, kajhjælperen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene.
@@ -3416,7 +3416,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/screenshots_i027.gd`
 
 **Formål:** Tager de billeder, der viser I027 virke i det kørende spil.
-- **Hvad det gør:** Starter et nyt spil, sætter sejl mod Göteborg med vinden lige imod og fotograferer båden, der krydser på dækket, instrumenterne med halsen og fremdriften, kortplotteren, dækket efter en vending i hånden og handlingshjulet med "Vend nu". `--shots=` vælger nogle.
+- **Hvad det gør:** Starter et nyt spil, sætter sejl mod Göteborg med vinden lige imod og fotograferer båden, der krydser på dækket, instrumenterne med halsen og fremdriften, kortplotteren, dækket efter en vending i hånden og handlingshjulet med "Vend nu". `--shots=` vælger nogle. Billeder fra trin 2 (10-14, docs/screenshots/i027/tier2): tankanlæggets pumpe på kajen, dens menu, havnekontorets driftsomkostninger, hjulets Motor op mod vinden og statuslinjens brændstof.
 - **Arbejder sammen med:** app-scenen, `Simulation`, `GameSession`, `InstrumentView`, `PlotterView`, handlingshjulet.
 - **Holder styr på:** Intet; den skriver PNG-filer (kun testgemmer og testindstillinger).
 - **Hvornår det kører:** Kun i hånden, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i027.tscn -- [--out=DIR] [--shots=a,b]`.

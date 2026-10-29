@@ -2059,7 +2059,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/action_wheel.gd`
 
-- **Role:** class_name `ActionWheel`, extends `ModalPanel`; radial modal menu of context actions (Q).
+- **Role:** class_name `ActionWheel`, extends `ModalPanel`; radial modal menu of context actions (Q). I027: `wheel_radii(count, area)` (static): rx ≥ (ITEM_SIZE.x + 10) / sin(step), at least RADIUS × 1.5, clamped to the area; ry = rx / 1.5 within [RADIUS, area.y / 2 − 130]; title and hint follow ry.
 - **Depends on:** `ModalPanel` (close, stack), `UiTheme.color(&"backdrop")`, theme icons `checked`/`unchecked` of `CheckBox`; items come from `App.get_wheel_actions()`.
 - **Signals:** declares `action_chosen(id: StringName)`, emitted in `choose()` after `close()`. Connects each button's `pressed`, `mouse_entered`, `focus_entered`, and its own `resized` -> `_layout`.
 - **State:** `items: Array[Dictionary]` (`id`, `label`, `action: Callable`, optional `checked: Callable`), `_selected`. "checked" is read once in `_ready` (never cached state).
@@ -3086,7 +3086,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_cost_of_wind.gd`
 
-- **Role:** extends RefCounted; I027 Tier 2 suite: `_test_data`, `_test_burn` (calm: burn = burn_lph × h; abeam wind per leg: 0 under sail), `_test_empty_tank`, `_test_buy_fuel`, `_test_dues`, `_test_ledger_and_voyage` (Copenhagen → Helsingør), `_test_motor_upwind`, `_test_save`, `_test_fuel_berth` (app scene, TestQuay.use_door FUEL, FillButton).
+- **Role:** extends RefCounted; I027 Tier 2 suite: `_test_data`, `_test_burn` (calm: burn = burn_lph × h; abeam wind per leg: 0 under sail), `_test_empty_tank`, `_test_buy_fuel`, `_test_dues`, `_test_ledger_and_voyage` (Copenhagen → Helsingør), `_test_motor_upwind`, `_test_save`, `_test_fuel_berth` (app scene, TestQuay.use_door FUEL, FillButton). Also the wheel under way: no button overlaps / off screen at 1280×720 100 % and 130 %, 1024×768 130 %.
 - **Depends on:** `Economy`, `GameSession`, `Simulation`, `SessionState`, `QuayLayout`, `HarbourFront`, `FuelMenu`, `HarbourOfficeMenu`, `Hud`, `tests/helpers/quay.gd`; runner helpers.
 - **State:** `Simulation.auto_advance` false; session ended at the end.
 - **Lifecycle:** in `tests/test_runner.gd` `SUITES` after `test_windward`.
@@ -3934,7 +3934,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/screenshots_i027.gd`
 
-- **Role:** extends Node; rendered I027 evidence (`docs/screenshots/i027/tier1/` by default): new game, `plan_route_to(&"gothenburg")`, depart, `_beat(minutes)` (wind kept on the current leg's nose, 5-minute `Simulation.advance`), shots 01 deck beating, 02 `open_instruments`, 03 `open_chartplotter`, 04 after `app.tack_now()`, 05 the action wheel.
+- **Role:** extends Node; rendered I027 evidence (`docs/screenshots/i027/tier1/` by default): new game, `plan_route_to(&"gothenburg")`, depart, `_beat(minutes)` (wind kept on the current leg's nose, 5-minute `Simulation.advance`), shots 01 deck beating, 02 `open_instruments`, 03 `open_chartplotter`, 04 after `app.tack_now()`, 05 the action wheel. Tier 2: `_tier2()` (fuel 9 L, quay, `open_fuel_berth`, `open_harbour_office(false)`), shots ≥ 10 go to `tier2/`, 13 = the wheel under way.
 - **Depends on:** `src/app/app.tscn`, `Simulation`, `GameSession`, `WindField`, `WeatherModel`, `SaveManager`/`SettingsManager` (test paths).
 - **State:** none kept; writes PNGs.
 - **Lifecycle:** run by hand under Xvfb (`tests/screenshots_i027.tscn`).

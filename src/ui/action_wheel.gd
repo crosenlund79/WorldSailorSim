@@ -73,14 +73,29 @@ func _ready() -> void:
 
 func _layout() -> void:
 	var centre := size / 2.0
-	_title.position = centre - Vector2(150, RADIUS + 78.0)
+	var radii := wheel_radii(_buttons.size(), size)
+	_title.position = centre - Vector2(150, radii.y + 78.0)
 	_title.size = Vector2(300, 36)
 	var hint := get_node("Hint") as Label
-	hint.position = centre + Vector2(-260, RADIUS + 50.0)
+	hint.position = centre + Vector2(-260, radii.y + 50.0)
 	hint.size = Vector2(520, 30)
 	for i in _buttons.size():
 		var angle := -PI / 2.0 + TAU * i / maxf(_buttons.size(), 1)
-		_buttons[i].position = centre + Vector2(cos(angle), sin(angle)) * Vector2(RADIUS * 1.5, RADIUS) - ITEM_SIZE / 2.0
+		_buttons[i].position = centre + Vector2(cos(angle), sin(angle)) * radii - ITEM_SIZE / 2.0
+
+
+## The wheel's ellipse for `count` items in `area` (I027: under way it holds
+## up to a dozen): wide enough that the neighbours at the top clear each
+## other's width, never smaller than the classic RADIUS × 1.5 by RADIUS, and
+## kept inside the screen with room for the title and the hint.
+static func wheel_radii(count: int, area: Vector2) -> Vector2:
+	var step := TAU / maxf(count, 1)
+	var rx := RADIUS * 1.5
+	if count > 1 and sin(step) > 0.05:
+		rx = maxf(rx, (ITEM_SIZE.x + 10.0) / sin(minf(step, PI / 2.0)))
+	rx = minf(rx, maxf(area.x / 2.0 - ITEM_SIZE.x / 2.0 - 16.0, RADIUS * 1.5))
+	var ry := clampf(rx / 1.5, RADIUS, maxf(area.y / 2.0 - 130.0, RADIUS * 0.8))
+	return Vector2(rx, ry)
 
 
 func focus_default() -> void:

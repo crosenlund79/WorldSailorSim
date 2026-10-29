@@ -783,9 +783,9 @@
    "note": "I022 Captain's Academy"
   },
   "src/ui/action_wheel.gd": {
-   "sha": "77d784d9635b9903",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "c508b54ccf0c94ec",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 2: wheel layout, shots, wheel test"
   },
   "src/ui/adoption_dialog.gd": {
    "sha": "1164eec60c96f2b6",
@@ -1248,9 +1248,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/career/career_sim.gd": {
-   "sha": "b824739287c2e4ef",
+   "sha": "e8c8a3d36df52058",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 2: wheel layout, shots, wheel test"
   },
   "tests/companion_animation_preview.gd": {
    "sha": "ecfb2a72e0098472",
@@ -1373,9 +1373,9 @@
    "note": "I026 closing: traffic warning title, batched dial ticks, café stand-up point, quay probe, layout checks, waterfront walkthrough"
   },
   "tests/screenshots_i027.gd": {
-   "sha": "8a8a38e38dcbc477",
+   "sha": "cc15d99137348640",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 1: windward sailing, tacking, ETA"
+   "note": "I027 Tier 2: wheel layout, shots, wheel test"
   },
   "tests/suites/test_academy.gd": {
    "sha": "001e7e3769747ff6",
@@ -1498,9 +1498,9 @@
    "note": "I025: suites follow no companion at New Game, hidden second-companion nodes, windows and faded sea on every cabin"
   },
   "tests/suites/test_cost_of_wind.gd": {
-   "sha": "10cd3d4c528d4551",
+   "sha": "4d0cf6d363180539",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 2: wheel layout, shots, wheel test"
   },
   "tests/suites/test_cozy_patch.gd": {
    "sha": "129afee3a93726c5",

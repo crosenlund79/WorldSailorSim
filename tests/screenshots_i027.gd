@@ -1,8 +1,11 @@
 extends Node
 ## I027, The Cost of the Wind: rendered evidence from the running game.
-## Tier 1: beating to windward on deck (sails close-hauled, the wind ahead),
+## Tier 1 (01-05, docs/screenshots/i027/tier1): beating to windward on deck,
 ## the instruments with the tack and the progress made good, the
-## chartplotter's zigzag, the deck after a tack by hand (K), and the chart.
+## chartplotter, the deck after a tack by hand (K), the wheel's Tack now.
+## Tier 2 (10-14, .../tier2): the fuel berth's pump on the quay, its menu,
+## the harbour office's running costs, the wheel's Motor to windward, and
+## the status line's fuel.
 ##   xvfb-run -a -s "-screen 0 1600x900x24" godot --path . --rendering-driver opengl3 \
 ##     --resolution 1600x900 res://tests/screenshots_i027.tscn -- [--out=DIR] [--shots=a,b]
 ## Uses the test save and settings files; never touches the player's own.
@@ -52,7 +55,9 @@ func _shot(name: String, settle := 0.6) -> void:
 	await get_tree().create_timer(settle).timeout
 	await _frames(3)
 	await RenderingServer.frame_post_draw
-	get_viewport().get_texture().get_image().save_png("%s/%s.png" % [out, name])
+	var dir := out if int(name.substr(0, 2)) < 10 else out.replace("tier1", "tier2")
+	DirAccess.make_dir_recursive_absolute(dir)
+	get_viewport().get_texture().get_image().save_png("%s/%s.png" % [dir, name])
 	print("SHOT %s" % name)
 
 
@@ -90,6 +95,7 @@ func _run() -> void:
 	await _frames(12)
 	app.start_new_game()
 	await _idle()
+	await _tier2()
 	GameSession.plan_route_to(&"gothenburg")
 	GameSession.depart()
 	await _idle()
@@ -119,5 +125,49 @@ func _run() -> void:
 		await _shot("05_wheel_tack_now")
 		app.modals.clear()
 		app.close_action_wheel() if app.has_method("close_action_wheel") else null
+	if _wanted("13"):
+		app.open_action_wheel()
+		await _frames(8)
+		await _shot("13_wheel_motor_to_windward")
+		app.modals.clear()
 	print("I027 SHOTS DONE")
 	get_tree().quit()
+
+
+## Tier 2 in Copenhagen: the fuel berth, its menu, the office's running costs.
+func _tier2() -> void:
+	if not (_wanted("10") or _wanted("11") or _wanted("12") or _wanted("14")):
+		return
+	var state := GameSession.get_state_snapshot()
+	state.fuel[state.vessel_id] = 9.0
+	GameSession.replace_state(state)
+	GameSession.buy_provisions()
+	app.modals.clear()
+	GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"from_boatyard")
+	app._show_current_boat_area()
+	await _idle()
+	app.open_quay()
+	await _idle()
+	var front := app.router.current_screen as HarbourFront
+	if front == null:
+		return
+	front.player.position = front.layout.fuel_berth + Vector2(0, -60)
+	front.player.set_facing(Vector2.DOWN)
+	front.camera.position.x = front._camera_x(front.player.position.x)
+	await _frames(6)
+	if _wanted("10"):
+		await _shot("10_fuel_berth_on_the_quay", 1.0)
+	if _wanted("11"):
+		app.open_fuel_berth()
+		await _frames(8)
+		await _shot("11_fuel_menu")
+		app.modals.clear()
+	if _wanted("12"):
+		app.open_harbour_office(false)
+		await _frames(8)
+		await _shot("12_harbour_office_running_costs")
+		app.modals.clear()
+	if _wanted("14"):
+		await _shot("14_status_line_fuel")
+	app.leave_quay()
+	await _idle()
