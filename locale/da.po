@@ -10397,3 +10397,48 @@ msgstr "Og måske ville du et sted undervejs finde vejen til dine egne."
 
 msgid "Your old life is behind you.\nThe next horizon is yours to discover."
 msgstr "Dit gamle liv ligger bag dig.\nDen næste horisont er din at opdage."
+
+msgid "You were woken after %s by a traffic warning. %s It is %s. On deck the radar shows the vessel; View chart on the warning lets you change course, or keep a lookout while it passes.%s"
+msgstr "Du blev vækket efter %s af en trafikadvarsel. %s Klokken er %s. På dækket viser radaren skibet; Se søkort i advarslen lader dig ændre kurs, eller hold udkig, mens det passerer.%s"
+
+msgid "%s (closed)"
+msgstr "%s (lukket)"
+
+msgid "Into town"
+msgstr "Ind til byen"
+
+msgid "Your coffee waits in the cup holder by the helm, on deck."
+msgstr "Din kaffe står i kopholderen ved roret, på dækket."
+
+msgid "Your coffee waits on the cabin table."
+msgstr "Din kaffe står på bordet i kahytten."
+
+msgid "Read the instruments"
+msgstr "Aflæs instrumenterne"
+
+msgid "No game."
+msgstr "Intet spil."
+
+msgid "No species."
+msgstr "Ingen arter."
+
+msgid "Someone is in the way. Walk on with the movement keys."
+msgstr "Nogen står i vejen. Gå videre med bevægelsestasterne."
+
+msgid "The mug is in your hand. Drink it, or set it down in the cup holder by the helm or on the cabin table, from the action wheel (Q)."
+msgstr "Kruset er i din hånd. Drik det, eller sæt det i kopholderen ved roret eller på bordet i kahytten, fra handlingshjulet (Q)."
+
+msgid "Shift"
+msgstr "Shift"
+
+msgid "run"
+msgstr "løb"
+
+msgid "Your five most notable catches ever, kept on the board after the fish are sold or eaten: rare fish rank above common ones, and a big fish above a small one of its kind."
+msgstr "Dine fem mest bemærkelsesværdige fangster nogensinde, som bliver på tavlen, efter at fiskene er solgt eller spist: sjældne fisk rangerer over almindelige, og en stor fisk over en lille af samme art."
+
+msgid "In the cool box now"
+msgstr "I køleboksen nu"
+
+msgid "On record: sold or eaten since"
+msgstr "Noteret: solgt eller spist siden"

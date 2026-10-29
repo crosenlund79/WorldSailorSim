@@ -56,17 +56,49 @@ func _draw() -> void:
 			points.append(tip.lerp(mid, t).lerp(mid.lerp(end, t), t))
 		draw_polyline(points, LINE, 1.2, true)
 		draw_circle(end, 3.0, Color(1, 1, 1, 0.25 + 0.15 * sin(_time * 2.0)))
-	# The holder: a steel tube clamped to the rail.
-	draw_circle(Vector2.ZERO, 7.0, INK)
-	draw_circle(Vector2.ZERO, 5.0, STEEL)
-	# The rod: a cork grip in the holder, the blank out to the tip.
-	draw_line(Vector2(6, 4), Vector2.ZERO, INK, 6.0, true)
-	draw_line(Vector2(5, 3.5), Vector2(-1, -0.5), CORK, 4.0, true)
-	draw_line(Vector2.ZERO, tip, INK, 4.0, true)
-	draw_line(Vector2.ZERO, tip, ROD, 2.2, true)
-	draw_circle(tip, 1.8, Color("#c8553d"))
-	# The reel, under the rod near the holder.
-	var reel := Vector2(-9.0, -2.0)
-	draw_circle(reel, 6.0, INK)
-	draw_circle(reel, 4.4, REEL)
-	draw_circle(reel, 1.6, STEEL)
+	# I027 playtest: redrawn in the illustrated style of the deck - a tapered
+	# blank with a soft highlight and guides, a cork grip, a spinning reel seen
+	# from above and a stainless holder, outlined lightly (as the people are)
+	# rather than in heavy ink. The tip and its nod are unchanged.
+	var ink := Color(INK, 0.55)
+	var along := tip.normalized()
+	var side := Vector2(-along.y, along.x)
+	# A soft shadow of the rod on the water and the deck below it.
+	draw_line(Vector2(3, 5), tip + Vector2(5, 8), Color(0, 0, 0, 0.16), 3.0, true)
+	# The holder: a short stainless tube clamped to the rail.
+	draw_circle(Vector2.ZERO, 5.6, ink)
+	draw_circle(Vector2.ZERO, 4.6, STEEL)
+	draw_circle(Vector2(-1.0, -1.2), 2.0, Color(1, 1, 1, 0.45))
+	# The blank: tapering from the butt to the tip, in segments.
+	var length := tip.length()
+	var segments := 8
+	for k in segments:
+		var a := along * length * (float(k) / segments)
+		var b := along * length * (float(k + 1) / segments)
+		var width := lerpf(3.0, 1.0, float(k) / segments)
+		draw_line(a, b, ink, width + 1.2, true)
+		draw_line(a, b, ROD, width, true)
+	draw_line(along * 4.0 + side * 0.6, tip * 0.8 + side * 0.4, Color(1, 1, 1, 0.22), 0.8, true)  # the varnish's highlight
+	# The guides: small rings along the blank, closer towards the tip.
+	for t: float in [0.32, 0.55, 0.73, 0.88]:
+		draw_arc(along * length * t, lerpf(2.2, 1.2, t), 0.0, TAU, 10, Color(STEEL, 0.9), 0.7, true)
+	draw_circle(tip, 1.5, Color("#c8553d"))  # the painted tip
+	# The grip: cork with its rings, below the holder's clamp.
+	var butt := -along * 9.0
+	draw_line(butt, Vector2.ZERO, ink, 5.0, true)
+	draw_line(butt, Vector2.ZERO, CORK, 3.8, true)
+	for t: float in [0.3, 0.65]:
+		var at := butt.lerp(Vector2.ZERO, t)
+		draw_line(at - side * 1.8, at + side * 1.8, Color(CORK.darkened(0.25), 0.8), 0.6, true)
+	draw_circle(butt, 2.0, Color(REEL, 0.95))  # the butt cap
+	# The reel: a spinning reel under the rod, its spool and bail seen from above.
+	var reel := along * 9.0 - side * 4.5
+	draw_line(along * 9.0, reel, Color(REEL, 0.9), 1.4, true)  # its foot
+	var body := PackedVector2Array([reel + along * 4.5 + side * 2.6, reel + along * 4.5 - side * 2.6,
+		reel - along * 3.5 - side * 3.0, reel - along * 3.5 + side * 3.0])
+	draw_colored_polygon(body, REEL)
+	draw_polyline(body + PackedVector2Array([body[0]]), ink, 0.7, true)
+	draw_circle(reel + along * 3.2, 2.4, STEEL)  # the spool
+	draw_arc(reel + along * 3.2, 3.6, along.angle() - 1.4, along.angle() + 1.4, 8, Color(STEEL, 0.9), 0.6, true)  # the bail
+	draw_line(reel - side * 3.0, reel - side * 6.0 - along * 1.5, Color(REEL, 0.9), 0.9, true)  # the handle
+	draw_circle(reel - side * 6.0 - along * 1.5, 1.1, CORK)

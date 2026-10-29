@@ -117,6 +117,78 @@ static func set_provisions(days: float) -> void:
 		GameSession.set_provisions_for_testing(days)
 
 
+# --- I027 playtest: more test shortcuts (existing systems only) -------------------------
+
+static func add_money(euros: int) -> void:
+	if is_enabled():
+		GameSession.add_funds_for_testing(euros)
+
+
+static func set_fuel(share: float) -> void:
+	if is_enabled():
+		GameSession.set_fuel_for_testing(share)
+
+
+static func add_lures(count: int) -> void:
+	if is_enabled():
+		GameSession.add_lures_for_testing(count)
+
+
+## A rare, Gold-sized fish on the line now. Returns "" or why not.
+static func rare_bite() -> String:
+	return GameSession.force_rare_bite_for_testing() if is_enabled() else "Developer tools are off."
+
+
+## An animal on this harbour's dock now (moored in a harbour only).
+static func dock_animal(kind: StringName) -> String:
+	if not is_enabled():
+		return "Developer tools are off."
+	if not GameSession.is_moored_in_harbour():
+		return "Moor in a harbour first: the animal waits on the pontoon."
+	GameSession.test_place_dock_animal(kind)
+	return ""
+
+
+## The next dream comes true. Returns "" or why not.
+static func fulfil_dream() -> String:
+	if not is_enabled():
+		return "Developer tools are off."
+	return "" if not GameSession.fulfil_next_dream_for_testing().is_empty() else "Every active dream has come true already."
+
+
+## Lets time pass (the normal simulation) to the next `hour` (local) at this
+## harbour: the shops' hours, the café and the evening light can be tried.
+static func advance_to_local_hour(hour: float) -> void:
+	if not is_enabled():
+		return
+	var place := GameSession.get_location_id()
+	var now := GameSession.get_game_time()
+	var local := BusinessHours.local_hours(place, now) if place != &"" else fposmod(now / 3600.0, 24.0)
+	var wait := fposmod(hour - local, 24.0)
+	advance_hours(wait if wait > 0.01 else 24.0)
+
+
+## Plans a course to the nearest other harbour (5 nm or more away) for a
+## passage test. Returns "" or why not.
+static func plan_short_passage() -> String:
+	if not is_enabled():
+		return "Developer tools are off."
+	if GameSession.is_underway():
+		return "Already under way."
+	var here := GameSession.get_vessel_position()
+	var best: PortData = null
+	var best_nm := INF
+	for port in PortCatalog.get_default().ports_in_rect(Rect2(here - Vector2(2.0, 1.5), Vector2(4.0, 3.0))):
+		var nm := here.distance_to(port.get_geo_position()) * 60.0
+		if port.id != GameSession.get_location_id() and nm >= 5.0 and nm < best_nm:
+			best = port
+			best_nm = nm
+	if best == null:
+		return "No other harbour nearby."
+	GameSession.plan_route_to(best.id)
+	return "" if GameSession.get_planned_route() != null else "No course could be plotted to %s." % best.display_name
+
+
 ## Lets `hours` of game time pass through the normal simulation.
 static func advance_hours(hours: float) -> Simulation.AdvanceResult:
 	return Simulation.advance(hours * 3600.0)

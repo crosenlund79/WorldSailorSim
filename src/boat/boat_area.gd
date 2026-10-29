@@ -118,6 +118,7 @@ func _ready() -> void:
 	SettingsManager.art_style_changed.connect(_on_art_style_changed)
 	_setup_shore()
 	_setup_aboard_gear()
+	_trim_cockpit_benches()  # I027 playtest: before the instruments and the winch, which stand by them
 	_setup_cockpit_instruments()  # I026: the instruments and the plotter at the helm
 	_place_player()
 	player.focus_changed.connect(_on_player_focus_changed)
@@ -126,7 +127,8 @@ func _ready() -> void:
 	_setup_winch()  # I026: the sheet winch where the sails are trimmed (before the connections below)
 	for node in find_children("*", "Interactable", true, false):
 		(node as Interactable).interacted.connect(_on_interacted)
-	AudioManager.play_ambience(ambience)
+	# The deck's open-air wash is the wind (I027 playtest): the Wind volume governs it.
+	AudioManager.play_ambience(ambience, true, WeatherAudio.WIND_BUS if area_id == SessionState.AREA_EXTERIOR else AudioManager.BUS_AMBIENCE)
 	show_condition()
 	GameSession.condition_changed.connect(func(_percent: float) -> void: show_condition())
 	_update_mooring()
@@ -264,6 +266,12 @@ func _setup_water_life() -> void:
 	surroundings.add_child(life)
 	surroundings.move_child(life, water.get_index() + 1)
 	life.setup(self)
+	# I027 playtest: a restrained wake while the boat moves (over the water, under the hull).
+	if area_id == SessionState.AREA_EXTERIOR:
+		var wake := BoatWake.new()
+		surroundings.add_child(wake)
+		surroundings.move_child(wake, life.get_index() + 1)
+		wake.setup(self, _lifeline_polygon())
 
 
 ## Life at anchor (0.102b): the time-of-day tint while settled at anchor,
@@ -613,6 +621,7 @@ func get_spawn_position(spawn_point: StringName) -> Vector2:
 func _physics_process(_delta: float) -> void:
 	if not _leaving:
 		GameSession.set_player_position(player.position)
+		_check_walkway_passage()
 	var camera := get_node_or_null(^"Camera2D") as Camera2D
 	if camera:
 		player.view_rotation = camera.rotation
@@ -716,6 +725,8 @@ func _on_interacted(interactable: Interactable, _actor: Node) -> void:
 			trophies_requested.emit()
 		&"chartplotter":
 			chartplotter_requested.emit()
+		&"instruments":
+			instruments_requested.emit()
 		&"hat":
 			message_requested.emit(GameSession.use_hat_hook())
 		&"trim":
@@ -926,6 +937,10 @@ func _update_shore() -> void:
 				shape.set_meta(&"own_shape", true)
 			(shape.shape as RectangleShape2D).size = Vector2(180, 64)
 			shape.position = Vector2.ZERO
+			# The painted arrows just before the passage's head.
+			var arrow := station.get_node_or_null(^"WalkwayArrow") as Node2D
+			if arrow:
+				arrow.position = Vector2(0.0, _shore.get_shore_rect().end.y - 34.0 - station.position.y)
 		_set_station_available(station, offered)
 		var label := mooring.get_node_or_null(NodePath(String(SIGN_LABELS[id]))) as Label
 		if label:
@@ -976,6 +991,10 @@ func _setup_walkway(stations: Node, yard_label: Label) -> void:
 	walkway.add_child(shape)
 	stations.add_child(walkway)
 	_walkway = walkway
+	# Painted arrows on the planks show the way to the passage (I027 playtest).
+	var arrow := WalkwayArrow.new()
+	arrow.name = "WalkwayArrow"
+	walkway.add_child(arrow)
 	if yard_label and mooring.get_node_or_null(^"QuaySign") == null:
 		var label := yard_label.duplicate() as Label
 		label.name = "QuaySign"
@@ -996,6 +1015,29 @@ func _walkway_slot() -> Dictionary:
 ## The walkway's station on the pontoon (null on decks without a shore).
 func get_walkway() -> Interactable:
 	return _walkway
+
+
+## The passage up to the quay (I027 playtest): walking on into the walkway at
+## the back of the pontoon takes the Captain up to the quay - no key, no
+## question - as walking down the quay's walkway brings the Captain back. Its
+## half-width, and how close to the pontoon's back edge the Captain must walk.
+const PASSAGE_HALF := 70.0
+const PASSAGE_DEPTH := 24.0
+
+
+## True when the Captain is walking into the walkway's passage.
+func is_in_walkway_passage(at: Vector2, moving: Vector2) -> bool:
+	if _walkway == null or _shore == null or not _walkway.enabled or not _walkway.visible:
+		return false
+	return absf(at.x - _walkway.position.x) < PASSAGE_HALF and at.y >= _shore.get_shore_rect().end.y - PASSAGE_DEPTH and moving.y > 0.0
+
+
+func _check_walkway_passage() -> void:
+	if player == null or not player.input_enabled or not player.keys_released or get_tree().paused:
+		return
+	if is_in_walkway_passage(player.position, player.velocity):
+		begin_exit()
+		quay_requested.emit()
 
 
 ## Where the Captain stands on the pontoon by the walkway (area
@@ -1148,8 +1190,8 @@ func _setup_aboard_gear() -> void:
 			holder.position = cup[0]
 			add_child(holder)
 			move_child(holder, get_node(^"Layout").get_index())
-			var station := _add_station(stations, "CupHolder", &"cup_holder", "Cup holder", cup[1], 20.0)
-			station.focus_priority = -1  # never takes E from the helm unless closer
+			# I027 playtest: on plain distance (the nearest thing wins), so the mug is easy to reach.
+			_add_station(stations, "CupHolder", &"cup_holder", "Cup holder", cup[1], 20.0)
 	elif area_id == SessionState.AREA_INTERIOR:
 		var provisions := stations.get_node_or_null(^"Provisions") as Node2D
 		var galley := _nearest_fixture(provisions.position if provisions else Vector2.ZERO, HighlightResolver.FIXTURES[&"provisions"])
@@ -1172,9 +1214,9 @@ func _setup_aboard_gear() -> void:
 			board.position = place[0]
 			_add_gear(board, TrophyBoard.outline())
 			var station := _add_station(stations, "Trophies", &"trophies", "Look at the trophy board", place[1], 26.0)
-			# A board to look at: like the companion, it never takes the E key
-			# from a station nearby unless the captain stands closer to it.
-			station.focus_priority = -1
+			# A board to look at: it competes on plain distance (I027 playtest:
+			# with a lower priority, standing at it beside the hull opened the
+			# keepsakes further along instead) - the nearest thing wins.
 		setup_decor()
 	if not GameSession.home_changed.is_connected(_on_home_changed):
 		GameSession.home_changed.connect(_on_home_changed)
@@ -1268,7 +1310,6 @@ func _setup_table_mug(stations: Node) -> void:
 	add_child(mug)
 	move_child(mug, get_node(^"Layout").get_index() + 1)
 	var station := _add_station(stations, "TableMug", &"coffee_table", "Your coffee", station_at, 22.0)
-	station.focus_priority = -1
 	station.enabled = GameSession.get_coffee() == GameSession.COFFEE_TABLE
 	_table_mug_station = station
 	if not GameSession.coffee_changed.is_connected(_on_coffee_changed):
@@ -1596,8 +1637,42 @@ func _setup_cockpit_instruments() -> void:
 	cockpit.add_child(HighlightProvider.create(&"chartplotter", HighlightResolver.rounded_rect(cockpit.plotter_rect().grow(1.0), 2.0)))
 	cockpit.plotter_clicked.connect(chartplotter_requested.emit)
 	cockpit.instruments_clicked.connect(instruments_requested.emit)
-	var station := _add_station(stations, "Chartplotter", &"chartplotter", "Use the chartplotter", layout.station, 18.0)
-	station.focus_priority = -1  # never takes E from the helm or the companionway unless closer
+	var station := _add_station(stations, "Chartplotter", &"chartplotter", "Use the chartplotter", layout.station, PLOTTER_REACH)
+	# I027 playtest: clear of the companionway now, the plotter (and the
+	# instruments, with their own place to stand: E or I) compete on plain
+	# distance - the nearest thing is the one E uses.
+	if layout.has("units_station"):
+		_add_station(stations, "Instruments", &"instruments", "Read the instruments", layout.units_station, PLOTTER_REACH)
+
+
+## I027 playtest: how far from its station the plotter (and the instruments)
+## can be used - a step, not a squeeze.
+const PLOTTER_REACH := 26.0
+## The cockpit benches' collision (I027 playtest): this share of their depth
+## (the outboard edge kept) and of their length (the aft end kept), so the
+## Captain walks past them as past a real bench; the art is unchanged.
+const BENCH_DEPTH := 0.6
+const BENCH_LENGTH := 0.85
+
+
+func _trim_cockpit_benches() -> void:
+	var collision := get_node_or_null(^"Layout/Collision")
+	if collision == null or area_id != SessionState.AREA_EXTERIOR:
+		return
+	for bench_name: String in ["BenchPort", "BenchStarboard", "BenchAft"]:
+		var bench := collision.get_node_or_null(bench_name) as BoatFixture
+		if bench == null or bench.polygon.size() >= 3:
+			continue
+		var s := bench.size
+		if s.x >= s.y:  # along the side: thinner (outboard edge kept), shorter (aft end kept)
+			var depth := s.y * BENCH_DEPTH
+			var length := s.x * BENCH_LENGTH
+			bench.position += Vector2(-(s.x - length) / 2.0, signf(bench.position.y) * (s.y - depth) / 2.0)
+			bench.size = Vector2(length, depth)
+		else:  # across the stern: thinner, its aft edge kept
+			var depth := s.x * BENCH_DEPTH
+			bench.position.x -= (s.x - depth) / 2.0
+			bench.size = Vector2(depth, s.y)
 
 
 ## Where the cockpit electronics go on a deck, from its fixtures (deck
@@ -1628,6 +1703,19 @@ static func cockpit_layout(collision: Node, stations: Node, unit_size := 11.0) -
 	var plotter: Vector2
 	var station: Vector2
 	var units: Array[Vector2] = []
+	# I027 playtest: on the monohulls the instruments and the tiller's plotter
+	# stand on the cockpit coamings behind the benches' middles, by the helm
+	# and well clear of the companionway; each has a place to stand on the
+	# cockpit floor.
+	var port_bench := collision.get_node_or_null(^"BenchPort") as BoatFixture
+	var starboard_bench := collision.get_node_or_null(^"BenchStarboard") as BoatFixture
+	var units_station := Vector2.INF
+	if starboard_bench and starboard_bench.polygon.size() < 3:
+		var mid := starboard_bench.position.x
+		var coaming := absf(starboard_bench.position.y) + starboard_bench.size.y / 2.0 - 2.0
+		for k in 3:
+			units.append(Vector2(mid + (1 - k) * spacing, coaming))
+		units_station = Vector2(mid, absf(starboard_bench.position.y) - starboard_bench.size.y / 2.0 - 22.0)
 	if pedestal:
 		plotter = pedestal.position + Vector2(3.0, 0.0)
 		station = pedestal.position + Vector2(30.0, 0.0)
@@ -1637,6 +1725,10 @@ static func cockpit_layout(collision: Node, stations: Node, unit_size := 11.0) -
 		station = plotter + Vector2(-24.0, 0.0)
 		for k in 3:
 			units.append(Vector2(aft_x + 4.0, plotter.y + inboard * (26.0 + k * spacing)))
+	elif port_bench and port_bench.polygon.size() < 3:
+		var mid := port_bench.position.x
+		plotter = Vector2(mid, -(absf(port_bench.position.y) + port_bench.size.y / 2.0 + 6.0))
+		station = Vector2(mid, -(absf(port_bench.position.y) - port_bench.size.y / 2.0 - 22.0))
 	else:
 		plotter = Vector2(aft_x + 6.0, -40.0)
 		station = plotter + Vector2(-30.0, 0.0)
@@ -1645,4 +1737,19 @@ static func cockpit_layout(collision: Node, stations: Node, unit_size := 11.0) -
 		# centreline (where the boom and the hatch run).
 		for k in 3:
 			units.append(Vector2(aft_x + 4.0, 9.0 + unit_size / 2.0 + k * (unit_size + 1.0)))
-	return {"plotter": plotter, "units": units, "station": station}
+	var result := {"plotter": plotter, "units": units, "station": station}
+	if units_station != Vector2.INF:
+		result["units_station"] = units_station
+	return result
+
+
+## Two chevrons painted on the pontoon's planks before the walkway's passage,
+## pointing the way up to the quay (drawn under the Captain; no collision).
+class WalkwayArrow:
+	extends Node2D
+
+	func _draw() -> void:
+		var paint := Color(0.93, 0.95, 0.93, 0.55)
+		for k in 2:
+			var y := -10.0 + k * 18.0
+			draw_polyline(PackedVector2Array([Vector2(-22.0, y), Vector2(0.0, y + 14.0), Vector2(22.0, y)]), paint, 5.0, true)

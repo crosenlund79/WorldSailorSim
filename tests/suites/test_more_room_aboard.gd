@@ -334,6 +334,8 @@ func _test_adopt_at_the_companionway() -> void:
 		return
 	var deck := app.router.current_screen as BoatArea
 	app._on_area_change_requested(SessionState.AREA_INTERIOR, &"from_deck")
+	# I027 playtest: the animal comes to the Captain first (a few seconds at most).
+	await t.wait_until(func() -> bool: return app.modals.get_top() is AdoptionDialog, 6.0)
 	await t.frames(3)
 	var dialog := app.modals.get_top() as AdoptionDialog
 	if not t.check(dialog != null and (dialog.find_child("Text", true, false) as Label).text.contains("followed you all the way home"),
@@ -345,6 +347,7 @@ func _test_adopt_at_the_companionway() -> void:
 	t.check(app.modals.is_empty() and _dock().is_following() and app.router.current_screen == deck and deck.player.input_enabled,
 		"[decision] Esc decides nothing: still on deck, it still follows")
 	app._on_area_change_requested(SessionState.AREA_INTERIOR, &"from_deck")
+	await t.wait_until(func() -> bool: return app.modals.get_top() is AdoptionDialog, 6.0)
 	await t.frames(3)
 	dialog = app.modals.get_top() as AdoptionDialog
 	dialog.choose_adopt()
@@ -384,6 +387,7 @@ func _test_not_now(kind: StringName) -> void:
 	if not t.check(dock != null and dock.is_following(), "(setup) a following %s" % kind):
 		return
 	app._on_area_change_requested(SessionState.AREA_INTERIOR, &"from_deck")
+	await t.wait_until(func() -> bool: return app.modals.get_top() is AdoptionDialog, 6.0)
 	await t.frames(3)
 	var dialog := app.modals.get_top() as AdoptionDialog
 	if not t.check(dialog != null, "[not now] the question (%s)" % kind):

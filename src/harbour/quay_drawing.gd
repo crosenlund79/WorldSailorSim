@@ -57,7 +57,10 @@ func get_bench_positions() -> PackedVector2Array:
 	var benches := PackedVector2Array()
 	for lamp in get_lamp_positions():
 		var at := lamp + Vector2(200.0, -24.0)
-		if absf(at.x) > QuayLayout.WALKWAY_CLEAR + 120.0 and not _over_lift(at.x) and not _before_yard(at.x) and at.x < layout.right - 200.0:
+		var cafe := layout.get_front(QuayLayout.CAFE)
+		var on_terrace := not cafe.is_empty() and at.x > float(cafe.x0) - 120.0 and at.x < float(cafe.x1) + 120.0
+		if absf(at.x) > QuayLayout.WALKWAY_CLEAR + 120.0 and not _over_lift(at.x) and not _before_yard(at.x) and at.x < layout.right - 200.0 \
+				and not on_terrace:
 			benches.append(at)
 	return benches
 
@@ -227,8 +230,8 @@ func _draw_walkway() -> void:
 	for x: float in [x0 - 5.0, x1 + 5.0]:
 		draw_line(Vector2(x, top - 6), Vector2(x, bottom), Color(INK, 0.6), 3.0, true)
 		draw_line(Vector2(x, top - 6), Vector2(x, bottom), Color("#C4CBCC"), 1.6, true)
-	# A small sign at its head: the guest pontoon.
-	var board := Rect2(x1 + 22.0, QuayLayout.EDGE_Y - 96.0, 190.0, 30.0)
+	# A small sign at its head (the office's side, clear of the café's terrace): the guest pontoon.
+	var board := Rect2(x0 - 22.0 - 190.0, QuayLayout.EDGE_Y - 66.0, 190.0, 30.0)
 	draw_rect(Rect2(board.position + Vector2(3, 4), board.size), SHADOW)
 	draw_rect(board, Color("#23394A"))
 	draw_rect(Rect2(board.position, Vector2(board.size.x, 3)), Color("#5AA8B8"))
@@ -242,7 +245,7 @@ func _draw_lift_dock() -> void:
 	if layout.lift == Vector2.ZERO:
 		return
 	# The travel lift's dock: a slot of water cut into the quay.
-	var dock := Rect2(layout.lift.x + 140.0, QuayLayout.EDGE_Y - 230.0, layout.lift.y - layout.lift.x - 280.0, 232.0)
+	var dock := Rect2(layout.lift.x + 140.0, QuayLayout.EDGE_Y - 180.0, layout.lift.y - layout.lift.x - 280.0, 182.0)
 	draw_rect(dock, WaterLook.water_colour(true).darkened(0.08))
 	draw_rect(Rect2(dock.position.x - 26.0, dock.position.y - 26.0, 26.0, dock.size.y + 26.0), (_style.edge as Color))
 	draw_rect(Rect2(dock.end.x, dock.position.y - 26.0, 26.0, dock.size.y + 26.0), (_style.edge as Color))
@@ -254,7 +257,7 @@ func _draw_lift_dock() -> void:
 func get_lift_dock() -> Rect2:
 	if layout.lift == Vector2.ZERO:
 		return Rect2()
-	return Rect2(layout.lift.x + 140.0, QuayLayout.EDGE_Y - 230.0, layout.lift.y - layout.lift.x - 280.0, 232.0)
+	return Rect2(layout.lift.x + 140.0, QuayLayout.EDGE_Y - 180.0, layout.lift.y - layout.lift.x - 280.0, 182.0)
 
 
 ## The fuel berth's pump (I027): a slim cabinet seen from above, its hose

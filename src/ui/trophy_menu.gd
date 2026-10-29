@@ -5,7 +5,8 @@ extends SimplePanel
 ## for a new species or a personal best at the time), and the captain's
 ## fishing record. Iteration 18: each catch on a plaque with its picture,
 ## rarity and specimen grade; only kept fish are trophies (released fish and
-## sharks never are).
+## sharks never are). I027 playtest: each plaque says whether the fish is
+## still in the cool box or only on record now (sold or eaten).
 
 const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -16,7 +17,7 @@ var _record: Label
 
 func _ready() -> void:
 	_build("Trophy board", 700.0)
-	_label("Info", "The five most notable catches: rare fish rank above common ones, and a big fish above a small one of its kind.",
+	_label("Info", "Your five most notable catches ever, kept on the board after the fish are sold or eaten: rare fish rank above common ones, and a big fish above a small one of its kind.",
 		&"MutedLabel")
 	_plaques = VBoxContainer.new()
 	_plaques.name = "Plaques"
@@ -61,6 +62,11 @@ func refresh() -> void:
 		var badge := CatchBadge.new()
 		words.add_child(badge)
 		badge.set_catch(catalog.rarity_of(fish.species), catalog.grade(fish.species, float(fish.kg)))
+		# I027 playtest: the board is the record of the catch, not the cool box.
+		var where := Label.new()
+		where.theme_type_variation = &"MutedLabel"
+		where.text = Loc.t("In the cool box now") if fishing.find_in_hold(int(fish.uid)) >= 0 else Loc.t("On record: sold or eaten since")
+		words.add_child(where)
 		_plaques.add_child(row)
 
 

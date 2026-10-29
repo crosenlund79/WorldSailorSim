@@ -2199,7 +2199,7 @@ func apply_fish_check(tick: float) -> bool:
 	var wind := Simulation.get_weather_at_vessel()
 	if rng.randf() >= catalog.bite_chance(_state.vessel_position, mode, fishing.lure, speed, wind.speed_kn):
 		return false
-	var fish := catalog.pick(rng, _state.vessel_position, mode, fishing.lure)
+	var fish := catalog.pick(rng, _state.vessel_position, mode, fishing.lure, is_moored_in_harbour())
 	# Now and then something else takes the hook (Iteration 18).
 	if not fish.is_empty() and rng.randf() < catalog.junk_chance:
 		fish = catalog.pick_junk(rng)
@@ -2207,6 +2207,13 @@ func apply_fish_check(tick: float) -> bool:
 		return false
 	var kind := catalog.kind_of(fish.species)
 	var rarity := catalog.rarity_of(fish.species)
+	# I027 playtest: a fish the keep preferences would put straight back (its
+	# rarity or its specimen grade below them) never starts the reel-in - at
+	# any speed of time; it nibbles and swims off. With the default (keep
+	# everything) nothing changes.
+	if kind == FishingCatalog.KIND_FISH and not fishing.wants(rarity, catalog.grade(fish.species, float(fish.kg))):
+		_quiet_nibbles += 1
+		return false
 	# In fast time the captain may only want to be stopped for keepers: the
 	# rest nibble and swim off (no fish is landed, nothing is gained).
 	if is_fast_time() and fishing.passage_posture == FishingState.PASSAGE_KEEPERS \
@@ -3550,6 +3557,75 @@ func pay_remote_work(hours: int) -> int:
 
 
 ## Development tools only (DevTools): sets food and water to `days`.
+# --- Developer tools (I027 playtest: F10's further rows) ------------------------------
+# Test-only setters for DevTools (a debug run from the editor only); nothing a
+# player reaches. They act through the game's own state and signals.
+
+func add_funds_for_testing(amount: int) -> void:
+	if _state == null:
+		return
+	_money(amount, "developer_test")
+	_has_unsaved_changes = true
+	funds_changed.emit(_state.funds)
+
+
+## The tank to `share` (0..1) of the boat's own tank.
+func set_fuel_for_testing(share: float) -> void:
+	if _state == null:
+		return
+	_state.fuel[_state.vessel_id] = get_fuel_tank_l() * clampf(share, 0.0, 1.0)
+	_has_unsaved_changes = true
+	fuel_changed.emit()
+
+
+func add_lures_for_testing(count: int) -> void:
+	if _state == null:
+		return
+	for lure: Dictionary in FishingCatalog.get_default().lures:
+		_state.fishing.lures[String(lure.id)] = _state.fishing.get_lure_count(String(lure.id)) + count
+	_has_unsaved_changes = true
+	fishing_changed.emit()
+
+
+## A rare fish of Gold size on the line now (the line goes out if it can).
+## Returns "" or why not.
+func force_rare_bite_for_testing() -> String:
+	if _state == null:
+		return "No game."
+	if not _state.fishing.line_out:
+		var refusal := set_line(true)
+		if not refusal.is_empty():
+			return refusal
+	var catalog := FishingCatalog.get_default()
+	var best: Dictionary = {}
+	for fish: Dictionary in catalog.species:
+		if String(fish.get("kind", "fish")) == "fish" and (best.is_empty() or catalog.rarity_rank(String(fish.id)) > catalog.rarity_rank(String(best.id))):
+			best = fish
+	if best.is_empty():
+		return "No species."
+	var kg := snappedf(lerpf(float(best.kg[0]), float(best.kg[1]), 0.9), 0.01)
+	_pending_bite = {"species": String(best.id), "kg": kg, "time": _state.game_time, "mode": String(get_fishing_mode()),
+		"lure": _state.fishing.lure, "kind": String(FishingCatalog.KIND_FISH), "rarity": catalog.rarity_of(String(best.id))}
+	fish_bite.emit(_pending_bite.duplicate())
+	return ""
+
+
+## Marks the next active, unfulfilled dream as come true (with its notice).
+## Returns its title, or "".
+func fulfil_next_dream_for_testing() -> String:
+	if _state == null:
+		return ""
+	for dream in Dreams.all():
+		var id := String(dream.id)
+		if Dreams.is_active(dream) and not _state.dreams.fulfilled.has(id):
+			_state.dreams.fulfilled[id] = {"time": _state.game_time, "port": String(_state.location_id), "vessel": String(_state.vessel_id)}
+			(_state.dreams.pursuing as Array).erase(id)
+			_has_unsaved_changes = true
+			dreams_changed.emit()
+			return String(dream.title)
+	return ""
+
+
 func set_provisions_for_testing(days: float) -> void:
 	if _state == null:
 		return

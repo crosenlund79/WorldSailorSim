@@ -775,8 +775,8 @@ func _draw_outside() -> void:
 
 ## The yacht ashore in the boatyard: its middle's height on the quay, its beam,
 ## and its length for a yard `w` wide (HarbourFront's collision uses the same).
-const HULL_Y := 140.0
-const HULL_BEAM := 190.0
+const HULL_Y := 115.0
+const HULL_BEAM := 150.0
 
 
 static func hull_length(w: float) -> float:

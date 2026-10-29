@@ -204,7 +204,7 @@ func _process(delta: float) -> void:
 		if _retarget <= 0.0 and gap > FOLLOW_START:
 			_retarget = 0.45
 			var away := (animal.position - captain).normalized()
-			var target := _safe(captain + away * FOLLOW_GAP)
+			var target := _follow_point(captain, away)
 			if not animal.is_walking() or animal.position.distance_to(target) > 30.0:
 				animal.walk_to(target)
 		return
@@ -221,6 +221,39 @@ func _process(delta: float) -> void:
 				_answer(int(result.step), line)
 	else:
 		_waited = maxf(_waited - delta * 2.0, 0.0)
+
+
+## Where it follows to: a step from the Captain, on the Captain's side of
+## the gangway (I027 playtest: a step "behind" a Captain who has just come
+## aboard lay over the side, so it waited below the gangplank; aboard it now
+## always aims for the deck, which takes it up the plank).
+func _follow_point(captain: Vector2, away: Vector2) -> Vector2:
+	var target := captain + away * FOLLOW_GAP
+	if shore and not shore.is_off_the_boat(captain) and shore.is_off_the_boat(target) and animal and animal.deck_spots:
+		return animal.deck_spots.nearest_safe(captain, false)
+	return _safe(target)
+
+
+## True when it is with the Captain (I027 playtest): on the same side of the
+## gangway (aboard, or both still on the pontoon) and close by.
+func is_aboard_near_captain() -> bool:
+	if animal == null or area == null or area.player == null:
+		return false
+	var same_side := shore == null or shore.is_off_the_boat(animal.position) == shore.is_off_the_boat(area.player.position)
+	return same_side and animal.position.distance_to(area.player.position) < FOLLOW_START * 2.0
+
+
+## Before the companionway's question (I027 playtest): it comes up the
+## gangplank to the Captain - a few seconds at most; if it still has not, it
+## hops aboard beside the Captain - so a welcomed animal is really aboard.
+func bring_aboard() -> void:
+	if animal == null or _farewell or area == null or area.player == null:
+		return
+	if not is_aboard_near_captain():
+		animal.walk_to(_follow_point(area.player.position, Vector2.LEFT))
+		await _until(func() -> bool: return animal == null or is_aboard_near_captain() or not animal.is_walking(), 4.0)
+	if animal and not is_aboard_near_captain():
+		animal.position = _follow_point(area.player.position, Vector2.LEFT)
 
 
 ## A point it can stand on near `p`: on the pontoon's strip, or a safe place

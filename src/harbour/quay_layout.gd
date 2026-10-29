@@ -12,9 +12,11 @@ extends RefCounted
 ## everything the Captain uses are at true scale, as everywhere around the
 ## boat: about 1 cm per unit (HarbourDressing.METRE). I027 (the Captain's
 ## "believable human scale, compressed environmental scale"): the frontages,
-## the travel lift's dock and the promenade's depth are compressed, and one
-## ordinary house closes each end, so a walk along the shops stays short; each
-## business keeps its sign and its own front.
+## the travel lift's dock and the promenade's depth are compressed, so a walk
+## along the shops stays short; each business keeps its sign and its own
+## front. After the I027 playtest the quay was made a close-knit row: the
+## frontages narrowed again (about a third), the gaps between them small, and
+## no ordinary houses at the ends - the quay is the businesses, side by side.
 ##
 ## The order along the quay is the harbour's working end to its town end:
 ## the boatyard (with its travel lift where the yard hauls out), the sail
@@ -39,7 +41,7 @@ const HOUSE := &"house"
 const BUSINESSES: Array[StringName] = [BOATYARD, SAIL_LOFT, CHANDLERY, HARBOUR_OFFICE, CAFE, GROCERY, FISHMONGER]
 
 ## The promenade: building fronts at y = 0, the coping's water edge here.
-const EDGE_Y := 350.0
+const EDGE_Y := 300.0
 ## The coping along the water.
 const COPING := 32.0
 ## Half the walkway's width where it comes up from the pontoon.
@@ -56,11 +58,13 @@ const WALKWAY_CLEAR := 130.0
 ## Frontages (scene units): [min, max] per kind (compressed in I027: they
 ## were about half as wide again).
 const WIDTHS := {
-	BOATYARD: [860.0, 940.0], SAIL_LOFT: [430.0, 470.0], CHANDLERY: [460.0, 520.0], HARBOUR_OFFICE: [440.0, 490.0],
-	CAFE: [580.0, 640.0], GROCERY: [460.0, 520.0], FISHMONGER: [380.0, 420.0], HOUSE: [380.0, 460.0], LANE: [250.0, 280.0],
+	BOATYARD: [640.0, 680.0], SAIL_LOFT: [290.0, 310.0], CHANDLERY: [320.0, 350.0], HARBOUR_OFFICE: [300.0, 330.0],
+	CAFE: [420.0, 450.0], GROCERY: [320.0, 350.0], FISHMONGER: [270.0, 290.0], HOUSE: [300.0, 340.0], LANE: [200.0, 220.0],
 }
 ## The travel lift's dock beside the boatyard (only where the yard hauls out).
-const LIFT_WIDTH := 460.0
+const LIFT_WIDTH := 340.0
+## The gap between the walkway's head and the first frontage on each side.
+const WALKWAY_GAP := 50.0
 ## The open walking lane along the whole quay, past every door (I027): no
 ## table, board, bench, stall or hull stands in it, so the businesses are a
 ## short, straight walk apart. The shops' own things stay above it, the café's
@@ -68,8 +72,8 @@ const LIFT_WIDTH := 460.0
 const LANE_Y := 128.0
 const LANE_HALF := 24.0
 ## The café's terrace: its tables' two rows (y), a row apart.
-const TERRACE_Y := 185.0
-const TERRACE_ROW := 50.0
+const TERRACE_Y := 184.0
+const TERRACE_ROW := 34.0
 
 var port_id: StringName = &""
 var archetype: StringName = HarbourDressing.ARCHETYPE_NORDIC
@@ -117,7 +121,6 @@ func _build(port_id_: StringName) -> void:
 		west.append(SAIL_LOFT)
 	if facilities.has(HarbourFacilities.BOATYARD):
 		west.append(BOATYARD)
-	west.append(HOUSE)
 	var east: Array[StringName] = [CAFE]
 	if facilities.has(HarbourFacilities.GROCERY):
 		east.append(GROCERY)
@@ -125,25 +128,24 @@ func _build(port_id_: StringName) -> void:
 		east.append(FISHMONGER)
 	if facilities.has(HarbourFacilities.GO_ASHORE):
 		east.append(LANE)
-	east.append(HOUSE)
 	# The walkway arrives between the office and the café: the noticeboard
 	# stands there, by the walkway's head.
-	var x := -WALKWAY_HALF - 70.0
+	var x := -WALKWAY_HALF - WALKWAY_GAP
 	for id in west:
 		var w := _width(id, rng)
 		if id == BOATYARD and haul_out:
 			lift = Vector2(x - w - LIFT_WIDTH, x - w)
 			_add(id, x - w, x, rng)
-			x -= w + LIFT_WIDTH + rng.randf_range(20.0, 40.0)
+			x -= w + LIFT_WIDTH + rng.randf_range(10.0, 20.0)
 			continue
 		_add(id, x - w, x, rng)
-		x -= w + (rng.randf_range(10.0, 40.0) if rng.randf() < 0.5 else 0.0)
+		x -= w + (rng.randf_range(0.0, 20.0) if rng.randf() < 0.5 else 0.0)
 	left = x - 40.0
-	x = WALKWAY_HALF + 70.0
+	x = WALKWAY_HALF + WALKWAY_GAP
 	for id in east:
 		var w := _width(id, rng)
 		_add(id, x, x + w, rng)
-		x += w + (rng.randf_range(10.0, 40.0) if rng.randf() < 0.5 and id != LANE else 0.0)
+		x += w + (rng.randf_range(0.0, 20.0) if rng.randf() < 0.5 and id != LANE else 0.0)
 	right = x + 40.0
 	fronts.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.x0) < float(b.x0))
 	# By the walkway's head, on the water side of the walking lane.
@@ -151,8 +153,8 @@ func _build(port_id_: StringName) -> void:
 	fuel_berth = Vector2(WALKWAY_HALF + 232.0, EDGE_Y - 24.0)
 	var cafe := get_front(CAFE)
 	if not cafe.is_empty():
-		var n := 3
 		var span := float(cafe.x1) - float(cafe.x0)
+		var n := 3 if span >= 520.0 else 2
 		for i in n:
 			var tx := float(cafe.x0) + span * (i + 0.5) / n
 			# Clear of the café's own door.

@@ -427,7 +427,9 @@ func _process(delta: float) -> void:
 	if not _leaving:
 		camera.position = Vector2(lerpf(camera.position.x, _camera_x(player.position.x), 1.0 - exp(-CAMERA_RATE * delta)), CAMERA_Y)
 	# Walking back down the walkway returns to the boat.
-	if not _leaving and seat.is_empty() and player.position.y > QuayLayout.EDGE_Y + 12.0 and absf(player.position.x) < QuayLayout.WALKWAY_HALF:
+	# (Only after the keys that brought the Captain up here have been let go.)
+	if not _leaving and seat.is_empty() and player.keys_released and player.velocity.y > 0.0 and player.position.y > QuayLayout.EDGE_Y + 12.0 \
+			and absf(player.position.x) < QuayLayout.WALKWAY_HALF:
 		leave()
 
 
@@ -455,6 +457,92 @@ func begin_exit() -> void:
 
 func is_leaving() -> bool:
 	return _leaving
+
+
+# --- Walking to a place by itself (I027 playtest, the action wheel) ----------------
+
+## The place the Captain is walking to by itself (&"" when none).
+var walking_to: StringName = &""
+
+
+## The Captain walks to `place` (a business, the noticeboard, the fuel pump or
+## the lane) along the open walking lane, and uses it on arriving - as if E
+## were pressed there. A movement key stops the walk. Returns false when this
+## quay has no such place.
+func walk_to_place(place: StringName) -> bool:
+	var points := approach(place)
+	if points.is_empty() or _leaving:
+		return false
+	if not seat.is_empty():
+		stand_up()
+	if not player.auto_walk_finished.is_connected(_on_auto_walk_finished):
+		player.auto_walk_finished.connect(_on_auto_walk_finished)
+	walking_to = place
+	player.walk_along(points)
+	return true
+
+
+## The way to `place` from where the Captain stands: onto the walking lane,
+## along it, and to the place (round the noticeboard and the café's tables).
+func approach(place: StringName) -> PackedVector2Array:
+	var lane_y := QuayLayout.LANE_Y
+	var points := PackedVector2Array()
+	var target := Vector2.INF
+	var via := Vector2.INF
+	if place in QuayLayout.BUSINESSES and layout.has_business(place):
+		target = Vector2(layout.door_station(place).x, lane_y)
+	elif place == QuayLayout.NOTICEBOARD:
+		via = Vector2(layout.noticeboard.x + 95.0, lane_y + 92.0)
+		target = Vector2(layout.noticeboard.x + 30.0, lane_y + 92.0)
+	elif place == FUEL:
+		via = Vector2(layout.fuel_berth.x + 20.0, lane_y)
+		target = Vector2(layout.fuel_berth.x + 20.0, layout.fuel_berth.y - 36.0)
+	elif place == QuayLayout.LANE and stations.has(QuayLayout.LANE):
+		via = Vector2((stations[QuayLayout.LANE] as Node2D).position.x, lane_y)
+		target = (stations[QuayLayout.LANE] as Node2D).position + Vector2(0.0, 20.0)
+	if target == Vector2.INF:
+		return points
+	if absf(player.position.y - lane_y) > 8.0:
+		# Up (or down) to the lane where the way is clear, else a step aside first.
+		for dx: float in [0.0, 110.0, -110.0, 220.0, -220.0]:
+			var side := player.position + Vector2(dx, 0.0)
+			if (dx == 0.0 or _clear(player.position, side)) and _clear(side, Vector2(side.x, lane_y)):
+				if dx != 0.0:
+					points.append(side)
+				points.append(Vector2(side.x, lane_y))
+				break
+	if via != Vector2.INF:
+		points.append(Vector2(via.x, lane_y))
+		points.append(via)
+	elif not target.is_equal_approx(Vector2(target.x, lane_y)):
+		points.append(Vector2(target.x, lane_y))
+	points.append(target)
+	return points
+
+
+## True when the Captain could walk straight from `a` to `b` (nothing solid between).
+func _clear(a: Vector2, b: Vector2) -> bool:
+	var query := PhysicsShapeQueryParameters2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = Player.RADIUS
+	query.shape = circle
+	query.collision_mask = player.collision_mask
+	query.exclude = [player.get_rid()]
+	query.transform = Transform2D(0.0, to_global(a))
+	query.motion = b - a
+	var result := get_world_2d().direct_space_state.cast_motion(query)
+	return result.is_empty() or result[0] >= 1.0
+
+
+func _on_auto_walk_finished(arrived: bool) -> void:
+	var place := walking_to
+	walking_to = &""
+	if place == &"" or _leaving:
+		return
+	if arrived and stations.has(place):
+		_on_interacted(stations[place] as Interactable, player)
+	elif not arrived and player.input_enabled and Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down") == Vector2.ZERO:
+		message_requested.emit(Loc.t("Someone is in the way. Walk on with the movement keys."))
 
 
 func _on_interacted(station: Interactable, _actor: Node) -> void:

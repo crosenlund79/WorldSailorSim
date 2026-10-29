@@ -1,0 +1,36 @@
+{"event": "start", "iso": "2026-10-29T22:18:10+00:00", "epoch": 1793312290.328, "monotonic_s": 26.64, "boot": "e04d6947", "note": "start commit 8a24d0f on iteration/i027 (= release/i027); tree clean"}
+{"event": "preflight_backup_begin", "iso": "2026-10-29T22:18:10+00:00", "epoch": 1793312290.348, "monotonic_s": 26.67, "boot": "e04d6947", "note": ""}
+{"event": "preflight_backup_end", "iso": "2026-10-29T22:18:20+00:00", "epoch": 1793312300.023, "monotonic_s": 36.34, "boot": "e04d6947", "note": "backup/i027-before-playtest-fixes = 8a24d0f verified; dev branch claude/captains-hat-visual-redesign-cgoy5o"}
+{"event": "finding_02_begin", "iso": "2026-10-29T22:18:54+00:00", "epoch": 1793312334.435, "monotonic_s": 70.75, "boot": "e04d6947", "note": ""}
+{"event": "finding_02_end", "iso": "2026-10-29T22:23:35+00:00", "epoch": 1793312615.726, "monotonic_s": 352.04, "boot": "e04d6947", "note": "completed: quay 58 -> 35 m, boatyard walk 7.3 -> 5.0 s"}
+{"event": "finding_01_begin", "iso": "2026-10-29T22:23:35+00:00", "epoch": 1793312615.746, "monotonic_s": 352.06, "boot": "e04d6947", "note": ""}
+{"event": "finding_01_end", "iso": "2026-10-29T22:30:08+00:00", "epoch": 1793313008.832, "monotonic_s": 745.15, "boot": "e04d6947", "note": "completed: walk-through passage both ways, chevrons; keys must be released after arrival"}
+{"event": "finding_03_begin", "iso": "2026-10-29T22:30:08+00:00", "epoch": 1793313008.847, "monotonic_s": 745.17, "boot": "e04d6947", "note": ""}
+{"event": "finding_03_end", "iso": "2026-10-29T22:34:28+00:00", "epoch": 1793313268.901, "monotonic_s": 1005.22, "boot": "e04d6947", "note": "completed: quay wheel lists places (closed marked), auto-walk + use, keys interrupt"}
+{"event": "finding_04_begin", "iso": "2026-10-29T22:34:28+00:00", "epoch": 1793313268.917, "monotonic_s": 1005.24, "boot": "e04d6947", "note": ""}
+{"event": "finding_04_end", "iso": "2026-10-29T22:35:37+00:00", "epoch": 1793313337.378, "monotonic_s": 1073.70, "boot": "e04d6947", "note": "completed: Shift runs x1.75, longer stride, key hint"}
+{"event": "finding_05_07_begin", "iso": "2026-10-29T22:35:37+00:00", "epoch": 1793313337.395, "monotonic_s": 1073.71, "boot": "e04d6947", "note": "cockpit findings 05-07 worked together (same scene code)"}
+{"event": "finding_05_07_end", "iso": "2026-10-29T22:41:30+00:00", "epoch": 1793313690.010, "monotonic_s": 1426.33, "boot": "e04d6947", "note": "completed: benches trimmed (art unchanged), instruments+plotter on coamings, own stations, plain-distance focus; all 4 decks"}
+{"event": "finding_08_begin", "iso": "2026-10-29T22:41:30+00:00", "epoch": 1793313690.022, "monotonic_s": 1426.34, "boot": "e04d6947", "note": ""}
+{"event": "finding_08_end", "iso": "2026-10-29T22:44:38+00:00", "epoch": 1793313878.513, "monotonic_s": 1614.83, "boot": "e04d6947", "note": "implemented: follow point on captain's side of gangway, bring_aboard before adoption question (suites running)"}
+{"event": "finding_09_begin", "iso": "2026-10-29T22:44:38+00:00", "epoch": 1793313878.542, "monotonic_s": 1614.85, "boot": "e04d6947", "note": ""}
+{"event": "finding_09_end", "iso": "2026-10-29T23:04:29+00:00", "epoch": 1793315069.624, "monotonic_s": 2805.94, "boot": "e04d6947", "note": "completed: rod redrawn (tapered blank, guides, cork grip, spinning reel, light ink)"}
+{"event": "finding_10_begin", "iso": "2026-10-29T23:04:29+00:00", "epoch": 1793315069.645, "monotonic_s": 2805.96, "boot": "e04d6947", "note": ""}
+{"event": "finding_10_end", "iso": "2026-10-29T23:07:09+00:00", "epoch": 1793315229.106, "monotonic_s": 2965.42, "boot": "e04d6947", "note": "completed: trophy station plain-distance focus (keepsakes stole E), plaques say cool box vs on record"}
+{"event": "finding_11_begin", "iso": "2026-10-29T23:07:09+00:00", "epoch": 1793315229.122, "monotonic_s": 2965.44, "boot": "e04d6947", "note": ""}
+{"event": "finding_11_end", "iso": "2026-10-29T23:07:39+00:00", "epoch": 1793315259.107, "monotonic_s": 2995.42, "boot": "e04d6947", "note": "completed: fish failing keep preferences (rarity or grade) never start the reel-in, at any time speed"}
+{"event": "finding_12_begin", "iso": "2026-10-29T23:07:39+00:00", "epoch": 1793315259.128, "monotonic_s": 2995.45, "boot": "e04d6947", "note": ""}
+{"event": "finding_12_end", "iso": "2026-10-29T23:08:05+00:00", "epoch": 1793315285.479, "monotonic_s": 3021.80, "boot": "e04d6947", "note": "completed: moored in a harbour, fish stay below the Silver grade (catalog.pick in_harbour)"}
+{"event": "finding_13_begin", "iso": "2026-10-29T23:08:10+00:00", "epoch": 1793315290.550, "monotonic_s": 3026.87, "boot": "e04d6947", "note": ""}
+{"event": "finding_13_end", "iso": "2026-10-29T23:09:04+00:00", "epoch": 1793315344.852, "monotonic_s": 3081.17, "boot": "e04d6947", "note": "completed: deck open-air wash plays on the Wind bus (Wind slider governs it); cabin bed stays Ambience"}
+{"event": "finding_14_begin", "iso": "2026-10-29T23:09:04+00:00", "epoch": 1793315344.867, "monotonic_s": 3081.19, "boot": "e04d6947", "note": ""}
+{"event": "finding_14_end", "iso": "2026-10-29T23:10:36+00:00", "epoch": 1793315436.612, "monotonic_s": 3172.93, "boot": "e04d6947", "note": "completed: BoatWake (band + Kelvin arms + bow white, speed-scaled, under way only)"}
+{"event": "finding_15_begin", "iso": "2026-10-29T23:10:36+00:00", "epoch": 1793315436.631, "monotonic_s": 3172.95, "boot": "e04d6947", "note": ""}
+{"event": "debug_integration", "iso": "2026-10-29T23:13:46+00:00", "epoch": 1793315626.640, "monotonic_s": 3362.96, "boot": "e04d6947", "note": "interrupted 15: quay lift reachability (hull slimmer/higher, lift dock depth), pet test settle frames; harbour 104/0, pets 114/0, fishing+cockpit 409 ok"}
+{"event": "finding_15_end", "iso": "2026-10-29T23:16:11+00:00", "epoch": 1793315771.111, "monotonic_s": 3507.43, "boot": "e04d6947", "note": "completed: dev panel rows money/fuel/fishing/pets/harbour hours/passage/dreams (existing systems; test-only setters), scrolls at 130%"}
+{"event": "finding_16_begin", "iso": "2026-10-29T23:16:11+00:00", "epoch": 1793315771.131, "monotonic_s": 3507.45, "boot": "e04d6947", "note": ""}
+{"event": "finding_16_end", "iso": "2026-10-29T23:16:40+00:00", "epoch": 1793315800.386, "monotonic_s": 3536.70, "boot": "e04d6947", "note": "completed: traffic wake-up names the vessel, CPA, time, bearing; radar + View chart actions"}
+{"event": "finding_17_begin", "iso": "2026-10-29T23:16:40+00:00", "epoch": 1793315800.403, "monotonic_s": 3536.72, "boot": "e04d6947", "note": ""}
+{"event": "finding_17_end", "iso": "2026-10-29T23:17:23+00:00", "epoch": 1793315843.885, "monotonic_s": 3580.20, "boot": "e04d6947", "note": "completed: pour says the mug is in hand + how (Q); cup holder/table mug plain-distance focus; wheel says where the coffee waits"}
+{"event": "validation_begin", "iso": "2026-10-29T23:17:23+00:00", "epoch": 1793315843.901, "monotonic_s": 3580.22, "boot": "e04d6947", "note": ""}
+{"event": "parallel_agent_guides_begin", "iso": "2026-10-29T23:18:24+00:00", "epoch": 1793315904.882, "monotonic_s": 3641.20, "boot": "e04d6947", "note": "helper agent updates the three GDScript guides (overlaps validation)"}

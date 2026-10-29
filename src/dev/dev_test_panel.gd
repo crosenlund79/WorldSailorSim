@@ -1,7 +1,9 @@
 class_name DevTestPanel
 extends ModalPanel
 ## The development-only test panel (DevTools): buttons for test weather,
-## boat condition, rescue, provisions and time, with the live state shown so
+## boat condition, rescue, provisions and time, and (I027 playtest) money,
+## fuel, lures, a rare bite, dock animals, harbour hours, a short passage and
+## dreams, with the live state shown so
 ## each test can be checked at a glance. Opened with F10 or from the pause
 ## menu, only where DevTools.is_enabled(). Clearly marked as a developer tool.
 ## The game is paused while it is open; "Advance" buttons move time through
@@ -9,6 +11,7 @@ extends ModalPanel
 
 var _status: Label
 var _buttons := {}
+var _rows: Array[Control] = []
 
 
 func _ready() -> void:
@@ -60,6 +63,36 @@ func _ready() -> void:
 		["Advance6", "Advance 6 h", func() -> void: DevTools.advance_hours(6.0)],
 		["Advance24", "Advance 24 h", func() -> void: DevTools.advance_hours(24.0)],
 	])
+	# I027 playtest: more test shortcuts, on the game's own systems.
+	_row(box, "Money", [
+		["Money1k", "+ €1,000", DevTools.add_money.bind(1000)],
+		["Money10k", "+ €10,000", DevTools.add_money.bind(10000)],
+	])
+	_row(box, "Fuel", [
+		["FuelFull", "Full tank", DevTools.set_fuel.bind(1.0)],
+		["FuelQuarter", "A quarter", DevTools.set_fuel.bind(0.25)],
+		["FuelEmpty", "Empty", DevTools.set_fuel.bind(0.0)],
+	])
+	_row(box, "Fishing", [
+		["Lures", "+5 of every lure", DevTools.add_lures.bind(5)],
+		["RareBite", "Rare Gold fish on the line", func() -> void: _report(DevTools.rare_bite(), "A rare fish is on the line.")],
+	])
+	_row(box, "Pets", [
+		["DockCat", "Cat on the dock", func() -> void: _report(DevTools.dock_animal(CompanionState.KIND_CAT), "A cat waits on the pontoon.")],
+		["DockDog", "Pug on the dock", func() -> void: _report(DevTools.dock_animal(CompanionState.KIND_DOG), "A Pug waits on the pontoon.")],
+		["DockParrot", "Conure on the dock", func() -> void: _report(DevTools.dock_animal(CompanionState.KIND_PARROT), "A conure waits on the pontoon.")],
+	])
+	_row(box, "Harbour", [
+		["To07", "To 07:00", DevTools.advance_to_local_hour.bind(7.0)],
+		["To10", "To 10:00 (shops open)", DevTools.advance_to_local_hour.bind(10.0)],
+		["To20", "To 20:00 (evening)", DevTools.advance_to_local_hour.bind(20.0)],
+	])
+	_row(box, "Passage", [
+		["PlanShort", "Plan a short passage", func() -> void: _report(DevTools.plan_short_passage(), "Course plotted: set sail from the helm.")],
+		["Dream", "Fulfil the next dream", func() -> void: _report(DevTools.fulfil_dream(), "A dream came true.")],
+	])
+	# The rows scroll when the screen (or a 130 % interface) is too short for them.
+	FitScroll.wrap(_rows, panel)
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
 	close_button.text = "Close (F10 / Esc)"
@@ -125,6 +158,7 @@ func _row(box: VBoxContainer, title: String, buttons: Array) -> void:
 		row.add_child(button)
 		_buttons[spec[0]] = button
 	box.add_child(row)
+	_rows.append(row)
 
 
 static func _add_label(box: Container, text: String, variation: StringName) -> Label:

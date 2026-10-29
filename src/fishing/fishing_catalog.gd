@@ -260,7 +260,9 @@ func bite_chance(geo: Vector2, mode: StringName, lure: String, speed_kn: float, 
 
 
 ## A fish for this place and way of fishing: {"species", "kg"} or {}.
-func pick(rng: RandomNumberGenerator, geo: Vector2, mode: StringName, lure: String) -> Dictionary:
+## I027 playtest: `in_harbour` (moored in a harbour) keeps the fish below the
+## Silver grade - the big Silver and Gold specimens live in open water.
+func pick(rng: RandomNumberGenerator, geo: Vector2, mode: StringName, lure: String, in_harbour := false) -> Dictionary:
 	var options := candidates(geo, mode, lure)
 	var total := 0.0
 	for option in options:
@@ -273,6 +275,8 @@ func pick(rng: RandomNumberGenerator, geo: Vector2, mode: StringName, lure: Stri
 		if roll <= 0.0:
 			var fish := get_species(option.species)
 			var r := rng.randf()
+			if in_harbour:
+				r = minf(r, sqrt(float(GRADE_FROM[GRADE_SILVER])) - 0.01)
 			# Most fish are modest; big ones are rarer.
 			var kg := lerpf(float(fish.kg[0]), float(fish.kg[1]), r * r)
 			return {"species": option.species, "kg": snappedf(kg, 0.01)}

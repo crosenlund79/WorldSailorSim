@@ -87,10 +87,14 @@ func is_music_playing() -> bool:
 
 ## Starts a looping ambience bed, replacing any current one. Requesting the
 ## stream that is already playing is a no-op so area changes do not restart it.
-func play_ambience(stream: AudioStream, loop := true) -> void:
+## `bus`: where it plays (I027 playtest: the deck's open-air wash is wind, so
+## it plays on the Wind bus and follows the Wind volume; the cabin's bed stays
+## on Ambience).
+func play_ambience(stream: AudioStream, loop := true, bus: StringName = BUS_AMBIENCE) -> void:
 	if stream == null:
 		stop_ambience()
 		return
+	_ambience.bus = bus if AudioServer.get_bus_index(bus) >= 0 else BUS_AMBIENCE
 	if _ambience.playing and _ambience.stream == stream:
 		_ambience_loops = loop
 		return

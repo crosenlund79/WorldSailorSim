@@ -207,7 +207,9 @@ func pour_coffee() -> Dictionary:
 		refresh()
 		return result
 	coffee_made.emit(result)
-	var lines := [Loc.t("Coffee is ready."), String(result.text)]
+	var lines := [Loc.t("Coffee is ready."), String(result.text),
+		# I027 playtest: where the coffee is, and what to do with it.
+		Loc.t("The mug is in your hand. Drink it, or set it down in the cup holder by the helm or on the cabin table, from the action wheel (Q).")]
 	if not (result.award as Dictionary).is_empty():
 		lines.append(Loc.t("Written in the Captain's Log: %s.") % String(result.award.title))
 	_outcome.text = "\n".join(lines)

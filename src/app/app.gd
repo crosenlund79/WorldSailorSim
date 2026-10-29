@@ -819,6 +819,11 @@ func get_wheel_actions() -> Array[Dictionary]:
 		add.call(&"coffee_finish", Loc.t("Finish the coffee"), func() -> void: notify(GameSession.finish_coffee()))
 	elif GameSession.coffee_waits_here():
 		add.call(&"coffee_take", Loc.t("Take your coffee"), func() -> void: notify(GameSession.pick_up_coffee()))
+	elif GameSession.get_coffee() != GameSession.COFFEE_NONE:
+		# I027 playtest: the mug waits elsewhere aboard - say where.
+		var where := Loc.t("Your coffee waits in the cup holder by the helm, on deck.") if GameSession.get_coffee() == GameSession.COFFEE_HOLDER \
+			else Loc.t("Your coffee waits on the cabin table.")
+		add.call(&"coffee_where", Loc.t("Your coffee"), func() -> void: notify(where))
 	add.call(&"log", "log" if not GameSession.is_underway() else Loc.t("Captain's Log"), toggle_captains_log)
 	return actions
 
@@ -1087,7 +1092,10 @@ func _after_sleep(_hours: float, outcome: Dictionary) -> void:
 		Simulation.STOP_ANCHORAGE:
 			notify(Loc.t("You were woken after %s: we've arrived at our anchorage. It is %s.%s") % [slept, now, still_paused])
 		Simulation.STOP_TRAFFIC:
-			notify(Loc.t("You were woken after %s by a traffic warning. Go up on deck and keep a lookout. It is %s.%s") % [slept, now, still_paused])
+			# I027 playtest: what woke the Captain, where it is, and what can be done.
+			var contact := Simulation.describe_traffic(result.traffic) if not result.traffic.is_empty() else ""
+			notify(Loc.t("You were woken after %s by a traffic warning. %s It is %s. On deck the radar shows the vessel; View chart on the warning lets you change course, or keep a lookout while it passes.%s") % [
+				slept, contact, now, still_paused])
 		Simulation.STOP_VHF:
 			notify(Loc.t("You were woken after %s by a call for assistance on the radio. It is %s.%s") % [slept, now, still_paused])
 		_:
@@ -1792,6 +1800,7 @@ func _on_area_change_requested(area: StringName, spawn_point: StringName) -> voi
 	var boat := router.current_screen as BoatArea
 	var dock := boat.get_dock_encounter_scene() if boat and boat.area_id == SessionState.AREA_EXTERIOR else null
 	if dock and area == SessionState.AREA_INTERIOR and dock.is_following():
+		await dock.bring_aboard()  # I027 playtest: really aboard before the question
 		var choice: Array = await ask_about_dock_animal(dock.kind)
 		match choice[0]:
 			AdoptionDialog.CHOICE_ADOPT:
@@ -2299,6 +2308,19 @@ func _quay_wheel_actions() -> Array[Dictionary]:
 	if front.is_seated():
 		add.call(&"stand_up", Loc.t("Stand up"), front.stand_up)
 	add.call(&"back_aboard", Loc.t("Back to the boat"), func() -> void: front.leave())
+	# I027 playtest: the quay's places - the Captain walks there and uses it.
+	# A closed business says so (going there offers to wait until it opens).
+	var port := GameSession.get_location_id()
+	var now := GameSession.get_game_time()
+	for business in front.get_layout().get_businesses():
+		var label := HarbourFront.business_name(business)
+		if not BusinessHours.is_open(business, port, now):
+			label = Loc.t("%s (closed)") % label
+		add.call(StringName("walk_%s" % business), label, front.walk_to_place.bind(business))
+	add.call(&"walk_noticeboard", HarbourFront.business_name(QuayLayout.NOTICEBOARD), front.walk_to_place.bind(QuayLayout.NOTICEBOARD))
+	add.call(&"walk_fuel", Loc.t("Fuel berth"), front.walk_to_place.bind(HarbourFront.FUEL))
+	if not front.get_layout().get_front(QuayLayout.LANE).is_empty():
+		add.call(&"walk_lane", Loc.t("Into town"), front.walk_to_place.bind(QuayLayout.LANE))
 	if GameSession.is_companion_ashore():
 		var ashore: Array[Dictionary] = []
 		for companion in GameSession.get_companions_ashore():
