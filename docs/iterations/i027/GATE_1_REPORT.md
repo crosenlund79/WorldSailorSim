@@ -188,7 +188,16 @@ What to judge (the gate):
   - when beating, an open-water corridor check (at most 13 look-ups);
   - fuel arithmetic.
 - The ETA walks the route with the same search.
-- A same-session benchmark against `release/i026` is in the delivery note.
+- **Same-session benchmark** (llvmpipe, two runs each, alternating) against
+  `release/i026`: every scene is within this machine's drift (under 10 %).
+  - Sailing 1×: −3 %. Chart: −1 %. Deck in harbour: +3 %.
+  - Long Passage at 12 h per second: +8 %. This is where the new work runs;
+    it can be cached per leg if a Windows reading shows it.
+  - Moored scenes: +6–7 % with no new per-frame work (identical draw calls
+    and node counts), so not attributable to the change.
+  - No growth across the session rounds (+10 objects, no orphans).
+  - Details: [PERFORMANCE_OPPORTUNITIES.md #14](../../technical/PERFORMANCE_OPPORTUNITIES.md).
+  - Windows (GPU) frame times are still to be read.
 
 ## Known limitations
 

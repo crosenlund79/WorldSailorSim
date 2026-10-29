@@ -344,3 +344,45 @@ Mean frame time, ms (average of the two runs):
   processing while hidden, the cockpit instruments redraw only when the
   light changes, and the townsfolk roster is compared with the clock every
   2 s. Nothing runs for a screen that is not shown.
+
+### 14. I027 Tiers 1-2: tacking, fuel and the running costs (measured, no action)
+
+Same session, Linux software rendering (llvmpipe, 1600×900),
+`tests/benchmark_wrs.tscn`, two runs each, alternating: `release/i026`
+(`51c247e`) and the Tier 2 checkpoint (`backup/i027-tier-2`, `2460371`).
+Files `docs/benchmarks/i027_base_i026_run{1,2}.json` and
+`i027_tier2_run{1,2}.json`. Mean frame time, ms (average of the two runs):
+
+| Scenario | I026 | I027 Tier 2 | Change |
+|---|---|---|---|
+| chart open, idle | 91.8 | 91.0 | -1 % |
+| walk on deck in harbour, day | 137.3 | 141.6 | +3 % |
+| walk in the cabin, day | 167.3 | 176.8 | +6 % |
+| harbour at night, still | 249.4 | 265.7 | +7 % |
+| sleep 8 h across midnight | 174.0 | 171.8 | -1 % |
+| sailing 1× (deck) | 142.9 | 138.0 | -3 % |
+| day/night while sailing, 20× (deck) | 135.5 | 140.3 | +4 % |
+| walk on deck after the session rounds (under way) | 130.6 | 110.5 | -15 % |
+| Long Passage, 12 h per s | 70.4 | 75.8 | +8 % |
+
+- **Everything is inside this machine's drift** (under about 10 %, #12 and
+  #13). The run-to-run spread is as large: the deck after the session
+  rounds read 154 and 107 ms on the same I026 build.
+- **Moored scenes (cabin, harbour at night):** I027 adds no per-frame work
+  there. No `_process` changed, and the draw calls (322, 605) and node
+  counts are identical. The +6-7 % is not attributable to the change.
+- **Long Passage** is where the new work runs, at most once per evaluation
+  (every 5 game minutes):
+  - the heading search (about 90 polar look-ups);
+  - while beating, the open-water corridor check (at most 13 look-ups);
+  - the fuel arithmetic.
+
+  +8 % (process time 88.7 → 96.2 ms) is consistent across both runs and
+  plausible for that work at 12 h per second, but it is still within drift.
+  If a Windows reading shows it, the heading search can be cached per leg
+  and wind sample.
+- **The ETA** walks the route with the same search; it is cached as before
+  (per 2 nm and 30 game minutes).
+- **Structure:** after the 20 session rounds, 3,339 objects against 3,329
+  (+10, the ledger and economy data); no orphan nodes; autoload connections
+  steady at 111.
