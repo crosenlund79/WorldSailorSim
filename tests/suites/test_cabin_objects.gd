@@ -35,6 +35,7 @@ func run(runner: Node) -> void:
 	await _test_vhf()
 	await _test_postcard()
 	await _test_layout()
+	await _test_warning_titles()
 	Simulation.auto_advance = true
 	app.queue_free()
 	await t.frames(2)
@@ -235,3 +236,16 @@ func _test_layout() -> void:
 		"berth": func() -> void: app.open_sleep_menu(),
 	})
 	t.check(problems.is_empty(), "[layout] the cabin's framed views fit at 1280x720 and 1024x768, 100 %% and 130 %%, English and Danish %s" % [problems])
+
+
+## The HUD's warning names what it warns of (I026 audit: a traffic alert
+## was titled "Weather warning").
+func _test_warning_titles() -> void:
+	var title := app.hud.get_node("%WarningPanel").get_node(^"VBox/Title") as Label
+	app._on_traffic_alert({"text": "A ship on a collision course."})
+	await t.frames(2)
+	t.check(title.text == "Traffic warning", "[warning] a traffic alert is titled as one ('%s')" % title.text)
+	app._on_weather_warning({"text": "A gale is coming."})
+	await t.frames(2)
+	t.check(title.text == "Weather warning", "[warning] a weather warning keeps its title ('%s')" % title.text)
+	app.hud.hide_warning()

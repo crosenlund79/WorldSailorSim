@@ -667,4 +667,18 @@ Two; the wording was again not found in the repository in Iteration 18.
   revision), the faded water outside the hull, harbour houses and
   neighbouring boats made more believable. See `docs/iterations/i025/ITERATION_25_REPORT.md`.
   Branches `iteration/i025` (from `cfc9b52`) and recovery branch `release/i025`.
-- **Next numbered major iteration: I026** (not yet commissioned).
+- **Iteration 26, A World You Can Touch**, version 0.112a, save format 12
+  (unchanged; one optional `instruments` section): the harbour's businesses
+  moved up the pontoon's walkway to a walkable quay, each in its own
+  storefront (boatyard with travel lift, chandlery, sail loft, grocery,
+  fishmonger, café, harbour office with an after-hours hatch, noticeboard,
+  lane into town), with opening hours on the harbour's solar time and a few
+  townsfolk on deterministic routines; a café for a coffee on the terrace;
+  SKERRY marine electronics in three packages (Classic, Modern Cruiser,
+  Offshore Navigator) replacing the sailing panel, with cockpit instruments
+  and the helm's chartplotter; the cabin's things as objects (logbook, VHF
+  set, switch panel, sea chest, postcard) and the sheet winch, each opening
+  its focused view. See `docs/iterations/i026/ITERATION_26_REPORT.md` and
+  `docs/technical/PHYSICAL_INTERFACE.md`. Branches `iteration/i026` (from
+  `3a27956`) and recovery branch `release/i026`.
+- **Next numbered major iteration: I027** (not yet commissioned).

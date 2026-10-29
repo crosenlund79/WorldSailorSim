@@ -4,8 +4,8 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 
 ## Where we are
 
-- **Current development version: 0.111a**, save format 12, in the Real Horizon edition (repository `crosenlund79/WorldSailorSim` since the Great Handover; see [DEVELOPMENT_HISTORY.md](DEVELOPMENT_HISTORY.md) and the [Real Horizon report](iterations/real_horizon/REAL_HORIZON_REPORT.md)). The latest iteration is [I025, A Little More Room Aboard](iterations/i025/); the next numbered iteration is I026 (not yet commissioned). Every running build names itself in the window's bottom-right corner (`LCH · i025 · DEV · <commit>`; `TEST` on a release snapshot) - see the Captain's Orders, *Build identifier*.
-- **Latest iteration:** [I025 report](iterations/i025/ITERATION_25_REPORT.md) (its [Windows checks](iterations/i025/WINDOWS_ACCEPTANCE_25.md) are pending); before it [I024](iterations/i024/ITERATION_24_REPORT.md), [I023](iterations/i023/ITERATION_23_REPORT.md), [I022](iterations/i022/ITERATION_22_REPORT.md) and [I021](iterations/i021/ITERATION_21_REPORT.md).
+- **Current development version: 0.112a**, save format 12, in the Real Horizon edition (repository `crosenlund79/WorldSailorSim` since the Great Handover; see [DEVELOPMENT_HISTORY.md](DEVELOPMENT_HISTORY.md) and the [Real Horizon report](iterations/real_horizon/REAL_HORIZON_REPORT.md)). The latest iteration is [I026, A World You Can Touch](iterations/i026/); the next numbered iteration is I027 (not yet commissioned). Every running build names itself in the window's bottom-right corner (`LCH · i026 · DEV · <commit>`; `TEST` on a release snapshot) - see the Captain's Orders, *Build identifier*.
+- **Latest iteration:** [I026 report](iterations/i026/ITERATION_26_REPORT.md) (its [Windows checks](iterations/i026/WINDOWS_ACCEPTANCE.md) are pending; how the places and objects replace buttons: [PHYSICAL_INTERFACE.md](technical/PHYSICAL_INTERFACE.md)); before it [I025](iterations/i025/ITERATION_25_REPORT.md), [I024](iterations/i024/ITERATION_24_REPORT.md), [I023](iterations/i023/ITERATION_23_REPORT.md), [I022](iterations/i022/ITERATION_22_REPORT.md) and [I021](iterations/i021/ITERATION_21_REPORT.md).
 - **Before it:** [Revision 0.105b](revisions/v0.105b/), Iterations [19](iterations/i019/) and [20](iterations/i020/), and the Engine Room maintenance pass ([report](technical/ENGINE_ROOM_AND_COMPANION_POLISH_REPORT.md)). Windows acceptance of 0.105b, I018–I021 is pending. Future scope is set by the Captain; see [CAPTAINS_ORDERS.md](../CAPTAINS_ORDERS.md).
 
 ## Iterations
@@ -32,6 +32,7 @@ Every report, assignment, requirement tracker and Windows checklist in the game'
 | [Real Horizon](iterations/real_horizon/) Illustrated sailing realism (not numbered) | 0.109a | [report](iterations/real_horizon/REAL_HORIZON_REPORT.md) (visual conversion, then the Great Handover with I021–I023 merged; [history](DEVELOPMENT_HISTORY.md)) |
 | [24](iterations/i024/) The Company We Keep | 0.110a | [report](iterations/i024/ITERATION_24_REPORT.md) (Windows checks in the report, pending), [screenshots](screenshots/i024/), [UI panel audit](iterations/i024/UI_PANEL_AUDIT.md) |
 | [25](iterations/i025/) A Little More Room Aboard | 0.111a | [report](iterations/i025/ITERATION_25_REPORT.md), [Windows acceptance](iterations/i025/WINDOWS_ACCEPTANCE_25.md) (pending), [screenshots](screenshots/i025/) |
+| [26](iterations/i026/) A World You Can Touch | 0.112a | [report](iterations/i026/ITERATION_26_REPORT.md), [Windows acceptance](iterations/i026/WINDOWS_ACCEPTANCE.md) (pending), [screenshots](screenshots/i026/) |
 
 Iterations 7–11 have no separate documents in this repository. Iteration 15 (the performance pass) was skipped at the Captain's instruction.
 
@@ -47,6 +48,7 @@ Iterations 7–11 have no separate documents in this repository. Iteration 15 (t
 ## Design and technical references
 
 - [Architecture](technical/ARCHITECTURE.md): how the game is built, including route calculation.
+- [The physical interface (I026)](technical/PHYSICAL_INTERFACE.md): the quay and its storefronts, opening hours, townsfolk, the instruments and the cabin's things - which buttons became places and objects, and which stayed conventional on purpose.
 - [The Captain's Chartroom UI pass](technical/CAPTAINS_CHARTROOM_UI_PASS.md): the shared day/night interface theme (Vintage Chartroom and Harbor Dusk), what the HUD and chart show by default, and the *Interface light* setting.
 - [Cozy Polish injection report](technical/COZY_POLISH_INJECTION_REPORT.md): floating things at sea, the chart's zoom limit, the Kiel and Suez canals, the Q menu, coffee and the hat in hand, the remembered sleep, visited-harbour pins, compact panels and the loading screen.
 - [The Well-Run Ship performance report](technical/THE_WELL_RUN_SHIP_PERFORMANCE_REPORT.md): where the time went (the day/night theme stall), what is kept in memory and what is written to disk, the sleep, dawn and dusk cards, and Long Passage on the voyage map.

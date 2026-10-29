@@ -1253,6 +1253,33 @@ with `t` (UTC), `event` and, during a game, `game` (game time).
   without the log and gets the same result. `-- --no-session-log` turns it
   off. Tests write to `user://test_diagnostics`.
 
+## A World You Can Touch (I026, 0.112a)
+
+Places and objects instead of buttons. Full description, with the old-to-new
+mapping and the conventional UI kept on purpose:
+[PHYSICAL_INTERFACE.md](PHYSICAL_INTERFACE.md). Report: `docs/iterations/i026/`.
+
+- **The quay** (`HarbourFront`, a router screen like the chart, not a boat
+  area): reached by the pontoon's walkway (`BoatArea.get_walkway()`), built
+  from `QuayLayout.build(port_id)` (deterministic), drawn by `QuayDrawing`
+  and `StorefrontDrawing`, peopled by `HarbourLife` (`TownsfolkDrawing`).
+  Doors are `Interactable`s; `place_requested` → `App._on_quay_place`, which
+  checks `BusinessHours` and opens the existing menu in a `ShopCounter`.
+  GameSession keeps the Captain on deck by the walkway, so saves are
+  unchanged.
+- **Opening hours** (`BusinessHours`, `data/harbours/business_hours.json`):
+  pure functions of business, harbour and game time on local solar time;
+  `App.wait_until_open` passes time ashore; the harbour office's hatch
+  (`HarbourOfficeMenu.hatch`) is always open for the essentials.
+- **Instruments** (`src/electronics/`: `InstrumentPackage`, `InstrumentState`
+  save section `instruments`, `InstrumentData`, `InstrumentFace`; views
+  `InstrumentCluster`, `InstrumentView`, `PlotterView`; `CockpitInstruments`
+  on deck): replace the sailing panel; one data snapshot feeds every face.
+- **Cabin objects** (`CabinObject`: logbook, VHF set, switch panel, sea chest,
+  postcard) and the sheet winch (`WinchProp`), placed by `BoatArea` on every
+  boat; `cabin_object_requested` / `trim_requested` → `App`. Menus opened from
+  objects get a `FocusFrame` (book, radio, teak, steel, electric).
+
 ## A Boat of Your Own (I020, 0.107a)
 
 Harbour trades and a cabin that feels like home. Report: `docs/iterations/i020/`.

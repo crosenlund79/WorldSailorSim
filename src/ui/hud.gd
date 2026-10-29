@@ -223,7 +223,10 @@ func get_prompt() -> String:
 	return _prompt.text if _prompt_panel.visible else ""
 
 
-func show_warning(text: String) -> void:
+## `title`: what kind of warning ("" = a weather warning; traffic names
+## itself, I026).
+func show_warning(text: String, title := "") -> void:
+	(_warning_panel.get_node(^"VBox/Title") as Label).text = title if title != "" else Loc.t("Weather warning")
 	_warning_text.text = text
 	_warning_pending = true
 	_warning_panel.visible = not _chart_mode

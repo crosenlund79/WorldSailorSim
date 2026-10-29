@@ -1551,7 +1551,7 @@ func _on_weather_warning(warning: Dictionary) -> void:
 ## and the radar shows by itself while the risk lasts.
 func _on_traffic_alert(info: Dictionary) -> void:
 	AudioManager.play_sfx(FishingSounds.warning(), FishingSounds.DB)
-	hud.show_warning(String(info.text))
+	hud.show_warning(String(info.text), Loc.t("Traffic warning"))
 	if not GameSession.is_asleep():
 		notify(String(info.text))
 

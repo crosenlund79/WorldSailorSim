@@ -4634,6 +4634,10 @@ msgstr ""
 msgid "It is %s."
 msgstr ""
 
+#: src/app/app.gd:1554
+msgid "Traffic warning"
+msgstr ""
+
 #: src/app/app.gd:1593 src/ui/harbour_moment.gd:75
 msgid "Arrived in %s."
 msgstr ""
@@ -7583,7 +7587,7 @@ msgstr ""
 msgid "%s on the course in about %d h"
 msgstr ""
 
-#: src/electronics/instrument_data.gd:226 src/ui/hud.gd:370
+#: src/electronics/instrument_data.gd:226 src/ui/hud.gd:373
 msgid ", gusts %d"
 msgstr ""
 
@@ -9151,11 +9155,11 @@ msgstr ""
 msgid "Underway to %s  ·  %.1f kn %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:314
+#: src/navigation/world_map.gd:861 src/ui/hud.gd:317
 msgid "Arrived at"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:314
+#: src/navigation/world_map.gd:861 src/ui/hud.gd:317
 msgid "Moored at"
 msgstr ""
 
@@ -11101,35 +11105,39 @@ msgstr ""
 msgid "Up she comes…"
 msgstr ""
 
-#: src/ui/hud.gd:297
-msgid "At anchor, %s  ·  bound for %s"
+#: src/ui/hud.gd:229 src/ui/hud.tscn:187
+msgid "Weather warning"
 msgstr ""
 
 #: src/ui/hud.gd:300
+msgid "At anchor, %s  ·  bound for %s"
+msgstr ""
+
+#: src/ui/hud.gd:303
 msgid "Underway to %s"
 msgstr ""
 
-#: src/ui/hud.gd:316 src/ui/hud.tscn:122
+#: src/ui/hud.gd:319 src/ui/hud.tscn:122
 msgid "Planned route"
 msgstr ""
 
-#: src/ui/hud.gd:324
+#: src/ui/hud.gd:327
 msgid "About %s with the expected wind  ·  set sail at the helm"
 msgstr ""
 
-#: src/ui/hud.gd:327
+#: src/ui/hud.gd:330
 msgid "Plot a course at the chart table"
 msgstr ""
 
-#: src/ui/hud.gd:355
+#: src/ui/hud.gd:358
 msgid "Hull %s   %s   Food %.1f d · Water %.1f d"
 msgstr ""
 
-#: src/ui/hud.gd:365
+#: src/ui/hud.gd:368
 msgid "Wind calm"
 msgstr ""
 
-#: src/ui/hud.gd:366
+#: src/ui/hud.gd:369
 msgid "Wind %s %d kn"
 msgstr ""
 
@@ -11167,10 +11175,6 @@ msgstr ""
 
 #: src/ui/hud.tscn:165
 msgid "Menu"
-msgstr ""
-
-#: src/ui/hud.tscn:187
-msgid "Weather warning"
 msgstr ""
 
 #: src/ui/hud.tscn:205
