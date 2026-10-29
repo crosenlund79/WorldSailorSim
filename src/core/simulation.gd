@@ -745,7 +745,7 @@ func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time
 		if in_approach:
 			course.zigzag = false
 		var sail: Dictionary = course.best if course.zigzag else course.direct
-		var sailing := float(sail.speed) >= profile.engine_start_below_kn and not (motor_upwind and course.zigzag)
+		var sailing: bool = float(sail.speed) >= profile.engine_start_below_kn and not (motor_upwind and course.zigzag)
 		if fuel <= 0.01:
 			sailing = true
 		var speed := float(sail.vmc) if sailing else profile.engine_speed_kn
