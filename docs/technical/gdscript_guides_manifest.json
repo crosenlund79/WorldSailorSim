@@ -63,9 +63,9 @@
    "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
   },
   "src/app/game_version.gd": {
-   "sha": "d718477b2b8e39ef",
+   "sha": "95fa382798ca8d9d",
    "reviewed": "2026-10-29",
-   "note": "I027 identity: 0.113a, BH · i027_01 · DEV"
+   "note": "I027 stage 02 label"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",

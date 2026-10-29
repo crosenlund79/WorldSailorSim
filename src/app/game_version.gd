@@ -30,7 +30,7 @@ const MACHINE := "0.113.1"
 ## release branches keep their own).
 const PROJECT_CODE := "BH"
 const ITERATION := "i027"
-const STAGE := "01"
+const STAGE := "02"
 const CHANNEL := "DEV"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public
