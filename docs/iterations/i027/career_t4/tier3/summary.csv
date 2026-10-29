@@ -1,0 +1,16 @@
+batch,policy,seed,level,build,wall_s,game_days,human_hours_est,voyages,nm_sail,nm_engine,fuel_l,start_funds,end_funds,min_funds,income_total,expense_total,low_money_days,stranded,services,bought_day,end_vessel
+t3,frugal,1,standard,BH · i027_03 · DEV · da27f17,47.64,125.5,9.06,49,1838.48,1749.88,830.39,10000,14101,10000,9800,5699,0,False,0,-1.0,arctic_wanderer_26
+t3,frugal,2,standard,BH · i027_03 · DEV · da27f17,37.46,123.62,9.47,52,1807.28,1676.6,794.23,10000,14678,10000,10400,5722,0,False,0,-1.0,arctic_wanderer_26
+t3,frugal,3,standard,BH · i027_03 · DEV · da27f17,33.5,121.5,9.86,55,1674.02,1504.38,708.86,10000,15233,10000,11000,5767,0,False,0,-1.0,arctic_wanderer_26
+t3,frugal,4,standard,BH · i027_03 · DEV · da27f17,36.0,121.38,9.27,51,1732.76,1762.43,837.99,10000,14283,10000,10200,5917,0,False,0,-1.0,arctic_wanderer_26
+t3,frugal,5,standard,BH · i027_03 · DEV · da27f17,33.95,122.75,9.75,54,1688.62,1728.39,823.11,10000,15034,10000,10800,5766,0,False,0,-1.0,arctic_wanderer_26
+t3,keeper,1,standard,BH · i027_03 · DEV · da27f17,31.88,122.62,9.82,55,1906.19,1581.67,700.52,10000,14549,10000,11000,6451,0,False,6,-1.0,arctic_wanderer_26
+t3,keeper,2,standard,BH · i027_03 · DEV · da27f17,38.6,123.75,9.44,52,1754.02,1913.82,846.52,10000,13379,10000,10400,7021,0,False,8,-1.0,arctic_wanderer_26
+t3,keeper,3,standard,BH · i027_03 · DEV · da27f17,36.26,121.62,9.11,50,1745.61,1642.17,729.74,10000,14082,10000,10000,5918,0,False,5,-1.0,arctic_wanderer_26
+t3,keeper,4,standard,BH · i027_03 · DEV · da27f17,35.83,121.5,9.25,51,1442.5,1952.95,862.22,10000,13398,10000,10200,6802,0,False,7,-1.0,arctic_wanderer_26
+t3,keeper,5,standard,BH · i027_03 · DEV · da27f17,40.05,121.5,9.15,50,1756.06,1606.2,712.63,10000,13706,10000,10000,6294,0,False,6,-1.0,arctic_wanderer_26
+t3,upgrader,1,standard,BH · i027_03 · DEV · da27f17,33.48,121.62,9.23,51,1663.24,1484.11,686.58,10000,5079,3017,15300,20221,0,False,5,99.25,starling_33
+t3,upgrader,2,standard,BH · i027_03 · DEV · da27f17,35.01,120.5,9.04,50,1825.91,1468.69,696.26,10000,5105,3019,15000,19895,0,False,3,95.25,starling_33
+t3,upgrader,3,standard,BH · i027_03 · DEV · da27f17,32.94,121.5,9.33,52,1821.99,1710.66,818.39,10000,5357,2960,15600,20243,0,False,4,94.25,starling_33
+t3,upgrader,4,standard,BH · i027_03 · DEV · da27f17,38.13,120.5,8.87,48,1560.65,1424.1,674.61,10000,4524,3039,14400,19876,0,False,4,102.25,starling_33
+t3,upgrader,5,standard,BH · i027_03 · DEV · da27f17,35.41,121.5,9.2,51,1754.94,1338.5,646.96,10000,5246,3062,15300,20054,0,False,4,94.25,starling_33

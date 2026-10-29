@@ -1,0 +1,26 @@
+batch,policy,seed,level,build,wall_s,game_days,human_hours_est,voyages,nm_sail,nm_engine,fuel_l,start_funds,end_funds,min_funds,income_total,expense_total,low_money_days,stranded,services,bought_day,end_vessel
+std,cruiser,1,standard,BH · i027_03 · DEV · da27f17,58.41,90.5,9.84,58,2153.98,2607.47,1245.82,10000,8971,8971,4350,5379,0,False,0,-1.0,arctic_wanderer_26
+std,cruiser,2,standard,BH · i027_03 · DEV · da27f17,53.67,90.0,9.43,56,2038.08,2665.08,1273.64,10000,8793,8731,4200,5407,0,False,0,-1.0,arctic_wanderer_26
+std,cruiser,3,standard,BH · i027_03 · DEV · da27f17,51.91,91.25,9.96,59,2100.35,2806.47,1348.18,10000,8891,8827,4425,5534,0,False,0,-1.0,arctic_wanderer_26
+std,cruiser,4,standard,BH · i027_03 · DEV · da27f17,52.62,90.75,8.9,52,1780.59,2625.98,1259.38,10000,8571,8571,3900,5329,0,False,0,-1.0,arctic_wanderer_26
+std,cruiser,5,standard,BH · i027_03 · DEV · da27f17,52.73,92.38,9.63,57,1674.97,2829.32,1356.3,10000,8843,8843,4275,5432,0,False,0,-1.0,arctic_wanderer_26
+std,frugal,1,standard,BH · i027_03 · DEV · da27f17,29.99,91.62,6.78,37,1222.92,1401.37,651.23,10000,13022,10000,7400,4378,0,False,0,-1.0,arctic_wanderer_26
+std,frugal,2,standard,BH · i027_03 · DEV · da27f17,24.85,90.5,7.19,40,1263.1,1299.33,599.97,10000,13590,10000,8000,4410,0,False,0,-1.0,arctic_wanderer_26
+std,frugal,3,standard,BH · i027_03 · DEV · da27f17,22.19,90.5,7.63,43,1294.25,1116.52,509.17,10000,14366,10000,8600,4234,0,False,0,-1.0,arctic_wanderer_26
+std,frugal,4,standard,BH · i027_03 · DEV · da27f17,26.59,91.5,6.92,38,1290.81,1361.14,630.92,10000,13255,10000,7600,4345,0,False,0,-1.0,arctic_wanderer_26
+std,frugal,5,standard,BH · i027_03 · DEV · da27f17,24.02,90.75,7.51,42,1437.39,1164.28,532.54,10000,14225,10000,8400,4175,0,False,0,-1.0,arctic_wanderer_26
+std,worker,1,standard,BH · i027_03 · DEV · da27f17,14.93,92.62,5.46,28,951.06,669.91,299.06,10000,23003,10000,16800,3797,0,False,0,-1.0,arctic_wanderer_26
+std,worker,2,standard,BH · i027_03 · DEV · da27f17,21.33,90.87,5.22,26,814.89,866.69,389.77,10000,21721,10000,15600,3879,0,False,0,-1.0,arctic_wanderer_26
+std,worker,3,standard,BH · i027_03 · DEV · da27f17,18.52,91.5,5.15,26,937.79,847.34,381.2,10000,21645,10000,15600,3955,0,False,0,-1.0,arctic_wanderer_26
+std,worker,4,standard,BH · i027_03 · DEV · da27f17,17.5,93.5,5.32,27,837.75,869.48,393.35,10000,22086,10000,16200,4114,0,False,0,-1.0,arctic_wanderer_26
+std,worker,5,standard,BH · i027_03 · DEV · da27f17,15.99,91.5,5.47,28,732.62,990.81,449.23,10000,22533,10000,16800,4267,0,False,0,-1.0,arctic_wanderer_26
+relaxed,frugal,1,relaxed,BH · i027_03 · DEV · da27f17,35.54,91.12,6.52,35,1266.64,1285.24,574.66,15000,19209,15000,7000,2791,0,False,0,-1.0,arctic_wanderer_26
+relaxed,frugal,2,relaxed,BH · i027_03 · DEV · da27f17,24.17,90.5,7.17,40,1222.94,1340.44,600.93,15000,19995,15000,8000,3005,0,False,0,-1.0,arctic_wanderer_26
+relaxed,frugal,3,relaxed,BH · i027_03 · DEV · da27f17,22.32,90.5,7.63,43,1286.09,1124.26,501.6,15000,20697,15000,8600,2903,0,False,0,-1.0,arctic_wanderer_26
+relaxed,frugal,4,relaxed,BH · i027_03 · DEV · da27f17,30.15,90.12,6.93,38,1340.66,1317.06,589.7,15000,19722,15000,7600,2878,0,False,0,-1.0,arctic_wanderer_26
+relaxed,frugal,5,relaxed,BH · i027_03 · DEV · da27f17,25.52,90.62,7.51,42,1424.69,1177.71,525.79,15000,20532,15000,8400,2868,0,False,0,-1.0,arctic_wanderer_26
+seasoned,frugal,1,seasoned,BH · i027_03 · DEV · da27f17,36.95,91.5,6.36,34,1218.68,1218.85,572.03,7000,8126,7000,6800,5674,0,False,0,-1.0,arctic_wanderer_26
+seasoned,frugal,2,seasoned,BH · i027_03 · DEV · da27f17,25.44,90.5,7.18,40,1286.87,1277.21,601.23,7000,9294,7000,8000,5706,0,False,0,-1.0,arctic_wanderer_26
+seasoned,frugal,3,seasoned,BH · i027_03 · DEV · da27f17,23.13,90.5,7.64,43,1305.56,1103.83,515.38,7000,9951,7000,8600,5649,0,False,0,-1.0,arctic_wanderer_26
+seasoned,frugal,4,seasoned,BH · i027_03 · DEV · da27f17,30.16,90.88,6.76,37,1232.5,1343.59,634.67,7000,8473,7000,7400,5927,0,False,0,-1.0,arctic_wanderer_26
+seasoned,frugal,5,seasoned,BH · i027_03 · DEV · da27f17,25.53,90.75,7.52,42,1451.85,1149.44,537.79,7000,9868,7000,8400,5532,0,False,0,-1.0,arctic_wanderer_26

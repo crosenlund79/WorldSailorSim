@@ -58,14 +58,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "3121355af7130924",
+   "sha": "cb70cf473471975f",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "src/app/game_version.gd": {
-   "sha": "d775db7da1fff853",
+   "sha": "0345635abc7f1c7e",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -258,14 +258,14 @@
    "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
   },
   "src/companion/dock_girl.gd": {
-   "sha": "837842f1d3a0f152",
-   "reviewed": "2026-10-28",
-   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+   "sha": "4f7c47cdc54e6fb7",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/companion/girl_drawing.gd": {
-   "sha": "a081bc4180ec00df",
-   "reviewed": "2026-10-28",
-   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+   "sha": "d4d41292ab81159c",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/companion/pair_moments.gd": {
    "sha": "85575e679dfb65f0",
@@ -312,10 +312,20 @@
    "reviewed": "2026-10-29",
    "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
   },
+  "src/core/career_telemetry.gd": {
+   "sha": "e18356da477ed1ab",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
+  },
   "src/core/difficulty.gd": {
    "sha": "8cb259b32db95129",
    "reviewed": "2026-10-27",
    "note": "I022 boats and difficulty"
+  },
+  "src/core/dreams.gd": {
+   "sha": "af8038a647ba262d",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/core/economy.gd": {
    "sha": "bdfc2225925e19e3",
@@ -333,9 +343,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "3a2f6a6216c883f0",
+   "sha": "2b994ad8dc18cdc7",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
+   "note": "I027 Tier 4: Dreams of the Sea API (dreams_changed, status/record/pursue, _check_dreams quiet on load), optional dreams save section (dreams_from), laptop Dreams app"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -378,14 +388,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/session_state.gd": {
-   "sha": "7e370d90bc7a0c4f",
+   "sha": "a42e8015ef9f8fc7",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: Dreams of the Sea API (dreams_changed, status/record/pursue, _check_dreams quiet on load), optional dreams save section (dreams_from), laptop Dreams app"
   },
   "src/core/simulation.gd": {
-   "sha": "bafb150e5b43a557",
+   "sha": "2dc266e606dc0895",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
+   "note": "I027 Tier 4: estimate_route full breakdown for PassagePlan; engine->sail threshold capped at engine speed"
   },
   "src/core/vessel_condition.gd": {
    "sha": "d1e2f8e4ae1d2c4b",
@@ -418,9 +428,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/diagnostics/session_log.gd": {
-   "sha": "275309aed5731d8a",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "986070e10fe57c34",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
+  },
+  "src/electronics/ais_receiver.gd": {
+   "sha": "c29f52b9bcde8baf",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/electronics/instrument_data.gd": {
    "sha": "f0cd7a299e5c3804",
@@ -503,9 +518,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_life.gd": {
-   "sha": "c0126219024455d7",
+   "sha": "a9d4b513d4373f39",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/harbour/harbour_looks.gd": {
    "sha": "eb39dfe6f16cfefb",
@@ -553,9 +568,9 @@
    "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/harbour/townsfolk_drawing.gd": {
-   "sha": "d33e869ebba04519",
+   "sha": "a0ad9b9d0b27608e",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/hat/hat_art.gd": {
    "sha": "7e3e8d99f9e02bff",
@@ -573,9 +588,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/hat/hat_drawing.gd": {
-   "sha": "9f02ea5d0a1c0f0c",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "9f5f6af46c792b58",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: finer redrawn hat (stitched crown, small badge); carried scale 0.28 matches worn"
   },
   "src/hat/hat_hook.gd": {
    "sha": "91e3e156926d7bcf",
@@ -588,9 +603,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/hat/player_hat.gd": {
-   "sha": "7e7f12f6a19ab242",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "25371a2c21bd846a",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: finer redrawn hat (stitched crown, small badge); carried scale 0.28 matches worn"
   },
   "src/interaction/highlight_provider.gd": {
    "sha": "d19d27da4b7936fd",
@@ -651,6 +666,11 @@
    "sha": "630855214a2c8a0d",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "src/navigation/passage_plan.gd": {
+   "sha": "19ee0a6e73cdeeac",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/navigation/planned_route.gd": {
    "sha": "1b49e388342b8d3f",
@@ -723,19 +743,24 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/persistence/save_manager.gd": {
-   "sha": "f951fcc69f129ee5",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "66949a583cb94fd1",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
+  },
+  "src/player/human_gait.gd": {
+   "sha": "c0fbff818fb9860a",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/player/player.gd": {
-   "sha": "080f4af2fb02175c",
+   "sha": "667eb2f8861ab9e7",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/player/sailor_drawing.gd": {
-   "sha": "3dbeae4873a1329c",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "9442b2f41dbacd75",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "src/sailing/course_maker.gd": {
    "sha": "e34c6832560241f4",
@@ -743,9 +768,9 @@
    "note": "I027 Tier 1: windward sailing, tacking, ETA"
   },
   "src/sailing/propulsion_controller.gd": {
-   "sha": "35c81202f7271c25",
+   "sha": "d2400fc8870d1437",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: estimate_route full breakdown for PassagePlan; engine->sail threshold capped at engine speed"
   },
   "src/sailing/propulsion_state.gd": {
    "sha": "6df781d9507df192",
@@ -973,19 +998,19 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/laptop/laptop_view.gd": {
-   "sha": "46b0627778767a8a",
-   "reviewed": "2026-10-28",
-   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
+   "sha": "8dbf58176eedde43",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: Dreams of the Sea API (dreams_changed, status/record/pursue, _check_dreams quiet on load), optional dreams save section (dreams_from), laptop Dreams app"
   },
   "src/ui/loading_screen.gd": {
-   "sha": "a19337a583a9a6ae",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "476c8c60a1bfbe00",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "src/ui/main_menu.gd": {
-   "sha": "d0658dd78d228e31",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "20d120efc396e40a",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "src/ui/markdown_lite.gd": {
    "sha": "a4bd5f14035e173c",
@@ -1011,6 +1036,11 @@
    "sha": "e1120a6110660b63",
    "reviewed": "2026-10-29",
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+  },
+  "src/ui/opening_story.gd": {
+   "sha": "5f2f14c62bdf0344",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/ui/passage_panel.gd": {
    "sha": "eb56735475054093",
@@ -1253,9 +1283,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/career/career_sim.gd": {
-   "sha": "f54b534606403974",
+   "sha": "9177d041b760f3c8",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 4: career telemetry files and dreams_fulfilled; five new suites registered (94), OpeningStory off in the runner"
+  },
+  "tests/character_sheet_i027.gd": {
+   "sha": "ba697b6d0766586e",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "tests/companion_animation_preview.gd": {
    "sha": "ecfb2a72e0098472",
@@ -1397,6 +1432,11 @@
    "reviewed": "2026-10-29",
    "note": "I027 Tier 3: comparison rows for guests, private cabins and passages; details keep Sleeps and Aboard"
   },
+  "tests/suites/test_ais.gd": {
+   "sha": "c061ca18d42763a4",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
+  },
   "tests/suites/test_anchor_life.gd": {
    "sha": "f614f6fddeb778d6",
    "reviewed": "2026-10-28",
@@ -1428,9 +1468,9 @@
    "note": "compass checks"
   },
   "tests/suites/test_branding.gd": {
-   "sha": "49ac3a54a9e50f15",
+   "sha": "b09298e08729eab4",
    "reviewed": "2026-10-29",
-   "note": "I027 identity: 0.113a, BH · i027_01 · DEV"
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "tests/suites/test_build_label.gd": {
    "sha": "d8af727ca2579d0d",
@@ -1547,6 +1587,11 @@
    "reviewed": "2026-10-29",
    "note": "I027 identity: 0.113a, BH · i027_01 · DEV"
   },
+  "tests/suites/test_dreams.gd": {
+   "sha": "1df1c54f63746b1c",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
+  },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",
    "reviewed": "2026-10-27",
@@ -1623,9 +1668,9 @@
    "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "tests/suites/test_living_world.gd": {
-   "sha": "fa00656f95c862c3",
-   "reviewed": "2026-10-28",
-   "note": "Arm swing on the open foredeck, by distance"
+   "sha": "2195852ea83f7d55",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
   },
   "tests/suites/test_localization.gd": {
    "sha": "9e12c7c2b89c2885",
@@ -1661,6 +1706,16 @@
    "sha": "0ebd844eb46fcadd",
    "reviewed": "2026-10-28",
    "note": "I024: laptop, clips, wording and retired-goal adjustments"
+  },
+  "tests/suites/test_opening.gd": {
+   "sha": "47e9828e26501b12",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
+  },
+  "tests/suites/test_passage_plan.gd": {
+   "sha": "27b3c57e0d9c469b",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "tests/suites/test_presentation.gd": {
    "sha": "3be19d117d7ba4f7",
@@ -1698,9 +1753,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "tests/suites/test_sailing.gd": {
-   "sha": "83306273a3c5003c",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "30d69ae37ff2d1d5",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: estimate_route full breakdown for PassagePlan; engine->sail threshold capped at engine speed"
   },
   "tests/suites/test_sailing_correctness.gd": {
    "sha": "e7a1826a7098ab08",
@@ -1751,6 +1806,11 @@
    "sha": "31aefe3b144bc3de",
    "reviewed": "2026-10-29",
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+  },
+  "tests/suites/test_telemetry.gd": {
+   "sha": "165ff6e8f253269f",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "tests/suites/test_turbocharge.gd": {
    "sha": "24511395031b3df7",
@@ -1833,9 +1893,9 @@
    "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
   },
   "tests/test_runner.gd": {
-   "sha": "3c86289f7b1a2426",
+   "sha": "9eb46507eee3018b",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+   "note": "I027 Tier 4: career telemetry files and dreams_fulfilled; five new suites registered (94), OpeningStory off in the runner"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",
@@ -1848,9 +1908,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tools/export_branding.gd": {
-   "sha": "856217357ad25dbb",
-   "reviewed": "2026-10-27",
-   "note": "I022 240 px logo"
+   "sha": "c65a5d0703be5a15",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "tools/navigation/world_land_to_res.gd": {
    "sha": "b75a5694c042570c",

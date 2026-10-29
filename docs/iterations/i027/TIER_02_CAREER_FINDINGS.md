@@ -116,3 +116,32 @@ Classified as the commission asks (84):
 
 The same seeds will be rerun after any approved change, and the before and
 after compared.
+
+
+## Re-measured after the Tier 4 propulsion fix
+
+Tier 4 found and fixed a sailing bug. The engine stayed on in a beam
+reach whenever the wind could not drive the boat past 6 kn, while the
+26 ft's engine only makes 5 kn. A single probe, Copenhagen to Kiel, went
+from 102 nm under engine to 7. The same batches were therefore run again
+on the fixed build: the same seeds, policies, difficulties and 90 days.
+
+| Batch | Policy | End money, median: before → after | nm sail / engine: before → after | Fuel (L) |
+|---|---|---|---|---|
+| std | cruiser | €8,542 → €8,843 | 1621 / 2845 → 2038 / 2665 | 1362 → 1273 |
+| std | frugal | €13,805 → €13,590 | 1310 / 1242 → 1290 / 1299 | 571 → 599 |
+| std | worker | €21,693 → €22,086 | 854 / 921 → 837 / 866 | 416 → 389 |
+| relaxed | frugal | €20,244 → €19,995 | 1208 / 1255 → 1286 / 1285 | 561 → 574 |
+| seasoned | frugal | €9,266 → €9,294 | 1233 / 1231 → 1286 / 1218 | 578 → 572 |
+
+**The findings above stand.**
+- Only the cruiser, which motors to windward, moved noticeably: about 400
+  more miles under sail and €300 better off.
+- For the other policies the difference is within the spread between
+  seeds.
+- About half of the miles are still under engine. That comes from calms,
+  light airs below the engine-start threshold and harbour approaches, as
+  finding 3 says, not from the bug.
+- Remote work remains the only material income.
+
+Raw data: [career_t4/tier2](career_t4/tier2/report.md).

@@ -156,20 +156,20 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Formål:** Spillets "dirigent": det forbinder menuerne, skærmene og spillets systemer, så de arbejder sammen.
-- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning). Den tilføjer også det lille versions-id i nederste højre hjørne, én gang (`BuildLabel`). I025: et nyt spil begynder uden ledsager (Nyt spil spørger ikke længere efter en). Hver ledsager følger Kaptajnen i sit eget tempo, og to tager aldrig samme plads på dækket eller pontonen; før der kastes los, nævnes begge, hvis begge er i land, og "Kald … om bord" henter dem alle på én gang. Når et dyr fra kajen har fulgt Kaptajnen hen til nedgangen, kommer spørgsmålet om adoption, før man går ned (`ask_about_dock_animal`, `AdoptionDialog`): Adoptér giver det et navn, byder det velkommen om bord med en kort linje og går ned; Ikke nu holder Kaptajnen på dækket, og den lille pige kommer og henter dyret; Esc beslutter intet. Med to ledsagere taler Kaptajnen på en lang passage nogle gange til den ene, andre gange om dem begge, stadig én bemærkning ad gangen; sejler man alene, er der ingen snak på passagen. I026: op ad pontonens gangbro kommer Kaptajnen til kajen (`open_quay`, `HarbourFront`), en skærm ligesom søkortet. Hver dør dér åbner forretningens egen menu i dens butiksdisk-ramme (`ShopCounter`); en lukket dør siger, hvornår den åbner, og tilbyder at vente til da (`ask_wait_until_open`, hvor tiden går som under søvn); havnekontorets luge har altid åbent (mad og en nødreparation); caféen sælger en kop kaffe og sætter Kaptajnen ved et bord på terrassen; opslagstavlen og stræden ind til byen (Gå i land) er der også, og går man ned igen, kommer man om bord. Gemmer man på kajen, står Kaptajnen på pontonen ved gangbroen. Instrumenterne (I, et klik på HUD'ens instrumenter eller på enhederne ved roret, handlingshjulet) åbner nærbilledet `InstrumentView`, og P åbner rorets kortplotter tæt på (`PlotterView`) i stedet for at slå et HUD-panel til og fra. I kahytten åbner logbogen, VHF-radioen, eltavlen, sømandskisten og det nyeste postkort deres visninger (`open_cabin_object`), hver indrammet som genstanden (`FocusFrame`), ligesom proviantskabet, komfuret, trofætavlen og køjens søvndialog; VHF-radioens lampe blinker, mens et opkald venter. Skødespillet på dækket åbner sejltrimmet. En trafikalarm vises nu under sin egen overskrift, "Trafikadvarsel". I027: K (eller "Vend nu" / "Bom nu" på handlingshjulet, mens autopiloten krydser) vender eller bommer i hånden og siger, hvilken halse båden nu er for. I027 trin 2: kajens brændstofpumpe åbner brændstofmenuen; handlingshjulet tilbyder "Motor op mod vinden". I027: udviklerens testpanel (F10) åbner også på kajen.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`. I026: `HarbourFront`, `BusinessHours`, `ShopCounter`, `FocusFrame`, `InstrumentView`, `PlotterView`.
+- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning). Den tilføjer også det lille versions-id i nederste højre hjørne, én gang (`BuildLabel`). I025: et nyt spil begynder uden ledsager (Nyt spil spørger ikke længere efter en). Hver ledsager følger Kaptajnen i sit eget tempo, og to tager aldrig samme plads på dækket eller pontonen; før der kastes los, nævnes begge, hvis begge er i land, og "Kald … om bord" henter dem alle på én gang. Når et dyr fra kajen har fulgt Kaptajnen hen til nedgangen, kommer spørgsmålet om adoption, før man går ned (`ask_about_dock_animal`, `AdoptionDialog`): Adoptér giver det et navn, byder det velkommen om bord med en kort linje og går ned; Ikke nu holder Kaptajnen på dækket, og den lille pige kommer og henter dyret; Esc beslutter intet. Med to ledsagere taler Kaptajnen på en lang passage nogle gange til den ene, andre gange om dem begge, stadig én bemærkning ad gangen; sejler man alene, er der ingen snak på passagen. I026: op ad pontonens gangbro kommer Kaptajnen til kajen (`open_quay`, `HarbourFront`), en skærm ligesom søkortet. Hver dør dér åbner forretningens egen menu i dens butiksdisk-ramme (`ShopCounter`); en lukket dør siger, hvornår den åbner, og tilbyder at vente til da (`ask_wait_until_open`, hvor tiden går som under søvn); havnekontorets luge har altid åbent (mad og en nødreparation); caféen sælger en kop kaffe og sætter Kaptajnen ved et bord på terrassen; opslagstavlen og stræden ind til byen (Gå i land) er der også, og går man ned igen, kommer man om bord. Gemmer man på kajen, står Kaptajnen på pontonen ved gangbroen. Instrumenterne (I, et klik på HUD'ens instrumenter eller på enhederne ved roret, handlingshjulet) åbner nærbilledet `InstrumentView`, og P åbner rorets kortplotter tæt på (`PlotterView`) i stedet for at slå et HUD-panel til og fra. I kahytten åbner logbogen, VHF-radioen, eltavlen, sømandskisten og det nyeste postkort deres visninger (`open_cabin_object`), hver indrammet som genstanden (`FocusFrame`), ligesom proviantskabet, komfuret, trofætavlen og køjens søvndialog; VHF-radioens lampe blinker, mens et opkald venter. Skødespillet på dækket åbner sejltrimmet. En trafikalarm vises nu under sin egen overskrift, "Trafikadvarsel". I027: K (eller "Vend nu" / "Bom nu" på handlingshjulet, mens autopiloten krydser) vender eller bommer i hånden og siger, hvilken halse båden nu er for. I027 trin 2: kajens brændstofpumpe åbner brændstofmenuen; handlingshjulet tilbyder "Motor op mod vinden". I027: udviklerens testpanel (F10) åbner også på kajen. I027 trin 4: Nyt spil fra titelskærmen åbner åbningshistorien (`play_opening`, `OpeningStory`) over det nye spils kahyt, med spillet sat på pause under den; et indlæst spil viser den aldrig, og tilbuddet om den første sejlads venter, til historien er slut.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`. I026: `HarbourFront`, `BusinessHours`, `ShopCounter`, `FocusFrame`, `InstrumentView`, `PlotterView`. I027: `OpeningStory`.
 - **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, hvornår hver ledsager næste gang følger dig mellem kahyt, dæk og land, og hvornår Kaptajnen næste gang taler med den på en lang passage. Selve spillet ligger i `GameSession`. I026: også hvilken forretning på kajen den åbne menu hører til (for dens ramme).
 - **Hvornår det kører:** Altid: det er hovedscenen, der starter med spillet.
 - **Hvis du ændrer det:** Næsten alle forløb kan blive påvirket: hvilke vinduer der åbner hvor, hvornår spillet pauser bag en menu, hvad spilleren får at vide efter søvn eller ankomst, motorlyden og reglerne for hurtig-gem.
 
 ### `src/app/game_version.gd`
 
-**Formål:** Holder spillets versionsnummer ét sted.
-- **Hvad det gør:** Giver den version, spillerne ser (fx "0.113a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes. Også den eneste kilde til udviklingsversionens id: iterationen ("i027"), et valgfrit internt stadie ("i027_02") og DEV eller TEST, samlet til mærket "BH · i027 · DEV · <commit>" (eller et ærligt "BH · dev-build", når iterationen ikke er sat), og om mærket vises.
-- **Arbejder sammen med:** `SessionLog` (skriver versionen ved opstart), hovedmenuen (viser den), `BuildLabel` (viser id'et), `tools/write_build_info.py` (skriver `build_info.json`).
+**Formål:** Holder spillets versionsnummer, og siden I027 dets visningsnavn, ét sted.
+- **Hvad det gør:** Giver den version, spillerne ser (fx "0.113a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes. Også den eneste kilde til udviklingsversionens id: iterationen ("i027"), et valgfrit internt stadie ("i027_02") og DEV eller TEST, samlet til mærket "BH · i027 · DEV · <commit>" (eller et ærligt "BH · dev-build", når iterationen ikke er sat), og om mærket vises. I027: også spillets offentlige navn, Between Horizons, med dets ordmærke (stort og lille) og dets undertitel på én linje ("The next horizon is yours to discover."), som titel-, indlæsnings- og opstartsskærmen, vinduets titel, åbningshistorien og diagnosen læser. Between Horizons er Kaptajnens arbejdstitel: et andet udgivet spil hedder allerede sådan, så navnet er ikke godkendt til butikssider, installationsprogrammer eller andre offentlige oplysninger. De tekniske navne (gemmemappen, repositoriet, de interne id'er og gemmenøglerne) forbliver, som de var.
+- **Arbejder sammen med:** `SessionLog` (skriver version og navn ved opstart), hovedmenuen, `LoadingScreen` og `OpeningStory` (viser navnet og ordmærket), `BuildLabel` (viser id'et), `tools/write_build_info.py` (skriver `build_info.json`).
 - **Holder styr på:** Buildens commit-kode, læst én gang og husket.
 - **Hvornår det kører:** Når noget spørger efter versionen (opstartslog, hovedmenu).
-- **Hvis du ændrer det:** Du skal også ændre versionen i projektindstillingerne; en test tjekker, at de to passer sammen. Gemte spil registrerer spillets version. Sæt iteration, stadie og kanal ved hvert checkpoint, som kaptajnens ordrer siger (*Major iteration branches*).
+- **Hvis du ændrer det:** Du skal også ændre versionen i projektindstillingerne; en test tjekker, at de to passer sammen. Gemte spil registrerer spillets version. Sæt iteration, stadie og kanal ved hvert checkpoint, som kaptajnens ordrer siger (*Major iteration branches*). Visningsnavnet skal være det samme som projektets navn (en test tjekker det); spørg Kaptajnen, før det bruges i offentlige oplysninger.
 
 ### `src/app/scene_router.gd`
 
@@ -243,6 +243,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Hver gang penge, brændstof eller båden flytter sig.
 - **Hvis du ændrer det:** Hvad driftsomkostningerne og karriererapporterne viser; aldrig selve pengene.
 
+### `src/core/career_telemetry.gd`
+
+**Formål:** Karrieretelemetri: tidsstemplede optegnelser af en karriere, som kan gentages, taget fra det rigtige spil, til spiltest (I027 trin 4).
+- **Hvad det gør:** Et øjebliksbillede læser kun det, spillet allerede registrerer: pengene og hvor de kom fra (`CareerLedger`), båden, dens brændstof, stand og pleje, hvad den byder gæster, forsyningerne og blinkene, rejserne og sømilene for sejl og motor, havnene og den længste passage, ry, bedrifter og Havets drømme. En optager tager et øjebliksbillede ved spillets egne hændelser (starten, en ankomst, et bådkøb, en drøm), og når man beder om det, og skriver dem som JSON-linjer og en flad CSV. Intet er opdigtet, og intet sendes nogen steder hen: kun lokale filer. Tal om passagerer kommer med I028.
+- **Arbejder sammen med:** `GameSession`, `CareerLedger`, `CaptainsLog`, `BoatCare`, `Accommodation`, `Economy`, `AchievementCatalog`, `Dreams`, `GameVersion`; karriereselen (`tests/career/career_sim.gd`).
+- **Holder styr på:** En optager holder på sine optegnelser, til de skrives; intet kommer i et gemt spil.
+- **Hvornår det kører:** Kun i karrieretesten og dens testsamling, aldrig i almindeligt spil.
+- **Hvis du ændrer det:** Kun telemetrifilerne og deres kolonner; selve spillet ændres ikke.
+
 ### `src/core/difficulty.gd`
 
 **Formål:** De tre sværhedsgrader: Afslappet, Standard og Erfaren skipper (I022).
@@ -251,6 +260,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Niveauerne fra datafilen, læst én gang.
 - **Hvornår det kører:** Hver gang et af de tal bruges.
 - **Hvis du ændrer det:** Balancen ændres for de niveauer, du redigerer; Standard bør forblive 1,0.
+
+### `src/core/dreams.gd`
+
+**Formål:** Havets drømme: Kaptajnens livsdrømme, en beskeden dagbog på laptoppen (I027 trin 4).
+- **Hvad det gør:** Læser drømmene fra `data/progression/dreams.json` (otte: en lang passage for egen kraft, den nordlige kyst, sydlige farvande, Caribien, en båd til oceanerne, en havkrydsning og to, der venter på senere systemer, en bog om dine rejser og ry som verdensrejsende) og siger, om en er gået i opfyldelse, ud fra det, der virkelig er sket: Logbogen (besøgte havne, den længste passage) og de ejede både. Intet er opdigtet, og intet er en opgave: Kaptajnen vælger op til tre at forfølge, i vilkårlig rækkefølge, og hver går i opfyldelse af sig selv. Den giver også dagbogen en linje om, hvor langt man er ("2 af 3 havne").
+- **Arbejder sammen med:** `GameSession` (husker valgene og de opfyldte drømme), `CaptainsLog`, `PortCatalog`, `Accommodation` (hvilke både er udrustet til oceaner), `LaptopView` (Drømme-appen), `CareerTelemetry`.
+- **Holder styr på:** Intet andet end filen, den læser én gang; Kaptajnens drømme ligger i det gemte spil.
+- **Hvornår det kører:** Når laptoppen viser drømmene, efter en ankomst eller et bådkøb, og når et spil indlæses.
+- **Hvis du ændrer det:** Hvilke drømme der findes, og hvornår de går i opfyldelse; drømmetesten tjekker listen og en rigtig passage.
 
 ### `src/core/economy.gd`
 
@@ -282,8 +300,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/game_session.gd`
 
 **Formål:** Vogteren af det kørende spil: det eneste sted, hvor spillets tilstand ændres.
-- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen. I024: ledsageren må gå i land, mens båden er fortøjet, men bliver aldrig efterladt: der kan ikke kastes los, før den er kaldt om bord (`recall_companion`). Landgang i 5 havne og i 3 lande og en uge til søs sammen giver bedrifter for ledsageren; når Kaptajnen vågner, findes den ved køjen, nu og da med en lille linje (`wake_companion`). Vedvarende fart for sejl måles på simulationens egne trin (`note_sailing`: bedste time og bedste døgn, milepæle for 7, 9 og 12 knob i en time og et døgn på 150 sømil), og hver ry-optegnelse noterer nu, hvor og på hvilken båd den blev optjent. I025: der kan være ingen, én eller to ledsagere, så kaldene om ledsagere tager et ledsagernummer (`get_companion(id)`, `get_companions`, `get_companion_count`, `has_room_for_companion`, `set_companion_area(area, spot, id)`, `get_companions_ashore`), og hver ledsager har sin egen tidsplan og plads. Ved hver ankomst til en havn afgør den, om et dyr venter på kajen (`DockEncounters`), og den håndterer de venlige gestus (`befriend_dock_animal`), adoption af dyret (`adopt_dock_animal`: en ny ledsager med navn, køn, og hvornår og hvor den kom om bord, plus optegnelsen "Velkommen om bord" uden omdømme) og "Ikke nu" (`decline_dock_animal`); når der kastes los, bliver et ventende dyr på sin kaj. Opvågning giver én linje om én eller begge ledsagere; båden kaster ikke los, mens en af dem er i land, og at kalde dem om bord henter dem alle. Sejler man alene, er der ingen morgenlinje, og ledsagerens pris for en uge til søs kræver en ledsager. I026: caféen på kajen sælger en kop kaffe til en lille pris, skaleret efter sværhedsgraden som andre udgifter, og intet andet ændres (`buy_cafe_coffee`). Den holder styr på den maritime elektronik: pakken monteret i hver båd (`get_instrument_package`), køb af en pakke i skibshandelen, betalt helt eller slet ikke, monteret med det samme i båden om bord og derefter Kaptajnens til enhver båd (`buy_instrument_package`), gratis montering af en pakke, man ejer, hvor som helst (`fit_instrument_package`), og den side, hvert display viser (`set_instrument_page`), hver meldt med `instruments_changed`. I027: den holder styr på rejsens krydsning (hvor langt fra kurslinjen båden er, hvilken side, vendingerne) og tæller den distance, der faktisk er sejlet gennem vandet. I027 trin 2: hver ændring af pengene noteres i karrierens regnskab; motoren bruger brændstof (og stopper, når tanken er tom); brændstof købes ved tankanlægget; havnepenge betales, når man sejler, for nætterne ved kaj (resten eftergives, hvis pengene ikke rækker); Kaptajnen kan vælge at gå for motor op mod vinden.
-- **Arbejder sammen med:** `SessionState` (de data, det ejer), `Simulation` (flytter tiden frem og kalder tilbage), `SaveManager`, `App`, HUD og menuer, mange kataloger (`PortCatalog`, `SeaRouter`, `VesselCatalog`, `ObjectiveCatalog`, `BoatCare`, `FishingCatalog`).
+- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen. I024: ledsageren må gå i land, mens båden er fortøjet, men bliver aldrig efterladt: der kan ikke kastes los, før den er kaldt om bord (`recall_companion`). Landgang i 5 havne og i 3 lande og en uge til søs sammen giver bedrifter for ledsageren; når Kaptajnen vågner, findes den ved køjen, nu og da med en lille linje (`wake_companion`). Vedvarende fart for sejl måles på simulationens egne trin (`note_sailing`: bedste time og bedste døgn, milepæle for 7, 9 og 12 knob i en time og et døgn på 150 sømil), og hver ry-optegnelse noterer nu, hvor og på hvilken båd den blev optjent. I025: der kan være ingen, én eller to ledsagere, så kaldene om ledsagere tager et ledsagernummer (`get_companion(id)`, `get_companions`, `get_companion_count`, `has_room_for_companion`, `set_companion_area(area, spot, id)`, `get_companions_ashore`), og hver ledsager har sin egen tidsplan og plads. Ved hver ankomst til en havn afgør den, om et dyr venter på kajen (`DockEncounters`), og den håndterer de venlige gestus (`befriend_dock_animal`), adoption af dyret (`adopt_dock_animal`: en ny ledsager med navn, køn, og hvornår og hvor den kom om bord, plus optegnelsen "Velkommen om bord" uden omdømme) og "Ikke nu" (`decline_dock_animal`); når der kastes los, bliver et ventende dyr på sin kaj. Opvågning giver én linje om én eller begge ledsagere; båden kaster ikke los, mens en af dem er i land, og at kalde dem om bord henter dem alle. Sejler man alene, er der ingen morgenlinje, og ledsagerens pris for en uge til søs kræver en ledsager. I026: caféen på kajen sælger en kop kaffe til en lille pris, skaleret efter sværhedsgraden som andre udgifter, og intet andet ændres (`buy_cafe_coffee`). Den holder styr på den maritime elektronik: pakken monteret i hver båd (`get_instrument_package`), køb af en pakke i skibshandelen, betalt helt eller slet ikke, monteret med det samme i båden om bord og derefter Kaptajnens til enhver båd (`buy_instrument_package`), gratis montering af en pakke, man ejer, hvor som helst (`fit_instrument_package`), og den side, hvert display viser (`set_instrument_page`), hver meldt med `instruments_changed`. I027: den holder styr på rejsens krydsning (hvor langt fra kurslinjen båden er, hvilken side, vendingerne) og tæller den distance, der faktisk er sejlet gennem vandet. I027 trin 2: hver ændring af pengene noteres i karrierens regnskab; motoren bruger brændstof (og stopper, når tanken er tom); brændstof købes ved tankanlægget; havnepenge betales, når man sejler, for nætterne ved kaj (resten eftergives, hvis pengene ikke rækker); Kaptajnen kan vælge at gå for motor op mod vinden. I027 trin 4, Havets drømme: den fortæller, hvor hver af Kaptajnens drømme står (åben, forfulgt, gået i opfyldelse eller til senere), lader op til tre blive forfulgt ad gangen og markerer en drøm som opfyldt, når Logbogen eller de ejede både viser det, med en kort besked efter en ankomst eller et bådkøb; et indlæst spils fortid opfylder sine drømme i stilhed. Båden om bord tæller som ejet.
+- **Arbejder sammen med:** `SessionState` (de data, det ejer), `Simulation` (flytter tiden frem og kalder tilbage), `SaveManager`, `App`, HUD og menuer, mange kataloger (`PortCatalog`, `SeaRouter`, `VesselCatalog`, `ObjectiveCatalog`, `BoatCare`, `FishingCatalog`). I027: `Dreams` (drømmene, og hvornår en går i opfyldelse).
 - **Holder styr på:** Den aktuelle `SessionState`, om der er ændringer, der ikke er gemt, og et par ting, der ikke gemmes (en fisk på linen, om kaptajnen sover, om båden ligger roligt for anker, det aktuelle ubrudte stræk for sejl til fartrekorderne).
 - **Hvornår det kører:** Altid (en autoload: et script Godot starter automatisk, og som altid findes).
 - **Hvis du ændrer det:** Næsten alle spilleregler og hvad der havner i gemte spil. Ændr med stor forsigtighed.
@@ -363,7 +381,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/session_state.gd`
 
 **Formål:** Det komplette gemte billede af ét spil, som rene data.
-- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil). I024: et nyt spil giver ledsagerens valgte navn og køn videre. I025: den har ledsagerne som en liste (ingen, én eller to, hver med et fast nummer, der aldrig genbruges) og dyrene, man finder på en kaj (`DockEncounters`). Et nyt spil starter uden ledsager; et gemt spil fra før I025 beholder sin ene ledsager som nummer 1, og det gamle felt med én ledsager skrives stadig for den første, så gemmeformatet forbliver version 12. I026: den husker også de instrumentpakker, der ejes, og den, der er monteret i hver båd (`InstrumentState`, den valgfrie del `instruments`); ældre gemte spil får Classic overalt, og gemmeformatet forbliver 12. I027: den holder også brændstoffet i hver båds tank, karrierens regnskab, hvornår båden lagde til, og valget om at gå for motor op mod vinden.
+- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil). I024: et nyt spil giver ledsagerens valgte navn og køn videre. I025: den har ledsagerne som en liste (ingen, én eller to, hver med et fast nummer, der aldrig genbruges) og dyrene, man finder på en kaj (`DockEncounters`). Et nyt spil starter uden ledsager; et gemt spil fra før I025 beholder sin ene ledsager som nummer 1, og det gamle felt med én ledsager skrives stadig for den første, så gemmeformatet forbliver version 12. I026: den husker også de instrumentpakker, der ejes, og den, der er monteret i hver båd (`InstrumentState`, den valgfrie del `instruments`); ældre gemte spil får Classic overalt, og gemmeformatet forbliver 12. I027: den holder også brændstoffet i hver båds tank, karrierens regnskab, hvornår båden lagde til, og valget om at gå for motor op mod vinden. I027 trin 4: den husker også Havets drømme (de forfulgte drømme, og hvornår og hvor hver gik i opfyldelse); et gemt spil uden dem indlæses uden nogen, og ukendte eller fejlagtige drømme springes over.
 - **Arbejder sammen med:** `GameSession` (ejer og ændrer det), `SaveManager` (skriver og læser det), alle de mindre tilstands-optegnelser i `src/core/`.
 - **Holder styr på:** Hele spillets tilstand.
 - **Hvornår det kører:** Ved nyt spil, hver gang der gemmes og indlæses, og som data bag hele spillet.
@@ -372,7 +390,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/simulation.gd`
 
 **Formål:** Spillets ur og den motor, der flytter båden gennem tiden.
-- **Hvad det gør:** Hvert billede laver det rigtig tid om til spiltid (1 rigtigt sekund = 1 spilminut ved 1×) og flytter båden langs kursen, med sejl eller motor efter vinden. Det tjekker vejret, huen, fiskebid, ankeret, trafik og opkald på VHF-radioen på et fast tidsgitter, så resultatet bliver det samme ved enhver hastighed, under søvn og under en Lang passage. Siden I022 skaleres vejrskader efter sværhedsgraden (selve vejret ikke). I022: fjernarbejde fortæller nu også, hvad der stoppede det før tid, så tidsskærmen kan sige det. I024: efter hvert trin fortæller det `GameSession`, hvor hurtigt båden sejlede, og om det var for sejl, til fartrekorderne. I027: den sejler op mod vinden. Kan et ben ikke sejles lige, krydser båden (eller bommer med vinden) i sin bedste vinkel, skifter side ved kanten af et bælte om kurslinjen, før land eller ved et vedvarende vindskift og mister lidt tid ved hver vending; i en havns indsejling holder den sin linje. Ankomstestimatet regner vendingerne med. I027 trin 2: med en tom tank kan motoren ikke starte; og når Kaptajnen vælger at gå for motor op mod vinden, sejles et ben, båden ellers ville krydse op ad, for motor, så længe der er brændstof. Ankomstestimatet regner med brændstoffet om bord: når det er brugt, sejles stilleperioderne langsomt for sejl.
+- **Hvad det gør:** Hvert billede laver det rigtig tid om til spiltid (1 rigtigt sekund = 1 spilminut ved 1×) og flytter båden langs kursen, med sejl eller motor efter vinden. Det tjekker vejret, huen, fiskebid, ankeret, trafik og opkald på VHF-radioen på et fast tidsgitter, så resultatet bliver det samme ved enhver hastighed, under søvn og under en Lang passage. Siden I022 skaleres vejrskader efter sværhedsgraden (selve vejret ikke). I022: fjernarbejde fortæller nu også, hvad der stoppede det før tid, så tidsskærmen kan sige det. I024: efter hvert trin fortæller det `GameSession`, hvor hurtigt båden sejlede, og om det var for sejl, til fartrekorderne. I027: den sejler op mod vinden. Kan et ben ikke sejles lige, krydser båden (eller bommer med vinden) i sin bedste vinkel, skifter side ved kanten af et bælte om kurslinjen, før land eller ved et vedvarende vindskift og mister lidt tid ved hver vending; i en havns indsejling holder den sin linje. Ankomstestimatet regner vendingerne med. I027 trin 2: med en tom tank kan motoren ikke starte; og når Kaptajnen vælger at gå for motor op mod vinden, sejles et ben, båden ellers ville krydse op ad, for motor, så længe der er brændstof. Ankomstestimatet regner med brændstoffet om bord: når det er brugt, sejles stilleperioderne langsomt for sejl. I027 trin 4: det samme skøn over en rute kan også fås i sin helhed: tiden, hvor længe og hvor langt for motor, hvor langt for sejl og det brændstof, motoren ville bruge (aldrig mere, end der er om bord), som passageplanen bruger.
 - **Arbejder sammen med:** `GameSession` (læser og opdaterer spillet), `WeatherModel`, `PropulsionController`, `WeatherDamage`, `HatConfig`, `FishingCatalog`, `TrafficModel`, `VhfRadio`; `App` lytter efter dens advarsler.
 - **Holder styr på:** Ikke gemt: farten for Lang passage, et gemt (cachet) skøn over ankomsttiden, og om kaptajnen er under dæk.
 - **Hvornår det kører:** Altid (en autoload); det står stille, mens spillet er sat på pause.
@@ -399,7 +417,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/diagnostics/session_log.gd`
 
 **Formål:** En lille teknisk dagbog over hver kørsel af spillet, til at finde fejl (ikke spillerens Logbog).
-- **Hvad det gør:** Skriver én linje pr. vigtig hændelse (start, skærmskift, gemme, rejser, huen, redninger, penge, fejl) i en fil i brugerens mappe. Filerne holdes små, og kun de 10 nyeste beholdes.
+- **Hvad det gør:** Skriver én linje pr. vigtig hændelse (start, skærmskift, gemme, rejser, huen, redninger, penge, fejl) i en fil i brugerens mappe. Filerne holdes små, og kun de 10 nyeste beholdes. I027: startlinjen nævner spillet ved dets visningsnavn fra `GameVersion` (arbejdstitlen).
 - **Arbejder sammen med:** Signaler fra `GameSession`, `SaveManager`, `App`, `GameVersion`.
 - **Holder styr på:** Den åbne logfil og hvor meget der er skrevet.
 - **Hvornår det kører:** Altid (en autoload).
@@ -417,7 +435,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/persistence/save_manager.gd`
 
 **Formål:** Gemmer og indlæser spil.
-- **Hvad det gør:** Skriver 3 gemmepladser og et hurtig-gem som filer i brugerens mappe, på en sikker måde (en midlertidig fil kontrolleres, og det forrige gemte spil beholdes som backup). Ved indlæsning kontrollerer den filen og opgraderer ældre gemme-versioner trin for trin.
+- **Hvad det gør:** Skriver 3 gemmepladser og et hurtig-gem som filer i brugerens mappe, på en sikker måde (en midlertidig fil kontrolleres, og det forrige gemte spil beholdes som backup). Ved indlæsning kontrollerer den filen og opgraderer ældre gemme-versioner trin for trin. I027: beskeden for en fil, der ikke er et gemt spil, nævner ikke længere spillets navn ("This is not a save file from this game (or from Next Harbor).", oversat).
 - **Arbejder sammen med:** `SessionState`, `App`, gem/indlæs-menuen, hovedmenuen, `LegacySaves`, `SessionLog`.
 - **Holder styr på:** Kun gemmemappens placering; selve de gemte spil er filer.
 - **Hvornår det kører:** Altid (en autoload); arbejder når der gemmes, indlæses eller vises pladser.
@@ -505,6 +523,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Gitterfelterne indlæst fra datafilerne og sine finere regionale gitre.
 - **Hvornår det kører:** Indlæses én gang sammen med ruteberegneren (på indlæsningsskærmen) og bruges derefter ved hvert rutetjek.
 - **Hvis du ændrer det:** Ruter kan komme til at krydse land, eller rigtige sejlruter kan blive spærret.
+
+### `src/navigation/passage_plan.gd`
+
+**Formål:** En passageplan: en rigtig kurs fra kortplotteren skrevet ned som strukturerede data, den aftale, den kommende passagerhandel (I028) bygger på (I027 trin 4).
+- **Hvad det gør:** Lavet ud fra den planlagte kurs noterer den afgangs- og ankomststed, waypoints og etaper, distancen, et tidsrum for afgang og den forventede ankomst (simulationens eget skøn), hvad skønnet byggede på, de sandsynlige motortimer og brændstof med prisen, mad og vand til passagen, havnepengene pr. nat på bestemmelsesstedet, båden og hvad den byder gæster, og om passagen kan lade sig gøre for den (kyst, åbent hav eller ocean; de forsyninger, den kan have med; hvad den er udrustet til), med grundene, når ikke. Den planlægger eller ændrer aldrig en kurs: kortplotteren bestemmer. Den kan skrives ud og læses ind igen, med versionsnummer, så en plan kommer uændret gennem et gemt spil eller en overdragelse.
+- **Arbejder sammen med:** `PlannedRoute` (kursen), `Simulation` (skønnet over tid og brændstof), `GameSession`, `Accommodation`, `PassageReadiness`, `Economy`, `Difficulty`, `GeoMath`.
+- **Holder styr på:** Én plans tal; spillet gemmer endnu intet.
+- **Hvornår det kører:** Kun når der bedes om en plan (i test nu; I028's passagetilbud senere).
+- **Hvis du ændrer det:** Formen på hver gemt eller overdraget plan; en ændring af felterne kræver et nyt versionsnummer.
 
 ### `src/navigation/planned_route.gd`
 
@@ -622,6 +649,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Udkastet til den kurs, der rettes i (den ændrer aldrig din rigtige kurs, før du trykker Apply).
 - **Hvornår det kører:** Når kortbordet eller kahyttens kort åbnes.
 - **Hvis du ændrer det:** Hvordan kursplanlægning virker, og søkort-skærmens opbygning og knapper.
+
+### `src/electronics/ais_receiver.gd`
+
+**Formål:** Forberedelse til AIS: en måde for senere systemer at vise fartøjerne i nærheden, sådan som en AIS-modtager ville, uden en ekstra trafikverden (I027 trin 4).
+- **Hvad det gør:** Tager de lokale fartøjer, spillet allerede har (de samme som radaren og trafikadvarslerne bruger), inden for VHF-rækkevidde af båden, højst 20 sømil, og viser dem med de nærmeste først, hver med et fast, opdigtet MMSI-nummer, navn og slags, klasse A (skibe) eller B (mindre fartøjer), kurs og fart, afstand og pejling fra båden, og hvor tæt og hvornår det vil passere. Samme sted og tidspunkt giver altid samme liste. Den tilføjer intet instrument og ingen skærm og er aldrig en verdensomspændende sporing.
+- **Arbejder sammen med:** `TrafficModel` (fartøjerne), `GameSession` og `Simulation` (bådens position, kurs og fart); senere I028 og en skærm i cockpittet.
+- **Holder styr på:** Intet; intet gemmes.
+- **Hvornår det kører:** Kun når der spørges (indtil videre i test).
+- **Hvis du ændrer det:** Hvad en fremtidig AIS-skærm eller I028 ville læse; radaren og trafikadvarslerne påvirkes ikke.
 
 ### `src/electronics/instrument_data.gd`
 
@@ -1049,11 +1085,20 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Ved hvert fysiktrin, mens du er om bord.
 - **Hvis du ændrer det:** Hvilken station E bruger, når flere er tæt på, også når man klapper katten eller hunden.
 
+### `src/player/human_gait.gd`
+
+**Formål:** Én måde at gå på for alle mennesker set ovenfra: Kaptajnen, byboerne og den lille pige (I027 trin 4).
+- **Hvad det gør:** Regner gangen ud for tegningerne: skridtet går frem med den strækning, der er gået, så tempoet altid passer til farten; armene svinger modsat benene (højre arm frem, når venstre fod er forrest); en fod står fast, mens kroppen passerer over den, og løftes lidt, når den svinger frem; vægten flytter sig en anelse over mod den fod, der står, uden at hoppe. Når man standser, aftager gangen blødt, og fødderne falder til ro side om side. Den tegner også skoene, med en kort bukseopslag, under kroppen. Et barn tager kortere skridt end en voksen. Kun et billede: den ændrer aldrig bevægelse eller kollision.
+- **Arbejder sammen med:** `Player` og `SailorDrawing` (Kaptajnen), `HarbourLife` og `TownsfolkDrawing` (byboerne), `DockGirl` og `GirlDrawing` (pigen); hver tegning beholder sit eget tøj og sin egen bygning.
+- **Holder styr på:** Intet; hver gående holder selv styr på sit skridt, og hvor meget den går.
+- **Hvornår det kører:** Når et menneske går eller tegnes.
+- **Hvis du ændrer det:** Hvordan alle går på én gang; testen af den levende verden tjekker, at armene svinger modsat benene, og at en fod på jorden aldrig glider fremad.
+
 ### `src/player/player.gd`
 
 **Formål:** Kaptajnen om bord: går med tasterne, støder ind i møbler og bruger ting med E.
-- **Hvad det gør:** Bevæger sig med en fast fart (tasterne følger skærmen, også når dæksvisningen er drejet), husker hvilken vej den vender, svinger armene, når den går, og tegner sig selv som en lille sømand, der bærer kaptajnshuen eller kaffen, når den har dem. Den ignorerer tasterne, mens menuer er åbne. I026: på kajen går den også på promenaden, og på caféen holder den caféens krus (tegnet som bådens eget, men intet i spillet ændres).
-- **Arbejder sammen med:** `InteractionSensor`, `SailorDrawing`, `PlayerHat`, `GameSession` (kaffe), `BoatArea`. I026: `HarbourFront` (kajen og caféstolen).
+- **Hvad det gør:** Bevæger sig med en fast fart (tasterne følger skærmen, også når dæksvisningen er drejet), husker hvilken vej den vender, går med den fælles menneskelige gang (`HumanGait`, I027 trin 4: skridt der følger den strækning, den går, arme der svinger modsat benene, fødder der står fast, og et blødt stop), og tegner sig selv som en lille sømand, der bærer kaptajnshuen eller kaffen, når den har dem. Den ignorerer tasterne, mens menuer er åbne. I026: på kajen går den også på promenaden, og på caféen holder den caféens krus (tegnet som bådens eget, men intet i spillet ændres).
+- **Arbejder sammen med:** `InteractionSensor`, `SailorDrawing`, `HumanGait`, `PlayerHat`, `GameSession` (kaffe), `BoatArea`. I026: `HarbourFront` (kajen og caféstolen).
 - **Holder styr på:** Retningen den vender, gang-animationen, om tasterne er slået til, og visningens drejning.
 - **Hvornår det kører:** Når du er på dækket eller i kahytten.
 - **Hvis du ændrer det:** Hvordan Kaptajnen bevæger sig og føles at styre; ændres kollisionsstørrelsen, ændres også, hvor man kan gå.
@@ -1061,8 +1106,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/player/sailor_drawing.gd`
 
 **Formål:** Tegner Kaptajnen oppefra som en lille sømand i stribet trøje.
-- **Hvad det gør:** Tegner skygge, svingende arme med hænder, den stribede krop, hår og et antydet ansigt samt kaffekruset i hånden, når kaffen bæres. De samme oplysninger giver altid den samme tegning.
-- **Arbejder sammen med:** `Player` (bruger den til at tegne), `CoffeeMug` (krus-tegningen), `PlayerHat` (tegner kaptajnshuen ovenpå).
+- **Hvad det gør:** Tegner skygge, svingende arme med hænder, den stribede krop, hår og et antydet ansigt samt kaffekruset i hånden, når kaffen bæres. De samme oplysninger giver altid den samme tegning. I027 trin 4: mindre tegneserieagtig, med en voksens proportioner (et mindre hoved i forhold til skuldrene) og en lettere blækstreg; med den fælles gang (`HumanGait`) svinger armene modsat hinanden og modsat benene (før svingede de i takt), bukser og sko ses under jakken, når fødderne træder, og vægten flytter sig en anelse.
+- **Arbejder sammen med:** `Player` (bruger den til at tegne), `CoffeeMug` (krus-tegningen), `HumanGait` (fødderne), `PlayerHat` (tegner kaptajnshuen ovenpå).
 - **Holder styr på:** Intet selv; kun farver og mål.
 - **Hvornår det kører:** Når Kaptajnen tegnes.
 - **Hvis du ændrer det:** Kaptajnens udseende; kaptajnshuens placering afhænger af, at hovedets midte bliver, hvor det er.
@@ -1270,8 +1315,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/companion/dock_girl.gd`
 
 **Formål:** Den lille pige på pontonen, der henter et dyr, Kaptajnen ikke tog om bord (I025).
-- **Hvad det gør:** Kommer gående i et barns rolige tempo, stopper, vinker, tager kassen op og går igen; parakitten kan sidde på hendes venstre skulder. Hun tegnes af `GirlDrawing`. Hun er ikke en rigtig person i spillet: ingen handling, ingen samtale og intet gemt, kun dette korte øjeblik.
-- **Arbejder sammen med:** `DockEncounterScene` (flytter hende), `GirlDrawing` (tegner hende), `DockBox` (kassen hun bærer).
+- **Hvad det gør:** Kommer gående i et barns rolige tempo, stopper, vinker, tager kassen op og går igen; parakitten kan sidde på hendes venstre skulder. Hun tegnes af `GirlDrawing`. Hun er ikke en rigtig person i spillet: ingen handling, ingen samtale og intet gemt, kun dette korte øjeblik. I027 trin 4: hun går med den samme gang som alle andre (`HumanGait`), med et barns skridt: skridtene følger den strækning, hun går, hendes støvler ses under frakken, og hun falder blødt til ro.
+- **Arbejder sammen med:** `DockEncounterScene` (flytter hende), `GirlDrawing` (tegner hende), `HumanGait` (hendes gang), `DockBox` (kassen hun bærer).
 - **Holder styr på:** Hvor hun går hen, hvilken vej hun vender, om hun vinker eller bærer kassen, og om hun har vinket (til testene).
 - **Hvornår det kører:** Kun under farvellet efter "Ikke nu".
 - **Hvis du ændrer det:** Kun farvellets udseende og tempo.
@@ -1279,8 +1324,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/companion/girl_drawing.gd`
 
 **Formål:** Tegner den lille pige set ovenfra, i samme stil som Kaptajnen (I025).
-- **Hvad det gør:** Tegner hende med form i toner, en blød blækstreg og lys fra øverst til venstre, ligesom `SailorDrawing`: et barns proportioner ved siden af Kaptajnen (smallere skuldre, et lidt større hoved i forhold til hendes størrelse), to korte fletninger med sløjfer og en dæmpet rød regnfrakke med hætten nede. Kun det, hendes korte øjeblik kræver: at gå, at stå, et vink med den ene arm løftet og kassen båret i begge arme. De samme tal giver altid den samme tegning.
-- **Arbejder sammen med:** `DockGirl` (beder den tegne), `SailorDrawing` (fælles formhjælpere), `DockBox` (den bårne kasse).
+- **Hvad det gør:** Tegner hende med form i toner, en blød blækstreg og lys fra øverst til venstre, ligesom `SailorDrawing`: et barns proportioner ved siden af Kaptajnen (smallere skuldre og siden I027 trin 4 et barnehoved lidt mindre end Kaptajnens, med en lettere blækstreg), to korte fletninger med sløjfer og en dæmpet rød regnfrakke med hætten nede. Kun det, hendes korte øjeblik kræver: at gå, at stå, et vink med den ene arm løftet og kassen båret i begge arme. De samme tal giver altid den samme tegning. I027 trin 4: når hun går, ses hendes strømpebukser og støvler under frakken, og vægten flytter sig en anelse, med den fælles gang (`HumanGait`, et barns skridt).
+- **Arbejder sammen med:** `DockGirl` (beder den tegne), `SailorDrawing` (fælles formhjælpere), `HumanGait` (hendes fødder), `DockBox` (den bårne kasse).
 - **Holder styr på:** Intet; det er en samling tegnefunktioner.
 - **Hvornår det kører:** Under pigens farvel.
 - **Hvis du ændrer det:** Kun hvordan hun ser ud; hold hende som et barn ved siden af Kaptajnen og i spillets tegnede stil.
@@ -1459,8 +1504,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/harbour/harbour_life.gd`
 
 **Formål:** Folkene på kajen: en håndfuld byboere med små vaner, så en havn føles beboet (I026).
-- **Hvad det gør:** Bestemmer, hvem der er ude, ud fra havnen, dagen og timen, altid de samme for det samme øjeblik: spadserende, der standser ved et butiksvindue, en bænk eller vandkanten; kunder, der går ind i en åben butik og kommer ud igen; cafégæster, der sidder, læser eller snakker, mens caféen har åbent; en fisker med sine net om morgenen; en handlende, der låser af ved lukketid; og en sen spadserende om natten. En større havn er mere travl, en lille er stille, og der er få eller ingen om natten og i dårligt vejr. Intet sker, mens Kaptajnen er væk: efter en søvn viser kajen bare, hvem der er ude på den nye time. Folk går i roligt tempo, står aldrig i en døråbning eller for enden af gangbroen og går uden om Kaptajnen.
-- **Arbejder sammen med:** `HarbourFront` (tilføjer den), `QuayLayout`, `BusinessHours`, `TownsfolkDrawing` (hvordan de ser ud), `Simulation` (vejret), `GameSession` (uret).
+- **Hvad det gør:** Bestemmer, hvem der er ude, ud fra havnen, dagen og timen, altid de samme for det samme øjeblik: spadserende, der standser ved et butiksvindue, en bænk eller vandkanten; kunder, der går ind i en åben butik og kommer ud igen; cafégæster, der sidder, læser eller snakker, mens caféen har åbent; en fisker med sine net om morgenen; en handlende, der låser af ved lukketid; og en sen spadserende om natten. En større havn er mere travl, en lille er stille, og der er få eller ingen om natten og i dårligt vejr. Intet sker, mens Kaptajnen er væk: efter en søvn viser kajen bare, hvem der er ude på den nye time. Folk går i roligt tempo, står aldrig i en døråbning eller for enden af gangbroen og går uden om Kaptajnen. I027 trin 4: alle går med den fælles gang (`HumanGait`): skridtene følger den strækning, de går, og de falder blødt i gang og til ro i stedet for at standse brat.
+- **Arbejder sammen med:** `HarbourFront` (tilføjer den), `QuayLayout`, `BusinessHours`, `TownsfolkDrawing` (hvordan de ser ud), `HumanGait` (hvordan de går), `Simulation` (vejret), `GameSession` (uret).
 - **Holder styr på:** De folk, der er på kajen nu, og de caféstole, Kaptajnen har taget.
 - **Hvornår det kører:** På kajen; hvert par sekunder sammenligner den, hvem der burde være ude, med hvem der er.
 - **Hvis du ændrer det:** Hvor livlige havnene føles; folkene er kun kulisse og ændrer intet i spillet.
@@ -1549,8 +1594,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/harbour/townsfolk_drawing.gd`
 
 **Formål:** Tegner havnens folk set oppefra, i samme stil som Kaptajnen og den lille pige (I026).
-- **Hvad det gør:** Tegner en person med form i toner, en blød blækstreg og naturlige voksne proportioner: en frakke, skuldre, arme der svinger lidt, hår eller en hat og stort set intet ansigt. Tøjet følger egnen (olietøj og uld i nord, voksbomuld og marineblåt ved Atlanterhavet, hør ved Middelhavet, let bomuld og stråhatte i troperne). Hver persons udseende laves én gang ud fra et tal, så den samme person altid ser ens ud. Stillinger: stående eller gående, siddende ved et bord eller bærende på en indkøbspose, en avis, en kop eller nøgler.
-- **Arbejder sammen med:** `HarbourLife` (hver byboer), `SailorDrawing` og `GirlDrawing` (den fælles stil).
+- **Hvad det gør:** Tegner en person med form i toner, en blød blækstreg og naturlige voksne proportioner: en frakke, skuldre, arme der svinger lidt, hår eller en hat og stort set intet ansigt. Tøjet følger egnen (olietøj og uld i nord, voksbomuld og marineblåt ved Atlanterhavet, hør ved Middelhavet, let bomuld og stråhatte i troperne). Hver persons udseende laves én gang ud fra et tal, så den samme person altid ser ens ud. Stillinger: stående eller gående, siddende ved et bord eller bærende på en indkøbspose, en avis, en kop eller nøgler. I027 trin 4: voksne proportioner (et mindre hoved i forhold til skuldrene), en lettere blækstreg, bukser og sko i hvert udseende og den fælles gang (`HumanGait`): fødderne træder under frakken, armene svinger modsat benene, og vægten flytter sig en anelse.
+- **Arbejder sammen med:** `HarbourLife` (hver byboer), `SailorDrawing` og `GirlDrawing` (den fælles stil), `HumanGait` (gangen).
 - **Holder styr på:** Intet (farvepaletterne ligger fast).
 - **Hvornår det kører:** Hver gang en person på kajen tegnes.
 - **Hvis du ændrer det:** Hvordan byboerne ser ud.
@@ -1585,7 +1630,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/hat/hat_drawing.gd`
 
 **Formål:** Den enkle indbyggede tegning af kaptajnshuen set ovenfra.
-- **Hvad det gør:** Tegner en hvid puld, et marineblåt bånd, en blank sort skygge og et lille messingmærke med en tynd, gennemsigtig kontur i Real Horizon-udtrykket. Bruges, når der ikke er et billede af huen.
+- **Hvad det gør:** Tegner en hvid puld, et marineblåt bånd, en blank sort skygge og et lille messingmærke med en tynd, gennemsigtig kontur i Real Horizon-udtrykket. Bruges, når der ikke er et billede af huen. I027 trin 4: tegnet om, så den ligner en rigtig kasket ved siden af de tegnede mennesker: en finere, lettere kontur, puldens syede top med knap og blødt lys, en finere skygge og et mindre mærke; båret er den på størrelse med en kasket på Kaptajnens hoved.
 - **Arbejder sammen med:** `HatArt` (kalder den som reserve).
 - **Holder styr på:** Intet; kun farver.
 - **Hvornår det kører:** Hver gang huen tegnes uden et billede.
@@ -1612,7 +1657,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/hat/player_hat.gd`
 
 **Formål:** Huen på kaptajnens figur: på hovedet eller under armen.
-- **Hvad det gør:** Følger huens tilstand i spillet og tegner den på hovedet, drejet den vej kaptajnen vender, eller båret i hånden. Det er kun et billede; kaptajnen bevæger sig og støder ind i ting på samme måde med eller uden den.
+- **Hvad det gør:** Følger huens tilstand i spillet og tegner den på hovedet, drejet den vej kaptajnen vender, eller båret i hånden. Det er kun et billede; kaptajnen bevæger sig og støder ind i ting på samme måde med eller uden den. I027: en båret hue tegnes i samme størrelse, som når den sidder på hovedet (før så den omkring dobbelt så stor ud).
 - **Arbejder sammen med:** `GameSession` (huens tilstand), `HatArt`, `HatState`; sættes på kaptajnen af `Player`.
 - **Holder styr på:** Hvad den viser lige nu, og hvilken vej kaptajnen vender.
 - **Hvornår det kører:** Når kaptajnen er på skærmen.
@@ -1630,7 +1675,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/sailing/propulsion_controller.gd`
 
 **Formål:** Afgør automatisk, om båden sejler eller bruger motoren.
-- **Hvad det gør:** Regner ud, hvor hurtigt båden kunne sejle i denne vind og kurs, tager et gennemsnit over omkring en spiltime og skifter til motor, når sejlads er for langsom (eller båden ligger i vindstille), og tilbage til sejl, når vinden er god igen. Minimumstider forhindrer, at den skifter frem og tilbage. En kursændring kan få den til at beslutte sig med det samme. I027: mens båden krydser op mod vinden, stoppes motoren, når sejlene på halsen klarer sig tydeligt bedre end tærsklen for at starte motoren (en båd på bidevind når aldrig sin fart på slør). I027 trin 2: uden brændstof forbliver motoren slukket, hvad reglerne end ville vælge.
+- **Hvad det gør:** Regner ud, hvor hurtigt båden kunne sejle i denne vind og kurs, tager et gennemsnit over omkring en spiltime og skifter til motor, når sejlads er for langsom (eller båden ligger i vindstille), og tilbage til sejl, når vinden er god igen. Minimumstider forhindrer, at den skifter frem og tilbage. En kursændring kan få den til at beslutte sig med det samme. I027: mens båden krydser op mod vinden, stoppes motoren, når sejlene på halsen klarer sig tydeligt bedre end tærsklen for at starte motoren (en båd på bidevind når aldrig sin fart på slør). I027 trin 2: uden brændstof forbliver motoren slukket, hvad reglerne end ville vælge. I027 trin 4: den bliver aldrig ved med at motorere, når sejlene ville være lige så hurtige: farten, hvor motoren giver plads til sejlene, er højst bådens egen fart for motor (26-fodsbåden, der motorerer med 5 knob, holdt før motoren kørende på en god halvvind, til tanken var tom).
 - **Arbejder sammen med:** `PropulsionState` (dens hukommelse), `VesselProfile` (bådens tal), `WindField` (vinden), `SailTrim` (sejltrim gør kun sejlene hurtigere eller langsommere); kaldes af `Simulation`.
 - **Holder styr på:** Intet selv; den returnerer en opdateret kopi af `PropulsionState`.
 - **Hvornår det kører:** Ved hvert simulationstrin under sejlads.
@@ -2018,8 +2063,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/laptop/laptop_view.gd`
 
 **Formål:** Kaptajnens laptop, åbnet helt tæt på (I024): det ene hjem for ry og udgivelser.
-- **Hvad det gør:** Dæmper kahytten og tegner den illustrerede laptop (låg, skærmkant, tastatur), så den fylder billedet; alt foregår på dens skærm. Fire apps i faner: Hjem (ry, fjernarbejde, det lille spil), Udgivelser (postkort, scrapbogen og rejseopdateringer), Bedrifter (samlingen efter kategori, de låste op først; låste mærker gjort grå af en lille shader, `greyed_badge.gdshader`, med en hængelås; hvornår, hvor og på hvilken båd) og Rejsehistorik (tal i alt, bedste time og bedste døgn for sejl, de seneste sejladser, tidligere hædersbevisninger). De eksisterende dialoger genbruges uændret og vises på skærmen (`SimplePanel.embedded`), så deres regler, tid og belønninger forbliver deres egne. Esc lukker en åben opgave og derefter laptoppen. I025: rejsehistorikken viser under "Om bord", hvem der sejler med: for hver ledsager hvor og hvornår den blev budt velkommen om bord (ud fra dens egne oplysninger), eller at den har været med fra start; overskriften vises kun, når en ledsager bor om bord.
-- **Arbejder sammen med:** `App` (åbner den og gør det, der tager spiltid eller penge, når den beder om det), `AchievementCatalog`, `GameSession`, `CaptainsLog`, `ObjectiveCatalog`, `PostcardMenu`, `ScrapbookMenu`, `PublishMenu`, `WorkMenu`, `GameDevMenu`, `Loc`.
+- **Hvad det gør:** Dæmper kahytten og tegner den illustrerede laptop (låg, skærmkant, tastatur), så den fylder billedet; alt foregår på dens skærm. Apps i faner: Hjem (ry, fjernarbejde, det lille spil), Udgivelser (postkort, scrapbogen og rejseopdateringer), Bedrifter (samlingen efter kategori, de låste op først; låste mærker gjort grå af en lille shader, `greyed_badge.gdshader`, med en hængelås; hvornår, hvor og på hvilken båd) og Rejsehistorik (tal i alt, bedste time og bedste døgn for sejl, de seneste sejladser, tidligere hædersbevisninger). De eksisterende dialoger genbruges uændret og vises på skærmen (`SimplePanel.embedded`), så deres regler, tid og belønninger forbliver deres egne. Esc lukker en åben opgave og derefter laptoppen. I025: rejsehistorikken viser under "Om bord", hvem der sejler med: for hver ledsager hvor og hvornår den blev budt velkommen om bord (ud fra dens egne oplysninger), eller at den har været med fra start; overskriften vises kun, når en ledsager bor om bord. I027 trin 4: en Drømme-app, Havets drømme: et kort for hver af Kaptajnens livsdrømme (de forfulgte først, så de åbne, de opfyldte og dem til senere), med dens ord, hvor langt den er nået, eller hvornår og hvor den gik i opfyldelse, og en knap til at forfølge den eller lægge den til side (op til tre ad gangen). Intet er en opgave: ingen rækkefølge og ingen belønning.
+- **Arbejder sammen med:** `App` (åbner den og gør det, der tager spiltid eller penge, når den beder om det), `AchievementCatalog`, `GameSession`, `Dreams`, `CaptainsLog`, `ObjectiveCatalog`, `PostcardMenu`, `ScrapbookMenu`, `PublishMenu`, `WorkMenu`, `GameDevMenu`, `Loc`.
 - **Holder styr på:** Kun den åbne app, den åbne opgave og den valgte kategori af bedrifter (gemmes ikke).
 - **Hvornår det kører:** Når du bruger arbejdspladsen ved kahytsbordet eller vælger Laptop på handlingshjulet.
 - **Hvis du ændrer det:** Hvor spillerne finder deres bedrifter, udgivelser og fjernarbejde; testene finder dens dele ved navn.
@@ -2027,8 +2072,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/loading_screen.gd`
 
 **Formål:** Spillets egen indlæsningsskærm med logoet over et roligt hav.
-- **Hvad det gør:** Viser logoet, en undertitel og en animeret scene (bølger, et fyrtårn med drejende lys, en vuggende sejlbåd), mens havnelisten, rutekortene (i en baggrundstråd, dvs. sideløbende arbejde) og bådkataloget indlæses. Den nævner hvert trin og glider derefter over i hovedmenuen. Siden I022 bruger den altid hovedmenuens dybe marineblå, så starten ligner den menu, den glider over i; Godots opstartsbillede før den er også marineblåt, med logoet i dets egen størrelse (skarpt, ikke strakt).
-- **Arbejder sammen med:** `UiTheme` (dens natfarver, uanset tidspunktet), `PortCatalog`, `SeaRouter`, `VesselCatalog`, `App` (opretter den).
+- **Hvad det gør:** Viser logoet, en undertitel og en animeret scene (bølger, et fyrtårn med drejende lys, en vuggende sejlbåd), mens havnelisten, rutekortene (i en baggrundstråd, dvs. sideløbende arbejde) og bådkataloget indlæses. Den nævner hvert trin og glider derefter over i hovedmenuen. Siden I022 bruger den altid hovedmenuens dybe marineblå, så starten ligner den menu, den glider over i; Godots opstartsbillede før den er også marineblåt, med logoet i dets egen størrelse (skarpt, ikke strakt). I027: ordmærket og undertitlen er spillets egne, fra `GameVersion` (arbejdstitlen Between Horizons, "The next horizon is yours to discover."); opstartsbilledet viser samme ordmærke.
+- **Arbejder sammen med:** `GameVersion` (navn, ordmærke og undertitel), `UiTheme` (dens natfarver, uanset tidspunktet), `PortCatalog`, `SeaRouter`, `VesselCatalog`, `App` (opretter den).
 - **Holder styr på:** Hvilket trin den er nået til, og om den allerede er vist i denne kørsel.
 - **Hvornår det kører:** Én gang pr. opstart, lige efter start (aldrig uden skærm, så aldrig i test).
 - **Hvis du ændrer det:** Opstartstiden og spillets første indtryk ændres.
@@ -2036,7 +2081,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/main_menu.gd`
 
 **Formål:** Titelskærmen.
-- **Hvad det gør:** Viser knapperne (Nyt spil, Fortsæt, Indlæs, Indstillinger, Afslut samt udviklerguider og import, når de findes) og melder kun, hvilken du trykkede på. Fortsæt er kun aktiv, når der findes et gyldigt gemt spil, og viser pladsen, datoen og stedet for det.
+- **Hvad det gør:** Viser knapperne (Nyt spil, Fortsæt, Indlæs, Indstillinger, Afslut samt udviklerguider og import, når de findes) og melder kun, hvilken du trykkede på. Fortsæt er kun aktiv, når der findes et gyldigt gemt spil, og viser pladsen, datoen og stedet for det. I027: logoet og undertitlen kommer fra `GameVersion` (arbejdstitlens ordmærke og dets linje) og sættes, når menuen åbner.
 - **Arbejder sammen med:** `SaveManager`, `SettingsManager`, `SaveLoadMenu` (datoformat), `GameVersion`, `LegacySaves`, `DevGuides`, `App` (gør det egentlige arbejde).
 - **Holder styr på:** Intet eget.
 - **Hvornår det kører:** Når spillet viser titelskærmen.
@@ -2086,6 +2131,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** Når opslagstavlen ved gangbroen bruges.
 - **Hvis du ændrer det:** Kun hvad opslagstavlen viser.
+
+### `src/ui/opening_story.gd`
+
+**Formål:** Åbningshistorien: en kort, stille prolog, der vises én gang, når et nyt spil begynder fra titelskærmen (I027 trin 4).
+- **Hvad det gør:** Viser tre tegnede billeder (et skrivebord ved et byvindue i skumringen, båden der venter ved en ponton ved daggry, det åbne hav) med Kaptajnens godkendte ord nogle få linjer ad gangen, der toner over fra side til side med en langsom, knap mærkbar glidning. Kaptajnen er en erfaren sejler, der forlader kontorlivet, ikke en begynder. Et klik, mellemrum, Enter eller Fortsæt vender siden; Spring over eller Esc slutter den med det samme. Den sidste side viser spillets navn og siger Begynd. Den slutter, hvor spillet begynder, om bord i kahytten, uden at der bliver spurgt om mere (tilbuddet om den første sejlads, når der er et, kommer bagefter). Et indlæst spil eller Fortsæt viser den aldrig.
+- **Arbejder sammen med:** `App` (viser den efter Nyt spil og sætter spillet på pause under den), `GameVersion` (ordmærket), `ModalPanel`, `Loc` (engelsk og dansk); billederne i `assets/opening/` og `assets/ui/title_scene.png`.
+- **Holder styr på:** Kun hvilken side den er på, og om den er slut; intet gemmes.
+- **Hvornår det kører:** Én gang pr. Nyt spil fra titelskærmen (slået fra i testene, undtagen dens egen).
+- **Hvis du ændrer det:** Det første, en ny spiller ser; ordene er Kaptajnens godkendte manuskript, så ændr dem kun sammen med Kaptajnen.
 
 ### `src/ui/passage_panel.gd`
 
@@ -2362,8 +2416,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/career/career_sim.gd`
 
 **Formål:** Spiller hurtige karrierer efter spillets rigtige regler for at måle økonomien (karrieretest, metode A; I027).
-- **Hvad det gør:** Starter et nyt spil på et frø og spiller det efter en enkel strategi (sparsom, krydstogtsejler, arbejder): fjernarbejde, proviant og brændstof i havn, nætter ved kaj, rigtige rejser mellem rigtige havne i det rigtige vejr. Skriver hver karrieres regnskab og daglige øjebliksbilleder som JSON og en samlet CSV. Den holder tre ure adskilt: hvor lang tid kørslen tog, hvor meget spiltid der gik, og et skøn (tydeligt mærket) over en spillers aktive tid. Den giver aldrig penge, rejser eller udmærkelser, som spillet ikke ville give. I027 trin 3: to politikker mere, én der lader bådeværftet udføre hvert service, det anbefaler ("keeper"), og én der også sparer op til og køber Wing 33 og flytter om bord ("upgrader"); hver karriere noterer de udførte service, dagen en båd blev købt, og båden den slutter på.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `PortCatalog`, `CareerLedger`.
+- **Hvad det gør:** Starter et nyt spil på et frø og spiller det efter en enkel strategi (sparsom, krydstogtsejler, arbejder): fjernarbejde, proviant og brændstof i havn, nætter ved kaj, rigtige rejser mellem rigtige havne i det rigtige vejr. Skriver hver karrieres regnskab og daglige øjebliksbilleder som JSON og en samlet CSV. Den holder tre ure adskilt: hvor lang tid kørslen tog, hvor meget spiltid der gik, og et skøn (tydeligt mærket) over en spillers aktive tid. Den giver aldrig penge, rejser eller udmærkelser, som spillet ikke ville give. I027 trin 3: to politikker mere, én der lader bådeværftet udføre hvert service, det anbefaler ("keeper"), og én der også sparer op til og køber Wing 33 og flytter om bord ("upgrader"); hver karriere noterer de udførte service, dagen en båd blev købt, og båden den slutter på. I027 trin 4: hver karriere optager også sin telemetri (`CareerTelemetry`: en optegnelse ved start, hver dag, ved hver ankomst, bådkøb eller drøm og ved slut) og skriver den ved siden af karrierens fil som JSON-linjer og en CSV; hver karriere noterer de drømme, der gik i opfyldelse.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `PortCatalog`, `CareerLedger`, `CareerTelemetry` (I027).
 - **Holder styr på:** Intet; den skriver rapportfiler (kun testgemmer).
 - **Hvornår det kører:** Kun i hånden: `res://tests/career/career_sim.tscn -- [--out=DIR] [--seeds=1,2] [--days=60] [--policies=frugal] [--level=standard]`.
 - **Hvis du ændrer det:** Kun rapporterne.
@@ -2394,6 +2448,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, lover en båd måske noget, dens kahyt ikke viser.
+
+### `tests/suites/test_ais.gd`
+
+**Formål:** Tjekker forberedelsen til AIS: fartøjerne i nærheden vist, som en AIS-modtager ville vise dem (I027 trin 4).
+- **Hvad det gør:** Tester, at der uden et spil ingen kontakter er; at der ud for København er mindst to, alle inden for VHF-rækkevidde (også når der bedes om 100 sømil), med de nærmeste først; at samme sted og tidspunkt altid giver samme kontakter; at hver har et opdigtet MMSI-nummer, et navn, klasse A for skibe og B for mindre fartøjer samt kurs og fart; og regnestykket for, hvor tæt og hvornår et fartøj passerer (lige imod, samme fart, allerede forbi).
+- **Arbejder sammen med:** `AisReceiver`, `TrafficModel`, `SeaRouter`, `PortCatalog`, `GameSession`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, rækker AIS-listen måske for langt, skifter mellem kørsler eller bedømmer et passerende fartøj forkert.
 
 ### `tests/suites/test_anchor_life.gd`
 
@@ -2451,8 +2514,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_branding.gd`
 
-**Formål:** Tjekker spillets navn, versionsnummer, skrifttyper, mappen til gemte spil og kopiering af gamle gemte spil fra Next Harbor.
-- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.113a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
+**Formål:** Tjekker spillets navn (arbejdstitlen siden I027), versionsnummer, skrifttyper, mappen til gemte spil og kopiering af gamle gemte spil fra Next Harbor.
+- **Hvad det gør:** Siden I027 tjekker den arbejdstitlen, Between Horizons: ét navn i `GameVersion` og vinduets titel, de tidligere titler (Little Captain's Hat, Next Harbor) i beskrivelsen, ordmærket på titelskærmen og i opstartsbilledet og undertitlen fra `GameVersion`. Den tjekker, at versionen er 0.113a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
 - **Arbejder sammen med:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Holder styr på:** Intet af sit eget (den laver en midlertidig, opdigtet Next Harbor-mappe og fjerner den igen).
 - **Hvornår det kører:** Kun i test.
@@ -2664,6 +2727,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker det nøjagtige versionsnummer ("0.113a") og gemmeformat (12), så et nyt versionsnummer betyder, at denne test skal rettes.
 
+### `tests/suites/test_dreams.gd`
+
+**Formål:** Tjekker Havets drømme (I027 trin 4).
+- **Hvad det gør:** Tester, at dagbogen har otte drømme, to af dem til senere; at et nyt spil ingen opfyldte har; at op til tre kan forfølges i vilkårlig rækkefølge (en fjerde afvises, en drøm til senere kan ikke forfølges, og lægger man én til side, bliver der plads); at en rigtig passage på mere end 100 sømil (København til Kiel, sejlet i den simulerede vind) opfylder "En passage for egen kraft" med en besked, men ikke havkrydsningen; at et køb af Wing 33 opfylder "En båd til oceanerne"; at et indlæst spil, der allerede har været langt mod nord, opfylder "Den nordlige kyst" i stilhed; at drømmene kommer gennem et gemt spil, at et ældre gemt spil indlæses uden nogen, og at vrøvl springes over; og laptoppens Drømme-app på engelsk og dansk, også at forfølge en drøm med dens knap.
+- **Arbejder sammen med:** `Dreams`, `GameSession`, `SessionState`, `Simulation`, `CaptainsLog`, app-scenen og `LaptopView`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, går en drøm måske forkert i opfyldelse, forsvinder i et gemt spil eller vises ikke på laptoppen.
+
 ### `tests/suites/test_eight_directions.gd`
 
 **Formål:** Tjekker, at visningen af dækket drejer til den nærmeste af otte kompasretninger, mens båden sejler (Iteration 13).
@@ -2802,8 +2874,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_living_world.gd`
 
 **Formål:** Tester udseendet i "en levende lille verden": sømanden, vandet og de tegnede både.
-- **Hvad det gør:** Tester, at sømanden svinger armene, når han går, og at havnevandet bevæger sig roligt, med den rette slags vand for hver havn. Det tester også de illustrerede dæk og kahytter på hver båd, at bølgerne følger vinden under sejlads, og at kameraet glider ud, når båden forlader havnen, og ind igen ved ankomst. Tjekket af armsvinget går på det åbne fordæk og måles i afstand: fra startstedet gik sømanden ind i dækbeslag efter mindre end ét skridt, hvilket fik det til at fejle.
-- **Arbejder sammen med:** `WaterLife`, `HarbourArt`, `SailorDrawing`, `VesselVisual`, `BoatArea`, `SettingsManager` og app-scenen.
+- **Hvad det gør:** Tester, at sømanden svinger armene, når han går, og at havnevandet bevæger sig roligt, med den rette slags vand for hver havn. Det tester også de illustrerede dæk og kahytter på hver båd, at bølgerne følger vinden under sejlads, og at kameraet glider ud, når båden forlader havnen, og ind igen ved ankomst. Tjekket af armsvinget går på det åbne fordæk og måles i afstand: fra startstedet gik sømanden ind i dækbeslag efter mindre end ét skridt, hvilket fik det til at fejle. I027 trin 4: armsvinget måles i den fælles gangs skridt (`HumanGait`), og den tester også, at armene svinger modsat hinanden og modsat benene, og at en fod, der står på jorden, glider bagud under kroppen, mens den går videre (aldrig fremad), med fødderne side om side, når den står stille.
+- **Arbejder sammen med:** `WaterLife`, `HarbourArt`, `SailorDrawing`, `HumanGait`, `VesselVisual`, `BoatArea`, `SettingsManager` og app-scenen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændringer i grafikken, vandeffekterne eller kameraets udsnit kan få testen til at fejle.
@@ -2871,6 +2943,24 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændrede belønninger, mål eller gemmeformat kan få testen til at fejle.
 
+### `tests/suites/test_opening.gd`
+
+**Formål:** Tjekker åbningshistorien, der vises, når et nyt spil begynder (I027 trin 4).
+- **Hvad det gør:** Tester det godkendte manuskript på otte sider, fra havet der kalder til den næste horisont, at det taler om en erfaren sejler, at dets tre billeder findes, og at hver side findes på dansk. Derefter, fra titelskærmens Nyt spil: historien åbner over det nye spils kahyt med spillet sat på pause og uret stående stille; Fortsæt (som har tastaturet) og et klik vender siden; den sidste side viser navnet og siger Begynd; læser man til enden, står Kaptajnen om bord i kahytten, fri til at spille. Esc og Spring over slutter den med det samme; et indlæst spil og Fortsæt viser den aldrig.
+- **Arbejder sammen med:** `OpeningStory`, app-scenen, `MainMenu`, `NewGameMenu`, `GameSession`, `SaveManager`, `SettingsManager`.
+- **Holder styr på:** Intet (den bruger gemmeplads 2 og sletter den igen).
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, starter et nyt spil måske uden sin historie, med spillet kørende under den, eller viser den igen ved indlæsning.
+
+### `tests/suites/test_passage_plan.gd`
+
+**Formål:** Tjekker aftalen om passageplanen, der laves ud fra en kurs i kortplotteren (I027 trin 4).
+- **Hvad det gør:** Uden en kurs er der ingen plan. For København til Kiel med 26-fodsbåden tester den afgangs- og ankomststed og etaper, der lægges sammen til distancen, en ankomsttid, der er simulationens egen, med et døgns tidsrum for afgang, de nedskrevne forudsætninger, motortimerne, brændstoffet og prisen, mad og vand, havnepengene pr. nat i Kiel, bådens tal for gæster, en mulig passage på åbent hav, og at planen lader kursen være urørt. En plan kommer uændret gennem at blive skrevet ud og læst ind igen; en nyere eller ødelagt plan afvises. Galápagos til Marquesasøerne er en oceanpassage, som 26-fodsbåden ikke er til, men som Wing 33 kan klare.
+- **Arbejder sammen med:** `PassagePlan`, `GameSession`, `Simulation`, `PortCatalog`, `WindField`, `WeatherModel`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, beskriver en plan måske en passage forkert, ændrer kursen eller kommer ikke gennem en overdragelse.
+
 ### `tests/suites/test_presentation.gd`
 
 **Formål:** Tjekker små præsentationsdetaljer på dækket og ved ankomst i havn.
@@ -2937,7 +3027,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_sailing.gd`
 
 **Formål:** Tjekker det automatiske valg mellem sejl og motor, og at sejladser forløber ens, uanset hvor hurtigt tiden går.
-- **Hvad det gør:** Tjekker, at båden sejler i god vind og bruger motor i let luft, venter på en varig ændring før den skifter, aldrig skifter frem og tilbage, sætter spileren på læns, giver samme sejlads ved normal hastighed, hurtig tid eller søvn, giver et godt bud på ankomsttiden, stadig giver vejrvarsler, og gemmer og indlæser sejl/motor-tilstanden (også gamle gemte spil fra Iteration 002).
+- **Hvad det gør:** Tjekker, at båden sejler i god vind og bruger motor i let luft, venter på en varig ændring før den skifter (siden I027 trin 4 stopper motoren ved de generelle 6 knob eller, lavere, bådens egen motorfart), aldrig skifter frem og tilbage, sætter spileren på læns, giver samme sejlads ved normal hastighed, hurtig tid eller søvn, giver et godt bud på ankomsttiden, stadig giver vejrvarsler, og gemmer og indlæser sejl/motor-tilstanden (også gamle gemte spil fra Iteration 002).
 - **Arbejder sammen med:** `PropulsionController`, `PropulsionState`, `VesselProfile`, `WindField`, `Simulation`, `GameSession`, `SessionState`, `SaveManager`, `WeatherFixtures`.
 - **Holder styr på:** Intet selv; den skriver en midlertidig gemt fil i gammelt format på plads 3 og fjerner den igen.
 - **Hvornår det kører:** Kun i test.
@@ -3032,6 +3122,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet (vinduesstørrelse og indstillinger gendannes).
 - **Hvornår det kører:** Sammen med de andre testsæt (`test_runner.tscn`).
 - **Hvis du ændrer det:** Kun testene ændres; et nyt vindue hører til i dens liste over åbnere.
+
+### `tests/suites/test_telemetry.gd`
+
+**Formål:** Tjekker grundlaget for telemetrien: øjebliksbilleder og optageren over det rigtige spil (I027 trin 4).
+- **Hvad det gør:** Tester, at der uden et spil ingen optegnelse er; at et øjebliksbillede rummer tid, økonomi, båd, beholdning, rejser og fremskridt, læst fra selve spillet; at en optager under rigtigt spil (København til Helsingør, derefter køb af Wing 33) optager ved spillets egne hændelser (start, ankomst, flåden) og ved slut; at ankomstoptegnelsen viser én rejse i Helsingør med dens egne tal, og slutoptegnelsen købet i regnskabet og en formue efter listepriser; og at JSON-linjerne og CSV'en, den skriver, kan læses igen.
+- **Arbejder sammen med:** `CareerTelemetry`, `GameSession`, `Simulation`.
+- **Holder styr på:** Intet (den skriver to midlertidige filer og fjerner dem).
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, mister karrieretelemetrien måske hændelser eller gengiver spillet forkert.
 
 ### `tests/suites/test_turbocharge.gd`
 
@@ -3231,6 +3330,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Arbejder sammen med:** Spillets scene, `GameSession`, `BoatLighting`, `BoatArea`.
 - **Holder styr på:** Intet selv; gemmer PNG-billeder i den valgte mappe.
 - **Hvornår det kører:** Kun når du starter det, med skærm: `xvfb-run godot --path . --rendering-driver opengl3 --resolution 1600x900 res://tests/cabin_light_18.tscn -- --out=DIR --label=before`.
+- **Hvis du ændrer det:** Intet i spillet ændres.
+
+### `tests/character_sheet_i027.gd`
+
+**Formål:** Tegner et stort personark over spillets mennesker, til at sammenligne før og efter arbejdet med personerne i I027 trin 4.
+- **Hvad det gør:** Med spillets egen tegnekode tegner den Kaptajnen gennem en gangcyklus vendt mod højre, nedad og op til venstre samt stående, med huen på og båret; tre byboere, der går, og én, der sidder; og den lille pige, der går, alle forstørret på en enkel grå baggrund, og gemmer arket som et billede. Med `--frames=N` gemmer den også N billeder af Kaptajnen og en byboer, der går side om side (til en kort animeret GIF).
+- **Arbejder sammen med:** `SailorDrawing`, `HatArt`, `PlayerHat`, `TownsfolkDrawing`, `GirlDrawing`, `HumanGait`.
+- **Holder styr på:** Intet; den skriver PNG-filer.
+- **Hvornår det kører:** Kun når du starter det, tegnet: `res://tests/character_sheet_i027.tscn -- --out=DIR [--label=after] [--frames=24]`.
 - **Hvis du ændrer det:** Intet i spillet ændres.
 
 ### `tests/companion_animation_preview.gd`
@@ -3460,8 +3568,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Formål:** Spillets automatiske testkører: den kører alle 85 testsamlinger og fortæller, hvor mange tjek der bestod.
-- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste. I026: den kører også testsættene for de levende havne, tingene i kahytten og den maritime elektronik, lige før A Little More Room Aboard. I026 tilføjede også gennemgangen af havnefronten til listen. I027 tilføjede testsamlingen om at sejle op mod vinden. I027 trin 2 tilføjede testsamlingen om brændstof og driftsomkostninger; de ældre testsamlinger, der sejler langt for motor i vindstille, kører med en motor, der ikke bruger brændstof, og alle andre har den rigtige tank. I027 trin 3 tilføjede testsamlingen om indretning.
+**Formål:** Spillets automatiske testkører: den kører alle 94 testsamlinger og fortæller, hvor mange tjek der bestod.
+- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste. I026: den kører også testsættene for de levende havne, tingene i kahytten og den maritime elektronik, lige før A Little More Room Aboard. I026 tilføjede også gennemgangen af havnefronten til listen. I027 tilføjede testsamlingen om at sejle op mod vinden. I027 trin 2 tilføjede testsamlingen om brændstof og driftsomkostninger; de ældre testsamlinger, der sejler langt for motor i vindstille, kører med en motor, der ikke bruger brændstof, og alle andre har den rigtige tank. I027 trin 3 tilføjede testsamlingen om indretning. I027 trin 4 tilføjede testsamlingerne om Havets drømme, passageplanen, AIS, telemetrien og åbningshistorien og slår åbningshistorien fra for de andre testsamlinger (åbningshistoriens egen testsamling slår den til).
 - **Arbejder sammen med:** Alle testsamlinger i `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Holder styr på:** Antal beståede/fejlede tjek og listen over fejl.
 - **Hvornår det kører:** Når du starter det, eller i automatik: `godot --headless --path . res://tests/test_runner.tscn` (valgmuligheder efter `--`: `--only=navn`, `--skip=navn`, `--screenshots=MAPPE`).
@@ -3488,8 +3596,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tools/export_branding.gd`
 
 **Formål:** Laver spillets logo- og ikontegninger (SVG) om til PNG-billeder i flere størrelser.
-- **Hvad det gør:** Tegner hver branding-SVG i de angivne højder og gemmer dem i `assets/branding/png/`. Siden I022 eksporteres logoet også i 240 pixels højde til Godots opstartsbillede.
-- **Arbejder sammen med:** SVG'erne i `assets/branding/`; indlæsningsskærmen bruger to af PNG'erne.
+- **Hvad det gør:** Tegner hver branding-SVG i de angivne højder og gemmer dem i `assets/branding/png/`. Siden I022 eksporteres logoet også i 240 pixels højde til Godots opstartsbillede. I027: den eksporterer også arbejdstitlens ordmærke, Between Horizons (240, 480 og 960 pixels høj, og en udgave til lys baggrund i 480), til titel-, indlæsnings- og opstartsskærmen.
+- **Arbejder sammen med:** SVG'erne i `assets/branding/`; indlæsningsskærmen, åbningshistorien og opstartsbilledet bruger Between Horizons-PNG'erne (I027).
 - **Holder styr på:** Intet; skriver PNG-filer.
 - **Hvornår det kører:** Kun når du starter det: `godot --headless --path . -s res://tools/export_branding.gd`.
 - **Hvis du ændrer det:** De eksporterede logoer ændres, også logoet på indlæsningsskærmen.

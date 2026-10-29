@@ -82,3 +82,23 @@ Raw data: [career_t3/summary.csv](career_t3/summary.csv) and
 - **Larger boats from the start, the catamaran, and careers beyond 120
   days.** These come with I028's passenger income, when "time to the next
   boat" has a second source of money to compare.
+
+
+## Re-measured after the Tier 4 propulsion fix
+
+The same batch was run again on the fixed build, with the same seeds,
+policies and 120 days (see [TIER_02_CAREER_FINDINGS.md](TIER_02_CAREER_FINDINGS.md)
+for the fix).
+
+| Policy | End money, median: before → after | Services (median) | Bought the Wing 33 | Day bought (median) | Stranded |
+|---|---|---|---|---|---|
+| frugal | €14,564 → €14,678 | 0 | - | - | 0 |
+| keeper | €13,654 → €13,706 | 6 | - | - | 0 |
+| upgrader | €4,824 → €5,105 | 5 → 4 | 5 of 5 | 96 → 95 | 0 |
+
+**The findings stand.**
+- Care costs about €6 a day (€713 over 120 days).
+- Every upgrader bought the Wing 33 at about day 95 and kept a reserve.
+- Nobody was stranded.
+
+Raw data: [career_t4/tier3](career_t4/tier3/report.md).
