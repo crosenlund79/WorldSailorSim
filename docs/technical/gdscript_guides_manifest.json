@@ -33,9 +33,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/aboard/rod_holder.gd": {
-   "sha": "01bdf46aa4fe1b26",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "a9a74e5d73a4e7db",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/aboard/trophy_board.gd": {
    "sha": "5f2413950233dae4",
@@ -58,9 +58,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "cb70cf473471975f",
+   "sha": "c25fec826250d66e",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/app/game_version.gd": {
    "sha": "43d2919b204771f1",
@@ -83,9 +83,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/audio/audio_manager.gd": {
-   "sha": "1b0cb38f92bb1b44",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "cf9811eb1d2ef073",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/audio/music_director.gd": {
    "sha": "19e35f301fb46ee3",
@@ -103,9 +103,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/boat/boat_area.gd": {
-   "sha": "5dd81a965347f4f1",
+   "sha": "608abfcaa2951bda",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/boat/boat_fixture.gd": {
    "sha": "cb427e4ff17e7ac7",
@@ -248,9 +248,9 @@
    "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
   },
   "src/companion/dock_encounter_scene.gd": {
-   "sha": "65f07e6d424aab0d",
-   "reviewed": "2026-10-28",
-   "note": "I025: new found-companion scripts (dock encounters, dock scene, box, girl, pair moments, welcome home, adoption dialog) documented"
+   "sha": "0fe5df7ebb13d401",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/companion/dock_encounters.gd": {
    "sha": "a2c8c9bd76a3b85b",
@@ -343,9 +343,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "2b994ad8dc18cdc7",
+   "sha": "3f9d656324f11082",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: Dreams of the Sea API (dreams_changed, status/record/pursue, _check_dreams quiet on load), optional dreams save section (dreams_from), laptop Dreams app"
+   "note": "doc comment moved back above set_provisions_for_testing"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -413,14 +413,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/dev/dev_test_panel.gd": {
-   "sha": "a066c200e03d68f6",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "7216c8f876d9b813",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/dev/dev_tools.gd": {
-   "sha": "84c938b20351d479",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "84d2052e094e9bdd",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/dev/weather_fixtures.gd": {
    "sha": "4891d7a2e1bbbdf6",
@@ -468,9 +468,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/fishing/fishing_catalog.gd": {
-   "sha": "92b09e4c1b7473ed",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "a736b5b02ddcbcbb",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/fishing/fishing_sounds.gd": {
    "sha": "a68fd882e227ac42",
@@ -508,9 +508,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_front.gd": {
-   "sha": "529dabc43ddd49bf",
+   "sha": "f475114bc3683ef7",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/harbour/harbour_landmark.gd": {
    "sha": "a0f34cd640504119",
@@ -543,14 +543,14 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "src/harbour/quay_drawing.gd": {
-   "sha": "d4413db790156f7a",
+   "sha": "9ee936e8c231152a",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/harbour/quay_layout.gd": {
-   "sha": "54831bfac7a059a2",
+   "sha": "bb77e67b6b73c15c",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/harbour/shore_access.gd": {
    "sha": "bf9b38f0b54f16bf",
@@ -563,9 +563,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/storefront_drawing.gd": {
-   "sha": "364209d9fdf57c06",
+   "sha": "e46eae7b50cbc77b",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/harbour/townsfolk_drawing.gd": {
    "sha": "a0ad9b9d0b27608e",
@@ -753,9 +753,9 @@
    "note": "I027 Tier 4: new entries (HumanGait, Dreams, PassagePlan, AisReceiver, CareerTelemetry, OpeningStory, character sheet, five new suites)"
   },
   "src/player/player.gd": {
-   "sha": "667eb2f8861ab9e7",
+   "sha": "5ea03e525ccea557",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: shared HumanGait walk (distance-based phase, eased amount, feet, opposite arms via hand_positions), adult proportions, child step"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/player/sailor_drawing.gd": {
    "sha": "9442b2f41dbacd75",
@@ -883,9 +883,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/cooking_menu.gd": {
-   "sha": "e49668a1bfdade9e",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "72e50bab57d80c81",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/ui/dev_guides_menu.gd": {
    "sha": "bf781211bd6f3dd9",
@@ -973,9 +973,9 @@
    "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
   },
   "src/ui/hud.gd": {
-   "sha": "17148bfecd8e8794",
+   "sha": "8144a8fc0acb3464",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/ui/instrument_cluster.gd": {
    "sha": "82004048e9cb09d0",
@@ -1163,9 +1163,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/trophy_menu.gd": {
-   "sha": "c0e9ab6b5b0cdd9c",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "def53ef8364b2aa6",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "src/ui/ui_scale_layer.gd": {
    "sha": "55de4e6cea9f3c86",
@@ -1206,6 +1206,11 @@
    "sha": "f731c4ec9ad1322e",
    "reviewed": "2026-10-27",
    "note": "I022 boats and difficulty"
+  },
+  "src/water/boat_wake.gd": {
+   "sha": "8ec88cbb1b59240b",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: new entries for BoatWake (restrained wake under way) and the rendered playtest probe, in EN, DA and ARCH"
   },
   "src/water/sea_surface.gd": {
    "sha": "9700dfbfc9dad7a0",
@@ -1331,6 +1336,11 @@
    "sha": "03d6bd428a01645e",
    "reviewed": "2026-10-27",
    "note": "Engine Room C/D: deterministic blink and walk-out tests, lighting node name, grocery refresh, pacing probe fixed"
+  },
+  "tests/playtest_probe.gd": {
+   "sha": "a49238f39a3c5947",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: new entries for BoatWake (restrained wake under way) and the rendered playtest probe, in EN, DA and ARCH"
   },
   "tests/restart_105b.gd": {
    "sha": "707c421868ed9dff",
@@ -1693,9 +1703,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "tests/suites/test_more_room_aboard.gd": {
-   "sha": "f0bc3e4ae886cb14",
-   "reviewed": "2026-10-28",
-   "note": "I025: one note when two identically named companions are called aboard"
+   "sha": "28366a3d78541378",
+   "reviewed": "2026-10-29",
+   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
   },
   "tests/suites/test_navigation_views.gd": {
    "sha": "c36a50d31a9388d3",

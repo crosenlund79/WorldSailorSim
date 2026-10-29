@@ -3556,7 +3556,6 @@ func pay_remote_work(hours: int) -> int:
 	return earned
 
 
-## Development tools only (DevTools): sets food and water to `days`.
 # --- Developer tools (I027 playtest: F10's further rows) ------------------------------
 # Test-only setters for DevTools (a debug run from the editor only); nothing a
 # player reaches. They act through the game's own state and signals.
@@ -3626,6 +3625,7 @@ func fulfil_next_dream_for_testing() -> String:
 	return ""
 
 
+## Development tools only (DevTools): sets food and water to `days`.
 func set_provisions_for_testing(days: float) -> void:
 	if _state == null:
 		return

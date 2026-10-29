@@ -34,3 +34,4 @@
 {"event": "finding_17_end", "iso": "2026-10-29T23:17:23+00:00", "epoch": 1793315843.885, "monotonic_s": 3580.20, "boot": "e04d6947", "note": "completed: pour says the mug is in hand + how (Q); cup holder/table mug plain-distance focus; wheel says where the coffee waits"}
 {"event": "validation_begin", "iso": "2026-10-29T23:17:23+00:00", "epoch": 1793315843.901, "monotonic_s": 3580.22, "boot": "e04d6947", "note": ""}
 {"event": "parallel_agent_guides_begin", "iso": "2026-10-29T23:18:24+00:00", "epoch": 1793315904.882, "monotonic_s": 3641.20, "boot": "e04d6947", "note": "helper agent updates the three GDScript guides (overlaps validation)"}
+{"event": "parallel_agent_guides_end", "iso": "2026-10-29T23:25:45+00:00", "epoch": 1793316345.939, "monotonic_s": 4082.26, "boot": "e04d6947", "note": "guides: 2 new + 18 changed entries, all acknowledged"}
