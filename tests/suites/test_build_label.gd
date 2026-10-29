@@ -1,5 +1,5 @@
 extends RefCounted
-## The development build identifier (bottom right, "LCH · i024 · DEV ·
+## The development build identifier (bottom right, "BH · i027 · DEV ·
 ## 1a2b3c4"): one authoritative source (GameVersion), the iteration this
 ## checkout belongs to (never older than its newest iteration report, never
 ## invented), stage suffixes, exactly one label through every screen change,
@@ -7,7 +7,7 @@ extends RefCounted
 ## keyboard, and switched off for a public export.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
-const LABEL_PATTERN := "^LCH · i\\d{3}(_\\d{2})? · (DEV|TEST)( · [0-9a-f]{7})?$"
+const LABEL_PATTERN := "^BH · i\\d{3}(_\\d{2})? · (DEV|TEST)( · [0-9a-f]{7})?$"
 
 var t: Node
 var app: Node

@@ -11,8 +11,8 @@ extends RefCounted
 ##
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
-const DISPLAY := "0.112a"
-const MACHINE := "0.112.1"
+const DISPLAY := "0.113a"
+const MACHINE := "0.113.1"
 
 ## The development build identity (the label in the window's bottom-right
 ## corner, BuildLabel): which major iteration this checkpoint belongs to, an
@@ -25,10 +25,13 @@ const MACHINE := "0.112.1"
 ##   STAGE "" or "02"   an internal stage of it (shown as i024_02)
 ##   CHANNEL DEV        work in progress; TEST = the verified snapshot that a
 ##                      release/iNNN branch points at
-const PROJECT_CODE := "LCH"
-const ITERATION := "i026"
-const STAGE := "06"
-const CHANNEL := "TEST"
+## The build label's project code: "BH" for Between Horizons, the working
+## title since I027 (it was "LCH", Little Captain's Hat, until I026; older
+## release branches keep their own).
+const PROJECT_CODE := "BH"
+const ITERATION := "i027"
+const STAGE := "01"
+const CHANNEL := "DEV"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public
 ## export turns it off with a feature-tag override in project.godot:
@@ -53,8 +56,8 @@ static func format_checkpoint(iteration: String, stage: String) -> String:
 	return iteration if stage.is_empty() else "%s_%s" % [iteration, stage]
 
 
-## The build label: "LCH · i024 · DEV", with the short commit when it is known
-## ("LCH · i024 · DEV · 1a2b3c4"). Without a known iteration: "LCH · dev-build"
+## The build label: "BH · i027 · DEV", with the short commit when it is known
+## ("BH · i027 · DEV · 1a2b3c4"). Without a known iteration: "BH · dev-build"
 ## (never an invented or stale number).
 static func build_label(with_commit := true) -> String:
 	var parts: Array[String] = [PROJECT_CODE]

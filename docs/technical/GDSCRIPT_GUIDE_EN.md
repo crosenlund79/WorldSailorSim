@@ -163,7 +163,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/game_version.gd`
 
 **Purpose:** Holds the game's version number in one place.
-- **What it does:** Gives the version shown to players (for example "0.112a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found. Also the one source of the development build identifier: the iteration ("i026"), an optional internal stage ("i026_02") and DEV or TEST, joined into the label "LCH · i025 · DEV · <commit>" (or an honest "LCH · dev-build" when the iteration is not set), and whether that label is shown.
+- **What it does:** Gives the version shown to players (for example "0.113a"), a numbers-only form for tools, and the short code of the exact build (commit) when it can be found. Also the one source of the development build identifier: the iteration ("i027"), an optional internal stage ("i027_02") and DEV or TEST, joined into the label "BH · i027 · DEV · <commit>" (or an honest "BH · dev-build" when the iteration is not set), and whether that label is shown.
 - **Works with:** `SessionLog` (writes the version at start-up), the main menu (shows it), `BuildLabel` (shows the identifier), `tools/write_build_info.py` (writes `build_info.json`).
 - **Keeps:** The build's commit code, read once and remembered.
 - **When it runs:** Whenever something asks for the version (start-up log, main menu).
@@ -1711,7 +1711,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/build_label.gd`
 
 **Purpose:** Shows which build is running, small, in the bottom-right corner of the window.
-- **What it does:** Shows the development build identifier ("LCH · i024 · DEV" with the short commit) from `GameVersion`, on its own layer above every screen, at the interface size; neutral grey with a soft outline, no panel; it ignores the mouse and the keyboard. Not made when the build label is switched off (a public export).
+- **What it does:** Shows the development build identifier ("BH · i024 · DEV" with the short commit) from `GameVersion`, on its own layer above every screen, at the interface size; neutral grey with a soft outline, no panel; it ignores the mouse and the keyboard. Not made when the build label is switched off (a public export).
 - **Works with:** `GameVersion`, `UiScaleLayer`, `App` (adds it once).
 - **Keeps:** Nothing.
 - **When it runs:** From start-up to quitting, in every screen.
@@ -2387,11 +2387,11 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Purpose:** Checks the game's name, version number, fonts, save folder, and copying old Next Harbor saves.
-- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.112a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that headings and display text use Barlow Condensed (Real Horizon) and Barlow everything else; Patrick Hand stays bundled with its licence. It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
+- **What it does:** It checks that the game is called "Little Captain's Hat", that the version is 0.113a everywhere, and that the logo and icon files exist. It checks that saves live in the game's own folder and that headings and display text use Barlow Condensed (Real Horizon) and Barlow everything else; Patrick Hand stays bundled with its licence. It also checks that old Next Harbor saves are copied (never moved or overwritten) into free save slots, including from the main menu's import button.
 - **Works with:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Keeps:** Nothing of its own (it makes a temporary pretend Next Harbor folder and removes it).
 - **When it runs:** Only in tests.
-- **If you change it:** Only the checks change. It checks the exact version ("0.112a", "0.112.1") and save format 12, so a new release means updating this test.
+- **If you change it:** Only the checks change. It checks the exact version ("0.113a", "0.113.1") and save format 12, so a new release means updating this test.
 
 ### `tests/suites/test_build_label.gd`
 
@@ -2588,7 +2588,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Works with:** `SessionLog`, `GameSession`, `SaveManager`, `GameVersion`, `Simulation`.
 - **Keeps:** Nothing of its own (it uses its own temporary log folder and cleans it).
 - **When it runs:** Only in tests.
-- **If you change it:** Only the checks change. It checks the exact game version ("0.112a") and save format (12), so a new version number means updating this test.
+- **If you change it:** Only the checks change. It checks the exact game version ("0.113a") and save format (12), so a new version number means updating this test.
 
 ### `tests/suites/test_eight_directions.gd`
 

@@ -165,7 +165,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/game_version.gd`
 
 **Formål:** Holder spillets versionsnummer ét sted.
-- **Hvad det gør:** Giver den version, spillerne ser (fx "0.112a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes. Også den eneste kilde til udviklingsversionens id: iterationen ("i026"), et valgfrit internt stadie ("i026_02") og DEV eller TEST, samlet til mærket "LCH · i025 · DEV · <commit>" (eller et ærligt "LCH · dev-build", når iterationen ikke er sat), og om mærket vises.
+- **Hvad det gør:** Giver den version, spillerne ser (fx "0.113a"), en udgave kun med tal til værktøjer, og den korte kode for præcis denne build (commit), når den kan findes. Også den eneste kilde til udviklingsversionens id: iterationen ("i027"), et valgfrit internt stadie ("i027_02") og DEV eller TEST, samlet til mærket "BH · i027 · DEV · <commit>" (eller et ærligt "BH · dev-build", når iterationen ikke er sat), og om mærket vises.
 - **Arbejder sammen med:** `SessionLog` (skriver versionen ved opstart), hovedmenuen (viser den), `BuildLabel` (viser id'et), `tools/write_build_info.py` (skriver `build_info.json`).
 - **Holder styr på:** Buildens commit-kode, læst én gang og husket.
 - **Hvornår det kører:** Når noget spørger efter versionen (opstartslog, hovedmenu).
@@ -1713,7 +1713,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/build_label.gd`
 
 **Formål:** Viser, hvilken version der kører, med lille skrift i vinduets nederste højre hjørne.
-- **Hvad det gør:** Viser udviklingsversionens id ("LCH · i024 · DEV" med den korte commit) fra `GameVersion` på sit eget lag over alle skærme, i grænsefladens størrelse; neutral grå med en blød kontur og uden panel; den reagerer ikke på mus eller tastatur. Laves ikke, når versionsmærket er slået fra (en offentlig eksport).
+- **Hvad det gør:** Viser udviklingsversionens id ("BH · i024 · DEV" med den korte commit) fra `GameVersion` på sit eget lag over alle skærme, i grænsefladens størrelse; neutral grå med en blød kontur og uden panel; den reagerer ikke på mus eller tastatur. Laves ikke, når versionsmærket er slået fra (en offentlig eksport).
 - **Arbejder sammen med:** `GameVersion`, `UiScaleLayer`, `App` (tilføjer den én gang).
 - **Gemmer:** Intet.
 - **Hvornår det kører:** Fra opstart til lukning, på alle skærme.
@@ -2389,11 +2389,11 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_branding.gd`
 
 **Formål:** Tjekker spillets navn, versionsnummer, skrifttyper, mappen til gemte spil og kopiering af gamle gemte spil fra Next Harbor.
-- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.112a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
+- **Hvad det gør:** Den tjekker, at spillet hedder "Little Captain's Hat", at versionen er 0.113a overalt, og at logo- og ikonfilerne findes. Den tjekker, at gemte spil ligger i spillets egen mappe, og at den kondenserede skrifttype Patrick Hand kun bruges til overskrifter (Barlow til alt andet). Den tjekker også, at gamle gemte spil fra Next Harbor bliver kopieret (aldrig flyttet eller overskrevet) over i ledige pladser, også via importknappen i hovedmenuen.
 - **Arbejder sammen med:** `GameVersion`, `SaveManager`, `LegacySaves`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`.
 - **Holder styr på:** Intet af sit eget (den laver en midlertidig, opdigtet Next Harbor-mappe og fjerner den igen).
 - **Hvornår det kører:** Kun i test.
-- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker den nøjagtige version ("0.112a", "0.112.1") og gemmeformat 12, så en ny udgivelse betyder, at denne test skal rettes.
+- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker den nøjagtige version ("0.113a", "0.113.1") og gemmeformat 12, så en ny udgivelse betyder, at denne test skal rettes.
 
 ### `tests/suites/test_build_label.gd`
 
@@ -2590,7 +2590,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Arbejder sammen med:** `SessionLog`, `GameSession`, `SaveManager`, `GameVersion`, `Simulation`.
 - **Holder styr på:** Intet af sit eget (den bruger sin egen midlertidige logmappe og rydder den op).
 - **Hvornår det kører:** Kun i test.
-- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker det nøjagtige versionsnummer ("0.112a") og gemmeformat (12), så et nyt versionsnummer betyder, at denne test skal rettes.
+- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Den tjekker det nøjagtige versionsnummer ("0.113a") og gemmeformat (12), så et nyt versionsnummer betyder, at denne test skal rettes.
 
 ### `tests/suites/test_eight_directions.gd`
 

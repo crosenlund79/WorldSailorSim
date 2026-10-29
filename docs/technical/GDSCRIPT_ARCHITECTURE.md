@@ -248,7 +248,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/app/game_version.gd`
 
-- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.112a", `MACHINE` "0.112.1"; I026) and build commit lookup; the development build identity `PROJECT_CODE` "LCH", `ITERATION` "i026", `STAGE` "06" on the I026 release commit ("01" while developed), `CHANNEL` "DEV" (`CHANNELS` DEV/TEST), `checkpoint()`/`format_checkpoint(iteration, stage)`, `build_label(with_commit)` (placeholder "LCH · dev-build" without an iteration), `shows_build_label()` (`SHOW_LABEL_SETTING` `application/config/show_build_label`, false for the `public_release` feature).
+- **Role:** class_name `GameVersion`, extends RefCounted; static version constants (`DISPLAY` "0.113a", `MACHINE` "0.113.1"; I027) and build commit lookup; the development build identity `PROJECT_CODE` "BH" (Between Horizons, since I027; "LCH" until I026), `ITERATION` "i027", `STAGE` "01", `CHANNEL` "DEV" (`CHANNELS` DEV/TEST), `checkpoint()`/`format_checkpoint(iteration, stage)`, `build_label(with_commit)` (placeholder "BH · dev-build" without an iteration), `shows_build_label()` (`SHOW_LABEL_SETTING` `application/config/show_build_label`, false for the `public_release` feature).
 - **Depends on:** `res://build_info.json` (optional), else `res://.git/HEAD`, ref file or `packed-refs` (read as files, no git process).
 - **State:** static `_commit` cache ("-" sentinel = unknown).
 - **Lifecycle:** static helper.
@@ -2890,7 +2890,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_branding.gd`
 
-- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.112a", MACHINE "0.112.1" since I025, commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Barlow Condensed headings and display with Barlow fallback, Barlow body; Patrick Hand bundled), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
+- **Role:** extends RefCounted; test suite for Visual Identity V01, Checkpoint C. Covers project settings (name, description mentions Next Harbor, version = `GameVersion.DISPLAY`, icon), `GameVersion` (DISPLAY "0.113a", MACHINE "0.113.1" since I025, commit format, `describe`), `SaveManager.SAVE_VERSION == 12` and `FORMAT_ID`, branding asset files, the custom user dir "Little Captains Hat" vs the legacy `app_userdata/Next Harbor`, fonts and the OFL licence, theme font variations (Barlow Condensed headings and display with Barlow fallback, Barlow body; Patrick Hand bundled), `LegacySaves` copy-only import (free-slot mapping, originals untouched, exact copies, v9 save upgraded in memory, already-imported, no free slot), the main menu (logo, tagline, version label, credits, fits at 130 %), the import button with `ConfirmDialog`, and Captain's Log and HUD typography.
 - **Depends on:** `src/app/app.tscn`, `assets/ui/next_harbor_theme.tres`, `GameVersion`, `SaveManager`, `LegacySaves`, `GameSession`, `HatState`, `MainMenu`, `ConfirmDialog`, `CaptainsLogMenu`, `Hud`, `SettingsManager`, `ProjectSettings`.
 - **State:** writes v9 legacy saves under `user://test_legacy_userdata/saves` via `LegacySaves.legacy_dir_override` (reset and cleaned at the end); deletes save slots 1–3.
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
@@ -3091,7 +3091,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Lifecycle:** test suite run by `tests/test_runner.gd`.
 - **Invariants:** the log must not affect the simulation (same hat-loss time with or without it).
 - **Tests:** —
-- **Change risks:** pins `GameVersion.DISPLAY == "0.112a"` and save format 12, so every version bump needs this test updated. The expected `error` line depends on `push_error` capture.
+- **Change risks:** pins `GameVersion.DISPLAY == "0.113a"` and save format 12, so every version bump needs this test updated. The expected `error` line depends on `push_error` capture.
 
 ### `tests/suites/test_eight_directions.gd`
 

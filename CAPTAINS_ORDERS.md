@@ -434,7 +434,8 @@ quality-assurance assignments. They are committed on the integration branch.
 6. Develop the iteration on that branch only. Its first commit sets the
    build identity in `src/app/game_version.gd`: `ITERATION = "i022"`,
    `STAGE = ""`, `CHANNEL = "DEV"` (the label in the window's bottom-right
-   corner then reads `LCH · i022 · DEV · <commit>`).
+   corner then reads `LCH · i022 · DEV · <commit>`; since I027 the project
+   code is `BH`, for the working title Between Horizons: `BH · i027 · DEV`).
 
 **Build identifier.** Every running build names its checkpoint in the
 bottom-right corner (`BuildLabel`), from `GameVersion` only: `ITERATION`,

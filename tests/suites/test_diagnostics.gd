@@ -56,7 +56,7 @@ func _test_start_line() -> void:
 	var path := SessionLog.get_log_path()
 	t.check(path.ends_with(".jsonl") and FileAccess.file_exists(path), "[log] one JSON Lines file per session in the diagnostics folder")
 	var first := _entries()[0]
-	t.check(first.event == "session_start" and first.version == GameVersion.DISPLAY and GameVersion.DISPLAY == "0.112a" and first.has("commit") and first.save_format == 12
+	t.check(first.event == "session_start" and first.version == GameVersion.DISPLAY and GameVersion.DISPLAY == "0.113a" and first.has("commit") and first.save_format == 12
 		and String(first.engine).begins_with("4.7"), "[log] it starts with the game version, commit, save format and engine")
 	t.check(String(first.t).ends_with("Z"), "[log] times are UTC")
 	t.check(SessionLog.get_folder().ends_with("test_diagnostics_suite"), "[log] the folder can be located (%s)" % SessionLog.get_folder())

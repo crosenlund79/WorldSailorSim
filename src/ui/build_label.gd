@@ -1,7 +1,7 @@
 class_name BuildLabel
 extends Label
 ## The development build identifier in the bottom-right corner of the window:
-## "LCH · i024 · DEV · 1a2b3c4" (GameVersion.build_label()), so every
+## "BH · i027 · DEV · 1a2b3c4" (GameVersion.build_label()), so every
 ## screenshot and bug report says which checkpoint was running.
 ##
 ## App adds exactly one, on its own UiScaleLayer above everything else

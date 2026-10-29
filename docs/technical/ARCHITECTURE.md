@@ -106,7 +106,7 @@ come from `project.godot` (`application/config/name` "Little Captain's Hat",
 (from an optional `build_info.json` written by `tools/write_build_info.py`, or
 read from `.git`; no git process at runtime). It is also the one source of
 the **development build identifier** (`ITERATION`, `STAGE`, `CHANNEL`,
-`build_label()` → `LCH · i024 · DEV · 1a2b3c4`): `BuildLabel`
+`build_label()` → `BH · i024 · DEV · 1a2b3c4`): `BuildLabel`
 (`src/ui/build_label.gd`) shows it in the window's bottom-right corner on
 its own `UiScaleLayer` (layer 128, added once by `App`), above every screen,
 ignoring the mouse; the project setting `application/config/show_build_label`
