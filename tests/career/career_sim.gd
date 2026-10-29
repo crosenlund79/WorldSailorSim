@@ -6,7 +6,8 @@ extends Node
 ## harbours in the real (seeded) weather - with no money, voyage or
 ## achievement that the game would not give. The career's own books
 ## (CareerLedger) and daily snapshots are written as JSON, one file per
-## career, plus a summary CSV.
+## career, plus a summary CSV; since I027 Tier 4 each career's telemetry
+## (CareerTelemetry: JSON lines and a CSV) is written beside it.
 ##   godot --headless --path . res://tests/career/career_sim.tscn -- \
 ##     [--out=DIR] [--seeds=1,2,3] [--days=60] [--policies=frugal,cruiser,worker] [--level=standard]
 ##
@@ -76,6 +77,9 @@ func _run() -> void:
 	for policy in policies:
 		for s in seeds:
 			var result := _career(policy, s)
+			# I027 Tier 4: the career's telemetry (CareerTelemetry), from the same play.
+			(result.recorder as CareerTelemetry.Recorder).write("%s/career_%s_%d_telemetry" % [out, policy, s])
+			result.erase("recorder")
 			var f := FileAccess.open("%s/career_%s_%d.json" % [out, policy, s], FileAccess.WRITE)
 			f.store_string(JSON.stringify(result, "  "))
 			rows.append("%s,%d,%s,%s,%.1f,%.1f,%d,%.1f,%.1f,%.1f,%d,%d,%d,%d,%d,%d,%.1f,%s,%d,%.1f,%s" % [policy, s, level, result.build, result.wall_s,
@@ -104,6 +108,8 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 	var start_time := GameSession.get_game_time()
 	var start_funds := GameSession.get_funds()
 	var min_funds := start_funds
+	var recorder := CareerTelemetry.Recorder.new()
+	recorder.start()
 	var snapshots: Array = []
 	var stops := 0
 	var work_sessions := 0
@@ -130,6 +136,7 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 				bought_day = (GameSession.get_game_time() - start_time) / 86400.0
 			Simulation.advance(maxf(86400.0 - fposmod(GameSession.get_game_time() - start_time, 86400.0), 3600.0))
 			snapshots.append(_snapshot(start_time))
+			recorder.mark("day")
 			min_funds = mini(min_funds, GameSession.get_funds())
 			low_money_days += 1 if GameSession.get_funds() < 200 else 0
 		# The next harbour.
@@ -156,6 +163,8 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 			break
 		snapshots.append(_snapshot(start_time))
 		min_funds = mini(min_funds, GameSession.get_funds())
+	recorder.mark("end")
+	recorder.stop()
 	var ledger := GameSession.get_ledger()
 	var income := 0
 	var expense := 0
@@ -177,6 +186,7 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 			HUMAN_MIN_PER_STOP, HUMAN_MIN_PER_WORK, HUMAN_S_PER_GAME_HOUR_UNDERWAY],
 		"stranded": stranded, "voyage_log": ledger.voyages, "snapshots": snapshots,
 		"services": services, "bought_day": bought_day, "end_vessel": String(GameSession.get_vessel_id()),
+		"dreams_fulfilled": GameSession.get_state_snapshot().dreams.fulfilled.keys(), "recorder": recorder,
 	}
 
 

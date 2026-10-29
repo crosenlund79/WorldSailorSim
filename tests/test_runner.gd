@@ -106,6 +106,7 @@ const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_dreams.gd"),
 	preload("res://tests/suites/test_passage_plan.gd"),
 	preload("res://tests/suites/test_ais.gd"),
+	preload("res://tests/suites/test_telemetry.gd"),
 	preload("res://tests/suites/test_waterfront_walkthrough.gd"),
 	preload("res://tests/suites/test_more_room_aboard.gd"),
 	# Last: it ends by quitting the game.
