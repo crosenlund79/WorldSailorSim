@@ -8,7 +8,7 @@ Captain's go-ahead.
 |---|---|
 | Iteration branch | `iteration/i027` (from `release/i026` = `51c247e`) |
 | Tier 1 checkpoint | `backup/i027-tier-1` = `93244d2` (full regression 5,587 / 0) |
-| Tier 2 checkpoint | `backup/i027-tier-2` (the tested commit below; see the delivery note) |
+| Tier 2 checkpoint | `backup/i027-tier-2` = `2460371` (full regression 5,628 / 0) |
 | Build label | `BH · i027_02 · DEV` |
 | Version | 0.113a, save format 12 (unchanged; optional new sections only) |
 
@@ -115,6 +115,14 @@ in the findings):
   optional. A proposal is in the findings; **nothing has been changed**.
 - **Not yet exercised:** boat care, upgrades, boat purchases and the bigger
   boats' running costs. That is the next step for the career harness.
+- **The longest ocean leg is now tight on the 26 ft.** Galápagos →
+  Marquesas (3,090 nm, real weather), with a full tank: estimated
+  30 d 23 h, sailed in 31.3 days, 0.6 days of stores left (it stows 32).
+  Before Tier 2 an endless engine motored through the doldrums. The
+  readiness says so honestly ("with little to spare"; with an empty tank,
+  "may run short"). Nothing has been changed: it is the Captain's call
+  whether the smallest boat should carry more stores, or whether that
+  passage should stay a stretch for it.
 
 ## Windows: launch and a short walkthrough
 
@@ -154,10 +162,24 @@ What to judge (the gate):
 
 - **Tier 1:** full regression at `93244d2`: 5,587 passed, 0 failed.
   `test_windward` 33 checks.
-- **Tier 2:** full regression at the tested commit: see the delivery note.
-  - `test_cost_of_wind`: 40 checks, including the wheel layout at
-    1280×720 / 1024×768, 100 / 130 %.
-  - Danish complete; content checker 31 PASS; guides and links clean.
+- **Tier 2:** full regression at `2460371`: **5,628 passed, 0 failed**
+  (88 suites, headless Linux).
+  - The first full run (at `a19d255`) found real problems, all fixed before
+    the checkpoint:
+    - the arrival estimate assumed an endless engine (an ocean passage
+      took 33 days on a 25-day estimate, and the stores ran out); it now
+      counts the fuel aboard;
+    - a fuel figure on the status line pushed it under the clock at 130 %;
+      the status line is back to I026's;
+    - nine older suites motor 150-216 nm in a flat calm; they now run with
+      an engine that burns no fuel (`FUEL_FREE_SUITES`, the runner's
+      per-suite fixture). Every other suite has the real tank, and the
+      world-voyage suite's skipper fills up before each passage.
+  - `test_cost_of_wind`: 41 checks, including the wheel layout at
+    1280×720 / 1024×768, 100 / 130 %, the fuel-aware estimate and the
+    empty-tank notice.
+  - Danish complete (3,104 messages); content checker 31 PASS; guides and
+    links clean.
 
 ## Performance
 
