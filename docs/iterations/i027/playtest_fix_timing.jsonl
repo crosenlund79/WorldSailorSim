@@ -35,3 +35,5 @@
 {"event": "validation_begin", "iso": "2026-10-29T23:17:23+00:00", "epoch": 1793315843.901, "monotonic_s": 3580.22, "boot": "e04d6947", "note": ""}
 {"event": "parallel_agent_guides_begin", "iso": "2026-10-29T23:18:24+00:00", "epoch": 1793315904.882, "monotonic_s": 3641.20, "boot": "e04d6947", "note": "helper agent updates the three GDScript guides (overlaps validation)"}
 {"event": "parallel_agent_guides_end", "iso": "2026-10-29T23:25:45+00:00", "epoch": 1793316345.939, "monotonic_s": 4082.26, "boot": "e04d6947", "note": "guides: 2 new + 18 changed entries, all acknowledged"}
+{"event": "validation_end", "iso": "2026-10-29T23:33:28+00:00", "epoch": 1793316808.151, "monotonic_s": 4544.47, "boot": "e04d6947", "note": "focused rendered suites 742/2 (2 environmental, pass headless 82/0); fishing/cockpit/walk 409/0; harbour 104/0; pets 114/0; launch smoke clean; i18n 0 errors; guides 387; links 0 broken; content 0 FAIL"}
+{"event": "git_admin_begin", "iso": "2026-10-29T23:33:28+00:00", "epoch": 1793316808.172, "monotonic_s": 4544.49, "boot": "e04d6947", "note": "timing report, commit, push, verify, handover"}
