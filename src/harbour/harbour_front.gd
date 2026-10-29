@@ -506,7 +506,7 @@ func stand_up() -> void:
 	if seat.is_empty():
 		return
 	life.reserved_seats.erase(seat_index)
-	player.position = (seat.at as Vector2) + Vector2(0.0, 52.0)  # out from the table, onto the promenade
+	player.position = stand_up_point(seat)
 	player.cafe_mug = false
 	seat = {}
 	seat_index = -1
@@ -516,6 +516,26 @@ func stand_up() -> void:
 		player.set_input_enabled(true)
 	interaction_prompt_changed.emit("")
 	message_requested.emit(Loc.t("You finish your coffee and leave the cup on the table. Lovely."))
+
+
+## Where the Captain stands after a coffee: out from the chair, on the
+## promenade side, clear of every table (the first free spot of a few around
+## the chair; the terrace's tables stand close).
+func stand_up_point(chair: Dictionary) -> Vector2:
+	var at: Vector2 = chair.at
+	var away: Vector2 = -(chair.facing as Vector2)
+	var space := get_world_2d().direct_space_state
+	var query := PhysicsShapeQueryParameters2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = Player.RADIUS + 1.0
+	query.shape = circle
+	query.collision_mask = player.collision_mask
+	query.exclude = [player.get_rid()]
+	for offset: Vector2 in [Vector2(0, 52), away * 30.0 + Vector2(0, 40), away * 40.0, Vector2(0, -52), away * 30.0 + Vector2(0, -40), Vector2(0, 80)]:
+		query.transform = Transform2D(0.0, to_global(at + offset))
+		if space.intersect_shape(query, 1).is_empty():
+			return at + offset
+	return at + Vector2(0.0, 52.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:

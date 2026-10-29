@@ -148,6 +148,10 @@ static func closed(points: PackedVector2Array) -> PackedVector2Array:
 
 static func ticks(ci: CanvasItem, center: Vector2, r: float, from_deg: float, to_deg: float, step: float, major_every: int,
 		minor_len: float, major_len: float, colour: Color, width := 1.0) -> void:
+	# Batched: one draw call for the major ticks and one for the minor ones
+	# (the HUD's dials are drawn every frame under way; I026 benchmark).
+	var majors := PackedVector2Array()
+	var minors := PackedVector2Array()
 	var n := int(round((to_deg - from_deg) / step))
 	for i in n + 1:
 		var deg := from_deg + i * step
@@ -155,8 +159,13 @@ static func ticks(ci: CanvasItem, center: Vector2, r: float, from_deg: float, to
 			break
 		var major := major_every > 0 and i % major_every == 0
 		var d := dir(deg)
-		ci.draw_line(center + d * r, center + d * (r - (major_len if major else minor_len)), colour if major else Color(colour, colour.a * 0.6),
-			width * (1.6 if major else 1.0), true)
+		var points := majors if major else minors
+		points.append(center + d * r)
+		points.append(center + d * (r - (major_len if major else minor_len)))
+	if not majors.is_empty():
+		ci.draw_multiline(majors, colour, width * 1.6, true)
+	if not minors.is_empty():
+		ci.draw_multiline(minors, Color(colour, colour.a * 0.6), width, true)
 
 
 static func arc(ci: CanvasItem, center: Vector2, r: float, from_deg: float, to_deg: float, colour: Color, width: float) -> void:
@@ -298,11 +307,16 @@ static func _dial_heading(ci: CanvasItem, c: Vector2, r: float, s: float, packag
 		ink: Color, needle_colour: Color, pulse: float) -> void:
 	# The compass card turns under a fixed lubber line: the heading is at the top.
 	var heading := data.heading_deg if data.underway else 0.0
+	var majors := PackedVector2Array()
+	var minors := PackedVector2Array()
 	for i in 72:
-		var bearing := i * 5.0
-		var d := dir(bearing - heading)
+		var d := dir(i * 5.0 - heading)
 		var major := i % 6 == 0
-		ci.draw_line(c + d * (r - 2.0 * s), c + d * (r - (8.0 if major else 4.5) * s), ink if major else Color(ink, 0.55), (1.5 if major else 1.0) * maxf(s * 0.9, 1.0), true)
+		var points := majors if major else minors
+		points.append(c + d * (r - 2.0 * s))
+		points.append(c + d * (r - (8.0 if major else 4.5) * s))
+	ci.draw_multiline(majors, ink, 1.5 * maxf(s * 0.9, 1.0), true)
+	ci.draw_multiline(minors, Color(ink, 0.55), maxf(s * 0.9, 1.0), true)
 	for i in 12:
 		var bearing := i * 30.0
 		var label: String = [Loc.t("N", "compass"), "3", "6", Loc.t("E", "compass"), "12", "15", Loc.t("S", "compass"), "21", "24", Loc.t("W", "compass"), "30", "33"][i]

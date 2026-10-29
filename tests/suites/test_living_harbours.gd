@@ -405,6 +405,21 @@ func _test_cafe() -> void:
 	await t.press_action(&"move_down")
 	await t.frames(2)
 	t.check(not front.is_seated() and not front.player.cafe_mug and front.player.input_enabled, "[café] a movement key stands the Captain up again")
+	# From every chair the Captain stands up onto open ground, never into a
+	# neighbouring table.
+	var space := front.get_world_2d().direct_space_state
+	var query := PhysicsShapeQueryParameters2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = Player.RADIUS
+	query.shape = circle
+	query.collision_mask = front.player.collision_mask
+	query.exclude = [front.player.get_rid()]
+	var wedged := []
+	for chair: Dictionary in front.layout.cafe_seats:
+		query.transform = Transform2D(0.0, front.to_global(front.stand_up_point(chair)))
+		if not space.intersect_shape(query, 1).is_empty():
+			wedged.append(chair.at)
+	t.check(wedged.is_empty(), "[café] from every chair the Captain stands up clear of the tables (%s)" % [wedged])
 	# A companion ashore comes along and rests by the table.
 	app.leave_quay()
 	await _settle()

@@ -16,7 +16,7 @@ extends RefCounted
 const APP_SCENE := preload("res://src/app/app.tscn")
 const W := preload("res://tests/helpers/walkability.gd")
 const MOVES: Array[StringName] = [&"move_left", &"move_right", &"move_up", &"move_down"]
-const QUAY_GRID := 20.0
+const QUAY_GRID := 10.0
 
 var t: Node
 var app: Node
@@ -85,7 +85,20 @@ func _quay_cells(front: HarbourFront, from: Vector2) -> Array[Vector2]:
 	query.shape = circle
 	query.collision_mask = front.player.collision_mask
 	query.exclude = [front.player.get_rid()]
+	var free := func(q: Vector2) -> bool:
+		query.transform = Transform2D(0.0, front.to_global(q))
+		return space.intersect_shape(query, 1).is_empty()
+	# The nearest free grid cell (between the café's tables the snapped
+	# position itself can touch a table).
 	var start := from.snapped(Vector2(QUAY_GRID, QUAY_GRID))
+	var best := Vector2.INF
+	for dx in range(-2, 3):
+		for dy in range(-2, 3):
+			var q := start + Vector2(dx, dy) * QUAY_GRID
+			if free.call(q) and (best == Vector2.INF or q.distance_to(from) < best.distance_to(from)):
+				best = q
+	if best != Vector2.INF:
+		start = best
 	var cells: Array[Vector2] = []
 	var seen := {start: true}
 	var queue: Array[Vector2] = [start]
@@ -98,8 +111,7 @@ func _quay_cells(front: HarbourFront, from: Vector2) -> Array[Vector2]:
 			if seen.has(q) or not bounds.has_point(q):
 				continue
 			seen[q] = true
-			query.transform = Transform2D(0.0, front.to_global(q))
-			if space.intersect_shape(query, 1).is_empty():
+			if free.call(q):
 				queue.append(q)
 	return cells
 
@@ -117,7 +129,7 @@ func _path(cells: Array[Vector2], grid: float, from: Vector2, station: Interacta
 	while head < queue.size():
 		var p: Vector2 = queue[head]
 		head += 1
-		if W.distance_to_station(station, p) <= W.USE_DISTANCE - 8.0:
+		if W.distance_to_station(station, p) <= W.USE_DISTANCE:
 			var path: Array[Vector2] = [p]
 			while parent[path[0]] != path[0]:
 				path.push_front(parent[path[0]])
@@ -232,7 +244,7 @@ func _the_cafe(front: HarbourFront) -> void:
 	var funds := GameSession.get_funds()
 	await t.press_action(&"interact")
 	await t.frames(4)
-	var menu := app.modals.get_top()
+	var menu: Node = app.modals.get_top()
 	if not t.check(menu is CafeMenu, "[play] E: the café's counter (open at this hour: %s)" % BusinessHours.status_text(QuayLayout.CAFE, front.port_id, GameSession.get_game_time())):
 		app.modals.clear()
 		return
@@ -241,8 +253,10 @@ func _the_cafe(front: HarbourFront) -> void:
 	t.check(GameSession.get_funds() == funds - GameSession.cafe_coffee_price() and front.is_seated(),
 		"[play] a coffee for %s, the Captain seated on the terrace" % GameSession.format_money(GameSession.cafe_coffee_price()))
 	await t.screenshot("i026_play_03_cafe")
-	await t.hold_actions([&"move_down"], 0.3)
-	t.check(not front.is_seated(), "[play] a movement key: up again")
+	await t.press_key(KEY_DOWN)
+	await t.physics_frames(3)
+	t.check(not front.is_seated() and _quay_cells(front, front.player.position).size() > 1000,
+		"[play] a movement key (Down): up again, out on the open terrace (%s)" % front.player.position)
 
 
 func _the_chandlery(front: HarbourFront) -> void:
@@ -253,14 +267,21 @@ func _the_chandlery(front: HarbourFront) -> void:
 	t.check(reached, "[play] walked along the quay to the chandlery ('%s')" % app.hud.get_prompt())
 	await t.press_action(&"interact")
 	await t.frames(4)
-	var menu := app.modals.get_top()
+	var menu: Node = app.modals.get_top()
 	if not t.check(menu is ChandleryMenu, "[play] E: the chandlery's counter"):
 		app.modals.clear()
 		return
-	var row := menu.find_child("Row_instruments_%s" % InstrumentPackage.MODERN, true, false)
+	var row: Node = menu.find_child("Row_instruments_%s" % InstrumentPackage.MODERN, true, false)
 	var buy: Button = row.find_children("*", "Button", true, false).back() as Button if row else null
 	t.check(buy != null and not buy.disabled, "[play] Electronics: Modern Cruiser for sale (%s)" % (buy.text if buy else "?"))
 	if buy:
+		# Scrolled down to Electronics, as a player would.
+		var scroll := buy.get_parent()
+		while scroll and not scroll is ScrollContainer:
+			scroll = scroll.get_parent()
+		if scroll:
+			(scroll as ScrollContainer).ensure_control_visible(buy)
+			await t.frames(3)
 		await t.click(buy)
 		await t.frames(4)
 		if app.modals.get_top() is ConfirmDialog:
