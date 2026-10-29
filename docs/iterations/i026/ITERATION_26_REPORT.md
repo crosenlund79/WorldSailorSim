@@ -146,8 +146,11 @@ cabin places to shore visits, pass with the new objects in place.
 - **Danish.** 3,057 messages, 0 missing.
 - **Fit.** Every focused view fits at 1280×720 and 1024×768, at 100 % and
   130 %, in both languages (tested).
-- **Polish.** From the audit: a traffic alert is now titled *Traffic warning*
-  (it said "Weather warning"). Stale postcard hints now point to the laptop.
+- **Polish.**
+  - From the audit: a traffic alert is now titled *Traffic warning* (it said
+    "Weather warning"), and the stale postcard hints now point to the laptop.
+  - From the benchmark: the dial ticks are batched.
+  - From the walkthrough: the café stand-up spot.
 
 ### Conversions
 
@@ -200,6 +203,8 @@ board and the berth.
 | Full regression (85 suites, headless Linux, at `26c00aa`) | 5,522 passed, 2 failed. Both failures were the new academy strings, run before their Danish was added in the same session. Re-run below. |
 | `test_localization`, `test_academy`, `test_living_harbours`, `test_cabin_objects`, `test_gameplay_flow` after the Danish and the new layout checks | 420 passed, 0 failed |
 | `test_cabin_objects`, `test_captains_watch`, `test_localization` after the warning-title fix | 145 passed, 0 failed |
+| `test_waterfront_walkthrough` (new) and `test_living_harbours` after the café stand-up fix | 24/0 and all quay checks passing |
+| Final full regression at the TEST commit | see the delivery note |
 | Stage suites, as they were built | `test_living_harbours` 99/0 alone; the affected older suites with it, 1,303/0; `test_marine_electronics` and `test_cabin_objects` as reported in their stages |
 | Save | `test_save_manager` and the old-save checks of the electronics and quay suites are in the full run (pass) |
 | Content | `check_game_content.py`: 31 PASS, 0 FAIL |
@@ -220,14 +225,49 @@ and also allows the nav station's own logbook, VHF set and switch panel.
 - a bench blocked the only lane past the yard
 - a suite left a save in slot 1
 
+## Reached in ordinary play
+
+`test_waterfront_walkthrough` plays the way there like a player, with no
+screen opened by code and no Captain placed by hand. 24 checks pass;
+screenshots are in `docs/screenshots/i026/play/`.
+
+1. It starts at the main menu: New Game, Start.
+2. It walks with the movement keys along a path of truly free ground and
+   uses E at the companionway, then at the pontoon's walkway, then up to
+   the quay.
+3. On the quay it checks there is a storefront for each business and that
+   the townsfolk are walking.
+4. At the café it orders a coffee for EUR 4, sits on the terrace and stands
+   up with a key.
+5. At the chandlery it scrolls to Electronics and buys Modern Cruiser with
+   a click.
+6. It walks back down to the boat and presses I: the new instruments, close
+   up.
+7. Under way, it finds the three displays on the HUD.
+
+It found one real bug: standing up from some café chairs put the Captain
+inside the neighbouring table. The Captain now steps to the first free spot
+beside the chair (`HarbourFront.stand_up_point`), and the quay suite checks
+it for every chair.
+
 ## Performance
 
-Measured in the same session against `release/i025`, on an otherwise idle
-machine. The results are in the
-[PERFORMANCE_OPPORTUNITIES.md](../../technical/PERFORMANCE_OPPORTUNITIES.md) I026 entry:
+Measured in the same session against `release/i025`, on an idle machine,
+with two runs each. The details are in
+[PERFORMANCE_OPPORTUNITIES.md](../../technical/PERFORMANCE_OPPORTUNITIES.md) #13.
 
-- the WRS benchmark, two runs each
-- the quay's own probe: deck against quay at noon, and the quay at 20×
+- **Most scenes** are within ±5 %, which is this machine's noise: the chart,
+  the cabin, sleep, the deck in harbour and the Long Passage.
+- **The quay** costs less than the deck (92.5 ms against 116 ms per frame on
+  software rendering, with 7 townsfolk).
+- **Under way on deck** frames are +15–17 % slower in two scenes.
+  - The HUD dials' tick marks were batched (about 130 anti-aliased lines per
+    frame), with little effect.
+  - Turning off the cluster, the cockpit instruments and the winch one at a
+    time showed no single cause.
+
+  This is recorded as an open finding for a Windows (GPU) reading. Nothing
+  else was traded for it.
 
 ## Evidence
 
@@ -246,6 +286,7 @@ All under `docs/screenshots/i026/`:
   - the HUD before and after
   - the three packages by day and night
   - the focused views, the plotter, the cockpits and the chandlery
+- **`play/` 01–06:** the walkthrough in ordinary play (walkway, quay, café, chandlery, instruments, under way).
 - **`motion/` strips:** made by `tests/screenshots_i026_motion.tscn` and `tools/qa/film_strip.py`.
   - the quay through a day (NPC routines)
   - people walking at noon

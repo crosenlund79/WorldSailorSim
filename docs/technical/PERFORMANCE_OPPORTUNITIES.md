@@ -294,3 +294,53 @@ I025 with plain-glass windows (the Captain's revision). Files
   a lower resolution or update it a few times a second; or a static faded
   sea texture tinted by the hour (the windows already went this way). The
   Captain decides after seeing it on the GPU.
+
+### 13. I026: the quay, the instruments and the cabin's things (measured)
+
+Same session, Linux software rendering (llvmpipe, 1600×900, idle machine),
+`tests/benchmark_wrs.tscn`, two runs each, back to back: `release/i025`
+(`3a27956`) and I026 after the closing fixes. Files
+`docs/benchmarks/i026_base_i025_run{1,2}.json`, `i026_final_run{1,2}.json`.
+Mean frame time, ms (average of the two runs):
+
+| Scenario | I025 | I026 | Change |
+|---|---|---|---|
+| chart open, idle | 83.0 | 81.7 | -2 % |
+| walk on deck in harbour, day | 122.0 | 128.0 | +5 % |
+| walk in the cabin, day | 152.2 | 157.8 | +4 % |
+| sleep 8 h across midnight | 189.0 | 175.2 | -7 % |
+| sailing 1× (deck) | 116.9 | 119.7 | +2 % |
+| day/night while sailing, 20× (deck) | 103.8 | 121.4 | +17 % |
+| walk on deck after the session rounds (under way) | 99.0 | 114.2 | +15 % |
+| Long Passage, 12 h per s | 66.0 | 68.7 | +4 % |
+
+- **The quay** (not in the WRS scenes, which predate it): the motion script's
+  probe (`tests/screenshots_i026_motion.tscn -- --probe=PATH`,
+  `docs/benchmarks/i026_quay_probe.json`) at noon in Copenhagen, 7 townsfolk:
+  - the quay averages 92.5 ms, and 94.3 ms at 20×;
+  - the deck in the same harbour averages 116.2 ms.
+  
+  The townsfolk and the storefronts cost less than the deck's sea.
+- **Under way on deck** is the one consistent increase (+15-17 % in two
+  scenes). Draw calls there went 244 → about 380.
+  - The HUD's dials drew one anti-aliased line per tick, now batched into
+    `draw_multiline` (two calls per dial). This changed little in the
+    numbers (draw calls 394 → 380).
+  - A probe that turned off the HUD instrument cluster, the cockpit
+    instruments and the winch one at a time, under way at 20×, showed no
+    difference beyond the noise (each within ±8 ms of all-on).
+
+  So the cause is not isolated. Candidates are the cluster's text glyphs
+  (each `draw_string` its own batch on llvmpipe), the cluster's 4-per-second
+  data read (`InstrumentData.read`), or drift between builds. On a GPU these
+  draw costs are expected to be negligible. A Windows reading decides
+  whether it matters; nothing was traded away for it.
+- **Drift:** as in #12, differences under about 10 % are not findings on this
+  machine (the same unchanged scene moved ±5 % between runs).
+- **Structure:** about 110 more objects at the end of the session rounds
+  (3,332 against 3,218), flat across the 20 rounds; no orphan nodes; the
+  autoload connections are steady (111 against 109).
+- **Hidden panels:** the sailing panel is gone, the instrument cluster stops
+  processing while hidden, the cockpit instruments redraw only when the
+  light changes, and the townsfolk roster is compared with the clock every
+  2 s. Nothing runs for a screen that is not shown.

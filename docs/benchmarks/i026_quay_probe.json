@@ -1,0 +1,21 @@
+{
+  "deck_copenhagen_noon": {
+    "frames": 69,
+    "max_ms": 204.65,
+    "mean_ms": 116.2,
+    "p95_ms": 129.05
+  },
+  "quay_copenhagen_20x": {
+    "frames": 85,
+    "max_ms": 127.49,
+    "mean_ms": 94.32,
+    "p95_ms": 112.6
+  },
+  "quay_copenhagen_noon": {
+    "frames": 87,
+    "max_ms": 118.95,
+    "mean_ms": 92.54,
+    "p95_ms": 110.89
+  },
+  "quay_people": 7
+}

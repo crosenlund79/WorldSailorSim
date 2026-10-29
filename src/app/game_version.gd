@@ -27,8 +27,8 @@ const MACHINE := "0.112.1"
 ##                      release/iNNN branch points at
 const PROJECT_CODE := "LCH"
 const ITERATION := "i026"
-const STAGE := "01"
-const CHANNEL := "DEV"
+const STAGE := "06"
+const CHANNEL := "TEST"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public
 ## export turns it off with a feature-tag override in project.godot:
