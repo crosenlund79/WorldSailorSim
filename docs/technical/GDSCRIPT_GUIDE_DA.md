@@ -156,9 +156,9 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/app/app.gd`
 
 **Formål:** Spillets "dirigent": det forbinder menuerne, skærmene og spillets systemer, så de arbejder sammen.
-- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning). Den tilføjer også det lille versions-id i nederste højre hjørne, én gang (`BuildLabel`). I025: et nyt spil begynder uden ledsager (Nyt spil spørger ikke længere efter en). Hver ledsager følger Kaptajnen i sit eget tempo, og to tager aldrig samme plads på dækket eller pontonen; før der kastes los, nævnes begge, hvis begge er i land, og "Kald … om bord" henter dem alle på én gang. Når et dyr fra kajen har fulgt Kaptajnen hen til nedgangen, kommer spørgsmålet om adoption, før man går ned (`ask_about_dock_animal`, `AdoptionDialog`): Adoptér giver det et navn, byder det velkommen om bord med en kort linje og går ned; Ikke nu holder Kaptajnen på dækket, og den lille pige kommer og henter dyret; Esc beslutter intet. Med to ledsagere taler Kaptajnen på en lang passage nogle gange til den ene, andre gange om dem begge, stadig én bemærkning ad gangen; sejler man alene, er der ingen snak på passagen.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`.
-- **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, hvornår hver ledsager næste gang følger dig mellem kahyt, dæk og land, og hvornår Kaptajnen næste gang taler med den på en lang passage. Selve spillet ligger i `GameSession`.
+- **Hvad det gør:** Viser hovedmenuen, starter og indlæser spil, åbner alle vinduer (pausemenu, søvn, fiskestang, ankerspil, bådeværft, butikker, Logbogen og flere) og gør spillets hændelser til korte beskeder og lyde på skærmen. Det er det ene sted, der håndterer Esc og genvejstasterne (F5 hurtig-gem, F9 hurtig-indlæs, H kaptajnshue, L Logbogen, R hal ind), så to vinduer aldrig reagerer på det samme tastetryk. Ved ankomst (I021) viser den ankomstkortet: havnens billede, "Ankommet til …" og én sætning om stedet. Siden I022 spørger den, før en båd købes på værftet, starter nye spil på den valgte sværhedsgrad og åbner dialogen for sværhedsgrad fra pausemenuen. I022: lange gøremål om bord (fjernarbejde, et postkort, en økt på det lille spil) går på det ene ur gennem `pass_time`: en overgang til sort, simulationen kørt én gang mens uret tæller, en linje hvis noget afbrød, og tilbage i ×1; kahyttens Q-hjul tilbyder Skriv et postkort og Arbejd på dit lille spil. I022 Skipperskolen: den har Skipperskolens kort på sit eget lag, tilbyder den første sejlads én gang ved det første nye spil på denne computer og åbner Skipperens håndbog med F1 eller fra pausemenuen. Steady Hands: hver knap får sin kliklyd én gang, også når den flyttes til en anden forælder. Golden Harbours: første ankomst til en havn med et billede viser det gyldne havneøjeblik (havnens billede belyst efter tidspunktet, med logbogslinjen på) i stedet for det lille kort og en særskilt logbogsbesked; en kendt havn beholder det lille kort. Beskeder om omdømme viser nu milepælenes navne på det valgte sprog. I024: arbejdspladsen og punktet Laptop på kahyttens hjul åbner Kaptajnens laptop (`open_laptop`, `LaptopView`), hvor postkort, rejseopdateringer, fjernarbejde, det lille spil og bedrifterne nu bor (`open_work_menu`, `open_postcards` og `open_game_dev` åbner den på den rigtige app). Fortøjet følger ledsageren Kaptajnen i land ad landgangen og bliver nogle gange lidt længere på pontonen; før der kastes los, spørger den, om ledsageren skal kaldes om bord (`recall_companion`, også på hjulet). Efter en rigtig søvn kan en lille linje fortælle, hvor ledsageren findes, og på lange passager taler Kaptajnen nu og da med den (`_update_passage_talk`: timet efter rejsens eget ur, kun i stille øjeblikke, aldrig en strøm af linjer efter hurtig tid eller en indlæsning). Den tilføjer også det lille versions-id i nederste højre hjørne, én gang (`BuildLabel`). I025: et nyt spil begynder uden ledsager (Nyt spil spørger ikke længere efter en). Hver ledsager følger Kaptajnen i sit eget tempo, og to tager aldrig samme plads på dækket eller pontonen; før der kastes los, nævnes begge, hvis begge er i land, og "Kald … om bord" henter dem alle på én gang. Når et dyr fra kajen har fulgt Kaptajnen hen til nedgangen, kommer spørgsmålet om adoption, før man går ned (`ask_about_dock_animal`, `AdoptionDialog`): Adoptér giver det et navn, byder det velkommen om bord med en kort linje og går ned; Ikke nu holder Kaptajnen på dækket, og den lille pige kommer og henter dyret; Esc beslutter intet. Med to ledsagere taler Kaptajnen på en lang passage nogle gange til den ene, andre gange om dem begge, stadig én bemærkning ad gangen; sejler man alene, er der ingen snak på passagen. I026: op ad pontonens gangbro kommer Kaptajnen til kajen (`open_quay`, `HarbourFront`), en skærm ligesom søkortet. Hver dør dér åbner forretningens egen menu i dens butiksdisk-ramme (`ShopCounter`); en lukket dør siger, hvornår den åbner, og tilbyder at vente til da (`ask_wait_until_open`, hvor tiden går som under søvn); havnekontorets luge har altid åbent (mad og en nødreparation); caféen sælger en kop kaffe og sætter Kaptajnen ved et bord på terrassen; opslagstavlen og stræden ind til byen (Gå i land) er der også, og går man ned igen, kommer man om bord. Gemmer man på kajen, står Kaptajnen på pontonen ved gangbroen. Instrumenterne (I, et klik på HUD'ens instrumenter eller på enhederne ved roret, handlingshjulet) åbner nærbilledet `InstrumentView`, og P åbner rorets kortplotter tæt på (`PlotterView`) i stedet for at slå et HUD-panel til og fra. I kahytten åbner logbogen, VHF-radioen, eltavlen, sømandskisten og det nyeste postkort deres visninger (`open_cabin_object`), hver indrammet som genstanden (`FocusFrame`), ligesom proviantskabet, komfuret, trofætavlen og køjens søvndialog; VHF-radioens lampe blinker, mens et opkald venter. Skødespillet på dækket åbner sejltrimmet.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `SceneRouter`, `Hud`, `ModalStack`, `Toasts`, `AudioManager`, `WeatherAudio`, `SessionLog`. I026: `HarbourFront`, `BusinessHours`, `ShopCounter`, `FocusFrame`, `InstrumentView`, `PlotterView`.
+- **Holder styr på:** Kun skærmens bogføring: om redningsrapporten er åben, et VHF-radioopkald eller et spørgsmål om ankerpladsen, der venter på at blive vist, sekunderne før en fisk på krogen slipper væk, hvornår hver ledsager næste gang følger dig mellem kahyt, dæk og land, og hvornår Kaptajnen næste gang taler med den på en lang passage. Selve spillet ligger i `GameSession`. I026: også hvilken forretning på kajen den åbne menu hører til (for dens ramme).
 - **Hvornår det kører:** Altid: det er hovedscenen, der starter med spillet.
 - **Hvis du ændrer det:** Næsten alle forløb kan blive påvirket: hvilke vinduer der åbner hvor, hvornår spillet pauser bag en menu, hvad spilleren får at vide efter søvn eller ankomst, motorlyden og reglerne for hurtig-gem.
 
@@ -264,7 +264,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/game_session.gd`
 
 **Formål:** Vogteren af det kørende spil: det eneste sted, hvor spillets tilstand ændres.
-- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen. I024: ledsageren må gå i land, mens båden er fortøjet, men bliver aldrig efterladt: der kan ikke kastes los, før den er kaldt om bord (`recall_companion`). Landgang i 5 havne og i 3 lande og en uge til søs sammen giver bedrifter for ledsageren; når Kaptajnen vågner, findes den ved køjen, nu og da med en lille linje (`wake_companion`). Vedvarende fart for sejl måles på simulationens egne trin (`note_sailing`: bedste time og bedste døgn, milepæle for 7, 9 og 12 knob i en time og et døgn på 150 sømil), og hver ry-optegnelse noterer nu, hvor og på hvilken båd den blev optjent. I025: der kan være ingen, én eller to ledsagere, så kaldene om ledsagere tager et ledsagernummer (`get_companion(id)`, `get_companions`, `get_companion_count`, `has_room_for_companion`, `set_companion_area(area, spot, id)`, `get_companions_ashore`), og hver ledsager har sin egen tidsplan og plads. Ved hver ankomst til en havn afgør den, om et dyr venter på kajen (`DockEncounters`), og den håndterer de venlige gestus (`befriend_dock_animal`), adoption af dyret (`adopt_dock_animal`: en ny ledsager med navn, køn, og hvornår og hvor den kom om bord, plus optegnelsen "Velkommen om bord" uden omdømme) og "Ikke nu" (`decline_dock_animal`); når der kastes los, bliver et ventende dyr på sin kaj. Opvågning giver én linje om én eller begge ledsagere; båden kaster ikke los, mens en af dem er i land, og at kalde dem om bord henter dem alle. Sejler man alene, er der ingen morgenlinje, og ledsagerens pris for en uge til søs kræver en ledsager.
+- **Hvad det gør:** Starter, afslutter og indlæser spil og tilbyder alle spillets handlinger: lægge en kurs, sætte sejl, ankomme, redning, penge, proviant, bådpleje, fiskeri, madlavning, ankeret, kaptajnshuen, ledsagerens flytninger, ry og rejseopdateringer. Det melder hver ændring ud med signaler (beskeder et objekt sender, som andre kan lytte efter) og rører aldrig skærmene. Siden I022 købes både (`buy_vessel`, én gang, på et værft, aldrig under nul), og kun både, du ejer, kan sejles; den holder også sværhedsgraden, som skalerer forbrug af mad og vand, slid, priser på bådpleje og proviant og redningsgebyret. I022 fritidssysler: den gemmer postkortet under arbejde (brugt tid bevares ved afbrydelse, smides ud på forlangende), lægger et færdigt kort i scrapbogen med ry første gang for hvert motiv, og tæller det lille spils økter for de timer, der faktisk er arbejdet, med ry for hver milepæl én gang og de første salg ved udgivelsen. I024: ledsageren må gå i land, mens båden er fortøjet, men bliver aldrig efterladt: der kan ikke kastes los, før den er kaldt om bord (`recall_companion`). Landgang i 5 havne og i 3 lande og en uge til søs sammen giver bedrifter for ledsageren; når Kaptajnen vågner, findes den ved køjen, nu og da med en lille linje (`wake_companion`). Vedvarende fart for sejl måles på simulationens egne trin (`note_sailing`: bedste time og bedste døgn, milepæle for 7, 9 og 12 knob i en time og et døgn på 150 sømil), og hver ry-optegnelse noterer nu, hvor og på hvilken båd den blev optjent. I025: der kan være ingen, én eller to ledsagere, så kaldene om ledsagere tager et ledsagernummer (`get_companion(id)`, `get_companions`, `get_companion_count`, `has_room_for_companion`, `set_companion_area(area, spot, id)`, `get_companions_ashore`), og hver ledsager har sin egen tidsplan og plads. Ved hver ankomst til en havn afgør den, om et dyr venter på kajen (`DockEncounters`), og den håndterer de venlige gestus (`befriend_dock_animal`), adoption af dyret (`adopt_dock_animal`: en ny ledsager med navn, køn, og hvornår og hvor den kom om bord, plus optegnelsen "Velkommen om bord" uden omdømme) og "Ikke nu" (`decline_dock_animal`); når der kastes los, bliver et ventende dyr på sin kaj. Opvågning giver én linje om én eller begge ledsagere; båden kaster ikke los, mens en af dem er i land, og at kalde dem om bord henter dem alle. Sejler man alene, er der ingen morgenlinje, og ledsagerens pris for en uge til søs kræver en ledsager. I026: caféen på kajen sælger en kop kaffe til en lille pris, skaleret efter sværhedsgraden som andre udgifter, og intet andet ændres (`buy_cafe_coffee`). Den holder styr på den maritime elektronik: pakken monteret i hver båd (`get_instrument_package`), køb af en pakke i skibshandelen, betalt helt eller slet ikke, monteret med det samme i båden om bord og derefter Kaptajnens til enhver båd (`buy_instrument_package`), gratis montering af en pakke, man ejer, hvor som helst (`fit_instrument_package`), og den side, hvert display viser (`set_instrument_page`), hver meldt med `instruments_changed`.
 - **Arbejder sammen med:** `SessionState` (de data, det ejer), `Simulation` (flytter tiden frem og kalder tilbage), `SaveManager`, `App`, HUD og menuer, mange kataloger (`PortCatalog`, `SeaRouter`, `VesselCatalog`, `ObjectiveCatalog`, `BoatCare`, `FishingCatalog`).
 - **Holder styr på:** Den aktuelle `SessionState`, om der er ændringer, der ikke er gemt, og et par ting, der ikke gemmes (en fisk på linen, om kaptajnen sover, om båden ligger roligt for anker, det aktuelle ubrudte stræk for sejl til fartrekorderne).
 - **Hvornår det kører:** Altid (en autoload: et script Godot starter automatisk, og som altid findes).
@@ -345,7 +345,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/core/session_state.gd`
 
 **Formål:** Det komplette gemte billede af ét spil, som rene data.
-- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil). I024: et nyt spil giver ledsagerens valgte navn og køn videre. I025: den har ledsagerne som en liste (ingen, én eller to, hver med et fast nummer, der aldrig genbruges) og dyrene, man finder på en kaj (`DockEncounters`). Et nyt spil starter uden ledsager; et gemt spil fra før I025 beholder sin ene ledsager som nummer 1, og det gamle felt med én ledsager skrives stadig for den første, så gemmeformatet forbliver version 12.
+- **Hvad det gør:** Holder alt, et gemt spil skal bruge (hvor du er om bord, uret, båden og dens position, rejsen, penge, proviant, stand for hver båd, Logbogen, ry, huen, fiskeri, kabys, anker, bådpleje, hjem), og laver det om til gemme-data og tilbage, mens hver del kontrolleres. Siden I022 husker den også, hvilke både kaptajnen ejer, og sværhedsgraden; gemte spil fra før I022 ejer alle både og er Standard. I022: den gemmer også fritidssyslerne (scrapbogen, et kort under arbejde, det lille spil). I024: et nyt spil giver ledsagerens valgte navn og køn videre. I025: den har ledsagerne som en liste (ingen, én eller to, hver med et fast nummer, der aldrig genbruges) og dyrene, man finder på en kaj (`DockEncounters`). Et nyt spil starter uden ledsager; et gemt spil fra før I025 beholder sin ene ledsager som nummer 1, og det gamle felt med én ledsager skrives stadig for den første, så gemmeformatet forbliver version 12. I026: den husker også de instrumentpakker, der ejes, og den, der er monteret i hver båd (`InstrumentState`, den valgfrie del `instruments`); ældre gemte spil får Classic overalt, og gemmeformatet forbliver 12.
 - **Arbejder sammen med:** `GameSession` (ejer og ændrer det), `SaveManager` (skriver og læser det), alle de mindre tilstands-optegnelser i `src/core/`.
 - **Holder styr på:** Hele spillets tilstand.
 - **Hvornår det kører:** Ved nyt spil, hver gang der gemmes og indlæses, og som data bag hele spillet.
@@ -605,6 +605,42 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når kortbordet eller kahyttens kort åbnes.
 - **Hvis du ændrer det:** Hvordan kursplanlægning virker, og søkort-skærmens opbygning og knapper.
 
+### `src/electronics/instrument_data.gd`
+
+**Formål:** Én aflæsning af alt, hvad bådens instrumenter viser, taget fra spillets egne data (I026).
+- **Hvad det gør:** Samler fart, kurs, den sande vind og dens vinkel til stævnen, vindstød og et ord om vejret, ruten (destination, distance tilbage, ankomsttid), næste sving og vejrudsigten for næste strækning, ankeret og (kun til ankers) dybden og, når der spørges, udsigten for de næste 3, 6 og 12 timer. Den regner intet ud selv: alt kommer fra spillets tilstand, simuleringen og søkortets næste sving, så de billigste instrumenter viser nøjagtig det samme vigtige som de dyreste. Der er ingen tilsyneladende vind og intet ekkolod under sejlads, fordi spillet ikke simulerer dem. Den gemmer også aflæsningerne som sætninger (de ord, det gamle sejlpanel brugte).
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `WorldMap` (næste sving), `Hud` (vindordene), `PropulsionState`, `SailTrim`, `DepthService`, `AnchorSite`; læses af `InstrumentCluster`, `InstrumentView` og `PlotterView`.
+- **Holder styr på:** Værdierne i én aflæsning; vejrudsigter gemmes pr. strækning og pr. halve time spiltid.
+- **Hvornår det kører:** Nogle gange i sekundet, mens instrumenterne er på skærmen.
+- **Hvis du ændrer det:** Hvad alle instrumenter viser; tallene skal fortsat komme fra spillets egne kilder.
+
+### `src/electronics/instrument_face.gd`
+
+**Formål:** Hvordan instrumenterne ser ud: tegningen af skiver, displays og multifunktionsskærmen for alle tre instrumentpakker (I026).
+- **Hvad det gør:** Tegner i enhver størrelse Classic-pakkens runde analoge skiver (fart, kurs, vind) og dens LCD-repeater, Modern Cruisers firkantede farvedisplays med deres sider (fart, kurs, vind, rute, næste sving, vejr, trim) og Offshore Navigators brede multifunktionsdisplay med dets opstillinger (oversigt, sejlads, navigation, vejr), hver i sit hus med glas, belysning om natten, et kompasbånd, en vindrose med røde og grønne sektorer for bidevind og en "motorvejs"-visning af kursen. Al tekst skrumper, så den passer til sin plads, også lange danske ord. Den tegner kun ud fra én aflæsning og læser aldrig selv spillet.
+- **Arbejder sammen med:** `InstrumentData` (hvad der skal vises), `InstrumentPackage` (farver og stil); bruges af `InstrumentCluster`, `InstrumentView` og `PlotterView`.
+- **Holder styr på:** Intet (kun de indlæste skrifttyper).
+- **Hvornår det kører:** Hver gang et instrument tegnes igen (nogle gange i sekundet).
+- **Hvis du ændrer det:** Udseendet af alle instrumenter i HUD'en, i nærbillederne og rundt om plotteren.
+
+### `src/electronics/instrument_package.gd`
+
+**Formål:** En af de tre instrumentpakker, en båd kan have: Classic, Modern Cruiser og Offshore Navigator fra det opdigtede mærke SKERRY (I026).
+- **Hvad det gør:** Læser listen over pakker fra `data/electronics/instrument_packages.json`: Classic (analoge skiver og en LCD-repeater, på alle både, gratis), Modern Cruiser (kompakte displays med sider) og Offshore Navigator (et multifunktionsdisplay med opstillinger). Hver har navn, model, tekst, pris, displays og sider og farver om dagen og om natten. Alle viser de samme data, så den billige aldrig er mindre sikker; de adskiller sig kun i udseende og opstilling.
+- **Arbejder sammen med:** `InstrumentState` (hvilke der ejes og er monteret), `GameSession`, `ChandleryMenu` (sælger dem), `InstrumentFace`, `CockpitInstruments`, `InstrumentCluster`, `InstrumentView`, `PlotterView`, `SystemsView`.
+- **Holder styr på:** Kataloget, indlæst én gang.
+- **Hvornår det kører:** Når instrumenterne tegnes, eller skibshandelen er åben.
+- **Hvis du ændrer det:** Pakkernes priser og udseende; id'erne ligger i de gemte spil.
+
+### `src/electronics/instrument_state.gd`
+
+**Formål:** Hvilke instrumentpakker Kaptajnen ejer, og hvilken der er monteret i hver båd (I026).
+- **Hvad det gør:** Husker de købte pakker (Classic ejes altid), pakken monteret i hver båd (Classic, når intet er valgt) og den side, hvert display viser. En pakke, der én gang er købt, er Kaptajnens til enhver båd og går aldrig tabt. Den laver det om til gemme-data og tilbage og afviser aldrig et gemt spil: ældre gemte spil har bare Classic overalt, og ukendte dele springes stille over.
+- **Arbejder sammen med:** `SessionState` (gemmer den som den valgfrie del `instruments`), `GameSession` (ændrer den), `InstrumentPackage`.
+- **Holder styr på:** Ejede pakker, den monterede pakke pr. båd og de valgte sider.
+- **Hvornår det kører:** Når instrumenter købes, monteres eller skifter side, og ved hver gemning og indlæsning.
+- **Hvis du ændrer det:** De gemte spil; gemmeformatet er stadig 12, så nye felter skal have sikre standardværdier.
+
 ### `src/ui/instrument_draw.gd`
 
 **Formål:** Små fælles tegnehjælpere til instrumentlignende brugerflade (Real Horizon).
@@ -663,7 +699,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 **Formål:** Den almindelige baggrundsvind overalt i verden.
 - **Hvad det gør:** Blander typiske vinde fra omkring 40 steder i Europa og fra verdens vindbælter (passatvinde, vestenvinde, stille områder) til en jævn vind og lægger langsomme ændringer over dage oveni. Samme sted, tid og seed giver altid den samme vind. Den giver også kompasnavne som "WSW" (på dansk "VSV").
-- **Arbejder sammen med:** `WeatherModel` (den vigtigste bruger), `PropulsionController`, HUD'en, `Simulation`, `AnchorSite`, radar- og sejlpanelerne.
+- **Arbejder sammen med:** `WeatherModel` (den vigtigste bruger), `PropulsionController`, HUD'en, `Simulation`, `AnchorSite`, radaren og instrumenterne.
 - **Holder styr på:** Vindindstillingerne fra `data/weather/wind_climate.json` og to forudberegnede vindgitre.
 - **Hvornår det kører:** Altid, når der er brug for vind.
 - **Hvis du ændrer det:** Vinden overalt og dermed sejlfart og rejsetider.
@@ -696,6 +732,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Hvilken ting den er, og hvilken side den hænger på.
 - **Hvornår det kører:** I kahytten, når den indlæses, eller når Kaptajnen ændrer valget af pynt.
 - **Hvis du ændrer det:** Kahytspyntens udseende og placering; en placeringsfejl kunne lægge en ting over en station eller kattens seng.
+
+### `src/aboard/cabin_object.gd`
+
+**Formål:** De ting, en sejler bruger under dæk, som rigtige genstande i kahytten: logbogen, VHF-radioen, el-tavlen, sømandskisten og det nyeste postkort (I026).
+- **Hvad det gør:** Tegner hver genstand, hvor den hører hjemme: den indbundne logbog og radioen ved kortbordet, el-tavlen ved motorkassen eller kabyssen, sømandskisten ved fodenden af køjen og, når der er et, det nyeste postkort stillet op på salonbordet. Hver har sin egen E-station; logbogen åbner Kaptajnens logbog som en bog, radioen VHF-radioens visning, tavlen bådens systemer, kisten "Make it home" og postkortet scrapbogen. Pladserne findes ud fra kahyttens egne møbler, på et sted Kaptajnen kan stå ved, og ikke oven i en anden station, så alle både får dem uden håndplacerede markører; mangler kahytten møblet, mangler den bare genstanden. Radioens lampe blinker, mens et opkald venter.
+- **Arbejder sammen med:** `BoatArea` (placerer dem og sender ønsket videre), `App` (åbner visningerne), `Interactable`, `BoatFixture`, `GameSession` (om der er et postkort).
+- **Holder styr på:** Hvilken genstand det er, og om et radioopkald venter (til lampen).
+- **Hvornår det kører:** I kahytten.
+- **Hvis du ændrer det:** Hvor kahyttens genstande står, og om Kaptajnen kan nå dem på alle både; de har ingen kollision og spærrer aldrig for at gå.
 
 ### `src/aboard/coffee_mug.gd`
 
@@ -754,8 +799,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat/boat_area.gd`
 
 **Formål:** Hjertet i hver dæks- og kahytsscene: den placerer Kaptajnen, sætter alt om bord op og gør "tryk på E ved noget" til ønsker, som spillet tager sig af.
-- **Hvad det gør:** Ved indlæsning lægger den bådens grafik på og tilføjer lys, vejr, liv i vandet, ankertegn, ledsageren på dækket, fiskestang, ankerspil, komfur, trofætavle, kaffepladser og kahytspynt. Den styrer kameraet (bredere under sejlads, drejet efter kursen, følger dig i land), gangen ud på pontonen i havnen og den korte ankomst til kaj. Når du bruger en station, sender den et signal (en besked et objekt sender, som andre kan lytte efter), f.eks. åbn søkort, sov eller lav mad, som app'en tager sig af; den åbner aldrig selv menuer. Når du kæler for ledsageren, viser den en gang imellem et venligt ord (`CompanionRemarks`), eller et venligt blik, når hænderne er fulde. I022: dækkets vand får sin blødere farve fra WaterLook med en svag havbund i lavt vand (ShallowWater), og Starling 33's kahyt får sine vinduer (CabinWindows), kun vist med den tegnede stil. I024: den stiller Kaptajnens laptop (`LaptopProp`) på kahytsbordet ved arbejdspladsen, hvis tekst bliver "Brug laptoppen". I025: den tilføjer en node til en anden ledsager i kahytten og to på dækket (hver vises kun, mens den ledsager bor om bord), kajscenen med et dyr, der venter på pontonen (`DockEncounterScene`), parøjeblikkene, når to ledsagere bor om bord (`PairMoments`), og det falmede hav uden for kahytten (`CabinSeaBackdrop`); hver båds kahyt har nu sine vinduer. `cancel_exit` lader Kaptajnen blive på dækket efter spørgsmålet ved nedgangen. Med fulde hænder nævner det venlige blik den ledsager, man prøvede at kæle for.
-- **Arbejder sammen med:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `LaptopProp`, `App` (som lytter efter dens ønsker). I025: også `DockEncounterScene`, `PairMoments`, `CabinSeaBackdrop`.
+- **Hvad det gør:** Ved indlæsning lægger den bådens grafik på og tilføjer lys, vejr, liv i vandet, ankertegn, ledsageren på dækket, fiskestang, ankerspil, komfur, trofætavle, kaffepladser og kahytspynt. Den styrer kameraet (bredere under sejlads, drejet efter kursen, følger dig i land), gangen ud på pontonen i havnen og den korte ankomst til kaj. Når du bruger en station, sender den et signal (en besked et objekt sender, som andre kan lytte efter), f.eks. åbn søkort, sov eller lav mad, som app'en tager sig af; den åbner aldrig selv menuer. Når du kæler for ledsageren, viser den en gang imellem et venligt ord (`CompanionRemarks`), eller et venligt blik, når hænderne er fulde. I022: dækkets vand får sin blødere farve fra WaterLook med en svag havbund i lavt vand (ShallowWater), og Starling 33's kahyt får sine vinduer (CabinWindows), kun vist med den tegnede stil. I024: den stiller Kaptajnens laptop (`LaptopProp`) på kahytsbordet ved arbejdspladsen, hvis tekst bliver "Brug laptoppen". I025: den tilføjer en node til en anden ledsager i kahytten og to på dækket (hver vises kun, mens den ledsager bor om bord), kajscenen med et dyr, der venter på pontonen (`DockEncounterScene`), parøjeblikkene, når to ledsagere bor om bord (`PairMoments`), og det falmede hav uden for kahytten (`CabinSeaBackdrop`); hver båds kahyt har nu sine vinduer. `cancel_exit` lader Kaptajnen blive på dækket efter spørgsmålet ved nedgangen. Med fulde hænder nævner det venlige blik den ledsager, man prøvede at kæle for. I026: på pontonen er der én station tilbage, gangbroen op til kajen ("To the quay"), hvor havnens forretninger nu har deres egne bygninger; de gamle butiksstationer bliver i scenerne, men bruges ikke. På hvert dæk monterer den de valgte instrumenter og kortplotteren ved roret (`CockpitInstruments`, placeret ud fra dækkets egne møbler, med en station ved plotteren) og skødespillet på cockpitsøllet (`WinchProp`, E trimmer sejlene); i hver kahyt placerer den logbogen, VHF-radioen, eltavlen, sømandskisten og det nyeste postkort (`CabinObject`). Bruges en af dem, sendes et ønske, som appen klarer, som for alle stationer.
+- **Arbejder sammen med:** `GameSession`, `Player`, `Interactable`, `VesselVisual`, `SailRig`, `BoatLighting`, `ShoreAccess`, `HarbourDressing`, `WaterLife`, `LaptopProp`, `App` (som lytter efter dens ønsker). I025: også `DockEncounterScene`, `PairMoments`, `CabinSeaBackdrop`. I026: `CockpitInstruments`, `WinchProp`, `CabinObject`.
 - **Holder styr på:** Kameraindstillinger, stationerne i land og ankomst-animationen; den skriver Kaptajnens position tilbage til spillets tilstand.
 - **Hvornår det kører:** Når du er på dækket eller i kahytten.
 - **Hvis du ændrer det:** Næsten alt om bord kan påvirkes: hvor Kaptajnen dukker op efter indlæsning, hvilke stationer der findes, og hvad de gør, kameraet og ankomsten i havn.
@@ -805,6 +850,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Verdens landformer, regnet ud én gang pr. spilkørsel og delt.
 - **Hvornår det kører:** I kahytten.
 - **Hvis du ændrer det:** Vægkortets udseende og rejsekortet, som genbruger dets tegning af land.
+
+### `src/boat/cockpit_instruments.gd`
+
+**Formål:** Bådens elektronik ved roret: kortplotteren ved rattet og en række instrumentdisplays på skottet (I026).
+- **Hvad det gør:** Tegner den monterede instrumentpakke i bådens rigtige målestok: plotteren på rattets søjle (ved siden af katamaranens rat eller ved nedgangen på en båd med rorpind) og tre displays over nedgangen, med skærmene vippet mod rorgængeren og et blødt skær om natten (rødt eller dæmpet, som pakken gør det). Et klik på plotteren eller displayene åbner deres nærbilleder; plotteren har også sin egen E-station. Udseendet skifter, så snart en anden pakke monteres.
+- **Arbejder sammen med:** `BoatArea` (placerer den ud fra dækkets egne møbler), `GameSession` (den monterede pakke), `InstrumentPackage`, `UiTheme` (natten), `App` (åbner `PlotterView` og `InstrumentView`).
+- **Holder styr på:** Hvor plotteren og displayene står, og hvilken pakke der tegnes.
+- **Hvornår det kører:** På dækket; den tegner højst nogle gange i sekundet, aldrig hvert billede.
+- **Hvis du ændrer det:** Hvordan cockpittets elektronik ser ud på alle både; det er grafik plus to klik og ændrer ikke sejladsen.
 
 ### `src/boat/fender_stowage.gd`
 
@@ -923,6 +977,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** På dækket.
 - **Hvis du ændrer det:** Hvordan vind og regn føles på dækket; kun udseendet.
 
+### `src/boat/winch_prop.gd`
+
+**Formål:** Genuaens skødespil på cockpitsøllet, hvor en sejler trimmer sejlene (I026).
+- **Hvad det gør:** Tegner et selvskødende spil med håndtag i rigtig størrelse ved den forreste ende af styrbords cockpitbænk (på Clam 40 ved siden af rattet). E på det åbner den samme sejltrim som T og handlingshjulet; kun under sejlads, ellers siger spillet hvorfor.
+- **Arbejder sammen med:** `BoatArea` (placerer det og sender ønsket videre), `Interactable`, `App` (åbner `SailTrimPanel`).
+- **Holder styr på:** Kun sin station.
+- **Hvornår det kører:** På dækket.
+- **Hvis du ændrer det:** Hvor spillet står, og hvordan det ser ud; det har ingen kollision og står aldrig i vejen for Kaptajnen eller en ledsager.
+
 ### `src/interaction/highlight_provider.gd`
 
 **Formål:** En lille usynlig hjælper, der fortæller fremhævningssystemet omridset af en tegnet ting (som komfuret eller ankerspillet).
@@ -962,8 +1025,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/player/player.gd`
 
 **Formål:** Kaptajnen om bord: går med tasterne, støder ind i møbler og bruger ting med E.
-- **Hvad det gør:** Bevæger sig med en fast fart (tasterne følger skærmen, også når dæksvisningen er drejet), husker hvilken vej den vender, svinger armene, når den går, og tegner sig selv som en lille sømand, der bærer kaptajnshuen eller kaffen, når den har dem. Den ignorerer tasterne, mens menuer er åbne.
-- **Arbejder sammen med:** `InteractionSensor`, `SailorDrawing`, `PlayerHat`, `GameSession` (kaffe), `BoatArea`.
+- **Hvad det gør:** Bevæger sig med en fast fart (tasterne følger skærmen, også når dæksvisningen er drejet), husker hvilken vej den vender, svinger armene, når den går, og tegner sig selv som en lille sømand, der bærer kaptajnshuen eller kaffen, når den har dem. Den ignorerer tasterne, mens menuer er åbne. I026: på kajen går den også på promenaden, og på caféen holder den caféens krus (tegnet som bådens eget, men intet i spillet ændres).
+- **Arbejder sammen med:** `InteractionSensor`, `SailorDrawing`, `PlayerHat`, `GameSession` (kaffe), `BoatArea`. I026: `HarbourFront` (kajen og caféstolen).
 - **Holder styr på:** Retningen den vender, gang-animationen, om tasterne er slået til, og visningens drejning.
 - **Hvornår det kører:** Når du er på dækket eller i kahytten.
 - **Hvis du ændrer det:** Hvordan Kaptajnen bevæger sig og føles at styre; ændres kollisionsstørrelsen, ændres også, hvor man kan gå.
@@ -1303,6 +1366,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når kaptajnen laver mad i kabyssen.
 - **Hvis du ændrer det:** Hvor nyttigt fiskeri og madlavning er for proviantbeholdningen.
 
+### `src/harbour/business_hours.gd`
+
+**Formål:** Åbningstiderne for kajens forretninger (I026).
+- **Hvad det gør:** Læser tiderne for hver slags forretning fra `data/harbours/business_hours.json`: caféen åbner tidligt, sejlmageren sent, bådeværftet holder arbejdstid og holder fri om søndagen. En kaj ved Middelhavet åbner lidt senere og holder åbent ind i aftenen, en lille havn har kortere åbningstid og en stor havn længere. Alt følger havnens egen soltid og spillets ene ur, så en butik har åbent præcis, når lyset siger, at det er morgen eller aften dér. Den svarer på, om en dør er åben, hvornår den næste gang åbner eller lukker, og skriver ordene til døren og prompten ("open until 17:00", "closed · opens 09:00 (in 3 h 10 min)"). Havnekontorets luge uden for åbningstid er altid bemandet. Intet gemmes.
+- **Arbejder sammen med:** `HarbourFront` (døre og prompter), `App` (tilbuddet om at vente, til en butik åbner), `HarbourNotes`, `HarbourLife`, `HarbourDressing` (egnen), `HarbourFacilities` (havnens størrelse), `Daylight`, `GameSession`, `PortCatalog`.
+- **Holder styr på:** Tabellen med åbningstider, indlæst én gang.
+- **Hvornår det kører:** På kajen, når en dør, en prompt eller opslagstavlen skal bruge åbningstiderne.
+- **Hvis du ændrer det:** Hvornår butikkerne har åbent; man kan altid vente på en lukket butik, og det nødvendige kan stadig klares ved lugen.
+
 ### `src/harbour/harbour_art.gd`
 
 **Formål:** Valgfri ekstra grafik til én bestemt havn: op til tre billeder af vartegn og vandets stemning.
@@ -1315,7 +1387,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/harbour/harbour_dressing.gd`
 
 **Formål:** Tegner den illustrerede havn omkring den fortøjede båd: flydebro, fortøjninger, klamper, stenkaj, krusninger i vandet, skilte for havnens tilbud og vartegn.
-- **Hvad det gør:** Læser, hvor den eksisterende flydebro, fortøjningerne og stationerne er, og maler havnen oven på dem set fra oven (Real Horizon): en flydebro, marinaskilte for købmanden, bådeværftet og Gå i land, kajen og byen i en af fire regionale typer og naboer fortøjet på den anden side af løbet; havnens udseende eller eget vartegn (HarbourLooks) dækker byen, hvor den har et. Står indstillingen Grafik på "Classic", skjuler den sig, og den gamle enkle tegning vises. Den fortæller også belysningen, hvor kajens lygter og broens lys er. Siden I021 kommer udsigten bag kajen fra HarbourLooks: havnens eget vartegn eller illustrationen for dens udseende. I025: havnen tegnes i bådens rigtige målestok (100 scene-enheder pr. meter, `METRE`). Byens huse har rigtige facadebredder og dybder for deres egn (`TOWNS`): træhuse og bådskure med gavlen ud mod vandet i den nordiske havn, granitrækkehuse med skifertage og skorstene ved Atlanterhavet, pudsede huse med skodder, vingetegl og tagterrasser ved Middelhavet, lave huse med verandaer under malet bølgeblik mellem palmer i troperne, med stræder, tilbagetrækninger og træer imellem, og byens bagerste del falmer lidt ind i disen. Hvor havnen har sit eget billede, starter husrækkerne fra billedets ender, så intet hus skæres over. På den anden side af løbet ligger nabobåde i deres rigtige størrelse og fra egnens egen flåde (`FLEETS`, `BOAT_SIZES`: tursejlere og større lystbåde, små sejlbåde, motorbåde, katamaraner, fiskekuttere og krabbebåde, små åbne både og joller), fortøjet med stævnen ind, eller med agterenden mod kajen ved Middelhavet, og let disede.
+- **Hvad det gør:** Læser, hvor den eksisterende flydebro, fortøjningerne og stationerne er, og maler havnen oven på dem set fra oven (Real Horizon): en flydebro, marinaskilte for købmanden, bådeværftet og Gå i land, kajen og byen i en af fire regionale typer og naboer fortøjet på den anden side af løbet; havnens udseende eller eget vartegn (HarbourLooks) dækker byen, hvor den har et. Står indstillingen Grafik på "Classic", skjuler den sig, og den gamle enkle tegning vises. Den fortæller også belysningen, hvor kajens lygter og broens lys er. Siden I021 kommer udsigten bag kajen fra HarbourLooks: havnens eget vartegn eller illustrationen for dens udseende. I025: havnen tegnes i bådens rigtige målestok (100 scene-enheder pr. meter, `METRE`). Byens huse har rigtige facadebredder og dybder for deres egn (`TOWNS`): træhuse og bådskure med gavlen ud mod vandet i den nordiske havn, granitrækkehuse med skifertage og skorstene ved Atlanterhavet, pudsede huse med skodder, vingetegl og tagterrasser ved Middelhavet, lave huse med verandaer under malet bølgeblik mellem palmer i troperne, med stræder, tilbagetrækninger og træer imellem, og byens bagerste del falmer lidt ind i disen. Hvor havnen har sit eget billede, starter husrækkerne fra billedets ender, så intet hus skæres over. På den anden side af løbet ligger nabobåde i deres rigtige størrelse og fra egnens egen flåde (`FLEETS`, `BOAT_SIZES`: tursejlere og større lystbåde, små sejlbåde, motorbåde, katamaraner, fiskekuttere og krabbebåde, små åbne både og joller), fortøjet med stævnen ind, eller med agterenden mod kajen ved Middelhavet, og let disede. I026: tilbuddene er flyttet op på kajen, så pontonens eneste skilt nu er gangbroens ("To the quay", med sit eget lille ikon af trin op til et hus), og den tegner aluminiumsgangbroen med trin og håndlister, der går fra bagkanten af pontonen op på kajen.
 - **Arbejder sammen med:** `BoatArea` (som tilføjer den), `HarbourArt` og `HarbourLandmark`, `SettingsManager` (grafikstil), `GameSession` (hvilken havn), `HighlightProvider`/`HighlightResolver` (skiltenes glød), `Interactable`-stationer.
 - **Holder styr på:** Former den har læst fra dækket, de aktuelle skilte og vartegn samt de klassiske skilttekster, så den kan skifte tilbage.
 - **Hvornår det kører:** Når båden ligger fortøjet i en havn, og dækket vises; opdateres når havnen eller indstillingen skifter.
@@ -1330,6 +1402,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Ved ankomst til en havn, når en butik åbnes, eller når man ser på et mål på søkortet.
 - **Hvis du ændrer det:** Hvor spilleren kan købe mad, reparere, få båden taget op eller besøge håndværkerne.
 
+### `src/harbour/harbour_front.gd`
+
+**Formål:** Kajen: den kajstrækning ved enden af gæstebroen, man kan gå på, hvor hver af havnens forretninger har sin egen bygning (I026).
+- **Hvad det gør:** Bygger kajen til den havn, båden ligger i: vandet og broens ende forneden, promenaden med bænke og lygter og butiksfacaderne langs toppen (kun de forretninger, havnen har, i egnens stil), med sine folk og de ledsagere, der er i land med Kaptajnen. Kameraet følger Kaptajnen langs kajen i rigtig målestok. Hver dør, havnekontorets luge uden for åbningstid, opslagstavlen, stræden ind til byen og bådliften lyser op og har en prompt, der siger, om stedet har åbent. Bruges en af dem, beder den appen åbne menuen; går man ned ad gangbroen igen (eller trykker E for enden af den), kommer man tilbage til båden. På caféen sætter Kaptajnen sig ved et bord på terrassen med en kop kaffe og rejser sig igen med E eller en bevægelsestast. Lyset følger timen: oplyste vinduer og lygter i skumringen, mørke butikker om natten. Det er en skærm ligesom søkortet, ikke et sted i det gemte spil: gemmer man her, indlæses spillet om bord, ved gangbroen.
+- **Arbejder sammen med:** `QuayLayout` (hvor alt står), `QuayDrawing`, `StorefrontDrawing`, `HarbourLife`, `QuayCompanion`, `BusinessHours`, `Interactable`, `Player`, `GameSession`, `App` (åbner menuerne og klarer at gå tilbage), `SceneRouter`.
+- **Holder styr på:** Layoutet, tegningerne og stationerne, ledsagerne på kajen og den caféstol, der er i brug; intet i spillets tilstand.
+- **Hvornår det kører:** Mens Kaptajnen er på kajen.
+- **Hvis du ændrer det:** Hvordan man går og gør ting på kajen; butikkernes menuer og det gemte spil ændres ikke af den.
+
 ### `src/harbour/harbour_landmark.gd`
 
 **Formål:** Ét billede af et vartegn til en havn (for eksempel Nyhavn i København).
@@ -1338,6 +1419,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Kun de fire indstillinger.
 - **Hvornår det kører:** Når havnens kulisse tegnes.
 - **Hvis du ændrer det:** Størrelsen og placeringen af et vartegnsbillede; det påvirker aldrig spillet.
+
+### `src/harbour/harbour_life.gd`
+
+**Formål:** Folkene på kajen: en håndfuld byboere med små vaner, så en havn føles beboet (I026).
+- **Hvad det gør:** Bestemmer, hvem der er ude, ud fra havnen, dagen og timen, altid de samme for det samme øjeblik: spadserende, der standser ved et butiksvindue, en bænk eller vandkanten; kunder, der går ind i en åben butik og kommer ud igen; cafégæster, der sidder, læser eller snakker, mens caféen har åbent; en fisker med sine net om morgenen; en handlende, der låser af ved lukketid; og en sen spadserende om natten. En større havn er mere travl, en lille er stille, og der er få eller ingen om natten og i dårligt vejr. Intet sker, mens Kaptajnen er væk: efter en søvn viser kajen bare, hvem der er ude på den nye time. Folk går i roligt tempo, står aldrig i en døråbning eller for enden af gangbroen og går uden om Kaptajnen.
+- **Arbejder sammen med:** `HarbourFront` (tilføjer den), `QuayLayout`, `BusinessHours`, `TownsfolkDrawing` (hvordan de ser ud), `Simulation` (vejret), `GameSession` (uret).
+- **Holder styr på:** De folk, der er på kajen nu, og de caféstole, Kaptajnen har taget.
+- **Hvornår det kører:** På kajen; hvert par sekunder sammenligner den, hvem der burde være ude, med hvem der er.
+- **Hvis du ændrer det:** Hvor livlige havnene føles; folkene er kun kulisse og ændrer intet i spillet.
 
 ### `src/harbour/harbour_looks.gd`
 
@@ -1348,6 +1438,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når du fortøjer, ankommer eller ser på en havn på søkortet.
 - **Hvis du ændrer det:** Hvordan havnene ser ud, og hvilke der er mærket som særlige; mangler et billede, vises blot den almindelige kaj, aldrig en fejl.
 
+### `src/harbour/harbour_notes.gd`
+
+**Formål:** Det, havnekontoret og opslagstavlen på kajen fortæller (I026).
+- **Hvad det gør:** Skriver ud fra data, spillet allerede har, havnens størrelse og tilbud, åbningstiderne for alle forretningerne på kajen, havnens egen beskrivelse og hvorfor den er særlig, vejrudsigten i ord for nu og om 6, 12 og 24 timer ("This evening: wind SW 14 kn, gusts 22 · fair") og nogle få små opslag for ugen fra `data/harbours/notices.json`. Kun oplysninger: ingen opgaver, intet at tjene, og aldrig en erstatning for vejr- og trafikadvarslerne, som kommer som altid.
+- **Arbejder sammen med:** `HarbourOfficeMenu`, `NoticeboardMenu`, `HarbourFacilities`, `BusinessHours`, `PortData`, `HarbourLooks`, `Simulation` (vejrudsigten).
+- **Holder styr på:** Filen med opslag, indlæst én gang.
+- **Hvornår det kører:** Når havnekontoret eller opslagstavlen åbnes.
+- **Hvis du ændrer det:** Ordene på kontorets side og på opslagstavlen.
+
 ### `src/harbour/harbour_trades.gd`
 
 **Formål:** Havnens håndværk og butikker: skibshandlen, sejlmageren og fiskehandleren samt de små ting, man kan købe til kahytten.
@@ -1356,6 +1455,33 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** En kopi af håndværkskataloget, der indlæses én gang.
 - **Hvornår det kører:** Når håndværkernes menuer åbnes, kahytten pyntes, eller sejlene tegnes.
 - **Hvis du ændrer det:** Hvad håndværkerne sælger og til hvilken pris, og hvordan sejlene ser ud; alt her er valgfrit for sejladsen.
+
+### `src/harbour/quay_companion.gd`
+
+**Formål:** En ledsager i land på kajen, der følger Kaptajnen (I026).
+- **Hvad det gør:** Viser en ledsager, der er i land med Kaptajnen, på kajen med sine egne tegnede gå- og hvilebilleder; den trisser efter Kaptajnen i lidt afstand (to holder afstand til hinanden) og hviler, når Kaptajnen står stille. På caféen slår den sig ned ved Kaptajnens bord: katten og hunden lægger sig ved siden af, papegøjen sætter sig på stoleryggen. Den ændrer intet i ledsagerens tilstand, har ingen kollision og kan ikke klappes her (det gør man om bord).
+- **Arbejder sammen med:** `HarbourFront` (tilføjer én for hver ledsager i land), `CompanionState`, `CompanionVisualSet`.
+- **Holder styr på:** Hvilken ledsager den viser, dens plads i rækken, dens billede og hvor den hviler ved caféen.
+- **Hvornår det kører:** På kajen, mens ledsageren er i land.
+- **Hvis du ændrer det:** Hvordan ledsagerne ser ud på kajen; deres rigtige tilstand røres ikke.
+
+### `src/harbour/quay_drawing.gd`
+
+**Formål:** Tegner kajens underlag set oppefra: promenaden, stenkanten langs vandet, vandet og broens ende (I026).
+- **Hvad det gør:** Maler promenaden i havnens egnsstil (brosten i nord, kalkstensfliser i syd), granitkanten med pullerter, lygtepæle og bænke, havnebassinet og enden af gæstebroen med gangbroen, der kommer op fra den, byen i disen bag den forreste husrække og, hvor bådeværftet tager både på land, bådliften over sin dok. Opslagstavlen står ved enden af gangbroen. Den tegnes én gang; kajen ændrer sig ikke, mens Kaptajnen er der.
+- **Arbejder sammen med:** `HarbourFront` (tilføjer den og bruger dens bænke, lygter og omrids), `QuayLayout`, `HarbourDressing` (egnsstilene).
+- **Holder styr på:** Layoutet og den stil, den tegner.
+- **Hvornår det kører:** På kajen.
+- **Hvis du ændrer det:** Hvordan kajens underlag ser ud; mure og stationer hører til `HarbourFront`.
+
+### `src/harbour/quay_layout.gd`
+
+**Formål:** Hvor alt står på en havns kaj, altid det samme for den samme havn (I026).
+- **Hvad det gør:** Lægger kajen ud alene ud fra havnens id, så testene kan læse den uden en scene: fra arbejdsenden til byenden bådeværftet (med bådliften, hvor værftet tager både op), sejlmageren og skibshandelen, havnekontoret med opslagstavlen ved gangbroen, så caféen, købmanden, fiskehandlerens bod og stræden ind til byen (Gå i land). Kun de forretninger, havnen faktisk har, står der (håndværkerne følger deres hovedforretning), og almindelige huse fylder resten; caféen, havnekontoret og opslagstavlen findes i alle havne. Den placerer også caféens terrasseborde og stole og ved, hvor folk ikke må blive stående (foran en dør og for enden af gangbroen).
+- **Arbejder sammen med:** `HarbourFront`, `QuayDrawing`, `StorefrontDrawing`, `HarbourLife`, `HarbourFacilities`, `HarbourTrades`, `HarbourDressing` (egnen).
+- **Holder styr på:** Facaderne, opslagstavlens og liftens pladser, kajens ender og caféens borde og stole.
+- **Hvornår det kører:** Når kajen bygges, og i testene.
+- **Hvis du ændrer det:** Rækkefølgen og størrelsen af kajens bygninger i alle havne.
 
 ### `src/harbour/shore_access.gd`
 
@@ -1374,6 +1500,24 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet ud over de faste tekster; hvilke øjeblikke du har haft, gemmes et andet sted.
 - **Hvornår det kører:** Når kaptajnen vælger Gå i land i en havn.
 - **Hvis du ændrer det:** Tekster, priser og ry for havneudflugter; omdøbes en hændelse, kan den tælle som ny igen.
+
+### `src/harbour/storefront_drawing.gd`
+
+**Formål:** Tegner én facade på kajen: en forretnings butiksfacade, et almindeligt hus eller stræden ind til byen (I026).
+- **Hvad det gør:** Maler facaden opret over kajen i havnens egnsstil (nordisk træ, atlantisk granit og puds, middelhavsstuk med skodder, tropiske malede brædder under bølgeblik), med det, der står udenfor, set oppefra. Hver forretning kan kendes på sin bygning, sit skilt og sine ting udenfor: bådeværftets værkstedsskur med et skrog på bukke, sejlmagerens hejsebom og rullet sejldug, skibshandelens vinduer med tovværk og bøjer og fendere ved døren, købmandens stribede markise og kasser, fiskehandlerens bod med fisk på is, caféens markise og terrasse, havnekontorets ur, flagstang og luge uden for åbningstid. Døren har et åben/lukket-skilt og en plade med åbningstiderne; åbne butikker har lysende vinduer i skumringen og om natten, lukkede er mørke, og husene tænder et vindue eller to om aftenen. Ingen rigtige mærker: skiltene siger, hvad stedet er.
+- **Arbejder sammen med:** `HarbourFront` (tilføjer dem og sætter timens tilstand), `QuayLayout`, `HarbourDressing` (egnsstilene), `BusinessHours` (gennem HarbourFront).
+- **Holder styr på:** Sin facade, om der er åbent, hvor mørkt det er, pladen med åbningstider og sine vinduer.
+- **Hvornår det kører:** På kajen; den tegner igen, når timens tilstand ændrer sig.
+- **Hvis du ændrer det:** Hvordan kajens bygninger ser ud; det er kun grafik.
+
+### `src/harbour/townsfolk_drawing.gd`
+
+**Formål:** Tegner havnens folk set oppefra, i samme stil som Kaptajnen og den lille pige (I026).
+- **Hvad det gør:** Tegner en person med form i toner, en blød blækstreg og naturlige voksne proportioner: en frakke, skuldre, arme der svinger lidt, hår eller en hat og stort set intet ansigt. Tøjet følger egnen (olietøj og uld i nord, voksbomuld og marineblåt ved Atlanterhavet, hør ved Middelhavet, let bomuld og stråhatte i troperne). Hver persons udseende laves én gang ud fra et tal, så den samme person altid ser ens ud. Stillinger: stående eller gående, siddende ved et bord eller bærende på en indkøbspose, en avis, en kop eller nøgler.
+- **Arbejder sammen med:** `HarbourLife` (hver byboer), `SailorDrawing` og `GirlDrawing` (den fælles stil).
+- **Holder styr på:** Intet (farvepaletterne ligger fast).
+- **Hvornår det kører:** Hver gang en person på kajen tegnes.
+- **Hvis du ændrer det:** Hvordan byboerne ser ud.
 
 ### `src/hat/hat_art.gd`
 
@@ -1451,7 +1595,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 **Formål:** Den gemte oversigt over, hvad der driver båden lige nu: sejl eller motor, fart og styringens hukommelse.
 - **Hvad det gør:** Indeholder tilstanden (sejl eller motor), hvorfor motoren kører, det gennemsnitlige sejlpotentiale, timere, vind og kurs ved sidste tjek, og om spilakeren er sat. Det skriver HUD-linjen, fx "Under sail · broad reach · 6.8 kn", og kontrollerer gemte data ved indlæsning.
-- **Arbejder sammen med:** `PropulsionController` (opdaterer det), `SessionState` (gemmer det), `Simulation`, `GameSession`, `SaveManager`, HUD'en (skærmens informationsfelter), sejladspanelerne, `SailRig` og `WorldMap`.
+- **Arbejder sammen med:** `PropulsionController` (opdaterer det), `SessionState` (gemmer det), `Simulation`, `GameSession`, `SaveManager`, HUD'en (skærmens informationsfelter), instrumenterne, `SailRig` og `WorldMap`.
 - **Holder styr på:** Tilstand, motorårsag, farter, timere, kurs, vind og spilaker.
 - **Hvornår det kører:** Hele tiden under sejlads; gemmes med spillet.
 - **Hvis du ændrer det:** Gemte spil (felterne skal kunne læses) og hvad HUD'en siger om sejladsen.
@@ -1460,7 +1604,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 **Formål:** Den lille færdighed i sejltrim: overlad det til besætningen, eller sæt skøderne selv.
 - **Hvad det gør:** Regner den bedste skødeindstilling ud for vindens vinkel (stramt på kryds, slækket på læns, lidt fladere i hård vind). En god indstilling gør båden op til 6 % hurtigere, en dårlig op til 10 % langsommere. Det ændrer aldrig, om motoren kører. Det giver også feedback som "Well trimmed" eller "Too loose".
-- **Arbejder sammen med:** `Simulation` og `PropulsionController` (bruger farten), `GameSession`/`SessionState` (gemmer indstillingen), panelerne for sejltrim og sejlads.
+- **Arbejder sammen med:** `Simulation` og `PropulsionController` (bruger farten), `GameSession`/`SessionState` (gemmer indstillingen), panelet for sejltrim og instrumenterne.
 - **Holder styr på:** Intet; kun regler.
 - **Hvornår det kører:** Ved hvert sejladstrin, og når kaptajnen flytter trim-skyderen.
 - **Hvis du ændrer det:** Hvor givende det er at trimme sejlene selv.
@@ -1560,11 +1704,11 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/boatyard_menu.gd`
 
 **Formål:** Bådeværftets vindue, hvor du ser bådene igennem og flytter om bord på en anden.
-- **Hvad det gør:** Viser hver båd med et billede af dækket, dens data og en tabel, der sammenligner farten, og lader dig skifte båd (gratis; tid, havn, ledsager og fremskridt bevares). Det har også knapper til Boat care, købmanden, skibshandelen og sejlmageren. Siden I022 viser den hver båds pris, eller at den er din, og tilbyder at købe en båd, du ikke ejer endnu. Steady Hands: bådene, detaljerne og sammenligningen ruller, når skærmen er for lav (ved 130 % brugerflade var den højere end skærmen).
-- **Arbejder sammen med:** `App`, `VesselCatalog`, `VesselDefinition`, `VesselVisual`, `GameSession`, `BoatCare`, `Provisions`, `HarbourFacilities`; layoutet kommer fra `boatyard_menu.tscn`.
+- **Hvad det gør:** Viser hver båd med et billede af dækket, dens data og en tabel, der sammenligner farten, og lader dig skifte båd (gratis; tid, havn, ledsager og fremskridt bevares). Det har også en knap til Boat care. Siden I026 har købmanden, skibshandelen og sejlmageren deres egne bygninger på kajen, så værftet har ikke længere knapper til dem. Siden I022 viser den hver båds pris, eller at den er din, og tilbyder at købe en båd, du ikke ejer endnu. Steady Hands: bådene, detaljerne og sammenligningen ruller, når skærmen er for lav (ved 130 % brugerflade var den højere end skærmen).
+- **Arbejder sammen med:** `App`, `VesselCatalog`, `VesselDefinition`, `VesselVisual`, `GameSession`, `BoatCare`, `HarbourFacilities`, `ShopCounter` (dens ramme på kajen); layoutet kommer fra `boatyard_menu.tscn`.
 - **Holder styr på:** Kun hvilken båd der er valgt i listen.
-- **Hvornår det kører:** Når du bruger bådeværftet, mens du ligger fortøjet i havn.
-- **Hvis du ændrer det:** Hvordan både vælges og sammenlignes, og vejen til værftets andre tjenester.
+- **Hvornår det kører:** Når du bruger bådeværftets dør på kajen, mens du ligger fortøjet i havn (I026).
+- **Hvis du ændrer det:** Hvordan både vælges og sammenlignes, og vejen til Boat care.
 
 ### `src/ui/build_label.gd`
 
@@ -1573,6 +1717,16 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Arbejder sammen med:** `GameVersion`, `UiScaleLayer`, `App` (tilføjer den én gang).
 - **Gemmer:** Intet.
 - **Hvornår det kører:** Fra opstart til lukning, på alle skærme.
+
+### `src/ui/cafe_menu.gd`
+
+**Formål:** Caféens disk på kajen: bestil en kop kaffe og sæt dig med den på terrassen (I026).
+- **Hvad det gør:** Viser prisen på en kop kaffe og dine penge og en knap til at bestille. En bestilling koster en lille pris, og Kaptajnen sætter sig ved et ledigt bord på terrassen med caféens krus; tiden går som sædvanlig, og E eller en bevægelsestast rejser Kaptajnen igen. Intet at tjene: ingen præstation, ingen energi, bare en kop kaffe ved vandet. Er alle borde optaget, siger den det, og intet betales.
+- **Arbejder sammen med:** `App` (betaler gennem `GameSession` og sætter Kaptajnen ved bordet), `HarbourFront` (terrassen), `ShopCounter` (dens ramme), `GameSession` (prisen).
+- **Holder styr på:** Intet selv.
+- **Hvornår det kører:** Ved caféens dør på kajen, mens caféen har åbent.
+- **Hvis du ændrer det:** Caféens disk; selve prisen ligger i `GameSession`.
+
 ### `src/ui/cabin_home_menu.gd`
 
 **Formål:** "Make it home": vælg hvilke af dine ting til kahytten der vises om bord på denne båd.
@@ -1603,20 +1757,20 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/chandlery_menu.gd`
 
 **Formål:** Skibshandelen: butikken for bådudstyr, Magic Anchor, fiskeblink og ting til kahytten.
-- **Hvad det gør:** Viser udstyr til båden (monteres én gang pr. båd), Magic Anchor (én gang, til alle både), blink og pynt til kahytten, hver med en prisknap. Et køb er alt eller intet og aldrig mere, end du har råd til.
-- **Arbejder sammen med:** `TradePanel`, `GameSession`, `HarbourTrades`, `BoatCare`, `FishingCatalog`, `App` (bruger monteringstiden).
+- **Hvad det gør:** Viser udstyr til båden (monteres én gang pr. båd), Magic Anchor (én gang, til alle både), blink og pynt til kahytten, hver med en prisknap. I026: en afdeling for elektronik sælger instrumentpakkerne (Modern Cruiser, Offshore Navigator), købt én gang og monteret med det samme i båden om bord; en pakke, du ejer, kan monteres igen her gratis, og den monterede er markeret. Et køb er alt eller intet og aldrig mere, end du har råd til.
+- **Arbejder sammen med:** `TradePanel`, `GameSession`, `HarbourTrades`, `BoatCare`, `FishingCatalog`, `App` (bruger monteringstiden). I026: `InstrumentPackage`, `ShopCounter`.
 - **Holder styr på:** Intet selv.
-- **Hvornår det kører:** Når du åbner skibshandelen fra bådeværftet, i havne der har en.
+- **Hvornår det kører:** Når du bruger skibshandelens dør på kajen (I026), i havne der har en.
 - **Hvis du ændrer det:** Hvad der kan købes, og til hvilken pris; købene havner i det gemte spil via `GameSession`.
 
 ### `src/ui/chart_plotter.gd`
 
-**Formål:** Den lille kortplotter på dækket under sejlads: din båd, den nærmeste kyst, din kurs, næste sving og vinden.
-- **Hvad det gør:** Tegner et kort med nord opad omkring båden med fire afstandsområder (5–80 sm) og bygger kystlinjen lidt ad gangen ud fra det samme vand/land-gitter, som ruteplanlæggeren bruger. Den viser tekst om næste sving eller destination og om vinden.
-- **Arbejder sammen med:** `Hud` (opretter den), `App` (slår den til og fra med P eller handlingshjulet), `GameSession`, `Simulation`, `SeaRouter` / `NavGrid`, `WorldMap`, `WindLayer`, `GeoMath`. `TrafficModel` låner også to af dens små kortberegnings-hjælpere.
-- **Holder styr på:** Om den er vist, og hvilket afstandsområde der er valgt (kun for denne spilgang, gemmes ikke), samt et lille billede af kysten.
-- **Hvornår det kører:** På dækket under sejlads, hvis den er slået til.
-- **Hvis du ændrer det:** Navigationshjælpen på dækket og muligvis billedhastigheden; ændrer du kortberegnings-hjælperne, påvirkes også de andre både i trafikken.
+**Formål:** Kortplotterens skærm: din båd, den nærmeste kyst, din kurs, næste sving og vinden.
+- **Hvad det gør:** Tegner et kort med nord opad omkring båden med fire afstandsområder (5–80 sm) og bygger kystlinjen lidt ad gangen ud fra det samme vand/land-gitter, som ruteplanlæggeren bruger, dæmpet om natten. Siden I026 er den ikke længere et panel i HUD'en: den er skærmen i kortplotteren ved roret, vist forstørret i nærbilledet `PlotterView` (P, handlingshjulet eller selve plotteren ved roret), inde i den monterede instrumentpakkes hus. Den giver også næste sving, kurs, vind og afstandsområde i ord.
+- **Arbejder sammen med:** `PlotterView` (rummer den), `App`, `GameSession`, `Simulation`, `SeaRouter` / `NavGrid`, `WorldMap`, `WindLayer`, `GeoMath`, `UiTheme` (natten). `TrafficModel` låner også to af dens små kortberegnings-hjælpere.
+- **Holder styr på:** Hvilket afstandsområde der er valgt (kun for denne spilgang, gemmes ikke), samt et lille billede af kysten.
+- **Hvornår det kører:** Kun mens den er på skærmen i plottervisningen.
+- **Hvis du ændrer det:** Navigationshjælpen ved roret og muligvis billedhastigheden; ændrer du kortberegnings-hjælperne, påvirkes også de andre både i trafikken.
 
 ### `src/ui/confirm_dialog.gd`
 
@@ -1678,7 +1832,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvad det gør:** Viser hver fisk i køleboksen med sin pris, solgt én ad gangen eller alle på én gang. Trofæer og rekorder bliver i Logbogen.
 - **Arbejder sammen med:** `TradePanel`, `GameSession`, `HarbourTrades`, `FishingCatalog`, `App`.
 - **Holder styr på:** Intet selv.
-- **Hvornår det kører:** Fra købmandens knap "To the fishmonger…", i havne der har en fiskehandler.
+- **Hvornår det kører:** Ved fiskehandlerens bod på kajen (I026; før fra købmandens knap), i havne der har en fiskehandler.
 - **Hvis du ændrer det:** Hvor mange penge fiskeri giver, og hvordan det føles at sælge.
 
 ### `src/ui/fit_scroll.gd`
@@ -1689,6 +1843,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Vinduespanelet, den hører til.
 - **Hvornår det kører:** Når vinduets størrelse, brugerfladens størrelse eller indholdet ændres; aldrig i hvert billede.
 - **Hvis du ændrer det:** Hold titel og knapper uden for det; kun midten af et vindue skal rulle.
+
+### `src/ui/focus_frame.gd`
+
+**Formål:** Rammen, der får en menu til at ligne den genstand, den blev åbnet fra (I026).
+- **Hvad det gør:** Når et vindue åbnes fra en fysisk genstand, tegner den genstandens materiale rundt om vinduets panel: en indbunden bogs stofbind og sider til logbogen, en radios grafitgrå ramme med et oplyst kanalvindue til VHF-radioen, lakeret teak til proviantskabet, trofætavlen, sømandskisten, postkortet og køjen, børstet stål til komfuret og en offwhite eltavle til systemvisningen. Panelet vokser kort frem. Selve vinduet er uændret; rammen tegner kun og tager aldrig musen eller tasterne.
+- **Arbejder sammen med:** `App` (sætter den på), vinduerne af typen `ModalPanel`/`SimplePanel` (`CaptainsLogMenu`, `VhfSetView`, `SystemsView`, `ProvisionsMenu`, `CookingMenu`, `TrophyMenu`, `CabinHomeMenu`, `ScrapbookMenu`, `SleepMenu`), `CabinObject`.
+- **Holder styr på:** Hvilket materiale den tegner.
+- **Hvornår det kører:** Mens et vindue med ramme er åbent.
+- **Hvis du ændrer det:** Hvordan nærbillederne ser ud; menuerne virker ens med og uden.
 
 ### `src/ui/game_dev_menu.gd`
 
@@ -1705,16 +1868,16 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvad det gør:** Viser havnens begivenhed (eller "en hyggelig gåtur", hvis du lige har været her), hvert valg med pris og tid, og fortæller bagefter, hvad der skete. Valg, du ikke har råd til, er gråtonede. Steady Hands: valgene og "gratis" vises på det valgte sprog.
 - **Arbejder sammen med:** `GameSession`, `ShoreEvents`, `App` (afgør valget og bruger tiden i land).
 - **Holder styr på:** Kun den begivenhed, der vises.
-- **Hvornår det kører:** Når du går i land i en havn, der tilbyder det.
+- **Hvornår det kører:** Når du går i land i en havn, der tilbyder det. Siden I026 fra stræden ind til byen ved kajens byende.
 - **Hvis du ændrer det:** Begivenhederne i land, hvad de koster, og det ry og de mindeværdige øjeblikke, de kan give.
 
 ### `src/ui/grocery_menu.gd`
 
 **Formål:** Havnens købmand: mad og vand, ekstra proviant til en Lang passage, en ny kaptajnshue og fiskeblink.
-- **Hvad det gør:** Fylder mad og vand op til 14 dage hver i ét køb eller ud over det til en lang passage (op til hvad båden kan stuve). Sælger også en ny kaptajnshue og blink og har en knap til fiskehandleren ved siden af. Steady Hands: blinknavne vises på det valgte sprog.
-- **Arbejder sammen med:** `GameSession`, `Provisions`, `FishingCatalog`, `HarbourFacilities`, `App` (åbner den og fiskehandleren).
-- **Holder styr på:** Intet selv. Den opdaterer sig selv, når dine penge eller din fangst ændrer sig (for eksempel efter et salg hos fiskehandleren ovenpå).
-- **Hvornår det kører:** I havn, fra pontonens købmandsstation, proviantpanelet eller bådeværftet.
+- **Hvad det gør:** Fylder mad og vand op til 14 dage hver i ét køb eller ud over det til en lang passage (op til hvad båden kan stuve). Sælger også en ny kaptajnshue og blink og fortæller, hvad din fangst er værd hos fiskehandlerens bod på kajen (I026: fiskehandleren har sin egen bod, så knappen dertil er væk). Steady Hands: blinknavne vises på det valgte sprog.
+- **Arbejder sammen med:** `GameSession`, `Provisions`, `FishingCatalog`, `HarbourFacilities`, `App` (åbner den), `ShopCounter` (dens ramme på kajen).
+- **Holder styr på:** Intet selv. Den opdaterer sig selv, når dine penge eller din fangst ændrer sig.
+- **Hvornår det kører:** I havn, fra købmandens dør på kajen (I026) eller kahyttens proviantskab.
 - **Hvis du ændrer det:** Prisen på proviant og hvor langt du kan sejle, før den slipper op; købene gemmes via `GameSession`.
 
 ### `src/ui/handbook_menu.gd`
@@ -1734,6 +1897,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Havnen, solens højde og skydækket ved ankomsten; et lager af vinduespletter pr. billede.
 - **Hvornår det kører:** Kun mens kortet er på skærmen; det tegnes én gang (og ved ændret størrelse), ikke i hvert billede.
 - **Hvis du ændrer det:** Hold det stille og kort; at vende tilbage til en kendt havn skal stadig give det lille kort, og at indlæse et spil eller gå under dæk må ikke vise det.
+
+### `src/ui/harbour_office_menu.gd`
+
+**Formål:** Havnekontoret på kajen og dets luge uden for åbningstid (I026).
+- **Hvad det gør:** Viser havnens størrelse og tilbud, åbningstiderne for alle forretninger på kajen, nogle få ord om stedet og vejrudsigten i ord. Uden for åbningstid viser lugen de samme oplysninger plus det nødvendige, der ikke kan vente til morgenen: mad og vand til båden (hvor havnen har en købmand) og en nødreparation af et beskadiget skrog (hvor den har et bådeværft; værftets egen reparation, med pris og tid som altid). Ingen strander på grund af uret.
+- **Arbejder sammen med:** `HarbourNotes` (ordene), `QuayLayout`, `GameSession` (proviant, reparationstilbud), `BoatCare`, `HarbourFacilities`, `App` (udfører reparationen og lader tiden gå), `ShopCounter`.
+- **Holder styr på:** Om det er lugen, og kajens layout.
+- **Hvornår det kører:** Ved havnekontorets dør (i åbningstiden) eller ved lugen (når som helst).
+- **Hvis du ændrer det:** Hvad kontoret fortæller, og hvad der stadig kan klares om natten.
 
 ### `src/ui/hat_badge.gd`
 
@@ -1764,12 +1936,30 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/hud.gd`
 
-**Formål:** Det overlay, du ser under spillet: hvor du er, uret, ruten, vinden og advarsler.
-- **Hvad det gør:** Opdaterer sin tekst hvert billede ud fra spillet: område og havn, uret og PAUSED-mærket, den planlagte rute eller sejladsens fremskridt med ankomsttid, bådens tilstand, penge og proviant, og vinden. Det viser vejradvarsler og "tryk E"-beskeden, og det rummer huemærket, mærket for livet om bord, passagepanelet, sejlpanelet, kortplotteren og radaren. På søkortet viser det kun urbjælken. Steady Hands: højre kolonne (rutepanelet, Turdetaljer, vejradvarslen) stables, så en advarsel aldrig flytter Turdetaljer og får den højde, dens tekst kræver; rutepanelet bliver smallere i stedet for at gå ind under uret ved en stor brugerflade; prompten flytter til højre for kortplotteren og radaren; "Moored at" / "Arrived at" oversættes.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `PortCatalog`, `HatBadge`, `AboardBadge`, `PassagePanel`, `SailingPanel`, `ChartPlotter`, `RadarPanel`, `App`.
+**Formål:** Det overlay, du ser under spillet: hvor du er, uret, ruten, instrumenterne og advarsler.
+- **Hvad det gør:** Opdaterer sin tekst hvert billede ud fra spillet: område og havn, uret og PAUSED-mærket, den planlagte rute i havn, bådens tilstand, penge og proviant, og vinden. Det viser vejradvarsler og "tryk E"-beskeden, og det rummer huemærket, mærket for livet om bord, passagepanelet, bådens instrumenter og radaren. I026: under sejlads viser instrumenterne (`InstrumentCluster`, i den monterede pakkes udseende) fart, kurs, vind, ruten, distancen og ankomsttiden, så rutepanelet kun beholder sin Menu-knap, og intet vises to gange; de afløste sejlpanelet, og kortplotteren er nu et apparat ved roret i stedet for et HUD-panel. Et klik på instrumenterne åbner deres nærbillede. På kajen kalder det stedet "The quay". På søkortet viser det kun urbjælken. Steady Hands: højre kolonne (rutepanelet, instrumenterne, vejradvarslen) stables, så en advarsel aldrig flytter instrumenterne og får den højde, dens tekst kræver; rutepanelet bliver smallere i stedet for at gå ind under uret ved en stor brugerflade; prompten flytter til højre for radaren; "Moored at" / "Arrived at" oversættes.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `PortCatalog`, `HatBadge`, `AboardBadge`, `PassagePanel`, `InstrumentCluster`, `RadarPanel`, `App`.
 - **Holder styr på:** Intet eget ud over et gemt tidsoverslag for ruten, og om det er i søkortstilstand.
 - **Hvornår det kører:** Altid under spillet (en del af appens hovedscene).
 - **Hvis du ændrer det:** Alt, hvad spilleren læser med et hurtigt blik, ændres. Flere andre paneler genbruger også dens vindtekst (`Hud.describe_wind`).
+
+### `src/ui/instrument_cluster.gd`
+
+**Formål:** Bådens instrumenter i HUD'en, i den monterede pakkes udseende (I026).
+- **Hvad det gør:** Viser under sejlads, på dækket og i kahytten, fart, kurs, den sande vind og dens vinkel, ruten (destination, distance, ankomsttid), næste sving og, til ankers, ankeret: tre runde skiver og en LCD-repeater for Classic, tre displays hver på sin egen side for Modern Cruiser eller multifunktionsdisplayet i sin opstilling for Offshore Navigator, med en statuslinje under dem. Den afløste sejlpanelet og rutepanelets linjer om sejladsen. Den aflæser instrumenterne nogle gange i sekundet og tegner kun igen da. En ny kurs på mere end 5° giver kursen et enkelt, roligt lys (et enkelt blink med Reduce flashing slået til). Et klik på den (eller I eller handlingshjulet) åbner nærbilledet `InstrumentView`.
+- **Arbejder sammen med:** `Hud` (rummer den og stabler den i højre kolonne), `InstrumentData`, `InstrumentPackage`, `InstrumentFace`, `GameSession` (den monterede pakke og siderne), `SettingsManager` (Reduce flashing), `App`.
+- **Holder styr på:** Den seneste aflæsning, den kurs den sidst så, og lysets tilstand.
+- **Hvornår det kører:** Under spillet, når båden sejler.
+- **Hvis du ændrer det:** Den vigtigste information om sejladsen på skærmen.
+
+### `src/ui/instrument_view.gd`
+
+**Formål:** Instrumenterne tæt på, som de ser ud ved roret, med deres sider og valget af pakke (I026).
+- **Hvad det gør:** Viser den monterede pakkes enheder forstørret på et stykke af cockpitskottet (lys gelcoat om dagen, dæmpet om natten): Classics tre skiver med repeateren, hvis knapper vælger rute, næste sving, vejr eller sejltrim; Modern Cruisers tre displays, hver med sine egne sideknapper; eller Offshore Navigators multifunktionsdisplay med knapper til opstillingerne (oversigt, sejlads, navigation, vejr). Under enhederne skriver den aflæsningerne i ord (vejrudsigten for næste strækning, trimmet, udsigten). En vælger viser de pakker, Kaptajnen ejer, og monterer straks den valgte i båden om bord; skibshandelen sælger de andre. Esc lukker.
+- **Arbejder sammen med:** `InstrumentData`, `InstrumentPackage`, `InstrumentFace`, `GameSession` (montering og sider), `App` (åbner den med I, handlingshjulet, et klik på HUD'ens instrumenter eller på enhederne ved roret).
+- **Holder styr på:** Classic-repeaterens side (for denne spilgang) og den seneste aflæsning.
+- **Hvornår det kører:** Mens den er åben.
+- **Hvis du ændrer det:** Hvordan spillerne aflæser og bladrer i instrumenterne; de valgte sider gemmes via `GameSession`.
 
 ### `src/ui/language_picker.gd`
 
@@ -1843,10 +2033,19 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når du trykker Nyt spil på titelskærmen.
 - **Hvis du ændrer det:** Hvordan et nyt spil begynder; at tilbyde en ledsager ved start igen ville gå imod I025's idé.
 
+### `src/ui/noticeboard_menu.gd`
+
+**Formål:** Kajens opslagstavle, læst tæt på (I026).
+- **Hvad det gør:** Viser vejrudsigten i ord, nogle få små opslag og havnens egne ord; åbningstiderne står på hver dør og på havnekontoret. Kun oplysninger: ingen opgaver, og vejr- og trafikadvarslerne kommer stadig som altid.
+- **Arbejder sammen med:** `HarbourNotes`, `HarbourFront`, `App` (åbner den), `ShopCounter`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Når opslagstavlen ved gangbroen bruges.
+- **Hvis du ændrer det:** Kun hvad opslagstavlen viser.
+
 ### `src/ui/passage_panel.gd`
 
 **Formål:** Et kompakt panel på dækket under lange sejladser, med knapper til hurtig tid.
-- **Hvad det gør:** Viser hvor båden er, dagen på havet, vejrudsigten langs ruten, om provianten rækker, og bådpleje der trænger. Knapperne lader tiden gå med 1, 4 eller 12 timer pr. sekund, åbner søkortet eller gemmer. Når hurtig tid stopper af sig selv, står der hvorfor (og hvor mange fisk der nappede imens).
+- **Hvad det gør:** Viser hvor båden er, dagen på havet, vejrudsigten langs ruten, om provianten rækker, og bådpleje der trænger. Knapperne lader tiden gå med 1, 4 eller 12 timer pr. sekund, åbner søkortet eller gemmer. Når hurtig tid stopper af sig selv, står der hvorfor (og hvor mange fisk der nappede imens). I026: farten og vinden står på instrumenterne ved siden af.
 - **Arbejder sammen med:** `GameSession`, `Simulation` (passageuret), `Hud` (rummer det), `BoatCare`, `Provisions`, `VoyageMap` (genbruger dets knaptekster).
 - **Holder styr på:** Kun gemt udsigtstekst og den seneste "stoppet"-besked.
 - **Hvornår det kører:** Under sejlads på ture på 60 sm eller mere, når båden ikke ligger for anker.
@@ -1860,6 +2059,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** Når du trykker Esc eller menuknappen under spillet.
 - **Hvis du ændrer det:** At gemme, indlæse og forlade spillet kan blive påvirket.
+
+### `src/ui/plotter_view.gd`
+
+**Formål:** Kortplotteren ved roret, tæt på (I026).
+- **Hvad det gør:** Viser plotterens skærm (kysten, kursen, næste sving og vinden, fra `ChartPlotter`) i den monterede pakkes hus, med knapper til afstandsområdet på rammen og en kolonne med data ved siden af kortet: fart, kurs, næste sving, vind og afstandsområde. Det er cockpittets plotter til sejladsen lige nu; kurser planlægges stadig ved kortbordet eller med Charts på handlingshjulet. Åbnes med P, handlingshjulet eller ved plotteren ved roret, om bord, i havn eller til søs; Esc lukker.
+- **Arbejder sammen med:** `ChartPlotter` (skærmen), `InstrumentData`, `InstrumentPackage`, `InstrumentFace` (huset), `GameSession`, `App`.
+- **Holder styr på:** Den seneste aflæsning; det valgte afstandsområde huskes af `ChartPlotter` for spilgangen.
+- **Hvornår det kører:** Mens den er åben.
+- **Hvis du ændrer det:** Plotteren tæt på; ruteplanlægningen påvirkes ikke.
 
 ### `src/ui/postcard_menu.gd`
 
@@ -1900,7 +2108,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/radar_panel.gd`
 
 **Formål:** En lille radarskærm på dækket, der viser andre skibe i nærheden.
-- **Hvad det gør:** Tegner din båd i midten, afstandsringe og nærliggende skibe farvet efter fare, og skriver op til tre linjer om de vigtigste (hvor tæt de passerer, og hvad du skal gøre). Du kan zoome mellem 3, 6 og 12 sm. Den vises, når du tænder den, eller af sig selv, når et skib udgør en risiko under sejlads. Den vises kun under sejlads, hvor dens punkt i Q-menuen findes: tændt på havet forsvinder den ved fortøjning og kommer igen på næste sejlads.
+- **Hvad det gør:** Tegner din båd i midten, afstandsringe og nærliggende skibe farvet efter fare, og skriver op til tre linjer om de vigtigste (hvor tæt de passerer, og hvad du skal gøre). Du kan zoome mellem 3, 6 og 12 sm. Den vises, når du tænder den, eller af sig selv, når et skib udgør en risiko under sejlads. Den vises kun under sejlads, hvor dens punkt i Q-menuen findes: tændt på havet forsvinder den ved fortøjning og kommer igen på næste sejlads. I026: den står alene i nederste venstre hjørne, da kortplotteren ikke længere er et HUD-panel.
 - **Arbejder sammen med:** `Simulation` (trafikrisici), `GameSession`, `TrafficModel`, `Hud` (rummer den), `App` (handlingshjulet tænder den).
 - **Holder styr på:** Om den er tændt, og zoomniveauet (kun for denne kørsel, ikke gemt).
 - **Hvornår det kører:** Under spillet, på dækket. Den tjekker trafikken et par gange i sekundet.
@@ -1933,18 +2141,9 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Under sejlads, når du trykker T (ikke for anker).
 - **Hvis du ændrer det:** Hvordan spillerne styrer sejlfarten.
 
-### `src/ui/sailing_panel.gd`
-
-**Formål:** Panelet til højre under sejlads med de tal, en skipper kaster et blik på.
-- **Hvad det gør:** Viser fart, kurs, vinden nu, sejltrimmet, næste etape med vindudsigt, og tid og afstand til næste rutepunkt eller ankerplads. Det fremhæver kursen blidt, når den skifter, og kan foldes sammen.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `WorldMap` (næste sving), `Hud` (rummer det, vindtekst), `SailTrim`, `SettingsManager`, `UiTheme`.
-- **Holder styr på:** Om det er foldet sammen (kun for denne kørsel) og noget gemt udsigtstekst.
-- **Hvornår det kører:** Under spillet, når båden er under sejlads.
-- **Hvis du ændrer det:** Den vigtigste sejlinformation på skærmen.
-
 ### `src/ui/sailmaker_menu.gd`
 
-**Formål:** Sejlmagerens butik ved bådeværftet.
+**Formål:** Sejlmagerens butik (siden I026 sit eget sejlmagerloft på kajen, ved siden af bådeværftet).
 - **Hvad det gør:** Tilbyder to ting: service af rigning og sejl (den samme som værftets, som får båden til at sejle bedre) og nye sejldugsfarver (kun udseende; de ændrer ikke farten). En dug, der allerede er købt til denne båd, kan sættes på igen gratis.
 - **Arbejder sammen med:** `TradePanel` (dens layout), `GameSession`, `BoatCare`, `HarbourTrades`, `SessionLog`, `App` (åbner den og bruger tiden).
 - **Holder styr på:** Intet eget.
@@ -1963,8 +2162,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/scrapbook_menu.gd`
 
 **Formål:** Scrapbogen med de postkort, der er lavet (I022).
-- **Hvad det gør:** Viser kortene én side ad gangen, nyeste først, med hvornår hvert blev sendt; pileknapperne eller Venstre/Højre bladrer. Uden kort endnu fortæller den, hvordan man laver et.
-- **Arbejder sammen med:** `PostcardView`, `GameSession` (kortene), `PostcardMenu` (åbner den).
+- **Hvad det gør:** Viser kortene én side ad gangen, nyeste først, med hvornår hvert blev sendt; pileknapperne eller Venstre/Højre bladrer. Uden kort endnu fortæller den, hvordan man laver et. I026: den åbnes også fra det nyeste postkort, der står på salonbordet i kahytten, i en teakramme; uden kort henviser den til laptoppen i kahytten (Publications).
+- **Arbejder sammen med:** `PostcardView`, `GameSession` (kortene), `PostcardMenu` (åbner den). I026: `CabinObject` (postkortet), `FocusFrame`.
 - **Holder styr på:** Den viste side.
 - **Hvornår det kører:** Mens den er åben.
 - **Hvis du ændrer det:** Behold en Luk-knap; Esc lukker den altid også.
@@ -1977,6 +2176,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** En kopi af de senest gemte indstillinger, så den kan se ikke-gemte ændringer.
 - **Hvornår det kører:** Når du åbner indstillinger.
 - **Hvis du ændrer det:** Alle spillerens indstillinger, som gemmes i indstillingsfilen.
+
+### `src/ui/shop_counter.gd`
+
+**Formål:** Butiksdisk-rammen: en forretnings menu vist, så den tydeligt hører til den butik (I026).
+- **Hvad det gør:** Bag menuens panel tegner den butikkens indre: bagvæggen og hylderne med det, den sælger (tovværk og fendere i skibshandelen, ruller af sejldug hos sejlmageren, dåser og frugt hos købmanden, kasser på is hos fiskehandleren, kopper og kaffemaskinen på caféen, værktøj og en halvmodel på værftet, søkort og nøgler på havnekontoret), disken foran og butikkens eget skilt ovenover, i havnens egnsfarver. Menuens knapper, priser, fokus og Esc er nøjagtig som før. Kahyttens proviantskab, som også åbner købmanden, får ingen disk.
+- **Arbejder sammen med:** `App` (sætter den på menuer åbnet fra kajen), `BoatyardMenu`, `BoatCareMenu`, `HaulOutPanel`, håndværkernes menuer, `GroceryMenu`, `CafeMenu`, `HarbourOfficeMenu`, `NoticeboardMenu`, `GoAshoreMenu`, `HarbourFront` (skiltenes navne), `HarbourDressing` (egnene).
+- **Holder styr på:** Forretningen, egnen og skiltets tekst.
+- **Hvornår det kører:** Mens en menu åbnet fra kajen er åben.
+- **Hvis du ændrer det:** Hvordan butikkerne ser ud indvendig; butikkernes menuer røres ikke.
 
 ### `src/ui/simple_panel.gd`
 
@@ -1995,6 +2203,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Det valgte antal timer.
 - **Hvornår det kører:** Når du går til køjen eller vælger Sov fra søkortet.
 - **Hvis du ændrer det:** Hvordan spillerne springer tid over ved at sove.
+
+### `src/ui/systems_view.gd`
+
+**Formål:** Bådens eltavle, tæt på: hvad båden faktisk holder øje med, samlet ét sted (I026).
+- **Hvad det gør:** Viser skrogets stand og plejeoversigten for skrog, rig, motor og udstyr (de samme ord som i værftets gennemgang), hvad værftet har monteret, sejldugen, mad og vand om bord og de monterede instrumenter. Kun til at læse: intet her er en ny pligt eller en ny måler, og de tjenester, der ændrer tingene, er hvor de plejer (bådeværftet, sejlmageren, købmanden). Den er indrammet som en eltavle.
+- **Arbejder sammen med:** `CabinObject` (eltavlen), `App`, `FocusFrame`, `GameSession`, `BoatCare`, `HarbourTrades`, `InstrumentPackage`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Når eltavlen i kahytten bruges.
+- **Hvis du ændrer det:** Kun hvad tavlen viser.
 
 ### `src/ui/theme/ui_theme.gd`
 
@@ -2068,6 +2285,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når et radioopkald kommer ind, og ingen anden dialog er åben.
 - **Hvis du ændrer det:** Hvordan spillerne svarer på radioopkald.
 
+### `src/ui/vhf_set_view.gd`
+
+**Formål:** VHF-radioen ved navigationspladsen, tæt på (I026).
+- **Hvad det gør:** Viser, hvad radioen faktisk har: kanal 16 på lytning; et opkald, der er kommet ind og ikke besvaret endnu, som kan besvares her med den samme dialog, som når det dukker op; og vejrmeldingen: vinden ved båden nu og, under sejlads med en kurs, de farer, vejrudsigten allerede ser forude. Advarslerne bliver i HUD'en og afhænger aldrig af, at radioen åbnes. Intet her er ny simulering, og intet gemmes. Den er indrammet som radioen.
+- **Arbejder sammen med:** `CabinObject` (radioen og dens lampe), `App` (det ventende opkald, `VhfDialog`), `FocusFrame`, `VhfRadio`, `GameSession`, `Simulation`.
+- **Holder styr på:** Det ventende opkald, hvis der er et.
+- **Hvornår det kører:** Når VHF-radioen ved kortbordet bruges.
+- **Hvis du ændrer det:** Hvad radioen viser; opkald giver stadig besked som før.
+
 ### `src/ui/voyage_map.gd`
 
 **Formål:** Det illustrerede atlas, der vises under Lang passage i hurtig tid.
@@ -2118,7 +2344,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_anchorage.gd`
 
 **Formål:** Tjekker ankerplads-rutepunkter: at markere et stop på søkortet, hvor båden skal ankre (Iteration 18).
-- **Hvad det gør:** På søkortet markerer den et rutepunkt som ankerplads (knap eller M). Steder på land eller i for dybt vand bliver afvist med en forklaring, og et sted i nærheden bliver foreslået i stedet. Den sejler derhen med Lang passage og tjekker, at båden stopper og spørger "Ready to drop anchor?" én gang, og derefter ankrer eller sejler videre. Den tjekker også gemme/indlæse, kursskift på havet, datolinjen og gamle gemte spil.
+- **Hvad det gør:** På søkortet markerer den et rutepunkt som ankerplads (knap eller M). Steder på land eller i for dybt vand bliver afvist med en forklaring, og et sted i nærheden bliver foreslået i stedet. Den sejler derhen med Lang passage og tjekker, at båden stopper og spørger "Ready to drop anchor?" én gang, og derefter ankrer eller sejler videre. Den tjekker også gemme/indlæse, kursskift på havet, datolinjen og gamle gemte spil. I026: mens båden venter ved ankerpladsen, siger instrumenterne det ("waiting at the anchorage" og hvordan man sejler videre).
 - **Arbejder sammen med:** `WorldMap`, `GameSession`, `Simulation`, `SeaRouter`, `AnchoragePrompt`, `PlannedRoute`, `SaveManager`.
 - **Holder styr på:** Intet af sit eget; den husker bare den valgte ankerplads.
 - **Hvornår det kører:** Kun i test.
@@ -2145,8 +2371,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_boat_care.gd`
 
 **Formål:** Tjekker vedligehold af båden: langsom slitage, bådeværftets ydelser, optagning, udstyr og Passage Readiness (om båden er klar til turen) (Iteration 14).
-- **Hvad det gør:** Den tjekker, at der gror ukrudt på skroget dag for dag, at rigningen slides med sømilene, og at motoren tæller sine timer, altid forudsigeligt. Værfterne tilbyder kun det arbejde, de kan udføre, og prisen stiger med skaden og bådens størrelse. Nyt udstyr har en rigtig virkning, men gør aldrig båden hurtigere. "Klar til turen" er kun et råd. Den indlæser også et gammelt gemt spil (format 11) og klikker sig gennem panelerne for vedligehold, optagning og Logbogen.
-- **Arbejder sammen med:** `BoatCare`, `GameSession`, `PassageReadiness`, `DevTools`, `BoatCareMenu`, `HaulOutPanel`, `CaptainsLogMenu`, `SaveManager`.
+- **Hvad det gør:** Den tjekker, at der gror ukrudt på skroget dag for dag, at rigningen slides med sømilene, og at motoren tæller sine timer, altid forudsigeligt. Værfterne tilbyder kun det arbejde, de kan udføre, og prisen stiger med skaden og bådens størrelse. Nyt udstyr har en rigtig virkning, men gør aldrig båden hurtigere. "Klar til turen" er kun et råd. Den indlæser også et gammelt gemt spil (format 11) og klikker sig gennem panelerne for vedligehold, optagning og Logbogen. I026: i Stege, en lille havn, går den op på kajen og tjekker, at der hverken er en værftsbygning eller en bådlift.
+- **Arbejder sammen med:** `BoatCare`, `GameSession`, `PassageReadiness`, `DevTools`, `BoatCareMenu`, `HaulOutPanel`, `CaptainsLogMenu`, `SaveManager`. I026: `HarbourFront`, `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet af sit eget.
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun tjekkene ændrer sig. En fejl peger på slitagen, værftspriserne eller indlæsning af gamle gemte spil. Skærmbillederne hedder `14_*`.
@@ -2176,6 +2402,16 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Arbejder sammen med:** app-scenen, `GameVersion`, `BuildLabel`, `SettingsManager`.
 - **Gemmer:** Intet (sætter grænsefladestørrelsen og indstillingen tilbage).
 - **Hvornår det kører:** I testkøreren, før `test_gameplay_flow`.
+
+### `tests/suites/test_cabin_objects.gd`
+
+**Formål:** Tester de ting, en sejler bruger under dæk, og skødespillet på dækket (I026).
+- **Hvad det gør:** På hver båd tester den, at kahytten har logbogen og VHF-radioen ved navigationspladsen, eltavlen, sømandskisten ved køjen og, når der er lavet et postkort, postkortet på salonbordet, hver med en fri plads ved siden af, hvor E vælger den. Hver åbner sit nærbillede indrammet som genstanden og lukker med Esc; vinduerne for proviantskabet, komfuret, trofætavlen og køjen har også ramme. VHF-lampen blinker, mens et opkald venter, og opkaldet besvares fra radioen; eltavlen viser kun, hvad spillet holder styr på. Skødespillet står på alle dæk og åbner sejltrimmet under sejlads.
+- **Arbejder sammen med:** `CabinObject`, `WinchProp`, `FocusFrame`, `VhfSetView`, `SystemsView`, `ScrapbookMenu`, `SailTrimPanel`, `BoatArea`, `GameSession`, hjælperen til gangbarhed, app-scenen.
+- **Holder styr på:** Intet selv.
+- **Hvornår det kører:** Kun i testene.
+- **Hvis du ændrer det:** Spillet ændres ikke; flyttes møbler i kahytten eller genstandenes visninger, kan den fejle.
+
 ### `tests/suites/test_cabin_windows.gd`
 
 **Formål:** Tjekker kahytsvinduerne og det blødere vand (I022; hver kahyt og det falmede hav udenfor siden I025).
@@ -2242,8 +2478,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_chartroom_ui.gd`
 
 **Formål:** Tjekker "Kortrum"-udseendet: ét fælles tema (fælles farver og skrifttyper) med en dag-stemning og en nat-stemning.
-- **Hvad det gør:** Den tjekker temaets farver, skrifttyper og kontrast. Den tjekker, at Altid dag / Altid nat / Automatisk gemmes i indstillinger (ikke i det gemte spil), og at Automatisk følger dagslyset i spillet og skifter langsomt. Et åbent vindue skal blive åbent, når stemningen skifter. Den tjekker også en roligere HUD, søkortets kurspanel, vedligehold af båden, fiskeriets tidsskive, og at farvetoner følger stemningen.
-- **Arbejder sammen med:** `UiTheme`, `SettingsManager`, `Hud`, `WorldMap`, `BoatCareMenu`, `FishingMenu`, `ReelDial`.
+- **Hvad det gør:** Den tjekker temaets farver, skrifttyper og kontrast. Den tjekker, at Altid dag / Altid nat / Automatisk gemmes i indstillinger (ikke i det gemte spil), og at Automatisk følger dagslyset i spillet og skifter langsomt. Et åbent vindue skal blive åbent, når stemningen skifter. Den tjekker også en roligere HUD, søkortets kurspanel, vedligehold af båden, fiskeriets tidsskive, og at farvetoner følger stemningen. I026: under sejlads står ruten, farten og vinden kun på instrumenterne, og rutepanelet beholder kun sin Menu-knap.
+- **Arbejder sammen med:** `UiTheme`, `SettingsManager`, `Hud`, `WorldMap`, `BoatCareMenu`, `FishingMenu`, `ReelDial`. I026: `InstrumentCluster`.
 - **Holder styr på:** Intet af sit eget.
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun tjekkene ændrer sig. Ændrer du temaets farver eller HUD'ens opbygning, kan den fejle.
@@ -2259,12 +2495,12 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/suites/test_cockpit_ui.gd`
 
-**Formål:** Tjekker instrumenterne i cockpittet: sejlpanelet, kortplotteren og handlingshjulet (Iteration 17).
-- **Hvad det gør:** Under sejlads mod Las Palmas tjekker den, at sejlpanelet viser fart, kurs, vind, næste strækning og næste sving (skøn er mærket som skøn). Panelet skal kunne foldes sammen og må ikke dække andre paneler. Et kursskift på mere end 5° lyser kort op. Kortplotteren (P) viser kysten omkring båden, kun på dækket og under sejlads, uden at bygge det store verdenskort. Handlingshjulet (Q) viser de rigtige handlinger på dækket og i kahytten og virker med både tastatur og mus, og intet bag det reagerer.
-- **Arbejder sammen med:** `SailingPanel`, `ChartPlotter`, `ActionWheel`, `Hud`, `WorldMap`, `GameSession`, `Simulation`.
+**Formål:** Tjekker cockpittet: instrumenterne, rorets kortplotter og handlingshjulet (Iteration 17; I026-instrumenterne).
+- **Hvad det gør:** Under sejlads mod Las Palmas tjekker den, at instrumenterne i HUD'en (som afløste sejlpanelet i I026) viser fart, kurs, vind, næste strækning og næste sving, med skøn mærket som skøn; at de ikke vises i havn og ikke dækker andre paneler; at et klik åbner deres nærbillede, og Esc lukker det; at sidste strækning siger "No more turns"; og at et kursskift på mere end 5° kort fremhæver kursen. Kortplotteren er ikke længere i HUD'en: P åbner rorets plotter tæt på, fra dækket og fra kahytten, dens knapper skifter afstandsområde, den bygger aldrig det store verdenskort, og Esc lukker den. Handlingshjulet (Q) viser de rigtige handlinger på dækket og i kahytten, virker med både tastatur og mus, bruger plotteren med E, og intet bag det reagerer.
+- **Arbejder sammen med:** `InstrumentCluster`, `InstrumentView`, `PlotterView`, `ChartPlotter`, `ActionWheel`, `Hud`, `WorldMap`, `GameSession`, `Simulation`.
 - **Holder styr på:** Intet af sit eget.
 - **Hvornår det kører:** Kun i test.
-- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Ændrer du teksterne i panelet eller handlingerne i hjulet, kan den fejle.
+- **Hvis du ændrer det:** Kun tjekkene ændrer sig. Ændrer du instrumenternes ordlyd, visningerne eller handlingerne i hjulet, kan den fejle.
 
 ### `tests/suites/test_companion_art.gd`
 
@@ -2314,7 +2550,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_cozy_polish.gd`
 
 **Formål:** Tjekker "Cozy Polish"-runden med rettelser til navigation og komfort.
-- **Hvad det gør:** Den tjekker ruter gennem Kielerkanalen, Suez (med Bab-el-Mandeb) og Panama og rundt om Stockholm, også når man gemmer midt i en kanal. Den tjekker, at søkortet holder sig på kortet, når man zoomer helt ud, og at et vildfarent klik ikke længere tilføjer et rutepunkt. Ting, der flyder i vandet, skal glide agterud forbi båden, og Q-menuen skal have sine nye navne og flueben. Kaffe og hue optager dine hænder, og alle både har en kopholder. Den tjekker også, at søvnlængden huskes, nåle for besøgte havne, mindre paneler, indlæsningsskærmen og kaffen i gemte spil.
+- **Hvad det gør:** Den tjekker ruter gennem Kielerkanalen, Suez (med Bab-el-Mandeb) og Panama og rundt om Stockholm, også når man gemmer midt i en kanal. Den tjekker, at søkortet holder sig på kortet, når man zoomer helt ud, og at et vildfarent klik ikke længere tilføjer et rutepunkt. Ting, der flyder i vandet, skal glide agterud forbi båden, og Q-menuen skal have sine nye navne og flueben. Kaffe og hue optager dine hænder, og alle både har en kopholder. Den tjekker også, at søvnlængden huskes, nåle for besøgte havne, mindre paneler, indlæsningsskærmen og kaffen i gemte spil. I026: ved roret tilbyder hjulet Chart plotter og Instruments, som åbner deres nærbilleder (uden flueben), mens radaren beholder sit flueben for til/fra.
 - **Arbejder sammen med:** `SeaRouter`, `WorldMap`, `MapView`, `WaterLife`, `ActionWheel`, `CoffeeMug`, `GameSession`, `SleepMenu`, `SettingsManager`, `LoadingScreen`, `SessionState`.
 - **Holder styr på:** Intet af sit eget.
 - **Hvornår det kører:** Kun i test.
@@ -2332,8 +2568,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_denmark_views.gd`
 
 **Formål:** Tager billeder af de detaljerede danske farvande på søkortet og på havet (Iteration 14).
-- **Hvad det gør:** Den viser søkortet i flere zoomniveauer over Danmark og tjekker, at det detaljerede danmarkskort bliver tegnet. Den lægger en kurs fra København rundt om Sjælland til Svendborg, sejler den og ankrer nær kysten. Derefter besøger den bådeværftet på kajen i Svendborg. Tjekkene er lette; skærmbillederne er hovedsagen.
-- **Arbejder sammen med:** `WorldMap`, `MapView`, `SeaRouter`, `GameSession`, `Simulation`, `BoatyardMenu`, `HarbourFacilities`.
+- **Hvad det gør:** Den viser søkortet i flere zoomniveauer over Danmark og tjekker, at det detaljerede danmarkskort bliver tegnet. Den lægger en kurs fra København rundt om Sjælland til Svendborg, sejler den og ankrer nær kysten. Derefter besøger den bådeværftet på kajen i Svendborg. Tjekkene er lette; skærmbillederne er hovedsagen. I026: bådeværftet findes nu ved at gå op på kajen i Svendborg, hvor dets facade lyser op.
+- **Arbejder sammen med:** `WorldMap`, `MapView`, `SeaRouter`, `GameSession`, `Simulation`, `BoatyardMenu`, `HarbourFacilities`. I026: `HarbourFront`, `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet af sit eget.
 - **Hvornår det kører:** Kun i test (billederne kun når kørslen gemmer skærmbilleder).
 - **Hvis du ændrer det:** Kun tjekkene og skærmbillederne `14_*` ændrer sig.
@@ -2395,7 +2631,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_gameplay_flow.gd`
 
 **Formål:** Spiller hele spillet fra start til slut, som en spiller med tastatur og mus.
-- **Hvad det gør:** Tester hovedmenuen, et nyt spil, at gå rundt og støde ind i ting, og de små hjælpetekster ved tingene. Det tester også søkortet (zoom, panorering, kurs og rutepunkter), trappen mellem kahyt og dæk, pausemenuen, indstillinger, gemme/indlæse og Fortsæt. Så sejler det en første tur til Kiel med et kulingvarsel og en ny kurs og slutter med at trykke Afslut. Steady Hands: tjekket af ture gennem nedgangen fortæller, hvor spilleren stod, og hvad prompten sagde, for at finde en sjælden fejl. Rundturene ad nedgangen flytter skibets kammerat til side, når den sidder ved lugen (den blev før klappet i stedet, en fejl der kom og gik), og tjekket for "ingen teleportering" tillader den afstand, båden faktisk sejler, mens søkortet åbner. I025: Nyt spil åbner kun sin dialog (der vælges ingen ledsager), og diagnosen for rundturene regner ikke længere med, at der findes en ledsager.
+- **Hvad det gør:** Tester hovedmenuen, et nyt spil, at gå rundt og støde ind i ting, og de små hjælpetekster ved tingene. Det tester også søkortet (zoom, panorering, kurs og rutepunkter), trappen mellem kahyt og dæk, pausemenuen, indstillinger, gemme/indlæse og Fortsæt. Så sejler det en første tur til Kiel med et kulingvarsel og en ny kurs og slutter med at trykke Afslut. Steady Hands: tjekket af ture gennem nedgangen fortæller, hvor spilleren stod, og hvad prompten sagde, for at finde en sjælden fejl. Rundturene ad nedgangen flytter skibets kammerat til side, når den sidder ved lugen (den blev før klappet i stedet, en fejl der kom og gik), og tjekket for "ingen teleportering" tillader den afstand, båden faktisk sejler, mens søkortet åbner. I025: Nyt spil åbner kun sin dialog (der vælges ingen ledsager), og diagnosen for rundturene regner ikke længere med, at der findes en ledsager. I026: mellem nedgangen og kortbordet kan navigationspladsens egne ting (logbogen, VHF-radioen, eltavlen) også være inden for rækkevidde.
 - **Arbejder sammen med:** app-scenen, `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, `SeaRouter`, `WeatherFixtures`, `MainMenu`, `WorldMap`, `PauseMenu` og `SaveLoadMenu`.
 - **Holder styr på:** Intet selv (testgemmepladser og en testfil til indstillinger).
 - **Hvornår det kører:** Kun i testene, og som den allersidste test, fordi den lukker programmet.
@@ -2422,8 +2658,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_harbour_life.gd`
 
 **Formål:** Tester livet i havn: at gå i land, havnens tilbud, Gå i land-oplevelser og dæksvisningen, der følger kursen (Iteration 12).
-- **Hvad det gør:** Tester, hvilke havne der har dagligvarebutik, bådeværft og optagning (Lohals har for eksempel intet bådeværft). På hver båd tester det, at man kan gå ned ad landgangen til pontonen og tilbage. Det tester også, at ting lyser op i stedet for cirkler, at Gå i land-oplevelser koster og betaler én gang, at landgangen tages ind, når man sejler, og at man kan gemme, mens man er i land. Til sidst tester det, at dækket under sejlads kan dreje, så stævnen peger langs kursen. Siden I021 står de små nye havne (Dingle, Ísafjörður, Symi, Essaouira, St. Helena) på listen over havne uden bådeværft.
-- **Arbejder sammen med:** `HarbourFacilities`, `ShoreEvents`, `GoAshoreMenu`, `BoatArea`, `Interactable`, `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, hjælperen til gangbarhed og app-scenen.
+- **Hvad det gør:** Tester, hvilke havne der har dagligvarebutik, bådeværft og optagning (Lohals har for eksempel intet bådeværft). På hver båd tester det, at man kan gå ned ad landgangen til pontonen og tilbage. Det tester også, at ting lyser op i stedet for cirkler, at Gå i land-oplevelser koster og betaler én gang, at landgangen tages ind, når man sejler, og at man kan gemme, mens man er i land. Til sidst tester det, at dækket under sejlads kan dreje, så stævnen peger langs kursen. Siden I021 står de små nye havne (Dingle, Ísafjörður, Symi, Essaouira, St. Helena) på listen over havne uden bådeværft. I026: på hver båd står gangbroen til kajen i land og kan nås til fods, dens skilt er pontonens eneste og lyser op med "To the quay"; på kajen lyser købmandens og bådeværftets facader op; Lohals har hverken bådeværft eller skibshandel på kajen, men sin købmand og stræden ind til byen, som nu er Gå i land ("Into town (Go ashore)"); under sejlads kan hverken tilbuddene eller gangbroen bruges.
+- **Arbejder sammen med:** `HarbourFacilities`, `ShoreEvents`, `GoAshoreMenu`, `BoatArea`, `Interactable`, `GameSession`, `Simulation`, `SaveManager`, `SettingsManager`, hjælperen til gangbarhed og app-scenen. I026: `HarbourFront`, `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet selv (bruger gemmeplads 3 og sletter den).
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændringer i havnens tilbud, pontonernes layout, oplevelser i land eller kursvisningen kan få testen til at fejle.
@@ -2458,7 +2694,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_life_aboard.gd`
 
 **Formål:** Tester hverdagen om bord: katten eller hunden, søvn, søkortets panel og sejlene.
-- **Hvad det gør:** Tester, at Nyt spil ikke tilbyder et valg af ledsager (I025), og, i spil startet med katten eller hunden, hvor ledsageren hviler, dens tidsplan og at klappe den (med lyd). Det tester også søvndialogen fra køjen og fra søkortet, at man vækkes tidligt af et vejrvarsel eller ved ankomst, og at søkortets panel står stille. Til sidst tester det rorets sejltjek, sejlenes rolige bevægelse, spilerens form og at ledsageren gemmes, også i gamle gemte spil. I024: når tiden kommer, går ledsageren hen til sit nye sted, og teksten siger "Pet the cat". I025: spillene med katten og med hunden startes direkte (`start_new_game` med den slags), fordi Nyt spil ikke længere vælger.
+- **Hvad det gør:** Tester, at Nyt spil ikke tilbyder et valg af ledsager (I025), og, i spil startet med katten eller hunden, hvor ledsageren hviler, dens tidsplan og at klappe den (med lyd). Det tester også søvndialogen fra køjen og fra søkortet, at man vækkes tidligt af et vejrvarsel eller ved ankomst, og at søkortets panel står stille. Til sidst tester det rorets sejltjek, sejlenes rolige bevægelse, spilerens form og at ledsageren gemmes, også i gamle gemte spil. I024: når tiden kommer, går ledsageren hen til sit nye sted, og teksten siger "Pet the cat". I025: spillene med katten og med hunden startes direkte (`start_new_game` med den slags), fordi Nyt spil ikke længere vælger. I026: rorets sejltjek læser "Under sail" på instrumenterne.
 - **Arbejder sammen med:** `NewGameMenu`, `SleepMenu`, `WorldMap`, `SailRig`, `ShipCompanion`, `CompanionState`, `AudioManager`, `GameSession`, `SaveManager`, `WeatherFixtures` og app-scenen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene (det går om bord i Wing 33, `starling_33`, fordi gåturene er skrevet til den kahyt).
@@ -2476,11 +2712,20 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_living.gd`
 
 **Formål:** Tester, hvordan man tjener og bruger penge: fjernarbejde og dagligvarebutikken.
-- **Hvad det gør:** Tester fjernarbejde i havn (1–8 timer, €25 i timen, afvist til søs) og priser i dagligvarebutikken (€10 pr. manglende dag af mad og vand tilsammen, samme pris i alle havne). Det tester også, at reparationer koster det tilbudte beløb, at penge og proviant overlever gemme/indlæse, at hver båds kahyt har sin laptop ved arbejdspladsen (siden I024 åbnes fjernarbejde på laptoppen), og at butikken kan åbnes på alle både.
-- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `LaptopView`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures` og app-scenen.
+- **Hvad det gør:** Tester fjernarbejde i havn (1–8 timer, €25 i timen, afvist til søs) og priser i dagligvarebutikken (€10 pr. manglende dag af mad og vand tilsammen, samme pris i alle havne). Det tester også, at reparationer koster det tilbudte beløb, at penge og proviant overlever gemme/indlæse, at hver båds kahyt har sin laptop ved arbejdspladsen (siden I024 åbnes fjernarbejde på laptoppen), og at butikken kan åbnes på alle både. I026: på hver båd har pontonen gangbroen til kajen med skilt, og købmanden nås ved sin dør deroppe.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `SaveManager`, `LaptopView`, `WorkMenu`, `GroceryMenu`, `WeatherFixtures` og app-scenen. I026: `BoatArea` (gangbroen), `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændringer i løn, priser, startpenge eller stationernes placering kan få testen til at fejle.
+
+### `tests/suites/test_living_harbours.gd`
+
+**Formål:** Tester de levende havne: kajen, dens butikker og åbningstider, byboerne og caféen (I026).
+- **Hvad det gør:** Tester data for åbningstiderne og kajernes layout (en bygning for hver forretning, havnen har) og derefter i spillet: at gå op ad pontonens gangbro til kajen og ned igen, at hver dør lyser sin facade op og åbner sin menu i en butiksdisk-ramme, at en lukket butik tilbyder at vente, til den åbner (og at ventetiden virker), havnekontorets luge om natten, caféen (en kop kaffe, en plads på terrassen, ledsagerne ved bordet), byboerne (efter time og vejr, aldrig i en døråbning), handlingshjulet og tasterne på kajen, at man kan gemme på kajen uden et nyt felt i det gemte spil, og at man går om bord igen.
+- **Arbejder sammen med:** `HarbourFront`, `QuayLayout`, `BusinessHours`, `ShopCounter`, `HarbourLife`, `HarbourNotes`, `CafeMenu`, `HarbourOfficeMenu`, `NoticeboardMenu`, `BoatArea`, `GameSession`, `SaveManager`, hjælperen til gangbarhed, app-scenen.
+- **Holder styr på:** Intet selv.
+- **Hvornår det kører:** Kun i testene.
+- **Hvis du ændrer det:** Spillet ændres ikke; ændringer i kajen, åbningstiderne eller butikkernes menuer kan få den til at fejle.
 
 ### `tests/suites/test_living_world.gd`
 
@@ -2517,6 +2762,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i testene.
 - **Hvis du ændrer det:** Spillet ændres ikke; ændringer i ankeret, skiven, priser eller motorreglerne kan få testen til at fejle.
+
+### `tests/suites/test_marine_electronics.gd`
+
+**Formål:** Tester den maritime elektronik: instrumentpakkerne, instrumenterne i HUD'en, enhederne i cockpittet og deres nærbilleder (I026).
+- **Hvad det gør:** Tester, at hver instrumentværdi er lig spillets egne data (dybde kun til ankers, et skøn i spillet); at én samling instrumenter vises i HUD'en under sejlads, på dækket og i kahytten, aflæst nogle gange i sekundet og ikke hvert billede, og at de gamle svævende paneler er væk; at de tre pakker købes i skibshandelen, monteres i båden om bord, ejes for altid og kan vælges på enhver båd, at valget og siderne følger med, når der gemmes og indlæses, at ældre gemte spil får Classic, og at gemmeformatet stadig er 12; at hver båd har sin elektronik og plotterstation ved roret, og at E og klik åbner visningerne; at I og P åbner visningerne, Esc lukker dem, og sider og opstillinger skifter; og at alt passer ved 1280×720 og 1024×768, ved 100 % og 130 %, på engelsk og dansk.
+- **Arbejder sammen med:** `InstrumentData`, `InstrumentPackage`, `InstrumentState`, `InstrumentCluster`, `InstrumentView`, `PlotterView`, `CockpitInstruments`, `ChandleryMenu`, `GameSession`, `SessionState`, `SaveManager`, `Hud`, app-scenen.
+- **Holder styr på:** Intet selv.
+- **Hvornår det kører:** Kun i testene.
+- **Hvis du ændrer det:** Spillet ændres ikke; ændringer i instrumenterne, deres ordlyd eller HUD'ens layout kan få den til at fejle.
 
 ### `tests/suites/test_more_room_aboard.gd`
 
@@ -2602,8 +2856,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_sail_trim.gd`
 
 **Formål:** Tjekker funktionen sejltrim.
-- **Hvad det gør:** Tjekker, at det bedste trim følger vindvinklen (hårdt trimmet bidevind, slækket på læns, lidt fladere i hård vind), at virkningen er beskeden (højst 6 % hurtigere eller 10 % langsommere), aldrig starter eller stopper motoren og ikke lægges oven i sig selv, at hurtig tid giver samme resultat, at indstillingen gemmes (gamle gemte spil lader besætningen trimme), og at T og handlingshjulet åbner trimpanelet med feedback som "Well trimmed", "Too tight" og "Too loose".
-- **Arbejder sammen med:** `SailTrim`, `GameSession`, `Simulation`, `SessionState`, `SailTrimPanel`, `SailingPanel`, app-scenen.
+- **Hvad det gør:** Tjekker, at det bedste trim følger vindvinklen (hårdt trimmet bidevind, slækket på læns, lidt fladere i hård vind), at virkningen er beskeden (højst 6 % hurtigere eller 10 % langsommere), aldrig starter eller stopper motoren og ikke lægges oven i sig selv, at hurtig tid giver samme resultat, at indstillingen gemmes (gamle gemte spil lader besætningen trimme), og at T og handlingshjulet åbner trimpanelet med feedback som "Well trimmed", "Too tight" og "Too loose". I026: instrumenterne viser trimmet og dets tast.
+- **Arbejder sammen med:** `SailTrim`, `GameSession`, `Simulation`, `SessionState`, `SailTrimPanel`, `InstrumentCluster`, app-scenen.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler testen, kan sejltrim gøre båden for hurtig eller langsom, eller panelet åbner måske ikke.
@@ -2629,8 +2883,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_sailing_presentation.gd`
 
 **Formål:** Tjekker, hvordan sejlads og motorsejlads ser ud og lyder i det rigtige spil.
-- **Hvad det gør:** Sætter kendte sejltilstande og tjekker, at sejlene ligger i læ (væk fra vinden), at spileren sættes på læns og tages ned, når vinden går frem, at sejlene er rullet sammen under motor, at motorlyden er høj på dækket og dæmpet i kahytten og stopper ved sejlads, ved ankomst og i hovedmenuen, at HUD'en (skærmens infofelter) viser tilstand, vind og ankomsttid, og at søkortets vindlag og dets til/fra-knap virker.
-- **Arbejder sammen med:** app-scenen, `SailRig`, `AudioManager`, `GameSession`, `PropulsionController`, `WorldMap`, `WindField`.
+- **Hvad det gør:** Sætter kendte sejltilstande og tjekker, at sejlene ligger i læ (væk fra vinden), at spileren sættes på læns og tages ned, når vinden går frem, at sejlene er rullet sammen under motor, at motorlyden er høj på dækket og dæmpet i kahytten og stopper ved sejlads, ved ankomst og i hovedmenuen, at HUD'en (skærmens infofelter) viser tilstand, vind og ankomsttid, og at søkortets vindlag og dets til/fra-knap virker. I026: tilstanden, vinden og ankomstskønnet læses på instrumenterne, ikke længere på rutepanelet.
+- **Arbejder sammen med:** app-scenen, `SailRig`, `AudioManager`, `GameSession`, `PropulsionController`, `WorldMap`, `WindField`. I026: `InstrumentCluster`.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i test (den gemmer skærmbilleder, når man beder om det).
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler testen, kan sejl, motorlyd, HUD eller vindlaget se forkerte ud eller lyde forkert.
@@ -2701,7 +2955,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_steady_hands.gd`
 
 **Formål:** Tester, at brugerfladen bliver på plads, på skærmen, kan lukkes og er oversat (Steady Hands).
-- **Hvad det gør:** Viser, opdaterer og skjuler vejradvarsler mange gange (engelsk og dansk, dag og nat, Turdetaljer sammenklappet og udfoldet) og tjekker, at Turdetaljer aldrig flytter sig, og at advarslen aldrig dækker den. Derefter åbner den alle vinduer, spillet tilbyder, fra spillets egne indgange, ved flere skærmformater og brugerfladestørrelser på begge sprog. Hvert vindue skal blive inden for skærmen, lukke med Esc og ikke vise rå pladsholdere eller engelsk tekst på dansk. Testen tjekker også HUD'ens paneler mod hinanden, hovedskærmene, det længste havnenavn med lange beskeder, hvad der sker, når situationen ændres under et åbent vindue, og at intet usynligt fanger musen. Den tjekker også skumring og daggry: over et helt døgn er brugerfladen enten dag eller nat (aldrig parkeret halvvejs) og skifter to gange, og teksten kan læses på sine paneler hele vejen gennem skiftet.
+- **Hvad det gør:** Viser, opdaterer og skjuler vejradvarsler mange gange (engelsk og dansk, dag og nat, med hver af de tre instrumentpakker monteret) og tjekker, at instrumenterne (I026: de afløste Turdetaljer) aldrig flytter sig, og at advarslen aldrig dækker dem. Derefter åbner den alle vinduer, spillet tilbyder, fra spillets egne indgange, ved flere skærmformater og brugerfladestørrelser på begge sprog. Hvert vindue skal blive inden for skærmen, lukke med Esc og ikke vise rå pladsholdere eller engelsk tekst på dansk. Testen tjekker også HUD'ens paneler mod hinanden, hovedskærmene, det længste havnenavn med lange beskeder, hvad der sker, når situationen ændres under et åbent vindue, og at intet usynligt fanger musen. Den tjekker også skumring og daggry: over et helt døgn er brugerfladen enten dag eller nat (aldrig parkeret halvvejs) og skifter to gange, og teksten kan læses på sine paneler hele vejen gennem skiftet.
 - **Arbejder sammen med:** `App`, `Hud`, alle vinduesklasser, `SettingsManager`.
 - **Holder styr på:** Intet (vinduesstørrelse og indstillinger gendannes).
 - **Hvornår det kører:** Sammen med de andre testsæt (`test_runner.tscn`).
@@ -2728,7 +2982,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_upkeep_ui.gd`
 
 **Formål:** Tjekker skærmene for bådens tilstand, proviant, bådeværftet og redning i det rigtige spil.
-- **Hvad det gør:** Tjekker, at HUD'en (infolinjen på skærmen) viser skrogets tilstand, penge, mad og vand; at proviantstationen i hver kahyt åbner proviantpanelet og fører videre til købmanden; at kasserne med mad og vand tømmes, efterhånden som tiden går; at skadesmærker bliver flere, når båden slides, og forsvinder efter reparation; at bådeværftets panel bevarer sin størrelse og tilbyder reparation og påfyldning; og at redningsrapporten vises og sætter spillet på pause. Den tjekker også udviklerens testpanel (F10), og at spillere aldrig ser det, og at skibskatten aldrig spærrer for en station (dens tekst siger "Pet the cat").
+- **Hvad det gør:** Tjekker, at HUD'en (infolinjen på skærmen) viser skrogets tilstand, penge, mad og vand; at proviantstationen i hver kahyt åbner proviantpanelet og fører videre til købmanden; at kasserne med mad og vand tømmes, efterhånden som tiden går; at skadesmærker bliver flere, når båden slides, og forsvinder efter reparation; at bådeværftets panel bevarer sin størrelse og tilbyder Boat care til en slidt båd (I026: købmanden er sin egen butik på kajen og åbnes her direkte); og at redningsrapporten vises og sætter spillet på pause. Den tjekker også udviklerens testpanel (F10), og at spillere aldrig ser det, og at skibskatten aldrig spærrer for en station (dens tekst siger "Pet the cat").
 - **Arbejder sammen med:** app-scenen, `ProvisionsMenu`, `GroceryMenu`, `ProvisionDisplay`, `BoatyardMenu`, `BoatCareMenu`, `RescueDialog`, `DevTools`, `DevTestPanel`, `ShipCompanion`, `InteractionSensor`, `TestWalkability`, `GameSession`.
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i test (den gemmer skærmbilleder, når man beder om det).
@@ -2737,8 +2991,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_vessels.gd`
 
 **Formål:** Tjekker de fire både, bådeværftet og livet om bord på hver båd.
-- **Hvad det gør:** Tjekker bådlisten (Arctic Wanderer 26 som startbåd, Wing 33, Clam 40, Frogleap 36), at hver båds dæk og kahyt har alle billedpladser, stationer og startpunkter, at man kan gå hen til hver station, og at hver båd sejler med sine egne hastigheder. Den bruger bådeværftet til at skifte båd (kun i havn), gennemgår livet om bord på hver båd (kahyt, ledsager, søkort, søvn, sejl, spiler, motor), tjekker at udskiftning med sprite-billeder (færdigtegnet grafik) aldrig ændrer kollisioner, og tjekker gemme/indlæse og gamle gemte spil. I025: når den tæller ledsagere, ser den bort fra skjulte (den tomme plads til en anden ledsager).
-- **Arbejder sammen med:** `VesselCatalog`, `VesselVisual`, `VesselVisualProfile`, `BoatArea`, `BoatyardMenu`, `SailRig`, `ShipCompanion`, `TestWalkability`, `GameSession`, `Simulation`, `SaveManager`, app-scenen.
+- **Hvad det gør:** Tjekker bådlisten (Arctic Wanderer 26 som startbåd, Wing 33, Clam 40, Frogleap 36), at hver båds dæk og kahyt har alle billedpladser, stationer og startpunkter, at man kan gå hen til hver station, og at hver båd sejler med sine egne hastigheder. Den bruger bådeværftet til at skifte båd (kun i havn), gennemgår livet om bord på hver båd (kahyt, ledsager, søkort, søvn, sejl, spiler, motor), tjekker at udskiftning med sprite-billeder (færdigtegnet grafik) aldrig ændrer kollisioner, og tjekker gemme/indlæse og gamle gemte spil. I025: når den tæller ledsagere, ser den bort fra skjulte (den tomme plads til en anden ledsager). I026: for at skifte båd går den op ad pontonens gangbro til kajen og bruger bådeværftets dør dér.
+- **Arbejder sammen med:** `VesselCatalog`, `VesselVisual`, `VesselVisualProfile`, `BoatArea`, `BoatyardMenu`, `SailRig`, `ShipCompanion`, `TestWalkability`, `GameSession`, `Simulation`, `SaveManager`, app-scenen. I026: `HarbourFront`, `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet selv; den bruger gemmeplads 2 og 3 kortvarigt og sletter dem.
 - **Hvornår det kører:** Kun i test (den gemmer skærmbilleder, når man beder om det).
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler testen, kan en båd mangle dele, have stationer man ikke kan nå, sejle med forkerte hastigheder eller blive indlæst forkert.
@@ -2746,8 +3000,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/suites/test_visual_prototype.gd`
 
 **Formål:** Tjekker det malede ("Illustrated") udseende af bådene og havnen.
-- **Hvad det gør:** Tjekker, at ejerens kattetegninger er urørte, at Wing 33, Clam 40 og Frogleap 36 har malede billedsæt, der kan udskiftes, og at et skift mellem Illustrated og Classic kun ændrer udseendet, aldrig hvor man kan gå, eller hvad man kan bruge. Den tjekker den malede havn (København med Nyhavn som vartegn, en almindelig havn andre steder, skilte kun for tjenester der findes, ingen havn til søs), at købmanden og bådeværftet stadig åbner, og valget af Artwork i indstillingerne. Siden I021 viser Kiel udseendet som havneby med gavlhuse i stedet for en bar kaj.
-- **Arbejder sammen med:** `VesselCatalog`, `VesselVisual`, `SettingsManager`, `HatArt`, `HarbourArt`, `HarbourLandmark`, `HarbourFacilities`, `BoatArea`, `SettingsMenu`, `TestWalkability`, app-scenen.
+- **Hvad det gør:** Tjekker, at ejerens kattetegninger er urørte, at Wing 33, Clam 40 og Frogleap 36 har malede billedsæt, der kan udskiftes, og at et skift mellem Illustrated og Classic kun ændrer udseendet, aldrig hvor man kan gå, eller hvad man kan bruge. Den tjekker den malede havn (København med Nyhavn som vartegn, en almindelig havn andre steder, skilte kun for tjenester der findes, ingen havn til søs), at købmanden og bådeværftet stadig åbner, og valget af Artwork i indstillingerne. Siden I021 viser Kiel udseendet som havneby med gavlhuse i stedet for en bar kaj. I026: pontonens eneste skilt er gangbroens ("To the quay"); kajen har havnens tilbud og intet andet, og købmanden og bådeværftet åbner fra deres butikker deroppe.
+- **Arbejder sammen med:** `VesselCatalog`, `VesselVisual`, `SettingsManager`, `HatArt`, `HarbourArt`, `HarbourLandmark`, `HarbourFacilities`, `BoatArea`, `SettingsMenu`, `TestWalkability`, app-scenen. I026: `HarbourFront`, `QuayLayout`, kaj-hjælperen.
 - **Holder styr på:** Intet selv; den efterlader grafikstilen sat til Illustrated.
 - **Hvornår det kører:** Kun i test (den gemmer skærmbilleder, når man beder om det).
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler testen, kan den malede grafik skjule ændringer i spillet, havnen kan vise forkerte skilte, eller grafikindstillingen bliver ikke husket.
@@ -2907,6 +3161,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Sprite Workshop-testene kan fejle, eller testbilleder kan blive liggende i grafikmappen.
 
+### `tests/helpers/quay.gd`
+
+**Formål:** Lader en test nå havnens butikker, som en spiller gør, op ad gangbroen til kajen (I026).
+- **Hvad det gør:** Siden forretningerne flyttede op på kajen, går en test, der skal bruge købmanden, bådeværftet eller en håndværker, op ad pontonens gangbro (og viser først dækket, hvis Kaptajnen er under dæk), stiller sig ved døren på kajen og trykker E der. Som standard bruges døren uanset hvad uret siger, til test, der ikke handler om åbningstiderne. Den venter også, til skærmskiftet er faldet til ro.
+- **Arbejder sammen med:** `HarbourFront`, `BoatArea`, `BusinessHours`, `App`; bruges af `test_boat_care`, `test_denmark_views`, `test_harbour_life`, `test_living`, `test_vessels` og `test_visual_prototype`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Alle test, der besøger en butik, kan fejle.
+
 ### `tests/helpers/reel.gd`
 
 **Formål:** Lader en test hale en fisk ind gennem det rigtige hjul på fiskestangen, som en spiller med perfekt timing.
@@ -2915,6 +3178,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet.
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Fisketestene kan begynde at miste fiskene.
+
+### `tests/helpers/view_fit.gd`
+
+**Formål:** Tjekker, at nærbillederne passer på skærmen i alle de størrelser, spillet lover (I026).
+- **Hvad det gør:** Åbner hver visning, en test giver den, ved 1280×720 og 1024×768, ved 100 % og 130 % brugerflade, på engelsk og dansk, måler dens panel (med rammens margen, når den er indrammet som en genstand, og som den ser ud, når åbningsanimationen er faldet til ro) og lister alle visninger, der går uden for skærmen. Bagefter sætter den vinduet, sproget og brugerfladens størrelse tilbage.
+- **Arbejder sammen med:** `FocusFrame` (dens margen), `SettingsManager` (sprog og brugerfladens størrelse), appens stak af vinduer.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Testene af nærbillederne kan bestå eller fejle anderledes.
 
 ### `tests/helpers/walkability.gd`
 
@@ -2991,8 +3263,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/screenshots_17.gd`
 
 **Formål:** Tager de tredive gennemgangsbilleder af "Let There Be Light" (Iteration 17): lyset døgnet rundt, vejret og drømmekortet (Dreamer's Map).
-- **Hvad det gør:** Fotograferer kahytter og dæk ved middag, skumring og nat, drømmekortet, søkortet, sejladsvisninger, regn og lyn samt ankomst til kaj. `--only=` vælger et udsnit.
-- **Arbejder sammen med:** Spillets scene, `GameSession`, `Simulation`, `Daylight`, `WeatherFixtures`, `ChartPlotter`, `CaptainsLogMenu`.
+- **Hvad det gør:** Fotograferer kahytter og dæk ved middag, skumring og nat, drømmekortet, søkortet, sejladsvisninger, regn og lyn samt ankomst til kaj. `--only=` vælger et udsnit. I026: billedet af kortplotteren viser rorets plotter tæt på (`PlotterView`), da plotteren ikke længere er et HUD-panel.
+- **Arbejder sammen med:** Spillets scene, `GameSession`, `Simulation`, `Daylight`, `WeatherFixtures`, `PlotterView`, `CaptainsLogMenu`.
 - **Holder styr på:** Intet; skriver i `docs/screenshots/iteration17/`.
 - **Hvornår det kører:** Kun når du starter det, med skærm: `godot --path . --resolution 1600x900 res://tests/screenshots_17.tscn [-- --only=cabin]`.
 - **Hvis du ændrer det:** Intet i spillet; kun dokumentationsbillederne.
@@ -3042,6 +3314,33 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun når du starter det, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i024.tscn -- --out=DIR [--only=PREFIX]`.
 - **Hvis du ændrer det:** Kun skærmbillederne ændrer sig.
 
+### `tests/screenshots_i026_harbour.gd`
+
+**Formål:** Tager I026-billederne af kajen: butiksfacaderne, deres diske, åbningstiderne på dørene, folkene på forskellige tider, caféen og egnsvarianter.
+- **Hvad det gør:** Fortøjer i København og andre havne på valgte tidspunkter og fotograferer pontonens gangbro, kajen ved ankomsten, hver butiks indgang og disk, opslagstavlen, folk der går rundt midt på dagen, en lukket skibshandel om morgenen med tilbuddet om at vente, liv om morgenen, caféen med gæster, Kaptajnen med en kop kaffe (og en ledsager, der hviler ved bordet), en handlende der låser af om aftenen, kajen om natten og kajer i andre egne. `--shots=` vælger et udsnit.
+- **Arbejder sammen med:** app-scenen, `HarbourFront`, `QuayLayout`, `GameSession`, `SessionState`, `Simulation`, `UiTheme`.
+- **Holder styr på:** Intet; den skriver PNG-filer (kun testgemmer og testindstillinger, aldrig spillerens egne).
+- **Hvornår det kører:** Kun i hånden, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i026_harbour.tscn -- [--out=DIR] [--shots=a,b]`.
+- **Hvis du ændrer det:** Kun skærmbillederne ændres.
+
+### `tests/screenshots_i026_instruments.gd`
+
+**Formål:** Tager I026-billederne af den maritime elektronik fra det kørende spil.
+- **Hvad det gør:** Fotograferer HUD'en under sejlads før og efter ændringen, de tre instrumentpakker under sejlads om dagen og om natten og i kahytten, hvert nærbillede af instrumenterne, kortplotteren tæt på, elektronikken ved roret på alle både og skibshandelens afdeling for elektronik. `--only=` vælger billeder efter begyndelsen af navnet.
+- **Arbejder sammen med:** app-scenen, `GameSession`, `InstrumentPackage`, `InstrumentView`, `PlotterView`, `ChandleryMenu`, `WindField`, `UiTheme`.
+- **Holder styr på:** Intet; den skriver PNG-filer (kun testgemmer og testindstillinger).
+- **Hvornår det kører:** Kun i hånden, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i026_instruments.tscn -- [--out=DIR] [--only=PREFIX]`.
+- **Hvis du ændrer det:** Kun skærmbillederne ændres.
+
+### `tests/screenshots_i026_motion.gd`
+
+**Formål:** Tager nummererede billeder af I026 i bevægelse, som et lille værktøj sætter sammen til filmstrimler.
+- **Hvad det gør:** Gemmer billeder (`film_NAME_NN.png`) til `tools/qa/film_strip.py`: det samme stykke af Københavns kaj gennem en dag (morgen, middag, aften, nat), folk der går og standser midt på dagen med et halvt sekunds mellemrum, en bestilling på caféen, at sætte sig og drikke, at gå hen til skibshandelens dør og ind, at bladre i Modern Cruisers displays og logbogen, der bringes tæt på. `--films=` vælger et udsnit.
+- **Arbejder sammen med:** app-scenen, `HarbourFront`, `HarbourLife`, `CafeMenu`, `InstrumentView`, `FocusFrame`, `GameSession`, `Simulation`.
+- **Holder styr på:** Intet; den skriver PNG-filer (kun testgemmer og testindstillinger, aldrig spillerens egne).
+- **Hvornår det kører:** Kun i hånden, med en rigtig skærm eller Xvfb: `res://tests/screenshots_i026_motion.tscn -- [--out=DIR] [--films=a,b]`.
+- **Hvis du ændrer det:** Kun filmbillederne ændres.
+
 ### `tests/one_clock_sea_trial.gd`
 
 **Formål:** En prøvetur på fem minutter, der måler, hvor tiden går, når uret kører hurtigere end 1x, især ved daggry, skumring, om natten og i havn (Operation One Clock).
@@ -3053,8 +3352,8 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-**Formål:** Spillets automatiske testkører: den kører alle 82 testsamlinger og fortæller, hvor mange tjek der bestod.
-- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste.
+**Formål:** Spillets automatiske testkører: den kører alle 85 testsamlinger og fortæller, hvor mange tjek der bestod.
+- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste. I026: den kører også testsættene for de levende havne, tingene i kahytten og den maritime elektronik, lige før A Little More Room Aboard.
 - **Arbejder sammen med:** Alle testsamlinger i `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Holder styr på:** Antal beståede/fejlede tjek og listen over fejl.
 - **Hvornår det kører:** Når du starter det, eller i automatik: `godot --headless --path . res://tests/test_runner.tscn` (valgmuligheder efter `--`: `--only=navn`, `--skip=navn`, `--screenshots=MAPPE`).
