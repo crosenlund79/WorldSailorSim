@@ -8,6 +8,9 @@ extends Node
 ##   film_shop          walking to the chandlery's door and going in
 ##   film_instruments   paging the Modern Cruiser's displays
 ##   film_focus         the logbook brought close (FocusFrame's grow-in)
+## --probe=PATH instead measures frame times (8 s each, same harbour, noon) on
+## the deck and on the quay with its townsfolk, and writes them as JSON: the
+## quay's own cost, which the WRS benchmark (older than the quay) cannot see.
 ##   xvfb-run -a -s "-screen 0 1600x900x24" godot --path . --rendering-driver opengl3 \
 ##     --resolution 1600x900 res://tests/screenshots_i026_motion.tscn -- [--out=DIR] [--films=a,b]
 ## Uses the test save and settings files; never touches the player's own.
@@ -17,6 +20,7 @@ const APP_SCENE := preload("res://src/app/app.tscn")
 var app: Node
 var out := "user://i026_motion"
 var only: Array[String] = []
+var probe := ""
 
 
 func _ready() -> void:
@@ -25,6 +29,8 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--out="):
 			out = a.trim_prefix("--out=")
+		elif a.begins_with("--probe="):
+			probe = a.trim_prefix("--probe=")
 		elif a.begins_with("--films="):
 			for s in a.trim_prefix("--films=").split(",", false):
 				only.append(s)
@@ -107,6 +113,10 @@ func _run() -> void:
 	await _idle()
 	Simulation.auto_advance = true
 	GameSession.set_time_scale(1)
+	if probe != "":
+		await _probe()
+		get_tree().quit()
+		return
 
 	if _wanted("npc_day"):
 		var hours := [7.2, 9.0, 11.0, 13.0, 15.5, 17.5, 19.5, 22.0]
@@ -193,3 +203,45 @@ func _run() -> void:
 		app.modals.clear()
 	print("I026 MOTION DONE")
 	get_tree().quit()
+
+
+## Frame times (ms) over `seconds` of real time: mean, p95, max, frames.
+func _frame_times(seconds: float) -> Dictionary:
+	var times: Array[float] = []
+	var start := Time.get_ticks_usec()
+	var last := start
+	while Time.get_ticks_usec() - start < seconds * 1000000.0:
+		await get_tree().process_frame
+		var now := Time.get_ticks_usec()
+		times.append((now - last) / 1000.0)
+		last = now
+	times.sort()
+	var total := 0.0
+	for v in times:
+		total += v
+	return {"mean_ms": snappedf(total / times.size(), 0.01), "p95_ms": snappedf(times[int(times.size() * 0.95)], 0.01),
+		"max_ms": snappedf(times[-1], 0.01), "frames": times.size()}
+
+
+func _probe() -> void:
+	Engine.max_fps = 0
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	var result := {}
+	_moor_in(&"copenhagen", 12.0)
+	app.modals.clear()
+	GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"from_boatyard")
+	app._show_current_boat_area()
+	await _idle()
+	await get_tree().create_timer(2.0).timeout
+	result["deck_copenhagen_noon"] = await _frame_times(8.0)
+	var front := await _quay()
+	await _stand(front, front.layout.door_station(QuayLayout.CAFE) + Vector2(0, 180))
+	await get_tree().create_timer(2.0).timeout
+	result["quay_copenhagen_noon"] = await _frame_times(8.0)
+	result["quay_people"] = front.life.get_person_count()
+	GameSession.set_time_scale(20)
+	result["quay_copenhagen_20x"] = await _frame_times(8.0)
+	GameSession.set_time_scale(1)
+	var file := FileAccess.open(probe, FileAccess.WRITE)
+	file.store_string(JSON.stringify(result, "  "))
+	print("PROBE ", JSON.stringify(result))
