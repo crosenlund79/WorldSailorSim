@@ -1920,15 +1920,16 @@ func set_interaction_debug(enabled: bool) -> void:
 	notify(Loc.t("Interaction areas: %s") % ("shown" if enabled else "hidden"))
 
 
-## The developer test panel (DevTools): F10 opens and closes it, in the boat or
-## on the chart. Development builds only; it does not exist for players.
+## The developer test panel (DevTools): F10 opens and closes it, in the boat,
+## on the quay (I027: it was left out when the quay came in I026) or on the
+## chart. Development builds only; it does not exist for players.
 func toggle_dev_tests() -> void:
 	if not DevTools.is_enabled() or not GameSession.is_active() or router.is_busy():
 		return
 	if modals.get_top() is DevTestPanel:
 		modals.get_top().close()
 		return
-	if not modals.is_empty() or not (router.current_screen is BoatArea or router.current_screen is WorldMap):
+	if not modals.is_empty() or not (router.current_screen is BoatArea or router.current_screen is HarbourFront or router.current_screen is WorldMap):
 		return
 	modals.push(DevTestPanel.new())
 

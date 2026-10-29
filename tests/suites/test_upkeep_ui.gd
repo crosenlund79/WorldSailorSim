@@ -33,6 +33,7 @@ func run(runner: Node) -> void:
 	await _test_boatyard()
 	await _test_rescue_flow()
 	await _test_dev_panel()
+	await _test_dev_panel_everywhere()
 	await _test_production_isolation()
 	await _test_companion_overlap()
 
@@ -484,6 +485,48 @@ func _test_dev_panel() -> void:
 	t.check_eq(Simulation.get_weather_at_vessel().to_dict(), first, "[dev] activating a scenario twice gives the same weather")
 	DevTools.restore_normal_weather()
 	t.use_calm_wind()
+
+
+## I027 (the Captain's Windows report): F10, a real key press, opens and
+## closes the panel on the deck, in the cabin, on the quay and on the chart,
+## and never over another window (the fuel menu on the quay).
+func _test_dev_panel_everywhere() -> void:
+	DevTools.force_enabled = true
+	app.modals.clear()
+	GameSession.start_new_session()
+	var opened := {}
+	await _show(SessionState.AREA_EXTERIOR, &"from_cabin")
+	opened["deck"] = await _f10_round_trip()
+	await _show(SessionState.AREA_INTERIOR, &"start")
+	opened["cabin"] = await _f10_round_trip()
+	app.open_quay()
+	await _settle()
+	var on_quay := app.router.current_screen is HarbourFront
+	opened["quay"] = on_quay and await _f10_round_trip()
+	t.check(opened.values().all(func(v: bool) -> bool: return v), "[dev] F10 opens and closes the panel on the deck, in the cabin and on the quay %s" % [opened])
+	if on_quay:
+		app.open_fuel_berth()
+		await t.frames(2)
+		await t.press_key(KEY_F10)
+		t.check(app.modals.get_top() is FuelMenu and app.modals.depth() == 1, "[dev] on the quay, F10 does not open over the fuel menu")
+		app.modals.clear()
+		await t.frames(2)
+		app.leave_quay()
+		await _settle()
+	app.open_chart()
+	await _settle()
+	t.check(app.router.current_screen is WorldMap and await _f10_round_trip(), "[dev] F10 opens and closes the panel on the chart")
+	app.close_chart()
+	await _settle()
+
+
+## F10 opens the panel, F10 again closes it. True when both happened.
+func _f10_round_trip() -> bool:
+	await t.press_key(KEY_F10)
+	var shown := app.modals.get_top() is DevTestPanel
+	await t.press_key(KEY_F10)
+	await t.frames(2)
+	return shown and not (app.modals.get_top() is DevTestPanel)
 
 
 func _test_production_isolation() -> void:
