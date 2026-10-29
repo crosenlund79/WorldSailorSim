@@ -91,8 +91,10 @@ beat at all and always motored.
 - **The choice to windward.** **Motor to windward** on the wheel. Four hours
   in 13 knots: beating made 11.2 nm on 0.9 L, motoring 20 nm on 8.8 L (about
   €17).
-- **Running costs** in the harbour office, fuel on the status line and the
-  switch panel.
+- **Running costs** in the harbour office; the fuel and its range on the
+  switch panel; a notice at a quarter tank and when it runs dry.
+- **An honest ETA.** The arrival estimate counts the fuel aboard; beyond it
+  the calms are sailed slowly. The passage readiness and the stores follow it.
 - **The career's books.** Every euro now passes one place and is recorded by
   source, with fuel, miles and each voyage.
 - **One central balance file:** `data/economy/economy.json`. Existing prices
@@ -126,7 +128,8 @@ in the findings):
 3. **New Game** → Start. You are in the cabin in Copenhagen.
 4. **Fuel.** Walk on deck, along the pontoon, and up the walkway to the quay.
    - The red **pump** stands by the walkway's head ("Fuel berth · €1.99 a
-     litre"). E shows the tank and *Fill up*. The status line shows "Fuel %".
+     litre"). E shows the tank and *Fill up*.
+   - Below, the **switch panel** shows the fuel and its range.
    - The **Harbour Office** lists the running costs (scroll down in its list).
 5. **Tacking.** Back aboard, plan a course to **Gothenburg** at the chart
    table and set sail.

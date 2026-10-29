@@ -19,7 +19,7 @@ func run(runner: Node) -> void:
 	Simulation.auto_advance = false
 	_test_data()
 	_test_burn()
-	_test_empty_tank()
+	await _test_empty_tank()
 	_test_buy_fuel()
 	_test_dues()
 	_test_ledger_and_voyage()
@@ -86,11 +86,23 @@ func _test_empty_tank() -> void:
 	_new_game()
 	GameSession.plan_route_to(&"gothenburg")
 	var state := GameSession.get_state_snapshot()
+	var path := GameSession.get_planned_route().path
+	var full_eta := Simulation.estimate_route_seconds(path)
 	state.fuel[state.vessel_id] = 0.5
 	GameSession.replace_state(state)
+	# The estimate counts the fuel aboard: in a calm, half a litre goes a
+	# mile or so, and the rest waits for wind (the stores are bought by it).
+	t.check(Simulation.estimate_route_seconds(path) > 3.0 * full_eta, "[empty] the estimate counts the fuel aboard (%.0f h with half a litre, %.0f h with a full tank)" % [
+		Simulation.estimate_route_seconds(path) / 3600.0, full_eta / 3600.0])
+	var notices: Array[String] = []
+	var listen := func(text: String) -> void: notices.append(text)
+	GameSession.notice.connect(listen)
 	GameSession.depart()
 	Simulation.advance(1800.0)
+	await t.frames(2)
+	GameSession.notice.disconnect(listen)
 	t.check(GameSession.get_fuel_l() <= 0.01, "[empty] the last half litre burns")
+	t.check(notices.any(func(n: String) -> bool: return n.contains("fuel tank is empty")), "[empty] the Captain is told the tank is empty %s" % [notices])
 	Simulation.advance(1800.0)
 	var progress := GameSession.get_voyage_progress_nm()
 	Simulation.advance(3600.0)
@@ -263,11 +275,6 @@ func _test_fuel_berth() -> void:
 			t.check(is_equal_approx(GameSession.get_fuel_l(), GameSession.get_fuel_tank_l()), "[berth] Fill up fills the tank")
 			await t.screenshot("i027_fuel_berth")
 		app.modals.clear()
-	t.check(not Hud.describe_status().contains("Fuel"), "[hud] a full tank keeps the status line short ('%s')" % Hud.describe_status())
-	var low_state := GameSession.get_state_snapshot()
-	low_state.fuel[low_state.vessel_id] = 0.2 * GameSession.get_fuel_tank_l()
-	GameSession.replace_state(low_state)
-	t.check(Hud.describe_status().contains("Fuel 20 %"), "[hud] low fuel shows on the status line ('%s')" % Hud.describe_status())
 	# The action wheel under way holds a dozen items without overlapping, at
 	# the promised sizes and scales (I027 added Tack now and Motor to windward).
 	app.modals.clear()

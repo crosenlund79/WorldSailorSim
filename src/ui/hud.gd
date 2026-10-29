@@ -352,18 +352,12 @@ func _set_route_lines(shown: bool) -> void:
 
 
 ## The boat's condition, money and stores in one compact line:
-## "Hull 87 % · Sound   €9,000   Food 12.5 d · Water 12.5 d", and the fuel
-## when it runs low ("Fuel 20 %"; the switch panel always shows it).
+## "Hull 87 % · Sound   €9,000   Food 12.5 d · Water 12.5 d".
 static func describe_status() -> String:
 	var provisions := GameSession.get_provisions()
-	var text := Loc.format("Hull %s   %s   Food %.1f d · Water %.1f d", [VesselCondition.describe(GameSession.get_condition()),
+	return Loc.format("Hull %s   %s   Food %.1f d · Water %.1f d", [VesselCondition.describe(GameSession.get_condition()),
 		GameSession.format_money(GameSession.get_funds()), floorf(provisions.food_days * 10.0 + 1e-6) / 10.0,
 		floorf(provisions.water_days * 10.0 + 1e-6) / 10.0])
-	# I027: the fuel in the tank, once it is low.
-	var tank := GameSession.get_fuel_tank_l()
-	if tank > 0.0 and GameSession.get_fuel_l() <= Economy.low_fuel_share() * tank:
-		text += "   " + Loc.t("Fuel %d %%") % roundi(GameSession.get_fuel_l() / tank * 100.0)
-	return text
 
 
 ## "Wind WSW 14 kn" (where it blows from), with gusts when they stand out

@@ -88,7 +88,7 @@ func _on_interrupted(reason: StringName, _text: String) -> void:
 	_interruptions[String(reason)] = int(_interruptions.get(String(reason), 0)) + 1
 
 
-## One passage: stores, readiness, depart, Long Passage time to arrival.
+## One passage: stores, fuel, readiness, depart, Long Passage time to arrival.
 func _sail_leg(index: int, from: StringName, to: StringName) -> bool:
 	var name := "%s -> %s" % [PortCatalog.get_default().get_display_name(from), PortCatalog.get_default().get_display_name(to)]
 	app.modals.clear()
@@ -97,6 +97,8 @@ func _sail_leg(index: int, from: StringName, to: StringName) -> bool:
 		"[paradise] %s: stocked up for the passage (%s, %s aboard)" % [name, stock if stock else "bought", Provisions.format_days(GameSession.get_provisions().endurance_days())])
 	if GameSession.get_fishing().get_lure_count("spoon") <= 0:
 		GameSession.buy_lure("spoon")
+	# I027: a full tank for the calms, as a skipper fills up before a passage.
+	GameSession.buy_fuel()
 	var plan := GameSession.plan_route_to(to)
 	if not t.check(plan == "", "[paradise] %s: course plotted (%s)" % [name, plan]):
 		return false

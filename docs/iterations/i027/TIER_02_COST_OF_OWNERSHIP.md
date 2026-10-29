@@ -10,9 +10,13 @@
   same simulation step that moves the boat under engine; under sail it burns
   nothing.
 - At a quarter of a tank the Captain is told how far it still goes. When the
-  tank runs dry the boat sails on under sail alone: no free motoring. When
-  becalmed it waits for wind, and the existing VHF and rescue paths are
-  unchanged.
+  tank runs dry the Captain is told, and the boat sails on under sail alone:
+  no free motoring. When becalmed it waits for wind, and the existing VHF and
+  rescue paths are unchanged.
+- **The arrival estimate counts the fuel aboard.** Beyond it, the calms are
+  sailed slowly, as the simulation sails them, so the ETA, the passage
+  readiness and the stores it advises stay honest. (Galápagos → Marquesas
+  on the 26 ft: estimated 33 d 0 h, sailed in 33.3 days.)
 - Fuel is bought at the **fuel berth**, a pump by the walkway's head on
   every quay. It is open at any hour, and E opens the pump. You can fill up
   or add 10 litres, as much as the money allows.
@@ -34,8 +38,9 @@
 **Running costs**
 - The harbour office shows the dues here, the fuel price and the boat's range
   under engine, and the last 30 days' costs by kind.
-- The status line shows the fuel; the switch panel shows the fuel and its
-  range.
+- The switch panel shows the fuel and its range. The HUD's status line is
+  unchanged: it was already full, and a fuel figure there pushed it under the
+  clock at 130 % (the full regression caught it).
 
 **Relaxed** pays 75 % of fuel and dues, through the existing *costs* factor.
 

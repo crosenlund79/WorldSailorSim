@@ -13,7 +13,8 @@ extends Node
 ## I027: suites whose voyages motor far in a flat calm (written before the
 ## tank); their engine burns no fuel. Every other suite has the real tank.
 const FUEL_FREE_SUITES: Array[String] = ["test_simulation.gd", "test_captains_log.gd", "test_objectives.gd",
-	"test_publishing.gd", "test_voyage_persistence.gd", "test_weather.gd", "test_harbour_life.gd"]
+	"test_publishing.gd", "test_voyage_persistence.gd", "test_weather.gd", "test_harbour_life.gd", "test_golden_harbours.gd",
+	"test_well_run_ship.gd"]
 
 const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_data_model.gd"),

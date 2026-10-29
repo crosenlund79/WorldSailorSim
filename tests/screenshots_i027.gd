@@ -3,9 +3,8 @@ extends Node
 ## Tier 1 (01-05, docs/screenshots/i027/tier1): beating to windward on deck,
 ## the instruments with the tack and the progress made good, the
 ## chartplotter, the deck after a tack by hand (K), the wheel's Tack now.
-## Tier 2 (10-14, .../tier2): the fuel berth's pump on the quay, its menu,
-## the harbour office's running costs, the wheel's Motor to windward, and
-## the status line's fuel.
+## Tier 2 (10-13, .../tier2): the fuel berth's pump on the quay, its menu,
+## the harbour office's running costs and the wheel's Motor to windward.
 ##   xvfb-run -a -s "-screen 0 1600x900x24" godot --path . --rendering-driver opengl3 \
 ##     --resolution 1600x900 res://tests/screenshots_i027.tscn -- [--out=DIR] [--shots=a,b]
 ## Uses the test save and settings files; never touches the player's own.
@@ -136,7 +135,7 @@ func _run() -> void:
 
 ## Tier 2 in Copenhagen: the fuel berth, its menu, the office's running costs.
 func _tier2() -> void:
-	if not (_wanted("10") or _wanted("11") or _wanted("12") or _wanted("14")):
+	if not (_wanted("10") or _wanted("11") or _wanted("12")):
 		return
 	var state := GameSession.get_state_snapshot()
 	state.fuel[state.vessel_id] = 9.0
@@ -167,7 +166,5 @@ func _tier2() -> void:
 		await _frames(8)
 		await _shot("12_harbour_office_running_costs")
 		app.modals.clear()
-	if _wanted("14"):
-		await _shot("14_status_line_fuel")
 	app.leave_quay()
 	await _idle()
