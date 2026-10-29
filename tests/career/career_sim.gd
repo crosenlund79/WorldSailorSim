@@ -25,12 +25,21 @@ const HUMAN_S_PER_GAME_HOUR_UNDERWAY := 3.0
 
 ## The policies: hours of remote work a day in harbour, days in each
 ## harbour, whether to motor to windward, the fuel share that triggers a
-## refill, and the provisions (days) that trigger a top-up.
+## refill, and the provisions (days) that trigger a top-up. I027 Tier 3:
+## "care" has the boatyard do every service it advises (recommended or
+## needed) where there is one; "buy" is a boat to buy and move aboard once
+## the money covers it and "reserve" besides, at a harbour with a boatyard.
 const POLICIES := {
 	"frugal": {"work_hours": 4, "stay_days": 2, "motor_upwind": false, "refuel_below": 0.35, "provision_below": 6.0, "hop_nm": [20.0, 70.0]},
 	"cruiser": {"work_hours": 3, "stay_days": 1, "motor_upwind": true, "refuel_below": 0.7, "provision_below": 10.0, "hop_nm": [25.0, 90.0]},
 	"worker": {"work_hours": 8, "stay_days": 3, "motor_upwind": false, "refuel_below": 0.5, "provision_below": 8.0, "hop_nm": [20.0, 60.0]},
+	"keeper": {"work_hours": 4, "stay_days": 2, "motor_upwind": false, "refuel_below": 0.35, "provision_below": 6.0, "hop_nm": [20.0, 70.0],
+		"care": true},
+	"upgrader": {"work_hours": 6, "stay_days": 2, "motor_upwind": false, "refuel_below": 0.35, "provision_below": 6.0, "hop_nm": [20.0, 70.0],
+		"care": true, "buy": "starling_33", "reserve": 3000},
 }
+const CARE_SERVICES: Array[StringName] = [BoatCare.SERVICE_REPAIR, BoatCare.SERVICE_RIG, BoatCare.SERVICE_ENGINE]
+const CARE_AREAS := {BoatCare.SERVICE_REPAIR: BoatCare.AREA_HULL, BoatCare.SERVICE_RIG: BoatCare.AREA_RIG, BoatCare.SERVICE_ENGINE: BoatCare.AREA_ENGINE}
 
 var out := "user://career_sim"
 var seeds: Array[int] = [1, 2, 3]
@@ -63,15 +72,16 @@ func _ready() -> void:
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(out)
 	Simulation.auto_advance = false
-	var rows: Array[String] = ["policy,seed,level,build,wall_s,game_days,voyages,nm_sail,nm_engine,fuel_l,start_funds,end_funds,min_funds,income_total,expense_total,low_money_days,human_hours_est,stranded"]
+	var rows: Array[String] = ["policy,seed,level,build,wall_s,game_days,voyages,nm_sail,nm_engine,fuel_l,start_funds,end_funds,min_funds,income_total,expense_total,low_money_days,human_hours_est,stranded,services,bought_day,end_vessel"]
 	for policy in policies:
 		for s in seeds:
 			var result := _career(policy, s)
 			var f := FileAccess.open("%s/career_%s_%d.json" % [out, policy, s], FileAccess.WRITE)
 			f.store_string(JSON.stringify(result, "  "))
-			rows.append("%s,%d,%s,%s,%.1f,%.1f,%d,%.1f,%.1f,%.1f,%d,%d,%d,%d,%d,%d,%.1f,%s" % [policy, s, level, result.build, result.wall_s,
+			rows.append("%s,%d,%s,%s,%.1f,%.1f,%d,%.1f,%.1f,%.1f,%d,%d,%d,%d,%d,%d,%.1f,%s,%d,%.1f,%s" % [policy, s, level, result.build, result.wall_s,
 				result.game_days, result.voyages, result.nm_sail, result.nm_engine, result.fuel_l, result.start_funds, result.end_funds,
-				result.min_funds, result.income_total, result.expense_total, result.low_money_days, result.human_hours_est, result.stranded])
+				result.min_funds, result.income_total, result.expense_total, result.low_money_days, result.human_hours_est, result.stranded,
+					result.services, result.bought_day, result.end_vessel])
 			print("CAREER %s seed %d: %.0f days, %d voyages, €%d -> €%d (wall %.0f s)" % [policy, s, result.game_days, result.voyages,
 				result.start_funds, result.end_funds, result.wall_s])
 	var csv := FileAccess.open("%s/summary.csv" % out, FileAccess.WRITE)
@@ -101,6 +111,8 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 	var low_money_days := 0
 	var stranded := false
 	var voyages := 0
+	var services := 0
+	var bought_day := -1.0
 	while (GameSession.get_game_time() - start_time) / 86400.0 < days:
 		# In harbour: work, stores, fuel, the nights.
 		stops += 1
@@ -112,6 +124,10 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 				GameSession.buy_provisions()
 			if GameSession.get_fuel_l() < float(policy.refuel_below) * GameSession.get_fuel_tank_l():
 				GameSession.buy_fuel()
+			if bool(policy.get("care", false)) and d == 0:
+				services += _care()
+			if policy.has("buy") and bought_day < 0.0 and _buy(StringName(policy.buy), int(policy.get("reserve", 0))):
+				bought_day = (GameSession.get_game_time() - start_time) / 86400.0
 			Simulation.advance(maxf(86400.0 - fposmod(GameSession.get_game_time() - start_time, 86400.0), 3600.0))
 			snapshots.append(_snapshot(start_time))
 			min_funds = mini(min_funds, GameSession.get_funds())
@@ -160,6 +176,7 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 		"human_hours_est": human_hours, "human_time_model": "estimate: %.0f min per harbour stop, %.0f min per work session, %.0f s per game hour under way (20x)" % [
 			HUMAN_MIN_PER_STOP, HUMAN_MIN_PER_WORK, HUMAN_S_PER_GAME_HOUR_UNDERWAY],
 		"stranded": stranded, "voyage_log": ledger.voyages, "snapshots": snapshots,
+		"services": services, "bought_day": bought_day, "end_vessel": String(GameSession.get_vessel_id()),
 	}
 
 
@@ -167,6 +184,39 @@ func _snapshot(start_time: float) -> Dictionary:
 	return {"day": snappedf((GameSession.get_game_time() - start_time) / 86400.0, 0.01), "funds": GameSession.get_funds(),
 		"fuel_l": snappedf(GameSession.get_fuel_l(), 0.1), "location": String(GameSession.get_location_id()),
 		"food_days": snappedf(GameSession.get_provisions().food_days, 0.1)}
+
+
+## The boatyard's advised services here (recommended or needed), each paid and
+## its time spent ashore; a haul-out when the bottom wants one. Returns how
+## many were done.
+func _care() -> int:
+	var done := 0
+	var care := GameSession.get_boat_care()
+	var now := GameSession.get_game_time()
+	for service in CARE_SERVICES:
+		var level := BoatCare.area_level(CARE_AREAS[service], care, GameSession.get_condition(), now)
+		if level in [BoatCare.LEVEL_RECOMMENDED, BoatCare.LEVEL_NEEDED] and GameSession.service_refusal(service) == "":
+			var result := GameSession.perform_service(service)
+			if String(result.error) == "":
+				Simulation.spend_time_ashore(float(result.minutes))
+				done += 1
+	var fouling := BoatCare._level(BoatCare.fouling(GameSession.get_boat_care(), GameSession.get_game_time()), BoatCare.FOULING_COSMETIC,
+		BoatCare.FOULING_RECOMMENDED, BoatCare.FOULING_NEEDED)
+	if fouling in [BoatCare.LEVEL_RECOMMENDED, BoatCare.LEVEL_NEEDED] and GameSession.service_refusal(BoatCare.SERVICE_HAUL_OUT) == "":
+		var hauled := GameSession.haul_out()
+		if String(hauled.error) == "":
+			Simulation.spend_time_ashore(float(hauled.minutes))
+			done += 1
+	return done
+
+
+## Buys `vessel_id` and moves aboard when the money covers it and `reserve`
+## besides, where there is a boatyard. True when it did.
+func _buy(vessel_id: StringName, reserve: int) -> bool:
+	var vessel := VesselCatalog.get_default().get_vessel(vessel_id)
+	if vessel == null or GameSession.owns_vessel(vessel_id) or GameSession.get_funds() < vessel.price + reserve or not GameSession.can_change_vessel():
+		return false
+	return GameSession.buy_vessel(vessel_id) == "" and GameSession.switch_vessel(vessel_id) == ""
 
 
 ## A harbour `hop_nm` away (min, max) by great-circle distance, at random

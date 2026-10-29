@@ -1065,6 +1065,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Whenever the Captain is drawn.
 - **If you change it:** The Captain's look; the hat's position depends on the head's centre staying where it is.
 
+### `src/vessels/accommodation.gd`
+
+**Purpose:** What each boat offers people aboard, as its cabin is drawn (I027).
+- **What it does:** Reads `data/vessels/accommodation.json` and answers the questions a future passenger booking will ask: how many people the boat safely carries, how many guests by day and overnight, private guest cabins, whether the skipper has a cabin of their own, how comfortable it is (simple, comfortable, spacious) and what passages it is fitted for (coastal, offshore, ocean). Each berth, cabin and heads in the file names the drawn piece of the cabin, so the data never claims what the picture does not show. It also gives the boatyard its lines about life aboard.
+- **Works with:** `BoatyardMenu` (shows it), the I028 passenger trade (to come).
+- **Keeps:** Nothing but the file it reads once.
+- **When it runs:** When the boatyard shows a boat, or a booking question is asked.
+- **If you change it:** What each boat promises its guests; the test checks it against the drawn cabins.
+
 ### `src/vessels/vessel_catalog.gd`
 
 **Purpose:** The list of all boats the Captain can own, in boatyard order.
@@ -1178,7 +1187,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat_care/passage_readiness.gd`
 
 **Purpose:** A friendly checklist before a passage: is the boat ready to go?
-- **What it does:** Looks at the hull and care areas, food and water against the expected passage time, the weather forecast along the route (24 hours ahead at most), the passage length and the boat's size. Each finding is OK, worth noting, or worth a second thought. It only advises; it never stops you leaving.
+- **What it does:** Looks at the hull and care areas, food and water against the expected passage time, the weather forecast along the route (24 hours ahead at most), the passage length and the boat's size. Each finding is OK, worth noting, or worth a second thought. It only advises; it never stops you leaving. I027: on a long passage with less than half a tank it suggests filling up (a full tank carries the boat through calms), and a passage longer than the boat can stow for says that a stop on the way, or a bigger boat, would answer it.
 - **Works with:** `GameSession` (boat, condition, provisions), `Simulation` (route time and weather hazards), `BoatCare`, `VesselCondition`, `Provisions`, `GeoMath`; shown by `App`, `WorldMap` and `VoyageDaydream`.
 - **Keeps:** Nothing; it works out a fresh answer each time.
 - **When it runs:** When a course is planned or a passage is about to start.
@@ -1738,7 +1747,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/boatyard_menu.gd`
 
 **Purpose:** The boatyard window, where you browse the boats and move aboard another one.
-- **What it does:** Lists every boat with a picture of its deck, its specs and a speed comparison table, and lets you switch boats (free; time, harbour, companion and progress are kept). It also has a button to Boat care. Since I026 the grocery store, the chandlery and the sail loft have their own buildings on the quay, so the yard no longer has buttons to them. Since I022 it shows each boat's price or that it is yours, and offers to buy a boat you do not own yet. Steady Hands: the boats, details and comparison scroll when the screen is too short (at a 130 % interface size it was taller than the screen).
+- **What it does:** Lists every boat with a picture of its deck, its specs and a speed comparison table, and lets you switch boats (free; time, harbour, companion and progress are kept). It also has a button to Boat care. Since I026 the grocery store, the chandlery and the sail loft have their own buildings on the quay, so the yard no longer has buttons to them. Since I022 it shows each boat's price or that it is yours, and offers to buy a boat you do not own yet. Steady Hands: the boats, details and comparison scroll when the screen is too short (at a 130 % interface size it was taller than the screen). I027 Tier 3: after the specs it shows life aboard from the boat's drawn cabin: who sleeps where, guests by day and overnight, private cabins, comfort and heads, and what passages it suits.
 - **Works with:** `App`, `VesselCatalog`, `VesselDefinition`, `VesselVisual`, `GameSession`, `BoatCare`, `HarbourFacilities`, `ShopCounter` (its frame on the quay); its layout comes from `boatyard_menu.tscn`.
 - **Keeps:** Only which boat is selected in the list.
 - **When it runs:** When you use the boatyard's door on the quay while moored in harbour (I026).
@@ -2351,7 +2360,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/career/career_sim.gd`
 
 **Purpose:** Plays fast careers on the real game rules to measure the economy (career testing, Mode A; I027).
-- **What it does:** Starts a new game on a seed and plays it with a simple policy (frugal, cruiser, worker): remote work, provisions and fuel in harbour, nights moored, real voyages between real harbours in the real weather. Writes each career's books and daily snapshots as JSON and a summary CSV. It keeps three clocks apart: how long the run took, how much game time passed, and an estimate (clearly labelled) of a player's active time. It never gives money, voyages or awards the game would not give.
+- **What it does:** Starts a new game on a seed and plays it with a simple policy (frugal, cruiser, worker): remote work, provisions and fuel in harbour, nights moored, real voyages between real harbours in the real weather. Writes each career's books and daily snapshots as JSON and a summary CSV. It keeps three clocks apart: how long the run took, how much game time passed, and an estimate (clearly labelled) of a player's active time. It never gives money, voyages or awards the game would not give. I027 Tier 3: two more policies, one that has the boatyard do every service it advises ("keeper") and one that also saves for and buys the Wing 33 and moves aboard ("upgrader"); each career notes the services done, the day a boat was bought and the boat it ends on.
 - **Works with:** `GameSession`, `Simulation`, `PortCatalog`, `CareerLedger`.
 - **Keeps:** Nothing; it writes report files (test saves only).
 - **When it runs:** Only by hand: `res://tests/career/career_sim.tscn -- [--out=DIR] [--seeds=1,2] [--days=60] [--policies=frugal] [--level=standard]`.
@@ -2374,6 +2383,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** Nothing (it resets the Academy's progress afterwards).
 - **When it runs:** With the other suites (`test_runner.tscn`).
 - **If you change it:** Only the tests change.
+
+### `tests/suites/test_accommodation.gd`
+
+**Purpose:** Checks each boat's accommodation against its drawn cabin (I027).
+- **What it does:** Checks every boat has accommodation data, every berth, cabin, heads and amenity in it is drawn in the boat's cabin (and the drawn cabins, heads and showers are all in the data), the booking answers for each boat, that the size classes follow length, price and running costs while the dearest boat is not best at everything, the Pacific's longest leg for each boat (and the readiness's fuel note), and the boatyard's lines about life aboard in English and Danish, inside the screen.
+- **Works with:** `Accommodation`, `VesselCatalog`, `Economy`, `PassageReadiness`, `Simulation`, the app scene and `BoatyardMenu`.
+- **Keeps:** Nothing.
+- **When it runs:** Only in tests.
+- **If you change it:** Only the safety net changes; if it fails, a boat may promise what its cabin does not show.
 
 ### `tests/suites/test_anchor_life.gd`
 
@@ -3432,7 +3450,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/test_runner.gd`
 
 **Purpose:** The game's automatic test runner: it runs all 85 test suites and says how many checks passed.
-- **What it does:** Moves saves, settings and logs to scratch test files, turns off the sleep/dawn animations, sets English and calm wind, and runs each suite in turn. It also gives the suites shared tools: checks, waiting, pressing keys, clicking, boarding a boat, setting the wind, planning routes and screenshots. Since I021 it also runs the wider-world suite. Since I022 it runs the I022 suite and lets the suites sail every boat without buying it. I022: it turns the Academy's offer and tips off for the other suites. It also runs the cabin windows suite. It also runs the Steady Hands interface suite. It also runs the Golden Harbours suite. I024: it also runs The Company We Keep suite. I025: it also runs the A Little More Room Aboard suite, just before the gameplay flow suite, which stays last. I026: it also runs the living harbours, cabin objects and marine electronics suites, just before A Little More Room Aboard. I026 also added the waterfront walkthrough to the list. I027 added the windward suite. I027 Tier 2 added the fuel and running-costs suite; the older suites that motor far in a flat calm run with an engine that burns no fuel, and every other suite has the real tank.
+- **What it does:** Moves saves, settings and logs to scratch test files, turns off the sleep/dawn animations, sets English and calm wind, and runs each suite in turn. It also gives the suites shared tools: checks, waiting, pressing keys, clicking, boarding a boat, setting the wind, planning routes and screenshots. Since I021 it also runs the wider-world suite. Since I022 it runs the I022 suite and lets the suites sail every boat without buying it. I022: it turns the Academy's offer and tips off for the other suites. It also runs the cabin windows suite. It also runs the Steady Hands interface suite. It also runs the Golden Harbours suite. I024: it also runs The Company We Keep suite. I025: it also runs the A Little More Room Aboard suite, just before the gameplay flow suite, which stays last. I026: it also runs the living harbours, cabin objects and marine electronics suites, just before A Little More Room Aboard. I026 also added the waterfront walkthrough to the list. I027 added the windward suite. I027 Tier 2 added the fuel and running-costs suite; the older suites that motor far in a flat calm run with an engine that burns no fuel, and every other suite has the real tank. I027 Tier 3 added the accommodation suite.
 - **Works with:** Every suite in `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Keeps:** The pass/fail counts and the list of failures.
 - **When it runs:** By hand or in automation: `godot --headless --path . res://tests/test_runner.tscn` (options after `--`: `--only=name`, `--skip=name`, `--screenshots=DIR`).

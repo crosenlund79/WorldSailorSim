@@ -1,0 +1,72 @@
+{
+	"note": "Between Horizons (I027 Tier 3): what each boat offers people aboard, as drawn in its cabin (src/vessels/<id>/cabin_visual.tscn). Read only by Accommodation (src/vessels/accommodation.gd). Every sleeping place and cabin names the node that draws it ('node', under FurnitureVisual, or a CabinDetails label for a cabin), and test_accommodation checks it is there: the data never claims what the art does not show. safe_persons is the most people the boat safely carries under way, the skipper included; it is not the number of bunks. A sleeping place 'for' the skipper is never offered to a guest. 'space' is shared (open to the saloon), or the id of a cabin. Quality: basic (a settee or a bow bunk), good, fine. Size class follows length and price; comfort is how it feels to live aboard; passage is the furthest kind of passage the boat is fitted for (coastal, offshore, ocean). The running costs are in data/economy/economy.json.",
+	"vessels": {
+		"arctic_wanderer_26": {
+			"size_class": "small",
+			"comfort": "simple",
+			"passage": "offshore",
+			"safe_persons": 4,
+			"sleeping": [
+				{"id": "v_berth", "node": "VBerth", "label": "V-berth", "sleeps": 2, "quality": "good", "space": "shared", "for": "skipper"},
+				{"id": "settee_port", "node": "SetteePort", "label": "Saloon settee", "sleeps": 1, "quality": "basic", "space": "shared"},
+				{"id": "settee_starboard", "node": "SetteeStarboard", "label": "Saloon settee", "sleeps": 1, "quality": "basic", "space": "shared"}
+			],
+			"cabins": [],
+			"heads": [],
+			"showers": 0,
+			"amenities": ["galley", "chart_table", "saloon_table"]
+		},
+		"starling_33": {
+			"size_class": "medium",
+			"comfort": "comfortable",
+			"passage": "ocean",
+			"safe_persons": 6,
+			"sleeping": [
+				{"id": "v_berth", "node": "VBerth", "label": "V-berth", "sleeps": 2, "quality": "good", "space": "shared", "for": "skipper"},
+				{"id": "settee_port", "node": "SetteePort", "label": "Saloon settee", "sleeps": 1, "quality": "good", "space": "shared"},
+				{"id": "settee_starboard", "node": "SetteeStarboard", "label": "Saloon settee", "sleeps": 1, "quality": "good", "space": "shared"}
+			],
+			"cabins": [],
+			"heads": [],
+			"showers": 0,
+			"amenities": ["galley", "chart_table", "saloon_table", "lockers"]
+		},
+		"petrel_36": {
+			"size_class": "medium",
+			"comfort": "simple",
+			"passage": "offshore",
+			"safe_persons": 5,
+			"sleeping": [
+				{"id": "v_berth", "node": "VBerth", "label": "V-berth", "sleeps": 2, "quality": "good", "space": "shared", "for": "skipper"},
+				{"id": "settee_port", "node": "SetteePort", "label": "Saloon settee", "sleeps": 1, "quality": "basic", "space": "shared"},
+				{"id": "settee_starboard", "node": "SetteeStbd", "label": "Saloon settee", "sleeps": 1, "quality": "basic", "space": "shared"}
+			],
+			"cabins": [],
+			"heads": [],
+			"showers": 0,
+			"amenities": ["galley", "chart_table", "saloon_table"]
+		},
+		"halcyon_40": {
+			"size_class": "large",
+			"comfort": "spacious",
+			"passage": "ocean",
+			"safe_persons": 8,
+			"sleeping": [
+				{"id": "owner_berth", "node": "OwnerBerth", "label": "Owner's double", "sleeps": 2, "quality": "fine", "space": "owner", "for": "skipper"},
+				{"id": "guest_berth", "node": "GuestBerth", "label": "Guest double", "sleeps": 2, "quality": "good", "space": "guest"},
+				{"id": "bow_bunk", "node": "Bunk", "label": "Bow bunk", "sleeps": 1, "quality": "basic", "space": "shared"},
+				{"id": "saloon_settee", "node": "Settee", "label": "Saloon settee", "sleeps": 1, "quality": "basic", "space": "shared"}
+			],
+			"cabins": [
+				{"id": "owner", "label_node": "OwnerCabin", "label": "Owner's cabin", "private": true, "en_suite": true, "for": "skipper"},
+				{"id": "guest", "label_node": "GuestCabin", "label": "Guest cabin", "private": true, "en_suite": false}
+			],
+			"heads": [
+				{"id": "en_suite", "node": "Ensuite", "cabin": "owner"},
+				{"id": "heads", "node": "Heads"}
+			],
+			"showers": 2,
+			"amenities": ["galley", "chart_table", "saloon_table", "fridge", "wardrobe", "desk"]
+		}
+	}
+}

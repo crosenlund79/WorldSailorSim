@@ -10191,3 +10191,79 @@ msgstr "%d af %d liter  ·  ca. %d sm for motor"
 
 msgid "Fuel"
 msgstr "Brændstof"
+
+msgid "Bow bunk"
+msgstr "Køje i forpeaken"
+
+msgid "Guest cabin"
+msgstr "Gæstekahyt"
+
+msgid "Guest double"
+msgstr "Gæstens dobbeltkøje"
+
+msgid "Owner's cabin"
+msgstr "Ejerkahytten"
+
+msgid "Owner's double"
+msgstr "Ejerens dobbeltkøje"
+
+msgid "Saloon settee"
+msgstr "Sofa i salonen"
+
+msgid "V-berth"
+msgstr "V-køje"
+
+msgid "This passage is longer than the %s can stow food and water for (%d days). A stop on the way would break it up; a bigger boat stows more."
+msgstr "Denne passage er længere, end %s kan have mad og vand til (%d dage). Et stop undervejs ville dele den op; en større båd har plads til mere."
+
+msgid "The fuel tank is %d %% full. A full tank carries her through calms and can shorten the passage."
+msgstr "Brændstoftanken er %d %% fuld. En fuld tank bærer hende gennem stilleperioder og kan gøre passagen kortere."
+
+msgid "%d by day, %d overnight"
+msgstr "%d om dagen, %d om natten"
+
+msgid "%d private guest cabin"
+msgid_plural "%d private guest cabins"
+msgstr[0] "%d privat gæstekahyt"
+msgstr[1] "%d private gæstekahytter"
+
+msgid "no private cabin"
+msgstr "ingen privat kahyt"
+
+msgid "the skipper's own cabin"
+msgstr "skipperens egen kahyt"
+
+msgid "%d heads"
+msgid_plural "%d heads"
+msgstr[0] "%d toilet"
+msgstr[1] "%d toiletter"
+
+msgid "no enclosed heads"
+msgstr "intet lukket toilet"
+
+msgid "Sleeps"
+msgstr "Sovepladser"
+
+msgid "Guests"
+msgstr "Gæster"
+
+msgid "Suited to"
+msgstr "Egnet til"
+
+msgid "Spacious"
+msgstr "Rummelig"
+
+msgid "Comfortable"
+msgstr "Komfortabel"
+
+msgid "Simple and snug"
+msgstr "Enkel og hyggelig"
+
+msgid "Ocean passages"
+msgstr "Oceanpassager"
+
+msgid "Offshore passages; oceans by way of island harbours"
+msgstr "Passager på åbent hav; oceaner via havne på øerne"
+
+msgid "Coastal hops"
+msgstr "Korte ture langs kysten"

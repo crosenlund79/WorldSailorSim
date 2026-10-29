@@ -71,7 +71,7 @@ def chart(groups, path, max_day=90):
     hi = int((hi // 2000 + 1) * 2000)
     x = lambda day: L + (W - L - R) * day / max_day
     y = lambda v: T + (H - T - B) * (1 - (v - lo) / (hi - lo))
-    d.text((L, 22), "Median money over 90 in-game days, by career policy", fill=INK, font=font(20))
+    d.text((L, 22), f"Median money over {max_day} in-game days, by career policy", fill=INK, font=font(20))
     for v in range(lo, hi + 1, 2000):
         d.line([(L, y(v)), (W - R, y(v))], fill=GRID, width=1)
         d.text((L - 10, y(v)), f"€{v:,}", fill=INK_2, font=font(13), anchor="rm")
@@ -102,10 +102,11 @@ def main():
     with open(os.path.join(out, "summary.csv"), "w", newline="") as f:
         w = csv.writer(f)
         keys = ["batch", "policy", "seed", "level", "build", "wall_s", "game_days", "human_hours_est", "voyages", "nm_sail", "nm_engine",
-                "fuel_l", "start_funds", "end_funds", "min_funds", "income_total", "expense_total", "low_money_days", "stranded"]
+                "fuel_l", "start_funds", "end_funds", "min_funds", "income_total", "expense_total", "low_money_days", "stranded",
+                "services", "bought_day", "end_vessel"]  # the last three since I027 Tier 3
         w.writerow(keys)
         for c in careers:
-            w.writerow([round(c[k], 2) if isinstance(c[k], float) else c[k] for k in keys])
+            w.writerow([round(c.get(k, ""), 2) if isinstance(c.get(k), float) else c.get(k, "") for k in keys])
     groups = {}
     for c in careers:
         groups.setdefault((c["batch"], c["policy"]), []).append(c)
@@ -122,10 +123,21 @@ def main():
     for (batch, policy), g in groups.items():
         vals = [int(st.median([c["totals"].get(s, 0) for c in g])) for s in sources]
         lines.append(f"| {batch} | {policy} | " + " | ".join(f"{v:+,}" for v in vals) + " |")
+    cared = [(k, g) for k, g in groups.items() if any("services" in c for c in g)]
+    if cared:
+        lines += ["", "Boat care and boat purchases (I027 Tier 3 policies):", "",
+                  "| Batch | Policy | Services done (median) | Bought a boat | Day bought (median) | Boat at the end |", "|---|---|---|---|---|---|"]
+        for (batch, policy), g in cared:
+            bought = [c["bought_day"] for c in g if c.get("bought_day", -1) >= 0]
+            ends = sorted({c.get("end_vessel", "") for c in g})
+            lines.append(f"| {batch} | {policy} | {st.median([c.get('services', 0) for c in g]):.0f} | {len(bought)} of {len(g)} | "
+                         f"{(f'{st.median(bought):.0f}' if bought else '-')} | {', '.join(ends)} |")
     open(os.path.join(out, "report.md"), "w").write("\n".join(lines) + "\n")
-    std = {p: g for (b, p), g in groups.items() if b == "std"}
-    if std:
-        chart(std, os.path.join(out, "money_over_time.png"))
+    first = next(iter(groups))[0] if groups else ""
+    chosen = {p: g for (b, p), g in groups.items() if b == ("std" if any(b == "std" for b, _ in groups) else first)}
+    if chosen:
+        max_day = int(max(c["game_days"] for g in chosen.values() for c in g)) // 15 * 15
+        chart(chosen, os.path.join(out, "money_over_time.png"), max(max_day, 15))
     print("\n".join(lines))
 
 

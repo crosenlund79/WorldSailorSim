@@ -3950,6 +3950,34 @@ msgstr ""
 msgid "33 ft cruising sloop"
 msgstr ""
 
+#: data/vessels/accommodation.json
+msgid "Bow bunk"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "Guest cabin"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "Guest double"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "Owner's cabin"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "Owner's double"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "Saloon settee"
+msgstr ""
+
+#: data/vessels/accommodation.json
+msgid "V-berth"
+msgstr ""
+
 #: data/vessels/arctic_wanderer_26.tres:14
 msgid "Arctic Wanderer 26"
 msgstr ""
@@ -5396,55 +5424,63 @@ msgstr ""
 msgid "Haul out"
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:106
+#: src/boat_care/passage_readiness.gd:100
+msgid "The engine is due a service; it is a little slower under power."
+msgstr ""
+
+#: src/boat_care/passage_readiness.gd:109
 msgid "Food or water may run short: %s aboard for a passage of about %s."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:111
+#: src/boat_care/passage_readiness.gd:114
 msgid "At the grocery store you can stock up for a long passage: the %s stows up to %d days."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:115
-msgid "This passage is longer than the %s can stow food and water for (%d days). A stop at a harbour on the way would break it up."
+#: src/boat_care/passage_readiness.gd:118
+msgid "This passage is longer than the %s can stow food and water for (%d days). A stop on the way would break it up; a bigger boat stows more."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:118
+#: src/boat_care/passage_readiness.gd:121
 msgid "Enough food and water for the passage, with little to spare (%s)."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:120
+#: src/boat_care/passage_readiness.gd:123
 msgid "Food and water for %s."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:138
+#: src/boat_care/passage_readiness.gd:134
+msgid "The fuel tank is %d %% full. A full tank carries her through calms and can shorten the passage."
+msgstr ""
+
+#: src/boat_care/passage_readiness.gd:152
 msgid "%s expected on the route %s (wind up to %d kn). Waiting in harbour may be kinder."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:141
+#: src/boat_care/passage_readiness.gd:155
 msgid "A fresh to strong breeze on the way (up to %d kn) %s."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:144
+#: src/boat_care/passage_readiness.gd:158
 msgid "No rough weather foreseen in the next %d hours."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:146
+#: src/boat_care/passage_readiness.gd:160
 msgid "No rough weather foreseen on the route."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:149
+#: src/boat_care/passage_readiness.gd:163
 msgid "The forecast reaches %d hours ahead; the weather further along the passage is not yet known."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:155
+#: src/boat_care/passage_readiness.gd:169
 msgid "An ocean passage of about %s. Long Passage time on deck lets the days go by."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:157
+#: src/boat_care/passage_readiness.gd:171
 msgid "A passage of several days (about %s): the weather can change on the way."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:159
+#: src/boat_care/passage_readiness.gd:173
 msgid "An overnight passage (about %s). A rest before setting out helps."
 msgstr ""
 
@@ -5460,32 +5496,28 @@ msgstr ""
 msgid "Worth a second thought before setting out."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:50
+#: src/boat_care/passage_readiness.gd:53
 msgid "The %s is a small boat: she is happiest making long or rough passages in settled weather."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:80
+#: src/boat_care/passage_readiness.gd:83
 msgid "The %s is sound (%d %%)."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:83
+#: src/boat_care/passage_readiness.gd:86
 msgid "The hull is worn (%d %%). Fine for a short hop; a boatyard repair would be wise before a long passage."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:86
+#: src/boat_care/passage_readiness.gd:89
 msgid "The hull is damaged (%d %%). Rough weather would be hard on her; a repair first would be wise."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:95
+#: src/boat_care/passage_readiness.gd:98
 msgid "Weed on the bottom is slowing her a little; a haul-out would clean it."
 msgstr ""
 
-#: src/boat_care/passage_readiness.gd:96
+#: src/boat_care/passage_readiness.gd:99
 msgid "The rigging and sails are due a service; they lose a little speed and take weather harder."
-msgstr ""
-
-#: src/boat_care/passage_readiness.gd:97
-msgid "The engine is due a service; it is a little slower under power."
 msgstr ""
 
 #: src/companion/companion_pose_art.gd:20
@@ -8603,7 +8635,7 @@ msgstr ""
 msgid "Wind %d kn"
 msgstr ""
 
-#: src/interaction/highlight_resolver.gd:23
+#: src/interaction/highlight_resolver.gd:23 src/vessels/accommodation.gd:35
 msgid "Berth"
 msgstr ""
 
@@ -10057,47 +10089,47 @@ msgstr ""
 msgid "Condition %s"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:161 src/ui/grocery_menu.gd:36
+#: src/ui/boatyard_menu.gd:166 src/ui/grocery_menu.gd:36
 msgid "Price"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:168
+#: src/ui/boatyard_menu.gd:173
 msgid "This is your boat"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:170
+#: src/ui/boatyard_menu.gd:175
 msgid "Move aboard the %s"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:172
+#: src/ui/boatyard_menu.gd:177
 msgid "Buy the %s (%s)…"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:174
+#: src/ui/boatyard_menu.gd:179
 msgid "%s needed to buy it"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:181 src/ui/boatyard_menu.gd:184 src/ui/boatyard_menu.gd:185
+#: src/ui/boatyard_menu.gd:186 src/ui/boatyard_menu.gd:189 src/ui/boatyard_menu.gd:190
 msgid "%.1f kn"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:181
+#: src/ui/boatyard_menu.gd:186
 msgid "Top speed under sail"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:183
+#: src/ui/boatyard_menu.gd:188
 msgid "%d kn wind at %d°"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:185
+#: src/ui/boatyard_menu.gd:190
 msgid "Under engine"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:241
+#: src/ui/boatyard_menu.gd:246
 msgid "(your boat)"
 msgstr ""
 
-#: src/ui/boatyard_menu.gd:242 src/ui/chandlery_menu.gd:61
+#: src/ui/boatyard_menu.gd:247 src/ui/chandlery_menu.gd:61
 msgid "Yours"
 msgstr ""
 
@@ -12580,6 +12612,70 @@ msgstr ""
 
 #: src/ui/work_menu.gd:77
 msgid "You finish at about %s.\nFunds now %s, afterwards %s.\nFood and water used: %s each."
+msgstr ""
+
+#: src/vessels/accommodation.gd:145
+msgid "%d by day, %d overnight"
+msgstr ""
+
+#: src/vessels/accommodation.gd:147
+msgid "%d private guest cabin"
+msgid_plural "%d private guest cabins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/vessels/accommodation.gd:147
+msgid "no private cabin"
+msgstr ""
+
+#: src/vessels/accommodation.gd:150
+msgid "the skipper's own cabin"
+msgstr ""
+
+#: src/vessels/accommodation.gd:152
+msgid "%d heads"
+msgid_plural "%d heads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/vessels/accommodation.gd:152
+msgid "no enclosed heads"
+msgstr ""
+
+#: src/vessels/accommodation.gd:153
+msgid "Sleeps"
+msgstr ""
+
+#: src/vessels/accommodation.gd:154
+msgid "Guests"
+msgstr ""
+
+#: src/vessels/accommodation.gd:156
+msgid "Suited to"
+msgstr ""
+
+#: src/vessels/accommodation.gd:162
+msgid "Spacious"
+msgstr ""
+
+#: src/vessels/accommodation.gd:164
+msgid "Comfortable"
+msgstr ""
+
+#: src/vessels/accommodation.gd:165
+msgid "Simple and snug"
+msgstr ""
+
+#: src/vessels/accommodation.gd:171
+msgid "Ocean passages"
+msgstr ""
+
+#: src/vessels/accommodation.gd:173
+msgid "Offshore passages; oceans by way of island harbours"
+msgstr ""
+
+#: src/vessels/accommodation.gd:174
+msgid "Coastal hops"
 msgstr ""
 
 #: src/vessels/arctic_wanderer_26/cabin_visual.tscn:309

@@ -148,9 +148,14 @@ func select(vessel_id: StringName) -> void:
 	for child in _specs.get_children():
 		_specs.remove_child(child)
 		child.queue_free()
+	# I027 Tier 3: life aboard (Accommodation, from the drawn cabin) after the specs.
+	var rows: Array = []
 	for key: String in vessel.specs:
-		_specs.add_child(_label(key, &"MutedLabel"))
-		var value := _label(vessel.specs[key])
+		rows.append([key, vessel.specs[key]])
+	rows.append_array(Accommodation.describe_rows(vessel_id))
+	for row: Array in rows:
+		_specs.add_child(_label(row[0], &"MutedLabel"))
+		var value := _label(row[1])
 		# Wraps inside the fixed panel instead of widening it.
 		value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL

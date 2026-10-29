@@ -167,8 +167,9 @@ Each boat gets data that matches its drawn interior:
 - private cabins and skipper privacy;
 - amenities and passage suitability.
 
-Booking queries for I028 come from that data (for example
-`VesselCatalog.accommodation(id)`).
+Booking queries for I028 come from that data: `Accommodation`
+(`src/vessels/accommodation.gd`, `data/vessels/accommodation.json`). Built:
+[TIER_03_ACCOMMODATION.md](TIER_03_ACCOMMODATION.md).
 
 ## Tier 4 - Dreams, passage plans, telemetry and the opening (after the gate)
 
@@ -177,6 +178,37 @@ Booking queries for I028 come from that data (for example
 - **AIS:** an integration surface over `TrafficModel`.
 - **The opening:** a skippable new-game story, plus the title source for the
   working title.
+
+## Added requirement: characters that belong to the world (the Captain, after the Tier 2 gate)
+
+Recorded as it was given, without interrupting Tier 3.
+
+- **What it asks for:**
+  - The Captain and the townsfolk drawn with believable proportions and
+    restrained shading, matching the illustrated boats and harbours.
+  - The Captain's hat redrawn with credible shape, material, scale and
+    shading, still recognisable.
+  - A walk cycle with the arms opposite the legs (today both arms swing
+    together), subtle swing, slightly visible grounded feet, a little
+    weight transfer, every direction, and a natural settle into idle.
+  - One reusable human walk, with each person's clothes, silhouette and
+    gait kept.
+  - The animals' animations untouched.
+- **What it is not:** a redesign of the character system, or new mechanics.
+- **When:** I027 Tier 4, the core-integration stage, before `release/i027`.
+  The Captain and the townsfolk get the shared walk and the new hat there.
+  I028 Tier 2 (people aboard) then gives the passengers the same walk.
+  Tier 3's gate and checkpoints are unaffected.
+- **Acceptance:**
+  - normal and diagonal walking; starting, stopping and turning;
+  - cadence matched to speed;
+  - 100 % and 130 % interface scale;
+  - cabins, decks, pontoons, the quay, shops and the café;
+  - no regression in collision, NPC paths, boarding or interactions;
+  - before and after screenshots and a short moving capture.
+- **Art rules:** `Visuals/` and `art_replacements/` are never touched; a
+  Captain's replacement still wins (ArtworkResolver). Generated character
+  art keeps its paths and canvases.
 
 ## Save compatibility
 

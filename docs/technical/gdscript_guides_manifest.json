@@ -63,9 +63,9 @@
    "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
   },
   "src/app/game_version.gd": {
-   "sha": "95fa382798ca8d9d",
+   "sha": "d775db7da1fff853",
    "reviewed": "2026-10-29",
-   "note": "I027 stage 02 label"
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
@@ -213,9 +213,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/boat_care/passage_readiness.gd": {
-   "sha": "19971cdde76c1db9",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "4a0fafaeb743444f",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "src/companion/companion_pose_art.gd": {
    "sha": "05b9b9fcd4bc622c",
@@ -813,9 +813,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/boatyard_menu.gd": {
-   "sha": "221a78087be2d806",
+   "sha": "355a6d6eb53a5d71",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "src/ui/build_label.gd": {
    "sha": "cb300b7a22b3c20a",
@@ -1162,6 +1162,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/vessels/accommodation.gd": {
+   "sha": "636197caa7f9222a",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
+  },
   "src/vessels/vessel_catalog.gd": {
    "sha": "b51fa4224c437b56",
    "reviewed": "2026-10-27",
@@ -1248,9 +1253,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/career/career_sim.gd": {
-   "sha": "e8c8a3d36df52058",
+   "sha": "f54b534606403974",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: wheel layout, shots, wheel test"
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "tests/companion_animation_preview.gd": {
    "sha": "ecfb2a72e0098472",
@@ -1381,6 +1386,11 @@
    "sha": "001e7e3769747ff6",
    "reviewed": "2026-10-28",
    "note": "Steady Hands (UI reliability)"
+  },
+  "tests/suites/test_accommodation.gd": {
+   "sha": "18d19be46003045e",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "tests/suites/test_anchor_life.gd": {
    "sha": "f614f6fddeb778d6",
@@ -1818,9 +1828,9 @@
    "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
   },
   "tests/test_runner.gd": {
-   "sha": "86017d8c42536d77",
+   "sha": "3c86289f7b1a2426",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
+   "note": "I027 Tier 3: accommodation data and queries, boatyard life aboard, readiness fuel note, career care/purchase policies, stage 03"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",

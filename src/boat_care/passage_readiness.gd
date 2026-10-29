@@ -29,6 +29,8 @@ const LONG_PASSAGE_HOURS := 48.0
 const OCEAN_PASSAGE_HOURS := 168.0
 ## Boats this short (ft) count as small for rough weather.
 const SMALL_BOAT_FT := 28.0
+## I027: below this share of the tank a long passage gets a fuel note.
+const LOW_FUEL_SHARE := 0.5
 ## How far ahead the forecast is consulted (hours, at most the passage).
 const FORECAST_HOURS := 24.0
 
@@ -43,6 +45,7 @@ static func assess(path: PackedVector2Array) -> Dictionary:
 	var vessel := GameSession.get_vessel_definition()
 	_boat(items, hours)
 	_stores(items, hours)
+	_fuel(items, hours)
 	var worst_hazard := _weather(items, path, hours)
 	_length(items, hours)
 	var length_ft := GameSession.get_base_vessel_profile().length_ft
@@ -112,12 +115,23 @@ static func _stores(items: Array[Dictionary], hours: float) -> void:
 					GameSession.get_vessel_definition().display_name, roundi(capacity)]})
 		elif capacity < needed + STORES_MARGIN_DAYS:
 			items.append({"topic": "stores_capacity", "level": CONSIDER,
-				"text": Loc.t("This passage is longer than the %s can stow food and water for (%d days). A stop at a harbour on the way would break it up.") % [
+				"text": Loc.t("This passage is longer than the %s can stow food and water for (%d days). A stop on the way would break it up; a bigger boat stows more.") % [
 					GameSession.get_vessel_definition().display_name, roundi(capacity)]})
 	elif days < needed + STORES_COMFORT_DAYS:
 		items.append({"topic": "stores", "level": NOTE, "text": Loc.t("Enough food and water for the passage, with little to spare (%s).") % Provisions.format_days(days)})
 	else:
 		items.append({"topic": "stores", "level": OK, "text": Loc.t("Food and water for %s.") % Provisions.format_days(days)})
+
+
+## I027: a long passage on a low tank. The estimate already counts the fuel
+## aboard; a full tank carries the boat through the calms.
+static func _fuel(items: Array[Dictionary], hours: float) -> void:
+	var tank := GameSession.get_fuel_tank_l()
+	if hours <= LONG_PASSAGE_HOURS or tank <= 0.0 or GameSession.test_fuel_unlimited:
+		return
+	var share := GameSession.get_fuel_l() / tank
+	if share < LOW_FUEL_SHARE:
+		items.append({"topic": "fuel", "level": NOTE, "text": Loc.t("The fuel tank is %d %% full. A full tank carries her through calms and can shorten the passage.") % roundi(share * 100.0)})
 
 
 ## Adds the weather finding; returns the worst hazard level foreseen.

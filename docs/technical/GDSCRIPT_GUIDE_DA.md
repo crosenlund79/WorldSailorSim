@@ -1067,6 +1067,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når Kaptajnen tegnes.
 - **Hvis du ændrer det:** Kaptajnens udseende; kaptajnshuens placering afhænger af, at hovedets midte bliver, hvor det er.
 
+### `src/vessels/accommodation.gd`
+
+**Formål:** Hvad hver båd byder folk om bord, sådan som kahytten er tegnet (I027).
+- **Hvad det gør:** Læser `data/vessels/accommodation.json` og svarer på de spørgsmål, en kommende passagerbooking vil stille: hvor mange mennesker båden sikkert kan have med, hvor mange gæster om dagen og om natten, private gæstekahytter, om skipperen har sin egen kahyt, hvor komfortabel den er (enkel, komfortabel, rummelig), og hvilke passager den er udrustet til (kyst, åbent hav, ocean). Hver køje, kahyt og hvert toilet i filen nævner den tegnede del af kahytten, så dataene aldrig lover noget, billedet ikke viser. Den giver også bådeværftet dets linjer om livet om bord.
+- **Arbejder sammen med:** `BoatyardMenu` (viser det), passagerhandelen i I028 (kommer).
+- **Holder styr på:** Intet andet end filen, den læser én gang.
+- **Hvornår det kører:** Når bådeværftet viser en båd, eller når der stilles et bookingspørgsmål.
+- **Hvis du ændrer det:** Hvad hver båd lover sine gæster; testen holder det op mod de tegnede kahytter.
+
 ### `src/vessels/vessel_catalog.gd`
 
 **Formål:** Listen over alle de både, Kaptajnen kan eje, i bådeværftets rækkefølge.
@@ -1180,7 +1189,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/boat_care/passage_readiness.gd`
 
 **Formål:** En venlig tjekliste før en sejlads: er båden klar til at tage af sted?
-- **Hvad det gør:** Ser på skroget og plejeområderne, proviant og vand i forhold til den forventede sejltid, vejrudsigten langs ruten (højst 24 timer frem), sejladsens længde og bådens størrelse. Hvert fund er OK, værd at bemærke eller værd at tænke over en ekstra gang. Det giver kun råd; det forhindrer dig aldrig i at sejle.
+- **Hvad det gør:** Ser på skroget og plejeområderne, proviant og vand i forhold til den forventede sejltid, vejrudsigten langs ruten (højst 24 timer frem), sejladsens længde og bådens størrelse. Hvert fund er OK, værd at bemærke eller værd at tænke over en ekstra gang. Det giver kun råd; det forhindrer dig aldrig i at sejle. I027: på en lang passage med under en halv tank foreslår den at fylde op (en fuld tank bærer båden gennem stille vejr), og en passage, der er længere, end båden har plads til forsyninger til, får at vide, at et stop undervejs eller en større båd ville løse det.
 - **Arbejder sammen med:** `GameSession` (båd, tilstand, proviant), `Simulation` (rutetid og vejrfarer), `BoatCare`, `VesselCondition`, `Provisions`, `GeoMath`; vises af `App`, `WorldMap` og `VoyageDaydream`.
 - **Holder styr på:** Intet; det regner et nyt svar ud hver gang.
 - **Hvornår det kører:** Når en kurs planlægges, eller en sejlads skal til at begynde.
@@ -1740,7 +1749,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `src/ui/boatyard_menu.gd`
 
 **Formål:** Bådeværftets vindue, hvor du ser bådene igennem og flytter om bord på en anden.
-- **Hvad det gør:** Viser hver båd med et billede af dækket, dens data og en tabel, der sammenligner farten, og lader dig skifte båd (gratis; tid, havn, ledsager og fremskridt bevares). Det har også en knap til Boat care. Siden I026 har købmanden, skibshandelen og sejlmageren deres egne bygninger på kajen, så værftet har ikke længere knapper til dem. Siden I022 viser den hver båds pris, eller at den er din, og tilbyder at købe en båd, du ikke ejer endnu. Steady Hands: bådene, detaljerne og sammenligningen ruller, når skærmen er for lav (ved 130 % brugerflade var den højere end skærmen).
+- **Hvad det gør:** Viser hver båd med et billede af dækket, dens data og en tabel, der sammenligner farten, og lader dig skifte båd (gratis; tid, havn, ledsager og fremskridt bevares). Det har også en knap til Boat care. Siden I026 har købmanden, skibshandelen og sejlmageren deres egne bygninger på kajen, så værftet har ikke længere knapper til dem. Siden I022 viser den hver båds pris, eller at den er din, og tilbyder at købe en båd, du ikke ejer endnu. Steady Hands: bådene, detaljerne og sammenligningen ruller, når skærmen er for lav (ved 130 % brugerflade var den højere end skærmen). I027 trin 3: efter specifikationerne viser den livet om bord ud fra bådens tegnede kahyt: hvem der sover hvor, gæster om dagen og om natten, private kahytter, komfort og toiletter, og hvilke passager den egner sig til.
 - **Arbejder sammen med:** `App`, `VesselCatalog`, `VesselDefinition`, `VesselVisual`, `GameSession`, `BoatCare`, `HarbourFacilities`, `ShopCounter` (dens ramme på kajen); layoutet kommer fra `boatyard_menu.tscn`.
 - **Holder styr på:** Kun hvilken båd der er valgt i listen.
 - **Hvornår det kører:** Når du bruger bådeværftets dør på kajen, mens du ligger fortøjet i havn (I026).
@@ -2353,7 +2362,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/career/career_sim.gd`
 
 **Formål:** Spiller hurtige karrierer efter spillets rigtige regler for at måle økonomien (karrieretest, metode A; I027).
-- **Hvad det gør:** Starter et nyt spil på et frø og spiller det efter en enkel strategi (sparsom, krydstogtsejler, arbejder): fjernarbejde, proviant og brændstof i havn, nætter ved kaj, rigtige rejser mellem rigtige havne i det rigtige vejr. Skriver hver karrieres regnskab og daglige øjebliksbilleder som JSON og en samlet CSV. Den holder tre ure adskilt: hvor lang tid kørslen tog, hvor meget spiltid der gik, og et skøn (tydeligt mærket) over en spillers aktive tid. Den giver aldrig penge, rejser eller udmærkelser, som spillet ikke ville give.
+- **Hvad det gør:** Starter et nyt spil på et frø og spiller det efter en enkel strategi (sparsom, krydstogtsejler, arbejder): fjernarbejde, proviant og brændstof i havn, nætter ved kaj, rigtige rejser mellem rigtige havne i det rigtige vejr. Skriver hver karrieres regnskab og daglige øjebliksbilleder som JSON og en samlet CSV. Den holder tre ure adskilt: hvor lang tid kørslen tog, hvor meget spiltid der gik, og et skøn (tydeligt mærket) over en spillers aktive tid. Den giver aldrig penge, rejser eller udmærkelser, som spillet ikke ville give. I027 trin 3: to politikker mere, én der lader bådeværftet udføre hvert service, det anbefaler ("keeper"), og én der også sparer op til og køber Wing 33 og flytter om bord ("upgrader"); hver karriere noterer de udførte service, dagen en båd blev købt, og båden den slutter på.
 - **Arbejder sammen med:** `GameSession`, `Simulation`, `PortCatalog`, `CareerLedger`.
 - **Holder styr på:** Intet; den skriver rapportfiler (kun testgemmer).
 - **Hvornår det kører:** Kun i hånden: `res://tests/career/career_sim.tscn -- [--out=DIR] [--seeds=1,2] [--days=60] [--policies=frugal] [--level=standard]`.
@@ -2376,6 +2385,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet (den nulstiller Skipperskolens fremskridt bagefter).
 - **Hvornår det kører:** Sammen med de andre testsæt (`test_runner.tscn`).
 - **Hvis du ændrer det:** Kun testene ændres.
+
+### `tests/suites/test_accommodation.gd`
+
+**Formål:** Holder hver båds indretning op mod dens tegnede kahyt (I027).
+- **Hvad det gør:** Tester, at hver båd har data om indretningen, at hver køje, kahyt, hvert toilet og hver bekvemmelighed i dem er tegnet i bådens kahyt (og at de tegnede kahytter, toiletter og brusere alle står i dataene), bookingsvarene for hver båd, at størrelsesklasserne følger længde, pris og driftsomkostninger, mens den dyreste båd ikke er bedst til alt, Stillehavets længste etape for hver båd (og klarmeldingens note om brændstof), og bådeværftets linjer om livet om bord på engelsk og dansk, inden for skærmen.
+- **Arbejder sammen med:** `Accommodation`, `VesselCatalog`, `Economy`, `PassageReadiness`, `Simulation`, app-scenen og `BoatyardMenu`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, lover en båd måske noget, dens kahyt ikke viser.
 
 ### `tests/suites/test_anchor_life.gd`
 
@@ -3434,7 +3452,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 ### `tests/test_runner.gd`
 
 **Formål:** Spillets automatiske testkører: den kører alle 85 testsamlinger og fortæller, hvor mange tjek der bestod.
-- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste. I026: den kører også testsættene for de levende havne, tingene i kahytten og den maritime elektronik, lige før A Little More Room Aboard. I026 tilføjede også gennemgangen af havnefronten til listen. I027 tilføjede testsamlingen om at sejle op mod vinden. I027 trin 2 tilføjede testsamlingen om brændstof og driftsomkostninger; de ældre testsamlinger, der sejler langt for motor i vindstille, kører med en motor, der ikke bruger brændstof, og alle andre har den rigtige tank.
+- **Hvad det gør:** Flytter gemte spil, indstillinger og logs over i midlertidige testfiler, slår søvn- og daggry-animationerne fra, vælger engelsk og vindstille, og kører hver testsamling efter tur. Den giver også testsamlingerne fælles værktøjer: tjek, ventetid, tastetryk, museklik, at gå om bord på en båd, at sætte vinden, at planlægge ruter og skærmbilleder. Siden I021 kører den også suiten om den større verden. Siden I022 kører den I022-testsættet og lader testsættene sejle alle både uden at købe dem. I022: den slår Skipperskolens tilbud og tips fra for de andre testsæt. Den kører også testsættet for kahytsvinduerne. Den kører også Steady Hands-testsættet for brugerfladen. Den kører også testsættet for de gyldne havne. I024: den kører også testsættet for The Company We Keep. I025: den kører også testsættet for A Little More Room Aboard, lige før testsættet for hele spillets forløb, som stadig er det sidste. I026: den kører også testsættene for de levende havne, tingene i kahytten og den maritime elektronik, lige før A Little More Room Aboard. I026 tilføjede også gennemgangen af havnefronten til listen. I027 tilføjede testsamlingen om at sejle op mod vinden. I027 trin 2 tilføjede testsamlingen om brændstof og driftsomkostninger; de ældre testsamlinger, der sejler langt for motor i vindstille, kører med en motor, der ikke bruger brændstof, og alle andre har den rigtige tank. I027 trin 3 tilføjede testsamlingen om indretning.
 - **Arbejder sammen med:** Alle testsamlinger i `tests/suites/`, plus `SaveManager`, `SettingsManager`, `SessionLog`, `TimePassage`, `WindField`, `Simulation`, `GameSession`.
 - **Holder styr på:** Antal beståede/fejlede tjek og listen over fejl.
 - **Hvornår det kører:** Når du starter det, eller i automatik: `godot --headless --path . res://tests/test_runner.tscn` (valgmuligheder efter `--`: `--only=navn`, `--skip=navn`, `--screenshots=MAPPE`).

@@ -1330,6 +1330,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_living_world.gd`.
 - **Change risks:** Moving the head off origin misplaces the hat; `hand_position` is the hat carry point.
 
+### `src/vessels/accommodation.gd`
+
+- **Role:** `class_name Accommodation`, extends RefCounted, static (I027 Tier 3). `of(id)` (entry or `FALLBACK`: skipper alone, coastal), `has_data`, booking queries `safe_persons`, `safe_guest_count` (safe − 1), `overnight_guest_count` (places not `for: skipper`, capped by safe guests), `private_guest_cabins`, `skipper_has_privacy` (skipper's place in a private cabin), `comfort_tier` (`COMFORT_ORDER`), `passage_suitability` / `suits_passage(kind)` (`PASSAGE_ORDER`), `size_class`, `heads_count`, `sleeping_places`; `describe_rows(id)` → [label, value] for the boatyard (Sleeps, Guests, Aboard, Suited to); `comfort_name`, `passage_name`.
+- **Depends on:** `data/vessels/accommodation.json` (each place's `node` under the cabin's FurnitureVisual, a cabin's `label_node` under CabinDetails/Labels); `Loc`.
+- **State:** static cache of the JSON.
+- **Lifecycle:** read by `BoatyardMenu.select`; I028's booking.
+- **Tests:** `tests/suites/test_accommodation.gd`.
+- **Change risks:** data must stay in step with `src/vessels/<id>/cabin_visual.tscn` (the suite fails otherwise); berths are not capacity.
+
 ### `src/vessels/vessel_catalog.gd`
 
 - **Role:** class_name `VesselCatalog`, extends Resource; ordered list of `VesselDefinition`s with starter fallback.
@@ -1465,7 +1474,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/boat_care/passage_readiness.gd`
 
-- **Role:** class_name `PassageReadiness`, extends RefCounted; advisory pre-departure assessment of a planned path (never blocks departure).
+- **Role:** class_name `PassageReadiness`, extends RefCounted; advisory pre-departure assessment of a planned path (never blocks departure). I027: `_fuel` (topic "fuel", NOTE) when hours > `LONG_PASSAGE_HOURS` and the tank is below `LOW_FUEL_SHARE` 0.5 (not with `GameSession.test_fuel_unlimited`); the over-capacity text names a stop on the way or a bigger boat.
 - **Depends on:** `GameSession` (`get_vessel_definition`, `get_base_vessel_profile`, `get_condition`, `get_boat_care`, `get_game_time`, `get_provisions`, `get_passage_store_days`), `Simulation` (`estimate_route_seconds`, `route_hazards`, `describe_when`, `format_duration`), `GeoMath.path_length_nm`, `BoatCare` (incl. private `_level`), `VesselCondition`, `WeatherModel.HAZARD_*`, `Provisions.format_days`, `Loc`.
 - **State:** none; `assess(path)` returns {level, summary, items[{topic, level, text}], hours, nm}; `describe(result, max_lines)` formats it.
 - **Lifecycle:** static helper; called from `App`, `WorldMap`, `VoyageDaydream`.
@@ -2126,7 +2135,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/boatyard_menu.gd`
 
-- **Role:** class_name `BoatyardMenu`, extends `ModalPanel`; vessel browser/switcher with SubViewport deck preview, spec list, performance comparison and yard-service buttons. I022: list buttons and a `Price` spec row from `_ownership()` ("(your boat)"/"Yours"/price); `_choose` reads "Move aboard…", "Buy the %s (%s)…" or "%s needed to buy it" (disabled when unaffordable); still emits `vessel_chosen`. Steady Hands: `FitScroll.wrap([Body, CompareTitle, Comparison], _panel)` in `_ready`. I026: the yard is no longer the hub of the trades: the Grocery, Sailmaker and Chandlery buttons and `_trade_button` are gone (each has its own door on the quay); framed by `ShopCounter` when opened from the quay.
+- **Role:** class_name `BoatyardMenu`, extends `ModalPanel`; vessel browser/switcher with SubViewport deck preview, spec list, performance comparison and yard-service buttons. I022: list buttons and a `Price` spec row from `_ownership()` ("(your boat)"/"Yours"/price); `_choose` reads "Move aboard…", "Buy the %s (%s)…" or "%s needed to buy it" (disabled when unaffordable); still emits `vessel_chosen`. Steady Hands: `FitScroll.wrap([Body, CompareTitle, Comparison], _panel)` in `_ready`. I026: the yard is no longer the hub of the trades: the Grocery, Sailmaker and Chandlery buttons and `_trade_button` are gone (each has its own door on the quay); framed by `ShopCounter` when opened from the quay. I027 Tier 3: `select` appends `Accommodation.describe_rows(id)` after `vessel.specs` (the free-text "Accommodation" spec was removed from the four .tres files).
 - **Depends on:** scene `src/ui/boatyard_menu.tscn` (unique nodes `%VesselList`, `%PreviewViewport`, `%NameLabel`, `%HullLabel`, `%Description`, `%Specs`, `%Comparison`, `%ChooseButton`, `%Panel`, `%ConditionLabel`, `%ServiceStatus`, `%CareButton`, `%CloseButton`), `VesselCatalog`, `VesselDefinition` (performance profile, specs, deck_visual_scene, get_active_visual_profile), `VesselVisual`, `VesselCondition`, `GameSession`, `BoatCare.overall_level`, `HarbourFacilities`, `Loc`.
 - **Signals:** declares `vessel_chosen(vessel_id)`, `care_requested` (I026: `grocery_requested`, `chandlery_requested`, `sailmaker_requested` removed). App connects them to `switch_vessel`, `open_boat_care`.
 - **State:** `selected: VesselDefinition`; no writes (switching is `App.switch_vessel` -> GameSession).
@@ -2850,7 +2859,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/career/career_sim.gd`
 
-- **Role:** extends Node; Part VII Mode A harness (I027). `POLICIES` {frugal, cruiser, worker}: work_hours, stay_days, motor_upwind, refuel_below, provision_below, hop_nm. `_career(policy, seed)`: `start_new_session`, `wind_seed` = seed, per stay day `Simulation.work`, `buy_provisions`, `buy_fuel`, advance to the next day; `_next_port` (great-circle ring, seeded), `plan_route_to` + `depart`, advance in 3 h steps (anchorage/anchor handled). Output `career_<policy>_<seed>.json` (totals, voyage_log, snapshots, wall_s, game_days, human_hours_est + model) and `summary.csv`.
+- **Role:** extends Node; Part VII Mode A harness (I027). `POLICIES` {frugal, cruiser, worker}: work_hours, stay_days, motor_upwind, refuel_below, provision_below, hop_nm. `_career(policy, seed)`: `start_new_session`, `wind_seed` = seed, per stay day `Simulation.work`, `buy_provisions`, `buy_fuel`, advance to the next day; `_next_port` (great-circle ring, seeded), `plan_route_to` + `depart`, advance in 3 h steps (anchorage/anchor handled). Output `career_<policy>_<seed>.json` (totals, voyage_log, snapshots, wall_s, game_days, human_hours_est + model) and `summary.csv`. I027 Tier 3: policies "keeper" (`care`) and "upgrader" (`care`, `buy` starling_33, `reserve` 3000); `_care()` performs repair/rig/engine at RECOMMENDED/NEEDED (`CARE_AREAS`) and a haul-out on fouling, spending the minutes ashore; `_buy()` = buy_vessel + switch_vessel at a boatyard; results gain services, bought_day, end_vessel (CSV columns too).
 - **Depends on:** `GameSession`, `Simulation`, `PortCatalog`, `GeoMath`, `GameVersion`, `CareerLedger`.
 - **State:** none; files under `--out`.
 - **Lifecycle:** run by hand headless (`tests/career/career_sim.tscn`).
@@ -2874,6 +2883,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Depends on:** `app.tscn`, `SaveManager.save_to_slot(3)`, runner helpers.
 - **Lifecycle:** in `test_runner.gd` `SUITES` after `test_captains_other_life`; resets `AcademyGuide.enabled` and the progress at the end.
 - **Change risks:** sets the private `_queue`/`_gap_left` of the guide to make tip timing deterministic.
+
+### `tests/suites/test_accommodation.gd`
+
+- **Role:** extends RefCounted; I027 Tier 3 suite: `_test_data` (every catalogue boat, enums, one skipper's berth, known cabins, overnight + 1 ≤ safe), `_test_matches_the_art` (instantiates each `cabin_scene`: places/heads by node under FurnitureVisual, cabins under Labels, amenities via `AMENITY_NODES`; reverse counts of `*Shower*`, `*Cabin` labels and Heads/Ensuite), `_test_queries` (expected per boat), `_test_classes` (size order ⇒ shorter, cheaper, lower dues and burn; the Clam points worst), `_test_pacific` (real weather, seed 16: Puerto Ayora → Taiohae per boat; the 26 ft's fuel note on 20 % of a tank), `_test_boatyard` (en/da rows present, no English in Danish via `test_steady_hands.english_phrase`, panel inside the screen; screenshots).
+- **Depends on:** `Accommodation`, `VesselCatalog`, `Economy`, `PassageReadiness`, `Simulation`, `WindField`, `WeatherModel`, `PortCatalog`, app scene, `BoatyardMenu`.
+- **State:** restores the calm test wind and English; ends the session.
+- **Lifecycle:** in `tests/test_runner.gd` `SUITES` after `test_cost_of_wind`.
+- **Tests:** —
+- **Change risks:** the Pacific numbers follow the weather model and polars; the check only needs one boat with 2 days to spare.
 
 ### `tests/suites/test_anchor_life.gd`
 
@@ -3952,7 +3970,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `tests/test_runner.gd`
 
-- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 85 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed. I021: registers `test_wider_world.gd` after `test_companion_remarks.gd`. I022: `test_captains_other_life` in `SUITES`; sets `GameSession.test_all_boats_owned = true` with `TimePassage.enabled = false`. I022: `AcademyGuide.enabled = false` at start; `test_academy` in SUITES after `test_captains_other_life`. `test_cabin_windows` in SUITES after `test_academy`. `test_steady_hands` in SUITES after `test_cabin_windows`. Golden Harbours: `test_golden_harbours` in `SUITES` after `test_steady_hands`. I024: `test_company_we_keep`, then `test_build_label`, before `test_gameplay_flow`, which stays last. I025: `test_more_room_aboard` after `test_build_label`, before `test_gameplay_flow`. I026: `test_living_harbours`, `test_cabin_objects`, `test_marine_electronics` in `SUITES` before `test_more_room_aboard`. I026: `test_waterfront_walkthrough` before `test_more_room_aboard` (86 suites). I027: `test_windward` before `test_waterfront_walkthrough` (87 suites). I027 Tier 2: `test_cost_of_wind` after `test_windward` (88 suites); `FUEL_FREE_SUITES` (the pre-I027 suites that motor far in a flat calm) get `GameSession.test_fuel_unlimited` per suite, every other suite the real tank.
+- **Role:** extends Node (root of `tests/test_runner.tscn`); self-contained test framework. Runs the 85 preloaded suites in `SUITES` (each `script.new()`, `await suite.run(self)`), counts checks, prints failures, exits 1 if any failed. I021: registers `test_wider_world.gd` after `test_companion_remarks.gd`. I022: `test_captains_other_life` in `SUITES`; sets `GameSession.test_all_boats_owned = true` with `TimePassage.enabled = false`. I022: `AcademyGuide.enabled = false` at start; `test_academy` in SUITES after `test_captains_other_life`. `test_cabin_windows` in SUITES after `test_academy`. `test_steady_hands` in SUITES after `test_cabin_windows`. Golden Harbours: `test_golden_harbours` in `SUITES` after `test_steady_hands`. I024: `test_company_we_keep`, then `test_build_label`, before `test_gameplay_flow`, which stays last. I025: `test_more_room_aboard` after `test_build_label`, before `test_gameplay_flow`. I026: `test_living_harbours`, `test_cabin_objects`, `test_marine_electronics` in `SUITES` before `test_more_room_aboard`. I026: `test_waterfront_walkthrough` before `test_more_room_aboard` (86 suites). I027: `test_windward` before `test_waterfront_walkthrough` (87 suites). I027 Tier 2: `test_cost_of_wind` after `test_windward` (88 suites); `FUEL_FREE_SUITES` (the pre-I027 suites that motor far in a flat calm) get `GameSession.test_fuel_unlimited` per suite, every other suite the real tank. I027 Tier 3: `test_accommodation` after `test_cost_of_wind` (89 suites).
 - **Depends on:** all `tests/suites/test_*.gd`; `SaveManager`, `SessionLog`, `SettingsManager`, `TimePassage`, `WindField`, `Simulation`, `GameSession`, `PortCatalog`, `SeaRouter`.
 - **State:** redirects `SaveManager.save_dir = user://test_saves`, `SessionLog.log_dir = user://test_diagnostics`, `SettingsManager.settings_path = user://test_settings.cfg`; `TimePassage.enabled = false`; language forced to `en` before each suite; before each suite `use_calm_wind()` and `Simulation.sea_encounters` true only for `test_captains_watch.gd` and `test_localization.gd`; scratch saves/settings deleted at start and end; `_exit_tree` calls `WindField.clear_default()`.
 - **Lifecycle:** `godot --headless --path . res://tests/test_runner.tscn [-- --only=a,b] [--skip=a,b] [--screenshots=DIR]` (filters match suite file-name substrings; screenshots only when rendered). `process_mode = ALWAYS`.
