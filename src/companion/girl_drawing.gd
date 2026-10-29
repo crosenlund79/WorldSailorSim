@@ -9,11 +9,13 @@ extends RefCounted
 ## short moment needs - walking, standing, a wave (one arm raised) and the
 ## box carried in both arms.
 ##
-## `facing` is the unit direction she faces; `swing` (-1..1) the walking
-## cycle; `wave` (0..1) how far the right arm is raised. The same numbers
-## always give the same drawing.
+## `facing` is the unit direction she faces; `swing` (-1..1) the arms'
+## swing; `wave` (0..1) how far the right arm is raised; `phase` and `amount`
+## the shared walk (HumanGait, a child's step) for her legs and shoes. I027:
+## her head a child's, a little smaller than the Captain's (it was larger),
+## and the lighter ink line. The same numbers always give the same drawing.
 
-const INK := Color(0.12, 0.15, 0.17, 0.75)
+const INK := Color(0.12, 0.15, 0.17, 0.55)
 const COAT := Color("#9E4A3C")
 const COAT_LIGHT := Color("#B8634F")
 const COAT_DARK := Color("#7A372D")
@@ -23,10 +25,12 @@ const HAIR := Color("#8A5A36")
 const HAIR_LIGHT := Color("#A8774C")
 const TIE := Color("#3E6B73")
 const SHADOW := Color(0.02, 0.04, 0.05, 0.26)
-## Half the shoulders' width and half the body's depth (SailorDrawing: 18, 9.5).
+## Half the shoulders' width and half the body's depth (SailorDrawing: 17, 9).
 const SHOULDER := 12.5
 const DEPTH := 7.0
-const HEAD := 7.8
+const HEAD := 6.6
+const TIGHTS := Color("#3E4A5A")
+const BOOTS := Color("#6E3A30")
 const SWING := 4.5
 ## Where a perching bird sits: on her left shoulder (local, before facing).
 const SHOULDER_PERCH := Vector2(-2.0, -10.5)
@@ -49,10 +53,11 @@ static func hand_position(facing: Vector2, swing: float, side_sign: float, wave 
 	return hand
 
 
-static func draw(canvas: CanvasItem, facing: Vector2, swing: float, wave := 0.0, box := false) -> void:
+static func draw(canvas: CanvasItem, facing: Vector2, swing: float, wave := 0.0, box := false, phase := 0.0, amount := 0.0) -> void:
 	var side := facing.orthogonal()
-	var body_center := -facing * 2.0
+	var body_center := -facing * 2.0 + side * HumanGait.sway(phase, amount) * 0.7
 	canvas.draw_colored_polygon(SailorDrawing._ellipse(body_center + Vector2(2.5, 3.5), SHOULDER + 1.0, DEPTH + 2.0, side), SHADOW)
+	HumanGait.draw_feet(canvas, facing, body_center, phase, amount, TIGHTS, BOOTS, 0.75, HumanGait.CHILD_STEP)
 	# Braids first: two short plaits down her back, a ribbon at each end.
 	for side_sign: float in [-1.0, 1.0]:
 		var root := -facing * 4.0 + side * side_sign * 4.5

@@ -28,8 +28,11 @@ const APP_HOME := &"home"
 const APP_PUBLICATIONS := &"publications"
 const APP_ACHIEVEMENTS := &"achievements"
 const APP_HISTORY := &"history"
-const APPS: Array[StringName] = [APP_HOME, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_HISTORY]
-const APP_TITLES := {APP_HOME: "Home", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements", APP_HISTORY: "Voyage history"}
+## I027 Tier 4: Dreams of the Sea, the Captain's own ambitions (Dreams).
+const APP_DREAMS := &"dreams"
+const APPS: Array[StringName] = [APP_HOME, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_DREAMS, APP_HISTORY]
+const APP_TITLES := {APP_HOME: "Home", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements", APP_DREAMS: "Dreams",
+	APP_HISTORY: "Voyage history"}
 
 ## The laptop's drawing (scene units = pixels of the view).
 const BODY := Color("#2E3539")
@@ -224,6 +227,8 @@ func show_app(id: StringName) -> void:
 			_content = _build_achievements()
 		APP_HISTORY:
 			_content = _build_history()
+		APP_DREAMS:
+			_content = _build_dreams()
 		_:
 			_content = _build_home()
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -562,6 +567,62 @@ func _fill_detail(entries: Array[Dictionary]) -> void:
 
 
 # Voyage history: what the log knows, nothing invented.
+## Dreams of the Sea (I027 Tier 4): every dream, the ones pursued first, then
+## the open ones, the fulfilled ones and those for later; a dream is pursued
+## or set aside here. Nothing is a quest: no order, no reward.
+func _build_dreams() -> Control:
+	var page := _page("Dreams of the Sea")
+	_text(page, &"Intro", "The voyages you once only read about. Choose up to three to pursue; each comes true by itself, in any order.", &"MutedLabel")
+	var order := {GameSession.DREAM_PURSUING: 0, GameSession.DREAM_OPEN: 1, GameSession.DREAM_FULFILLED: 2, GameSession.DREAM_LATER: 3}
+	var dreams := Dreams.all().duplicate()
+	dreams.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return int(order[GameSession.get_dream_status(StringName(a.id))]) < int(order[GameSession.get_dream_status(StringName(b.id))]))
+	var log := GameSession.get_captains_log()
+	for dream: Dictionary in dreams:
+		var id := StringName(dream.id)
+		var status := GameSession.get_dream_status(id)
+		var card := PanelContainer.new()
+		card.name = "Dream_%s" % id
+		card.theme_type_variation = &"SectionPanel"
+		card.modulate = Color(1, 1, 1, 0.6) if status == GameSession.DREAM_LATER else Color.WHITE
+		page.add_child(card)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 12)
+		card.add_child(row)
+		var box := VBoxContainer.new()
+		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(box)
+		_text(box, &"Title", Loc.t(String(dream.title)), &"HeaderLabel")
+		_text(box, &"Text", Loc.t(String(dream.text)))
+		_text(box, &"Status", _dream_status_text(dream, status, log), &"MutedLabel")
+		if status == GameSession.DREAM_OPEN or status == GameSession.DREAM_PURSUING:
+			var button := _action(row, "PursueButton", "Set aside" if status == GameSession.DREAM_PURSUING else "Pursue this dream",
+				_toggle_dream.bind(id, status != GameSession.DREAM_PURSUING))
+			button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return page
+
+
+func _dream_status_text(dream: Dictionary, status: StringName, log: CaptainsLog) -> String:
+	match status:
+		GameSession.DREAM_FULFILLED:
+			var record := GameSession.get_dream_record(StringName(dream.id))
+			var port := PortCatalog.get_default().get_display_name(StringName(str(record.get("port", ""))))
+			return Loc.t("Came true in %s, %s.") % [port, Simulation.format_game_time(float(record.get("time", 0.0)), false)] if port != "" \
+				else Loc.t("Came true.")
+		GameSession.DREAM_LATER:
+			return Loc.t("Later in your life afloat.")
+	var progress := Dreams.progress_text(dream, log)
+	var lead := Loc.t("Pursuing.") if status == GameSession.DREAM_PURSUING else Loc.t("Not pursued yet.")
+	return lead + ("  " + progress if progress != "" else "")
+
+
+func _toggle_dream(id: StringName, pursue: bool) -> void:
+	var error := GameSession.set_dream_pursued(id, pursue)
+	if error != "":
+		notify(error)
+	show_app(APP_DREAMS)
+
+
 func _build_history() -> Control:
 	var page := _page("Voyage history")
 	var log := GameSession.get_captains_log()

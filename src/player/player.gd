@@ -66,24 +66,27 @@ func _physics_process(_delta: float) -> void:
 	_animate_walk(position.distance_to(before), _delta)
 
 
-## Arm swing (presentation only): one stride per STRIDE units walked, easing
-## to rest when stopped. Never affects movement or collision.
-const STRIDE := 46.0
-
-
+## The walk (presentation only): HumanGait's cycle advances with the distance
+## walked (I027: its adult step, so the cadence matches the speed and the feet
+## stay planted), easing to rest when stopped. Never affects movement or
+## collision.
 func _animate_walk(moved: float, delta: float) -> void:
-	var target := 1.0 if moved > 0.5 else 0.0
-	var amount := move_toward(_walk_amount, target, delta * 6.0)
+	var amount := HumanGait.ease_amount(_walk_amount, moved > 0.5, delta)
 	if moved > 0.0:
-		_walk_phase = fmod(_walk_phase + moved / STRIDE * PI, TAU)
+		_walk_phase = HumanGait.advance(_walk_phase, moved)
 	if amount != _walk_amount or moved > 0.0:
 		_walk_amount = amount
 		queue_redraw()
 
 
-## The walking cycle now (-1..1, 0 when standing).
+## The arms' swing now (-1..1, 0 when standing).
 func get_swing() -> float:
-	return sin(_walk_phase) * _walk_amount
+	return HumanGait.swing(_walk_phase, _walk_amount)
+
+
+## The walking cycle: [phase, amount] (HumanGait).
+func get_gait() -> Vector2:
+	return Vector2(_walk_phase, _walk_amount)
 
 
 ## Where the player's left hand is (a carried hat is held there).
@@ -123,4 +126,4 @@ func set_input_enabled(enabled: bool) -> void:
 func _draw() -> void:
 	var hat := get_hat_visual()
 	SailorDrawing.draw(self, _facing, get_swing(), hat != null and hat.get_shown_status() == HatState.CARRIED,
-		cafe_mug or (GameSession.is_active() and GameSession.is_carrying_coffee()))
+		cafe_mug or (GameSession.is_active() and GameSession.is_carrying_coffee()), _walk_phase, _walk_amount)

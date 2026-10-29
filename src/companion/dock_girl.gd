@@ -7,8 +7,6 @@ extends Node2D
 
 ## A child's unhurried walk (the Captain walks faster).
 const SPEED := 46.0
-## Steps per second at that speed (the arms' swing).
-const STEP_RATE := 1.6
 
 var facing := Vector2.RIGHT
 var waving := 0.0
@@ -18,6 +16,7 @@ var waved := false
 var _target := Vector2.ZERO
 var _walking := false
 var _phase := 0.0
+var _amount := 0.0
 var _wave_left := 0.0
 
 
@@ -62,7 +61,9 @@ func _process(delta: float) -> void:
 		else:
 			position += to.normalized() * step
 			facing = to.normalized()
-		_phase += delta * STEP_RATE * TAU
+		# I027: the shared walk, a child's step, with the distance walked.
+		_phase = HumanGait.advance(_phase, minf(step, to.length()), HumanGait.CHILD_STEP)
+	_amount = HumanGait.ease_amount(_amount, _walking, delta)
 	_wave_left = maxf(_wave_left - delta, 0.0)
 	var wave_goal := 1.0 if _wave_left > 0.0 else 0.0
 	waving = move_toward(waving, wave_goal, delta * 4.0)
@@ -70,7 +71,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	var swing := sin(_phase) if _walking else 0.0
+	var swing := HumanGait.swing(_phase, _amount)
 	# A raised hand moves a little from side to side.
 	var wave := waving * (0.85 + 0.15 * sin(Time.get_ticks_msec() * 0.012))
-	GirlDrawing.draw(self, facing, swing, wave, carrying_box)
+	GirlDrawing.draw(self, facing, swing, wave, carrying_box, _phase, _amount)

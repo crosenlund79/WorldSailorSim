@@ -146,6 +146,10 @@ var moored_since := 0.0
 ## I027: the Captain's choice to windward - motor straight up (fuel) rather
 ## than beat under sail. Optional in a save (false: sail when the wind allows).
 var motor_upwind := false
+## I027 Tier 4, Dreams of the Sea (Dreams): {"pursuing": [ids], "fulfilled":
+## {id: {"time", "port", "vessel"}}}. Optional in a save (none pursued, none
+## fulfilled; a loaded game's past is checked quietly, GameSession).
+var dreams := {"pursuing": [], "fulfilled": {}}
 
 
 static func create_new(start_location: StringName, start_area: StringName, start_spawn: StringName,
@@ -185,6 +189,28 @@ static func get_area_display_name(area: StringName) -> String:
 
 ## The owned boats from a save's "fleet" section: known ids only, the boat
 ## aboard always included; no section (a save from before I022) owns all.
+## Dreams from a save, leniently: unknown ids and malformed entries are
+## dropped (I027 Tier 4).
+static func dreams_from(data: Variant) -> Dictionary:
+	var out := {"pursuing": [], "fulfilled": {}}
+	if not data is Dictionary:
+		return out
+	var pursuing: Variant = (data as Dictionary).get("pursuing", [])
+	if pursuing is Array:
+		for id: Variant in pursuing:
+			if (id is String or id is StringName) and not Dreams.get_dream(StringName(id)).is_empty() and not String(id) in out.pursuing:
+				out.pursuing.append(String(id))
+	var fulfilled: Variant = (data as Dictionary).get("fulfilled", {})
+	if fulfilled is Dictionary:
+		for id: Variant in fulfilled:
+			var entry: Variant = fulfilled[id]
+			if not Dreams.get_dream(StringName(str(id))).is_empty() and entry is Dictionary:
+				var time: Variant = (entry as Dictionary).get("time", 0.0)
+				out.fulfilled[String(id)] = {"time": float(time) if (time is int or time is float) and is_finite(float(time)) else 0.0,
+					"port": str((entry as Dictionary).get("port", "")), "vessel": str((entry as Dictionary).get("vessel", ""))}
+	return out
+
+
 static func owned_from(fleet: Variant, aboard: StringName) -> Array[StringName]:
 	var catalog := VesselCatalog.get_default()
 	var owned: Array[StringName] = []
@@ -258,6 +284,7 @@ func duplicate_state() -> SessionState:
 	copy.ledger = ledger.duplicate_ledger()
 	copy.moored_since = moored_since
 	copy.motor_upwind = motor_upwind
+	copy.dreams = dreams.duplicate(true)
 	return copy
 
 
@@ -357,6 +384,7 @@ func _to_dict() -> Dictionary:
 		"ledger": ledger.to_dict(),
 		"moored_since": moored_since,
 		"motor_upwind": motor_upwind,
+		"dreams": dreams.duplicate(true),
 		"navigation": {
 			"location_id": String(location_id),
 			"planned_route": planned_route.to_dict() if planned_route else null,
@@ -539,6 +567,7 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	var moored: Variant = data.get("moored_since", 0.0)
 	state.moored_since = float(moored) if (moored is int or moored is float) and is_finite(float(moored)) else 0.0
 	state.motor_upwind = data.get("motor_upwind", false) is bool and data.get("motor_upwind", false)
+	state.dreams = dreams_from(data.get("dreams"))
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).
 	state.owned_vessels = owned_from(data.get("fleet"), state.vessel_id)

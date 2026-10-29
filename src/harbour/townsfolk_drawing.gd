@@ -10,16 +10,21 @@ extends RefCounted
 ## north, waxed cotton and navy on the Atlantic, linen in the Mediterranean,
 ## light cotton and straw hats in the tropics). A look is made once per
 ## person (make_look) from a seed, so the same person always looks the same.
-## Poses: standing or walking (`swing`), sitting at a table (`seated`),
+## Poses: standing or walking (`swing`, and the shared walk's `phase` and
+## `amount` for legs and shoes, HumanGait), sitting at a table (`seated`),
 ## carrying something (`item`: a shopping bag, a newspaper, a cup, keys).
-## The same numbers always give the same drawing.
+## I027 Tier 4: adult proportions (a smaller head against the shoulders), a
+## lighter ink line, trousers and shoes in each look. The same numbers always
+## give the same drawing.
 
-const INK := Color(0.12, 0.15, 0.17, 0.75)
+const INK := Color(0.12, 0.15, 0.17, 0.55)
 const SHADOW := Color(0.02, 0.04, 0.05, 0.26)
 const SHOULDER := 16.5
 const DEPTH := 9.0
-const HEAD := 9.0
-const SWING := 6.0
+const HEAD := 7.2
+const SWING := 4.2
+const TROUSERS: Array[Color] = [Color("#2C3542"), Color("#3B3A36"), Color("#4A4F5A"), Color("#5A5040"), Color("#7A7468")]
+const SHOES: Array[Color] = [Color("#3A2E26"), Color("#2A2A2A"), Color("#6B5440"), Color("#8C8270")]
 
 const ITEM_NONE := &""
 const ITEM_BAG := &"bag"
@@ -59,17 +64,24 @@ static func make_look(archetype: StringName, seed: int) -> Dictionary:
 	var hats: Array = palette.hats
 	var hairs: Array = palette.hair
 	var skins: Array = palette.skin
-	return {"coat": coat, "coat_light": coat.lightened(0.16), "sleeve": coat.darkened(0.12), "hat": hats[rng.randi() % hats.size()],
+	var look := {"coat": coat, "coat_light": coat.lightened(0.16), "sleeve": coat.darkened(0.12), "hat": hats[rng.randi() % hats.size()],
 		"hair": hairs[rng.randi() % hairs.size()], "skin": skins[rng.randi() % skins.size()], "build": rng.randf_range(0.9, 1.06)}
+	# I027 (drawn after the rest, so every existing look stays as it was).
+	look["trousers"] = TROUSERS[rng.randi() % TROUSERS.size()]
+	look["shoes"] = SHOES[rng.randi() % SHOES.size()]
+	return look
 
 
-static func draw(canvas: CanvasItem, facing: Vector2, swing: float, look: Dictionary, seated := false, item: StringName = ITEM_NONE) -> void:
+static func draw(canvas: CanvasItem, facing: Vector2, swing: float, look: Dictionary, seated := false, item: StringName = ITEM_NONE,
+		phase := 0.0, amount := 0.0) -> void:
 	var k: float = look.get("build", 1.0)
 	var side := facing.orthogonal()
-	var body_center := -facing * 2.5
+	var body_center := -facing * 2.5 + (side * HumanGait.sway(phase, amount) if not seated else Vector2.ZERO)
 	var coat: Color = look.coat
 	var skin: Color = look.skin
 	canvas.draw_colored_polygon(SailorDrawing._ellipse(body_center + Vector2(3, 4), (SHOULDER + 1.0) * k, (DEPTH + 2.0) * k, side), SHADOW)
+	if not seated:
+		HumanGait.draw_feet(canvas, facing, body_center, phase, amount, look.get("trousers", TROUSERS[0]), look.get("shoes", SHOES[0]), k)
 	var right_hand := Vector2.ZERO
 	var left_hand := Vector2.ZERO
 	for side_sign: float in [-1.0, 1.0]:

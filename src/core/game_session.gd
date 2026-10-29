@@ -12,6 +12,8 @@ signal session_ended
 signal state_replaced
 ## I027: the fuel in the tank changed (bought, burned).
 signal fuel_changed
+## I027 Tier 4: a dream pursued, set aside or fulfilled (Dreams of the Sea).
+signal dreams_changed
 signal boat_area_changed(area: StringName)
 ## `route` is a PlannedRoute, or null when the route was cleared.
 signal route_changed(route: PlannedRoute)
@@ -192,6 +194,9 @@ func replace_state(new_state: SessionState) -> void:
 	# I027: a save from before harbour dues starts counting now, never back.
 	if _state.moored_since <= 0.0 and is_moored_in_harbour():
 		_state.moored_since = _state.game_time
+	# I027 Tier 4: a loaded game's past fulfils its dreams quietly (no burst
+	# of notices for what happened before dreams existed).
+	_check_dreams(false)
 	_asleep = false
 	_update_anchor_life(false)
 	if not was_active:
@@ -542,6 +547,7 @@ func buy_vessel(vessel_id: StringName) -> String:
 	SessionLog.write("vessel_bought", {"vessel": String(vessel_id), "price": vessel.price, "funds": _state.funds})
 	funds_changed.emit(_state.funds)
 	fleet_changed.emit()
+	_check_dreams()  # I027 Tier 4: a boat for the oceans
 	return ""
 
 
@@ -1328,6 +1334,7 @@ func complete_voyage() -> void:
 	voyage_logged.emit(record, new_harbour)
 	if not awards.is_empty():
 		renown_awarded.emit(awards)
+	_check_dreams()  # I027 Tier 4
 	voyage_arrived.emit(destination.id)
 
 
@@ -1868,6 +1875,86 @@ const RECEIVER_WARNING_HOURS := 10.0
 # --- Captain's Log ---------------------------------------------------------------
 
 ## A copy of the Captain's Log.
+# --- Dreams of the Sea (I027 Tier 4) -------------------------------------------
+
+const DREAM_FULFILLED := &"fulfilled"
+const DREAM_PURSUING := &"pursuing"
+const DREAM_OPEN := &"open"
+const DREAM_LATER := &"later"
+
+
+## Where a dream stands: DREAM_FULFILLED, DREAM_PURSUING, DREAM_OPEN or
+## DREAM_LATER (it needs a system that comes with I028).
+func get_dream_status(id: StringName) -> StringName:
+	var dream := Dreams.get_dream(id)
+	if dream.is_empty() or _state == null:
+		return DREAM_OPEN
+	if _state.dreams.fulfilled.has(String(id)):
+		return DREAM_FULFILLED
+	if not Dreams.is_active(dream):
+		return DREAM_LATER
+	return DREAM_PURSUING if String(id) in _state.dreams.pursuing else DREAM_OPEN
+
+
+## When and where a dream came true: {"time", "port", "vessel"} ({} if not).
+func get_dream_record(id: StringName) -> Dictionary:
+	return (_state.dreams.fulfilled.get(String(id), {}) as Dictionary).duplicate() if _state else {}
+
+
+func get_pursued_dreams() -> Array[StringName]:
+	var out: Array[StringName] = []
+	if _state:
+		for id: String in _state.dreams.pursuing:
+			out.append(StringName(id))
+	return out
+
+
+## Pursues a dream (or sets it aside). Returns "" or why not: a later dream,
+## one already fulfilled, or already MAX_PURSUED pursued.
+func set_dream_pursued(id: StringName, pursue: bool) -> String:
+	if _state == null:
+		return Loc.t("No game is running.")
+	var status := get_dream_status(id)
+	if status == DREAM_FULFILLED:
+		return Loc.t("That dream has already come true.")
+	if status == DREAM_LATER:
+		return Loc.t("That dream belongs to a later part of your life afloat.")
+	var pursuing: Array = _state.dreams.pursuing
+	if pursue and not String(id) in pursuing:
+		if pursuing.size() >= Dreams.MAX_PURSUED:
+			return Loc.t("You can pursue %d dreams at a time. Set one aside first.") % Dreams.MAX_PURSUED
+		pursuing.append(String(id))
+	elif not pursue:
+		pursuing.erase(String(id))
+	_has_unsaved_changes = true
+	SessionLog.write("dream_pursued" if pursue else "dream_set_aside", {"dream": String(id)})
+	dreams_changed.emit()
+	return ""
+
+
+## Marks every active dream that has come true (from the Captain's Log and
+## the boats owned); with `announce`, a notice for each. Returns their ids.
+func _check_dreams(announce := true) -> Array[StringName]:
+	var done: Array[StringName] = []
+	if _state == null:
+		return done
+	for dream in Dreams.all():
+		var id := String(dream.id)
+		if _state.dreams.fulfilled.has(id) or not Dreams.is_active(dream):
+			continue
+		if Dreams.is_met(dream, _state.captains_log, get_owned_vessels()):
+			_state.dreams.fulfilled[id] = {"time": _state.game_time, "port": String(_state.location_id), "vessel": String(_state.vessel_id)}
+			(_state.dreams.pursuing as Array).erase(id)
+			done.append(StringName(id))
+			SessionLog.write("dream_fulfilled", {"dream": id, "port": String(_state.location_id), "announced": announce})
+			if announce:
+				notice.emit.call_deferred(Loc.t("A dream come true: %s.") % Loc.t(String(dream.title)))
+	if not done.is_empty():
+		_has_unsaved_changes = _has_unsaved_changes or announce
+		dreams_changed.emit()
+	return done
+
+
 func get_captains_log() -> CaptainsLog:
 	return _state.captains_log.duplicate_log() if _state else CaptainsLog.new()
 

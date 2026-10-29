@@ -100,14 +100,41 @@ func _test_sailor() -> void:
 	var swings := []
 	var timer := t.get_tree().create_timer(3.0)
 	Input.action_press(&"move_right")
-	while timer.time_left > 0.0 and player.position.distance_to(from) < Player.STRIDE * 2.0:
+	while timer.time_left > 0.0 and player.position.distance_to(from) < HumanGait.STEP * 2.0:
 		await t.frames(1)
 		swings.append(player.get_swing())
 	Input.action_release(&"move_right")
 	var low: float = swings.min()
 	var high: float = swings.max()
 	var walked := player.position.distance_to(from)
-	t.check(walked >= Player.STRIDE and high - low > 0.6, "[sailor] walking a stride or more swings the arms (%.2f .. %.2f; walked %.0f px)" % [low, high, walked])
+	t.check(walked >= HumanGait.STEP and high - low > 0.6, "[sailor] walking a stride or more swings the arms (%.2f .. %.2f; walked %.0f px)" % [low, high, walked])
+	# I027 (the Captain's report): the arms swing opposite each other, and
+	# opposite the legs; a planted foot stays put while the body walks on.
+	var opposite := true
+	var contra := true
+	for i in 16:
+		var phase := TAU * i / 16.0
+		var hands := SailorDrawing.hand_positions(Vector2.RIGHT, HumanGait.swing(phase, 1.0))
+		var rest := SailorDrawing.hand_positions(Vector2.RIGHT, 0.0)
+		var a := (hands[0] - rest[0]).x
+		var b := (hands[1] - rest[1]).x
+		opposite = opposite and (absf(a) < 0.01 or signf(a) == -signf(b))
+		# The +1 side's arm forward: the -1 side's foot ahead of the +1 side's.
+		if HumanGait.swing(phase, 1.0) > 0.5:
+			contra = contra and HumanGait.foot(phase, 1.0, -1.0).x > HumanGait.foot(phase, 1.0, 1.0).x
+	t.check(opposite and contra, "[sailor] the arms swing opposite each other and opposite the legs")
+	# A planted foot moves back under the body as it walks on (never forward),
+	# and nothing bounces: the feet stay on the walker's sides.
+	var phase0 := PI * 0.5  # the -1 side's heel strikes
+	var moved := 0.0
+	var back := true
+	var last := HumanGait.foot(phase0, 1.0, -1.0).x
+	while moved < HumanGait.STEP - 1.0:
+		moved += 2.0
+		var along := HumanGait.foot(HumanGait.advance(phase0, moved), 1.0, -1.0).x
+		back = back and along <= last + 1e-4
+		last = along
+	t.check(back and HumanGait.foot(phase0, 0.0, -1.0) == Vector2.ZERO, "[sailor] a planted foot moves back under the body, never forward; standing, the feet are side by side")
 	await t.screenshot("160_sailor_walking")
 	await t.frames(30)
 	t.check(is_zero_approx(snappedf(player.get_swing(), 0.05)), "[sailor] the arms come to rest after walking")

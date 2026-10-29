@@ -10259,3 +10259,99 @@ msgstr "Åbent hav"
 
 msgid "Coastal"
 msgstr "Kyst"
+
+msgid "A boat for the oceans"
+msgstr "En båd til oceanerne"
+
+msgid "A book of your travels"
+msgstr "En bog om dine rejser"
+
+msgid "A known world traveller"
+msgstr "En kendt verdensomrejsende"
+
+msgid "A passage of your own"
+msgstr "En passage helt for dig selv"
+
+msgid "An ocean crossing"
+msgstr "En krydsning af et ocean"
+
+msgid "Complete a remarkable voyage: a thousand miles or more in one passage."
+msgstr "Gennemfør en bemærkelsesværdig rejse: tusind sømil eller mere på én passage."
+
+msgid "Cross to the Caribbean and moor in one of its harbours."
+msgstr "Sejl over til Caribien, og fortøj i en af dens havne."
+
+msgid "Explore a northern coastline: moor in three harbours north of the sixty-second parallel."
+msgstr "Udforsk en nordlig kyst: fortøj i tre havne nord for den 62. breddegrad."
+
+msgid "One day, be known among sailors as a true world traveller."
+msgstr "En dag at være kendt blandt sejlere som en ægte verdensomrejsende."
+
+msgid "One day, publish a travel book that people admire."
+msgstr "En dag at udgive en rejsebog, som folk beundrer."
+
+msgid "Own a yacht fitted for ocean passages."
+msgstr "Ej en båd, der er udrustet til oceanpassager."
+
+msgid "Sail a real passage: a hundred miles or more in one voyage, from one harbour to the next."
+msgstr "Sejl en rigtig passage: hundrede sømil eller mere på én rejse, fra én havn til den næste."
+
+msgid "Sail to a distant region: moor in a harbour on the Mediterranean."
+msgstr "Sejl til en fjern egn: fortøj i en havn ved Middelhavet."
+
+msgid "Southern waters"
+msgstr "Sydlige farvande"
+
+msgid "The Caribbean"
+msgstr "Caribien"
+
+msgid "The northern coast"
+msgstr "Den nordlige kyst"
+
+msgid "Longest passage so far: %.0f nm"
+msgstr "Længste passage indtil nu: %.0f sm"
+
+msgid "%d of %d harbours"
+msgstr "%d af %d havne"
+
+msgid "That dream has already come true."
+msgstr "Den drøm er allerede gået i opfyldelse."
+
+msgid "That dream belongs to a later part of your life afloat."
+msgstr "Den drøm hører til en senere del af dit liv på vandet."
+
+msgid "You can pursue %d dreams at a time. Set one aside first."
+msgstr "Du kan forfølge %d drømme ad gangen. Læg en til side først."
+
+msgid "A dream come true: %s."
+msgstr "En drøm gået i opfyldelse: %s."
+
+msgid "Dreams"
+msgstr "Drømme"
+
+msgid "Dreams of the Sea"
+msgstr "Drømme om havet"
+
+msgid "The voyages you once only read about. Choose up to three to pursue; each comes true by itself, in any order."
+msgstr "De rejser, du engang kun læste om. Vælg op til tre at forfølge; hver går i opfyldelse af sig selv, i vilkårlig rækkefølge."
+
+msgid "Pursue this dream"
+msgstr "Forfølg denne drøm"
+
+msgid "Set aside"
+msgstr "Læg til side"
+
+msgid "Came true in %s, %s."
+msgstr "Gik i opfyldelse i %s, %s."
+
+msgid "Came true."
+msgstr "Gik i opfyldelse."
+
+msgid "Later in your life afloat."
+msgstr "Senere i dit liv på vandet."
+
+msgid "Not pursued yet."
+msgstr "Ikke forfulgt endnu."
+
+msgid "Pursuing."
+msgstr "Forfølges."

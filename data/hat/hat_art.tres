@@ -6,6 +6,6 @@
 script = ExtResource("1_hat")
 art_folder = "res://assets/hat"
 stored_size = 46.0
-worn_size = 27.0
-blowing_size = 40.0
+worn_size = 12.5
+blowing_size = 20.0
 procedural_only = false

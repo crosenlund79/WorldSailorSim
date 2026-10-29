@@ -36,6 +36,10 @@ extends RefCounted
 ##
 ## `engine_available` (I027): false with an empty tank - the boat sails, even
 ## becalmed, until fuel is bought.
+## Never motor when the sails would be as fast (I027 Tier 4): the engine ->
+## sail threshold is at most the boat's own speed under engine. A small boat
+## (the 26 ft motors at 5 kn) otherwise kept its engine running on a good
+## reach, below the general 6 kn, until the tank ran dry.
 ## `stop_above_kn` (I027): the engine -> sail threshold for this evaluation,
 ## when not the profile's engine_stop_above_kn - while beating, a sail on the
 ## tack that is clearly better than the start threshold is enough (a boat
@@ -43,7 +47,7 @@ extends RefCounted
 static func evaluate(state: PropulsionState, profile: VesselProfile, now: float, heading_deg: float,
 		wind: WindField.Sample, reset_history := false, reassess := false, trim_factor := 1.0,
 		stop_above_kn := -1.0, engine_available := true) -> PropulsionState:
-	var stop_above := profile.engine_stop_above_kn if stop_above_kn < 0.0 else stop_above_kn
+	var stop_above := minf(profile.engine_stop_above_kn if stop_above_kn < 0.0 else stop_above_kn, profile.engine_speed_kn)
 	var next := state.duplicate_state()
 	var angle := WindField.relative_angle(heading_deg, wind.from_deg)
 	var potential := profile.sail_speed_kn(wind.speed_kn, angle)

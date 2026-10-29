@@ -5,9 +5,11 @@ extends Node2D
 ## no collision: the player's shape and movement are unchanged. It follows
 ## GameSession's hat state.
 
-## Where a carried hat is drawn (beside the token, on its left).
+## Where a carried hat is drawn (beside the token, on its left), and its
+## scale against the stored slot's size: the same size as when worn (I027;
+## it was about twice that).
 const CARRIED_OFFSET := Vector2(-6, -22)
-const CARRIED_SCALE := 0.46
+const CARRIED_SCALE := 0.28
 
 var _status: StringName = &""
 var _facing := Vector2.RIGHT

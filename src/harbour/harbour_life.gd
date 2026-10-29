@@ -349,7 +349,7 @@ class Townsperson extends Node2D:
 	var _wait := 0.0
 	var _speed := 90.0
 	var _phase := 0.0
-	var _swing := 0.0
+	var _amount := 0.0
 	var _step := 0
 	var _then: StringName = &""
 	var _rng := RandomNumberGenerator.new()
@@ -451,11 +451,15 @@ class Townsperson extends Node2D:
 
 	func advance(delta: float) -> void:
 		_time += delta
+		# The walk eases in and out (I027): no snap to a standstill.
+		var walked := _amount
+		_amount = HumanGait.ease_amount(_amount, state == WALK, delta)
+		if _amount != walked and state != WALK:
+			queue_redraw()
 		match state:
 			WALK:
 				_walk(delta)
 			PAUSE:
-				_swing = move_toward(_swing, 0.0, delta * 4.0)
 				_wait -= delta
 				# Someone stands too close: move on rather than stand in the way.
 				if _wait <= 0.0 or (life.captain and life.captain.position.distance_to(position) < 34.0):
@@ -499,8 +503,7 @@ class Townsperson extends Node2D:
 		var step := minf(_speed * delta, to.length())
 		position += direction * step
 		facing = facing.lerp(direction, minf(delta * 8.0, 1.0)).normalized()
-		_phase = fmod(_phase + step / 46.0 * PI, TAU)
-		_swing = sin(_phase)
+		_phase = HumanGait.advance(_phase, step)  # I027: the shared walk
 		queue_redraw()
 
 	func _arrive() -> void:
@@ -545,4 +548,4 @@ class Townsperson extends Node2D:
 		if state in [SIT, FISH]:
 			# A small turn of the head and hands now and then.
 			turn = facing.rotated(sin(_time * 0.7 + float(int(entry.seed) % 7)) * 0.25)
-		TownsfolkDrawing.draw(self, turn, _swing if state == WALK else 0.0, look, state == SIT or _on_bench, item)
+		TownsfolkDrawing.draw(self, turn, HumanGait.swing(_phase, _amount), look, state == SIT or _on_bench, item, _phase, _amount)

@@ -1,11 +1,15 @@
 class_name HatDrawing
 extends RefCounted
-## The temporary procedural captain's hat, seen from above: a white crown with
-## a navy band, a glossy black peak and a little brass badge, outlined in a
-## slightly uneven dark ink line so it sits with the hand-drawn look. Used
-## wherever HatArt has no image for a slot.
+## The procedural captain's hat, seen from above: a white crown with a navy
+## band, a glossy black peak and a little brass badge, outlined in a slightly
+## uneven ink line. Used wherever HatArt has no image for a slot.
+##
+## I027 Tier 4 (to sit with the illustrated people and boats): a lighter,
+## thinner ink line, the crown's stitched top and soft shading, a finer peak
+## and a smaller badge; worn, it is now a cap's size on the Captain's head
+## (HatArt worn_size).
 
-const INK := Color(0.11, 0.13, 0.15, 0.7)
+const INK := Color(0.11, 0.13, 0.15, 0.5)
 const CROWN := Color("#E6E7E1")
 const CROWN_SHADE := Color("#B9BCB6")
 const BAND := Color("#1F2B38")
@@ -31,22 +35,27 @@ static func draw_hat(canvas: CanvasItem, center: Vector2, radius: float, angle :
 		var t := -1.0 + i / 6.0
 		peak.append(center + dir * (radius * 0.35 + radius * 0.25 * cos(t * PI / 2.0)) + side * radius * 0.8 * t)
 	canvas.draw_colored_polygon(peak, a.call(PEAK))
-	canvas.draw_polyline(_closed(peak), a.call(INK), maxf(radius * 0.09, 1.2), true)
+	canvas.draw_polyline(_closed(peak), a.call(INK), maxf(radius * 0.05, 0.8), true)
 	canvas.draw_line(center + dir * radius * 0.95 - side * radius * 0.35, center + dir * radius * 1.0 + side * radius * 0.15,
-		a.call(PEAK_SHINE), maxf(radius * 0.08, 1.0), true)
+		a.call(Color(PEAK_SHINE, 0.7)), maxf(radius * 0.05, 0.8), true)
 	# Band and crown, with a soft shade on the side away from the light.
 	var band := _blob(center, radius * 0.86, angle, 7)
 	canvas.draw_colored_polygon(band, a.call(BAND))
-	var crown := _blob(center - dir * radius * 0.05, radius * 0.7, angle, 11)
+	var crown := _blob(center - dir * radius * 0.05, radius * 0.76, angle, 11)
 	canvas.draw_colored_polygon(crown, a.call(CROWN))
-	canvas.draw_colored_polygon(_blob(center - dir * radius * 0.05 + Vector2(radius * 0.18, radius * 0.2), radius * 0.42, angle, 5),
-		a.call(Color(CROWN_SHADE, 0.55)))
-	canvas.draw_polyline(_closed(crown), a.call(INK), maxf(radius * 0.08, 1.2), true)
-	canvas.draw_polyline(_closed(band), a.call(INK), maxf(radius * 0.1, 1.4), true)
-	# Brass badge at the front of the crown.
-	var badge := center + dir * radius * 0.48
-	canvas.draw_circle(badge, radius * 0.17, a.call(BADGE))
-	canvas.draw_arc(badge, radius * 0.17, 0.0, TAU, 16, a.call(INK), maxf(radius * 0.05, 1.0), true)
+	canvas.draw_colored_polygon(_blob(center - dir * radius * 0.05 + Vector2(radius * 0.16, radius * 0.18), radius * 0.46, angle, 5),
+		a.call(Color(CROWN_SHADE, 0.4)))
+	canvas.draw_colored_polygon(_blob(center - dir * radius * 0.05 - Vector2(radius * 0.2, radius * 0.22), radius * 0.26, angle, 9),
+		a.call(Color(1, 1, 1, 0.35)))  # the light on the crown
+	# The crown's stitched top and its button.
+	canvas.draw_arc(center - dir * radius * 0.05, radius * 0.42, 0.0, TAU, 24, a.call(Color(CROWN_SHADE, 0.6)), maxf(radius * 0.035, 0.6), true)
+	canvas.draw_circle(center - dir * radius * 0.05, maxf(radius * 0.06, 0.7), a.call(Color(CROWN_SHADE, 0.9)))
+	canvas.draw_polyline(_closed(crown), a.call(INK), maxf(radius * 0.045, 0.8), true)
+	canvas.draw_polyline(_closed(band), a.call(INK), maxf(radius * 0.055, 0.9), true)
+	# A small brass badge at the front of the crown.
+	var badge := center + dir * radius * 0.52
+	canvas.draw_circle(badge, radius * 0.12, a.call(BADGE))
+	canvas.draw_circle(badge - Vector2(radius * 0.03, radius * 0.03), radius * 0.05, a.call(BADGE.lightened(0.3)))
 
 
 ## A slightly irregular circle: a hand-drawn outline that stays the same

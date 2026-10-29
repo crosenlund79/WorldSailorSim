@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"note": "Between Horizons (I027 Tier 4): Dreams of the Sea - the Captain's lifetime ambitions, a modest journal on the laptop. Read by Dreams (src/core/dreams.gd). All are visible from the start; the Captain chooses which to pursue (up to Dreams.MAX_PURSUED at a time) in any order; each comes true by itself from what really happened (the Captain's Log, the boats owned). Kinds: longest_passage (nm: one passage at least this long), visit_north (lat, count: harbours visited at or north of this latitude), visit_region (regions, count: harbours visited in any of these PortData regions), own_ocean_boat (a yacht fitted for ocean passages, Accommodation), later (needs a system that comes with I028: 'system' names it; shown, never active before then). No money or renown: they are the Captain's own.",
+	"dreams": [
+		{"id": "own_passage", "title": "A passage of your own", "kind": "longest_passage", "nm": 100,
+			"text": "Sail a real passage: a hundred miles or more in one voyage, from one harbour to the next."},
+		{"id": "northern_coast", "title": "The northern coast", "kind": "visit_north", "lat": 62.0, "count": 3,
+			"text": "Explore a northern coastline: moor in three harbours north of the sixty-second parallel."},
+		{"id": "southern_waters", "title": "Southern waters", "kind": "visit_region", "regions": ["mediterranean", "aegean", "adriatic", "ionian", "levant"], "count": 1,
+			"text": "Sail to a distant region: moor in a harbour on the Mediterranean."},
+		{"id": "caribbean", "title": "The Caribbean", "kind": "visit_region", "regions": ["caribbean"], "count": 1,
+			"text": "Cross to the Caribbean and moor in one of its harbours."},
+		{"id": "ocean_boat", "title": "A boat for the oceans", "kind": "own_ocean_boat",
+			"text": "Own a yacht fitted for ocean passages."},
+		{"id": "ocean_crossing", "title": "An ocean crossing", "kind": "longest_passage", "nm": 1000,
+			"text": "Complete a remarkable voyage: a thousand miles or more in one passage."},
+		{"id": "travel_book", "title": "A book of your travels", "kind": "later", "system": "i028_writing",
+			"text": "One day, publish a travel book that people admire."},
+		{"id": "world_traveller", "title": "A known world traveller", "kind": "later", "system": "i028_renown",
+			"text": "One day, be known among sailors as a true world traveller."}
+	]
+}

@@ -8,11 +8,17 @@ extends RefCounted
 ## movement are the player's, unchanged. The captain's hat is drawn on top by
 ## PlayerHat (its centre is the head's centre, the origin).
 ##
+## I027 Tier 4: an adult's proportions (a smaller head against the
+## shoulders), a lighter ink line, and the shared walk (HumanGait): the arms
+## swing opposite each other and opposite the legs (they swung together
+## before: the side was applied twice), the legs and shoes show under the
+## jacket as the feet step, and the weight shifts a touch.
+##
 ## `facing` is the unit direction the player faces; `swing` (-1..1) is the
-## walking cycle (0 when standing). The same numbers always give the same
-## drawing.
+## arms' swing (0 when standing); `phase` and `amount` are HumanGait's
+## walking cycle for the feet. The same numbers always give the same drawing.
 
-const INK := Color(0.12, 0.15, 0.17, 0.75)
+const INK := Color(0.12, 0.15, 0.17, 0.55)
 const JUMPER := Color("#46596A")
 const JUMPER_LIGHT := Color("#5D7385")
 const LIFEJACKET := Color("#2C3236")
@@ -25,11 +31,13 @@ const SKIN := Color("#C99C7E")
 const HAIR := Color("#4A3A2E")
 const SHADOW := Color(0.02, 0.04, 0.05, 0.28)
 ## Half the shoulders' width (across) and half the body's depth (along facing).
-const SHOULDER := 18.0
-const DEPTH := 9.5
-const HEAD := 9.5
+const SHOULDER := 17.0
+const DEPTH := 9.0
+const HEAD := 7.6
 ## How far a hand travels forward and back while walking.
-const SWING := 6.5
+const SWING := 4.5
+const TROUSERS := Color("#2C3542")
+const SHOES := Color("#4A3A2C")
 
 
 ## Where a hand is (left: side -1, right: +1), relative to the origin.
@@ -39,20 +47,31 @@ static func hand_position(facing: Vector2, swing: float, side_sign: float) -> Ve
 	return shoulder + facing * (5.0 + SWING * swing * side_sign) + side * side_sign * 3.0
 
 
-static func draw(canvas: CanvasItem, facing: Vector2, swing: float, carrying := false, mug := false) -> void:
-	var side := facing.orthogonal()
-	var body_center := -facing * 2.5
-	canvas.draw_colored_polygon(_ellipse(body_center + Vector2(3, 4), SHOULDER + 1.0, DEPTH + 2.0, side), SHADOW)
-	# Arms first (under the shoulders): sleeve from shoulder to wrist, a hand.
-	var right_hand := Vector2.ZERO
+## Both hands while walking: [the -1 side's, the +1 side's]. They swing
+## opposite each other (hand_position applies the side once).
+static func hand_positions(facing: Vector2, swing: float, carrying := false, mug := false) -> Array[Vector2]:
+	var out: Array[Vector2] = []
 	for side_sign: float in [-1.0, 1.0]:
-		var shoulder: Vector2 = body_center + side * (SHOULDER - 3.0) * side_sign
-		var arm_swing := swing * side_sign
+		var arm_swing := swing
 		if carrying and side_sign < 0.0:
 			arm_swing = 0.2  # the arm holding the hat moves less
 		if mug and side_sign > 0.0:
 			arm_swing = 0.25  # and the one holding the coffee, carefully
-		var hand := hand_position(facing, arm_swing, side_sign)
+		out.append(hand_position(facing, arm_swing, side_sign))
+	return out
+
+
+static func draw(canvas: CanvasItem, facing: Vector2, swing: float, carrying := false, mug := false, phase := 0.0, amount := 0.0) -> void:
+	var side := facing.orthogonal()
+	var body_center := -facing * 2.5 + side * HumanGait.sway(phase, amount)
+	canvas.draw_colored_polygon(_ellipse(body_center + Vector2(3, 4), SHOULDER + 1.0, DEPTH + 2.0, side), SHADOW)
+	HumanGait.draw_feet(canvas, facing, body_center, phase, amount, TROUSERS, SHOES)
+	# Arms first (under the shoulders): sleeve from shoulder to wrist, a hand.
+	var right_hand := Vector2.ZERO
+	var hands := hand_positions(facing, swing, carrying, mug)
+	for side_sign: float in [-1.0, 1.0]:
+		var shoulder: Vector2 = body_center + side * (SHOULDER - 3.0) * side_sign
+		var hand: Vector2 = hands[0 if side_sign < 0.0 else 1]
 		canvas.draw_line(shoulder, hand, INK, 7.4, true)
 		canvas.draw_line(shoulder, hand, SLEEVE, 6.0, true)
 		canvas.draw_line(shoulder - side * side_sign * 1.2, hand - side * side_sign * 1.2, JUMPER_LIGHT, 1.6, true)
