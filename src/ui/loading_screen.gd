@@ -15,7 +15,7 @@ extends CanvasLayer
 signal finished
 
 const FADE_SECONDS := 0.45
-const LOGO := preload("res://assets/branding/png/little_captains_hat_logo_480.png")
+## The wordmark is the game's own (GameVersion.LOGO_SMALL_PATH).
 ## The main menu's own background (src/ui/main_menu.tscn, Background).
 const TITLE := preload("res://assets/ui/title_scene.png")
 
@@ -58,14 +58,14 @@ func _ready() -> void:
 	column.position.y -= 80.0
 	_canvas.add_child(column)
 	var logo := TextureRect.new()
-	logo.texture = LOGO  # the white wordmark, as on the menu
+	logo.texture = load(GameVersion.LOGO_SMALL_PATH)  # the white wordmark, as on the menu
 	logo.custom_minimum_size = Vector2(440, 206)
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(logo)
 	var tagline := Label.new()
-	tagline.text = "Small boat. Wide world. Hold onto your hat."
+	tagline.text = GameVersion.TAGLINE
 	tagline.theme_type_variation = &"DisplayTagline"
 	tagline.add_theme_color_override(&"font_color", UiTheme.color_at(&"ink_soft", 1.0))
 	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

@@ -8,6 +8,13 @@ including Godot's SVG importer), a fine instrument-cyan rule, and a small
 line drawing of a captain's cap above it. The same file names as before
 (assets/branding/little_captains_hat_*.svg), so every screen that shows the
 logo keeps working; the old Next Harbor files stay untouched for history.
+
+I027: the same treatment for the working title, Between Horizons
+(assets/branding/between_horizons_logo*.svg), which the title screen and the
+loading screen now show (GameVersion.LOGO). Between Horizons is a creative
+working title only: a released game already has that name, so it is not
+cleared for public metadata (see docs/iterations/i027/TIER_04_OPENING.md).
+The Little Captain's Hat files and the application icon stay as they are.
 Re-export the PNGs afterwards with:
     godot --headless --path . -s res://tools/export_branding.gd
 
@@ -23,6 +30,7 @@ ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 FONT = os.path.join(ROOT, "assets", "fonts", "BarlowCondensed-SemiBold.ttf")
 OUT = os.path.join(ROOT, "assets", "branding")
 NAME = "LITTLE CAPTAIN’S HAT"
+WORKING_TITLE = "BETWEEN HORIZONS"
 WHITE, NAVY, CYAN, STEEL = "#E9EEEC", "#1B2932", "#5AA8B8", "#77888C"
 
 
@@ -58,17 +66,17 @@ def cap(cx, cy, s, ink, accent):
     return g + "</g>"
 
 
-def logo(ink, accent, rule):
+def logo(ink, accent, rule, name=NAME, title="Little Captain’s Hat"):
     size, tracking = 92, 0.06
-    probe, width = wordmark(NAME, size, tracking, 0, 0)
+    probe, width = wordmark(name, size, tracking, 0, 0)
     w, h = int(width + 80), 300
     x0 = (w - width) / 2
-    text, _ = wordmark(NAME, size, tracking, x0, 236)
+    text, _ = wordmark(name, size, tracking, x0, 236)
     body = cap(w / 2, 82, 1.15, ink, accent)
     body += f'<rect x="{x0}" y="148" width="{width}" height="2" fill="{rule}"/>'
     body += f'<rect x="{w / 2 - 34}" y="146" width="68" height="6" fill="{accent}"/>'
     body += f'<path d="{text}" fill="{ink}"/>'
-    return svg(w, h, body, "Little Captain’s Hat")
+    return svg(w, h, body, title)
 
 
 def symbol(bg=None, ink=WHITE, accent=CYAN):
@@ -98,3 +106,5 @@ if __name__ == "__main__":
     write("little_captains_hat_logo_on_light.svg", logo(NAVY, "#3F8796", STEEL))
     write("little_captains_hat_symbol.svg", symbol())
     write("little_captains_hat_icon.svg", symbol(bg="#202D35"))
+    write("between_horizons_logo.svg", logo(WHITE, CYAN, STEEL, WORKING_TITLE, "Between Horizons"))
+    write("between_horizons_logo_on_light.svg", logo(NAVY, "#3F8796", STEEL, WORKING_TITLE, "Between Horizons"))

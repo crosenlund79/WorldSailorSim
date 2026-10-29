@@ -107,6 +107,7 @@ const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_passage_plan.gd"),
 	preload("res://tests/suites/test_ais.gd"),
 	preload("res://tests/suites/test_telemetry.gd"),
+	preload("res://tests/suites/test_opening.gd"),
 	preload("res://tests/suites/test_waterfront_walkthrough.gd"),
 	preload("res://tests/suites/test_more_room_aboard.gd"),
 	# Last: it ends by quitting the game.
@@ -160,6 +161,8 @@ func _run() -> void:
 	GameSession.test_all_boats_owned = true
 	# I022: no First Voyage offer or tips over other suites (test_academy turns it on).
 	AcademyGuide.enabled = false
+	# I027: no opening story over the new-game flows (test_opening turns it on).
+	OpeningStory.enabled = false
 	SettingsManager.load_settings()
 	# The suites check the English text; the language suite switches itself.
 	SettingsManager.set_language(&"en")

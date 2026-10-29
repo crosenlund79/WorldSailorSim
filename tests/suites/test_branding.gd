@@ -1,8 +1,9 @@
 extends RefCounted
-## Visual Identity V01, Checkpoint C: the provisional name Little Captain's
-## Hat, the version convention (0.100a), the display font (Patrick Hand, used
-## sparingly; Barlow stays the functional font), the game's own save folder
-## and the copy-only import of saves from Next Harbor.
+## Visual Identity V01, Checkpoint C, and I027's working title (Between
+## Horizons, from GameVersion): the name, the version convention (0.100a),
+## the display font (Patrick Hand, used sparingly; Barlow stays the
+## functional font), the game's own save folder and the copy-only import of
+## saves from Next Harbor.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
 const LEGACY_DIR := "user://test_legacy_userdata"
@@ -52,9 +53,16 @@ func _font_path(control: Control) -> String:
 
 
 func _test_name_and_version() -> void:
-	t.check_eq(ProjectSettings.get_setting("application/config/name"), "Little Captain's Hat", "[brand] the game is called Little Captain's Hat")
-	t.check(String(ProjectSettings.get_setting("application/config/description")).contains("Next Harbor"),
-		"[brand] the description says it was developed as Next Harbor")
+	# I027: the working title Between Horizons, from one source (GameVersion).
+	t.check_eq(GameVersion.DISPLAY_NAME, "Between Horizons", "[brand] the game's display name is the working title, Between Horizons")
+	t.check_eq(ProjectSettings.get_setting("application/config/name"), GameVersion.DISPLAY_NAME,
+		"[brand] the window title is the same name (project.godot)")
+	t.check(String(ProjectSettings.get_setting("application/config/description")).contains("Next Harbor")
+		and String(ProjectSettings.get_setting("application/config/description")).contains("Little Captain's Hat"),
+		"[brand] the description names the earlier titles, Little Captain's Hat and Next Harbor")
+	t.check(FileAccess.file_exists(GameVersion.LOGO_PATH) and FileAccess.file_exists(GameVersion.LOGO_SMALL_PATH)
+		and String(ProjectSettings.get_setting("application/boot_splash/image")).begins_with("res://assets/branding/png/between_horizons_logo"),
+		"[brand] its wordmark exists, and the boot splash shows it")
 	t.check_eq(GameVersion.DISPLAY, "0.113a", "[version] this release is 0.113a")
 	t.check_eq(ProjectSettings.get_setting("application/config/version"), GameVersion.DISPLAY,
 		"[version] project.godot carries the same version (saves record it)")
@@ -189,18 +197,18 @@ func _test_main_menu() -> void:
 	var menu := app.router.current_screen as MainMenu
 	t.check(menu != null, "[brand] the main menu is shown")
 	var logo := menu.find_child("Logo", true, false) as TextureRect
-	t.check(logo.texture.resource_path == "res://assets/branding/little_captains_hat_logo.svg", "[brand] the main menu shows the new logo")
+	t.check(logo.texture.resource_path == GameVersion.LOGO_PATH, "[brand] the main menu shows the working title's wordmark")
 	var tagline := menu.find_child("Tagline", true, false) as Label
-	t.check(tagline.text == "Small boat. Wide world. Hold onto your hat." and _font_path(tagline) == CONDENSED_MEDIUM,
+	t.check(tagline.text == GameVersion.TAGLINE and _font_path(tagline) == CONDENSED_MEDIUM,
 		"[brand] with the tagline, in Barlow Condensed")
 	var version := menu.find_child("Version", true, false) as Label
 	t.check(version.text.begins_with("Version 0.113a"), "[version] the menu shows the version (%s)" % version.text)
 	t.check(_font_path(version) == BARLOW or version.label_settings != null, "[fonts] the version stays in Barlow")
 	t.check(_font_path(menu.find_child("NewGameButton", true, false)).contains("Barlow"), "[fonts] menu buttons stay in Barlow")
 	t.check(String((menu.find_child("Credits", true, false) as Label).text).contains("Patrick Hand (SIL OFL)"), "[fonts] the credits name both fonts")
-	t.check(String(ProjectSettings.get_setting("application/config/name")) == "Little Captain's Hat" and (DisplayServer.get_name() == "headless" or t.get_window().title.begins_with("Little Captain")),
+	t.check(DisplayServer.get_name() == "headless" or t.get_window().title.begins_with(GameVersion.DISPLAY_NAME),
 		"[brand] the window title")
-	await t.screenshot("130_main_menu_little_captains_hat")
+	await t.screenshot("130_main_menu_between_horizons")
 	SettingsManager.set_ui_scale(1.3)
 	await t.frames(3)
 	var column := menu.find_child("Column", true, false) as Control

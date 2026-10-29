@@ -1938,11 +1938,15 @@ func _check_dreams(announce := true) -> Array[StringName]:
 	var done: Array[StringName] = []
 	if _state == null:
 		return done
+	# The boat aboard counts as owned, as it does in a save (SessionState).
+	var owned := get_owned_vessels()
+	if not _state.vessel_id in owned:
+		owned.append(_state.vessel_id)
 	for dream in Dreams.all():
 		var id := String(dream.id)
 		if _state.dreams.fulfilled.has(id) or not Dreams.is_active(dream):
 			continue
-		if Dreams.is_met(dream, _state.captains_log, get_owned_vessels()):
+		if Dreams.is_met(dream, _state.captains_log, owned):
 			_state.dreams.fulfilled[id] = {"time": _state.game_time, "port": String(_state.location_id), "vessel": String(_state.vessel_id)}
 			(_state.dreams.pursuing as Array).erase(id)
 			done.append(StringName(id))

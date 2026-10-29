@@ -21,6 +21,9 @@ signal import_requested
 
 func _ready() -> void:
 	super._ready()
+	# The name and its line come from one place (GameVersion).
+	%Logo.texture = load(GameVersion.LOGO_PATH)
+	%Tagline.text = GameVersion.TAGLINE
 	_new_game.pressed.connect(new_game_requested.emit)
 	_continue.pressed.connect(continue_requested.emit)
 	_load.pressed.connect(load_requested.emit)

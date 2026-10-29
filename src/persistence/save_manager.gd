@@ -266,7 +266,7 @@ func _read_and_validate(path: String) -> _ReadResult:
 		return read
 	var data: Variant = json.data
 	if not data is Dictionary or data.get("format") != FORMAT_ID:
-		read.error = Loc.t("This is not a Little Captain's Hat (or Next Harbor) save file.")
+		read.error = Loc.t("This is not a save file from this game (or from Next Harbor).")
 		return read
 	var version: Variant = data.get("version")
 	if not (version is int or version is float):

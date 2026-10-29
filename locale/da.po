@@ -10355,3 +10355,45 @@ msgstr "Ikke forfulgt endnu."
 
 msgid "Pursuing."
 msgstr "Forfølges."
+
+msgid "No course is plotted."
+msgstr "Der er ikke lagt nogen kurs."
+
+msgid "Longer than the boat can stow food and water for."
+msgstr "Længere end båden kan have mad og vand med til."
+
+msgid "A longer passage than the boat is fitted for."
+msgstr "En længere overfart, end båden er udrustet til."
+
+msgid "Between Horizons"
+msgstr "Between Horizons"
+
+msgid "The next horizon is yours to discover."
+msgstr "Den næste horisont er din at opdage."
+
+msgid "This is not a save file from this game (or from Next Harbor)."
+msgstr "Dette er ikke en gemmefil fra dette spil (eller fra Next Harbor)."
+
+msgid "For years, the sea had been calling."
+msgstr "I årevis havde havet kaldt på dig."
+
+msgid "Between meetings, deadlines and the familiar rhythm of another working week, you found yourself studying charts. Reading about distant harbours. Imagining the places you might one day sail."
+msgstr "Mellem møder, deadlines og den velkendte rytme i endnu en arbejdsuge sad du og studerede søkort. Læste om fjerne havne. Forestillede dig de steder, du måske en dag ville sejle til."
+
+msgid "You were no stranger to sailing. But somehow, the voyages you'd dreamed about always seemed to belong to another life."
+msgstr "Du var ingen nybegynder på vandet. Men på en eller anden måde syntes de rejser, du drømte om, altid at høre til et andet liv."
+
+msgid "Until one day, you decided you'd waited long enough.\nYou left the nine-to-five behind."
+msgstr "Indtil du en dag besluttede, at du havde ventet længe nok.\nDu lagde otte-til-fire bag dig."
+
+msgid "Not with a fortune. Not with every answer. Just a little money, a boat, and the experience to know that the sea rarely follows anyone's plans."
+msgstr "Ikke med en formue. Ikke med alle svarene. Bare lidt penge, en båd og erfaringen til at vide, at havet sjældent følger nogens planer."
+
+msgid "There would be fuel to buy, repairs to make and bills to pay.\nPerhaps you could earn your living taking others to the places they'd always dreamed of seeing."
+msgstr "Der ville være brændstof at købe, reparationer at lave og regninger at betale.\nMåske kunne du tjene til livet ved at tage andre med til de steder, de altid havde drømt om at se."
+
+msgid "And perhaps, somewhere along the way, you would find a way to reach your own."
+msgstr "Og måske ville du et sted undervejs finde vejen til dine egne."
+
+msgid "Your old life is behind you.\nThe next horizon is yours to discover."
+msgstr "Dit gamle liv ligger bag dig.\nDen næste horisont er din at opdage."

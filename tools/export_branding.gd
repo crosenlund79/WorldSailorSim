@@ -15,6 +15,9 @@ const EXPORTS := {
 	"little_captains_hat_logo_on_light": [480],
 	"little_captains_hat_symbol": [64, 256, 512],
 	"little_captains_hat_icon": [32, 64, 256, 512],
+	# I027: the working title (the title, loading and boot screens).
+	"between_horizons_logo": [240, 480, 960],
+	"between_horizons_logo_on_light": [480],
 }
 
 

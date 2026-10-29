@@ -511,8 +511,30 @@ func open_new_game_menu() -> void:
 		return
 	var menu := new_game_menu_scene.instantiate() as NewGameMenu
 	# I025: a new game begins without a companion (kind "").
-	menu.start_requested.connect(func(level: StringName) -> void: start_new_game(&"", level))
+	menu.start_requested.connect(func(level: StringName) -> void:
+		start_new_game(&"", level)
+		play_opening())
 	modals.push(menu)
+
+
+## I027: the opening story, over the new game's cabin (New Game only: loading
+## a save never shows it). Returns it, or null when it is off (tests).
+func play_opening() -> OpeningStory:
+	if not OpeningStory.enabled or not GameSession.is_active():
+		return null
+	var story := OpeningStory.new()
+	modals.push(story)
+	_pause_under(story)
+	return story
+
+
+## Once the new screen is in, the game under a modal pushed during the change
+## pauses like under any other menu.
+func _pause_under(modal: ModalPanel) -> void:
+	while is_instance_valid(modal) and router.is_busy():
+		await get_tree().process_frame
+	if is_instance_valid(modal) and modal.is_inside_tree():
+		_on_modal_stack_changed(modals.depth())
 
 
 func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
@@ -531,7 +553,8 @@ func start_new_game(companion_kind: StringName = CompanionState.DEFAULT_KIND, le
 ## Handbook can begin it again.
 func offer_first_voyage() -> void:
 	await get_tree().process_frame
-	while router.is_busy() or is_loading():
+	# After the opening story, when there is one.
+	while router.is_busy() or is_loading() or modals.get_top() is OpeningStory:
 		await get_tree().process_frame
 	if not is_in_gameplay():
 		return

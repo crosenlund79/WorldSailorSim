@@ -12,6 +12,21 @@ extends RefCounted
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
 const DISPLAY := "0.113a"
+
+## The game's public name, in one place (I027): the title screen, the loading
+## and boot screens, the window title (project.godot's application/config/name,
+## kept equal by test_branding), the opening story and the diagnostics read it.
+## "Between Horizons" is the Captain's creative WORKING TITLE: a released game
+## already has that name, so it is not cleared for store pages, installers or
+## other public metadata - ask the Captain before any of those. The technical
+## identifiers stay as they were: the save folder ("Little Captains Hat"),
+## the repository, the internal ids and the save keys.
+const DISPLAY_NAME := "Between Horizons"
+## Its wordmark (tools/branding/make_horizon_branding.py).
+const LOGO_PATH := "res://assets/branding/between_horizons_logo.svg"
+const LOGO_SMALL_PATH := "res://assets/branding/png/between_horizons_logo_480.png"
+## One line under the name (the last line of the opening story).
+const TAGLINE := "The next horizon is yours to discover."
 const MACHINE := "0.113.1"
 
 ## The development build identity (the label in the window's bottom-right

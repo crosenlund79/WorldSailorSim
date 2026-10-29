@@ -86,7 +86,7 @@ func restart() -> void:
 	if _file == null:
 		push_warning("The diagnostic log could not be opened at %s." % _path)
 		return
-	write("session_start", {"game": "Little Captain's Hat", "version": GameVersion.DISPLAY, "commit": GameVersion.get_commit(),
+	write("session_start", {"game": GameVersion.DISPLAY_NAME, "version": GameVersion.DISPLAY, "commit": GameVersion.get_commit(),
 		"save_format": SaveManager.SAVE_VERSION, "engine": Engine.get_version_info().string, "os": OS.get_name(),
 		"debug": OS.is_debug_build(), "renderer": str(ProjectSettings.get_setting("rendering/renderer/rendering_method", ""))})
 

@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Little Captain's Hat"
-config/description="A cozy sailing adventure about making a home on the water and exploring the world at your own pace. (Developed as Next Harbor until Iteration 006.)"
+config/name="Between Horizons"
+config/description="Between Horizons (a working title; Little Captain's Hat until I026). A cozy sailing adventure about making a home on the water and exploring the world at your own pace. (Developed as Next Harbor until Iteration 006.)"
 config/version="0.113a"
 config/show_build_label=true
 config/show_build_label.public_release=false
@@ -19,7 +19,7 @@ run/main_scene="res://src/app/app.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.043, 0.133, 0.18, 1)
 boot_splash/stretch_mode=0
-boot_splash/image="res://assets/branding/png/little_captains_hat_logo_240.png"
+boot_splash/image="res://assets/branding/png/between_horizons_logo_240.png"
 config/icon="res://assets/branding/little_captains_hat_icon.svg"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Little Captains Hat"
