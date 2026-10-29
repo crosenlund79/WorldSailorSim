@@ -84,6 +84,9 @@ func _start(underway: bool, area: StringName, hour_utc := 10.0) -> void:
 	var state := GameSession.get_state_snapshot()
 	state.game_time = state.game_time - fposmod(state.game_time, 86400.0) + hour_utc * 3600.0
 	state.funds = 60000
+	if underway:
+		# I027: the widest status line, with the fuel shown once it is low.
+		state.fuel[state.vessel_id] = 0.1 * Economy.tank_l(state.vessel_id)
 	GameSession.replace_state(state)
 	if underway:
 		GameSession.plan_route_to(&"helsingor")

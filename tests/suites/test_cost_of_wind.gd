@@ -263,7 +263,11 @@ func _test_fuel_berth() -> void:
 			t.check(is_equal_approx(GameSession.get_fuel_l(), GameSession.get_fuel_tank_l()), "[berth] Fill up fills the tank")
 			await t.screenshot("i027_fuel_berth")
 		app.modals.clear()
-	t.check(Hud.describe_status().contains("Fuel"), "[hud] the fuel on the status line ('%s')" % Hud.describe_status())
+	t.check(not Hud.describe_status().contains("Fuel"), "[hud] a full tank keeps the status line short ('%s')" % Hud.describe_status())
+	var low_state := GameSession.get_state_snapshot()
+	low_state.fuel[low_state.vessel_id] = 0.2 * GameSession.get_fuel_tank_l()
+	GameSession.replace_state(low_state)
+	t.check(Hud.describe_status().contains("Fuel 20 %"), "[hud] low fuel shows on the status line ('%s')" % Hud.describe_status())
 	# The action wheel under way holds a dozen items without overlapping, at
 	# the promised sizes and scales (I027 added Tack now and Motor to windward).
 	app.modals.clear()

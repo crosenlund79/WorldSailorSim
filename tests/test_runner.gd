@@ -10,6 +10,11 @@ extends Node
 ## player's real saves and settings are never touched. The exit code is 0
 ## only if every check passed.
 
+## I027: suites whose voyages motor far in a flat calm (written before the
+## tank); their engine burns no fuel. Every other suite has the real tank.
+const FUEL_FREE_SUITES: Array[String] = ["test_simulation.gd", "test_captains_log.gd", "test_objectives.gd",
+	"test_publishing.gd", "test_voyage_persistence.gd", "test_weather.gd", "test_harbour_life.gd"]
+
 const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_data_model.gd"),
 	preload("res://tests/suites/test_routing.gd"),
@@ -159,6 +164,8 @@ func _run() -> void:
 			continue
 		use_calm_wind()
 		Simulation.sea_encounters = script.resource_path.get_file() in ["test_captains_watch.gd", "test_localization.gd"]
+		# I027: suites written before fuel that motor far in a flat calm.
+		GameSession.test_fuel_unlimited = script.resource_path.get_file() in FUEL_FREE_SUITES
 		if not SettingsManager.has_chosen_language() or SettingsManager.get_language() != &"en":
 			SettingsManager.set_language(&"en")  # a suite before may have reset the settings
 		var suite: Object = script.new()

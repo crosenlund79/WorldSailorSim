@@ -1530,9 +1530,15 @@ func get_fuel_tank_l() -> float:
 	return Economy.tank_l(_state.vessel_id) if _state else 0.0
 
 
+## Tests only (the test runner): the engine burns no fuel, for the suites
+## written before I027 that motor long distances in a flat calm. The fuel
+## suites keep it off.
+var test_fuel_unlimited := false
+
+
 ## True while the engine has fuel to run on.
 func has_fuel() -> bool:
-	return get_fuel_l() > 0.01
+	return test_fuel_unlimited or get_fuel_l() > 0.01
 
 
 ## About how far the fuel in the tank goes under engine (nm).
@@ -1592,7 +1598,7 @@ func buy_fuel(litres := -1.0) -> Dictionary:
 ## the boat under engine). Tells the Captain when it runs low and when dry.
 func _burn_fuel(elapsed: float) -> void:
 	var before := get_fuel_l()
-	if before <= 0.0:
+	if before <= 0.0 or test_fuel_unlimited:
 		return
 	var burned := minf(Economy.burn_lph(_state.vessel_id) * elapsed / 3600.0, before)
 	var after := before - burned

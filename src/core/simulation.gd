@@ -724,6 +724,11 @@ func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time
 	# Near the route's ends (its harbours' approaches) the boat keeps to its
 	# line, as the simulation does (_in_harbour_approach).
 	var router := SeaRouter.get_default()
+	# I027: the fuel aboard goes as far as it goes; beyond it, the light airs
+	# are sailed as the simulation sails them (the ETA and stores stay honest).
+	var fuel := INF if GameSession.test_fuel_unlimited else GameSession.get_fuel_l()
+	var burn_lph := Economy.burn_lph(GameSession.get_vessel_id())
+	var motor_upwind := GameSession.is_motoring_upwind()
 	var ends: Array = []
 	for end_point: Vector2 in [path[0], path[path.size() - 1]]:
 		ends.append([end_point, router.approach_radius_nm(end_point)])
@@ -740,10 +745,14 @@ func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time
 		if in_approach:
 			course.zigzag = false
 		var sail: Dictionary = course.best if course.zigzag else course.direct
-		var sailing := float(sail.speed) >= profile.engine_start_below_kn
+		var sailing := float(sail.speed) >= profile.engine_start_below_kn and not (motor_upwind and course.zigzag)
+		if fuel <= 0.01:
+			sailing = true
 		var speed := float(sail.vmc) if sailing else profile.engine_speed_kn
 		var ds := minf(ESTIMATE_STEP_NM, total - d)
 		seconds += ds / maxf(speed, MIN_ESTIMATE_SPEED_KN) * 3600.0
+		if not sailing:
+			fuel -= ds / profile.engine_speed_kn * burn_lph
 		if sailing and course.zigzag:
 			seconds += CourseMaker.expected_tacks(ds, float(sail.delta), cumulative[i] - d) * profile.tack_loss_s
 		d += ds
