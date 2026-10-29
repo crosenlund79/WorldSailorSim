@@ -115,12 +115,12 @@ func _ready() -> void:
 	readouts.add_theme_constant_override(&"h_separation", 14)
 	readouts.add_theme_constant_override(&"v_separation", 2)
 	box.add_child(readouts)
-	for key: String in ["turn", "next_leg", "propulsion", "trim", "outlook"]:
+	for key: String in ["turn", "next_leg", "propulsion", "tack", "trim", "outlook"]:
 		var caption := Label.new()
 		caption.name = "Caption_%s" % key
 		caption.theme_type_variation = &"MutedLabel"
 		caption.add_theme_font_size_override(&"font_size", 16)
-		caption.text = {"turn": "Next turn", "next_leg": "Next leg", "propulsion": "Sails and engine", "trim": "Sail trim", "outlook": "Outlook"}[key]
+		caption.text = {"turn": "Next turn", "next_leg": "Next leg", "propulsion": "Sails and engine", "tack": "Tacking", "trim": "Sail trim", "outlook": "Outlook"}[key]
 		readouts.add_child(caption)
 		var value := Label.new()
 		value.name = "Value_%s" % key

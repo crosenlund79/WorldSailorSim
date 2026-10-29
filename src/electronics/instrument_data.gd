@@ -125,6 +125,19 @@ static func read(with_weather := false) -> InstrumentData:
 	else:
 		data.values["speed"] = Loc.format("%.1f kn  ·  %s", [data.speed_kn, Loc.t("under engine") if data.motoring else Loc.t("under sail")])
 		data.values["heading"] = Loc.t("%03d°  ·  on the planned course") % roundi(data.heading_deg)
+		# I027: beating or gybing on the autopilot's zigzag, or back to the line.
+		var course := GameSession.get_voyage_course()
+		var offset := float(course.get("heading_offset_deg", 0.0))
+		if not data.motoring and int(course.get("tack_side", 0)) != 0:
+			var made_good := data.speed_kn * cos(deg_to_rad(offset))
+			var tack_word := Loc.t("gybing downwind") if absf(data.wind_angle) > 90.0 else Loc.t("beating to windward")
+			data.values["heading"] = Loc.t("%03d°  ·  %s tack, %s") % [roundi(data.heading_deg), PropulsionState.wind_side(data.wind_angle), tack_word]
+			data.values["tack"] = Loc.format("%.1f kn made good towards the course", [made_good])
+			var next := Simulation.next_tack_seconds()
+			if next > 0.0:
+				data.values["tack"] += "  ·  " + Loc.t("next tack in about %s") % Simulation.format_duration(next)
+		elif absf(offset) > 0.5:
+			data.values["heading"] = Loc.t("%03d°  ·  back to the planned course") % roundi(data.heading_deg)
 		var side := PropulsionState.wind_side(data.wind_angle)
 		if wind.speed_kn >= 0.5:
 			data.values["wind"] += "  ·  %d° %s" % [roundi(absf(data.wind_angle)), side if side else Loc.t("off the bow")]

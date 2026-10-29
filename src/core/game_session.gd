@@ -1140,6 +1140,7 @@ func change_course(destination_id: StringName, waypoints: Array[Vector2], anchor
 	voyage.holding_at = -1
 	voyage.anchorages_done.clear()
 	voyage.progress_nm = 0.0
+	voyage.reset_course()  # I027: the new course starts where the boat is
 	voyage.revision += 1
 	voyage.warned_conditions.clear()
 	_state.vessel_position = voyage.get_position()
@@ -1152,7 +1153,10 @@ func change_course(destination_id: StringName, waypoints: Array[Vector2], anchor
 
 ## Applies a simulation step: new game time and, when underway, new progress.
 ## Food and water are used up with the elapsed game time, wherever the boat is.
-func apply_simulation_step(game_time: float, progress_nm: float) -> void:
+## `cross_track_nm` (I027): the boat's offset from the leg's line after the
+## step (NAN = unchanged); `water_nm`: the distance it sailed through the
+## water (-1 = the progress made, as on a straight line).
+func apply_simulation_step(game_time: float, progress_nm: float, cross_track_nm := NAN, water_nm := -1.0) -> void:
 	if _state == null:
 		return
 	var elapsed := game_time - _state.game_time
@@ -1170,16 +1174,57 @@ func apply_simulation_step(game_time: float, progress_nm: float) -> void:
 	_companion_to_cabin_if_needed()
 	if _state.voyage:
 		var progress := clampf(progress_nm, 0.0, _state.voyage.get_total_nm())
+		var along := maxf(progress - _state.voyage.progress_nm, 0.0)
 		if elapsed > 0.0 and not _state.anchor.active:
-			_wear(elapsed, maxf(progress - _state.voyage.progress_nm, 0.0))
-		_state.voyage.sailed_nm += maxf(progress - _state.voyage.progress_nm, 0.0)
+			_wear(elapsed, water_nm if water_nm >= 0.0 else along)
+		_state.voyage.sailed_nm += water_nm if water_nm >= 0.0 else along
 		_state.voyage.progress_nm = progress
+		if not is_nan(cross_track_nm):
+			_state.voyage.cross_track_nm = cross_track_nm
 		var before := _state.vessel_position
 		_state.vessel_position = GeoMath.normalize(_state.anchor.position if _state.anchor.active else _state.voyage.get_position())
 		_note_crossings(before, _state.vessel_position)
 	_has_unsaved_changes = true
 	if _state.anchor.active or _settled:
 		_update_anchor_life()
+
+
+## The boat onto its course line (I027): at a waypoint it stops at, what is
+## left of a tack's offset (at most the narrowest lane) is closed.
+func settle_on_line() -> void:
+	if _state == null or _state.voyage == null:
+		return
+	_state.voyage.cross_track_nm = 0.0
+	_state.voyage.tack_side = 0
+	_state.voyage.heading_offset_deg = 0.0
+	if not _state.anchor.active:
+		_state.vessel_position = GeoMath.normalize(_state.voyage.get_position())
+	_has_unsaved_changes = true
+
+
+## The course fields of the voyage (I027) without copying the voyage:
+## {cross_track_nm, tack_side, heading_offset_deg, tack_since, tack_count,
+## tack_loss_left_s, manual_tack_until, course_leg}; {} when not underway.
+func get_voyage_course() -> Dictionary:
+	if _state == null or _state.voyage == null:
+		return {}
+	var out := {}
+	for key: String in Voyage._COURSE_FIELDS:
+		out[key] = _state.voyage.get(key)
+	return out
+
+
+## The course on the current leg (I027, set by Simulation from CourseMaker):
+## any of Voyage's course fields (tack_side, heading_offset_deg, tack_since,
+## tack_count, tack_loss_left_s, manual_tack_until, course_leg,
+## cross_track_nm).
+func set_voyage_course(fields: Dictionary) -> void:
+	if _state == null or _state.voyage == null:
+		return
+	for key: String in fields:
+		if key in Voyage._COURSE_FIELDS:
+			_state.voyage.set(key, fields[key])
+	_has_unsaved_changes = true
 
 
 ## Diagnostics (Iteration 16): the Date Line and the chart regions (detailed
@@ -3545,7 +3590,11 @@ func _recover_voyage(router: SeaRouter) -> void:
 	# valid is enough (Iteration 18: a save just after leaving harbour asked
 	# for the course to be plotted again).
 	var path_ok := remaining.size() >= 2 and (router.validate_route(check).is_empty() or router.validate_route(voyage.route).is_empty())
-	var position_ok := _near_route_port(router, position, voyage.route) or router.is_afloat(position)
+	# On its own validated course (not off it tacking) the boat is where the
+	# course goes, also over a harbour's berth link (I027: boats under sail
+	# reach other points of it than under engine).
+	var on_course := not anchor.active and absf(voyage.cross_track_nm) < 1e-6 and path_ok
+	var position_ok := on_course or _near_route_port(router, position, voyage.route) or router.is_afloat(position)
 	if path_ok and position_ok:
 		return
 	var start := position
@@ -3563,6 +3612,7 @@ func _recover_voyage(router: SeaRouter) -> void:
 	if result.is_ok():
 		voyage.route = result.route
 		voyage.progress_nm = 0.0
+		voyage.reset_course()
 		voyage.revision += 1
 		voyage.warned_conditions.clear()
 	if anchor.active:

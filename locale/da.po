@@ -10045,3 +10045,45 @@ msgstr "Kahytten har din køje (søvn), navigationsbordet (søkortet) med logbog
 
 msgid "Traffic warning"
 msgstr "Trafikadvarsel"
+
+msgid "Gybe now"
+msgstr "Bom nu"
+
+msgid "Tack now"
+msgstr "Vend nu"
+
+msgid "Gybed: now on the %s gybe."
+msgstr "Bommet: nu for %s halse."
+
+msgid "Ready about… tacked: now on the %s tack."
+msgstr "Klar til at vende… vendt: nu for %s halse."
+
+msgid "Tacking is for sailing under way."
+msgstr "Man vender kun, når man sejler."
+
+msgid "Under engine the boat motors along its course: there is no tack to change."
+msgstr "For motor sejler båden langs sin kurs: der er ingen halse at skifte."
+
+msgid "The course can be sailed as it lies: no need to tack."
+msgstr "Kursen kan sejles, som den ligger: ingen grund til at vende."
+
+msgid "beating to windward"
+msgstr "krydser op mod vinden"
+
+msgid "gybing downwind"
+msgstr "bommer med vinden"
+
+msgid "%03d°  ·  %s tack, %s"
+msgstr "%03d°  ·  %s halse, %s"
+
+msgid "%.1f kn made good towards the course"
+msgstr "%.1f kn fremdrift mod kursen"
+
+msgid "next tack in about %s"
+msgstr "næste vending om ca. %s"
+
+msgid "%03d°  ·  back to the planned course"
+msgstr "%03d°  ·  tilbage mod den planlagte kurs"
+
+msgid "Tacking"
+msgstr "Krydsning"

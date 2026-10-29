@@ -40,6 +40,23 @@ var anchorages_done: Array[int] = []
 ## time the boat stays where it is (the voyage pauses; the clock, weather and
 ## stores go on). 0 when not standing by. Optional in a save.
 var standby_until := 0.0
+## Sailing the leg (I027, CourseMaker): how far the boat is off the leg's line
+## (nm, + to the right of it, - to the left), the side it is tacking or
+## gybing on (+1 / -1; 0 = sailing the line), its heading relative to the
+## leg (degrees, signed), when it last changed side, how many tacks and
+## gybes this voyage, the tack time still to lose, until when a tack made
+## by hand is kept, and the leg the course was set for. Optional in a save.
+var cross_track_nm := 0.0
+var tack_side := 0
+var heading_offset_deg := 0.0
+var tack_since := 0.0
+var tack_count := 0
+var tack_loss_left_s := 0.0
+var manual_tack_until := 0.0
+var course_leg := -1
+
+const _COURSE_FIELDS := ["cross_track_nm", "tack_side", "heading_offset_deg", "tack_since", "tack_count",
+	"tack_loss_left_s", "manual_tack_until", "course_leg"]
 
 var _cumulative := PackedFloat64Array()
 
@@ -69,6 +86,8 @@ func duplicate_voyage() -> Voyage:
 	copy.holding_at = holding_at
 	copy.anchorages_done = anchorages_done.duplicate()
 	copy.standby_until = standby_until
+	for key: String in _COURSE_FIELDS:
+		copy.set(key, get(key))
 	return copy
 
 
@@ -119,8 +138,42 @@ func get_remaining_nm() -> float:
 	return maxf(get_total_nm() - progress_nm, 0.0)
 
 
+## Where the boat is: on the leg's line at its progress, plus its offset to
+## the side while tacking (I027). The one position the chart, HUD, traffic
+## and saves use.
 func get_position() -> Vector2:
-	return position_at(progress_nm)
+	var on_line := position_at(progress_nm)
+	if absf(cross_track_nm) < 1e-9:
+		return on_line
+	return GeoMath.normalize(GeoMath.offset_nm(on_line, leg_bearing_at(progress_nm) + 90.0, cross_track_nm))
+
+
+## A new course from where the boat is (a change of course, a re-planned
+## route): it starts on its line, not tacking; the tack count is kept.
+func reset_course() -> void:
+	cross_track_nm = 0.0
+	tack_side = 0
+	heading_offset_deg = 0.0
+	tack_loss_left_s = 0.0
+	manual_tack_until = 0.0
+	course_leg = -1
+
+
+## The compass bearing of the leg at `distance_nm` along the course.
+func leg_bearing_at(distance_nm: float) -> float:
+	var i := leg_index_at(distance_nm)
+	return GeoMath.rhumb_bearing(route.path[i - 1], route.path[i])
+
+
+## The index (1..) of the path segment at `distance_nm`.
+func leg_index_at(distance_nm: float) -> int:
+	return GeoMath.segment_index_at(get_cumulative(), distance_nm)
+
+
+## The distance (nm) still ahead on the current leg.
+func remaining_leg_nm() -> float:
+	var cumulative := get_cumulative()
+	return maxf(cumulative[mini(leg_index_at(progress_nm), cumulative.size() - 1)] - progress_nm, 0.0)
 
 
 ## Within ±180° of longitude, also on a segment across the Date Line.
@@ -130,7 +183,8 @@ func position_at(distance_nm: float) -> Vector2:
 
 ## The part of the course still ahead, starting at the vessel's position.
 func get_remaining_path() -> PackedVector2Array:
-	var result := PackedVector2Array([get_position()])
+	# From the line (a cut of the route), not the boat's offset while tacking.
+	var result := PackedVector2Array([position_at(progress_nm)])
 	var cumulative := get_cumulative()
 	for i in route.path.size():
 		if cumulative[i] > progress_nm + 1e-6:
@@ -168,6 +222,9 @@ func to_dict() -> Dictionary:
 		"holding_at": holding_at,
 		"anchorages_done": anchorages_done.duplicate(),
 		"standby_until": standby_until,
+		"course": {"cross_track_nm": cross_track_nm, "tack_side": tack_side, "heading_offset_deg": heading_offset_deg,
+			"tack_since": tack_since, "tack_count": tack_count, "tack_loss_left_s": tack_loss_left_s,
+			"manual_tack_until": manual_tack_until, "course_leg": course_leg},
 	}
 
 
@@ -239,6 +296,22 @@ static func from_dict(data: Variant, catalog: PortCatalog, errors: Array[String]
 			return null
 		voyage.anchorages_done.append(int(value))
 	voyage.standby_until = maxf(float(data.standby_until), 0.0) if _is_number(data.get("standby_until")) else 0.0
+	# Tacking (I027): optional; a voyage saved before sails its line.
+	var course: Variant = data.get("course", {})
+	if course is Dictionary:
+		var side: Variant = course.get("tack_side", 0)
+		var cross: Variant = course.get("cross_track_nm", 0.0)
+		if _is_number(side) and int(side) in [-1, 0, 1] and _is_number(cross) and absf(float(cross)) <= 60.0:
+			voyage.tack_side = int(side)
+			voyage.cross_track_nm = float(cross)
+			for key: String in ["heading_offset_deg", "tack_since", "tack_loss_left_s", "manual_tack_until"]:
+				if _is_number(course.get(key)):
+					voyage.set(key, float(course[key]))
+			for key: String in ["tack_count", "course_leg"]:
+				if _is_number(course.get(key)):
+					voyage.set(key, int(course[key]))
+			voyage.heading_offset_deg = clampf(voyage.heading_offset_deg, -90.0, 90.0)
+			voyage.tack_loss_left_s = clampf(voyage.tack_loss_left_s, 0.0, 600.0)
 	return voyage
 
 

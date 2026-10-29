@@ -443,6 +443,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			open_sail_trim()
 		return
+	if event.is_action_pressed(&"tack") and not event.is_echo():
+		if is_in_gameplay() and modals.is_empty() and not router.is_busy() and GameSession.is_underway():
+			get_viewport().set_input_as_handled()
+			tack_now()
+		return
 	if event.is_action_pressed(&"reel_in") and not event.is_echo():
 		if is_in_gameplay() and modals.is_empty() and not router.is_busy() and not is_on_quay():
 			get_viewport().set_input_as_handled()
@@ -753,6 +758,10 @@ func get_wheel_actions() -> Array[Dictionary]:
 			actions.back().checked = func() -> bool: return RadarPanel.shown
 			if not GameSession.is_anchored():
 				add.call(&"sail_trim", Loc.t("Trim sails"), func() -> void: open_sail_trim.call_deferred())
+				# I027: tacking or gybing by hand while the autopilot zigzags.
+				var course := GameSession.get_voyage_course()
+				if int(course.get("tack_side", 0)) != 0 and not GameSession.get_propulsion().is_motoring():
+					add.call(&"tack", Loc.t("Gybe now") if _is_gybing() else Loc.t("Tack now"), func() -> void: tack_now())
 			if GameSession.is_anchored() or GameSession.anchoring_refusal() == "" or GameSession.is_holding_at_anchorage():
 				add.call(&"anchor", "Anchor", func() -> void: open_anchor())
 			if GameSession.is_holding_at_anchorage():
@@ -889,6 +898,23 @@ func request_departure() -> void:
 	var error := GameSession.depart()
 	notify(error if not error.is_empty() else Loc.t("Underway to %s. The autopilot holds the course.") %
 		catalog.get_display_name(route.destination_port_id))
+
+
+## A tack (or gybe) by hand (I027; K, or the wheel): the autopilot takes the
+## other side at once and keeps it a while. Says what happened, or why not.
+func tack_now() -> void:
+	var gybe := _is_gybing()
+	var refusal := Simulation.manual_tack()
+	if refusal != "":
+		notify(refusal)
+		return
+	var side := PropulsionState.wind_side(GameSession.get_propulsion().true_wind_angle)
+	notify((Loc.t("Gybed: now on the %s gybe.") if gybe else Loc.t("Ready about… tacked: now on the %s tack.")) % side)
+
+
+## True while the zigzag is downwind (gybes rather than tacks).
+func _is_gybing() -> bool:
+	return GameSession.is_underway() and absf(GameSession.get_propulsion().true_wind_angle) > 90.0
 
 
 ## In port the helm sets sail; underway it checks the sail configuration: a

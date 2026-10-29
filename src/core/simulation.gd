@@ -362,13 +362,35 @@ func advance(seconds: float, stop_at_events := false) -> AdvanceResult:
 		var total := GameSession.get_voyage_total_nm()
 		var vertex := GameSession.get_voyage_next_vertex_nm()
 		var event_at := minf(total, vertex)
-		var to_event := (maxf(event_at - progress, 0.0) / speed * 3600.0) if speed > 0.0 else INF
+		# I027: the boat makes VMC along the leg's line and drifts off it at
+		# the lateral speed while tacking (CourseMaker); a tack's lost time
+		# comes first, without progress.
+		var course := GameSession.get_voyage_course()
+		var cross := float(course.cross_track_nm)
+		var offset := deg_to_rad(float(course.heading_offset_deg))
+		# Steering back to the line (not tacking): once on it, along it.
+		var returning := int(course.tack_side) == 0 or propulsion.is_motoring()
+		if returning and absf(cross) < 1e-9:
+			offset = 0.0
+		var along_speed := speed * cos(offset)
+		var lateral_speed := speed * sin(offset)
+		var loss := float(course.tack_loss_left_s)
+		var to_event := (loss + maxf(event_at - progress, 0.0) / along_speed * 3600.0) if along_speed > 1e-6 else INF
+		# Reaching the line is an event too, so that one long step and many
+		# short ones turn onto it at the same moment.
+		var to_line := INF
+		if returning and absf(cross) >= 1e-9 and lateral_speed * cross < 0.0:
+			to_line = loss + absf(cross) / absf(lateral_speed) * 3600.0
 		var to_grid := maxf(next_grid - time, 0.0)
 		var fish_tick := _next_fish_tick(time, time + remaining)
-		var step := minf(minf(remaining, fish_tick - time), minf(to_event, to_grid))
+		var step := minf(minf(remaining, fish_tick - time), minf(minf(to_event, to_line), to_grid))
 		var reached_event := to_event <= step
-		var new_progress := event_at if reached_event else progress + speed * step / 3600.0
-		GameSession.apply_simulation_step(time + step, new_progress)
+		var moving := maxf(step - minf(loss, step), 0.0)
+		var new_progress := event_at if reached_event else progress + along_speed * moving / 3600.0
+		var new_cross := 0.0 if to_line <= step else cross + lateral_speed * moving / 3600.0
+		if loss > 0.0:
+			GameSession.set_voyage_course({"tack_loss_left_s": loss - minf(loss, step)})
+		GameSession.apply_simulation_step(time + step, new_progress, new_cross, speed * moving / 3600.0)
 		GameSession.note_sailing(time, time + step, speed, propulsion.sails_set())  # I024: sustained speed
 		_check_hat(time, time + step, progress, new_progress, result)
 		result.elapsed_seconds += step
@@ -381,8 +403,10 @@ func advance(seconds: float, stop_at_events := false) -> AdvanceResult:
 				break
 		if not reached_event:
 			continue  # a grid point or the end of the requested time
-		# An anchorage waypoint (Iteration 18): the boat stops and waits there.
+		# An anchorage waypoint (Iteration 18): the boat stops and waits there
+		# (I027: on the spot, closing what is left of a tack's offset).
 		if GameSession.reach_anchorage_at(event_at):
+			GameSession.settle_on_line()
 			result.anchorage = true
 			if stop_at_events:
 				result.stopped_by = STOP_ANCHORAGE
@@ -422,12 +446,161 @@ func evaluate_propulsion(reset_history := false, reassess := false) -> void:
 	if not GameSession.is_underway() or GameSession.is_anchored():
 		return
 	var wind := get_wind_at(GameSession.get_vessel_position())
-	var heading := get_current_heading()
+	var profile := GameSession.get_vessel_profile()
+	var now := GameSession.get_game_time()
+	var before := GameSession.get_propulsion()
+	# I027: the heading the sails would sail on this leg (straight, or the
+	# tack CourseMaker chooses); the controller judges sail or engine on it.
+	var sail := _set_course(wind, profile, now, before.initialised and before.is_motoring())
+	var heading: float = sail.heading
 	var trim := GameSession.get_sail_trim()
 	var factor := SailTrim.factor(trim.auto, trim.value, WindField.relative_angle(heading, wind.from_deg), wind.speed_kn)
-	var state := PropulsionController.evaluate(GameSession.get_propulsion(), GameSession.get_vessel_profile(),
-		GameSession.get_game_time(), heading, wind, reset_history, reassess, factor)
+	var beating := int(GameSession.get_voyage_course().tack_side) != 0
+	var stop_above := profile.engine_start_below_kn + CourseMaker.BEAT_STOP_MARGIN_KN if beating else -1.0
+	var state := PropulsionController.evaluate(before, profile, now, heading, wind, reset_history, reassess, factor, stop_above)
+	# Under engine the boat motors along its line (back to it, if off it);
+	# sailing, it sails the tack or the line.
+	var course := GameSession.get_voyage_course()
+	var offset := CourseMaker.recovery_offset(float(course.cross_track_nm))
+	if not state.is_motoring() and int(course.tack_side) != 0:
+		offset = float(sail.offset)
+	GameSession.set_voyage_course({"heading_offset_deg": offset})
 	GameSession.set_propulsion(state)
+
+
+## Sets the course for the leg the boat is on (CourseMaker) and returns the
+## sailing heading: {"heading", "offset"} (offset from the leg's bearing).
+## Tacks or gybes here, and only here (at evaluation points): at the lane's
+## edge, before land, or on a lasting wind shift - never while motoring.
+func _set_course(wind: WindField.Sample, profile: VesselProfile, now: float, motoring: bool) -> Dictionary:
+	var voyage := GameSession.get_voyage()
+	var progress := voyage.progress_nm
+	var leg := voyage.leg_index_at(progress)
+	var bearing := voyage.leg_bearing_at(progress)
+	var fields := {}
+	var cross := voyage.cross_track_nm
+	var side := voyage.tack_side
+	if voyage.course_leg != leg:
+		if voyage.course_leg > 0 and voyage.course_leg < voyage.route.path.size():
+			# A new leg: the offset is carried into its frame.
+			var old_bearing := GeoMath.rhumb_bearing(voyage.route.path[voyage.course_leg - 1], voyage.route.path[voyage.course_leg])
+			cross *= cos(deg_to_rad(WindField.relative_angle(old_bearing, bearing)))
+			fields.cross_track_nm = cross
+		fields.course_leg = leg
+		side = 0
+	var course := CourseMaker.plan(profile, bearing, wind.from_deg, wind.speed_kn)
+	# In a harbour's approach the boat keeps to its line (and motors, if the
+	# line is to windward), as a skipper does leaving or entering harbour.
+	if not course.zigzag or _in_harbour_approach(voyage):
+		side = 0
+	elif side == 0:
+		side = _first_side(course, cross)
+		if not _water_ahead(voyage, course, side, cross, bearing):
+			side = -side if _water_ahead(voyage, course, -side, cross, bearing) else 0
+		if side != 0:
+			fields.tack_since = now
+	elif not motoring:
+		var reason := _tack_reason(voyage, course, side, cross, bearing, now)
+		if reason != "":
+			side = -side
+			fields.tack_since = now
+			fields.tack_count = voyage.tack_count + 1
+			fields.tack_loss_left_s = voyage.tack_loss_left_s + profile.tack_loss_s
+			SessionLog.write("tack", {"reason": reason, "side": side, "cross_nm": snappedf(cross, 0.01),
+				"downwind": CourseMaker.is_downwind(CourseMaker.side_of(course, side).heading, wind.from_deg)})
+	fields.tack_side = side
+	GameSession.set_voyage_course(fields)
+	if side == 0:
+		var back := CourseMaker.recovery_offset(cross)
+		return {"heading": fposmod(bearing + back, 360.0), "offset": back}
+	var chosen := CourseMaker.side_of(course, side)
+	return {"heading": float(chosen.heading), "offset": side * float(chosen.delta)}
+
+
+## The side to start a zigzag on: the better one, or - when both are about as
+## good - the one that heads back across the line.
+func _first_side(course: Dictionary, cross: float) -> int:
+	var right := float(course.starboard.vmc)
+	var left := float(course.port.vmc)
+	if absf(cross) > CourseMaker.ON_LINE_NM and absf(right - left) <= 0.1 * maxf(right, left):
+		return -int(signf(cross))
+	return 1 if right >= left else -1
+
+
+## Why the boat should tack or gybe now ("lane", "land", "shift") or "".
+func _tack_reason(voyage: Voyage, course: Dictionary, side: int, cross: float, bearing: float, now: float) -> String:
+	var chosen := CourseMaker.side_of(course, side)
+	if not _water_ahead(voyage, course, side, cross, bearing):
+		return "land"
+	if side * cross >= CourseMaker.lane_nm(voyage.remaining_leg_nm()) and now - voyage.tack_since >= CourseMaker.MIN_LANE_TACK_S:
+		return "lane"
+	var other := CourseMaker.side_of(course, -side)
+	if float(other.vmc) >= CourseMaker.SHIFT_GAIN * float(chosen.vmc) and now - voyage.tack_since >= CourseMaker.MIN_TACK_TIME_S \
+			and now >= voyage.manual_tack_until:
+		return "shift"
+	return ""
+
+
+## True when the boat on `side` stays afloat until the next evaluation (with
+## a margin): the routing's own test of where a boat may lie.
+func _water_ahead(voyage: Voyage, course: Dictionary, side: int, cross: float, bearing: float) -> bool:
+	var chosen := CourseMaker.side_of(course, side)
+	var ahead := float(chosen.speed) * sin(deg_to_rad(float(chosen.delta))) * EVALUATION_INTERVAL / 3600.0 + 0.3
+	var router := SeaRouter.get_default()
+	var line := voyage.position_at(voyage.progress_nm)
+	for share: float in [0.5, 1.0]:
+		var probe := GeoMath.normalize(GeoMath.offset_nm(line, bearing + 90.0, cross + side * ahead * share))
+		if not router.is_afloat(probe):
+			return false
+	return true
+
+
+## True within the approach of the voyage's departure or destination harbour.
+func _in_harbour_approach(voyage: Voyage) -> bool:
+	var router := SeaRouter.get_default()
+	var here := voyage.position_at(voyage.progress_nm)
+	for id: StringName in [voyage.route.origin_port_id, voyage.route.destination_port_id]:
+		var port := PortCatalog.get_default().get_port(id) if id != &"" else null
+		if port and GeoMath.rhumb_distance_nm(port.get_geo_position(), here) <= router.approach_radius_nm(port.get_geo_position()):
+			return true
+	return false
+
+
+## About when the autopilot will next tack or gybe at the lane's edge (game
+## seconds from now; 0 when not zigzagging or not knowable): the offset
+## still to go to the edge at the present sideways speed.
+func next_tack_seconds() -> float:
+	var course := GameSession.get_voyage_course()
+	var side := int(course.get("tack_side", 0))
+	if side == 0 or GameSession.get_propulsion().is_motoring():
+		return 0.0
+	var voyage := GameSession.get_voyage()
+	var lateral := GameSession.get_propulsion().speed_kn * sin(deg_to_rad(absf(float(course.heading_offset_deg))))
+	if lateral < 0.1:
+		return 0.0
+	var to_edge := CourseMaker.lane_nm(voyage.remaining_leg_nm()) - side * float(course.cross_track_nm)
+	return maxf(to_edge, 0.0) / lateral * 3600.0
+
+
+## A tack (or gybe) by hand from the helm (I027): the other side at once,
+## kept for at least CourseMaker.MIN_TACK_TIME_S unless the lane or land
+## says otherwise. Returns "" when done, or why not.
+func manual_tack() -> String:
+	if not GameSession.is_underway() or GameSession.is_anchored() or GameSession.is_holding_at_anchorage() or GameSession.is_standing_by():
+		return Loc.t("Tacking is for sailing under way.")
+	if GameSession.get_propulsion().is_motoring():
+		return Loc.t("Under engine the boat motors along its course: there is no tack to change.")
+	var course := GameSession.get_voyage_course()
+	if int(course.tack_side) == 0:
+		return Loc.t("The course can be sailed as it lies: no need to tack.")
+	var now := GameSession.get_game_time()
+	GameSession.set_voyage_course({"tack_side": -int(course.tack_side), "tack_since": now, "tack_count": int(course.tack_count) + 1,
+		"tack_loss_left_s": float(course.tack_loss_left_s) + GameSession.get_vessel_profile().tack_loss_s,
+		"manual_tack_until": now + CourseMaker.MIN_TACK_TIME_S})
+	SessionLog.write("tack", {"reason": "hand", "side": -int(course.tack_side)})
+	evaluate_propulsion()
+	invalidate_estimates()
+	return ""
 
 
 ## The helm's "Check sail configuration": a fresh assessment of the current
@@ -467,8 +640,8 @@ func get_current_heading() -> float:
 	var voyage := GameSession.get_voyage()
 	if voyage == null:
 		return 0.0
-	var i := GeoMath.segment_index_at(voyage.get_cumulative(), voyage.progress_nm)
-	return GeoMath.rhumb_bearing(voyage.route.path[i - 1], voyage.route.path[i])
+	# I027: the leg's bearing plus the course offset (a tack, or back to the line).
+	return fposmod(voyage.leg_bearing_at(voyage.progress_nm) + voyage.heading_offset_deg, 360.0)
 
 
 func _next_grid_time(last_evaluation: float) -> float:
@@ -521,14 +694,31 @@ func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time
 	var d := from_nm
 	var model := WeatherModel.get_default()
 	var known_at := GameSession.get_game_time()
+	# Near the route's ends (its harbours' approaches) the boat keeps to its
+	# line, as the simulation does (_in_harbour_approach).
+	var router := SeaRouter.get_default()
+	var ends: Array = []
+	for end_point: Vector2 in [path[0], path[path.size() - 1]]:
+		ends.append([end_point, router.approach_radius_nm(end_point)])
 	while d < total - 1e-6:
 		var i := GeoMath.segment_index_at(cumulative, d)
 		var heading := GeoMath.rhumb_bearing(path[i - 1], path[i])
 		var wind := model.sample(GeoMath.point_along(path, cumulative, d), time + seconds, GameSession.get_wind_seed(), known_at)
-		var potential := profile.sail_speed_kn(wind.speed_kn, WindField.relative_angle(heading, wind.from_deg))
-		var speed := potential if potential >= profile.engine_start_below_kn else profile.engine_speed_kn
+		# I027: the best progress along the leg (straight, or tacking:
+		# CourseMaker's VMC plus the tacks), or the engine where the sails
+		# would do too poorly - the simulation's own choice.
+		var course := CourseMaker.plan(profile, heading, wind.from_deg, wind.speed_kn)
+		var here := GeoMath.point_along(path, cumulative, d)
+		var in_approach := ends.any(func(e: Array) -> bool: return GeoMath.rhumb_distance_nm(e[0], here) <= float(e[1]))
+		if in_approach:
+			course.zigzag = false
+		var sail: Dictionary = course.best if course.zigzag else course.direct
+		var sailing := float(sail.speed) >= profile.engine_start_below_kn
+		var speed := float(sail.vmc) if sailing else profile.engine_speed_kn
 		var ds := minf(ESTIMATE_STEP_NM, total - d)
 		seconds += ds / maxf(speed, MIN_ESTIMATE_SPEED_KN) * 3600.0
+		if sailing and course.zigzag:
+			seconds += CourseMaker.expected_tacks(ds, float(sail.delta), cumulative[i] - d) * profile.tack_loss_s
 		d += ds
 	return seconds
 

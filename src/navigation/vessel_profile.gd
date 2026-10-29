@@ -29,11 +29,18 @@ static var _default: VesselProfile
 @export_range(0.0, 10.0, 0.1) var light_air_full_kn := 3.0
 ## Efficiency (0..1) by true wind angle in degrees, 0 = head to wind, 180 = dead
 ## downwind. Points are (angle, efficiency), linearly interpolated.
+## I027: the close-hauled band (35-65°) raised to what a cruising sloop does
+## to windward (about two thirds of its reaching speed at 45°), so beating is
+## a real way upwind (CourseMaker) instead of always the engine.
 @export var angle_efficiency_curve := PackedVector2Array([
-	Vector2(0, 0.0), Vector2(35, 0.0), Vector2(45, 0.35), Vector2(55, 0.55), Vector2(65, 0.70),
+	Vector2(0, 0.0), Vector2(35, 0.0), Vector2(40, 0.45), Vector2(45, 0.62), Vector2(55, 0.74), Vector2(65, 0.80),
 	Vector2(80, 0.85), Vector2(95, 0.95), Vector2(110, 1.0), Vector2(125, 0.97), Vector2(140, 0.90),
 	Vector2(155, 0.80), Vector2(170, 0.70), Vector2(180, 0.66),
 ])
+
+## A tack or gybe costs this much time without progress (game seconds):
+## the boat slows through the wind and builds speed again (I027).
+@export_range(0.0, 600.0, 1.0) var tack_loss_s := 90.0
 
 @export_group("Spinnaker")
 @export var has_spinnaker := true

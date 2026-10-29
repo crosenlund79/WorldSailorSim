@@ -47,7 +47,7 @@ var _units: Array[Control] = []
 var _status: Label
 var _status_style: StyleBoxFlat
 var _refresh := 0.0
-var _course_key := Vector2i(-1, -1)
+var _course_key := Vector4i(-1, -1, -1, 0)
 var _last_course := -1.0
 var _pulse: Tween
 
@@ -213,7 +213,10 @@ func _check_course_change() -> void:
 	var voyage := GameSession.get_voyage()
 	if voyage == null or data.anchored or data.holding:
 		return
-	var key := Vector2i(voyage.revision, GeoMath.segment_index_at(voyage.get_cumulative(), voyage.progress_nm))
+	# A new leg, a new course, or the autopilot's own turn: a tack or gybe,
+	# or steering back to the line (I027).
+	var key := Vector4i(voyage.revision, GeoMath.segment_index_at(voyage.get_cumulative(), voyage.progress_nm), voyage.tack_count,
+		roundi(voyage.heading_offset_deg))
 	if key == _course_key:
 		return
 	var first := _course_key.x < 0

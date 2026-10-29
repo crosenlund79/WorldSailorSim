@@ -100,6 +100,15 @@ static func rhumb_bearing(from: Vector2, to: Vector2) -> float:
 	return fposmod(rad_to_deg(atan2(d_lon, d_psi)), 360.0)
 
 
+## The point `distance_nm` from `from` on the compass bearing `bearing_deg`
+## (a short flat-earth step: for the few miles a boat sails off its line).
+static func offset_nm(from: Vector2, bearing_deg: float, distance_nm: float) -> Vector2:
+	var b := deg_to_rad(bearing_deg)
+	var lat := from.y + distance_nm * cos(b) / 60.0
+	var mean_lat := deg_to_rad((from.y + lat) * 0.5)
+	return Vector2(from.x + distance_nm * sin(b) / (60.0 * maxf(cos(mean_lat), 0.01)), lat)
+
+
 ## Total rhumb length of a polyline, in nautical miles.
 static func path_length_nm(path: PackedVector2Array) -> float:
 	var total := 0.0
