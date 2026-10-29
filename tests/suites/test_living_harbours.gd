@@ -156,6 +156,17 @@ func _test_layouts() -> void:
 				overlaps.append(String(port.id))
 	t.check(mismatch.is_empty(), "[layout] in every harbour a storefront stands exactly where the harbour offers the service (%s)" % [mismatch.slice(0, 6)])
 	t.check(overlaps.is_empty(), "[layout] no two buildings overlap on any quay (%s)" % [overlaps.slice(0, 6)])
+	# I027: compressed environmental scale - no quay longer than 62 m, and the
+	# furthest door within 19 m of the walkway (they were up to 89 m and 25 m).
+	var long_quays := []
+	for port in PortCatalog.get_default().ports:
+		var layout := QuayLayout.build(port.id)
+		var furthest := 0.0
+		for business in layout.get_businesses():
+			furthest = maxf(furthest, absf(layout.door_station(business).x))
+		if layout.right - layout.left > 6200.0 or furthest > 1900.0:
+			long_quays.append("%s %.0f m / %.0f m" % [port.id, (layout.right - layout.left) / 100.0, furthest / 100.0])
+	t.check(long_quays.is_empty(), "[layout] compact quays: at most 62 m long, every door within 19 m of the walkway %s" % [long_quays.slice(0, 6)])
 	var again := QuayLayout.build(&"copenhagen")
 	t.check(again.fronts == cph.fronts and again.cafe_seats == cph.cafe_seats, "[layout] the same harbour always has the same quay")
 	t.check(not cph.is_in_the_way(cph.door_station(QuayLayout.CAFE) + Vector2(0, 200)) and cph.is_in_the_way(Vector2(0, QuayLayout.EDGE_Y - 40))
@@ -255,6 +266,31 @@ func _test_quay() -> void:
 		if W.use_points(front.stations[place], cells).is_empty():
 			unreachable.append(place)
 	t.check(unreachable.is_empty(), "[quay] every door and station can be walked to from the walkway (%s)" % [unreachable])
+	# I027, the compact waterfront: an open lane along the quay past every door
+	# (a person-sized probe touches nothing from the first door to the last),
+	# and every door's area reaches down to it.
+	var probe := PhysicsShapeQueryParameters2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = Player.RADIUS
+	probe.shape = circle
+	probe.collision_mask = 1
+	probe.exclude = [front.player.get_rid()]
+	var doors_x: Array = layout.get_businesses().map(func(b: StringName) -> float: return layout.door_station(b).x)
+	var blocked := []
+	var x: float = doors_x.min()
+	while x <= float(doors_x.max()):
+		probe.transform = Transform2D(0.0, front.to_global(Vector2(x, QuayLayout.LANE_Y)))
+		if not front.get_world_2d().direct_space_state.intersect_shape(probe, 1).is_empty():
+			blocked.append(roundi(x))
+		x += 20.0
+	t.check(blocked.is_empty(), "[lane] the walking lane is open from the first door to the last (blocked at %s)" % [blocked.slice(0, 8)])
+	var short_doors := []
+	for business in layout.get_businesses():
+		var shape := front.get_station(business).get_node("CollisionShape2D") as CollisionShape2D
+		var bottom := front.get_station(business).position.y + (shape.shape as RectangleShape2D).size.y / 2.0
+		if bottom < QuayLayout.LANE_Y - QuayLayout.LANE_HALF:
+			short_doors.append(business)
+	t.check(short_doors.is_empty(), "[lane] every door lights up from the lane (%s do not)" % [short_doors])
 	var highlights := true
 	for business in layout.get_businesses():
 		highlights = highlights and front.get_station(business).highlight_outline.size() >= 3

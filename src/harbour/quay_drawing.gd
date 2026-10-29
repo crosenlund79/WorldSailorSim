@@ -45,7 +45,8 @@ func get_lamp_positions() -> PackedVector2Array:
 	var lamps := PackedVector2Array()
 	var x := ceilf((layout.left + 200.0) / LAMP_PITCH) * LAMP_PITCH - 450.0
 	while x < layout.right - 150.0:
-		if absf(x) > QuayLayout.WALKWAY_CLEAR + 40.0 and not _over_lift(x):
+		# Not before the boatyard (I027): its hull leaves a lane along the coping.
+		if absf(x) > QuayLayout.WALKWAY_CLEAR + 40.0 and not _over_lift(x) and not _before_yard(x):
 			lamps.append(Vector2(x, QuayLayout.EDGE_Y - 34.0))
 		x += LAMP_PITCH
 	return lamps

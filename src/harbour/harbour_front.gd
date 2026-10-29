@@ -170,12 +170,13 @@ func _build_walls() -> void:
 		var w := float(front.x1) - x0
 		match front.kind:
 			QuayLayout.BOATYARD:
-				var length := minf(w * 0.55, 760.0)
-				_box(body, Rect2(x0 + w * 0.36 - length / 2.0, 40.0, length, 270.0))  # the hull on its stands
+				var length := StorefrontDrawing.hull_length(w)
+				var beam := StorefrontDrawing.HULL_BEAM + 24.0  # with its stands
+				_box(body, Rect2(x0 + w * 0.36 - length / 2.0, StorefrontDrawing.HULL_Y - beam / 2.0, length, beam))  # the hull on its stands
 				_box(body, Rect2(x0 + w * 0.06, 50.0, 160.0, 44.0))  # the workbench
 				_box(body, Rect2(x0 + w * 0.7 - 15.0, 55.0, 64.0, 30.0))  # the drums
 			QuayLayout.SAIL_LOFT:
-				_box(body, Rect2(x0 + w * 0.2 - 70.0, 65.0, 310.0, 40.0))
+				_box(body, Rect2(x0 + w * 0.2 - 70.0, 58.0, 310.0, 40.0))
 			QuayLayout.FISHMONGER:
 				_box(body, Rect2(x0 + 30.0, 30.0, w - 210.0, 70.0))
 
@@ -212,7 +213,10 @@ func _build_stations() -> void:
 	holder.name = "Stations"
 	add_child(holder)
 	for business in layout.get_businesses():
-		var station := _add_station(holder, business, layout.door_station(business), Vector2(160, 76))
+		# From the doorstep down to the walking lane (I027): passing a door on
+		# the lane lights it up.
+		var reach := QuayLayout.LANE_Y - QuayLayout.STATION_Y
+		var station := _add_station(holder, business, layout.door_station(business) + Vector2(0.0, reach / 2.0 - 14.0), Vector2(160, 76.0 + reach - 28.0))
 		var drawing := get_storefront(business)
 		if drawing:
 			station.set_highlight_outline_global.call_deferred(drawing.get_highlight_outline())

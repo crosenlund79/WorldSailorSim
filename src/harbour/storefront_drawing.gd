@@ -689,7 +689,7 @@ func _draw_lane() -> void:
 func _draw_outside() -> void:
 	match get_kind():
 		QuayLayout.BOATYARD:
-			_draw_hull_on_stands(Vector2(_w * 0.36, 175.0))
+			_draw_hull_on_stands(Vector2(_w * 0.36, HULL_Y))
 			for k in 2:
 				var drum := Vector2(_w * 0.7 + k * 34.0, 70.0)
 				draw_circle(drum + Vector2(4, 5), 15.0, SHADOW)
@@ -703,7 +703,7 @@ func _draw_outside() -> void:
 			draw_rect(Rect2(bench.position + Vector2(80, 22), Vector2(54, 10)), Color("#B34A32"))
 		QuayLayout.SAIL_LOFT:
 			for k in 2:
-				var at := Vector2(_w * 0.2 + k * 90.0, 85.0)
+				var at := Vector2(_w * 0.2 + k * 90.0, 78.0)
 				draw_rect(Rect2(at + Vector2(-60, -14) + Vector2(5, 6), Vector2(200, 28)), SHADOW)
 				draw_rect(Rect2(at + Vector2(-60, -14), Vector2(200, 28)), Color("#EDEBE3"))  # rolled sailcloth
 				for r in 4:
@@ -773,11 +773,21 @@ func _draw_outside() -> void:
 					draw_line(at + Vector2(-46 + b * 30, -10), at + Vector2(-46 + b * 30, 12), Color("#5A4636"), 1.0)
 
 
+## The yacht ashore in the boatyard: its middle's height on the quay, its beam,
+## and its length for a yard `w` wide (HarbourFront's collision uses the same).
+const HULL_Y := 140.0
+const HULL_BEAM := 190.0
+
+
+static func hull_length(w: float) -> float:
+	return minf(w * 0.62, 600.0)
+
+
 func _draw_hull_on_stands(at: Vector2) -> void:
 	# A small yacht ashore, seen from above: the hull, its keel's shadow and
 	# the stands (props) on each side.
-	var length := minf(_w * 0.55, 760.0)
-	var outline := HarbourDressing.hull_outline(length, 250.0)
+	var length := hull_length(_w)
+	var outline := HarbourDressing.hull_outline(length, HULL_BEAM)
 	var pts := PackedVector2Array()
 	for p in outline:  # stern at 0, bow at +length: turned to lie along the quay
 		pts.append(at + Vector2(p.y - length / 2.0, p.x))
@@ -787,7 +797,7 @@ func _draw_hull_on_stands(at: Vector2) -> void:
 	draw_colored_polygon(shadow, SHADOW)
 	for k in 3:
 		for side: float in [-1.0, 1.0]:
-			var stand := at + Vector2(-length * 0.3 + k * length * 0.3, side * 140.0)
+			var stand := at + Vector2(-length * 0.3 + k * length * 0.3, side * (HULL_BEAM / 2.0 + 12.0))
 			draw_line(stand, stand - Vector2(0, side * 26.0), Color("#3E6B8A"), 6.0)
 			draw_circle(stand, 8.0, Color("#3E6B8A"))
 	draw_colored_polygon(pts, Color("#E4E3DC"))

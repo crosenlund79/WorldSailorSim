@@ -58,9 +58,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "b839ffe62209bbfa",
+   "sha": "3121355af7130924",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/app/game_version.gd": {
    "sha": "d775db7da1fff853",
@@ -493,9 +493,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_front.gd": {
-   "sha": "bb68a99e77d64283",
+   "sha": "529dabc43ddd49bf",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/harbour/harbour_landmark.gd": {
    "sha": "a0f34cd640504119",
@@ -528,14 +528,14 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "src/harbour/quay_drawing.gd": {
-   "sha": "f028025b8a04fa22",
+   "sha": "d4413db790156f7a",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/harbour/quay_layout.gd": {
-   "sha": "26ba609f2bd701a7",
+   "sha": "54831bfac7a059a2",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 2: fuel, harbour dues, career ledger, motor to windward, career sim"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/harbour/shore_access.gd": {
    "sha": "bf9b38f0b54f16bf",
@@ -548,9 +548,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/storefront_drawing.gd": {
-   "sha": "8ea134a9d89983fc",
+   "sha": "364209d9fdf57c06",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "src/harbour/townsfolk_drawing.gd": {
    "sha": "d33e869ebba04519",
@@ -1382,6 +1382,11 @@
    "reviewed": "2026-10-29",
    "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
   },
+  "tests/screenshots_i027_waterfront.gd": {
+   "sha": "808e6a47f6802966",
+   "reviewed": "2026-10-29",
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
+  },
   "tests/suites/test_academy.gd": {
    "sha": "001e7e3769747ff6",
    "reviewed": "2026-10-28",
@@ -1613,9 +1618,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "tests/suites/test_living_harbours.gd": {
-   "sha": "43b090a204e8d490",
+   "sha": "618854f6c66bad7b",
    "reviewed": "2026-10-29",
-   "note": "I026 closing: traffic warning title, batched dial ticks, café stand-up point, quay probe, layout checks, waterfront walkthrough"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "tests/suites/test_living_world.gd": {
    "sha": "fa00656f95c862c3",
@@ -1758,9 +1763,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_upkeep_ui.gd": {
-   "sha": "dd78b9ff4ae40a49",
+   "sha": "9c6ab9ee15613376",
    "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "note": "I027 Tier 4: compact waterfront with an open walking lane; F10 on the quay"
   },
   "tests/suites/test_vessels.gd": {
    "sha": "9d6925b5c72f1db1",

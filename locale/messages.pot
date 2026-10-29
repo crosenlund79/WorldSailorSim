@@ -4706,79 +4706,79 @@ msgstr ""
 msgid "Interaction areas: %s"
 msgstr ""
 
-#: src/app/app.gd:1941
+#: src/app/app.gd:1942
 msgid "The boatyard is only open while you are moored in harbour."
 msgstr ""
 
-#: src/app/app.gd:2005
+#: src/app/app.gd:2006
 msgid "Buy the %s?"
 msgstr ""
 
-#: src/app/app.gd:2006
+#: src/app/app.gd:2007
 msgid "The %s costs %s; you have %s. It is yours for good, and you move aboard at once. Your other boats stay yours."
 msgstr ""
 
-#: src/app/app.gd:2007 src/ui/grocery_menu.gd:71
+#: src/app/app.gd:2008 src/ui/grocery_menu.gd:71
 msgid "Buy"
 msgstr ""
 
-#: src/app/app.gd:2020
+#: src/app/app.gd:2021
 msgid "Welcome aboard the %s."
 msgstr ""
 
-#: src/app/app.gd:2168
+#: src/app/app.gd:2169
 msgid "%s: closed"
 msgstr ""
 
-#: src/app/app.gd:2169
+#: src/app/app.gd:2170
 msgid "It opens at %s local time, in %s. Wait on the quay until then? Time passes as usual, and anything that needs you will interrupt the wait."
 msgstr ""
 
-#: src/app/app.gd:2171 src/ui/adoption_dialog.gd:80 src/ui/haul_out_panel.gd:57
+#: src/app/app.gd:2172 src/ui/adoption_dialog.gd:80 src/ui/haul_out_panel.gd:57
 msgid "Not now"
 msgstr ""
 
-#: src/app/app.gd:2171
+#: src/app/app.gd:2172
 msgid "Wait until it opens"
 msgstr ""
 
-#: src/app/app.gd:2190
+#: src/app/app.gd:2191
 msgid "Interrupted: %s. It is %s."
 msgstr ""
 
-#: src/app/app.gd:2192
+#: src/app/app.gd:2193
 msgid "%s is open now. It is %s."
 msgstr ""
 
-#: src/app/app.gd:2213
+#: src/app/app.gd:2214
 msgid "Every table on the terrace is taken just now. Try again in a little while."
 msgstr ""
 
-#: src/app/app.gd:2221
+#: src/app/app.gd:2222
 msgid "A coffee on the terrace for %s. Stay as long as you like."
 msgstr ""
 
-#: src/app/app.gd:2245
+#: src/app/app.gd:2246
 msgid "The yard's night man sees to the hull for %s. The work takes %s."
 msgstr ""
 
-#: src/app/app.gd:2276
+#: src/app/app.gd:2277
 msgid "Stand up"
 msgstr ""
 
-#: src/app/app.gd:2277 src/harbour/harbour_front.gd:249
+#: src/app/app.gd:2278 src/harbour/harbour_front.gd:253
 msgid "Back to the boat"
 msgstr ""
 
-#: src/app/app.gd:2284 src/app/app.gd:796
+#: src/app/app.gd:2285 src/app/app.gd:796
 msgid "Finish the coffee"
 msgstr ""
 
-#: src/app/app.gd:2285 src/app/app.gd:799 src/ui/captains_log_menu.gd:29 src/ui/hud.gd:45
+#: src/app/app.gd:2286 src/app/app.gd:799 src/ui/captains_log_menu.gd:29 src/ui/hud.gd:45
 msgid "Captain's Log"
 msgstr ""
 
-#: src/app/app.gd:2360
+#: src/app/app.gd:2361
 msgid "The quay"
 msgstr ""
 
@@ -8095,7 +8095,7 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:97 src/harbour/harbour_facilities.gd:127 src/harbour/harbour_front.gd:409 src/harbour/storefront_drawing.gd:222
+#: src/harbour/harbour_dressing.gd:97 src/harbour/harbour_facilities.gd:127 src/harbour/harbour_front.gd:413 src/harbour/storefront_drawing.gd:222
 msgid "Groceries"
 msgstr ""
 
@@ -8139,7 +8139,7 @@ msgstr ""
 msgid "food and water"
 msgstr ""
 
-#: src/harbour/harbour_facilities.gd:128 src/harbour/harbour_front.gd:399 src/harbour/storefront_drawing.gd:166 src/harbour/storefront_drawing.gd:600
+#: src/harbour/harbour_facilities.gd:128 src/harbour/harbour_front.gd:403 src/harbour/storefront_drawing.gd:166 src/harbour/storefront_drawing.gd:600
 msgid "Boatyard"
 msgstr ""
 
@@ -8155,7 +8155,7 @@ msgstr ""
 msgid "bottom cleaning, hard coating"
 msgstr ""
 
-#: src/harbour/harbour_facilities.gd:130 src/harbour/harbour_front.gd:403 src/harbour/storefront_drawing.gd:218 src/ui/chandlery_menu.gd:17
+#: src/harbour/harbour_facilities.gd:130 src/harbour/harbour_front.gd:407 src/harbour/storefront_drawing.gd:218 src/ui/chandlery_menu.gd:17
 msgid "Chandlery"
 msgstr ""
 
@@ -8171,7 +8171,7 @@ msgstr ""
 msgid "sail care, new sailcloth"
 msgstr ""
 
-#: src/harbour/harbour_facilities.gd:132 src/harbour/harbour_front.gd:411
+#: src/harbour/harbour_facilities.gd:132 src/harbour/harbour_front.gd:415
 msgid "Fishmonger"
 msgstr ""
 
@@ -8195,55 +8195,55 @@ msgstr ""
 msgid "Small harbour"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:224
+#: src/harbour/harbour_front.gd:228
 msgid "Ring at the after-hours hatch"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:230
+#: src/harbour/harbour_front.gd:234
 msgid "Read the noticeboard"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:235
+#: src/harbour/harbour_front.gd:239
 msgid "Into town (Go ashore)"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:242
+#: src/harbour/harbour_front.gd:246
 msgid "Ask about a haul-out"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:245 src/ui/fuel_menu.gd:19
+#: src/harbour/harbour_front.gd:249 src/ui/fuel_menu.gd:19
 msgid "Fuel berth"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:378
+#: src/harbour/harbour_front.gd:382
 msgid "Fuel berth · %s a litre"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:378 src/ui/fuel_menu.gd:36 src/ui/harbour_office_menu.gd:80
+#: src/harbour/harbour_front.gd:382 src/ui/fuel_menu.gd:36 src/ui/harbour_office_menu.gd:80
 msgid "€%.2f"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:401 src/harbour/storefront_drawing.gd:220
+#: src/harbour/harbour_front.gd:405 src/harbour/storefront_drawing.gd:220
 msgid "Sail Loft"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:405 src/harbour/storefront_drawing.gd:226 src/ui/harbour_office_menu.gd:31 src/ui/shop_counter.gd:36
+#: src/harbour/harbour_front.gd:409 src/harbour/storefront_drawing.gd:226 src/ui/harbour_office_menu.gd:31 src/ui/shop_counter.gd:36
 msgid "Harbour Office"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:407 src/harbour/storefront_drawing.gd:224 src/ui/cafe_menu.gd:17
+#: src/harbour/harbour_front.gd:411 src/harbour/storefront_drawing.gd:224 src/ui/cafe_menu.gd:17
 msgid "Café"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:413 src/ui/noticeboard_menu.gd:13
+#: src/harbour/harbour_front.gd:417 src/ui/noticeboard_menu.gd:13
 msgid "Noticeboard"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:505
+#: src/harbour/harbour_front.gd:509
 msgid "Enjoy your coffee  ·  E or a movement key to stand up"
 msgstr ""
 
-#: src/harbour/harbour_front.gd:527
+#: src/harbour/harbour_front.gd:531
 msgid "You finish your coffee and leave the cup on the table. Lovely."
 msgstr ""
 
@@ -8287,7 +8287,7 @@ msgstr ""
 msgid "Tomorrow evening"
 msgstr ""
 
-#: src/harbour/quay_drawing.gd:234
+#: src/harbour/quay_drawing.gd:235
 msgid "Guest pontoon"
 msgstr ""
 

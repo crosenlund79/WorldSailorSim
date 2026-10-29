@@ -8,8 +8,13 @@ extends RefCounted
 ## the guest pontoon arrives at x = 0), y down the screen. The building fronts
 ## stand on y = 0 (their facades are drawn upright above it), the promenade
 ## runs from there to the granite coping at EDGE_Y, and the water and the
-## head of the guest pontoon lie below. True scale, as everywhere around the
-## boat: about 1 cm per unit (HarbourDressing.METRE).
+## head of the guest pontoon lie below. People, doors, the walkway and
+## everything the Captain uses are at true scale, as everywhere around the
+## boat: about 1 cm per unit (HarbourDressing.METRE). I027 (the Captain's
+## "believable human scale, compressed environmental scale"): the frontages,
+## the travel lift's dock and the promenade's depth are compressed, and one
+## ordinary house closes each end, so a walk along the shops stays short; each
+## business keeps its sign and its own front.
 ##
 ## The order along the quay is the harbour's working end to its town end:
 ## the boatyard (with its travel lift where the yard hauls out), the sail
@@ -34,7 +39,7 @@ const HOUSE := &"house"
 const BUSINESSES: Array[StringName] = [BOATYARD, SAIL_LOFT, CHANDLERY, HARBOUR_OFFICE, CAFE, GROCERY, FISHMONGER]
 
 ## The promenade: building fronts at y = 0, the coping's water edge here.
-const EDGE_Y := 420.0
+const EDGE_Y := 350.0
 ## The coping along the water.
 const COPING := 32.0
 ## Half the walkway's width where it comes up from the pontoon.
@@ -48,13 +53,23 @@ const STATION_Y := 46.0
 const DOOR_CLEAR := 110.0
 const WALKWAY_CLEAR := 130.0
 
-## Frontages (scene units): [min, max] per kind.
+## Frontages (scene units): [min, max] per kind (compressed in I027: they
+## were about half as wide again).
 const WIDTHS := {
-	BOATYARD: [1250.0, 1400.0], SAIL_LOFT: [600.0, 680.0], CHANDLERY: [700.0, 800.0], HARBOUR_OFFICE: [620.0, 700.0],
-	CAFE: [760.0, 860.0], GROCERY: [700.0, 800.0], FISHMONGER: [520.0, 580.0], HOUSE: [560.0, 760.0], LANE: [300.0, 340.0],
+	BOATYARD: [860.0, 940.0], SAIL_LOFT: [430.0, 470.0], CHANDLERY: [460.0, 520.0], HARBOUR_OFFICE: [440.0, 490.0],
+	CAFE: [580.0, 640.0], GROCERY: [460.0, 520.0], FISHMONGER: [380.0, 420.0], HOUSE: [380.0, 460.0], LANE: [250.0, 280.0],
 }
 ## The travel lift's dock beside the boatyard (only where the yard hauls out).
-const LIFT_WIDTH := 520.0
+const LIFT_WIDTH := 460.0
+## The open walking lane along the whole quay, past every door (I027): no
+## table, board, bench, stall or hull stands in it, so the businesses are a
+## short, straight walk apart. The shops' own things stay above it, the café's
+## terrace below it.
+const LANE_Y := 128.0
+const LANE_HALF := 24.0
+## The café's terrace: its tables' two rows (y), a row apart.
+const TERRACE_Y := 185.0
+const TERRACE_ROW := 50.0
 
 var port_id: StringName = &""
 var archetype: StringName = HarbourDressing.ARCHETYPE_NORDIC
@@ -103,14 +118,11 @@ func _build(port_id_: StringName) -> void:
 	if facilities.has(HarbourFacilities.BOATYARD):
 		west.append(BOATYARD)
 	west.append(HOUSE)
-	if west.size() < 4:
-		west.append(HOUSE)
 	var east: Array[StringName] = [CAFE]
 	if facilities.has(HarbourFacilities.GROCERY):
 		east.append(GROCERY)
 	if facilities.has(HarbourFacilities.FISHMONGER):
 		east.append(FISHMONGER)
-	east.append(HOUSE)
 	if facilities.has(HarbourFacilities.GO_ASHORE):
 		east.append(LANE)
 	east.append(HOUSE)
@@ -122,30 +134,31 @@ func _build(port_id_: StringName) -> void:
 		if id == BOATYARD and haul_out:
 			lift = Vector2(x - w - LIFT_WIDTH, x - w)
 			_add(id, x - w, x, rng)
-			x -= w + LIFT_WIDTH + rng.randf_range(20.0, 60.0)
+			x -= w + LIFT_WIDTH + rng.randf_range(20.0, 40.0)
 			continue
 		_add(id, x - w, x, rng)
-		x -= w + (rng.randf_range(10.0, 80.0) if rng.randf() < 0.6 else 0.0)
+		x -= w + (rng.randf_range(10.0, 40.0) if rng.randf() < 0.5 else 0.0)
 	left = x - 40.0
 	x = WALKWAY_HALF + 70.0
 	for id in east:
 		var w := _width(id, rng)
 		_add(id, x, x + w, rng)
-		x += w + (rng.randf_range(10.0, 80.0) if rng.randf() < 0.6 and id != LANE else 0.0)
+		x += w + (rng.randf_range(10.0, 40.0) if rng.randf() < 0.5 and id != LANE else 0.0)
 	right = x + 40.0
 	fronts.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.x0) < float(b.x0))
-	noticeboard = Vector2(-WALKWAY_HALF - 130.0, 150.0)
+	# By the walkway's head, on the water side of the walking lane.
+	noticeboard = Vector2(-WALKWAY_HALF - 150.0, LANE_Y + LANE_HALF + 34.0)
 	fuel_berth = Vector2(WALKWAY_HALF + 232.0, EDGE_Y - 24.0)
 	var cafe := get_front(CAFE)
 	if not cafe.is_empty():
-		var n := 3 if tier == HarbourFacilities.TIER_SMALL else 4
+		var n := 3
 		var span := float(cafe.x1) - float(cafe.x0)
 		for i in n:
 			var tx := float(cafe.x0) + span * (i + 0.5) / n
 			# Clear of the café's own door.
 			if absf(tx - float(cafe.door)) < DOOR_HALF + 60.0:
 				tx += (DOOR_HALF + 70.0) * signf(tx - float(cafe.door) + 0.01)
-			var table := Vector2(tx, 175.0 + (i % 2) * 70.0)
+			var table := Vector2(tx, TERRACE_Y + (i % 2) * TERRACE_ROW)
 			cafe_tables.append(table)
 			for side: float in [-1.0, 1.0]:
 				cafe_seats.append({"at": table + Vector2(side * 52.0, 0.0), "table": table, "facing": Vector2(-side, 0.0)})
