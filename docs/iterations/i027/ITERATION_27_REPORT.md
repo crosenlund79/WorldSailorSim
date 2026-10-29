@@ -1,5 +1,9 @@
 # I027 - The Cost of the Wind
 
+**Release classification: I027 Windows Playtest Release.** Authorised by
+the Captain with the Windows and GPU checks still pending. Nothing here has
+been verified on Windows.
+
 *Sailing to windward, what a boat costs to run, what it offers people
 aboard, and the first steps of Between Horizons.*
 
@@ -43,11 +47,41 @@ The plan: [DESIGN.md](DESIGN.md). Each tier has its own report.
 
 ## Tests on the release candidate
 
-RESULTS
+All runs are on Linux, in a container without a GPU.
+
+| Run | Commit | Result |
+|---|---|---|
+| Full regression (headless, all suites) | `4807b6c` (Tier 4 checkpoint) | **5,732 passed, 0 failed** (94 suites) |
+| Essential release suites (headless): build label, branding, saves, Dreams, fuel and costs, F10 everywhere, the walk, the compact quay, the opening | release candidate (`2c1b755`; code differs from `4807b6c` only in `CHANNEL`) | **455 passed, 0 failed** (9 suites) |
+| Launch smoke test (rendered: xvfb, OpenGL 3 on llvmpipe, 1600×900, 12 s) | release candidate | Starts to the title screen with no load errors; the wordmark and the label `BH · i027_04 · TEST · <commit>` show |
+| Full rendered regression | release candidate | **Stopped at the Captain's order** after 2 of 94 suites (335 passed, 0 failed); not repeated |
+| Content / localisation / GDScript guides / links | release candidate | 0 FAIL / 3,168 messages, 0 errors / 385 scripts reviewed / 0 broken |
+| Earlier rendered runs (Tier 4) | during the tier | The opening (screenshots), the character suites (924 passed), the waterfront before/after and the F10 key press on the quay, deck, cabin and chart |
+
+**Not run for this release:**
+- the full rendered regression;
+- the same-session benchmark against I026.
+
+The last benchmark (Tiers 1-2, register #14) was within drift. One known
+rendered check fails in the container: chart panning in
+`test_sailing_presentation` (about 150 ms against a 100 ms limit). It fails
+the same way on `release/i026`, so it needs a Windows/GPU reading.
 
 ## Performance
 
-PERFORMANCE
+- **Not re-measured for this release, by the Captain's order:**
+  - the Tier 4 additions (Dreams, the opening, the walk);
+  - the compact quay.
+
+  None of them adds per-frame work beyond drawing the people, which was
+  already done every frame.
+- **Last measurement:** Tiers 1-2 against I026, same session, in
+  [PERFORMANCE_OPPORTUNITIES.md](../../technical/PERFORMANCE_OPPORTUNITIES.md)
+  #14. Everything was within drift, Long Passage +8 %.
+- **Pending on the Captain's PC:**
+  - Long Passage on the GPU;
+  - chart panning;
+  - the quay at night.
 
 ## Build identity and save compatibility
 

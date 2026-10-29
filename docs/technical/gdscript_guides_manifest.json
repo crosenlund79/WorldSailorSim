@@ -63,9 +63,9 @@
    "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
   },
   "src/app/game_version.gd": {
-   "sha": "0345635abc7f1c7e",
+   "sha": "43d2919b204771f1",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: working title Between Horizons from GameVersion (DISPLAY_NAME, logos, tagline); opening story on New Game; name-free not-a-save text"
+   "note": "I027 release: STAGE 04, CHANNEL TEST"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
