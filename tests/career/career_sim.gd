@@ -76,6 +76,7 @@ func _run() -> void:
 				result.start_funds, result.end_funds, result.wall_s])
 	var csv := FileAccess.open("%s/summary.csv" % out, FileAccess.WRITE)
 	csv.store_string("\n".join(rows) + "\n")
+	csv.close()
 	print("CAREER SIM DONE")
 	get_tree().quit()
 
