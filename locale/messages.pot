@@ -7611,252 +7611,252 @@ msgstr ""
 msgid "Moored at %s"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:198
+#: src/electronics/instrument_face.gd:207
 msgctxt "instrument"
 msgid "PORT"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:198
+#: src/electronics/instrument_face.gd:207
 msgctxt "instrument"
 msgid "STBD"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:212 src/electronics/instrument_face.gd:369
+#: src/electronics/instrument_face.gd:221 src/electronics/instrument_face.gd:383
 msgctxt "instrument"
 msgid "MOORED"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:214 src/electronics/instrument_face.gd:371
+#: src/electronics/instrument_face.gd:223 src/electronics/instrument_face.gd:385
 msgctxt "instrument"
 msgid "AT ANCHOR"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:216
+#: src/electronics/instrument_face.gd:225
 msgctxt "instrument"
 msgid "AT THE ANCHORAGE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:217
+#: src/electronics/instrument_face.gd:226
 msgctxt "instrument"
 msgid "UNDER ENGINE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:217
+#: src/electronics/instrument_face.gd:226
 msgctxt "instrument"
 msgid "UNDER SAIL"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:224
+#: src/electronics/instrument_face.gd:233
 msgctxt "instrument"
 msgid "BOAT SPEED"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:226 src/electronics/instrument_face.gd:575 src/electronics/instrument_face.gd:601 src/electronics/instrument_face.gd:609
+#: src/electronics/instrument_face.gd:235 src/electronics/instrument_face.gd:589 src/electronics/instrument_face.gd:615 src/electronics/instrument_face.gd:623
 msgctxt "instrument"
 msgid "HEADING"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:228 src/electronics/instrument_face.gd:573
+#: src/electronics/instrument_face.gd:237 src/electronics/instrument_face.gd:587
 msgctxt "instrument"
 msgid "TRUE WIND"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:230
+#: src/electronics/instrument_face.gd:239
 msgctxt "instrument"
 msgid "ROUTE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:232 src/electronics/instrument_face.gd:379 src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:400
+#: src/electronics/instrument_face.gd:241 src/electronics/instrument_face.gd:393 src/electronics/instrument_face.gd:395 src/electronics/instrument_face.gd:414
 msgctxt "instrument"
 msgid "NEXT TURN"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:234
+#: src/electronics/instrument_face.gd:243
 msgctxt "instrument"
 msgid "WEATHER"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:236 src/electronics/instrument_face.gd:393 src/electronics/instrument_face.gd:576
+#: src/electronics/instrument_face.gd:245 src/electronics/instrument_face.gd:407 src/electronics/instrument_face.gd:590
 msgctxt "instrument"
 msgid "SAIL TRIM"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:238
+#: src/electronics/instrument_face.gd:247
 msgctxt "instrument"
 msgid "OVERVIEW"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:240
+#: src/electronics/instrument_face.gd:249
 msgctxt "instrument"
 msgid "SAILING"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:242
+#: src/electronics/instrument_face.gd:251
 msgctxt "instrument"
 msgid "NAVIGATION"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:292
+#: src/electronics/instrument_face.gd:301
 msgctxt "instrument"
 msgid "KNOTS"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:308 src/electronics/instrument_face.gd:488 src/weather/wind_field.gd
+#: src/electronics/instrument_face.gd:322 src/electronics/instrument_face.gd:502 src/weather/wind_field.gd
 msgctxt "compass"
 msgid "E"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:308 src/electronics/instrument_face.gd:486 src/ui/chart_plotter.gd:163 src/ui/radar_panel.gd:158
+#: src/electronics/instrument_face.gd:322 src/electronics/instrument_face.gd:500 src/ui/chart_plotter.gd:163 src/ui/radar_panel.gd:158
 msgctxt "compass"
 msgid "N"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:308 src/electronics/instrument_face.gd:490 src/weather/wind_field.gd
+#: src/electronics/instrument_face.gd:322 src/electronics/instrument_face.gd:504 src/weather/wind_field.gd
 msgctxt "compass"
 msgid "S"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:308 src/electronics/instrument_face.gd:492 src/weather/wind_field.gd
+#: src/electronics/instrument_face.gd:322 src/electronics/instrument_face.gd:506 src/weather/wind_field.gd
 msgctxt "compass"
 msgid "W"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:327 src/electronics/instrument_face.gd:367 src/electronics/instrument_face.gd:369 src/electronics/instrument_face.gd:377
+#: src/electronics/instrument_face.gd:341 src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:383 src/electronics/instrument_face.gd:391
 msgctxt "instrument"
 msgid "KN"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:367 src/electronics/instrument_face.gd:377 src/electronics/instrument_face.gd:388 src/electronics/instrument_face.gd:536
+#: src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:391 src/electronics/instrument_face.gd:402 src/electronics/instrument_face.gd:550
 msgctxt "instrument"
 msgid "CALM"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:369 src/electronics/instrument_face.gd:393 src/electronics/instrument_face.gd:575 src/electronics/instrument_face.gd:601
+#: src/electronics/instrument_face.gd:383 src/electronics/instrument_face.gd:407 src/electronics/instrument_face.gd:589 src/electronics/instrument_face.gd:615
 msgctxt "instrument"
 msgid "SPEED"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:369 src/electronics/instrument_face.gd:371 src/electronics/instrument_face.gd:394 src/electronics/instrument_face.gd:396
+#: src/electronics/instrument_face.gd:383 src/electronics/instrument_face.gd:385 src/electronics/instrument_face.gd:408 src/electronics/instrument_face.gd:410
 msgctxt "instrument"
 msgid "WIND"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:371
+#: src/electronics/instrument_face.gd:385
 msgctxt "instrument"
 msgid "CHAIN %d×"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:372
+#: src/electronics/instrument_face.gd:386
 msgctxt "instrument"
 msgid "ABOUT %d M"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:372
+#: src/electronics/instrument_face.gd:386
 msgctxt "instrument"
 msgid "DEPTH"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:372
+#: src/electronics/instrument_face.gd:386
 msgctxt "instrument"
 msgid "ESTIMATE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:379 src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:396 src/electronics/instrument_face.gd:398
+#: src/electronics/instrument_face.gd:393 src/electronics/instrument_face.gd:395 src/electronics/instrument_face.gd:410 src/electronics/instrument_face.gd:412
 msgctxt "instrument"
 msgid "NM"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:379 src/electronics/instrument_face.gd:400 src/electronics/instrument_face.gd:458
+#: src/electronics/instrument_face.gd:393 src/electronics/instrument_face.gd:414 src/electronics/instrument_face.gd:472
 msgctxt "instrument"
 msgid "THEN"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:380
+#: src/electronics/instrument_face.gd:394
 msgctxt "instrument"
 msgid "IN"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:380
+#: src/electronics/instrument_face.gd:394
 msgctxt "instrument"
 msgid "WIND THERE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:398 src/electronics/instrument_face.gd:580
+#: src/electronics/instrument_face.gd:395 src/electronics/instrument_face.gd:412 src/electronics/instrument_face.gd:594
 msgctxt "instrument"
 msgid "NONE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:381 src/electronics/instrument_face.gd:396 src/electronics/instrument_face.gd:399 src/electronics/instrument_face.gd:449
+#: src/electronics/instrument_face.gd:395 src/electronics/instrument_face.gd:410 src/electronics/instrument_face.gd:413 src/electronics/instrument_face.gd:463
 msgctxt "instrument"
 msgid "TO %s"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:382 src/electronics/instrument_face.gd:397 src/electronics/instrument_face.gd:399 src/electronics/instrument_face.gd:451
+#: src/electronics/instrument_face.gd:396 src/electronics/instrument_face.gd:411 src/electronics/instrument_face.gd:413 src/electronics/instrument_face.gd:465
 msgctxt "instrument"
 msgid "ETA"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:384 src/electronics/instrument_face.gd:516
+#: src/electronics/instrument_face.gd:398 src/electronics/instrument_face.gd:530
 msgctxt "instrument"
 msgid "NOW"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:387 src/electronics/instrument_face.gd:519
+#: src/electronics/instrument_face.gd:401 src/electronics/instrument_face.gd:533
 msgctxt "instrument"
 msgid "+%d H"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:394 src/electronics/instrument_face.gd:468 src/electronics/instrument_face.gd:576 src/electronics/instrument_face.gd:602
+#: src/electronics/instrument_face.gd:408 src/electronics/instrument_face.gd:482 src/electronics/instrument_face.gd:590 src/electronics/instrument_face.gd:616
 msgctxt "instrument"
 msgid "WIND ANGLE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:396
+#: src/electronics/instrument_face.gd:410
 msgctxt "instrument"
 msgid "ANCHORAGE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:396
+#: src/electronics/instrument_face.gd:410
 msgctxt "instrument"
 msgid "WAITING"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:460
+#: src/electronics/instrument_face.gd:474
 msgctxt "instrument"
 msgid "NO MORE TURNS"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:466 src/electronics/instrument_face.gd:626
+#: src/electronics/instrument_face.gd:480 src/electronics/instrument_face.gd:640
 msgctxt "instrument"
 msgid "ENGINE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:538
+#: src/electronics/instrument_face.gd:552
 msgctxt "instrument"
 msgid "G%d"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:583 src/electronics/instrument_face.gd:603 src/electronics/instrument_face.gd:610
+#: src/electronics/instrument_face.gd:597 src/electronics/instrument_face.gd:617 src/electronics/instrument_face.gd:624
 msgctxt "instrument"
 msgid "TO GO"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:584
+#: src/electronics/instrument_face.gd:598
 msgctxt "instrument"
 msgid "NEW COURSE"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:588
+#: src/electronics/instrument_face.gd:602
 msgctxt "instrument"
 msgid "WIND NOW"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:593
+#: src/electronics/instrument_face.gd:607
 msgctxt "instrument"
 msgid "GUSTS %d"
 msgstr ""
 
-#: src/electronics/instrument_face.gd:597
+#: src/electronics/instrument_face.gd:611
 msgctxt "instrument"
 msgid "FORECAST HERE (ESTIMATE)"
 msgstr ""

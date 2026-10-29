@@ -63,9 +63,9 @@
    "note": "I026 closing: traffic warning title, batched dial ticks, café stand-up point, quay probe, layout checks, waterfront walkthrough"
   },
   "src/app/game_version.gd": {
-   "sha": "bdf4d679c8d357cc",
-   "reviewed": "2026-10-28",
-   "note": "I026: version 0.112a, i026 stage 01, DEV (entries unchanged)"
+   "sha": "352b62be483783e6",
+   "reviewed": "2026-10-29",
+   "note": "I026 TEST checkpoint i026_06, version 0.112a"
   },
   "src/app/scene_router.gd": {
    "sha": "1ddf708627a20b17",
