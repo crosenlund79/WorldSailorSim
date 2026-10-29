@@ -123,8 +123,11 @@ func _test_engine_stops() -> void:
 	t.check_eq(result.switches.size(), 1, "a lasting good breeze stops the engine once")
 	if result.switches.size() == 1:
 		var after: float = result.switches[0][0] - 2 * 3600.0
-		t.check(after >= profile.engine_stop_confirm_s + 3600.0 and after <= 3.0 * 3600.0,
-			"the engine stops only after the average has stayed above 6 kn for a while (after %s)" % Simulation.format_duration(after))
+		# I027 Tier 4: the threshold is the general 6 kn or, lower, the boat's
+		# own speed under engine (never motor when the sails are as fast).
+		var stop_kn := minf(profile.engine_stop_above_kn, profile.engine_speed_kn)
+		t.check(after >= profile.engine_stop_confirm_s + 1800.0 and after <= 3.0 * 3600.0,
+			"the engine stops only after the average has stayed above %.1f kn for a while (after %s)" % [stop_kn, Simulation.format_duration(after)])
 	t.check(result.state.sails_set() and is_equal_approx(result.state.speed_kn, 7.5), "back under sail at the sailing speed")
 
 

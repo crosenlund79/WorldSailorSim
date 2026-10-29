@@ -709,8 +709,16 @@ func _on_state_replaced() -> void:
 ## if the potential beats the engine-start threshold, otherwise motor). It is
 ## an estimate: it ignores the controller's averaging and hysteresis.
 func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time := -1.0, to_nm := -1.0) -> float:
+	return float(estimate_route(path, from_nm, start_time, to_nm).seconds)
+
+
+## The same walk along a route, in full (I027 Tier 4, for PassagePlan):
+## {"seconds", "engine_seconds", "engine_nm", "sail_nm", "fuel_l"} - the fuel
+## the engine would burn, never more than is aboard.
+func estimate_route(path: PackedVector2Array, from_nm := 0.0, start_time := -1.0, to_nm := -1.0) -> Dictionary:
+	var out := {"seconds": 0.0, "engine_seconds": 0.0, "engine_nm": 0.0, "sail_nm": 0.0, "fuel_l": 0.0}
 	if path.size() < 2:
-		return 0.0
+		return out
 	var profile := GameSession.get_vessel_profile()
 	var cumulative := GeoMath.cumulative_distances(path)
 	var total := cumulative[cumulative.size() - 1]
@@ -753,10 +761,16 @@ func estimate_route_seconds(path: PackedVector2Array, from_nm := 0.0, start_time
 		seconds += ds / maxf(speed, MIN_ESTIMATE_SPEED_KN) * 3600.0
 		if not sailing:
 			fuel -= ds / profile.engine_speed_kn * burn_lph
+			out.engine_seconds += ds / profile.engine_speed_kn * 3600.0
+			out.engine_nm += ds
+			out.fuel_l += ds / profile.engine_speed_kn * burn_lph
+		else:
+			out.sail_nm += ds
 		if sailing and course.zigzag:
 			seconds += CourseMaker.expected_tacks(ds, float(sail.delta), cumulative[i] - d) * profile.tack_loss_s
 		d += ds
-	return seconds
+	out.seconds = seconds
+	return out
 
 
 ## Estimated game time of arrival for the active voyage (cached; refreshed as
