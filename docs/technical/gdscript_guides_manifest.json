@@ -373,9 +373,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "src/core/simulation.gd": {
-   "sha": "6c20e8bb669f32c1",
+   "sha": "fec0c1aa847042d3",
    "reviewed": "2026-10-29",
-   "note": "I027 Tier 1: windward sailing, tacking, ETA"
+   "note": "I027 Tier 1: open-water corridor check while tacking"
   },
   "src/core/vessel_condition.gd": {
    "sha": "d1e2f8e4ae1d2c4b",

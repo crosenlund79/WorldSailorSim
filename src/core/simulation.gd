@@ -541,16 +541,28 @@ func _tack_reason(voyage: Voyage, course: Dictionary, side: int, cross: float, b
 	return ""
 
 
-## True when the boat on `side` stays afloat until the next evaluation (with
-## a margin): the routing's own test of where a boat may lie.
+## True when the boat on `side` stays in open water until the next
+## evaluation (with a margin): the whole corridor from the course line out to
+## where it will be is afloat (the routing's own test), checked every
+## CORRIDOR_STEP_NM - so the lane is the water round the route, a boat never
+## slips behind an island, and its way back to the line is always clear.
 func _water_ahead(voyage: Voyage, course: Dictionary, side: int, cross: float, bearing: float) -> bool:
 	var chosen := CourseMaker.side_of(course, side)
 	var ahead := float(chosen.speed) * sin(deg_to_rad(float(chosen.delta))) * EVALUATION_INTERVAL / 3600.0 + 0.3
+	return _corridor_afloat(voyage.position_at(voyage.progress_nm), bearing, cross + side * ahead)
+
+
+const CORRIDOR_STEP_NM := 0.5
+
+
+## Every CORRIDOR_STEP_NM from the line point out to `offset_nm` (signed,
+## to the right of `bearing`), and the end itself, is afloat.
+func _corridor_afloat(line: Vector2, bearing: float, offset_nm: float) -> bool:
 	var router := SeaRouter.get_default()
-	var line := voyage.position_at(voyage.progress_nm)
-	for share: float in [0.5, 1.0]:
-		var probe := GeoMath.normalize(GeoMath.offset_nm(line, bearing + 90.0, cross + side * ahead * share))
-		if not router.is_afloat(probe):
+	var steps := ceili(absf(offset_nm) / CORRIDOR_STEP_NM)
+	for i in range(1, steps + 1):
+		var d := signf(offset_nm) * minf(i * CORRIDOR_STEP_NM, absf(offset_nm))
+		if not router.is_afloat(GeoMath.normalize(GeoMath.offset_nm(line, bearing + 90.0, d))):
 			return false
 	return true
 
