@@ -8,7 +8,7 @@ playtesting.
 |---|---|
 | Iteration branch | `iteration/i027` |
 | Tier 3 checkpoint | `backup/i027-tier-3` = `73473b4` (full regression 5,651 / 0) |
-| Tier 4 checkpoint | `backup/i027-tier-4` = `TBD` (full regression: TBD) |
+| Tier 4 checkpoint | `backup/i027-tier-4` = `4807b6c` (full regression 5,732 / 0, 94 suites) |
 | Build label | `BH · i027_04 · DEV` |
 | Version | 0.113a. Save format 12 is unchanged: Dreams is an optional new section with safe defaults |
 
@@ -45,7 +45,7 @@ found it.
 
 ## Tests
 
-- **Full regression:** TBD.
+- **Full regression** at `4807b6c` (headless Linux): **5,732 passed, 0 failed**, in 94 suites.
 - **New suites:** `test_dreams`, `test_passage_plan`, `test_ais`,
   `test_telemetry`, `test_opening`.
 - **Extended suites:** `test_upkeep_ui` (F10 everywhere),
