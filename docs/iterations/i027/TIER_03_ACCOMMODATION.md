@@ -1,7 +1,15 @@
 # I027 Tier 3 - Yacht accommodation and commercial capability
 
-**Status: built under the Captain's conditional approval of Tiers 1-2.** No
-passenger marketplace (that is I028). Design: [DESIGN.md](DESIGN.md).
+**Status: done.** Built under the Captain's conditional approval of Tiers
+1-2. No passenger marketplace (that is I028). Design: [DESIGN.md](DESIGN.md).
+
+| | |
+|---|---|
+| Checkpoint | `backup/i027-tier-3` = `73473b4` |
+| Build label | `BH · i027_03 · DEV` |
+| Full regression | **5,651 passed, 0 failed** at `73473b4` (89 suites, headless Linux; Tier 2 had 5,628) |
+| `test_accommodation` | 23 checks (data, art, queries, classes, the Pacific, the boatyard in English and Danish) |
+| Danish | 3,125 messages, 0 errors |
 
 ## What each boat offers, as its cabin is drawn
 
