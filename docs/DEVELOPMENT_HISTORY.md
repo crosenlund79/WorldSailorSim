@@ -24,7 +24,8 @@ and are never merged back into one chain.
 | Build identifier (small adjustment after I024) | 0.110a | WorldSailorSim | the bottom-right `LCH · i024 · DEV` label from `GameVersion`; on `claude/captains-hat-visual-redesign-cgoy5o` |
 | I025 A Little More Room Aboard: found companions (no pet at start, dock encounters, adoption, the girl, two companions), a more believable Real Horizon | 0.111a | WorldSailorSim | started at `cfc9b52b9541fd024d6eb3c7bde3c836bd947439`; `release/i025` at the final tested commit ([report](iterations/i025/ITERATION_25_REPORT.md)) |
 | I026 A World You Can Touch: the walkable quay with separate storefronts, opening hours, townsfolk and the café; SKERRY marine electronics; the cabin's things and the winch as objects with focused views | 0.112a | WorldSailorSim | started at `3a27956e1bc7fb6cea11e205615b0455504793dd`; `release/i026` at the final tested commit ([report](iterations/i026/ITERATION_26_REPORT.md)) |
-| I027 | — | WorldSailorSim | next major iteration, not yet commissioned |
+| I027 The Cost of the Wind: sailing to windward and tacking, fuel and running costs, yacht accommodation, Dreams of the Sea, the opening story and the working title Between Horizons, the character polish and the compact waterfront | 0.113a | WorldSailorSim | started at `51c247e9d6420aa3334554ac95e7e1d3ca965c34` (`release/i026`); tier checkpoints `backup/i027-tier-1` to `-tier-4`; `release/i027` at the final commit ([report](iterations/i027/ITERATION_27_REPORT.md)) |
+| I028 | — | WorldSailorSim | passengers; next major iteration, not yet authorised |
 
 ## The Great Handover (2026-10-28)
 

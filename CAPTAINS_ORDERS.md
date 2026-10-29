@@ -682,4 +682,20 @@ Two; the wording was again not found in the repository in Iteration 18.
   its focused view. See `docs/iterations/i026/ITERATION_26_REPORT.md` and
   `docs/technical/PHYSICAL_INTERFACE.md`. Branches `iteration/i026` (from
   `3a27956`) and recovery branch `release/i026`.
-- **Next numbered major iteration: I027** (not yet commissioned).
+- **Iteration 27, The Cost of the Wind**, version 0.113a, save format 12
+  (unchanged; optional `ledger` and `dreams` sections): sailing to windward
+  (the autopilot beats and gybes on the polar's best angles, manual tacking
+  with K or the wheel, an ETA that counts the zigzag); fuel, a pump on every
+  quay, harbour dues, Motor to windward and the running costs, with one
+  balance file and the career's books; what each boat offers people aboard,
+  checked against its drawn cabin, ready for I028's bookings; Dreams of the
+  Sea, the PassagePlan contract, AIS preparation and career telemetry; the
+  opening story and the working title Between Horizons (a working title
+  only: a released game has that name); the Captain and the townsfolk
+  redrawn with one shared walk and a credible hat; the compact waterfront.
+  See `docs/iterations/i027/ITERATION_27_REPORT.md`. Branches
+  `iteration/i027` (from `51c247e`), tier checkpoints
+  `backup/i027-tier-1` to `-tier-4`, and recovery branch `release/i027`.
+  Windows acceptance pending.
+- **Next numbered major iteration: I028** (passengers; not to begin until
+  the Captain authorises it).
