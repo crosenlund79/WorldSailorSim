@@ -1,0 +1,30 @@
+{
+ "id": "swedish_east_coast",
+ "name": "The Swedish east coast",
+ "parent": "europe",
+ "source": "OpenStreetMap land polygons via geo-maps earth-lands-100m 0.6.0 (npm @geo-maps/earth-lands-100m, about 100 m accuracy). Map data (c) OpenStreetMap contributors, ODbL 1.0, openstreetmap.org/copyright. Package code MIT.",
+ "retrieved": "2026-10-25",
+ "licence": "ODbL 1.0 (derived database: this region's raster, land and graph are ODbL too)",
+ "label_source": "Label positions from GeoNames town coordinates (lutangar/cities.json, CC BY 4.0, geonames.org); label texts: tools/navigation/swedish_labels.json.",
+ "crs": "WGS 84 longitude/latitude (EPSG:4326); raster in Mercator rows like the base chart",
+ "processing": "Clipped to the region with a 0.1 deg margin; holes filled (lakes and tile-seam artefacts are land); raster at 360 cells per Mercator degree (6 x the base), land if any part of a cell is land (1/4 cell precision), approach water with a water majority; display simplified 0.0003 deg (detail) and 0.0035 deg (overview). Not for navigation.",
+ "factor": 6,
+ "base_cells": {
+  "column": 2478,
+  "row": 1807,
+  "columns": 186,
+  "rows": 285
+ },
+ "bounds": {
+  "west": 16.299999999999997,
+  "south": 57.54262585398258,
+  "east": 19.4,
+  "north": 60.00392867342939
+ },
+ "columns": 1116,
+ "rows": 1710,
+ "cells_per_mercator_degree": 360,
+ "mercator_north": 75.4639871037028,
+ "base_west": 16.299999999999997,
+ "detail_from_px_per_degree": 140.0
+}

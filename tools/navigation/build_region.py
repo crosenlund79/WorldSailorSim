@@ -66,6 +66,50 @@ REGIONS = {
         "tile_deg": 0.5,
         "labels": "danish_labels.json",
     },
+    # Sweden (Regions and Harbours 2026): Bohuslän north of the Danish region (its south edge is
+    # Denmark's north edge), and the east coast from Västervik to the Stockholm archipelago and
+    # Åland's Sea. Both refine Europe's chart.
+    "bohuslan": {
+        "name": "Bohuslän",
+        "west": 10.9, "east": 12.4, "south": 58.0055, "north": 59.2,
+        "factor": 6,
+        "detail_simplify": 0.0003, "detail_min_area": 0.000002,
+        "overview_simplify": 0.0035, "overview_min_area": 0.0002,
+        "tile_deg": 0.5,
+        "labels": "swedish_labels.json", "label_group": "bohuslan",
+    },
+    "swedish_east_coast": {
+        "name": "The Swedish east coast",
+        "west": 16.3, "east": 19.4, "south": 57.55, "north": 60.0,
+        "factor": 6,
+        "detail_simplify": 0.0003, "detail_min_area": 0.000002,
+        "overview_simplify": 0.0035, "overview_min_area": 0.0002,
+        "tile_deg": 0.5,
+        "labels": "swedish_labels.json", "label_group": "east",
+    },
+    # New Zealand refines the world chart (12 cells per Mercator degree) 18 times, to 216: the
+    # North Island with Cook Strait, the Marlborough Sounds and Tasman Bay; and the South Island
+    # south of them with Stewart Island.
+    "nz_north": {
+        "name": "New Zealand: North Island and Cook Strait",
+        "parent": "world",
+        "west": 171.9, "east": 179.0, "south": -41.7, "north": -34.0,
+        "factor": 18,
+        "detail_simplify": 0.0003, "detail_min_area": 0.000002,
+        "overview_simplify": 0.0035, "overview_min_area": 0.0002,
+        "tile_deg": 0.5,
+        "labels": "new_zealand_labels.json", "label_group": "north",
+    },
+    "nz_south": {
+        "name": "New Zealand: South Island",
+        "parent": "world",
+        "west": 166.0, "east": 174.6, "south": -47.5, "north": -41.733,
+        "factor": 18,
+        "detail_simplify": 0.0003, "detail_min_area": 0.000002,
+        "overview_simplify": 0.0035, "overview_min_area": 0.0002,
+        "tile_deg": 0.5,
+        "labels": "new_zealand_labels.json", "label_group": "south",
+    },
 }
 
 # Graph lattice in fine cells (coarse to fine) and the narrow-water skeleton spacing.
@@ -81,16 +125,25 @@ def merc_y(lat):
     return math.degrees(math.log(math.tan(math.pi / 4.0 + math.radians(lat) / 2.0)))
 
 
+# The chart a region refines: Europe's (European waters) or the world chart (anywhere else,
+# e.g. New Zealand; Regions and Harbours 2026). Same Mercator raster layout either way.
+PARENTS = {
+    "europe": ("europe_navmask.json", "europe_navmask.png", "europe_route_graph.json"),
+    "world": ("world/world.json", "world/navmask.png", "world/graph.json"),
+}
+
+
 class Base:
-    def __init__(self):
-        meta = json.load(open(os.path.join(NAV_DIR, "europe_navmask.json")))
+    def __init__(self, parent="europe"):
+        meta_file, mask_file, graph_file = PARENTS[parent]
+        meta = json.load(open(os.path.join(NAV_DIR, meta_file)))
         self.west = meta["bounds"]["west"]
         self.cpd = meta["cells_per_mercator_degree"]
         self.my_north = meta["mercator_north"]
-        mask = np.array(Image.open(os.path.join(NAV_DIR, "europe_navmask.png")))
+        mask = np.array(Image.open(os.path.join(NAV_DIR, mask_file)).convert("L"))
         self.mask = mask
         self.rows, self.cols = mask.shape
-        graph = json.load(open(os.path.join(NAV_DIR, "europe_route_graph.json")))
+        graph = json.load(open(os.path.join(NAV_DIR, graph_file)))
         n = graph["nodes"]
         self.nodes = [(n[i], n[i + 1]) for i in range(0, len(n), 2)]
         e = graph["edges"]
@@ -427,7 +480,7 @@ def tiles_and_coast(polygons, region, tile_deg):
     return tiles, coast
 
 
-def place_labels(spec, cities_path):
+def place_labels(spec, cities_path, group=""):
     """Chart labels from town positions (GeoNames via cities.json, CC BY 4.0): a land label at a
     town on that land, a water label halfway between two towns facing each other across it."""
     towns = {}
@@ -436,6 +489,8 @@ def place_labels(spec, cities_path):
             towns.setdefault(c["name"], (float(c["lng"]), float(c["lat"])))
     labels = []
     for entry in spec["labels"]:
+        if group and entry.get("group", group) != group:
+            continue
         at = [towns[t] for t in entry["towns"]]
         lon = sum(p[0] for p in at) / len(at) + entry.get("shift", [0, 0])[0]
         lat = sum(p[1] for p in at) / len(at) + entry.get("shift", [0, 0])[1]
@@ -481,7 +536,8 @@ def main():
     rid = sys.argv[3] if len(sys.argv) > 3 else "denmark"
     spec = REGIONS[rid]
     started = time.time()
-    base = Base()
+    parent = spec.get("parent", "europe")
+    base = Base(parent)
     region = Region(rid, spec, base)
     print("region %s: base cells %d..%d x %d..%d, fine raster %d x %d, geo %.4f..%.4f E %.4f..%.4f N" % (
         rid, region.c0, region.c1, region.r0, region.r1, region.cols, region.rows,
@@ -556,7 +612,8 @@ def main():
     overview = display_polygons(land, spec["overview_simplify"], spec["overview_min_area"])
     d_tiles, d_coast = tiles_and_coast(detail, region, spec["tile_deg"])
     o_tiles, o_coast = tiles_and_coast(overview, region, 4.0)
-    labels = place_labels(json.load(open(os.path.join(os.path.dirname(__file__), spec["labels"]))), cities_path)
+    labels = place_labels(json.load(open(os.path.join(os.path.dirname(__file__), spec["labels"]))), cities_path,
+                          spec.get("label_group", ""))
     json.dump({"region": rid, "name": spec["name"],
                "detail": {"fill_tiles": d_tiles, "coast": d_coast},
                "overview": {"fill_tiles": o_tiles, "coast": o_coast},
@@ -567,13 +624,13 @@ def main():
           flush=True)
 
     meta = {
-        "id": rid, "name": spec["name"],
+        "id": rid, "name": spec["name"], "parent": parent,
         "source": "OpenStreetMap land polygons via geo-maps earth-lands-100m 0.6.0 (npm @geo-maps/earth-lands-100m, "
                   "about 100 m accuracy). Map data (c) OpenStreetMap contributors, ODbL 1.0, "
                   "openstreetmap.org/copyright. Package code MIT.",
         "retrieved": "2026-10-25",
         "licence": "ODbL 1.0 (derived database: this region's raster, land and graph are ODbL too)",
-        "label_source": "Label positions from GeoNames town coordinates (lutangar/cities.json, CC BY 4.0, geonames.org); label texts: tools/navigation/danish_labels.json.",
+        "label_source": "Label positions from GeoNames town coordinates (lutangar/cities.json, CC BY 4.0, geonames.org); label texts: tools/navigation/%s." % spec["labels"],
         "crs": "WGS 84 longitude/latitude (EPSG:4326); raster in Mercator rows like the base chart",
         "processing": ("Clipped to the region with a 0.1 deg margin; holes filled (lakes and tile-seam artefacts "
                        "are land); raster at %d cells per Mercator degree (%d x the base), land if any part of a cell "

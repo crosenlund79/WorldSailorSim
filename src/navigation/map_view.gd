@@ -145,6 +145,8 @@ var _has_world := false
 var _world_width := 0.0
 var _overlay_view_key := Vector3.INF
 var _europe_layer: Node2D
+## Detail regions of the world chart itself (New Zealand), over the world land.
+var _world_detail_layer: Node2D
 var _world_overview: Node2D
 var _world_regional: Node2D
 ## The world land, projected once and kept for every chart opened later.
@@ -670,6 +672,9 @@ func _build_land() -> void:
 	_europe_layer = Node2D.new()
 	_europe_layer.name = "Europe"
 	_land.add_child(_europe_layer)
+	_world_detail_layer = Node2D.new()
+	_world_detail_layer.name = "WorldRegions"
+	_land.add_child(_world_detail_layer)
 
 	# Detail regions (Iteration 14): inside them the base land is cut away and
 	# the region draws its own (see _build_regions()).
@@ -1016,7 +1021,8 @@ func _load_region_rects() -> void:
 		var top_left := projection.geo_to_map(Vector2(meta.bounds.west, meta.bounds.north))
 		var bottom_right := projection.geo_to_map(Vector2(meta.bounds.east, meta.bounds.south))
 		_regions.append({"id": String(meta.id), "name": String(meta.get("name", meta.id)), "folder": String(entry.folder),
-			"rect": Rect2(top_left, bottom_right - top_left), "detail_px": float(meta.get("detail_from_px_per_degree", 140.0))})
+			"rect": Rect2(top_left, bottom_right - top_left), "detail_px": float(meta.get("detail_from_px_per_degree", 140.0)),
+			"parent": String(entry.get("parent", "europe"))})
 
 
 ## The parts of a base land polygon outside every region.
@@ -1064,10 +1070,19 @@ func _build_regions() -> void:
 		if data.is_empty():
 			continue
 		var layers := {"detail_px": region.detail_px}
+		var on_world: bool = region.parent == "world"
 		for level in ["overview", "detail"]:
 			var layer := Node2D.new()
 			layer.name = "Region_%s_%s" % [region.id, level]
-			_europe_layer.add_child(layer)
+			(_world_detail_layer if on_world else _europe_layer).add_child(layer)
+			if on_world:
+				# The world's own (coarser) land lies under a world region: its
+				# water is painted over it first, so only the region's land shows
+				# (Regions and Harbours 2026). A copy one world-width west keeps it
+				# in view across the Date Line.
+				_add_world_region_level(layer, region.rect, data[level])
+				layers[level] = layer
+				continue
 			for points: PackedVector2Array in data[level].fill:
 				var polygon := Polygon2D.new()
 				polygon.color = LAND
@@ -1104,6 +1119,24 @@ func _build_regions() -> void:
 	_update_region_detail()
 
 
+func _add_world_region_level(layer: Node2D, rect: Rect2, shapes: Dictionary) -> void:
+	for copy_index in 2:
+		var copy := Node2D.new()
+		copy.name = ["Main", "West"][copy_index]
+		copy.position.x = -_world_width * copy_index
+		layer.add_child(copy)
+		var water := Polygon2D.new()
+		water.color = WATER
+		water.polygon = PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+		copy.add_child(water)
+		for points: PackedVector2Array in shapes.fill:
+			var polygon := Polygon2D.new()
+			polygon.color = LAND
+			polygon.polygon = points
+			copy.add_child(polygon)
+		_add_coast_tiles(copy, shapes.coast, "Coast")
+
+
 ## Shows each region's detailed layer once the chart is zoomed in far enough,
 ## its overview layer otherwise.
 func _update_region_detail() -> void:
@@ -1122,6 +1155,7 @@ func _update_region_detail() -> void:
 			_build_world_layer(_world_regional, "regional")
 		if _world_regional:
 			_world_regional.visible = regional
+		_world_detail_layer.visible = regional
 	for layers in _region_layers:
 		var detail: bool = px >= float(layers.detail_px)
 		(layers.detail as Node2D).visible = detail

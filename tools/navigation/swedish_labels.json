@@ -1,0 +1,18 @@
+{
+	"note": "Chart labels for the Swedish regions (Regions and Harbours 2026), as danish_labels.json: positions from GeoNames town coordinates (cities.json, CC BY 4.0), shifted [lon, lat] degrees to keep a water label on the water. 'group' names the region (bohuslan, east). Approximate, for the chart's look only.",
+	"countries": ["SE"],
+	"labels": [
+		{"text": "BOHUSLÄN", "kind": "land", "towns": ["Uddevalla"], "shift": [0.15, 0.25], "group": "bohuslan"},
+		{"text": "Orust", "kind": "island", "towns": ["Lysekil"], "shift": [0.2, -0.06], "group": "bohuslan"},
+		{"text": "Skagerrak", "kind": "sea", "towns": ["Strömstad", "Lysekil"], "shift": [-0.55, 0.0], "min_px_per_degree": 40.0, "group": "bohuslan"},
+		{"text": "Gullmarn", "kind": "sea", "towns": ["Lysekil"], "shift": [0.1, 0.04], "group": "bohuslan"},
+		{"text": "SÖDERMANLAND", "kind": "land", "towns": ["Nyköping"], "shift": [0.0, 0.12], "group": "east"},
+		{"text": "ÖSTERGÖTLAND", "kind": "land", "towns": ["Söderköping"], "shift": [-0.35, 0.05], "group": "east"},
+		{"text": "UPPLAND", "kind": "land", "towns": ["Norrtälje"], "shift": [-0.35, 0.15], "group": "east"},
+		{"text": "Gotland", "kind": "island", "towns": ["Visby"], "shift": [0.3, 0.05], "group": "east"},
+		{"text": "Stockholm Archipelago", "kind": "sea", "towns": ["Vaxholm", "Nynäshamn"], "shift": [0.45, 0.0], "group": "east"},
+		{"text": "Baltic Sea", "kind": "sea", "towns": ["Oxelösund", "Västervik"], "shift": [0.9, -0.1], "min_px_per_degree": 40.0, "group": "east"},
+		{"text": "Åland Sea", "kind": "sea", "towns": ["Norrtälje"], "shift": [0.85, 0.15], "min_px_per_degree": 40.0, "group": "east"},
+		{"text": "St. Anna and Gryt", "kind": "sea", "towns": ["Valdemarsvik", "Söderköping"], "shift": [0.4, -0.02], "group": "east"}
+	]
+}

@@ -1,6 +1,10 @@
 {
-	"note": "High-detail chart regions (Iteration 14). Each folder holds region.json, navmask.png, land.json and graph.json, built by tools/navigation/build_region.py. The base chart (europe_*) is used wherever no region covers. See DEV_GUIDES/CHART_REGIONS.md.",
+	"note": "High-detail chart regions (Iteration 14; Sweden and New Zealand: Regions and Harbours 2026). Each folder holds region.json, navmask.png, land.json and graph.json, built by tools/navigation/build_region.py. 'parent' is the chart a region refines: 'europe' (the default) or 'world'. Regions never overlap. The parent chart is used wherever no region covers. See DEV_GUIDES/CHART_REGIONS.md.",
 	"regions": [
-		{"id": "denmark", "folder": "res://data/navigation/regions/denmark"}
+		{"id": "denmark", "folder": "res://data/navigation/regions/denmark"},
+		{"id": "bohuslan", "folder": "res://data/navigation/regions/bohuslan"},
+		{"id": "swedish_east_coast", "folder": "res://data/navigation/regions/swedish_east_coast"},
+		{"id": "nz_north", "parent": "world", "folder": "res://data/navigation/regions/nz_north"},
+		{"id": "nz_south", "parent": "world", "folder": "res://data/navigation/regions/nz_south"}
 	]
 }

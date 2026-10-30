@@ -88,8 +88,9 @@ static func load_from(mask_path: String, meta_path: String) -> NavGrid:
 	return grid
 
 
-## The whole hierarchy: the world grid, Europe as its region, and Europe's
-## own regions (Denmark). Null when the world data is missing.
+## The whole hierarchy: the world grid, Europe as its first region, Europe's
+## own regions (Denmark, Sweden) and the world's (New Zealand). Null when the
+## world data is missing.
 static func load_world(world_mask := WORLD_MASK, world_meta := WORLD_META, europe_mask := DEFAULT_MASK,
 		europe_meta := DEFAULT_META, regions_index := REGIONS_INDEX) -> NavGrid:
 	var world := NavGrid.load_from(world_mask, world_meta)
@@ -97,6 +98,8 @@ static func load_world(world_mask := WORLD_MASK, world_meta := WORLD_META, europ
 		return null
 	world.wraps = bool(world.meta.get("wraps", false))
 	world.region_id = "world"
+	# Detail regions of the world chart itself (New Zealand; Regions and Harbours 2026).
+	world.load_regions(regions_index, "world")
 	var europe := NavGrid.load_from(europe_mask, europe_meta)
 	var link: Dictionary = world.meta.get("europe", {})
 	if europe and not link.is_empty():
@@ -106,12 +109,14 @@ static func load_world(world_mask := WORLD_MASK, world_meta := WORLD_META, europ
 		europe.base_cell = Vector2i(int(link.base_cells.column), int(link.base_cells.row))
 		europe.base_size = Vector2i(int(link.base_cells.columns), int(link.base_cells.rows))
 		europe.load_regions(regions_index)
-		world.regions = [europe]
+		world.regions.push_front(europe)
 	return world
 
 
-## Loads the regional grids listed in `index_path` (missing index: none).
-func load_regions(index_path := REGIONS_INDEX) -> void:
+## Loads the regional grids listed in `index_path` (missing index: none) that
+## refine `parent`: "europe" (the European chart; an entry without "parent")
+## or "world" (the world chart).
+func load_regions(index_path := REGIONS_INDEX, parent := "europe") -> void:
 	regions.clear()
 	if not FileAccess.file_exists(index_path):
 		return
@@ -119,6 +124,8 @@ func load_regions(index_path := REGIONS_INDEX) -> void:
 	if not index is Dictionary:
 		return
 	for entry: Dictionary in index.get("regions", []):
+		if String(entry.get("parent", "europe")) != parent:
+			continue
 		var folder: String = entry.get("folder", "")
 		var region := NavGrid.load_region(folder.path_join("navmask.png"), folder.path_join("region.json"))
 		if region:

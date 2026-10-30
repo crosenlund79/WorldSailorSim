@@ -1,0 +1,22 @@
+{
+	"note": "Chart labels for the New Zealand regions (Regions and Harbours 2026), as danish_labels.json: positions from GeoNames town coordinates (cities.json, CC BY 4.0), shifted [lon, lat] degrees to keep a water label on the water. 'group' names the region (north, south). Approximate, for the chart's look only.",
+	"countries": ["NZ"],
+	"labels": [
+		{"text": "NORTH ISLAND", "kind": "land", "towns": ["Taupo"], "group": "north"},
+		{"text": "Northland", "kind": "land", "towns": ["Kaitaia", "Whangarei"], "shift": [0.0, 0.0], "group": "north"},
+		{"text": "Bay of Islands", "kind": "sea", "towns": ["Paihia", "Kerikeri"], "shift": [0.12, 0.1], "group": "north"},
+		{"text": "Hauraki Gulf", "kind": "sea", "towns": ["Auckland", "Coromandel"], "shift": [0.0, 0.12], "group": "north"},
+		{"text": "Bay of Plenty", "kind": "sea", "towns": ["Tauranga", "Whakatane"], "shift": [0.0, 0.45], "min_px_per_degree": 40.0, "group": "north"},
+		{"text": "Hawke Bay", "kind": "sea", "towns": ["Napier"], "shift": [0.35, 0.3], "group": "north"},
+		{"text": "Cook Strait", "kind": "sea", "towns": ["Wellington", "Picton"], "shift": [-0.1, -0.15], "group": "north"},
+		{"text": "Marlborough Sounds", "kind": "sea", "towns": ["Picton"], "shift": [0.05, 0.18], "group": "north"},
+		{"text": "Tasman Bay", "kind": "sea", "towns": ["Nelson", "Motueka"], "shift": [0.0, 0.22], "group": "north"},
+		{"text": "Tasman Sea", "kind": "sea", "towns": ["New Plymouth"], "shift": [-1.3, 0.3], "min_px_per_degree": 40.0, "group": "north"},
+		{"text": "SOUTH ISLAND", "kind": "land", "towns": ["Ashburton"], "shift": [-0.9, 0.2], "group": "south"},
+		{"text": "Pegasus Bay", "kind": "sea", "towns": ["Christchurch"], "shift": [0.3, 0.2], "group": "south"},
+		{"text": "Canterbury Bight", "kind": "sea", "towns": ["Ashburton", "Timaru"], "shift": [0.7, -0.05], "min_px_per_degree": 40.0, "group": "south"},
+		{"text": "Foveaux Strait", "kind": "sea", "towns": ["Bluff"], "shift": [-0.15, -0.2], "group": "south"},
+		{"text": "Stewart Island", "kind": "island", "towns": ["Bluff"], "shift": [-0.25, -0.55], "group": "south"},
+		{"text": "Fiordland", "kind": "land", "towns": ["Te Anau"], "shift": [-0.55, 0.05], "group": "south"}
+	]
+}

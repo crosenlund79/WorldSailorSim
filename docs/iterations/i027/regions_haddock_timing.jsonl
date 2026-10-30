@@ -1,0 +1,8 @@
+{"event": "start", "iso": "2026-10-30T07:49:01+00:00", "epoch": 1793346541.431, "monotonic_s": 67.45, "boot": "a6613b62", "note": "start ef6aed4 on claude/captains-hat-visual-redesign-cgoy5o (17 playtest fixes complete, pushed, verified); tree clean"}
+{"event": "preflight_backup_begin", "iso": "2026-10-30T07:49:01+00:00", "epoch": 1793346541.447, "monotonic_s": 67.47, "boot": "a6613b62", "note": ""}
+{"event": "preflight_backup_end", "iso": "2026-10-30T07:49:19+00:00", "epoch": 1793346559.134, "monotonic_s": 85.16, "boot": "a6613b62", "note": "backup/i027-before-regions-haddock = ef6aed4 verified; continuing on claude/captains-hat-visual-redesign-cgoy5o"}
+{"event": "research_begin", "iso": "2026-10-30T07:49:19+00:00", "epoch": 1793346559.150, "monotonic_s": 85.18, "boot": "a6613b62", "note": ""}
+{"event": "parallel_research_agents_begin", "iso": "2026-10-30T07:52:34+00:00", "epoch": 1793346754.600, "monotonic_s": 280.62, "boot": "a6613b62", "note": "3 research agents (DK, SE, NZ) compile verified destination lists; main thread does chart engineering"}
+{"event": "research_end", "iso": "2026-10-30T07:53:50+00:00", "epoch": 1793346830.443, "monotonic_s": 356.47, "boot": "a6613b62", "note": "main thread: audit + design (DK 26, SE 10, NZ 4 harbours; 0 named anchorages); detailed research delegated to 3 agents"}
+{"event": "navigation_begin", "iso": "2026-10-30T07:53:50+00:00", "epoch": 1793346830.455, "monotonic_s": 356.48, "boot": "a6613b62", "note": "detailed charts: Sweden x2 (European), New Zealand x2 (world-level)"}
+{"event": "parallel_research_agents_end", "iso": "2026-10-30T08:11:04+00:00", "epoch": 1793347864.922, "monotonic_s": 1390.95, "boot": "a6613b62", "note": "DK 63, SE 73, NZ 53 candidates"}

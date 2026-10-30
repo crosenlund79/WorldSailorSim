@@ -1,0 +1,30 @@
+{
+ "id": "nz_south",
+ "name": "New Zealand: South Island",
+ "parent": "world",
+ "source": "OpenStreetMap land polygons via geo-maps earth-lands-100m 0.6.0 (npm @geo-maps/earth-lands-100m, about 100 m accuracy). Map data (c) OpenStreetMap contributors, ODbL 1.0, openstreetmap.org/copyright. Package code MIT.",
+ "retrieved": "2026-10-25",
+ "licence": "ODbL 1.0 (derived database: this region's raster, land and graph are ODbL too)",
+ "label_source": "Label positions from GeoNames town coordinates (lutangar/cities.json, CC BY 4.0, geonames.org); label texts: tools/navigation/new_zealand_labels.json.",
+ "crs": "WGS 84 longitude/latitude (EPSG:4326); raster in Mercator rows like the base chart",
+ "processing": "Clipped to the region with a 0.1 deg margin; holes filled (lakes and tile-seam artefacts are land); raster at 216 cells per Mercator degree (18 x the base), land if any part of a cell is land (1/4 cell precision), approach water with a water majority; display simplified 0.0003 deg (detail) and 0.0035 deg (overview). Not for navigation.",
+ "factor": 18,
+ "base_cells": {
+  "column": 4152,
+  "row": 2228,
+  "columns": 104,
+  "rows": 98
+ },
+ "bounds": {
+  "west": 166.0,
+  "south": -47.536594535991334,
+  "east": 174.66666666666669,
+  "north": -41.732511932268466
+ },
+ "columns": 1872,
+ "rows": 1764,
+ "cells_per_mercator_degree": 216,
+ "mercator_north": -46.002679562963834,
+ "base_west": 166.0,
+ "detail_from_px_per_degree": 140.0
+}
