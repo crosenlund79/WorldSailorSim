@@ -11810,3 +11810,11 @@ msgstr "Kaptajnens navn"
 
 msgid "Not given"
 msgstr "Ikke angivet"
+
+msgctxt "place"
+msgid "Råå"
+msgstr "Råå"
+
+msgctxt "place"
+msgid "Rörö"
+msgstr "Rörö"

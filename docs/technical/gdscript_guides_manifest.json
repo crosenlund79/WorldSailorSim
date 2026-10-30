@@ -58,9 +58,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/app/app.gd": {
-   "sha": "c25fec826250d66e",
-   "reviewed": "2026-10-29",
-   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
+   "sha": "d22b8dfee895459a",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: New Game passes the Captain's name; pause menu rename wired to GameSession"
   },
   "src/app/game_version.gd": {
    "sha": "43d2919b204771f1",
@@ -343,9 +343,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "3f9d656324f11082",
-   "reviewed": "2026-10-29",
-   "note": "doc comment moved back above set_provisions_for_testing"
+   "sha": "bfb7ad74e4a5d10b",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: get/set_captain_name, captain_name_changed signal"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -388,9 +388,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/session_state.gd": {
-   "sha": "a42e8015ef9f8fc7",
-   "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: Dreams of the Sea API (dreams_changed, status/record/pursue, _check_dreams quiet on load), optional dreams save section (dreams_from), laptop Dreams app"
+   "sha": "928bd984d2fc7fa6",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: optional captain_name (default empty, trimmed, max 40), clean_captain_name; save version 12"
   },
   "src/core/simulation.gd": {
    "sha": "2dc266e606dc0895",
@@ -413,14 +413,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/dev/dev_test_panel.gd": {
-   "sha": "7216c8f876d9b813",
-   "reviewed": "2026-10-29",
-   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
+   "sha": "a3591849293113be",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: Captain's Tools heading outside the editor"
   },
   "src/dev/dev_tools.gd": {
-   "sha": "84d2052e094e9bdd",
-   "reviewed": "2026-10-29",
-   "note": "I027 playtest fixes: reviewed the diff against release/i027 (8a24d0f) and updated EN, DA and ARCH entries (quay compaction, walkway passage and quay auto-walk, Shift run, cockpit benches/instruments, wake, dock animal brought aboard, harbour fish cap and quiet nibbles, trophy/coffee lines, dev panel rows)"
+   "sha": "8570230db20fbbff",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: is_enabled = editor build or Captain named Haddock; captain_unlocks, is_captain_unlocked, is_editor_build"
   },
   "src/dev/weather_fixtures.gd": {
    "sha": "4891d7a2e1bbbdf6",
@@ -498,9 +498,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/harbour/harbour_dressing.gd": {
-   "sha": "e1745bf20f1fc6b8",
-   "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "sha": "4631f2ff06bc704c",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: regional town palettes (danish, swedish, new_zealand) via town_for/_town_key, pohutukawa; archetype unchanged"
   },
   "src/harbour/harbour_facilities.gd": {
    "sha": "89468fd9d1acf16e",
@@ -637,6 +637,11 @@
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
+  "src/navigation/cruising_regions.gd": {
+   "sha": "224be78ad4c7a01b",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: new CruisingRegions registry entries (regions, destination classes, membership by country + outline, anchorages, look_for)"
+  },
   "src/navigation/depth_data.gd": {
    "sha": "dd6e908a75f3c3f1",
    "reviewed": "2026-10-27",
@@ -658,14 +663,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/map_view.gd": {
-   "sha": "ed78d23a1a451c32",
-   "reviewed": "2026-10-28",
-   "note": "Real Horizon visual conversion and the I021–I023 merge: entries reviewed against the code; Real Horizon descriptions (materials, signage, theme, fonts, sea) updated; new scripts added"
+   "sha": "403636e7441c8139",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: world-level detail layer, cruising region marks and fade, anchorage markers, picking/hover signals, _drawable_pieces"
   },
   "src/navigation/nav_grid.gd": {
-   "sha": "630855214a2c8a0d",
-   "reviewed": "2026-10-27",
-   "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+   "sha": "92db4d2547e1992c",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: world-level detail regions (parent world, New Zealand), load_regions(index, parent); Sweden regions noted"
   },
   "src/navigation/passage_plan.gd": {
    "sha": "19ee0a6e73cdeeac",
@@ -733,9 +738,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/navigation/world_map.gd": {
-   "sha": "5657560d20c7eb09",
-   "reviewed": "2026-10-27",
-   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
+   "sha": "feade2610b232a3c",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: cruising legend, info tooltip, one-time hint, show_cruising_region, plan_via_anchorage, _cruising_line"
   },
   "src/persistence/legacy_saves.gd": {
    "sha": "19476bac39c66476",
@@ -1028,9 +1033,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/new_game_menu.gd": {
-   "sha": "7b0b5c1a538aa8c8",
-   "reviewed": "2026-10-28",
-   "note": "I025: no companion at New Game, per-companion following, adoption question at the companionway, second companion node, dock scene, pair moments, Aboard history, companion-count wording"
+   "sha": "246c23027b6ce2ee",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: optional Captain's name field; start_requested(level, captain_name)"
   },
   "src/ui/noticeboard_menu.gd": {
    "sha": "e1120a6110660b63",
@@ -1048,9 +1053,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "src/ui/pause_menu.gd": {
-   "sha": "e1a4ea8c4aaf849d",
-   "reviewed": "2026-10-27",
-   "note": "I022 Captain's Academy"
+   "sha": "89ed225ed1e94d46",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: Captain's name field (captain_name_entered), Captain's Tools (F10) button text outside the editor"
   },
   "src/ui/plotter_view.gd": {
    "sha": "23b8dc6767985fda",
@@ -1302,6 +1307,11 @@
    "reviewed": "2026-10-28",
    "note": "I024: new entries, animation preview grid and I024 screenshots"
   },
+  "tests/haddock_probe.gd": {
+   "sha": "bbada5ff1e692ca1",
+   "reviewed": "2026-10-30",
+   "note": "Header: how to run the probe in an exported build (feature-tagged main scene, local only)"
+  },
   "tests/helpers/art_fixtures.gd": {
    "sha": "fd5f381f9ed9821d",
    "reviewed": "2026-10-27",
@@ -1338,9 +1348,9 @@
    "note": "Engine Room C/D: deterministic blink and walk-out tests, lighting node name, grocery refresh, pacing probe fixed"
   },
   "tests/playtest_probe.gd": {
-   "sha": "a49238f39a3c5947",
-   "reviewed": "2026-10-29",
-   "note": "I027 playtest fixes: new entries for BoatWake (restrained wake under way) and the rendered playtest probe, in EN, DA and ARCH"
+   "sha": "206bf5eccb1917bb",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: --chart views (hover/click/region) and --wind=0"
   },
   "tests/restart_105b.gd": {
    "sha": "707c421868ed9dff",
@@ -1497,6 +1507,11 @@
    "reviewed": "2026-10-28",
    "note": "I025 revision: cabin windows are plain glass (no live view); comments and tests follow; the I025 suite removes its fixture save"
   },
+  "tests/suites/test_captain_tools.gd": {
+   "sha": "53d224fed04e4f4a",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: new suite for the Haddock rule and captain_name persistence"
+  },
   "tests/suites/test_captains_log.gd": {
    "sha": "476e2391b68c04c1",
    "reviewed": "2026-10-28",
@@ -1577,6 +1592,11 @@
    "reviewed": "2026-10-29",
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
+  "tests/suites/test_cruising_regions.gd": {
+   "sha": "e54be92be659f60e",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: new suite for the Detailed Cruising Regions (registry, membership, destinations, charts, voyages, chart marks, looks)"
+  },
   "tests/suites/test_data_model.gd": {
    "sha": "0a1ea71d6fdcb39d",
    "reviewed": "2026-10-27",
@@ -1638,9 +1658,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_harbour_life.gd": {
-   "sha": "0d5124d8951b867d",
-   "reviewed": "2026-10-29",
-   "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
+   "sha": "4e58c347201bcf67",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: no-boatyard list now includes cruising guest harbours/fishing villages without repairs (ARCH updated)"
   },
   "tests/suites/test_harbours.gd": {
    "sha": "20b68e4c9eed379b",
@@ -1873,9 +1893,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_wider_world.gd": {
-   "sha": "2627818fa629f971",
-   "reviewed": "2026-10-27",
-   "note": "I021: harbour looks and special harbours, arrival card, chart star, decor items, tests"
+   "sha": "deaf0e2a4db3907c",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: catalogue count 239 plus the cruising regions' harbours (ARCH updated)"
   },
   "tests/suites/test_wind.gd": {
    "sha": "e93f2a67688db172",
@@ -1903,9 +1923,9 @@
    "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
   },
   "tests/test_runner.gd": {
-   "sha": "9eb46507eee3018b",
-   "reviewed": "2026-10-29",
-   "note": "I027 Tier 4: career telemetry files and dreams_fulfilled; five new suites registered (94), OpeningStory off in the runner"
+   "sha": "ef93c3774a61ad17",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: test_cruising_regions and test_captain_tools registered (96 suites)"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",
@@ -1926,6 +1946,11 @@
    "sha": "b75a5694c042570c",
    "reviewed": "2026-10-27",
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
+  },
+  "tools/qa/check_destinations.gd": {
+   "sha": "fdf9ac30cd6a19fd",
+   "reviewed": "2026-10-30",
+   "note": "Regions and Harbours 2026: new destination check (harbour approach, anchoring rule) against the charts"
   },
   "tools/vessels/render_art_templates.gd": {
    "sha": "37958453cf4ec4ef",

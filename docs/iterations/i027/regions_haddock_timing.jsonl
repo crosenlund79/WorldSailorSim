@@ -12,3 +12,4 @@
 {"event": "chart_end", "iso": "2026-10-30T08:36:26+00:00", "epoch": 1793349386.583, "monotonic_s": 2912.61, "boot": "a6613b62", "note": "marks, legend, info, hint, anchorage markers + planning, NZ drawing fixes, suite 59/0; began at visuals_end"}
 {"event": "haddock_end", "iso": "2026-10-30T08:52:10+00:00", "epoch": 1793350330.973, "monotonic_s": 3857.00, "boot": "a6613b62", "note": "captain name, central rule, New Game + pause-menu rename, Captain's Tools heading; Linux release export probe 20/20; suite 16/0; began at chart_end"}
 {"event": "validation_begin", "iso": "2026-10-30T08:52:10+00:00", "epoch": 1793350330.986, "monotonic_s": 3857.01, "boot": "a6613b62", "note": "focused suites, guides, docs, screenshots"}
+{"event": "regression_begin", "iso": "2026-10-30T08:52:33+00:00", "epoch": 1793350353.672, "monotonic_s": 3879.69, "boot": "a6613b62", "note": "full headless regression, 3 parallel shards (96 suites)"}

@@ -1,8 +1,68 @@
-id,name,country,kind,latitude,longitude,reason
-dyvig,Dyvig,Denmark,anchorage,55.04300,9.71000,The nearest spot the game can anchor in is 1.75 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
-moturua_island,Moturua Island,New Zealand,anchorage,-35.21770,174.19500,"Its nearest valid spot is the same as Otehei Bay's (Urupukapuka), 0.06 nm away: kept once, as Otehei Bay."
-ship_cove,Ship Cove,New Zealand,anchorage,-41.09350,174.24250,The nearest spot the game can anchor in is 2.00 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
-endeavour_inlet,Endeavour Inlet,New Zealand,anchorage,-41.08833,174.18111,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
-portage_bay,Portage Bay,New Zealand,anchorage,-41.19550,174.03650,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
-deep_cove_doubtful,"Deep Cove, Doubtful Sound",New Zealand,anchorage,-45.45000,167.15000,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
-henan,Henån,Sweden,guest_harbour,58.24055,11.67813,"Its approach passes, but the inner Orust fjord reaches the open sea only through narrow sounds that the chart's resolution closes: no sea route."
+id,name,country,kind,latitude,longitude,stage,reason
+dyvig,Dyvig,Denmark,anchorage,55.04300,9.71000,game check,The nearest spot the game can anchor in is 1.75 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
+moturua_island,Moturua Island,New Zealand,anchorage,-35.21770,174.19500,game check,"Its nearest valid spot is the same as Otehei Bay's (Urupukapuka), 0.06 nm away: kept once, as Otehei Bay."
+ship_cove,Ship Cove,New Zealand,anchorage,-41.09350,174.24250,game check,The nearest spot the game can anchor in is 2.00 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
+endeavour_inlet,Endeavour Inlet,New Zealand,anchorage,-41.08833,174.18111,game check,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+portage_bay,Portage Bay,New Zealand,anchorage,-41.19550,174.03650,game check,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+deep_cove_doubtful,"Deep Cove, Doubtful Sound",New Zealand,anchorage,-45.45000,167.15000,game check,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+henan,Henån,Sweden,guest_harbour,58.24055,11.67813,game check,"Its approach passes, but the inner Orust fjord reaches the open sea only through narrow sounds that the chart's resolution closes: no sea route."
+aebelo,Æbelø,Denmark,anchorage,,,research,Protected island with very shallow surrounding water; no source found giving a recognised anchoring spot or position.
+lindelse_nor,Lindelse Nor,Denmark,anchorage,,,research,"Only described as a shallow, soft-bottomed cove open to the west (diving/fishing spot); no evidence found of use as a yacht anchorage."
+bogestrommen,Bøgestrømmen,Denmark,anchorage,,,research,Narrow shallow strait inside a bird/nature reserve; no source found describing an anchorage or position.
+faeno_sund,Fænø Sund,Denmark,anchorage,,,research,"Guides rate the Fænø anchorage as poor, the island is private and currents strong; could not pin a credible anchoring position."
+mjels_vig,Mjels Vig,Denmark,anchorage,,,research,"Named as an anchorage beside Dyvig, but its position relative to Dyvig could not be confirmed; covered by the Dyvig entry."
+brandso,Brandsø,Denmark,anchorage,,,research,Uninhabited private hunting island in the Little Belt; no source found describing an anchorage.
+korshavn_fyns_hoved,Korshavn (Fyns Hoved),Denmark,anchorage,,,research,"Bay described as giving natural shelter, but no anchoring guidance or reliable position found."
+bramsnaes_vig,Bramsnæs Vig,Denmark,anchorage,,,research,No source found describing a yacht anchorage.
+nekselo,Nekselø,Denmark,guest_harbour,,,research,Private island with a small private jetty; no anchorage data and guest status unclear.
+fredericia,Fredericia,Denmark,harbour,,,research,No reliable marina coordinates found.
+frederikshavn,Frederikshavn,Denmark,harbour,,,research,No marina coordinates found in the time available.
+nykobing_sjaelland,Nykøbing Sjælland,Denmark,harbour,,,research,No harbour coordinates found.
+holbaek,Holbæk,Denmark,harbour,,,research,Several conflicting MarineLink positions for different basins; left out rather than guess.
+humlebaek,Humlebæk,Denmark,harbour,,,research,Sources disagree on the harbour position by more than 3 km.
+kolding,Kolding,Denmark,harbour,,,research,Only one marina position (Lystbådehavn Nord) found; left out as a long fjord detour with a single source.
+koster_ekenas,Ekenäs (Sydkoster),Sweden,guest_harbour,,,research,"unverifiable position: only a third-party 'Korshamn Ekenäs' fix (58.893,11.049) that may be on Nordkoster; conflicting"
+koster_langegarde,Långegärde (Sydkoster),Sweden,fishing_village,,,research,no coordinate found; Kostersundet listing bans anchoring Jun-Aug and limits quay stays
+grinda_gasthamn,Grinda gästhamn,Sweden,guest_harbour,,,research,"no harbour-basin coordinate (only island centroid 59.417,18.562 on land); Grinda covered by the Hästholmssundet anchorage"
+styrso_bratten,Styrsö Bratten,Sweden,guest_harbour,,,research,no guest-harbour coordinate found (only Styrsö Skäret ferry stop); Vrångö used instead
+ronnang,Rönnäng,Sweden,harbour,,,research,no coordinate found in any accessible source
+landskrona_lundakra,Lundåkrahamnen (Landskrona),Sweden,guest_harbour,,,research,real guest harbour but no coordinate returned
+ven_backviken,Bäckviken (Ven),Sweden,harbour,,,research,no coordinate found; Kyrkbacken used for Ven
+falsterbo_canal,Falsterbokanalen,Sweden,harbour,,,research,no coordinate found for the canal guest harbour
+karlshamn_town,Karlshamn,Sweden,harbour,,,research,town guest-harbour coordinate not found; Vägga fiskehamn (Karlshamn) used instead
+grankullavik,Grankullavik,Sweden,harbour,,,research,"only village-centre coordinate (57.336,17.094) found; harbour position unverified"
+orno_karlslund,Karlslund gästhamn (Ornö area),Sweden,guest_harbour,59.11868,18.30659,research,coordinate exists but island attribution (Ornö vs Björkösund mainland) unclear
+namdo,Nämdö,Sweden,guest_harbour,,,research,no harbour coordinate found
+landsort,Landsort (Öja),Sweden,harbour,,,research,no harbour coordinate found
+langviksskar,Långviksskär,Sweden,anchorage,,,research,real (now in Nämdöskärgården NP) but no anchoring position found
+gilloga,Gillöga,Sweden,anchorage,,,research,real natural harbour but no position found
+gasholmen,Gåsholmen,Sweden,anchorage,,,research,could not verify which Gåsholmen or that it is a used anchorage
+kalvsund,Kalvsund,Sweden,anchorage,,,research,no anchorage position found (it is a village sound on Kalvsundsö)
+yttre_tistlarna,Yttre Tistlarna,Sweden,anchorage,,,research,natural harbour confirmed by Länsstyrelsen but no coordinate found
+vaderoarna,Väderöarna,Sweden,anchorage,,,research,no coordinate found
+kungshamn,Kungshamn,Sweden,harbour,58.36178,11.24582,research,verified (pump-out position) but curated out: 1 nm from Smögen
+husaro,Husarö,Sweden,guest_harbour,59.50205,18.84517,research,verified but curated out: 1.6 nm from Finnhamn
+donso,Donsö,Sweden,fishing_village,57.59878,11.79391,research,verified but curated out: 1.3 nm from Vrångö
+grundsund,Grundsund,Sweden,guest_harbour,58.21520,11.41637,research,verified but curated out: 1.5 nm from Gullholmen/Ellös cluster
+fiskebackskil,Fiskebäckskil,Sweden,fishing_village,58.24382,11.46018,research,verified (pump-out position) but curated out: 2 nm from Lysekil
+bovallstrand,Bovallstrand,Sweden,fishing_village,58.47845,11.32430,research,verified (pump-out position) but curated out: 2.5 nm from Hunnebostrand
+havstenssund,Havstenssund,Sweden,guest_harbour,58.75677,11.17811,research,verified but curated out: between Grebbestad and Resö
+dyron,Dyrön,Sweden,fishing_village,57.92940,11.60270,research,verified but curated out: 1 nm from Åstol
+axholmen,Äxholmen,Sweden,anchorage,57.73460,11.63610,research,verified but curated out: 0.5 nm from Lindholmen anchorage
+gallno_karklo,Gällnö Karklö,Sweden,anchorage,59.39090,18.66260,research,verified but curated out: duplicate of Gällnö Getudden
+bullero_stora_melskar,Stora Melskär (Bullerö),Sweden,anchorage,59.20893,18.81793,research,verified but curated out: duplicate of Bullerö Bodkobbshålet
+langskar_nykoping,Långskär (Nyköping),Sweden,anchorage,58.71427,17.17128,research,verified but no harbour in this list within 15 nm
+vrango_klubbholmen,Vrångö Klubbholmen,Sweden,anchorage,57.58052,11.77174,research,verified but curated out: 0.6 nm from Vrångö harbour
+whangamumu,Whangamumu Harbour,New Zealand,,,,research,No published coordinates found for the harbour/anchorage; not verifiable
+pickersgill_harbour,Pickersgill Harbour (Dusky Sound),New Zealand,,,,research,Only a 1773 latitude found; longitude unverified
+luncheon_cove,Luncheon Cove (Dusky Sound),New Zealand,,,,research,Only island-level coordinates for Anchor Island; cove position unverified
+tryphena,Tryphena (Great Barrier Island),New Zealand,,,,research,Only rounded locality coordinates; wharf/anchorage position conflicting (log typo)
+te_kouma,Te Kouma Harbour,New Zealand,,,,research,"Harbour-level point only, overlaps Hannafords Wharf entry"
+port_william,Port William (Stewart Island),New Zealand,,,,research,No published coordinates found
+rakino,Rakino Island,New Zealand,,,,research,No anchorage coordinates verified
+mapua,Māpua,New Zealand,,,,research,Shallow estuary wharf; coordinates not verified
+mercury_huruhi,Huruhi Harbour (Great Mercury),New Zealand,,,,research,Exact position not found (LINZ notice not readable); generic Great Mercury anchorage used instead
+westhaven,Westhaven,New Zealand,,,,research,Part of existing auckland harbour
+chaffers,Chaffers Marina,New Zealand,,,,research,Part of existing wellington harbour
+whangarei_town_basin,Whangārei Town Basin,New Zealand,,,,research,Is the existing whangarei harbour
+mistletoe_bay,Mistletoe Bay,New Zealand,,,,research,No coordinates found

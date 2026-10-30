@@ -1,7 +1,9 @@
 # Chart regions: the world chart and detailed coastlines (geographic data preparation)
 
 Iteration 14 added the first detailed region (Denmark); Iteration 16 put the
-whole world underneath. How the charts fit together, where the data comes
+whole world underneath; Regions and Harbours 2026 added Sweden (Bohuslän and
+the east coast, regions of Europe) and New Zealand (two regions of the world
+chart itself). How the charts fit together, where the data comes
 from, how to rebuild it, and how to add another region.
 
 ## 1. How it fits together
@@ -13,11 +15,13 @@ WGS 84) with Mercator rasters for navigation, nested three deep:
 |---|---|---|
 | World (Iteration 16) | `data/navigation/world/` — `world.json`, `navmask.png`, `graph.json`, `europe_link.json`, `land.res` | 12 cells per Mercator degree (about 5 nautical miles); OpenStreetMap coastlines; wraps round at the Date Line; latitudes 72° S to 80° N |
 | Base chart | `data/navigation/europe_navmask.png`, `data/navigation/europe_navmask.json`, `data/navigation/europe_route_graph.json`, `data/navigation/europe_land.json` | 60 cells per Mercator degree (about 1 nautical mile); Natural Earth 10m coastlines |
-| Regions | `data/navigation/regions.json` lists them; each has a folder such as `data/navigation/regions/denmark/` | finer (Denmark: 6 times, about 175 m cells); OpenStreetMap coastlines |
+| Regions | `data/navigation/regions.json` lists them; each has a folder such as `data/navigation/regions/denmark/` | finer (Denmark, Bohuslän, the Swedish east coast: 6 times Europe, about 175 m cells; New Zealand north and south: 18 times the world, 216 cells per Mercator degree); OpenStreetMap coastlines |
 
 Europe is a region of the world chart (one world cell is 5 × 5 European
 cells) and Denmark is a region of Europe (one European cell is 6 × 6 Danish
-cells).
+cells), as are Bohuslän and the Swedish east coast. New Zealand's two regions
+are regions of the world chart ("parent": "world" in `regions.json`; one world
+cell is 18 × 18 of theirs).
 A region is a rectangle of its parent chart, its edges on parent raster cells, with
 its own raster, route graph and drawing, in the **same coordinates**. Nothing
 about positions, saves or projections changes, and the base files stay exactly
@@ -35,7 +39,10 @@ as they were: outside the regions the game is unchanged.
   inside each region; the region draws a light **overview** outline when zoomed
   out and its **detailed** coastline once the chart is zoomed in past
   `detail_from_px_per_degree` (in `region.json`). Region labels appear at their
-  own zoom.
+  own zoom. A region of the world chart (New Zealand) is drawn over the world's
+  own land: its rectangle of water first, then its land, in detail wherever the
+  world's regional land shows (`detail_from_px_per_degree` 0). A fill ring the
+  renderer cannot triangulate is split into quarters, not dropped.
 - **Anchoring, fishing, the hat's open water** read the same composite chart
   (`src/anchor/anchor_site.gd`, `src/fishing/fishing_catalog.gd`,
   `src/hat/hat_story.gd`), so they see the detailed coast too.
@@ -166,12 +173,29 @@ Europe rectangle, any other region directly in the world chart.
    world chart: its edges on world cells (12 per Mercator degree) and its
    factor relative to the world (for example 12 for one-mile cells). Charts
    nest recursively in the code (`NavGrid.grid_at`, `SeaRouter._merge`), but
-   today `NavGrid.load_world` attaches only Europe to the world: a world-level
-   region needs a regions list for the world there (and `build_region.py`
-   taught to align to world cells). That is the first step of the work, not
-   done yet.
+   a world-level region is written with `"parent": "world"` in its `REGIONS`
+   entry (the builder then aligns it to world cells and seams it to the world
+   graph) and listed with `"parent": "world"` in `regions.json`;
+   `NavGrid.load_world` attaches it beside Europe (New Zealand is the example).
 5. Run the tests. Add harbours for the region as described in
    [HARBOURS.md](HARBOURS.md).
+
+### Detailed Cruising Regions
+
+A detailed chart is navigation data. A **Detailed Cruising Region** (Denmark —
+Home Waters, Sweden — The Archipelagos, New Zealand — The Long White Cloud) is
+the player-facing idea built on it: an area with more local harbours,
+anchorages and coastal destinations. They are data too:
+`data/cruising/regions.json` (names, info texts, outlines, the chart's mark,
+the waterfront look, the detail charts that cover it) and
+`data/cruising/destinations.json` (built by `tools/navigation/build_cruising.py`
+from `tools/navigation/cruising_destinations.csv`; candidates left out, with
+the reason, in `cruising_destinations_omitted.csv`). Every destination is
+checked against the game's own charts with `tools/qa/check_destinations.gd`
+before it is imported. `CruisingRegions` (`src/navigation/cruising_regions.gd`)
+answers which region a harbour belongs to, what kind of destination it is and
+its metadata for I028. Another region is another entry in both files, its
+destinations rows in the CSV and, if its coast needs it, a detail chart above.
 
 ## 7. Performance
 

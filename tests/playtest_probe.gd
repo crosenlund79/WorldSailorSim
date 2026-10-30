@@ -63,6 +63,7 @@ func _chart_views() -> void:
 	var view: MapView = map.get_map_view()
 	if args.get("wind", "1") == "0":
 		map.set_wind_shown(false)
+		view.show_weather = false
 	var report := []
 	var k := 0
 	for part in String(args.chart).split(";", false):

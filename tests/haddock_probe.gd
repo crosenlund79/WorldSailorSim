@@ -1,7 +1,12 @@
 extends Node
 ## Captain Haddock's tools, checked end to end (Regions and Harbours 2026),
-## also in an exported build, where the editor's own access is absent:
-##   ./BetweenHorizons.x86_64 res://tests/haddock_probe.tscn [-- --out=DIR]
+## also in an exported build, where the editor's own access is absent. In
+## the editor: `godot --path . res://tests/haddock_probe.tscn [-- --out=DIR]`.
+## Official export templates refuse a scene path on the command line, so for
+## an exported probe build add, for that export only (never committed),
+## `run/main_scene.haddock_probe="res://tests/haddock_probe.tscn"` under
+## [application] in project.godot and the custom feature "haddock_probe" to
+## the export preset; then run the exported binary `-- --out=DIR`.
 ## Each scenario goes through the game's own New Game window (the name typed
 ## into its field, Start pressed), the F10 key (a real key event), saves and
 ## loads, and the pause menu's name field. Prints "HADDOCK {json}": the build

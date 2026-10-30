@@ -17,6 +17,9 @@ Writes:
     full-service harbour has every facility and a haul-out; a guest harbour and a
     fishing village have the grocery and the shore, and a boatyard only where the
     listing names repairs; gameplay abstractions, not claims about businesses;
+  - each harbour's look in data/harbours/harbour_looks.json (added if it has none): a Danish or
+    Swedish town harbour the gabled waterfront, a small island, guest or fishing harbour there the
+    Nordic timber look, a New Zealand harbour the timber look like its older ones;
   - data/cruising/destinations.json: every destination's metadata for the
     passenger work of I028 (class, services, overnight suitability, scenic tags,
     region membership, vessel notes) and the anchorages' names, positions and
@@ -34,6 +37,7 @@ SOURCE = os.path.join(HERE, "cruising_destinations.csv")
 HARBOURS = os.path.join(HERE, "harbours.csv")
 FACILITIES = os.path.join(ROOT, "data", "harbours", "facilities")
 OUT = os.path.join(ROOT, "data", "cruising", "destinations.json")
+LOOKS = os.path.join(ROOT, "data", "harbours", "harbour_looks.json")
 HARBOUR_FIELDS = ["id", "name", "country", "latitude", "longitude", "importance", "region", "island", "source", "description"]
 CLASSES = ("harbour", "guest_harbour", "fishing_village", "anchorage")
 
@@ -55,6 +59,26 @@ def facilities(row):
     full = row["kind"] == "harbour"
     boatyard = full or "repairs" in services
     return {"grocery": "true", "boatyard": "true" if boatyard else "false", "haul_out": "true" if full else "false"}
+
+
+def look_for(row):
+    if row["country"] == "New Zealand":
+        return "nordic_timber"
+    return "gabled_waterfront" if row["kind"] == "harbour" else "nordic_timber"
+
+
+def add_looks(rows):
+    """Adds a look for each harbour without one, keeping the file's layout (one harbour per line)."""
+    text = open(LOOKS, encoding="utf-8").read()
+    have = set(json.loads(text)["harbours"])
+    lines = ['\t\t"%s": "%s"' % (r["id"], look_for(r)) for r in rows if r["kind"] != "anchorage" and r["id"] not in have]
+    if lines:
+        end = text.rstrip().rfind("}", 0, len(text.rstrip()) - 1)
+        body = text[:end].rstrip()
+        text = body + ",\n" + ",\n".join(lines) + "\n\t}\n}\n"
+        json.loads(text)
+        open(LOOKS, "w", encoding="utf-8").write(text)
+    return len(lines)
 
 
 def main():
@@ -101,8 +125,9 @@ def main():
                        "anchorages are not harbours and have no shore facilities.",
                "classes": list(CLASSES), "destinations": destinations},
               open(OUT, "w", encoding="utf-8"), indent="\t", ensure_ascii=False)
-    print("%d destinations (%d harbours added to harbours.csv, %d anchorages)" % (
-        len(destinations), added, sum(1 for d in destinations if d["class"] == "anchorage")))
+    looks = add_looks(rows)
+    print("%d destinations (%d harbours added to harbours.csv, %d looks added, %d anchorages)" % (
+        len(destinations), added, looks, sum(1 for d in destinations if d["class"] == "anchorage")))
 
 
 if __name__ == "__main__":

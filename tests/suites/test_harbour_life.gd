@@ -88,9 +88,15 @@ func _test_facility_data() -> void:
 		&"nukualofa", &"lautoka",
 		# I021: the small harbours of the wider world.
 		&"dingle", &"isafjordur", &"symi", &"essaouira", &"st_helena"]
+	# Regions and Harbours 2026: the Detailed Cruising Regions' guest harbours
+	# and fishing villages, unless their listing names repairs.
+	for record: Dictionary in CruisingRegions.get_default().destinations.values():
+		if record["class"] in [CruisingRegions.CLASS_GUEST_HARBOUR, CruisingRegions.CLASS_FISHING_VILLAGE] \
+				and not "repairs" in (record.services as Array):
+			small.append(record.id)
 	without.sort()
 	small.sort()
-	t.check(without == small, "[facilities] only Lohals and the small Danish, island and fishing harbours lack a boatyard (%s)" % [without])
+	t.check(without == small, "[facilities] only Lohals, the small Danish, island and fishing harbours and the cruising regions' guest harbours and fishing villages lack a boatyard (%s)" % [without])
 	t.check(haul_outs > 0 and haul_outs < PortCatalog.get_default().ports.size() / 2,
 		"[facilities] only some harbours can haul out (%d of %d)" % [haul_outs, PortCatalog.get_default().ports.size()])
 	t.check(copenhagen.has(HarbourFacilities.HAUL_OUT) and copenhagen.get_tier() == HarbourFacilities.TIER_MAJOR,

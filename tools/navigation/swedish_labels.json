@@ -2,9 +2,9 @@
 	"note": "Chart labels for the Swedish regions (Regions and Harbours 2026), as danish_labels.json: positions from GeoNames town coordinates (cities.json, CC BY 4.0), shifted [lon, lat] degrees to keep a water label on the water. 'group' names the region (bohuslan, east). Approximate, for the chart's look only.",
 	"countries": ["SE"],
 	"labels": [
-		{"text": "BOHUSLÄN", "kind": "land", "towns": ["Uddevalla"], "shift": [0.15, 0.25], "group": "bohuslan"},
+		{"text": "BOHUSLÄN", "kind": "land", "towns": ["Uddevalla"], "shift": [0.35, 0.35], "group": "bohuslan"},
 		{"text": "Orust", "kind": "island", "towns": ["Lysekil"], "shift": [0.2, -0.06], "group": "bohuslan"},
-		{"text": "Skagerrak", "kind": "sea", "towns": ["Strömstad", "Lysekil"], "shift": [-0.55, 0.0], "min_px_per_degree": 40.0, "group": "bohuslan"},
+		{"text": "Skagerrak", "kind": "sea", "towns": ["Strömstad", "Lysekil"], "shift": [-1.5, -0.2], "min_px_per_degree": 40.0, "group": "bohuslan"},
 		{"text": "Gullmarn", "kind": "sea", "towns": ["Lysekil"], "shift": [0.1, 0.04], "group": "bohuslan"},
 		{"text": "SÖDERMANLAND", "kind": "land", "towns": ["Nyköping"], "shift": [0.0, 0.12], "group": "east"},
 		{"text": "ÖSTERGÖTLAND", "kind": "land", "towns": ["Söderköping"], "shift": [-0.35, 0.05], "group": "east"},
