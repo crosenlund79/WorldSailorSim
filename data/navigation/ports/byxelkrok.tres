@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"byxelkrok"
+display_name = "Byxelkrok"
+country = "Sweden"
+latitude = 57.32718
+longitude = 17.00515
+description = "Northern Öland harbour with smoked fish and sunsets over Kalmar Sound."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/byxelkroks-gasthamn (Regions and Harbours 2026)"

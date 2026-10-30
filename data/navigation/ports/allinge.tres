@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"allinge"
+display_name = "Allinge"
+country = "Denmark"
+latitude = 55.27900
+longitude = 14.80300
+description = "Small rocky harbour on Bornholm's north coast, near Hammershus castle ruin."
+importance = 3
+region = "baltic"
+island = true
+source = "https://ports.marinelink.com/ports/port/allinge (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"napier"
+display_name = "Napier"
+country = "New Zealand"
+latitude = -39.48321
+longitude = 176.89166
+description = "An Art Deco city whose Ahuriri inner harbour hosts a friendly sailing club."
+importance = 2
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/hawkes-bay/napier-marina (Regions and Harbours 2026)"

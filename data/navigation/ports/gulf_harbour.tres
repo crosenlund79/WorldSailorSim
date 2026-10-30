@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"gulf_harbour"
+display_name = "Gulf Harbour"
+country = "New Zealand"
+latitude = -36.61980
+longitude = 174.79010
+description = "A large marina at the tip of Whangaparāoa Peninsula, a handy jumping-off point for the Gulf."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.dockwalk.com/superports/gulf-harbour-marina--952 (Regions and Harbours 2026)"

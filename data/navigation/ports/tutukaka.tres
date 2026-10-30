@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"tutukaka"
+display_name = "Tutukākā"
+country = "New Zealand"
+latitude = -35.61280
+longitude = 174.52500
+description = "A snug marina harbour and gateway to the Poor Knights Islands dive reserve."
+importance = 3
+region = "pacific"
+island = false
+source = "https://en.wikipedia.org/wiki/Tutukaka (Regions and Harbours 2026)"

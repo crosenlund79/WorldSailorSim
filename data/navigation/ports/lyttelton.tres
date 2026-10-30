@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"lyttelton"
+display_name = "Lyttelton"
+country = "New Zealand"
+latitude = -43.60450
+longitude = 172.71330
+description = "A characterful port town inside a drowned volcano, Christchurch's harbour."
+importance = 2
+region = "pacific"
+island = false
+source = "https://berthfinder.com/marina/te-ana-marina-dampier-bay (Regions and Harbours 2026)"

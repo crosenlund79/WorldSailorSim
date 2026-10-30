@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"bogense"
+display_name = "Bogense"
+country = "Denmark"
+latitude = 55.56720
+longitude = 10.07830
+description = "Large marina beside a small old market town on Funen's north coast."
+importance = 3
+region = "baltic"
+island = false
+source = "https://marinaguide.dk/en/bogense-harbour-marina/navigation (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"lyo"
+display_name = "Lyø"
+country = "Denmark"
+latitude = 55.04940
+longitude = 10.15720
+description = "Small sheltered harbour on Lyø's north shore, a short walk from a thatched village with a round churchyard."
+importance = 3
+region = "baltic"
+island = true
+source = "https://marinas.com/view/marina/x1cn6m_Ly%C3%B8_Havn_Ly%C3%B8_By_Ly%C3%B8_Denmark (Regions and Harbours 2026)"

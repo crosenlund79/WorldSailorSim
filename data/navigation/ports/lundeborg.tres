@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"lundeborg"
+display_name = "Lundeborg"
+country = "Denmark"
+latitude = 55.13940
+longitude = 10.78390
+description = "Small harbour on Funen's east coast, with a beach and views across to Langeland."
+importance = 3
+region = "baltic"
+island = false
+source = "https://en.wikipedia.org/wiki/Lundeborg (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"whakatane"
+display_name = "Whakatāne"
+country = "New Zealand"
+latitude = -37.95000
+longitude = 176.99750
+description = "A sunny river-mouth town looking out to Moutohorā and steaming Whakaari."
+importance = 3
+region = "pacific"
+island = false
+source = "https://whakatane.govt.nz/services/ports-and-harbours (Regions and Harbours 2026)"

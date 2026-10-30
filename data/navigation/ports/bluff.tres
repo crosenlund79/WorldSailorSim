@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"bluff"
+display_name = "Bluff"
+country = "New Zealand"
+latitude = -46.59970
+longitude = 168.34300
+description = "New Zealand's southernmost port town, famous for its oysters."
+importance = 3
+region = "pacific"
+island = false
+source = "https://berthfinder.com/marina/bluff-marina-southland (Regions and Harbours 2026)"

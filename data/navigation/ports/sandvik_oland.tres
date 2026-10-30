@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"sandvik_oland"
+display_name = "Sandvik"
+country = "Sweden"
+latitude = 57.07145
+longitude = 16.85467
+description = "Small Öland harbour beside a towering Dutch-style windmill."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/sandvik-gasthamn-2 (Regions and Harbours 2026)"

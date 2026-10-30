@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hamburgsund"
+display_name = "Hamburgsund"
+country = "Sweden"
+latitude = 58.55072
+longitude = 11.27118
+description = "Village along a narrow sound, a small cable ferry crossing to Hamburgö."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/fjallbacka-gasthamn (nearby listing) (Regions and Harbours 2026)"

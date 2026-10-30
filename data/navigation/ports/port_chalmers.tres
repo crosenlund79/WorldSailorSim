@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"port_chalmers"
+display_name = "Port Chalmers"
+country = "New Zealand"
+latitude = -45.80850
+longitude = 170.62739
+description = "A hilly historic port halfway up Otago Harbour, near the albatross colony."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/otago/otago-harbour (Regions and Harbours 2026)"

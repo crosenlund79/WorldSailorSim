@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"bonnerup"
+display_name = "Bønnerup"
+country = "Denmark"
+latitude = 56.53480
+longitude = 10.71150
+description = "Fishing harbour on Djursland's north coast, open to the Kattegat."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://seame.com/en/poi/3022/boennerup (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"femo"
+display_name = "Femø"
+country = "Denmark"
+latitude = 54.97220
+longitude = 11.51250
+description = "Island harbour on Femø's west side, with two small basins and a ferry quay."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.seame.com/en/poi/2992/femoe (Regions and Harbours 2026)"

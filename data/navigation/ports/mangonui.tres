@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"mangonui"
+display_name = "Mangōnui"
+country = "New Zealand"
+latitude = -34.99000
+longitude = 173.53450
+description = "An old whaling port on Doubtless Bay, famous for fish and chips on the wharf."
+importance = 3
+region = "pacific"
+island = false
+source = "https://en.wikipedia.org/wiki/Mang%C5%8Dnui (Regions and Harbours 2026)"

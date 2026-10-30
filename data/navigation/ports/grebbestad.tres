@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"grebbestad"
+display_name = "Grebbestad"
+country = "Sweden"
+latitude = 58.68812
+longitude = 11.25455
+description = "Oyster capital of Sweden, with a long sheltered guest harbour."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/grebbestad (Regions and Harbours 2026)"

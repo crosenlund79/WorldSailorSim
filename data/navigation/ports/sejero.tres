@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"sejero"
+display_name = "Sejerø"
+country = "Denmark"
+latitude = 55.87980
+longitude = 11.13550
+description = "Ferry and fishing harbour on the long, quiet island of Sejerø."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://seame.com/en/poi/3059/sejeroe-havn (Regions and Harbours 2026)"

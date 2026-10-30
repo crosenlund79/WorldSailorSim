@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"kaikoura"
+display_name = "Kaikōura"
+country = "New Zealand"
+latitude = -42.42593
+longitude = 173.68156
+description = "A small fishing harbour where whales, dolphins and seals share the sea beneath snowy peaks."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/canterbury/kaikura-marina (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hunnebostrand"
+display_name = "Hunnebostrand"
+country = "Sweden"
+latitude = 58.44087
+longitude = 11.29421
+description = "Stone-cutters' village where pink granite meets a friendly guest harbour."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/hunnebostrands-gasthamn (Regions and Harbours 2026)"

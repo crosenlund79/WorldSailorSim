@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"rungsted"
+display_name = "Rungsted"
+country = "Denmark"
+latitude = 55.88580
+longitude = 12.54900
+description = "Large Øresund marina north of Copenhagen, near Karen Blixen's old home."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.boatview.io/en/poi/3121/rungsted (Regions and Harbours 2026)"

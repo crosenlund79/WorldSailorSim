@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"picton"
+display_name = "Picton"
+country = "New Zealand"
+latitude = -41.28856
+longitude = 174.01106
+description = "A small port town at the head of Queen Charlotte Sound, where the inter-island ferries berth."
+importance = 2
+region = "pacific"
+island = false
+source = "https://dockwalk.com/superports/picton-marina--269 (Regions and Harbours 2026)"

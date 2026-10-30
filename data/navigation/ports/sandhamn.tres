@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"sandhamn"
+display_name = "Sandhamn"
+country = "Sweden"
+latitude = 59.28947
+longitude = 18.91834
+description = "Sailing capital of the outer archipelago, home of the KSSS yacht club."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/ksss-gasthamn-sandhamn (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"akaroa"
+display_name = "Akaroa"
+country = "New Zealand"
+latitude = -43.80500
+longitude = 172.97000
+description = "A French-flavoured village on a sheltered volcanic harbour, home to tiny Hector's dolphins."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.yit.nz/node/66364 (Regions and Harbours 2026)"

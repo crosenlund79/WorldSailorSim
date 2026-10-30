@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"rorvig"
+display_name = "Rørvig"
+country = "Denmark"
+latitude = 55.94530
+longitude = 11.76670
+description = "Popular harbour at the mouth of Isefjord, with fishing sheds and sandy heath nearby."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://ports.marinelink.com/ports/port/rorvig-havn (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"kristianopel"
+display_name = "Kristianopel"
+country = "Sweden"
+latitude = 56.25677
+longitude = 16.04497
+description = "Tiny fortified village whose guest harbour lies right inside the old walls."
+importance = 3
+region = "baltic"
+island = false
+source = "https://www.hamnkartan.se/hamnar/kristianopel-1 (Regions and Harbours 2026)"

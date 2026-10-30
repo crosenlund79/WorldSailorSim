@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"karingon"
+display_name = "Käringön"
+country = "Sweden"
+latitude = 58.11332
+longitude = 11.36612
+description = "Bare granite island off Orust with a cosy harbour and seafood restaurant."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://www.hamnkartan.se/hamnar/karingons-hamn (Regions and Harbours 2026)"

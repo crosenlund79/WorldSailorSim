@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"seaview_marina"
+display_name = "Seaview"
+country = "New Zealand"
+latitude = -41.25150
+longitude = 174.89950
+description = "A tidy marina on the eastern shore of Wellington Harbour."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.noonsite.com/business/seaview-marina/ (Regions and Harbours 2026)"

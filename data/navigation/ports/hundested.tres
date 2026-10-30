@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hundested"
+display_name = "Hundested"
+country = "Denmark"
+latitude = 55.96520
+longitude = 11.84530
+description = "Busy fishing and ferry port at the entrance to Isefjord, below high clay cliffs."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://seame.com/en/poi/3126/hundested (Regions and Harbours 2026)"

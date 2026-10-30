@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cdshhldbi34di"
+
+[deps]
+
+files=["res://tools/navigation/cruising_destinations_omitted.name.translation", "res://tools/navigation/cruising_destinations_omitted.country.translation", "res://tools/navigation/cruising_destinations_omitted.kind.translation", "res://tools/navigation/cruising_destinations_omitted.latitude.translation", "res://tools/navigation/cruising_destinations_omitted.longitude.translation", "res://tools/navigation/cruising_destinations_omitted.reason.translation"]
+
+source_file="res://tools/navigation/cruising_destinations_omitted.csv"
+dest_files=["res://tools/navigation/cruising_destinations_omitted.name.translation", "res://tools/navigation/cruising_destinations_omitted.country.translation", "res://tools/navigation/cruising_destinations_omitted.kind.translation", "res://tools/navigation/cruising_destinations_omitted.latitude.translation", "res://tools/navigation/cruising_destinations_omitted.longitude.translation", "res://tools/navigation/cruising_destinations_omitted.reason.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

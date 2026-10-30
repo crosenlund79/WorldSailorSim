@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"oamaru"
+display_name = "Ōamaru"
+country = "New Zealand"
+latitude = -45.10650
+longitude = 170.97600
+description = "A Victorian stone harbour town where little blue penguins come ashore at dusk."
+importance = 3
+region = "pacific"
+island = false
+source = "https://ports.marinelink.com/ports/port/oamaru (Regions and Harbours 2026)"

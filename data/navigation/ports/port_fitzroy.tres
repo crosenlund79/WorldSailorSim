@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"port_fitzroy"
+display_name = "Port Fitzroy"
+country = "New Zealand"
+latitude = -36.16400
+longitude = 175.35600
+description = "A tiny wharf settlement deep inside Great Barrier Island's best all-weather harbour."
+importance = 3
+region = "pacific"
+island = true
+source = "https://ports.marinelink.com/ports/port/port-fitzroy (Regions and Harbours 2026)"

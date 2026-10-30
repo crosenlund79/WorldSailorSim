@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"drejo"
+display_name = "Drejø"
+country = "Denmark"
+latitude = 54.96580
+longitude = 10.43440
+description = "Little harbour on the south side of Drejø, a low island of salt meadows and birds."
+importance = 3
+region = "baltic"
+island = true
+source = "https://marinas.com/view/marina/jnclg8_Drej%C3%B8_Havn_Drej%C3%B8_Denmark (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"half_moon_bay"
+display_name = "Half Moon Bay"
+country = "New Zealand"
+latitude = -36.87986
+longitude = 174.90188
+description = "A sheltered eastern Auckland marina where ferries leave for Waiheke and the islands."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/auckland/half-moon-bay-marina (Regions and Harbours 2026)"

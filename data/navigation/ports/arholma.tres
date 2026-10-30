@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"arholma"
+display_name = "Arholma"
+country = "Sweden"
+latitude = 59.84315
+longitude = 19.12079
+description = "Northernmost archipelago island with a white beacon tower and quiet meadows."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/arholma (Regions and Harbours 2026)"

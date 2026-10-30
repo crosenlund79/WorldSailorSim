@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"skovshoved"
+display_name = "Skovshoved"
+country = "Denmark"
+latitude = 55.76030
+longitude = 12.60170
+description = "Old fishing village harbour on the Øresund coast just north of Copenhagen."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://ports.marinelink.com/ports/port/skovshoved-havn (Regions and Harbours 2026)"

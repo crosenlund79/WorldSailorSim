@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bjf4p3i8xe0y0"
+
+[deps]
+
+files=["res://tools/navigation/cruising_destinations.name.translation", "res://tools/navigation/cruising_destinations.country.translation", "res://tools/navigation/cruising_destinations.cruising.translation", "res://tools/navigation/cruising_destinations.area.translation", "res://tools/navigation/cruising_destinations.kind.translation", "res://tools/navigation/cruising_destinations.latitude.translation", "res://tools/navigation/cruising_destinations.longitude.translation", "res://tools/navigation/cruising_destinations.island.translation", "res://tools/navigation/cruising_destinations.overnight.translation", "res://tools/navigation/cruising_destinations.scenic.translation", "res://tools/navigation/cruising_destinations.services.translation", "res://tools/navigation/cruising_destinations.onward.translation", "res://tools/navigation/cruising_destinations.vessel.translation", "res://tools/navigation/cruising_destinations.research.translation", "res://tools/navigation/cruising_destinations.adjusted.translation", "res://tools/navigation/cruising_destinations.sea.translation", "res://tools/navigation/cruising_destinations.importance.translation", "res://tools/navigation/cruising_destinations.source.translation", "res://tools/navigation/cruising_destinations.description.translation"]
+
+source_file="res://tools/navigation/cruising_destinations.csv"
+dest_files=["res://tools/navigation/cruising_destinations.name.translation", "res://tools/navigation/cruising_destinations.country.translation", "res://tools/navigation/cruising_destinations.cruising.translation", "res://tools/navigation/cruising_destinations.area.translation", "res://tools/navigation/cruising_destinations.kind.translation", "res://tools/navigation/cruising_destinations.latitude.translation", "res://tools/navigation/cruising_destinations.longitude.translation", "res://tools/navigation/cruising_destinations.island.translation", "res://tools/navigation/cruising_destinations.overnight.translation", "res://tools/navigation/cruising_destinations.scenic.translation", "res://tools/navigation/cruising_destinations.services.translation", "res://tools/navigation/cruising_destinations.onward.translation", "res://tools/navigation/cruising_destinations.vessel.translation", "res://tools/navigation/cruising_destinations.research.translation", "res://tools/navigation/cruising_destinations.adjusted.translation", "res://tools/navigation/cruising_destinations.sea.translation", "res://tools/navigation/cruising_destinations.importance.translation", "res://tools/navigation/cruising_destinations.source.translation", "res://tools/navigation/cruising_destinations.description.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

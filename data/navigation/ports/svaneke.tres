@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"svaneke"
+display_name = "Svaneke"
+country = "Denmark"
+latitude = 55.13600
+longitude = 15.14500
+description = "Tidy old harbour town on Bornholm's east coast, built of granite and red tiles."
+importance = 3
+region = "baltic"
+island = true
+source = "https://ports.marinelink.com/ports/port/svaneke-havn (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"mana_marina"
+display_name = "Mana"
+country = "New Zealand"
+latitude = -41.09900
+longitude = 174.86650
+description = "A sheltered marina on Porirua Harbour, close to Mana Island and Cook Strait."
+importance = 3
+region = "pacific"
+island = false
+source = "https://en.wikipedia.org/wiki/Mana,_New_Zealand (Regions and Harbours 2026)"

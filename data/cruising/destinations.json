@@ -1,0 +1,4451 @@
+{
+	"note": "Destinations of the Detailed Cruising Regions, built from tools/navigation/cruising_destinations.csv by tools/navigation/build_cruising.py. Harbours are also PortData (data/navigation/ports); anchorages are not harbours and have no shore facilities.",
+	"classes": [
+		"harbour",
+		"guest_harbour",
+		"fishing_village",
+		"anchorage"
+	],
+	"destinations": [
+		{
+			"id": "lyo",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0494,
+			"longitude": 10.1572,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://marinas.com/view/marina/x1cn6m_Ly%C3%B8_Havn_Ly%C3%B8_By_Ly%C3%B8_Denmark"
+		},
+		{
+			"id": "avernako",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0397,
+			"longitude": 10.2525,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/avernakoe"
+		},
+		{
+			"id": "drejo",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 54.9658,
+			"longitude": 10.4344,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"wildlife"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://marinas.com/view/marina/jnclg8_Drej%C3%B8_Havn_Drej%C3%B8_Denmark"
+		},
+		{
+			"id": "skaro",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0114,
+			"longitude": 10.4706,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"cafe"
+			],
+			"vessel_note": "shallow approach, about 2 m",
+			"source": "https://ports.marinelink.com/ports/port/skaro-havn"
+		},
+		{
+			"id": "stryno",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 54.9036,
+			"longitude": 10.6297,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"wildlife"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "shallow approach, about 2 m",
+			"source": "https://seame.com/en/poi/2806/strynoe"
+		},
+		{
+			"id": "troense",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0346,
+			"longitude": 10.6454,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"village",
+				"archipelago"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Troense"
+		},
+		{
+			"id": "thuro",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0414,
+			"longitude": 10.6684,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"archipelago",
+				"bay",
+				"forest"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://marinaguide.dk/en/thuroe-sailing-club/navigation"
+		},
+		{
+			"id": "dyreborg",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0711,
+			"longitude": 10.2186,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"forest"
+			],
+			"services": [
+				"harbour_office"
+			],
+			"vessel_note": "shallow approach, about 2 m",
+			"source": "https://ports.marinelink.com/ports/port/dyreborg-havn"
+		},
+		{
+			"id": "soby",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 54.9428,
+			"longitude": 10.26,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/2772"
+		},
+		{
+			"id": "bagenkop",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 54.7519,
+			"longitude": 10.6732,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/2813/bagenkop"
+		},
+		{
+			"id": "spodsbjerg",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "great_belt",
+			"latitude": 54.9328,
+			"longitude": 10.8343,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/2820"
+		},
+		{
+			"id": "lundeborg",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "great_belt",
+			"latitude": 55.1394,
+			"longitude": 10.7839,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"beach",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Lundeborg"
+		},
+		{
+			"id": "bogense",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.5672,
+			"longitude": 10.0783,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://marinaguide.dk/en/bogense-harbour-marina/navigation"
+		},
+		{
+			"id": "assens",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.2685,
+			"longitude": 9.8875,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/assens"
+		},
+		{
+			"id": "faldsled",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.1525,
+			"longitude": 10.1419,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "shallow buoyed channel, about 2 m",
+			"source": "https://seame.com/en/poi/2799/faldsled"
+		},
+		{
+			"id": "kalvo",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.1228,
+			"longitude": 9.4654,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"bay"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "limited berths, about 3 m",
+			"source": "https://seame.com/en/poi/2791/kalvoe-genner-bugt"
+		},
+		{
+			"id": "aabenraa",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.0383,
+			"longitude": 9.4164,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"fjord"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/aabenraa-sejl"
+		},
+		{
+			"id": "rorvig",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "isefjord",
+			"latitude": 55.9453,
+			"longitude": 11.7667,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/rorvig-havn"
+		},
+		{
+			"id": "hundested",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "isefjord",
+			"latitude": 55.9652,
+			"longitude": 11.8453,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"cliffs"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3126/hundested"
+		},
+		{
+			"id": "sejero",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.8798,
+			"longitude": 11.1355,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"remote"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3059/sejeroe-havn"
+		},
+		{
+			"id": "karrebaeksminde",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 55.1783,
+			"longitude": 11.6547,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"beach",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/2913"
+		},
+		{
+			"id": "skaelskor",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 55.2517,
+			"longitude": 11.2868,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"fjord"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/2956/skaelskoer"
+		},
+		{
+			"id": "omo",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 55.1713,
+			"longitude": 11.1602,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"beach"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"provisions"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/omo-havn"
+		},
+		{
+			"id": "agerso",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 55.211,
+			"longitude": 11.198,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.boatview.io/en/poi/2994/agersoe"
+		},
+		{
+			"id": "femo",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.9722,
+			"longitude": 11.5125,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"beach"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/2992/femoe"
+		},
+		{
+			"id": "fejo_dybvig",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.9442,
+			"longitude": 11.4359,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"archipelago"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/2942"
+		},
+		{
+			"id": "asko",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.8844,
+			"longitude": 11.4829,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"wildlife"
+			],
+			"services": [
+				"harbour_office"
+			],
+			"vessel_note": "shallow approach, about 2 m",
+			"source": "https://www.boatview.io/en/poi/2990/askoe"
+		},
+		{
+			"id": "bisserup",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 55.1997,
+			"longitude": 11.4913,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"wildlife"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "shallow approach, about 2 m",
+			"source": "https://www.boatview.io/en/poi/2907/bisserup"
+		},
+		{
+			"id": "rungsted",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "oresund",
+			"latitude": 55.8858,
+			"longitude": 12.549,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.boatview.io/en/poi/3121/rungsted"
+		},
+		{
+			"id": "skovshoved",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "oresund",
+			"latitude": 55.7603,
+			"longitude": 12.6017,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"harbour_office",
+				"showers",
+				"cafe",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/skovshoved-havn"
+		},
+		{
+			"id": "hornbaek",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "oresund",
+			"latitude": 56.0942,
+			"longitude": 12.4592,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/hornbaek-havn"
+		},
+		{
+			"id": "ballen",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.8167,
+			"longitude": 10.64,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.visitdenmark.com/denmark/plan-your-trip/ballen-marina-gdk1097750"
+		},
+		{
+			"id": "langor",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.9105,
+			"longitude": 10.6418,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"wildlife",
+				"remote"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "buoyed approach over reefs",
+			"source": "https://www.visitdenmark.com/denmark/plan-your-trip/langor-marina-gdk1097753"
+		},
+		{
+			"id": "marup",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.937,
+			"longitude": 10.5522,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"cliffs",
+				"remote"
+			],
+			"services": [
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.visitsamsoe.dk/en/transport/samsoe-marinas/maarup-marina/"
+		},
+		{
+			"id": "tuno",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.9487,
+			"longitude": 10.453,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"beach"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/3104"
+		},
+		{
+			"id": "endelave",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.7605,
+			"longitude": 10.2725,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"wildlife",
+				"village"
+			],
+			"services": [
+				"harbour_office",
+				"showers",
+				"provisions"
+			],
+			"vessel_note": "",
+			"source": "https://marinaguide.dk/en/endelave-harbour/navigation"
+		},
+		{
+			"id": "anholt",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 56.7151,
+			"longitude": 11.5118,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"beach",
+				"wildlife"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/3023/"
+		},
+		{
+			"id": "osterby",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 57.3194,
+			"longitude": 11.1225,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3055/oesterby"
+		},
+		{
+			"id": "vestero_havn",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 57.2967,
+			"longitude": 10.9236,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3094/vesteroe-havn"
+		},
+		{
+			"id": "bonnerup",
+			"class": "fishing_village",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 56.5348,
+			"longitude": 10.7115,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3022/boennerup"
+		},
+		{
+			"id": "hals",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "limfjord_east",
+			"latitude": 56.9905,
+			"longitude": 10.3075,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fjord",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/hals"
+		},
+		{
+			"id": "saeby",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 57.3342,
+			"longitude": 10.5286,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"fishing",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/saeby-havn"
+		},
+		{
+			"id": "allinge",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "bornholm",
+			"latitude": 55.279,
+			"longitude": 14.803,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"cliffs",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/allinge"
+		},
+		{
+			"id": "gudhjem",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "bornholm",
+			"latitude": 55.2106,
+			"longitude": 14.9686,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"cliffs",
+				"historic_town",
+				"fishing"
+			],
+			"services": [
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/gudhjem-havn"
+		},
+		{
+			"id": "svaneke",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "bornholm",
+			"latitude": 55.136,
+			"longitude": 15.145,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"historic_town",
+				"fishing"
+			],
+			"services": [
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/svaneke-havn"
+		},
+		{
+			"id": "nexo",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "bornholm",
+			"latitude": 55.0633,
+			"longitude": 15.137,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/2940/nexoe"
+		},
+		{
+			"id": "christianso",
+			"class": "guest_harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "bornholm",
+			"latitude": 55.3225,
+			"longitude": 15.1872,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"historic_town",
+				"wildlife"
+			],
+			"services": [
+				"harbour_office",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.christiansoe.dk/en/visit-the-island/the-harbour/"
+		},
+		{
+			"id": "klintholm",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.9536,
+			"longitude": 12.4659,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"cliffs",
+				"fishing",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"fishmonger"
+			],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Klintholm_Havn"
+		},
+		{
+			"id": "gedser",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.5669,
+			"longitude": 11.9247,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"remote"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://marinas.com/view/harbor/1198_Gedser_Havn_Harbor_Gedser_Falster_Denmark"
+		},
+		{
+			"id": "bandholm",
+			"class": "harbour",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.8382,
+			"longitude": 11.4914,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"harbour_office",
+				"showers",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://ports.marinelink.com/ports/port/bandholm"
+		},
+		{
+			"id": "begtrup_vig",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "aarhus_bay",
+			"latitude": 56.16583,
+			"longitude": 10.516,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "deep in parts; anchor in the south behind Rønnen",
+			"source": "https://seame.com/en/poi/3063/kongsgaarde-bro",
+			"name": "Begtrup Vig",
+			"description": "Popular anchorage in a hill-ringed bay between Mols and Helgenæs, behind the Rønnen shoal.",
+			"onward": "aarhus",
+			"research_position": [
+				56.17,
+				10.516
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "kalo_vig",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "aarhus_bay",
+			"latitude": 56.27416,
+			"longitude": 10.47908,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"historic_town",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://seame.com/en/poi/3027/nappedam",
+			"name": "Kalø Vig",
+			"description": "Sheltered anchorage between Nappedam and the medieval Kalø castle ruin.",
+			"onward": "aarhus",
+			"research_position": [
+				56.283,
+				10.495
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "knebel_vig",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "aarhus_bay",
+			"latitude": 56.20933,
+			"longitude": 10.45026,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "sand and seagrass bottom; a few guest buoys",
+			"source": "https://www.navily.com/en/mouillage/knebel-vig/41488",
+			"name": "Knebel Vig",
+			"description": "Almost enclosed bay in the Mols hills, quiet and away from the main routes.",
+			"onward": "aarhus",
+			"research_position": [
+				56.2047,
+				10.4378
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "stavns_fjord",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.91191,
+			"longitude": 10.63445,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"wildlife",
+				"fjord"
+			],
+			"services": [],
+			"vessel_note": "soft bottom; 5 kn speed limit in the reserve",
+			"source": "https://www.visitsamsoe.dk/en/transport/samsoe-marinas/langoere-marina/",
+			"name": "Stavns Fjord",
+			"description": "Calm anchorage inside Samsø's Stavns Fjord, a bird reserve dotted with islets.",
+			"onward": "langor",
+			"research_position": [
+				55.916,
+				10.633
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "thuro_bund",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.02371,
+			"longitude": 10.70324,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"archipelago",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "sandy bottom, 2-6 m",
+			"source": "https://www.yacht.de/en/travel-and-charter/denmark/funen-twelve-bays-for-perfect-nights-at-anchor-in-the-great-and-little-belt/",
+			"name": "Thurø Bund",
+			"description": "Former winter haven for schooners, a snug wooded bay on Thurø.",
+			"onward": "svendborg",
+			"research_position": [
+				55.0445,
+				10.679
+			],
+			"adjusted_nm": 1.5
+		},
+		{
+			"id": "lunkebugten",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.008,
+			"longitude": 10.695,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "open to the north",
+			"source": "https://lex.dk/Lunkebugten",
+			"name": "Lunkebugten",
+			"description": "Wide shallow bay on Tåsinge's east coast, a quiet overnight stop south of Thurø.",
+			"onward": "troense"
+		},
+		{
+			"id": "avernako_korshavn",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.0262,
+			"longitude": 10.31409,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"beach"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.visitfaaborg.com/korshavn-bro-avernako-gdk613830",
+			"name": "Revkrogen",
+			"description": "Anchorage off Korshavn and Revkrogen at Avernakø's eastern end, sheltered from the north-west.",
+			"onward": "faaborg",
+			"research_position": [
+				55.0158,
+				10.3262
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "lyo_west_bay",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "south_funen",
+			"latitude": 55.05939,
+			"longitude": 10.14548,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.seame.com/en/poi/2803?slug=lyoe",
+			"name": "Lyø Anchorage",
+			"description": "Roomy anchorage in the bay north-west of Lyø's pier, easy to approach.",
+			"onward": "lyo",
+			"research_position": [
+				55.0553,
+				10.1469
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "genner_bugt",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.11712,
+			"longitude": 9.51788,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "muddy bottom; best near the south shore",
+			"source": "https://seame.com/en/poi/2791/kalvoe-genner-bugt",
+			"name": "Genner Bugt",
+			"description": "Sheltered wooded bay beside Kalvø, good holding except in easterly winds.",
+			"onward": "kalvo",
+			"research_position": [
+				55.122,
+				9.475
+			],
+			"adjusted_nm": 1.5
+		},
+		{
+			"id": "helnaes_bugt",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "little_belt",
+			"latitude": 55.154,
+			"longitude": 10.12071,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"wildlife",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "changing depths; watch for fishing stakes",
+			"source": "https://www.boatview.io/en/poi/4426/fahrwasser-faldsled",
+			"name": "Helnæs Bugt",
+			"description": "Seldom-crowded bay on south-west Funen, with Faldsled's inn ashore.",
+			"onward": "faldsled",
+			"research_position": [
+				55.154,
+				10.128
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "tuno_anchorage",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "kattegat",
+			"latitude": 55.94989,
+			"longitude": 10.46529,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach"
+			],
+			"services": [],
+			"vessel_note": "2-3 m close inshore; keep clear of cable area",
+			"source": "https://boatview-cdn.com/en/poi/3104/tunoe",
+			"name": "Tunø Anchorage",
+			"description": "Anchorage just north-east of Tunø harbour, good in westerly and northerly winds.",
+			"onward": "tuno",
+			"research_position": [
+				55.9522,
+				10.4591
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "femo_anchorage",
+			"class": "anchorage",
+			"country": "Denmark",
+			"cruising_region": "denmark",
+			"area": "smaalandsfarvandet",
+			"latitude": 54.96904,
+			"longitude": 11.49977,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach"
+			],
+			"services": [],
+			"vessel_note": "about 2.5 m",
+			"source": "https://www.seame.com/en/poi/2992/femoe",
+			"name": "Femø Anchorage",
+			"description": "Anchorage west of Femø harbour, sheltered from north and east winds.",
+			"onward": "femo",
+			"research_position": [
+				54.9725,
+				11.5038
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "vrango",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gothenburg_archipelago",
+			"latitude": 57.5809,
+			"longitude": 11.79113,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"granite",
+				"village",
+				"fishing"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/vrango"
+		},
+		{
+			"id": "hono_klava",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gothenburg_archipelago",
+			"latitude": 57.68182,
+			"longitude": 11.64752,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/hono-klava-hamn"
+		},
+		{
+			"id": "roro",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gothenburg_archipelago",
+			"latitude": 57.77217,
+			"longitude": 11.6195,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"granite",
+				"fishing",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/roro-hamn"
+		},
+		{
+			"id": "marstrand",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gothenburg_archipelago",
+			"latitude": 57.88815,
+			"longitude": 11.58753,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"historic_town",
+				"granite",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/ringens-varv"
+		},
+		{
+			"id": "astol",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 57.92167,
+			"longitude": 11.58533,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village",
+				"granite"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/astols-gasthamn (vastsverige.com Åstols Gästhamn)"
+		},
+		{
+			"id": "kladesholmen",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 57.9455,
+			"longitude": 11.53701,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village",
+				"historic_town"
+			],
+			"services": [
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/kladesholmen-vastra-hamn"
+		},
+		{
+			"id": "skarhamn",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 57.98798,
+			"longitude": 11.54559,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"granite",
+				"village",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/skarhamns-gasthamn"
+		},
+		{
+			"id": "mollosund",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.07323,
+			"longitude": 11.47016,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"granite",
+				"boathouses"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/mollosund-gasthamn"
+		},
+		{
+			"id": "karingon",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.11332,
+			"longitude": 11.36612,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village",
+				"granite",
+				"remote"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/karingons-hamn"
+		},
+		{
+			"id": "gullholmen",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.17822,
+			"longitude": 11.40465,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village",
+				"granite",
+				"boathouses"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/gullholmens-gasthamn"
+		},
+		{
+			"id": "ellos",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.1847,
+			"longitude": 11.46656,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"archipelago",
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/ellos"
+		},
+		{
+			"id": "lysekil",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.27452,
+			"longitude": 11.44144,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"granite",
+				"fjord"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/lysekils-gasthamn"
+		},
+		{
+			"id": "smogen",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.35422,
+			"longitude": 11.23019,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"granite",
+				"boathouses"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "Busy and crowded in July.",
+			"source": "https://www.hamnkartan.se/hamnar/rs-smogen"
+		},
+		{
+			"id": "hunnebostrand",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.44087,
+			"longitude": 11.29421,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"granite",
+				"village",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/hunnebostrands-gasthamn"
+		},
+		{
+			"id": "hamburgsund",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.55072,
+			"longitude": 11.27118,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"archipelago",
+				"granite"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/fjallbacka-gasthamn (nearby listing)"
+		},
+		{
+			"id": "fjallbacka",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.59773,
+			"longitude": 11.2807,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"granite",
+				"cliffs",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/fjallbacka-gasthamn"
+		},
+		{
+			"id": "grebbestad",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.68812,
+			"longitude": 11.25455,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"fishing",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"chandlery",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/grebbestad"
+		},
+		{
+			"id": "reso",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.80073,
+			"longitude": 11.16433,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"fishing",
+				"village",
+				"remote"
+			],
+			"services": [
+				"provisions",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/reso-gasthamn"
+		},
+		{
+			"id": "molle",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oresund",
+			"latitude": 56.28295,
+			"longitude": 12.4926,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"cliffs",
+				"forest",
+				"historic_town"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/molle-hamn"
+		},
+		{
+			"id": "helsingborg",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oresund",
+			"latitude": 56.04918,
+			"longitude": 12.68569,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/helsingborg"
+		},
+		{
+			"id": "raa",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oresund",
+			"latitude": 55.99115,
+			"longitude": 12.74222,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/raa"
+		},
+		{
+			"id": "kyrkbacken",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oresund",
+			"latitude": 55.90967,
+			"longitude": 12.67333,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"beach"
+			],
+			"services": [
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.navily.com/port/kyrkbackens-hamn/8723"
+		},
+		{
+			"id": "barsebackshamn",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oresund",
+			"latitude": 55.757,
+			"longitude": 12.903,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"beach"
+			],
+			"services": [
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/rs-barsebackshamn (rounded 55°45'N 12°54'E)"
+		},
+		{
+			"id": "skanor",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "skane_south",
+			"latitude": 55.41627,
+			"longitude": 12.82852,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"beach",
+				"wildlife"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "Shallow approaches.",
+			"source": "https://www.hamnkartan.se/hamnar/skanors-gasthamn"
+		},
+		{
+			"id": "simrishamn",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "skane_south",
+			"latitude": 55.56045,
+			"longitude": 14.35223,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/simrishamn-2"
+		},
+		{
+			"id": "kivik",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "skane_south",
+			"latitude": 55.68847,
+			"longitude": 14.22721,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"fishing",
+				"beach"
+			],
+			"services": [
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/rs-kivik"
+		},
+		{
+			"id": "ahus",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "skane_south",
+			"latitude": 55.92575,
+			"longitude": 14.3046,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/ahus-1"
+		},
+		{
+			"id": "hano",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "blekinge",
+			"latitude": 56.00962,
+			"longitude": 14.83592,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"wildlife",
+				"forest",
+				"historic_town"
+			],
+			"services": [
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/hano-hamn"
+		},
+		{
+			"id": "vagga",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "blekinge",
+			"latitude": 56.15585,
+			"longitude": 14.88338,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"archipelago"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/vagga-fiskehamn-1"
+		},
+		{
+			"id": "kristianopel",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "blekinge",
+			"latitude": 56.25677,
+			"longitude": 16.04497,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"village",
+				"fishing"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/kristianopel-1"
+		},
+		{
+			"id": "borgholm",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oland",
+			"latitude": 56.8799,
+			"longitude": 16.6471,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/borgholms-gasthamn"
+		},
+		{
+			"id": "sandvik_oland",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oland",
+			"latitude": 57.07145,
+			"longitude": 16.85467,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"fishing"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/sandvik-gasthamn-2"
+		},
+		{
+			"id": "byxelkrok",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "oland",
+			"latitude": 57.32718,
+			"longitude": 17.00515,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"beach",
+				"forest"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/byxelkroks-gasthamn"
+		},
+		{
+			"id": "lickershamn",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.82657,
+			"longitude": 18.51369,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"cliffs",
+				"fishing",
+				"remote"
+			],
+			"services": [
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/lickershamns-gasthamn"
+		},
+		{
+			"id": "farosund",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.86698,
+			"longitude": 19.05814,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"fishing",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/farosund (Fiskehamnen)"
+		},
+		{
+			"id": "slite",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.70625,
+			"longitude": 18.80886,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"island",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/slite-gasthamn"
+		},
+		{
+			"id": "katthammarsvik",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.43563,
+			"longitude": 18.85044,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"remote"
+			],
+			"services": [
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/katthammarsvik-bathamn"
+		},
+		{
+			"id": "ljugarn",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.3219,
+			"longitude": 18.70836,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"village",
+				"cliffs"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Exposed in easterly winds.",
+			"source": "https://www.hamnkartan.se/hamnar/ljugarns-gasthamn"
+		},
+		{
+			"id": "ronehamn",
+			"class": "fishing_village",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.17353,
+			"longitude": 18.49034,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/ronehamn"
+		},
+		{
+			"id": "klintehamn",
+			"class": "harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gotland",
+			"latitude": 57.38937,
+			"longitude": 18.18755,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/klintehamn"
+		},
+		{
+			"id": "vastervik",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland_smaland",
+			"latitude": 57.75752,
+			"longitude": 16.6505,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/pampas-marina-gasthamn"
+		},
+		{
+			"id": "fyrudden",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland",
+			"latitude": 58.19175,
+			"longitude": 16.85254,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"archipelago",
+				"fishing",
+				"granite"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/fyrudden-gasthamn"
+		},
+		{
+			"id": "arkosund",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland",
+			"latitude": 58.48788,
+			"longitude": 16.94449,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"archipelago",
+				"village",
+				"granite"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/arkosund-1"
+		},
+		{
+			"id": "trosa",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "sodermanland",
+			"latitude": 58.88968,
+			"longitude": 17.55261,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/laxkroksholmarna (Trosa Gästhamn listing)"
+		},
+		{
+			"id": "uto",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 58.97053,
+			"longitude": 18.3252,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"historic_town",
+				"forest",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/gruvbryggan-uto"
+		},
+		{
+			"id": "dalaro",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.13548,
+			"longitude": 18.40224,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/askfatshamnen-gasthamn"
+		},
+		{
+			"id": "sandhamn",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.28947,
+			"longitude": 18.91834,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"archipelago",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Very busy in July.",
+			"source": "https://www.hamnkartan.se/hamnar/ksss-gasthamn-sandhamn"
+		},
+		{
+			"id": "moja",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.40545,
+			"longitude": 18.88341,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"village",
+				"forest",
+				"archipelago"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/kyrkviken-gasthamn"
+		},
+		{
+			"id": "vaxholm",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.4006,
+			"longitude": 18.35069,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"archipelago"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/waxholms-gasthamn"
+		},
+		{
+			"id": "finnhamn",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.47888,
+			"longitude": 18.81235,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"archipelago"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/paradisviken"
+		},
+		{
+			"id": "furusund",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.6611,
+			"longitude": 18.91809,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"historic_town",
+				"archipelago"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/furusund"
+		},
+		{
+			"id": "arholma",
+			"class": "guest_harbour",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.84315,
+			"longitude": 19.12079,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"village",
+				"forest"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/arholma"
+		},
+		{
+			"id": "grinda_hastholmssundet",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.40273,
+			"longitude": 18.55686,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/grinda-hastholmssundet",
+			"name": "Grinda Hästholmssundet",
+			"description": "Sheltered sound on Grinda's south side, beloved by families on summer weekends.",
+			"onward": "vaxholm",
+			"research_position": [
+				59.40592,
+				18.57199
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "gallno_getudden",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.40464,
+			"longitude": 18.61756,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/gallno-getudden",
+			"name": "Gällnö Getudden",
+			"description": "Quiet natural harbour on Gällnö, an island of meadows and old farms.",
+			"onward": "finnhamn",
+			"research_position": [
+				59.40627,
+				18.63362
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "sjalbottna_langviken",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.56693,
+			"longitude": 18.82051,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/sjalbottna-langviken",
+			"name": "Själbottna Långviken",
+			"description": "Long wooded inlet on Själbottna, calm in almost any wind.",
+			"onward": "finnhamn",
+			"research_position": [
+				59.5653,
+				18.80438
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "bullero_bodkobbshalet",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.19606,
+			"longitude": 18.85126,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"remote",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/bodkobbshalet",
+			"name": "Bullerö Bodkobbshålet",
+			"description": "Rocky outer-skerry anchorage in the Bullerö reserve, eider ducks all around.",
+			"onward": "sandhamn",
+			"research_position": [
+				59.19952,
+				18.84674
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "stora_nassa",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.42832,
+			"longitude": 19.20099,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"remote",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/gubben-1 (St Nassa svajankring listing)",
+			"name": "Stora Nassa",
+			"description": "Remote low skerries far out to sea; swing at anchor among nesting birds.",
+			"onward": "moja",
+			"research_position": [
+				59.43178,
+				19.19644
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "rodloga",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.59623,
+			"longitude": 19.17923,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"remote",
+				"village"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/rodloga-2",
+			"name": "Rödlöga",
+			"description": "Outer skerry anchorage beside a tiny summer village and its little shop.",
+			"onward": "furusund",
+			"research_position": [
+				59.59623,
+				19.16276
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "huvudskar",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 58.96348,
+			"longitude": 18.55662,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"remote",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/huvudskar-1",
+			"name": "Huvudskär",
+			"description": "Old fishing skerries at the open-sea edge, with a lonely lighthouse.",
+			"onward": "uto",
+			"research_position": [
+				58.96348,
+				18.5647
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "agno_napoleonviken",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.23702,
+			"longitude": 18.41706,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "Navigare Yachting Sweden route 2 PDF (N59 14.221 E18 24.046)",
+			"name": "Ägnö Napoleonviken",
+			"description": "Snug forested bay on Ägnö, an easy first night out from Stockholm.",
+			"onward": "dalaro",
+			"research_position": [
+				59.23702,
+				18.40077
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "fjardlang_rumpudden",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "stockholm_archipelago",
+			"latitude": 59.05523,
+			"longitude": 18.54351,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"granite"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/fjardlang-rumpudden",
+			"name": "Fjärdlång Rumpudden",
+			"description": "Natural harbour on the long wooded island of Fjärdlång.",
+			"onward": "dalaro",
+			"research_position": [
+				59.05817,
+				18.53778
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "altarholmen",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.015,
+			"longitude": 11.45333,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "vastsverige.com Tjörn badhamnar (58°0.9'N 11°27.2'E)",
+			"name": "Altarholmen",
+			"description": "Popular natural harbour at an old pilot station, clear water and mussels.",
+			"onward": "skarhamn"
+		},
+		{
+			"id": "karholmarna",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.1163,
+			"longitude": 11.42855,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/karholmarna-1",
+			"name": "Karholmarna",
+			"description": "Bare granite islets near Mollösund, a classic west-coast natural harbour.",
+			"onward": "karingon",
+			"research_position": [
+				58.11167,
+				11.44167
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "kalkeron",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "tjorn_orust",
+			"latitude": 58.07495,
+			"longitude": 11.59046,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/kalkeron-3",
+			"name": "Kälkerön",
+			"description": "Sheltered skerry anchorage off northern Tjörn.",
+			"onward": "mollosund",
+			"research_position": [
+				58.07333,
+				11.575
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "vasholmarna",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.21333,
+			"longitude": 11.375,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/vasholmarna-1",
+			"name": "Vasholmarna",
+			"description": "Outer granite islets west of Grundsund, best in settled weather.",
+			"onward": "gullholmen"
+		},
+		{
+			"id": "gaso_badviken",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.25159,
+			"longitude": 11.40565,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/gaso-badviken",
+			"name": "Gåsö Badviken",
+			"description": "Bathing cove on Gåsö at the mouth of Gullmarsfjorden.",
+			"onward": "lysekil",
+			"research_position": [
+				58.24167,
+				11.39833
+			],
+			"adjusted_nm": 0.64
+		},
+		{
+			"id": "lindholmen_ockero",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "gothenburg_archipelago",
+			"latitude": 57.73598,
+			"longitude": 11.61951,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/lindholmen",
+			"name": "Lindholmen",
+			"description": "Small granite natural harbour in the northern Gothenburg archipelago.",
+			"onward": "roro"
+		},
+		{
+			"id": "munkholmen",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.49941,
+			"longitude": 11.27189,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/munkholmen",
+			"name": "Munkholmen",
+			"description": "Granite islet anchorage among the skerries south of Hamburgsund.",
+			"onward": "hamburgsund",
+			"research_position": [
+				58.50022,
+				11.27971
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "huo",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "bohuslan_north",
+			"latitude": 58.45893,
+			"longitude": 11.27705,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"granite",
+				"archipelago"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/hunnebostrands-gasthamn (Huö Yttre/Inre listing)",
+			"name": "Huö",
+			"description": "Island natural harbour just off Hunnebostrand, smooth rocks for bathing.",
+			"onward": "hunnebostrand",
+			"research_position": [
+				58.45893,
+				11.28502
+			],
+			"adjusted_nm": 0.25
+		},
+		{
+			"id": "kalmo",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland_smaland",
+			"latitude": 57.61527,
+			"longitude": 16.7641,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"archipelago",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/kalmo",
+			"name": "Kälmö",
+			"description": "Skerry anchorage in the outer Västervik archipelago.",
+			"onward": "vastervik"
+		},
+		{
+			"id": "boko_hamnvik",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland",
+			"latitude": 58.07956,
+			"longitude": 16.81551,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/boko-hamnvik",
+			"name": "Bokö Hamnvik",
+			"description": "Sheltered bay on Bokö in the Gryt archipelago.",
+			"onward": "fyrudden",
+			"research_position": [
+				58.0959,
+				16.82166
+			],
+			"adjusted_nm": 1.0
+		},
+		{
+			"id": "harstena_flisfjarden",
+			"class": "anchorage",
+			"country": "Sweden",
+			"cruising_region": "sweden",
+			"area": "ostergotland",
+			"latitude": 58.25441,
+			"longitude": 17.04322,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"fishing",
+				"village"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://www.hamnkartan.se/hamnar/yttero-2 (Harstena / Flisfjärden listing)",
+			"name": "Harstena Flisfjärden",
+			"description": "Natural harbour by Harstena, an outer fishing hamlet known for smoked fish.",
+			"onward": "fyrudden",
+			"research_position": [
+				58.26135,
+				17.02346
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "opua",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.31558,
+			"longitude": 174.1209,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.predictwind.com/marinas/new-zealand/northland/bay-of-islands-marina---port-opua"
+		},
+		{
+			"id": "russell",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.2618,
+			"longitude": 174.1208,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"bay"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Open roadstead off the waterfront; exposed to westerlies",
+			"source": "https://en.wikipedia.org/wiki/Russell,_New_Zealand"
+		},
+		{
+			"id": "paihia",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.2815,
+			"longitude": 174.0935,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"beach",
+				"village"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Wharf mainly for ferries and tour boats; anchor off in settled weather",
+			"source": "https://en.wikipedia.org/wiki/Paihia"
+		},
+		{
+			"id": "kerikeri_doves_bay",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.19438,
+			"longitude": 174.03445,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest"
+			],
+			"services": [
+				"showers"
+			],
+			"vessel_note": "Shallow upper Kerikeri Inlet; watch the tide",
+			"source": "https://www.yachtingnz.org.nz/node/5145"
+		},
+		{
+			"id": "mangonui",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "northland",
+			"latitude": -34.99,
+			"longitude": 173.5345,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"village",
+				"historic_town"
+			],
+			"services": [
+				"provisions",
+				"cafe",
+				"fishmonger"
+			],
+			"vessel_note": "Narrow entrance from Doubtless Bay; best entered on the tide",
+			"source": "https://en.wikipedia.org/wiki/Mang%C5%8Dnui"
+		},
+		{
+			"id": "whangaroa",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "northland",
+			"latitude": -35.05,
+			"longitude": 173.7415,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"cliffs",
+				"fishing",
+				"village",
+				"volcanic"
+			],
+			"services": [
+				"fuel",
+				"provisions"
+			],
+			"vessel_note": "Narrow cliff-lined entrance; marina about 20 minutes inside",
+			"source": "https://www.noonsite.com/?p=58428"
+		},
+		{
+			"id": "houhora",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "northland",
+			"latitude": -34.827,
+			"longitude": 173.133,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"remote",
+				"village"
+			],
+			"services": [
+				"provisions"
+			],
+			"vessel_note": "Remote Far North; shallow bar at Houhora Heads, follow the channel",
+			"source": "https://en.wikipedia.org/wiki/Pukenui"
+		},
+		{
+			"id": "tutukaka",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "northland",
+			"latitude": -35.6128,
+			"longitude": 174.525,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"cliffs",
+				"bay",
+				"wildlife"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Narrow entrance; open to easterly swell on the approach",
+			"source": "https://en.wikipedia.org/wiki/Tutukaka"
+		},
+		{
+			"id": "marsden_cove",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "northland",
+			"latitude": -35.83649,
+			"longitude": 174.46767,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.predictwind.com/marinas/new-zealand/northland/marsden-cove-marina"
+		},
+		{
+			"id": "gulf_harbour",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.6198,
+			"longitude": 174.7901,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.dockwalk.com/superports/gulf-harbour-marina--952"
+		},
+		{
+			"id": "half_moon_bay",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.87986,
+			"longitude": 174.90188,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.predictwind.com/marinas/new-zealand/auckland/half-moon-bay-marina"
+		},
+		{
+			"id": "port_fitzroy",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.164,
+			"longitude": 175.356,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"remote",
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"provisions"
+			],
+			"vessel_note": "Long passage across the outer Gulf; little shelter on the way",
+			"source": "https://ports.marinelink.com/ports/port/port-fitzroy"
+		},
+		{
+			"id": "whitianga",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "coromandel",
+			"latitude": -36.83733,
+			"longitude": 175.70746,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"beach",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.predictwind.com/marinas/new-zealand/waikato/whitianga-marina"
+		},
+		{
+			"id": "hannafords_wharf",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "coromandel",
+			"latitude": -36.8093,
+			"longitude": 175.46713,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"forest",
+				"fishing"
+			],
+			"services": [],
+			"vessel_note": "Shallow harbour with mussel farms; anchor or moor nearby",
+			"source": "https://www.waikatoregion.govt.nz/services/maritime-services/moorings-4-sale-or-rent/mooring-161-takawhare-bay-for-sale"
+		},
+		{
+			"id": "tauranga",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_plenty",
+			"latitude": -37.67176,
+			"longitude": 176.17884,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"volcanic"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Strong tidal streams in the harbour entrance by Mount Maunganui",
+			"source": "https://www.predictwind.com/marinas/new-zealand/bay-of-plenty/tauranga-bridge-marina"
+		},
+		{
+			"id": "whakatane",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_plenty",
+			"latitude": -37.95,
+			"longitude": 176.9975,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"volcanic",
+				"wildlife"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "River bar: cross only near high water in settled weather",
+			"source": "https://whakatane.govt.nz/services/ports-and-harbours"
+		},
+		{
+			"id": "gisborne",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "east_cape",
+			"latitude": -38.67582,
+			"longitude": 178.02229,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"beach"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Remote East Cape coast; exposed to southerly swell in Poverty Bay",
+			"source": "https://www.predictwind.com/marinas/new-zealand/gisborne/gisborne-harbour"
+		},
+		{
+			"id": "napier",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "east_cape",
+			"latitude": -39.48321,
+			"longitude": 176.89166,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"cafe",
+				"showers"
+			],
+			"vessel_note": "Exposed Hawke Bay coast; contact Napier Sailing Club before arrival",
+			"source": "https://www.predictwind.com/marinas/new-zealand/hawkes-bay/napier-marina"
+		},
+		{
+			"id": "mana_marina",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "wellington",
+			"latitude": -41.099,
+			"longitude": 174.8665,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Approach via Cook Strait coast; strong winds and steep seas",
+			"source": "https://en.wikipedia.org/wiki/Mana,_New_Zealand"
+		},
+		{
+			"id": "seaview_marina",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "wellington",
+			"latitude": -41.2515,
+			"longitude": 174.8995,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"chandlery",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Wellington Harbour gusts can be fierce",
+			"source": "https://www.noonsite.com/business/seaview-marina/"
+		},
+		{
+			"id": "picton",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "marlborough_sounds",
+			"latitude": -41.28856,
+			"longitude": 174.01106,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"sound",
+				"village",
+				"forest"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Ferry traffic in Queen Charlotte Sound; keep clear",
+			"source": "https://dockwalk.com/superports/picton-marina--269"
+		},
+		{
+			"id": "waikawa",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "marlborough_sounds",
+			"latitude": -41.26653,
+			"longitude": 174.03859,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"sound",
+				"bay",
+				"forest"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"chandlery",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://www.predictwind.com/marinas/new-zealand/marlborough/waikawa-marina"
+		},
+		{
+			"id": "havelock",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "marlborough_sounds",
+			"latitude": -41.27721,
+			"longitude": 173.77033,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"sound",
+				"village",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "Shallow, drying approach at the head of Pelorus Sound; time the tide",
+			"source": "https://www.predictwind.com/marinas/new-zealand/marlborough/havelock-marina"
+		},
+		{
+			"id": "port_motueka",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "tasman_bay",
+			"latitude": -41.13669,
+			"longitude": 173.02057,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"village",
+				"fishing"
+			],
+			"services": [
+				"fuel",
+				"repairs",
+				"showers"
+			],
+			"vessel_note": "Shifting sandbar at the entrance; enter near high water",
+			"source": "https://tasman.govt.nz/my-region/transport/ports-and-wharves/locations/port-motueka"
+		},
+		{
+			"id": "tarakohe",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "tasman_bay",
+			"latitude": -40.82167,
+			"longitude": 172.897,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"cliffs",
+				"remote"
+			],
+			"services": [
+				"fuel"
+			],
+			"vessel_note": "Golden Bay is open to northerlies; few other refuges nearby",
+			"source": "https://tasman.govt.nz/my-region/transport/ports-and-wharves/locations/port-tarakohe"
+		},
+		{
+			"id": "kaikoura",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "canterbury",
+			"latitude": -42.42593,
+			"longitude": 173.68156,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"wildlife",
+				"fishing",
+				"village"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe",
+				"fishmonger"
+			],
+			"vessel_note": "Exposed east coast; long passages to Picton or Lyttelton with no shelter",
+			"source": "https://www.predictwind.com/marinas/new-zealand/canterbury/kaikura-marina"
+		},
+		{
+			"id": "lyttelton",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "canterbury",
+			"latitude": -43.6045,
+			"longitude": 172.7133,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"volcanic",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"cafe",
+				"harbour_office",
+				"showers"
+			],
+			"vessel_note": "",
+			"source": "https://berthfinder.com/marina/te-ana-marina-dampier-bay"
+		},
+		{
+			"id": "akaroa",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "canterbury",
+			"latitude": -43.805,
+			"longitude": 172.97,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"volcanic",
+				"historic_town",
+				"wildlife"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Williwaws off the crater rim in strong winds",
+			"source": "https://www.yit.nz/node/66364"
+		},
+		{
+			"id": "port_chalmers",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "otago",
+			"latitude": -45.8085,
+			"longitude": 170.62739,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"wildlife"
+			],
+			"services": [
+				"provisions",
+				"repairs",
+				"cafe"
+			],
+			"vessel_note": "Long, narrow shipping channel up Otago Harbour",
+			"source": "https://www.predictwind.com/marinas/new-zealand/otago/otago-harbour"
+		},
+		{
+			"id": "oamaru",
+			"class": "harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "otago",
+			"latitude": -45.1065,
+			"longitude": 170.976,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"historic_town",
+				"wildlife"
+			],
+			"services": [
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Open east coast; harbour exposed to easterly swell",
+			"source": "https://ports.marinelink.com/ports/port/oamaru"
+		},
+		{
+			"id": "bluff",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "southland",
+			"latitude": -46.5997,
+			"longitude": 168.343,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fishing",
+				"historic_town"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"repairs",
+				"fishmonger"
+			],
+			"vessel_note": "Strong tidal streams at the entrance and in Foveaux Strait",
+			"source": "https://berthfinder.com/marina/bluff-marina-southland"
+		},
+		{
+			"id": "halfmoon_bay",
+			"class": "fishing_village",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "stewart_island",
+			"latitude": -46.8954,
+			"longitude": 168.1375,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"wildlife",
+				"village",
+				"remote"
+			],
+			"services": [
+				"fuel",
+				"provisions",
+				"cafe"
+			],
+			"vessel_note": "Foveaux Strait crossing can be rough",
+			"source": "https://en.wikipedia.org/wiki/Oban,_New_Zealand"
+		},
+		{
+			"id": "milford_deepwater_basin",
+			"class": "guest_harbour",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "fiordland",
+			"latitude": -44.68158,
+			"longitude": 167.91982,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"fjord",
+				"remote",
+				"cliffs",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "Remote: Tasman coast passage with no harbour for over 100 nm; sudden katabatic winds",
+			"source": "https://gazette.govt.nz/notice/id/2012-ln350"
+		},
+		{
+			"id": "roberton_island",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.24019,
+			"longitude": 174.17743,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "Open to southerlies",
+			"source": "https://www.yit.nz/anchorage/roberton-island-motuarohia-island",
+			"name": "Roberton Island",
+			"description": "Twin turquoise lagoons and a hilltop lookout where Captain Cook once anchored.",
+			"onward": "russell",
+			"research_position": [
+				-35.237,
+				174.168
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "otehei_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.22675,
+			"longitude": 174.213,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"bay",
+				"beach"
+			],
+			"services": [],
+			"vessel_note": "Shallow entrance",
+			"source": "https://www.greatescape.co.nz/cruising-ground/cruising-grounds-urupukapuka-island/",
+			"name": "Otehei Bay",
+			"description": "A well-sheltered island bay with a wharf, cafe and walking tracks.",
+			"onward": "russell",
+			"research_position": [
+				-35.2235,
+				174.233
+			],
+			"adjusted_nm": 1.0
+		},
+		{
+			"id": "deep_water_cove",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "bay_of_islands",
+			"latitude": -35.19456,
+			"longitude": 174.27399,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"bay",
+				"cliffs",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "Exposed approach near Cape Brett",
+			"source": "https://www.yit.nz/anchorage/maunganui-bay-deep-water-cove",
+			"name": "Deep Water Cove",
+			"description": "A clear-water cove near Cape Brett, start of the lighthouse track.",
+			"onward": "russell",
+			"research_position": [
+				-35.1905,
+				174.299
+			],
+			"adjusted_nm": 1.25
+		},
+		{
+			"id": "islington_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.80852,
+			"longitude": 174.90359,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"volcanic",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "Soft mud; anchors can drag",
+			"source": "https://scd.landcareresearch.co.nz/Specimen/CHR%20246562",
+			"name": "Islington Bay",
+			"description": "A calm bay between Rangitoto's lava fields and green Motutapu Island.",
+			"onward": "half_moon_bay",
+			"research_position": [
+				-36.784,
+				174.8975
+			],
+			"adjusted_nm": 1.5
+		},
+		{
+			"id": "oneroa_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.7566,
+			"longitude": 175.02615,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach",
+				"village"
+			],
+			"services": [],
+			"vessel_note": "Open to northerlies",
+			"source": "https://www.navily.com/en/mouillage/oneroa-bay/32966",
+			"name": "Oneroa Bay",
+			"description": "A sandy bay below Waiheke's hillside village of cafes and galleries.",
+			"onward": "half_moon_bay",
+			"research_position": [
+				-36.7797,
+				175.0142
+			],
+			"adjusted_nm": 1.5
+		},
+		{
+			"id": "man_o_war_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.78762,
+			"longitude": 175.16821,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"bay",
+				"beach"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://swimpass.app/spots/c9e46e72-43d0-45ad-a7f6-c5f186221849",
+			"name": "Man O' War Bay",
+			"description": "A quiet eastern Waiheke bay backed by vineyards.",
+			"onward": "half_moon_bay",
+			"research_position": [
+				-36.786,
+				175.158
+			],
+			"adjusted_nm": 0.5
+		},
+		{
+			"id": "mansion_house_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.42156,
+			"longitude": 174.80658,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"historic_town",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Mansion_House,_Kawau_Island",
+			"name": "Mansion House Bay",
+			"description": "Governor Grey's historic mansion, with peacocks and wallabies around the lawns.",
+			"onward": "gulf_harbour",
+			"research_position": [
+				-36.4285,
+				174.8195
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "smokehouse_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "hauraki_gulf",
+			"latitude": -36.1975,
+			"longitude": 175.29152,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"forest",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://blog.mailasail.com/sylph/posts/2020/11/17/2195-smokehouse-bay",
+			"name": "Smokehouse Bay",
+			"description": "A boaties' cove with a bush bathtub, smokehouse and wash-house built for cruisers.",
+			"onward": "port_fitzroy",
+			"research_position": [
+				-36.1975,
+				175.3225
+			],
+			"adjusted_nm": 1.5
+		},
+		{
+			"id": "great_mercury_island",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "coromandel",
+			"latitude": -36.61386,
+			"longitude": 175.76346,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"beach",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "Open to westerlies",
+			"source": "https://blog.mailasail.com/justatadd/posts/2019/12/25/387-happy-christmas-from-great-mercury-island-36-36-0s-175-46-5e",
+			"name": "Great Mercury Island",
+			"description": "A private, farmed island with white beaches off Mercury Bay.",
+			"onward": "whitianga",
+			"research_position": [
+				-36.6,
+				175.775
+			],
+			"adjusted_nm": 1.0
+		},
+		{
+			"id": "anchorage_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "abel_tasman",
+			"latitude": -40.96029,
+			"longitude": 173.07579,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Abel_Tasman_Coast_Track",
+			"name": "Anchorage Bay",
+			"description": "A golden-sand bay that is the best all-weather anchorage in Abel Tasman.",
+			"onward": "port_motueka",
+			"research_position": [
+				-40.9555,
+				173.0605
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "torrent_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "abel_tasman",
+			"latitude": -40.9361,
+			"longitude": 173.0667,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "Lagoon dries; anchor off the beach",
+			"source": "https://en.wikipedia.org/wiki/Torrent_Bay",
+			"name": "Torrent Bay",
+			"description": "A tidal lagoon and baches behind a long golden beach.",
+			"onward": "port_motueka",
+			"research_position": [
+				-40.9465,
+				173.0575
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "bark_bay",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "abel_tasman",
+			"latitude": -40.91356,
+			"longitude": 173.06921,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"forest",
+				"bay"
+			],
+			"services": [],
+			"vessel_note": "Open to easterlies",
+			"source": "https://scd.landcareresearch.co.nz/Specimen/CHR%20310876",
+			"name": "Bark Bay",
+			"description": "A crescent of sand and a tidal lagoon in the heart of Abel Tasman.",
+			"onward": "port_motueka",
+			"research_position": [
+				-40.916,
+				173.053
+			],
+			"adjusted_nm": 0.75
+		},
+		{
+			"id": "awaroa",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "abel_tasman",
+			"latitude": -40.85343,
+			"longitude": 173.06691,
+			"island": false,
+			"overnight": true,
+			"scenic": [
+				"beach",
+				"forest",
+				"remote"
+			],
+			"services": [],
+			"vessel_note": "Inlet dries at low water; anchor outside in settled weather",
+			"source": "https://en.wikipedia.org/wiki/Awaroa_Inlet",
+			"name": "Awaroa Bay",
+			"description": "The people's beach, bought by New Zealanders, beside a wide tidal inlet.",
+			"onward": "tarakohe",
+			"research_position": [
+				-40.865,
+				173.044
+			],
+			"adjusted_nm": 1.25
+		},
+		{
+			"id": "ulva_island",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "stewart_island",
+			"latitude": -46.93807,
+			"longitude": 168.10564,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"wildlife",
+				"forest"
+			],
+			"services": [],
+			"vessel_note": "",
+			"source": "https://en.wikipedia.org/wiki/Ulva_Island_(New_Zealand)",
+			"name": "Ulva Island",
+			"description": "A predator-free island sanctuary where saddlebacks and robins greet visitors.",
+			"onward": "halfmoon_bay",
+			"research_position": [
+				-46.9265,
+				168.131
+			],
+			"adjusted_nm": 1.25
+		},
+		{
+			"id": "port_pegasus",
+			"class": "anchorage",
+			"country": "New Zealand",
+			"cruising_region": "new_zealand",
+			"area": "stewart_island",
+			"latitude": -47.21178,
+			"longitude": 167.68436,
+			"island": true,
+			"overnight": true,
+			"scenic": [
+				"island",
+				"remote",
+				"forest",
+				"wildlife"
+			],
+			"services": [],
+			"vessel_note": "Remote: nearest harbour Halfmoon Bay about 35 nm; exposed Southern Ocean coast",
+			"source": "https://datazone.birdlife.org/site/factsheet/port-pegasus-iba-new-zealand/map",
+			"name": "Port Pegasus",
+			"description": "A vast, uninhabited southern harbour of granite domes and still water.",
+			"onward": "halfmoon_bay",
+			"research_position": [
+				-47.2,
+				167.667
+			],
+			"adjusted_nm": 1.0
+		}
+	]
+}

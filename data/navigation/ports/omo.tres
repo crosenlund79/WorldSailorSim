@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"omo"
+display_name = "Omø"
+country = "Denmark"
+latitude = 55.17130
+longitude = 11.16020
+description = "Friendly island harbour on Omø, with a small village and beaches a bike ride away."
+importance = 3
+region = "baltic"
+island = true
+source = "https://ports.marinelink.com/ports/port/omo-havn (Regions and Harbours 2026)"

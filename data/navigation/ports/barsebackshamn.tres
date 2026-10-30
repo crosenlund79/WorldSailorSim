@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"barsebackshamn"
+display_name = "Barsebäckshamn"
+country = "Sweden"
+latitude = 55.75700
+longitude = 12.90300
+description = "Thatched fishing village harbour on the flat Skåne shore of Öresund."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/rs-barsebackshamn (rounded 55°45'N 12°54'E) (Regions and Harbours 2026)"

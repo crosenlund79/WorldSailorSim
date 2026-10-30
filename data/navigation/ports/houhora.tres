@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"houhora"
+display_name = "Houhora"
+country = "New Zealand"
+latitude = -34.82700
+longitude = 173.13300
+description = "New Zealand's northernmost commercial wharf, a quiet fishing settlement on Houhora Harbour."
+importance = 3
+region = "pacific"
+island = false
+source = "https://en.wikipedia.org/wiki/Pukenui (Regions and Harbours 2026)"

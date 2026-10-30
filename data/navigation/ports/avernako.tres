@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"avernako"
+display_name = "Avernakø"
+country = "Denmark"
+latitude = 55.03970
+longitude = 10.25250
+description = "Quiet ferry and guest harbour on Avernakø, with farm lanes and meadows close by."
+importance = 3
+region = "baltic"
+island = true
+source = "https://ports.marinelink.com/ports/port/avernakoe (Regions and Harbours 2026)"

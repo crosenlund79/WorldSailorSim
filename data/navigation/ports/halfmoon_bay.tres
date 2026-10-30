@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"halfmoon_bay"
+display_name = "Oban"
+country = "New Zealand"
+latitude = -46.89540
+longitude = 168.13750
+description = "Stewart Island's only village, a peaceful bay of fishing boats, kiwi and birdsong."
+importance = 3
+region = "pacific"
+island = true
+source = "https://en.wikipedia.org/wiki/Oban,_New_Zealand (Regions and Harbours 2026)"

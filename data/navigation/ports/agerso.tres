@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"agerso"
+display_name = "Agersø"
+country = "Denmark"
+latitude = 55.21100
+longitude = 11.19800
+description = "Small fishing harbour on Agersø's east side, across the sound from Stigsnæs."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.boatview.io/en/poi/2994/agersoe (Regions and Harbours 2026)"

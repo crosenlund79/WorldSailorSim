@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"marstrand"
+display_name = "Marstrand"
+country = "Sweden"
+latitude = 57.88815
+longitude = 11.58753
+description = "Sailing town beneath Carlsten fortress, its harbour packed with masts all summer."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://www.hamnkartan.se/hamnar/ringens-varv (Regions and Harbours 2026)"

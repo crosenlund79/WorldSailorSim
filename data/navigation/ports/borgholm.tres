@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"borgholm"
+display_name = "Borgholm"
+country = "Sweden"
+latitude = 56.87990
+longitude = 16.64710
+description = "Öland's little capital, beneath the dramatic ruins of Borgholm castle."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/borgholms-gasthamn (Regions and Harbours 2026)"

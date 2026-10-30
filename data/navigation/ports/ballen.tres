@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"ballen"
+display_name = "Ballen"
+country = "Denmark"
+latitude = 55.81670
+longitude = 10.64000
+description = "Lively marina on Samsø's east coast, with a sandy beach and small eateries."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://www.visitdenmark.com/denmark/plan-your-trip/ballen-marina-gdk1097750 (Regions and Harbours 2026)"

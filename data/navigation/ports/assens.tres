@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"assens"
+display_name = "Assens"
+country = "Denmark"
+latitude = 55.26850
+longitude = 9.88750
+description = "Town harbour and marina on Funen's west coast, facing the Little Belt."
+importance = 3
+region = "baltic"
+island = false
+source = "https://ports.marinelink.com/ports/port/assens (Regions and Harbours 2026)"

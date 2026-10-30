@@ -116,6 +116,10 @@ var _label_settings_classic: LabelSettings
 var _label_settings_sign: LabelSettings
 var _port_id: StringName = &""
 var _archetype: StringName = ARCHETYPE_NORDIC
+## The town palette (TOWNS): the harbour's Detailed Cruising Region's look
+## (Regions and Harbours 2026), else its archetype. Drawing only: prices and
+## opening hours follow the archetype.
+var _town_key: StringName = ARCHETYPE_NORDIC
 ## The classic sign labels' text and settings, to restore under Classic.
 var _sign_classic := {}
 
@@ -179,6 +183,7 @@ func refresh() -> void:
 		sign_label.label_settings = _sign_text_settings() if illustrated else classic[1]
 	_port_id = GameSession.get_location_id()
 	_archetype = archetype_for(_port_id)
+	_town_key = town_for(_port_id)
 	# The harbour's own landmarks, else the illustration of its look (I021).
 	_art = HarbourLooks.get_default().art_for(_port_id)
 	_landmarks = _art.get_landmarks() if _art else ([] as Array[HarbourLandmark])
@@ -218,6 +223,17 @@ static func archetype_for(port_id: StringName) -> StringName:
 
 func get_archetype() -> StringName:
 	return _archetype
+
+
+## The town palette of a harbour (TOWNS): its Detailed Cruising Region's look
+## when TOWNS has it, else its archetype.
+static func town_for(port_id: StringName) -> StringName:
+	var look := CruisingRegions.get_default().look_for(port_id)
+	return look if TOWNS.has(look) else archetype_for(port_id)
+
+
+func get_town_key() -> StringName:
+	return _town_key
 
 
 ## Each sign board is what its station highlights (Iteration 12).
@@ -794,7 +810,7 @@ func _draw_town(rng: RandomNumberGenerator) -> void:
 
 ## One run of buildings from `from` towards `to` (direction +1 or -1).
 func _draw_row(rng: RandomNumberGenerator, y0: float, from: float, to: float, direction: float) -> void:
-	var town: Dictionary = TOWNS.get(_archetype, TOWNS[ARCHETYPE_NORDIC])
+	var town: Dictionary = TOWNS.get(_town_key, TOWNS[ARCHETYPE_NORDIC])
 	var x := from
 	var guard := 0
 	while (to - x) * direction > 0.0 and guard < 40:
@@ -825,6 +841,35 @@ const TOWNS := {
 		"roofs": {"nordic": [[Color("#34383B"), "tile"], [Color("#3F4245"), "shingle"], [Color("#7A4A3A"), "tile"], [Color("#2E3134"), "tile"]]},
 		"frame": Color("#ECEAE2"), "shutter": null, "lane": [60.0, 280.0], "lane_chance": 0.7, "setback": 30.0,
 		"tree": Color("#5E6E4E"), "tree_r": [180.0, 260.0], "tree_chance": 0.5},
+	# Regional looks (Regions and Harbours 2026): Danish colour-washed houses
+	# (ochre, white, pale rose, red brick) under red tile and the odd dark
+	# thatch; Swedish falu-red and white timber with gable-end boathouses on the
+	# water; New Zealand painted weatherboard villas and baches with verandas
+	# under corrugated iron, among pōhutukawa.
+	&"danish": {"kinds": [
+			{"w": [560.0, 860.0], "d": [800.0, 1050.0], "form": "ridge", "roofs": "danish", "pitch": 230.0, "dormer": 0.35, "chimney": 0.7},
+			{"w": [520.0, 760.0], "d": [800.0, 1000.0], "form": "ridge", "roofs": "danish", "pitch": 220.0, "chimney": 0.6},
+			{"w": [460.0, 620.0], "d": [900.0, 1200.0], "form": "gable", "roofs": "danish", "pitch": 0.0, "door": true}],
+		"facades": [Color("#D9B862"), Color("#ECE7DA"), Color("#D8B1A2"), Color("#A9563F"), Color("#E3CF96"), Color("#E9E3D3")],
+		"roofs": {"danish": [[Color("#9C4A36"), "tile"], [Color("#A9543C"), "tile"], [Color("#5B5148"), "shingle"], [Color("#3A3C3E"), "tile"]]},
+		"frame": Color("#F0EEE6"), "shutter": null, "lane": [60.0, 260.0], "lane_chance": 0.6, "setback": 20.0,
+		"tree": Color("#61714F"), "tree_r": [180.0, 250.0], "tree_chance": 0.45},
+	&"swedish": {"kinds": [
+			{"w": [440.0, 600.0], "d": [900.0, 1300.0], "form": "gable", "roofs": "swedish", "pitch": 0.0, "door": true},
+			{"w": [560.0, 820.0], "d": [800.0, 1050.0], "form": "ridge", "roofs": "swedish", "pitch": 240.0, "chimney": 0.5},
+			{"w": [440.0, 600.0], "d": [900.0, 1200.0], "form": "gable", "roofs": "swedish", "pitch": 0.0, "door": true}],
+		"facades": [Color("#8A3B2E"), Color("#7E3429"), Color("#E6E2D6"), Color("#D2B36A"), Color("#93412F"), Color("#E9E5DA")],
+		"roofs": {"swedish": [[Color("#2F3234"), "tile"], [Color("#3B3E40"), "shingle"], [Color("#7A4537"), "tile"]]},
+		"frame": Color("#F1EFE8"), "shutter": null, "lane": [80.0, 320.0], "lane_chance": 0.75, "setback": 40.0,
+		"tree": Color("#4F6447"), "tree_r": [170.0, 240.0], "tree_chance": 0.55},
+	&"new_zealand": {"kinds": [
+			{"w": [620.0, 880.0], "d": [700.0, 1000.0], "form": "hip", "roofs": "iron", "pitch": 260.0, "veranda": true},
+			{"w": [520.0, 760.0], "d": [700.0, 950.0], "form": "ridge", "roofs": "iron", "pitch": 250.0, "veranda": true},
+			{"w": [480.0, 640.0], "d": [700.0, 900.0], "form": "gable", "roofs": "iron", "pitch": 0.0, "door": true}],
+		"facades": [Color("#E8E4D8"), Color("#C9D3CF"), Color("#E2D6B4"), Color("#AEBFB4"), Color("#EEEBE2"), Color("#C7C1B2")],
+		"roofs": {"iron": [[Color("#8E3F36"), "tin"], [Color("#4E6B57"), "tin"], [Color("#3E4447"), "tin"], [Color("#9AA2A3"), "tin"]]},
+		"frame": Color("#F2F0E9"), "shutter": null, "lane": [120.0, 340.0], "lane_chance": 0.8, "setback": 70.0,
+		"tree": Color("#4A5E3E"), "tree_r": [240.0, 320.0], "tree_chance": 0.6},
 	&"atlantic": {"kinds": [
 			{"w": [520.0, 720.0], "d": [800.0, 1100.0], "form": "ridge", "roofs": "slate", "pitch": 230.0, "stack": true},
 			{"w": [520.0, 700.0], "d": [800.0, 1000.0], "form": "ridge", "roofs": "slate", "pitch": 240.0, "stack": true},
@@ -1048,7 +1093,17 @@ func _roof_texture(area: Rect2, colour: Color, material: String, along: bool, _c
 
 func _draw_tree(at: Vector2, radius: float, colour: Color, rng: RandomNumberGenerator) -> void:
 	draw_circle(at + Vector2(radius * 0.3, radius * 0.36), radius, Color(0.03, 0.05, 0.05, 0.28))
-	if _archetype == ARCHETYPE_TROPICAL:
+	if _town_key == &"new_zealand" and rng.randf() < 0.55:
+		# A pōhutukawa: a broad, dark, glossy crown, flecked crimson in flower.
+		draw_circle(at, radius, colour.darkened(0.15))
+		for k in 8:
+			var o := Vector2.from_angle(TAU * k / 8.0 + rng.randf()) * radius * 0.5
+			draw_circle(at + o, radius * 0.45, colour.lerp(Color("#3E5233"), 0.4).lightened(0.05 * (k % 3)))
+		for k in 14:
+			var o := Vector2.from_angle(rng.randf() * TAU) * radius * rng.randf_range(0.2, 0.85)
+			draw_circle(at + o, radius * 0.06, Color("#B23A32"))
+		return
+	if _town_key == ARCHETYPE_TROPICAL:
 		# A palm: tapering fronds radiating from the crown, the old ones lower and brown.
 		for k in 11:
 			var a := TAU * k / 11.0 + rng.randf_range(-0.15, 0.15)

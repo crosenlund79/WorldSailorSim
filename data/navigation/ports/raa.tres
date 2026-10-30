@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"raa"
+display_name = "Råå"
+country = "Sweden"
+latitude = 55.99115
+longitude = 12.74222
+description = "Charming fishing village south of Helsingborg, with low houses and smoked fish."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/raa (Regions and Harbours 2026)"

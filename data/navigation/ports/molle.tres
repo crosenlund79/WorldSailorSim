@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"molle"
+display_name = "Mölle"
+country = "Sweden"
+latitude = 56.28295
+longitude = 12.49260
+description = "Steep old bathing village beneath the beech-clad Kullaberg headland."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/molle-hamn (Regions and Harbours 2026)"

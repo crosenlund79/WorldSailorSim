@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"gisborne"
+display_name = "Gisborne"
+country = "New Zealand"
+latitude = -38.67582
+longitude = 178.02229
+description = "The first city to see the sun, with a small inner harbour of fishing boats and cafes."
+importance = 2
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/gisborne/gisborne-harbour (Regions and Harbours 2026)"

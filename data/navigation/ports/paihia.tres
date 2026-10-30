@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"paihia"
+display_name = "Paihia"
+country = "New Zealand"
+latitude = -35.28150
+longitude = 174.09350
+description = "A lively seaside village whose wharf sends ferries and tour boats across the Bay of Islands."
+importance = 3
+region = "pacific"
+island = false
+source = "https://en.wikipedia.org/wiki/Paihia (Regions and Harbours 2026)"

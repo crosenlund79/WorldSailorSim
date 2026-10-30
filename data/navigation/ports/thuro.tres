@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"thuro"
+display_name = "Thurø"
+country = "Denmark"
+latitude = 55.04140
+longitude = 10.66840
+description = "Marina at Gambøt on Thurø, beside the sheltered water of Thurø Bund."
+importance = 3
+region = "baltic"
+island = true
+source = "https://marinaguide.dk/en/thuroe-sailing-club/navigation (Regions and Harbours 2026)"

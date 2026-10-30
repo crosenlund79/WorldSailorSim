@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"soby"
+display_name = "Søby"
+country = "Denmark"
+latitude = 54.94280
+longitude = 10.26000
+description = "Working harbour at the north tip of Ærø, with a shipyard, ferry and fishing boats."
+importance = 3
+region = "baltic"
+island = true
+source = "https://seame.com/en/poi/2772 (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"spodsbjerg"
+display_name = "Spodsbjerg"
+country = "Denmark"
+latitude = 54.93280
+longitude = 10.83430
+description = "Ferry and fishing harbour on Langeland's east coast, facing the Great Belt and Lolland."
+importance = 3
+region = "baltic"
+island = true
+source = "https://seame.com/en/poi/2820 (Regions and Harbours 2026)"

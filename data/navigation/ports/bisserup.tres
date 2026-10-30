@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"bisserup"
+display_name = "Bisserup"
+country = "Denmark"
+latitude = 55.19970
+longitude = 11.49130
+description = "Small fishing village harbour on Zealand's south-west coast, among shallow islets."
+importance = 3
+region = "baltic"
+island = false
+source = "https://www.boatview.io/en/poi/2907/bisserup (Regions and Harbours 2026)"

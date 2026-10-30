@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"opua"
+display_name = "Opua"
+country = "New Zealand"
+latitude = -35.31558
+longitude = 174.12090
+description = "The Bay of Islands Marina, New Zealand's favourite landfall for yachts arriving from the tropics."
+importance = 2
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/northland/bay-of-islands-marina---port-opua (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"gudhjem"
+display_name = "Gudhjem"
+country = "Denmark"
+latitude = 55.21060
+longitude = 14.96860
+description = "Steep little harbour town of granite and smokehouses, with boats to Christiansø."
+importance = 3
+region = "baltic"
+island = true
+source = "https://ports.marinelink.com/ports/port/gudhjem-havn (Regions and Harbours 2026)"

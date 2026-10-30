@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"farosund"
+display_name = "Fårösund"
+country = "Sweden"
+latitude = 57.86698
+longitude = 19.05814
+description = "Ferry village on the sound between Gotland and Fårö's famous sea-stacks."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/farosund (Fiskehamnen) (Regions and Harbours 2026)"

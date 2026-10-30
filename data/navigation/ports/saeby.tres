@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"saeby"
+display_name = "Sæby"
+country = "Denmark"
+latitude = 57.33420
+longitude = 10.52860
+description = "Old town harbour in north Jutland, with cobbled lanes and fishing boats."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://ports.marinelink.com/ports/port/saeby-havn (Regions and Harbours 2026)"

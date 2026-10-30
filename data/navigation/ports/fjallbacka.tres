@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"fjallbacka"
+display_name = "Fjällbacka"
+country = "Sweden"
+latitude = 58.59773
+longitude = 11.28070
+description = "Pastel houses huddle beneath the sheer Vetteberget cliff."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://www.hamnkartan.se/hamnar/fjallbacka-gasthamn (Regions and Harbours 2026)"

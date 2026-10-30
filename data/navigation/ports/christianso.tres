@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"christianso"
+display_name = "Christiansø"
+country = "Denmark"
+latitude = 55.32250
+longitude = 15.18720
+description = "Tiny fortress-island harbour between granite islets, home to eiders and old naval buildings."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.christiansoe.dk/en/visit-the-island/the-harbour/ (Regions and Harbours 2026)"

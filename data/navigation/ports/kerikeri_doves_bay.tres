@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"kerikeri_doves_bay"
+display_name = "Doves Bay"
+country = "New Zealand"
+latitude = -35.19438
+longitude = 174.03445
+description = "A friendly cruising-club marina tucked into the quiet Kerikeri Inlet."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.yachtingnz.org.nz/node/5145 (Regions and Harbours 2026)"

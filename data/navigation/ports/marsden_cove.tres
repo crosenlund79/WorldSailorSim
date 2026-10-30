@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"marsden_cove"
+display_name = "Marsden Cove"
+country = "New Zealand"
+latitude = -35.83649
+longitude = 174.46767
+description = "A modern canal marina near the mouth of Whangārei Harbour, beneath Bream Head."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/northland/marsden-cove-marina (Regions and Harbours 2026)"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HarbourFacilities" format=3]
+
+[ext_resource type="Script" path="res://src/harbour/harbour_facilities.gd" id="1_fac"]
+
+[resource]
+script = ExtResource("1_fac")
+grocery = true
+boatyard = false
+go_ashore = true
+haul_out = false

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hannafords_wharf"
+display_name = "Coromandel"
+country = "New Zealand"
+latitude = -36.80930
+longitude = 175.46713
+description = "The ferry wharf for Coromandel town, among green hills and mussel farms."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.waikatoregion.govt.nz/services/maritime-services/moorings-4-sale-or-rent/mooring-161-takawhare-bay-for-sale (Regions and Harbours 2026)"

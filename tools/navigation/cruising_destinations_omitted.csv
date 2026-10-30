@@ -1,0 +1,8 @@
+id,name,country,kind,latitude,longitude,reason
+dyvig,Dyvig,Denmark,anchorage,55.04300,9.71000,The nearest spot the game can anchor in is 1.75 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
+moturua_island,Moturua Island,New Zealand,anchorage,-35.21770,174.19500,"Its nearest valid spot is the same as Otehei Bay's (Urupukapuka), 0.06 nm away: kept once, as Otehei Bay."
+ship_cove,Ship Cove,New Zealand,anchorage,-41.09350,174.24250,The nearest spot the game can anchor in is 2.00 nm away: too far to be this anchorage at the chart's 0.5 nm coastal resolution.
+endeavour_inlet,Endeavour Inlet,New Zealand,anchorage,-41.08833,174.18111,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+portage_bay,Portage Bay,New Zealand,anchorage,-41.19550,174.03650,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+deep_cove_doubtful,"Deep Cove, Doubtful Sound",New Zealand,anchorage,-45.45000,167.15000,No spot within 2 nm passes the game's anchoring rule (narrow water at the chart's 0.5 nm coastal resolution).
+henan,Henån,Sweden,guest_harbour,58.24055,11.67813,"Its approach passes, but the inner Orust fjord reaches the open sea only through narrow sounds that the chart's resolution closes: no sea route."

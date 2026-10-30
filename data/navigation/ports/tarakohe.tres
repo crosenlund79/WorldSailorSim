@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"tarakohe"
+display_name = "Tarakohe"
+country = "New Zealand"
+latitude = -40.82167
+longitude = 172.89700
+description = "A tiny limestone-walled harbour on Golden Bay near Pōhara."
+importance = 3
+region = "pacific"
+island = false
+source = "https://tasman.govt.nz/my-region/transport/ports-and-wharves/locations/port-tarakohe (Regions and Harbours 2026)"

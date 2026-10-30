@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"vastervik"
+display_name = "Västervik"
+country = "Sweden"
+latitude = 57.75752
+longitude = 16.65050
+description = "Summer town of narrow lanes, gateway to a vast skerry archipelago."
+importance = 3
+region = "baltic"
+island = false
+source = "https://www.hamnkartan.se/hamnar/pampas-marina-gasthamn (Regions and Harbours 2026)"

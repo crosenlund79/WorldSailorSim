@@ -6,3 +6,6 @@
 {"event": "research_end", "iso": "2026-10-30T07:53:50+00:00", "epoch": 1793346830.443, "monotonic_s": 356.47, "boot": "a6613b62", "note": "main thread: audit + design (DK 26, SE 10, NZ 4 harbours; 0 named anchorages); detailed research delegated to 3 agents"}
 {"event": "navigation_begin", "iso": "2026-10-30T07:53:50+00:00", "epoch": 1793346830.455, "monotonic_s": 356.48, "boot": "a6613b62", "note": "detailed charts: Sweden x2 (European), New Zealand x2 (world-level)"}
 {"event": "parallel_research_agents_end", "iso": "2026-10-30T08:11:04+00:00", "epoch": 1793347864.922, "monotonic_s": 1390.95, "boot": "a6613b62", "note": "DK 63, SE 73, NZ 53 candidates"}
+{"event": "navigation_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.542, "monotonic_s": 1981.57, "boot": "a6613b62", "note": "detail charts built and wired (SE x2 European, NZ x2 world-level); routing+regions suites 454/0"}
+{"event": "data_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.560, "monotonic_s": 1981.58, "boot": "a6613b62", "note": "import, checks, anchorage moves, registry; began at parallel_research_agents_end"}
+{"event": "visuals_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.577, "monotonic_s": 1981.60, "boot": "a6613b62", "note": "regional town palettes (danish, swedish, new_zealand), pohutukawa; interleaved with data"}

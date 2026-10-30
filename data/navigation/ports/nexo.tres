@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"nexo"
+display_name = "Nexø"
+country = "Denmark"
+latitude = 55.06330
+longitude = 15.13700
+description = "Bornholm's working fishing port, a practical stop with full services."
+importance = 2
+region = "baltic"
+island = true
+source = "https://seame.com/en/poi/2940/nexoe (Regions and Harbours 2026)"

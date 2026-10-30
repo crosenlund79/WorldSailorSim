@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"port_motueka"
+display_name = "Port Motueka"
+country = "New Zealand"
+latitude = -41.13669
+longitude = 173.02057
+description = "A small tidal port and marina, the gateway to Abel Tasman for boaties."
+importance = 3
+region = "pacific"
+island = false
+source = "https://tasman.govt.nz/my-region/transport/ports-and-wharves/locations/port-motueka (Regions and Harbours 2026)"

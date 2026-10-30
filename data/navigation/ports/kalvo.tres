@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"kalvo"
+display_name = "Kalvø"
+country = "Denmark"
+latitude = 55.12280
+longitude = 9.46540
+description = "Wooded islet joined to the shore by a causeway, with a small maritime museum."
+importance = 3
+region = "baltic"
+island = true
+source = "https://seame.com/en/poi/2791/kalvoe-genner-bugt (Regions and Harbours 2026)"

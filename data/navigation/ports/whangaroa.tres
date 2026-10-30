@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"whangaroa"
+display_name = "Whangaroa"
+country = "New Zealand"
+latitude = -35.05000
+longitude = 173.74150
+description = "A deep, cliff-ringed harbour and big-game fishing village beneath volcanic domes."
+importance = 3
+region = "pacific"
+island = false
+source = "https://www.noonsite.com/?p=58428 (Regions and Harbours 2026)"

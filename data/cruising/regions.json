@@ -1,0 +1,47 @@
+{
+	"note": "Detailed Cruising Regions (Regions and Harbours 2026): areas of the world with more local harbours, anchorages and coastal destinations (data/cruising/destinations.json). A harbour belongs to a region when its country is the region's and it lies inside one of the region's outlines (lon, lat). 'symbol' and 'label' place the chart's quiet mark; 'chart_regions' name the detail charts (data/navigation/regions.json) that cover it; 'look' is the waterfront's town palette (HarbourDressing.TOWNS). More regions are more entries here.",
+	"regions": [
+		{
+			"id": "denmark",
+			"name": "Home Waters",
+			"title": "Denmark — Home Waters",
+			"country": "Denmark",
+			"description": "Discover a rich network of island harbours, sheltered passages and welcoming coastal communities.",
+			"look": "danish",
+			"chart_regions": ["denmark"],
+			"symbol": [11.35, 56.45],
+			"outlines": [
+				[[8.1, 57.1], [9.9, 57.75], [10.75, 57.85], [11.25, 57.35], [11.7, 56.75], [12.2, 56.2], [12.645, 56.06], [12.64, 55.95], [12.62, 55.85], [12.72, 55.72], [12.7, 55.4], [12.55, 54.95], [12.3, 54.55], [11.9, 54.5], [11.0, 54.45], [10.3, 54.6], [9.75, 54.8], [9.4, 55.0], [9.3, 55.6], [9.0, 56.1]],
+				[[14.6, 55.4], [15.3, 55.4], [15.3, 54.95], [14.6, 54.95]]
+			]
+		},
+		{
+			"id": "sweden",
+			"name": "The Archipelagos",
+			"title": "Sweden — The Archipelagos",
+			"country": "Sweden",
+			"description": "Explore winding archipelagos, island villages and quiet anchorages along Sweden's remarkable coastline.",
+			"look": "swedish",
+			"chart_regions": ["bohuslan", "swedish_east_coast", "denmark"],
+			"symbol": [18.0, 58.2],
+			"outlines": [
+				[[10.95, 59.2], [11.6, 59.25], [12.4, 58.0], [13.0, 56.6], [14.5, 56.3], [16.0, 56.6], [16.3, 57.8], [16.6, 58.4], [17.3, 59.0], [18.6, 60.1], [19.6, 60.1], [19.6, 59.0], [19.2, 57.2], [18.7, 56.85], [17.0, 56.6], [16.3, 56.0], [15.6, 55.9], [14.5, 55.3], [13.3, 55.2], [12.75, 55.3], [12.8, 55.7], [12.65, 55.88], [12.66, 56.1], [12.2, 56.6], [11.6, 57.5], [11.3, 58.0], [10.95, 58.6]]
+			]
+		},
+		{
+			"id": "new_zealand",
+			"name": "The Long White Cloud",
+			"title": "New Zealand — The Long White Cloud",
+			"country": "New Zealand",
+			"description": "Discover sheltered bays, remote anchorages and memorable coastal passages across New Zealand's two main islands.",
+			"look": "new_zealand",
+			"chart_regions": ["nz_north", "nz_south"],
+			"symbol": [178.6, -40.6],
+			"outlines": [
+				[[172.3, -34.0], [174.0, -34.6], [176.5, -36.8], [178.8, -37.4], [178.5, -39.2], [177.0, -40.0], [175.6, -41.9], [174.6, -42.5], [173.9, -43.5], [173.2, -44.2], [171.5, -45.6], [169.4, -46.8], [168.3, -47.5], [167.2, -47.4], [166.2, -46.0], [166.5, -45.0], [168.2, -44.0], [170.5, -42.8], [171.8, -41.3], [172.6, -40.4], [173.9, -39.2], [174.4, -38.1], [174.4, -37.0], [173.3, -35.4]]
+			]
+		}
+	],
+	"legend": "An area with more local harbours, anchorages and coastal destinations to explore.",
+	"hint": "Explore the world at your own pace. Sail between destinations across the globe, or discover the hidden harbours and anchorages of our Detailed Cruising Regions."
+}

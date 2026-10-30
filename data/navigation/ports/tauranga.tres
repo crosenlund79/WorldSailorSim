@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"tauranga"
+display_name = "Tauranga"
+country = "New Zealand"
+latitude = -37.67176
+longitude = 176.17884
+description = "A big, well-serviced marina beside the harbour bridge, with Mauao on the skyline."
+importance = 2
+region = "pacific"
+island = false
+source = "https://www.predictwind.com/marinas/new-zealand/bay-of-plenty/tauranga-bridge-marina (Regions and Harbours 2026)"

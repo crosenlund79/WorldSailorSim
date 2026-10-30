@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"osterby"
+display_name = "Østerby"
+country = "Denmark"
+latitude = 57.31940
+longitude = 11.12250
+description = "Fishing and marina harbour on Læsø's north coast, known for its langoustines."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://seame.com/en/poi/3055/oesterby (Regions and Harbours 2026)"

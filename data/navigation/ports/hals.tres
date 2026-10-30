@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hals"
+display_name = "Hals"
+country = "Denmark"
+latitude = 56.99050
+longitude = 10.30750
+description = "Harbour at the eastern entrance of the Limfjord, with an old ferry crossing."
+importance = 3
+region = "scandinavia"
+island = false
+source = "https://ports.marinelink.com/ports/port/hals (Regions and Harbours 2026)"

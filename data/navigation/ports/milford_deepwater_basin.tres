@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"milford_deepwater_basin"
+display_name = "Milford Sound"
+country = "New Zealand"
+latitude = -44.68158
+longitude = 167.91982
+description = "A sheltered basin at the head of Milford Sound, beneath sheer cliffs and waterfalls."
+importance = 3
+region = "pacific"
+island = false
+source = "https://gazette.govt.nz/notice/id/2012-ln350 (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"marup"
+display_name = "Mårup"
+country = "Denmark"
+latitude = 55.93700
+longitude = 10.55220
+description = "Small harbour on Samsø's north-west coast, below clay cliffs and heathland."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://www.visitsamsoe.dk/en/transport/samsoe-marinas/maarup-marina/ (Regions and Harbours 2026)"

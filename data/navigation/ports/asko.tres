@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"asko"
+display_name = "Askø"
+country = "Denmark"
+latitude = 54.88440
+longitude = 11.48290
+description = "Little harbour on low, peaceful Askø, a short hop from Bandholm."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.boatview.io/en/poi/2990/askoe (Regions and Harbours 2026)"

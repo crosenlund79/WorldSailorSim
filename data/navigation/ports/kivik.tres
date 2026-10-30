@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"kivik"
+display_name = "Kivik"
+country = "Sweden"
+latitude = 55.68847
+longitude = 14.22721
+description = "Apple-country fishing harbour near a famous Bronze Age cairn."
+importance = 3
+region = "baltic"
+island = false
+source = "https://www.hamnkartan.se/hamnar/rs-kivik (Regions and Harbours 2026)"

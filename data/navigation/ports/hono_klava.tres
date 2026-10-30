@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hono_klava"
+display_name = "Hönö Klåva"
+country = "Sweden"
+latitude = 57.68182
+longitude = 11.64752
+description = "Busy fishing harbour on Hönö, smelling of tar and fresh shrimp."
+importance = 3
+region = "scandinavia"
+island = true
+source = "https://www.hamnkartan.se/hamnar/hono-klava-hamn (Regions and Harbours 2026)"

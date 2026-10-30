@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"fejo_dybvig"
+display_name = "Fejø Dybvig"
+country = "Denmark"
+latitude = 54.94420
+longitude = 11.43590
+description = "Small harbour near Østerby on Fejø, an island of orchards and lanes."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.seame.com/en/poi/2942 (Regions and Harbours 2026)"

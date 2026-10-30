@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"ljugarn"
+display_name = "Ljugarn"
+country = "Sweden"
+latitude = 57.32190
+longitude = 18.70836
+description = "Old bathing village with sea-stacks at Folhammar and sandy beaches."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/ljugarns-gasthamn (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"lickershamn"
+display_name = "Lickershamn"
+country = "Sweden"
+latitude = 57.82657
+longitude = 18.51369
+description = "Small harbour beneath the Jungfrun sea-stack on Gotland's limestone coast."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/lickershamns-gasthamn (Regions and Harbours 2026)"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"hano"
+display_name = "Hanö"
+country = "Sweden"
+latitude = 56.00962
+longitude = 14.83592
+description = "Lonely island with a lighthouse, fallow deer and an old English naval cemetery."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/hano-hamn (Regions and Harbours 2026)"

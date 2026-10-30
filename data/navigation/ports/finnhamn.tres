@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"finnhamn"
+display_name = "Finnhamn"
+country = "Sweden"
+latitude = 59.47888
+longitude = 18.81235
+description = "Wooded outer island with a hostel and the sheltered Paradisviken bay."
+importance = 3
+region = "baltic"
+island = true
+source = "https://www.hamnkartan.se/hamnar/paradisviken (Regions and Harbours 2026)"
