@@ -57,7 +57,7 @@ func load_files(regions_path: String, destinations_path: String) -> void:
 	_region_of_port.clear()
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(regions_path)) if FileAccess.file_exists(regions_path) else null
 	if data is Dictionary:
-		legend = String(data.get("legend", ""))
+		legend = String((data.get("legend", {}) as Dictionary).get("label", ""))
 		hint = String(data.get("hint", ""))
 		for entry: Dictionary in data.get("regions", []):
 			var outlines: Array[PackedVector2Array] = []

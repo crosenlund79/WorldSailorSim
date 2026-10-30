@@ -9,3 +9,4 @@
 {"event": "navigation_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.542, "monotonic_s": 1981.57, "boot": "a6613b62", "note": "detail charts built and wired (SE x2 European, NZ x2 world-level); routing+regions suites 454/0"}
 {"event": "data_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.560, "monotonic_s": 1981.58, "boot": "a6613b62", "note": "import, checks, anchorage moves, registry; began at parallel_research_agents_end"}
 {"event": "visuals_end", "iso": "2026-10-30T08:20:55+00:00", "epoch": 1793348455.577, "monotonic_s": 1981.60, "boot": "a6613b62", "note": "regional town palettes (danish, swedish, new_zealand), pohutukawa; interleaved with data"}
+{"event": "chart_end", "iso": "2026-10-30T08:36:26+00:00", "epoch": 1793349386.583, "monotonic_s": 2912.61, "boot": "a6613b62", "note": "marks, legend, info, hint, anchorage markers + planning, NZ drawing fixes, suite 59/0; began at visuals_end"}

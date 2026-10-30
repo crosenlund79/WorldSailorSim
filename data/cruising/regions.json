@@ -42,6 +42,6 @@
 			]
 		}
 	],
-	"legend": "An area with more local harbours, anchorages and coastal destinations to explore.",
+	"legend": {"label": "An area with more local harbours, anchorages and coastal destinations to explore."},
 	"hint": "Explore the world at your own pace. Sail between destinations across the globe, or discover the hidden harbours and anchorages of our Detailed Cruising Regions."
 }

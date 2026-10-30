@@ -26,5 +26,5 @@
  "cells_per_mercator_degree": 216,
  "mercator_north": -46.002679562963834,
  "base_west": 166.0,
- "detail_from_px_per_degree": 140.0
+ "detail_from_px_per_degree": 0.0
 }

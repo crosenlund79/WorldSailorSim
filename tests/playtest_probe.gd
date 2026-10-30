@@ -6,6 +6,9 @@ extends Node
 ##   xvfb-run -a -s "-screen 0 1600x900x24" godot --path . --rendering-driver opengl3 \
 ##     --resolution 1600x900 res://tests/playtest_probe.tscn -- --out=DIR --scene=deck|cabin|quay \
 ##     [--port=copenhagen] [--hour=11] [--at=X,Y] [--walk=right:1.5,up:0.5] [--name=shot]
+##     [--chart=lon,lat,px[;lon,lat,px...]] (Regions and Harbours 2026: opens the chart and
+##     shoots each view, centred on lon,lat at px screen pixels per degree; "hover:id" or
+##     "click:id" as a view hovers or clicks a named anchorage, "region:id" a region's mark)
 ## Prints "PROBE {json}". Uses the test save and settings files.
 
 const APP_SCENE := preload("res://src/app/app.tscn")
@@ -50,6 +53,37 @@ func _shot(name: String) -> void:
 	await RenderingServer.frame_post_draw
 	DirAccess.make_dir_recursive_absolute(args.out)
 	get_viewport().get_texture().get_image().save_png("%s/%s.png" % [args.out, name])
+
+
+func _chart_views() -> void:
+	app.open_chart()
+	await _idle()
+	await get_tree().create_timer(0.6).timeout
+	var map: WorldMap = app.router.current_screen
+	var view: MapView = map.get_map_view()
+	if args.get("wind", "1") == "0":
+		map.set_wind_shown(false)
+	var report := []
+	var k := 0
+	for part in String(args.chart).split(";", false):
+		if part.begins_with("click:"):
+			report.append({"click": part, "result": map.plan_via_anchorage(StringName(part.substr(6))), "draft": map.get_draft_anchorages()})
+		elif part.begins_with("hover:") or part.begins_with("region:"):
+			var id := StringName(part.get_slice(":", 1))
+			view.hovered_anchorage = id if part.begins_with("hover:") else &""
+			view.hovered_cruising_region = id if part.begins_with("region:") else &""
+			map._update_cruising_tooltip()
+			view._overlay.queue_redraw()
+			report.append({"hover": part, "info": map.get_cruising_info_text()})
+		else:
+			var bits := part.split(",")
+			view.center_on_geo(Vector2(float(bits[0]), float(bits[1])), float(bits[2]) / view.units_per_degree)
+		await get_tree().create_timer(0.8).timeout
+		await _shot("%s_%d" % [args.name, k])
+		report.append({"view": k, "px": snappedf(view.get_px_per_degree(), 0.1), "anchorages": view.get_shown_anchorage_ids().size(),
+			"ports": view.get_shown_port_ids().size(), "legend": map.is_cruising_legend_shown(), "status": map.get_course_status_text().left(300)})
+		k += 1
+	print("PROBE ", JSON.stringify(report))
 
 
 func _run() -> void:
@@ -99,6 +133,10 @@ func _run() -> void:
 	if args.has("open"):
 		app.call(StringName(args.open))  # e.g. open_action_wheel
 		await get_tree().create_timer(0.3).timeout
+	if args.has("chart"):
+		await _chart_views()
+		get_tree().quit()
+		return
 	await _shot(String(args.name) + "_0")
 	var report := {"scene": String(args.scene), "screen": screen.get_class() if screen.get_script() == null else String(screen.get_script().get_global_name()),
 		"start": [player.position.x, player.position.y] if player else []}

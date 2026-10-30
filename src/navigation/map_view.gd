@@ -23,6 +23,11 @@ signal waypoint_released(index: int, geo: Vector2)
 signal waypoint_remove_requested(index: int)
 ## Cursor position in geographic coordinates, or null when not over the map.
 signal cursor_moved(geo: Variant)
+## A Detailed Cruising Region's chart mark or a named anchorage was clicked,
+## or the mark / anchorage under the cursor changed (Regions and Harbours 2026).
+signal cruising_region_clicked(id: StringName)
+signal anchorage_clicked(id: StringName)
+signal cruising_hover_changed()
 
 @export var land_data: JSON
 @export var units_per_degree := 160.0
@@ -84,6 +89,20 @@ const WORLD_LAND_RES := "res://data/navigation/world/land.res"
 ## At world zoom, harbour markers closer than this (screen pixels) to a more
 ## important one are left out, so a click always hits the intended harbour.
 const DECLUTTER_PX := 16.0
+## Detailed Cruising Regions (Regions and Harbours 2026): each region's quiet
+## mark (a small symbol, its name and a dashed accent along its waters) shows
+## on the zoomed-out chart and fades out by CRUISING_MARK_MAX_PX, where the
+## region's own harbours take over. Named anchorages get a small anchor from
+## ANCHORAGE_MARKER_PX (the zoom of the smallest harbours) and a name where
+## there is room from ANCHORAGE_LABEL_PX.
+const CRUISING_MARK_MAX_PX := 60.0
+const CRUISING_ACCENT := Color("#C9B27E")
+const ANCHORAGE_MARKER_PX := 110.0
+const ANCHORAGE_LABEL_PX := 200.0
+const CRUISING_PICK_PX := 14.0
+## The regions' names join their symbols from this zoom (the whole-world view
+## keeps to the symbols, clear of the harbour names).
+const CRUISING_NAME_MIN_PX := 8.0
 const ISLET_COLOUR := Color("#7F7C66")
 
 ## ROUTE: pressed on a course line; it becomes a new waypoint only when dragged
@@ -128,6 +147,14 @@ var _weather_shapes: Array[Dictionary] = []
 ## Game time the weather overlay shows (follows the game clock in steps).
 var weather_time := -1.0
 var _hovered_port_id: StringName
+## Shown on the chart (tests and the world map may switch them off).
+var show_cruising_regions := true
+## The region mark / named anchorage under the cursor, or &"".
+var hovered_cruising_region: StringName
+var hovered_anchorage: StringName
+## Each region's outlines in map space (built once with the land).
+var _cruising_outlines := {}
+var _shown_anchorages: Array[Dictionary] = []
 ## Harbours with a marker in the current view, most important first, and the
 ## ones whose name is written (see _update_port_layout()).
 var _shown_ports: Array[PortData] = []
@@ -507,7 +534,7 @@ func _begin_left_press(position: Vector2) -> void:
 		_press_waypoint = waypoint
 		waypoint_pressed.emit(waypoint)
 		return
-	if pick_port(position).is_empty():
+	if pick_port(position).is_empty() and pick_anchorage(position).is_empty():
 		var leg := pick_route_leg(position)
 		if leg >= 0:
 			_press = Press.ROUTE
@@ -521,8 +548,14 @@ func _end_left_press(position: Vector2) -> void:
 				waypoint_released.emit(_press_waypoint, screen_to_geo(position))
 		Press.PENDING, Press.ROUTE:
 			var port := pick_port(position)
+			var anchorage := pick_anchorage(position) if port.is_empty() else &""
+			var region := pick_cruising_region(position) if port.is_empty() and anchorage.is_empty() else &""
 			if not port.is_empty():
 				port_clicked.emit(port)
+			elif not anchorage.is_empty():
+				anchorage_clicked.emit(anchorage)
+			elif not region.is_empty():
+				cruising_region_clicked.emit(region)
 			else:
 				map_clicked.emit(screen_to_geo(position))
 	_press = Press.NONE
@@ -554,6 +587,13 @@ func _handle_mouse_motion(event: InputEventMouseMotion) -> void:
 	if hovered != _hovered_port_id:
 		_hovered_port_id = hovered
 		_overlay.queue_redraw()
+	var anchorage := pick_anchorage(event.position) if hovered.is_empty() else &""
+	var region := pick_cruising_region(event.position) if hovered.is_empty() and anchorage.is_empty() else &""
+	if anchorage != hovered_anchorage or region != hovered_cruising_region:
+		hovered_anchorage = anchorage
+		hovered_cruising_region = region
+		_overlay.queue_redraw()
+		cruising_hover_changed.emit()
 	var map_point := screen_to_map(event.position)
 	var inside := map_point.y >= _map_bounds.position.y and map_point.y <= _map_bounds.end.y if _has_world else _map_bounds.has_point(map_point)
 	cursor_moved.emit(screen_to_geo(event.position) if inside else null)
@@ -711,6 +751,7 @@ func _build_land() -> void:
 				"max_px": float(label.get("max_px_per_degree", INF)),
 			})
 	_build_regions()
+	_project_cruising_regions()
 
 
 ## The world land, projected to map space once (static cache): per layer
@@ -818,6 +859,30 @@ func _world_tiles(level: String) -> Array:
 			_tile_of(tiles, Rect2(p, Vector2.ZERO)).islets.append(p)
 	data[cache_key] = tiles.values()
 	return data[cache_key]
+
+
+## A fill ring as pieces the renderer can triangulate (Regions and Harbours
+## 2026): the ring itself, or, when the triangulation rejects it (a long,
+## nearly self-touching coast), its quarters clipped out of it, up to three
+## times; slivers are left out.
+static func _drawable_pieces(points: PackedVector2Array, depth := 0) -> Array[PackedVector2Array]:
+	var pieces: Array[PackedVector2Array] = []
+	if points.size() < 3 or absf(_ring_area(points)) < 0.05:
+		return pieces
+	if not Geometry2D.triangulate_polygon(points).is_empty():
+		pieces.append(points)
+		return pieces
+	if depth >= 3:
+		return pieces
+	var box := _bounds_of(points)
+	var half := box.size / 2.0
+	for k in 4:
+		var quarter := Rect2(box.position + Vector2(k % 2, k / 2) * half, half)
+		var cut := PackedVector2Array([quarter.position, Vector2(quarter.end.x, quarter.position.y), quarter.end, Vector2(quarter.position.x, quarter.end.y)])
+		for clipped in Geometry2D.intersect_polygons(points, cut):
+			if not Geometry2D.is_polygon_clockwise(clipped):
+				pieces.append_array(_drawable_pieces(clipped, depth + 1))
+	return pieces
 
 
 ## False for slivers and degenerate rings: nothing visible to draw, and the
@@ -965,9 +1030,7 @@ func _region_shapes(region: Dictionary) -> Dictionary:
 	for level in ["overview", "detail"]:
 		var fill: Array[PackedVector2Array] = []
 		for ring: Array in data.get(level, {}).get("fill_tiles", []):
-			var points := _project_ring(ring)
-			if MapView._drawable(points):
-				fill.append(points)
+			fill.append_array(MapView._drawable_pieces(_project_ring(ring)))
 		var tiles := {}
 		for line: Array in data.get(level, {}).get("coast", []):
 			_add_coast_runs(tiles, _project_ring(line))
@@ -1476,8 +1539,10 @@ func _draw_overlay() -> void:
 	if show_weather:
 		_draw_weather(s)
 	_draw_canals(s)
+	_draw_cruising_regions(s, px)
 	_draw_courses(s)
 	_update_port_layout()
+	_draw_anchorages(s, px)
 	for i in range(_shown_ports.size() - 1, -1, -1):  # most important drawn last (on top)
 		_draw_port(_shown_ports[i], s, _labelled_ports.has(_shown_ports[i].id))
 	_draw_waypoints(s)
@@ -1492,6 +1557,125 @@ func _draw_overlay() -> void:
 		if not boat_port_id.is_empty():
 			at += Vector2(-26, -26) * s
 		_draw_boat(at, s, not boat_port_id.is_empty())
+
+
+# --- Detailed Cruising Regions (Regions and Harbours 2026) ---------------------------------
+
+func _project_cruising_regions() -> void:
+	_cruising_outlines.clear()
+	for region: Dictionary in CruisingRegions.get_default().regions:
+		var rings: Array[PackedVector2Array] = []
+		for outline: PackedVector2Array in region.outlines:
+			var ring := _project_geo(outline)
+			ring.append(ring[0])
+			rings.append(ring)
+		_cruising_outlines[region.id] = rings
+
+
+## How strongly the regions' marks show at `px` (1 zoomed out, 0 from CRUISING_MARK_MAX_PX).
+func cruising_mark_strength(px := -1.0) -> float:
+	if not show_cruising_regions:
+		return 0.0
+	px = get_px_per_degree() if px < 0.0 else px
+	return clampf((CRUISING_MARK_MAX_PX - px) / (CRUISING_MARK_MAX_PX * 0.35), 0.0, 1.0)
+
+
+## The region whose mark is under a screen position, or &"".
+func pick_cruising_region(screen_point: Vector2) -> StringName:
+	if cruising_mark_strength() < 0.3:
+		return &""
+	for region: Dictionary in CruisingRegions.get_default().regions:
+		var at := map_to_screen(_near_view(projection.geo_to_map(region.symbol)))
+		var label_end := at + Vector2(22.0 + LABEL_FONT.get_string_size(Loc.t(region.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x * 0.7, 0)
+		if at.distance_to(screen_point) <= CRUISING_PICK_PX or Rect2(at + Vector2(10, -11), label_end - at + Vector2(0, 22)).has_point(screen_point):
+			return region.id
+	return &""
+
+
+## The named anchorage under a screen position (only those with a marker), or &"".
+func pick_anchorage(screen_point: Vector2) -> StringName:
+	var best: StringName = &""
+	var best_distance := CRUISING_PICK_PX
+	for record in _shown_anchorages:
+		var distance := geo_to_screen(record.position).distance_to(screen_point)
+		if distance <= best_distance:
+			best_distance = distance
+			best = record.id
+	return best
+
+
+func get_shown_anchorage_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for record in _shown_anchorages:
+		ids.append(record.id)
+	return ids
+
+
+func _draw_cruising_regions(s: float, px: float) -> void:
+	var strength := cruising_mark_strength(px)
+	if strength <= 0.0:
+		return
+	var regions := CruisingRegions.get_default()
+	for region: Dictionary in regions.regions:
+		var hovered: bool = region.id == hovered_cruising_region
+		var colour := Color(CRUISING_ACCENT, (0.75 if hovered else 0.5) * strength)
+		for ring: PackedVector2Array in _cruising_outlines.get(region.id, []):
+			var shift := _near_view(ring[0]) - ring[0]
+			for i in range(1, ring.size()):
+				_overlay.draw_dashed_line(ring[i - 1] + shift, ring[i] + shift, colour, 2.0 * s, 10.0 * s, true, true)
+		var at := _near_view(projection.geo_to_map(region.symbol))
+		MapView.draw_cruising_symbol(_overlay, at, s, strength, hovered)
+		if px < CRUISING_NAME_MIN_PX and not hovered:
+			continue
+		_draw_text(Loc.t(region.name), at + Vector2(14.0, 5.0) * s, 15.0 * s, Color(PORT_FILL, 0.92 * strength), false, true)
+
+
+## The Detailed Cruising Region symbol: a small brass ring around a four-point
+## star (a chart's compass mark, quieter than a harbour's pin). Also drawn in
+## the chart's legend.
+static func draw_cruising_symbol(canvas: CanvasItem, at: Vector2, s: float, strength := 1.0, hovered := false) -> void:
+	var r := 7.0 * s
+	canvas.draw_circle(at, r + 2.0 * s, Color(PORT_RIM, 0.75 * strength), true, -1.0, true)
+	canvas.draw_arc(at, r, 0.0, TAU, 24, Color(CRUISING_ACCENT, strength), (2.2 if hovered else 1.6) * s, true)
+	var star := PackedVector2Array()
+	for k in 8:
+		var a := -PI / 2.0 + k * PI / 4.0
+		star.append(at + Vector2(cos(a), sin(a)) * (r * 0.72 if k % 2 == 0 else r * 0.22))
+	canvas.draw_colored_polygon(star, Color(CRUISING_ACCENT, strength))
+
+
+func _draw_anchorages(s: float, px: float) -> void:
+	_shown_anchorages.clear()
+	if not show_cruising_regions or px < ANCHORAGE_MARKER_PX:
+		return
+	var area := get_visible_geo_rect().grow(40.0 / px)
+	var placed: Array[Rect2] = []
+	for id: StringName in _labelled_ports:
+		placed.append(_labelled_ports[id])
+	for record in CruisingRegions.get_default().anchorages_in_rect(area):
+		_shown_anchorages.append(record)
+		var at := _near_view(projection.geo_to_map(record.position))
+		var hovered: bool = record.id == hovered_anchorage
+		var r := 7.0 * s
+		if hovered:
+			_overlay.draw_circle(at, r + 5.0 * s, HOVER, false, 2.0 * s, true)
+		_overlay.draw_circle(at, r, PORT_RIM, true, -1.0, true)
+		var w := 1.4 * s
+		var c := Color(CRUISING_ACCENT, 1.0)
+		_overlay.draw_circle(at + Vector2(0, -3.8) * s, 1.3 * s, c, false, w, true)  # ring
+		_overlay.draw_line(at + Vector2(0, -2.5) * s, at + Vector2(0, 4.2) * s, c, w, true)  # shank
+		_overlay.draw_line(at + Vector2(-2.6, -1.4) * s, at + Vector2(2.6, -1.4) * s, c, w, true)  # stock
+		_overlay.draw_arc(at + Vector2(0, 0.6) * s, 3.9 * s, deg_to_rad(20.0), deg_to_rad(160.0), 10, c, w, true)  # arms
+		if px < ANCHORAGE_LABEL_PX and not hovered:
+			continue
+		var title := Loc.t(String(record.name))
+		var size := LABEL_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 22) * (15.0 / 22.0)
+		var screen := map_to_screen(at)
+		var rect := Rect2(screen + Vector2(11.0, -size.y * 0.5), size)
+		if not hovered and placed.any(func(other: Rect2) -> bool: return other.intersects(rect)):
+			continue
+		placed.append(rect)
+		_draw_text(title, at + Vector2(11.0, 5.0) * s, 15.0 * s, Color(PORT_FILL, 0.85), false, true)
 
 
 func _draw_graticule(s: float) -> void:

@@ -130,6 +130,9 @@ func _ready() -> void:
 	_map.waypoint_released.connect(_on_waypoint_released)
 	_map.waypoint_remove_requested.connect(remove_waypoint)
 	_map.cursor_moved.connect(_on_cursor_moved)
+	_map.anchorage_clicked.connect(plan_via_anchorage)
+	_map.cruising_region_clicked.connect(show_cruising_region)
+	_map.cruising_hover_changed.connect(_update_cruising_tooltip)
 	_plot_button.pressed.connect(func() -> void: plot_course_to(_selected_port_id))
 	_apply_button.pressed.connect(apply_course)
 	_discard_button.pressed.connect(discard_changes)
@@ -158,6 +161,7 @@ func _ready() -> void:
 	_wind_toggle.toggled.connect(set_wind_shown)
 	set_wind_shown(wind_shown)
 	_build_anchorage_controls()
+	_build_cruising_legend()
 	# Captain's Chartroom: small, quiet map controls.
 	for control in %ZoomInButton.get_parent().get_children():
 		if control is CheckButton:
@@ -172,6 +176,9 @@ func _ready() -> void:
 	_selected_port_id = _draft_destination
 	if mode == MODE_DREAM:
 		_setup_dream()
+	# Once per career (kept with the hints in the save): the Detailed Cruising Regions.
+	if mode != MODE_DREAM and GameSession.take_hint("cruising_regions"):
+		_feedback_hint = Loc.t(CruisingRegions.get_default().hint)
 	_refresh()
 	center_on_vessel()
 	if mode == MODE_STATION:
@@ -194,6 +201,8 @@ func get_station_zoom() -> float:
 
 func _process(delta: float) -> void:
 	_update_anchorage_info(delta)
+	if _cruising_legend:
+		_cruising_legend.visible = _map.cruising_mark_strength() > 0.3
 	if _dragging_waypoint >= 0 and _pending_drag_geo != Vector2.INF:
 		_drag_timer -= delta
 		if _drag_timer <= 0.0:
@@ -502,7 +511,7 @@ func _refresh_dream() -> void:
 		return
 	_set_text(_selection_title, "%s, %s" % [selected.display_name, selected.country])
 	var visited := Loc.t("Visited") if log.has_visited(selected.id) else Loc.t("Not visited yet")
-	_set_text(_selection_details, Loc.t("%s\n%s\n%s  ·  %s  ·  %d nm in a straight line") % [selected.get_description() + _special_line(selected.id),
+	_set_text(_selection_details, Loc.t("%s\n%s\n%s  ·  %s  ·  %d nm in a straight line") % [selected.get_description() + _special_line(selected.id) + _cruising_line(selected),
 		HarbourFacilities.describe_services(selected.id), visited,
 		GeoMath.format_position(selected.get_geo_position()),
 		roundi(GeoMath.distance_nm(GameSession.get_vessel_position(), selected.get_geo_position()))])
@@ -887,7 +896,7 @@ func _refresh() -> void:
 		# Captain's Chartroom: a compact summary (the services by name and the
 		# distance); the explanations and the coordinates are in the tooltip.
 		var away := roundi(GeoMath.distance_nm(GameSession.get_vessel_position(), selected.get_geo_position()))
-		_set_text(_selection_details, Loc.t("%s\n%s\n%d nm away in a straight line") % [selected.get_description() + _special_line(selected.id),
+		_set_text(_selection_details, Loc.t("%s\n%s\n%d nm away in a straight line") % [selected.get_description() + _special_line(selected.id) + _cruising_line(selected),
 			HarbourFacilities.describe_services(selected.id, true), away])
 		_selection_details.tooltip_text = Loc.t("%s\n%s  ·  %d nm in a straight line") % [HarbourFacilities.describe_services(selected.id),
 			GeoMath.format_position(selected.get_geo_position()), away]
@@ -1286,6 +1295,149 @@ func _build_wind_legend() -> void:
 		label.add_theme_font_size_override(&"font_size", 16)
 		bands.add_child(label)
 		lower = int(band[0]) if not is_inf(band[0]) else lower
+
+
+## A harbour's line in a Detailed Cruising Region (Regions and Harbours
+## 2026): what kind of harbour it is and the region's name; "" elsewhere.
+static func _cruising_line(port: PortData) -> String:
+	var regions := CruisingRegions.get_default()
+	var region := regions.get_region(regions.region_of_port(port))
+	if region.is_empty():
+		return ""
+	return "\n%s  ·  %s" % [CruisingRegions.class_name_of(regions.class_of(port.id)), Loc.t(region.title)]
+
+
+# --- Detailed Cruising Regions (Regions and Harbours 2026) ---------------------------------
+
+var _cruising_legend: PanelContainer
+var _cruising_tooltip: PanelContainer
+var _cruising_tooltip_label: Label
+
+
+## The chart's legend entry for the Detailed Cruising Regions (shown while
+## their marks are) and the small info panel shown over a mark or a named
+## anchorage under the cursor.
+func _build_cruising_legend() -> void:
+	var root := _wind_legend.get_parent() as Control
+	_cruising_legend = PanelContainer.new()
+	_cruising_legend.name = "CruisingLegend"
+	_cruising_legend.theme_type_variation = &"HudPanel"
+	_cruising_legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(_cruising_legend)
+	_cruising_legend.position = Vector2(24, 64)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override(&"separation", 10)
+	_cruising_legend.add_child(row)
+	var symbol := Control.new()
+	symbol.custom_minimum_size = Vector2(22, 22)
+	symbol.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	symbol.draw.connect(func() -> void: MapView.draw_cruising_symbol(symbol, Vector2(11, 11), 1.15))
+	row.add_child(symbol)
+	var box := VBoxContainer.new()
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(box)
+	var title := Label.new()
+	title.text = "Detailed Cruising Region"
+	title.add_theme_font_size_override(&"font_size", 16)
+	box.add_child(title)
+	var text := Label.new()
+	text.name = "LegendText"
+	text.text = Loc.t(CruisingRegions.get_default().legend)
+	text.theme_type_variation = &"MutedLabel"
+	text.add_theme_font_size_override(&"font_size", 14)
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text.custom_minimum_size = Vector2(300, 0)
+	box.add_child(text)
+	_cruising_tooltip = PanelContainer.new()
+	_cruising_tooltip.name = "CruisingInfo"
+	_cruising_tooltip.theme_type_variation = &"HudPanel"
+	_cruising_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cruising_tooltip.visible = false
+	root.add_child(_cruising_tooltip)
+	_cruising_tooltip_label = Label.new()
+	_cruising_tooltip_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_cruising_tooltip_label.custom_minimum_size = Vector2(330, 0)
+	_cruising_tooltip_label.add_theme_font_size_override(&"font_size", 16)
+	_cruising_tooltip.add_child(_cruising_tooltip_label)
+
+
+## The info text of a region mark or named anchorage ("" for neither).
+func cruising_info_text(region_id: StringName, anchorage_id: StringName) -> String:
+	var regions := CruisingRegions.get_default()
+	if not anchorage_id.is_empty():
+		var record := regions.get_anchorage(anchorage_id)
+		var onward := PortCatalog.get_default().get_port(StringName(record.get("onward", "")))
+		var lines: Array[String] = ["%s  ·  %s" % [Loc.t(String(record.name)), CruisingRegions.class_name_of(CruisingRegions.CLASS_ANCHORAGE)],
+			Loc.t(String(record.get("description", "")))]
+		if onward and mode != MODE_DREAM:
+			lines.append(Loc.t("Click to plan a course to %s, anchoring here on the way.") % onward.display_name)
+		return "\n".join(lines)
+	if not region_id.is_empty():
+		var region := regions.get_region(region_id)
+		return "%s\n%s\n%s" % [Loc.t(region.title), Loc.t(region.description), Loc.t("Click to sail the chart there.")]
+	return ""
+
+
+func _update_cruising_tooltip() -> void:
+	var text := cruising_info_text(_map.hovered_cruising_region, _map.hovered_anchorage)
+	_cruising_tooltip.visible = not text.is_empty()
+	if text.is_empty():
+		return
+	_cruising_tooltip_label.text = text
+	_cruising_tooltip.reset_size()
+	var root := _cruising_tooltip.get_parent() as Control
+	var at := root.get_local_mouse_position() + Vector2(18, 18)
+	at.x = minf(at.x, root.size.x - _cruising_tooltip.size.x - 8.0)
+	at.y = minf(at.y, root.size.y - _cruising_tooltip.size.y - 8.0)
+	_cruising_tooltip.position = at
+
+
+func get_cruising_info_text() -> String:
+	return _cruising_tooltip_label.text if _cruising_tooltip and _cruising_tooltip.visible else ""
+
+
+func is_cruising_legend_shown() -> bool:
+	return _cruising_legend != null and _cruising_legend.visible
+
+
+## Shows a Detailed Cruising Region: the chart moves over its waters, zoomed
+## in to where its harbours appear, and its info is shown.
+func show_cruising_region(region_id: StringName) -> void:
+	var region := CruisingRegions.get_default().get_region(region_id)
+	if region.is_empty():
+		return
+	var bounds := Rect2(region.symbol, Vector2.ZERO)
+	for outline: PackedVector2Array in region.outlines:
+		for p in outline:
+			bounds = bounds.expand(p)
+	var span := maxf(bounds.size.x, bounds.size.y * 1.6)
+	var px := clampf(_map._free_view_size().x / maxf(span, 0.1), MapView.CRUISING_MARK_MAX_PX * 1.05, 200.0)
+	_map.center_on_geo(bounds.get_center(), px / _map.units_per_degree)
+	_set_feedback("%s: %s" % [Loc.t(region.title), Loc.t(region.description)])
+
+
+## Plans a course to a named anchorage's harbour, with the anchorage as an
+## anchoring waypoint on the way (Iteration 18's flow: the boat stops there
+## for the anchor). Out of planning (the daydream chart), only its info is
+## shown. Returns "" or the reason it could not be planned.
+func plan_via_anchorage(anchorage_id: StringName) -> String:
+	var record := CruisingRegions.get_default().get_anchorage(anchorage_id)
+	if record.is_empty():
+		return "unknown_anchorage"
+	var onward := PortCatalog.get_default().get_port(StringName(record.get("onward", "")))
+	if mode == MODE_DREAM or onward == null:
+		_set_feedback(cruising_info_text(&"", anchorage_id))
+		return "not_planning"
+	select_port(onward.id)
+	plot_course_to(onward.id)
+	var index := insert_waypoint(0, record.position)
+	var problem := toggle_anchorage(index)
+	if not problem.is_empty():
+		return problem
+	_set_feedback(Loc.t("%s: course planned to %s, anchoring here on the way. Apply the course to keep it.") % [Loc.t(String(record.name)), onward.display_name])
+	return ""
 
 
 ## A special harbour's line in the harbour details (I021): what makes it

@@ -97,8 +97,11 @@ REGIONS = {
         "factor": 18,
         "detail_simplify": 0.0003, "detail_min_area": 0.000002,
         "overview_simplify": 0.0035, "overview_min_area": 0.0002,
-        "tile_deg": 0.5,
+        "tile_deg": 0.25,
         "labels": "new_zealand_labels.json", "label_group": "north",
+        # Small enough to draw in detail wherever the world's regional land shows: its coarse
+        # overview fails to fill the South Island's top (one large polygon in 4-degree tiles).
+        "detail_px": 0.0,
     },
     "nz_south": {
         "name": "New Zealand: South Island",
@@ -107,8 +110,9 @@ REGIONS = {
         "factor": 18,
         "detail_simplify": 0.0003, "detail_min_area": 0.000002,
         "overview_simplify": 0.0035, "overview_min_area": 0.0002,
-        "tile_deg": 0.5,
+        "tile_deg": 0.25,
         "labels": "new_zealand_labels.json", "label_group": "south",
+        "detail_px": 0.0,
     },
 }
 
@@ -452,6 +456,27 @@ def ring(coords):
     return out
 
 
+def _add_tile_pieces(tiles, poly, cell, depth):
+    """The land of `poly` inside `cell` as fill rings. A ring that rounding left self-touching (which
+    the game cannot triangulate, so it would not be drawn) is split into the cell's quarters, up to
+    three times."""
+    piece = poly.intersection(cell)
+    for g in getattr(piece, "geoms", [piece]):
+        if not isinstance(g, Polygon) or g.area <= 1e-9:
+            continue
+        r = ring(g.exterior.coords)
+        if len(r) < 3:
+            continue
+        if Polygon(r).is_valid or depth >= 3:
+            tiles.append(r)
+            continue
+        x0, y0, x1, y1 = cell.bounds
+        mx, my = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+        for quarter in (box(x0, y0, mx, my), box(mx, y0, x1, my), box(x0, my, mx, y1), box(mx, my, x1, y1)):
+            if g.intersects(quarter):
+                _add_tile_pieces(tiles, g, quarter, depth + 1)
+
+
 def tiles_and_coast(polygons, region, tile_deg):
     rect = box(region.west, region.south, region.east, region.north)
     tiles = []
@@ -461,14 +486,8 @@ def tiles_and_coast(polygons, region, tile_deg):
         while lat < region.north:
             cell = box(lon, lat, min(lon + tile_deg, region.east), min(lat + tile_deg, region.north))
             for poly in polygons:
-                if not poly.intersects(cell):
-                    continue
-                piece = poly.intersection(cell)
-                for g in getattr(piece, "geoms", [piece]):
-                    if isinstance(g, Polygon) and g.area > 1e-9:
-                        r = ring(g.exterior.coords)
-                        if len(r) >= 3:
-                            tiles.append(r)
+                if poly.intersects(cell):
+                    _add_tile_pieces(tiles, poly, cell, 0)
             lat += tile_deg
         lon += tile_deg
     coast = []
@@ -644,7 +663,7 @@ def main():
         "cells_per_mercator_degree": base.cpd * region.k,
         "mercator_north": base.my_north - region.r0 / base.cpd,
         "base_west": region.west,
-        "detail_from_px_per_degree": 140.0,
+        "detail_from_px_per_degree": spec.get("detail_px", 140.0),
     }
     json.dump(meta, open(os.path.join(out_dir, "region.json"), "w"), indent=1, ensure_ascii=False)
     print("done in %.0f s" % (time.time() - started), flush=True)

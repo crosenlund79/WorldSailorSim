@@ -335,7 +335,7 @@ msgstr ""
 msgid "Walk with {move}. Press {interact} next to something that lights up to use it. {action_wheel} opens the action wheel with what you can do where you stand. {captains_log} opens the Captain's Log, {captains_hat} puts your hat on or takes it off, and {pause} opens the menu (and closes any window). {handbook} opens this Handbook."
 msgstr ""
 
-#: data/academy/academy.json src/navigation/world_map.gd:143 src/navigation/world_map.gd:948
+#: data/academy/academy.json src/navigation/world_map.gd:146 src/navigation/world_map.gd:957
 msgid "Weather"
 msgstr ""
 
@@ -425,6 +425,426 @@ msgstr ""
 
 #: data/boat/equipment.json
 msgid "Weather receiver"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A boaties' cove with a bush bathtub, smokehouse and wash-house built for cruisers."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A calm bay between Rangitoto's lava fields and green Motutapu Island."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A clear-water cove near Cape Brett, start of the lighthouse track."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A crescent of sand and a tidal lagoon in the heart of Abel Tasman."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A golden-sand bay that is the best all-weather anchorage in Abel Tasman."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A predator-free island sanctuary where saddlebacks and robins greet visitors."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A private, farmed island with white beaches off Mercury Bay."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A quiet eastern Waiheke bay backed by vineyards."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A sandy bay below Waiheke's hillside village of cafes and galleries."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A tidal lagoon and baches behind a long golden beach."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A vast, uninhabited southern harbour of granite domes and still water."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "A well-sheltered island bay with a wharf, cafe and walking tracks."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Almost enclosed bay in the Mols hills, quiet and away from the main routes."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Altarholmen"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Anchorage Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Anchorage just north-east of Tunø harbour, good in westerly and northerly winds."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Anchorage off Korshavn and Revkrogen at Avernakø's eastern end, sheltered from the north-west."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Anchorage west of Femø harbour, sheltered from north and east winds."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Awaroa Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Bare granite islets near Mollösund, a classic west-coast natural harbour."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Bark Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Bathing cove on Gåsö at the mouth of Gullmarsfjorden."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Begtrup Vig"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Bokö Hamnvik"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Bullerö Bodkobbshålet"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Calm anchorage inside Samsø's Stavns Fjord, a bird reserve dotted with islets."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Deep Water Cove"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Femø Anchorage"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Fjärdlång Rumpudden"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Former winter haven for schooners, a snug wooded bay on Thurø."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Genner Bugt"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Governor Grey's historic mansion, with peacocks and wallabies around the lawns."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Granite islet anchorage among the skerries south of Hamburgsund."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Great Mercury Island"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Grinda Hästholmssundet"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Gällnö Getudden"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Gåsö Badviken"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Harstena Flisfjärden"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Helnæs Bugt"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Huvudskär"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Huö"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Island natural harbour just off Hunnebostrand, smooth rocks for bathing."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Islington Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Kalø Vig"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Karholmarna"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Knebel Vig"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Kälkerön"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Kälmö"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Lindholmen"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Long wooded inlet on Själbottna, calm in almost any wind."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Lunkebugten"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Lyø Anchorage"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Man O' War Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Mansion House Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Munkholmen"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Natural harbour by Harstena, an outer fishing hamlet known for smoked fish."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Natural harbour on the long wooded island of Fjärdlång."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Old fishing skerries at the open-sea edge, with a lonely lighthouse."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Oneroa Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Otehei Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Outer granite islets west of Grundsund, best in settled weather."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Outer skerry anchorage beside a tiny summer village and its little shop."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Popular anchorage in a hill-ringed bay between Mols and Helgenæs, behind the Rønnen shoal."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Popular natural harbour at an old pilot station, clear water and mussels."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Port Pegasus"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Quiet natural harbour on Gällnö, an island of meadows and old farms."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Remote low skerries far out to sea; swing at anchor among nesting birds."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Revkrogen"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Roberton Island"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Rocky outer-skerry anchorage in the Bullerö reserve, eider ducks all around."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Roomy anchorage in the bay north-west of Lyø's pier, easy to approach."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Rödlöga"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Seldom-crowded bay on south-west Funen, with Faldsled's inn ashore."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Sheltered anchorage between Nappedam and the medieval Kalø castle ruin."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Sheltered bay on Bokö in the Gryt archipelago."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Sheltered skerry anchorage off northern Tjörn."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Sheltered sound on Grinda's south side, beloved by families on summer weekends."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Sheltered wooded bay beside Kalvø, good holding except in easterly winds."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Själbottna Långviken"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Skerry anchorage in the outer Västervik archipelago."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Small granite natural harbour in the northern Gothenburg archipelago."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Smokehouse Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Snug forested bay on Ägnö, an easy first night out from Stockholm."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Stavns Fjord"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Stora Nassa"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "The people's beach, bought by New Zealanders, beside a wide tidal inlet."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Thurø Bund"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Torrent Bay"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Tunø Anchorage"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Twin turquoise lagoons and a hilltop lookout where Captain Cook once anchored."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Ulva Island"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Vasholmarna"
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Wide shallow bay on Tåsinge's east coast, a quiet overnight stop south of Thurø."
+msgstr ""
+
+#: data/cruising/destinations.json
+msgid "Ägnö Napoleonviken"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "An area with more local harbours, anchorages and coastal destinations to explore."
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Denmark — Home Waters"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Discover a rich network of island harbours, sheltered passages and welcoming coastal communities."
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Discover sheltered bays, remote anchorages and memorable coastal passages across New Zealand's two main islands."
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Explore the world at your own pace. Sail between destinations across the globe, or discover the hidden harbours and anchorages of our Detailed Cruising Regions."
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Explore winding archipelagos, island villages and quiet anchorages along Sweden's remarkable coastline."
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Home Waters"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "New Zealand — The Long White Cloud"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "Sweden — The Archipelagos"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "The Archipelagos"
+msgstr ""
+
+#: data/cruising/regions.json
+msgid "The Long White Cloud"
 msgstr ""
 
 #: data/electronics/instrument_packages.json
@@ -891,7 +1311,7 @@ msgstr ""
 msgid "Balearic Sea"
 msgstr ""
 
-#: data/navigation/europe_land.json
+#: data/navigation/europe_land.json data/navigation/regions/swedish_east_coast/land.json
 msgid "Baltic Sea"
 msgstr ""
 
@@ -911,7 +1331,7 @@ msgstr ""
 msgid "English Channel"
 msgstr ""
 
-#: data/navigation/europe_land.json src/navigation/nav_grid.gd:104
+#: data/navigation/europe_land.json src/navigation/nav_grid.gd:107
 msgid "Europe"
 msgstr ""
 
@@ -951,7 +1371,7 @@ msgstr ""
 msgid "Norwegian Sea"
 msgstr ""
 
-#: data/navigation/europe_land.json data/weather/wind_climate.json
+#: data/navigation/europe_land.json data/navigation/regions/bohuslan/land.json data/weather/wind_climate.json
 msgid "Skagerrak"
 msgstr ""
 
@@ -978,6 +1398,15 @@ msgstr ""
 #: data/navigation/ports/a_coruna.tres:8
 msgctxt "place"
 msgid "A Coruña"
+msgstr ""
+
+#: data/navigation/ports/aabenraa.tres:12
+msgid "Marina at the head of Aabenraa Fjord, below an old merchant town."
+msgstr ""
+
+#: data/navigation/ports/aabenraa.tres:8
+msgctxt "place"
+msgid "Aabenraa"
 msgstr ""
 
 #: data/navigation/ports/aarhus.tres:12
@@ -1007,6 +1436,24 @@ msgctxt "place"
 msgid "Ærøskøbing"
 msgstr ""
 
+#: data/navigation/ports/agerso.tres:12
+msgid "Small fishing harbour on Agersø's east side, across the sound from Stigsnæs."
+msgstr ""
+
+#: data/navigation/ports/agerso.tres:8
+msgctxt "place"
+msgid "Agersø"
+msgstr ""
+
+#: data/navigation/ports/ahus.tres:12
+msgid "Old river-mouth town known for smoked eel and long sandy beaches."
+msgstr ""
+
+#: data/navigation/ports/ahus.tres:8
+msgctxt "place"
+msgid "Åhus"
+msgstr ""
+
 #: data/navigation/ports/ajaccio.tres:12
 msgid "Ajaccio, an island harbour on the Mediterranean."
 msgstr ""
@@ -1014,6 +1461,15 @@ msgstr ""
 #: data/navigation/ports/ajaccio.tres:8
 msgctxt "place"
 msgid "Ajaccio"
+msgstr ""
+
+#: data/navigation/ports/akaroa.tres:12
+msgid "A French-flavoured village on a sheltered volcanic harbour, home to tiny Hector's dolphins."
+msgstr ""
+
+#: data/navigation/ports/akaroa.tres:8
+msgctxt "place"
+msgid "Akaroa"
 msgstr ""
 
 #: data/navigation/ports/alesund.tres:12
@@ -1034,6 +1490,15 @@ msgctxt "place"
 msgid "Alghero"
 msgstr ""
 
+#: data/navigation/ports/allinge.tres:12
+msgid "Small rocky harbour on Bornholm's north coast, near Hammershus castle ruin."
+msgstr ""
+
+#: data/navigation/ports/allinge.tres:8
+msgctxt "place"
+msgid "Allinge"
+msgstr ""
+
 #: data/navigation/ports/almeria.tres:12
 msgid "Almería, a harbour on the Mediterranean."
 msgstr ""
@@ -1050,6 +1515,15 @@ msgstr ""
 #: data/navigation/ports/ancona.tres:8
 msgctxt "place"
 msgid "Ancona"
+msgstr ""
+
+#: data/navigation/ports/anholt.tres:12
+msgid "Remote Kattegat island harbour among dunes, a full day's sail from the mainland."
+msgstr ""
+
+#: data/navigation/ports/anholt.tres:8
+msgctxt "place"
+msgid "Anholt"
 msgstr ""
 
 #: data/navigation/ports/arcachon.tres:12
@@ -1070,6 +1544,24 @@ msgctxt "place"
 msgid "Arendal"
 msgstr ""
 
+#: data/navigation/ports/arholma.tres:12
+msgid "Northernmost archipelago island with a white beacon tower and quiet meadows."
+msgstr ""
+
+#: data/navigation/ports/arholma.tres:8
+msgctxt "place"
+msgid "Arholma"
+msgstr ""
+
+#: data/navigation/ports/arkosund.tres:12
+msgid "Old pilot village at the outer edge of Östergötland's skerries."
+msgstr ""
+
+#: data/navigation/ports/arkosund.tres:8
+msgctxt "place"
+msgid "Arkösund"
+msgstr ""
+
 #: data/navigation/ports/arrecife.tres:12
 msgid "Arrecife on Lanzarote, the easternmost of the Canary Islands."
 msgstr ""
@@ -1077,6 +1569,33 @@ msgstr ""
 #: data/navigation/ports/arrecife.tres:8
 msgctxt "place"
 msgid "Arrecife"
+msgstr ""
+
+#: data/navigation/ports/asko.tres:12
+msgid "Little harbour on low, peaceful Askø, a short hop from Bandholm."
+msgstr ""
+
+#: data/navigation/ports/asko.tres:8
+msgctxt "place"
+msgid "Askø"
+msgstr ""
+
+#: data/navigation/ports/assens.tres:12
+msgid "Town harbour and marina on Funen's west coast, facing the Little Belt."
+msgstr ""
+
+#: data/navigation/ports/assens.tres:8
+msgctxt "place"
+msgid "Assens"
+msgstr ""
+
+#: data/navigation/ports/astol.tres:12
+msgid "Tiny car-free island where white houses crowd every ledge above the harbour."
+msgstr ""
+
+#: data/navigation/ports/astol.tres:8
+msgctxt "place"
+msgid "Åstol"
 msgstr ""
 
 #: data/navigation/ports/atuona.tres:12
@@ -1106,6 +1625,42 @@ msgctxt "place"
 msgid "Avarua"
 msgstr ""
 
+#: data/navigation/ports/avernako.tres:12
+msgid "Quiet ferry and guest harbour on Avernakø, with farm lanes and meadows close by."
+msgstr ""
+
+#: data/navigation/ports/avernako.tres:8
+msgctxt "place"
+msgid "Avernakø"
+msgstr ""
+
+#: data/navigation/ports/bagenkop.tres:12
+msgid "Fishing harbour near Langeland's southern tip, a good jumping-off point toward Kiel."
+msgstr ""
+
+#: data/navigation/ports/bagenkop.tres:8
+msgctxt "place"
+msgid "Bagenkop"
+msgstr ""
+
+#: data/navigation/ports/ballen.tres:12
+msgid "Lively marina on Samsø's east coast, with a sandy beach and small eateries."
+msgstr ""
+
+#: data/navigation/ports/ballen.tres:8
+msgctxt "place"
+msgid "Ballen"
+msgstr ""
+
+#: data/navigation/ports/bandholm.tres:12
+msgid "Old estate port on Lolland's north coast, near Knuthenborg park."
+msgstr ""
+
+#: data/navigation/ports/bandholm.tres:8
+msgctxt "place"
+msgid "Bandholm"
+msgstr ""
+
 #: data/navigation/ports/bar.tres:12
 msgid "Bar, a harbour on the Adriatic Sea."
 msgstr ""
@@ -1131,6 +1686,15 @@ msgstr ""
 #: data/navigation/ports/bari.tres:8
 msgctxt "place"
 msgid "Bari"
+msgstr ""
+
+#: data/navigation/ports/barsebackshamn.tres:12
+msgid "Thatched fishing village harbour on the flat Skåne shore of Öresund."
+msgstr ""
+
+#: data/navigation/ports/barsebackshamn.tres:8
+msgctxt "place"
+msgid "Barsebäckshamn"
 msgstr ""
 
 #: data/navigation/ports/bastia.tres:12
@@ -1169,6 +1733,24 @@ msgctxt "place"
 msgid "Bergen"
 msgstr ""
 
+#: data/navigation/ports/bisserup.tres:12
+msgid "Small fishing village harbour on Zealand's south-west coast, among shallow islets."
+msgstr ""
+
+#: data/navigation/ports/bisserup.tres:8
+msgctxt "place"
+msgid "Bisserup"
+msgstr ""
+
+#: data/navigation/ports/bluff.tres:12
+msgid "New Zealand's southernmost port town, famous for its oysters."
+msgstr ""
+
+#: data/navigation/ports/bluff.tres:8
+msgctxt "place"
+msgid "Bluff"
+msgstr ""
+
 #: data/navigation/ports/bodo.tres:12
 msgid "Bodø, a harbour on the Norwegian coast."
 msgstr ""
@@ -1187,6 +1769,15 @@ msgctxt "place"
 msgid "Bodrum"
 msgstr ""
 
+#: data/navigation/ports/bogense.tres:12
+msgid "Large marina beside a small old market town on Funen's north coast."
+msgstr ""
+
+#: data/navigation/ports/bogense.tres:8
+msgctxt "place"
+msgid "Bogense"
+msgstr ""
+
 #: data/navigation/ports/bonifacio.tres:12
 msgid "Bonifacio, an island harbour on the Mediterranean."
 msgstr ""
@@ -1196,6 +1787,15 @@ msgctxt "place"
 msgid "Bonifacio"
 msgstr ""
 
+#: data/navigation/ports/bonnerup.tres:12
+msgid "Fishing harbour on Djursland's north coast, open to the Kattegat."
+msgstr ""
+
+#: data/navigation/ports/bonnerup.tres:8
+msgctxt "place"
+msgid "Bønnerup"
+msgstr ""
+
 #: data/navigation/ports/bora_bora.tres:12
 msgid "Bora Bora, its lagoon under the peak of Otemanu."
 msgstr ""
@@ -1203,6 +1803,15 @@ msgstr ""
 #: data/navigation/ports/bora_bora.tres:8
 msgctxt "place"
 msgid "Bora Bora"
+msgstr ""
+
+#: data/navigation/ports/borgholm.tres:12
+msgid "Öland's little capital, beneath the dramatic ruins of Borgholm castle."
+msgstr ""
+
+#: data/navigation/ports/borgholm.tres:8
+msgctxt "place"
+msgid "Borgholm"
 msgstr ""
 
 #: data/navigation/ports/boulogne.tres:12
@@ -1239,6 +1848,15 @@ msgstr ""
 #: data/navigation/ports/brindisi.tres:8
 msgctxt "place"
 msgid "Brindisi"
+msgstr ""
+
+#: data/navigation/ports/byxelkrok.tres:12
+msgid "Northern Öland harbour with smoked fish and sunsets over Kalmar Sound."
+msgstr ""
+
+#: data/navigation/ports/byxelkrok.tres:8
+msgctxt "place"
+msgid "Byxelkrok"
 msgstr ""
 
 #: data/navigation/ports/cagliari.tres:12
@@ -1358,6 +1976,15 @@ msgctxt "place"
 msgid "Chios"
 msgstr ""
 
+#: data/navigation/ports/christianso.tres:12
+msgid "Tiny fortress-island harbour between granite islets, home to eiders and old naval buildings."
+msgstr ""
+
+#: data/navigation/ports/christianso.tres:8
+msgctxt "place"
+msgid "Christiansø"
+msgstr ""
+
 #: data/navigation/ports/civitavecchia.tres:12
 msgid "Civitavecchia, a harbour on the Mediterranean."
 msgstr ""
@@ -1421,6 +2048,15 @@ msgctxt "place"
 msgid "Dakar"
 msgstr ""
 
+#: data/navigation/ports/dalaro.tres:12
+msgid "Old customs village with yellow wooden houses at the southern fairway."
+msgstr ""
+
+#: data/navigation/ports/dalaro.tres:8
+msgctxt "place"
+msgid "Dalarö"
+msgstr ""
+
 #: data/navigation/ports/den_helder.tres:12
 msgid "Den Helder, a harbour on the North Sea."
 msgstr ""
@@ -1466,6 +2102,15 @@ msgctxt "place"
 msgid "Dragør"
 msgstr ""
 
+#: data/navigation/ports/drejo.tres:12
+msgid "Little harbour on the south side of Drejø, a low island of salt meadows and birds."
+msgstr ""
+
+#: data/navigation/ports/drejo.tres:8
+msgctxt "place"
+msgid "Drejø"
+msgstr ""
+
 #: data/navigation/ports/dublin.tres:12
 msgid "Capital of Ireland at the mouth of the Liffey on the Irish Sea."
 msgstr ""
@@ -1493,6 +2138,15 @@ msgctxt "place"
 msgid "Dunkirk"
 msgstr ""
 
+#: data/navigation/ports/dyreborg.tres:12
+msgid "Small fishing hamlet west of Faaborg, tucked below a beech wood."
+msgstr ""
+
+#: data/navigation/ports/dyreborg.tres:8
+msgctxt "place"
+msgid "Dyreborg"
+msgstr ""
+
 #: data/navigation/ports/ebeltoft.tres:12
 msgid "Ebeltoft, on Djursland, home of the frigate Jylland."
 msgstr ""
@@ -1500,6 +2154,24 @@ msgstr ""
 #: data/navigation/ports/ebeltoft.tres:8
 msgctxt "place"
 msgid "Ebeltoft"
+msgstr ""
+
+#: data/navigation/ports/ellos.tres:12
+msgid "Sheltered Orust village where wooden sailboats were once built by the hundred."
+msgstr ""
+
+#: data/navigation/ports/ellos.tres:8
+msgctxt "place"
+msgid "Ellös"
+msgstr ""
+
+#: data/navigation/ports/endelave.tres:12
+msgid "Harbour at the end of a causeway on quiet Endelave, south of Samsø."
+msgstr ""
+
+#: data/navigation/ports/endelave.tres:8
+msgctxt "place"
+msgid "Endelave"
 msgstr ""
 
 #: data/navigation/ports/essaouira.tres:12
@@ -1529,6 +2201,15 @@ msgctxt "place"
 msgid "Fakarava"
 msgstr ""
 
+#: data/navigation/ports/faldsled.tres:12
+msgid "Small harbour at the head of Helnæs Bugt, near an old village inn."
+msgstr ""
+
+#: data/navigation/ports/faldsled.tres:8
+msgctxt "place"
+msgid "Faldsled"
+msgstr ""
+
 #: data/navigation/ports/falmouth_antigua.tres:12
 msgid "Falmouth Harbour on the south coast of Antigua."
 msgstr ""
@@ -1545,6 +2226,51 @@ msgstr ""
 #: data/navigation/ports/faro.tres:8
 msgctxt "place"
 msgid "Faro"
+msgstr ""
+
+#: data/navigation/ports/farosund.tres:12
+msgid "Ferry village on the sound between Gotland and Fårö's famous sea-stacks."
+msgstr ""
+
+#: data/navigation/ports/farosund.tres:8
+msgctxt "place"
+msgid "Fårösund"
+msgstr ""
+
+#: data/navigation/ports/fejo_dybvig.tres:12
+msgid "Small harbour near Østerby on Fejø, an island of orchards and lanes."
+msgstr ""
+
+#: data/navigation/ports/fejo_dybvig.tres:8
+msgctxt "place"
+msgid "Fejø Dybvig"
+msgstr ""
+
+#: data/navigation/ports/femo.tres:12
+msgid "Island harbour on Femø's west side, with two small basins and a ferry quay."
+msgstr ""
+
+#: data/navigation/ports/femo.tres:8
+msgctxt "place"
+msgid "Femø"
+msgstr ""
+
+#: data/navigation/ports/finnhamn.tres:12
+msgid "Wooded outer island with a hostel and the sheltered Paradisviken bay."
+msgstr ""
+
+#: data/navigation/ports/finnhamn.tres:8
+msgctxt "place"
+msgid "Finnhamn"
+msgstr ""
+
+#: data/navigation/ports/fjallbacka.tres:12
+msgid "Pastel houses huddle beneath the sheer Vetteberget cliff."
+msgstr ""
+
+#: data/navigation/ports/fjallbacka.tres:8
+msgctxt "place"
+msgid "Fjällbacka"
 msgstr ""
 
 #: data/navigation/ports/floro.tres:12
@@ -1574,6 +2300,24 @@ msgctxt "place"
 msgid "Funchal"
 msgstr ""
 
+#: data/navigation/ports/furusund.tres:12
+msgid "Old bathing resort beside the narrow sound where big ferries glide past."
+msgstr ""
+
+#: data/navigation/ports/furusund.tres:8
+msgctxt "place"
+msgid "Furusund"
+msgstr ""
+
+#: data/navigation/ports/fyrudden.tres:12
+msgid "Mainland harbour at the doorstep of the Gryt archipelago."
+msgstr ""
+
+#: data/navigation/ports/fyrudden.tres:8
+msgctxt "place"
+msgid "Fyrudden"
+msgstr ""
+
 #: data/navigation/ports/galle.tres:12
 msgid "Galle, Sri Lanka, beside the ramparts of its old fort, on the sea road across the Indian Ocean."
 msgstr ""
@@ -1590,6 +2334,15 @@ msgstr ""
 #: data/navigation/ports/gdynia.tres:8
 msgctxt "place"
 msgid "Gdynia"
+msgstr ""
+
+#: data/navigation/ports/gedser.tres:12
+msgid "Denmark's southernmost harbour on Falster, a natural stepping stone toward Germany."
+msgstr ""
+
+#: data/navigation/ports/gedser.tres:8
+msgctxt "place"
+msgid "Gedser"
 msgstr ""
 
 #: data/navigation/ports/genoa.tres:12
@@ -1628,6 +2381,15 @@ msgctxt "place"
 msgid "Gilleleje"
 msgstr ""
 
+#: data/navigation/ports/gisborne.tres:12
+msgid "The first city to see the sun, with a small inner harbour of fishing boats and cafes."
+msgstr ""
+
+#: data/navigation/ports/gisborne.tres:8
+msgctxt "place"
+msgid "Gisborne"
+msgstr ""
+
 #: data/navigation/ports/gothenburg.tres:12
 msgid "Sweden's west-coast port at the mouth of the Göta älv, sheltered by the archipelago."
 msgstr ""
@@ -1635,6 +2397,15 @@ msgstr ""
 #: data/navigation/ports/gothenburg.tres:8
 msgctxt "place"
 msgid "Gothenburg"
+msgstr ""
+
+#: data/navigation/ports/grebbestad.tres:12
+msgid "Oyster capital of Sweden, with a long sheltered guest harbour."
+msgstr ""
+
+#: data/navigation/ports/grebbestad.tres:8
+msgctxt "place"
+msgid "Grebbestad"
 msgstr ""
 
 #: data/navigation/ports/grenaa.tres:12
@@ -1646,6 +2417,69 @@ msgctxt "place"
 msgid "Grenaa"
 msgstr ""
 
+#: data/navigation/ports/gudhjem.tres:12
+msgid "Steep little harbour town of granite and smokehouses, with boats to Christiansø."
+msgstr ""
+
+#: data/navigation/ports/gudhjem.tres:8
+msgctxt "place"
+msgid "Gudhjem"
+msgstr ""
+
+#: data/navigation/ports/gulf_harbour.tres:12
+msgid "A large marina at the tip of Whangaparāoa Peninsula, a handy jumping-off point for the Gulf."
+msgstr ""
+
+#: data/navigation/ports/gulf_harbour.tres:8
+msgctxt "place"
+msgid "Gulf Harbour"
+msgstr ""
+
+#: data/navigation/ports/gullholmen.tres:12
+msgid "Densely built fishing island linked by footbridge to the Härmanö nature reserve."
+msgstr ""
+
+#: data/navigation/ports/gullholmen.tres:8
+msgctxt "place"
+msgid "Gullholmen"
+msgstr ""
+
+#: data/navigation/ports/half_moon_bay.tres:12
+msgid "A sheltered eastern Auckland marina where ferries leave for Waiheke and the islands."
+msgstr ""
+
+#: data/navigation/ports/half_moon_bay.tres:8
+msgctxt "place"
+msgid "Half Moon Bay"
+msgstr ""
+
+#: data/navigation/ports/halfmoon_bay.tres:12
+msgid "Stewart Island's only village, a peaceful bay of fishing boats, kiwi and birdsong."
+msgstr ""
+
+#: data/navigation/ports/halfmoon_bay.tres:8 data/navigation/ports/oban.tres:8
+msgctxt "place"
+msgid "Oban"
+msgstr ""
+
+#: data/navigation/ports/hals.tres:12
+msgid "Harbour at the eastern entrance of the Limfjord, with an old ferry crossing."
+msgstr ""
+
+#: data/navigation/ports/hals.tres:8
+msgctxt "place"
+msgid "Hals"
+msgstr ""
+
+#: data/navigation/ports/hamburgsund.tres:12
+msgid "Village along a narrow sound, a small cable ferry crossing to Hamburgö."
+msgstr ""
+
+#: data/navigation/ports/hamburgsund.tres:8
+msgctxt "place"
+msgid "Hamburgsund"
+msgstr ""
+
 #: data/navigation/ports/hammerfest.tres:12
 msgid "Hammerfest, a harbour on the Norwegian coast."
 msgstr ""
@@ -1653,6 +2487,24 @@ msgstr ""
 #: data/navigation/ports/hammerfest.tres:8
 msgctxt "place"
 msgid "Hammerfest"
+msgstr ""
+
+#: data/navigation/ports/hannafords_wharf.tres:12
+msgid "The ferry wharf for Coromandel town, among green hills and mussel farms."
+msgstr ""
+
+#: data/navigation/ports/hannafords_wharf.tres:8
+msgctxt "place"
+msgid "Coromandel"
+msgstr ""
+
+#: data/navigation/ports/hano.tres:12
+msgid "Lonely island with a lighthouse, fallow deer and an old English naval cemetery."
+msgstr ""
+
+#: data/navigation/ports/hano.tres:8
+msgctxt "place"
+msgid "Hanö"
 msgstr ""
 
 #: data/navigation/ports/harlingen.tres:12
@@ -1671,6 +2523,24 @@ msgstr ""
 #: data/navigation/ports/haugesund.tres:8
 msgctxt "place"
 msgid "Haugesund"
+msgstr ""
+
+#: data/navigation/ports/havelock.tres:12
+msgid "The green-lipped mussel capital, at the quiet head of Pelorus Sound."
+msgstr ""
+
+#: data/navigation/ports/havelock.tres:8
+msgctxt "place"
+msgid "Havelock"
+msgstr ""
+
+#: data/navigation/ports/helsingborg.tres:12
+msgid "Lively city harbour at the Öresund narrows, facing Helsingør across the strait."
+msgstr ""
+
+#: data/navigation/ports/helsingborg.tres:8
+msgctxt "place"
+msgid "Helsingborg"
 msgstr ""
 
 #: data/navigation/ports/helsingor.tres:12
@@ -1718,6 +2588,15 @@ msgctxt "place"
 msgid "Honningsvåg"
 msgstr ""
 
+#: data/navigation/ports/hono_klava.tres:12
+msgid "Busy fishing harbour on Hönö, smelling of tar and fresh shrimp."
+msgstr ""
+
+#: data/navigation/ports/hono_klava.tres:8
+msgctxt "place"
+msgid "Hönö Klåva"
+msgstr ""
+
 #: data/navigation/ports/honolulu.tres:12
 msgid "Honolulu on O'ahu, in the middle of the North Pacific."
 msgstr ""
@@ -1727,6 +2606,15 @@ msgctxt "place"
 msgid "Honolulu"
 msgstr ""
 
+#: data/navigation/ports/hornbaek.tres:12
+msgid "Fishing and leisure harbour on Zealand's north coast, beside long sandy beaches."
+msgstr ""
+
+#: data/navigation/ports/hornbaek.tres:8
+msgctxt "place"
+msgid "Hornbæk"
+msgstr ""
+
 #: data/navigation/ports/horta.tres:12
 msgid "Horta on Faial in the Azores, a famous mid-Atlantic stop for sailors."
 msgstr ""
@@ -1734,6 +2622,33 @@ msgstr ""
 #: data/navigation/ports/horta.tres:8
 msgctxt "place"
 msgid "Horta"
+msgstr ""
+
+#: data/navigation/ports/houhora.tres:12
+msgid "New Zealand's northernmost commercial wharf, a quiet fishing settlement on Houhora Harbour."
+msgstr ""
+
+#: data/navigation/ports/houhora.tres:8
+msgctxt "place"
+msgid "Houhora"
+msgstr ""
+
+#: data/navigation/ports/hundested.tres:12
+msgid "Busy fishing and ferry port at the entrance to Isefjord, below high clay cliffs."
+msgstr ""
+
+#: data/navigation/ports/hundested.tres:8
+msgctxt "place"
+msgid "Hundested"
+msgstr ""
+
+#: data/navigation/ports/hunnebostrand.tres:12
+msgid "Stone-cutters' village where pink granite meets a friendly guest harbour."
+msgstr ""
+
+#: data/navigation/ports/hunnebostrand.tres:8
+msgctxt "place"
+msgid "Hunnebostrand"
 msgstr ""
 
 #: data/navigation/ports/hvar.tres:12
@@ -1799,6 +2714,15 @@ msgctxt "place"
 msgid "Juelsminde"
 msgstr ""
 
+#: data/navigation/ports/kaikoura.tres:12
+msgid "A small fishing harbour where whales, dolphins and seals share the sea beneath snowy peaks."
+msgstr ""
+
+#: data/navigation/ports/kaikoura.tres:8
+msgctxt "place"
+msgid "Kaikōura"
+msgstr ""
+
 #: data/navigation/ports/kalamata.tres:12
 msgid "Kalamata, a harbour on the Ionian Sea."
 msgstr ""
@@ -1826,6 +2750,24 @@ msgctxt "place"
 msgid "Kalundborg"
 msgstr ""
 
+#: data/navigation/ports/kalvo.tres:12
+msgid "Wooded islet joined to the shore by a causeway, with a small maritime museum."
+msgstr ""
+
+#: data/navigation/ports/kalvo.tres:8
+msgctxt "place"
+msgid "Kalvø"
+msgstr ""
+
+#: data/navigation/ports/karingon.tres:12
+msgid "Bare granite island off Orust with a cosy harbour and seafood restaurant."
+msgstr ""
+
+#: data/navigation/ports/karingon.tres:8
+msgctxt "place"
+msgid "Käringön"
+msgstr ""
+
 #: data/navigation/ports/karlskrona.tres:12
 msgid "Karlskrona, a harbour on the Baltic Sea."
 msgstr ""
@@ -1835,6 +2777,24 @@ msgctxt "place"
 msgid "Karlskrona"
 msgstr ""
 
+#: data/navigation/ports/karrebaeksminde.tres:12
+msgid "Harbour on the channel into Karrebæk Fjord, with a lifting bridge and beaches."
+msgstr ""
+
+#: data/navigation/ports/karrebaeksminde.tres:8
+msgctxt "place"
+msgid "Karrebæksminde"
+msgstr ""
+
+#: data/navigation/ports/katthammarsvik.tres:12
+msgid "Quiet fishing harbour on Gotland's east coast, fishermen's huts by the shore."
+msgstr ""
+
+#: data/navigation/ports/katthammarsvik.tres:8
+msgctxt "place"
+msgid "Katthammarsvik"
+msgstr ""
+
 #: data/navigation/ports/kavala.tres:12
 msgid "Kavala, a harbour on the Aegean Sea."
 msgstr ""
@@ -1842,6 +2802,15 @@ msgstr ""
 #: data/navigation/ports/kavala.tres:8
 msgctxt "place"
 msgid "Kavala"
+msgstr ""
+
+#: data/navigation/ports/kerikeri_doves_bay.tres:12
+msgid "A friendly cruising-club marina tucked into the quiet Kerikeri Inlet."
+msgstr ""
+
+#: data/navigation/ports/kerikeri_doves_bay.tres:8
+msgctxt "place"
+msgid "Doves Bay"
 msgstr ""
 
 #: data/navigation/ports/kerteminde.tres:12
@@ -1871,6 +2840,42 @@ msgctxt "place"
 msgid "Kirkwall"
 msgstr ""
 
+#: data/navigation/ports/kivik.tres:12
+msgid "Apple-country fishing harbour near a famous Bronze Age cairn."
+msgstr ""
+
+#: data/navigation/ports/kivik.tres:8
+msgctxt "place"
+msgid "Kivik"
+msgstr ""
+
+#: data/navigation/ports/kladesholmen.tres:12
+msgid "Old herring island off Tjörn, still famous for its pickled herring."
+msgstr ""
+
+#: data/navigation/ports/kladesholmen.tres:8
+msgctxt "place"
+msgid "Klädesholmen"
+msgstr ""
+
+#: data/navigation/ports/klintehamn.tres:12
+msgid "West Gotland harbour where boats leave for the bird island of Stora Karlsö."
+msgstr ""
+
+#: data/navigation/ports/klintehamn.tres:8
+msgctxt "place"
+msgid "Klintehamn"
+msgstr ""
+
+#: data/navigation/ports/klintholm.tres:12
+msgid "Harbour on Møn's south coast, a short walk from the white chalk cliffs."
+msgstr ""
+
+#: data/navigation/ports/klintholm.tres:8
+msgctxt "place"
+msgid "Klintholm"
+msgstr ""
+
 #: data/navigation/ports/korcula.tres:12
 msgid "Korčula, an island harbour on the Adriatic Sea."
 msgstr ""
@@ -1898,6 +2903,15 @@ msgctxt "place"
 msgid "Kotka"
 msgstr ""
 
+#: data/navigation/ports/kristianopel.tres:12
+msgid "Tiny fortified village whose guest harbour lies right inside the old walls."
+msgstr ""
+
+#: data/navigation/ports/kristianopel.tres:8
+msgctxt "place"
+msgid "Kristianopel"
+msgstr ""
+
 #: data/navigation/ports/kristiansand.tres:12
 msgid "Kristiansand, a harbour on the Norwegian coast."
 msgstr ""
@@ -1923,6 +2937,15 @@ msgstr ""
 #: data/navigation/ports/kusadasi.tres:8
 msgctxt "place"
 msgid "Kuşadası"
+msgstr ""
+
+#: data/navigation/ports/kyrkbacken.tres:12
+msgid "Small harbour on Ven's west side, below the church of Sankt Ibb."
+msgstr ""
+
+#: data/navigation/ports/kyrkbacken.tres:8
+msgctxt "place"
+msgid "Kyrkbacken"
 msgstr ""
 
 #: data/navigation/ports/la_rochelle.tres:12
@@ -1959,6 +2982,15 @@ msgstr ""
 #: data/navigation/ports/langkawi.tres:8
 msgctxt "place"
 msgid "Langkawi"
+msgstr ""
+
+#: data/navigation/ports/langor.tres:12
+msgid "Small harbour inside Stavns Fjord on Samsø, a protected bird reserve."
+msgstr ""
+
+#: data/navigation/ports/langor.tres:8
+msgctxt "place"
+msgid "Langør"
 msgstr ""
 
 #: data/navigation/ports/larnaca.tres:12
@@ -2042,6 +3074,15 @@ msgctxt "place"
 msgid "Les Sables-d'Olonne"
 msgstr ""
 
+#: data/navigation/ports/lickershamn.tres:12
+msgid "Small harbour beneath the Jungfrun sea-stack on Gotland's limestone coast."
+msgstr ""
+
+#: data/navigation/ports/lickershamn.tres:8
+msgctxt "place"
+msgid "Lickershamn"
+msgstr ""
+
 #: data/navigation/ports/liepaja.tres:12
 msgid "Liepāja, a harbour on the Baltic Sea."
 msgstr ""
@@ -2096,6 +3137,15 @@ msgctxt "place"
 msgid "Livorno"
 msgstr ""
 
+#: data/navigation/ports/ljugarn.tres:12
+msgid "Old bathing village with sea-stacks at Folhammar and sandy beaches."
+msgstr ""
+
+#: data/navigation/ports/ljugarn.tres:8
+msgctxt "place"
+msgid "Ljugarn"
+msgstr ""
+
 #: data/navigation/ports/lohals.tres:12
 msgid "Lohals, a small harbour at the north end of the island of Langeland."
 msgstr ""
@@ -2123,6 +3173,15 @@ msgctxt "place"
 msgid "Luleå"
 msgstr ""
 
+#: data/navigation/ports/lundeborg.tres:12
+msgid "Small harbour on Funen's east coast, with a beach and views across to Langeland."
+msgstr ""
+
+#: data/navigation/ports/lundeborg.tres:8
+msgctxt "place"
+msgid "Lundeborg"
+msgstr ""
+
 #: data/navigation/ports/lunenburg.tres:12
 msgid "Lunenburg, Nova Scotia, an old fishing town of painted wooden houses climbing the hill above its red waterfront sheds."
 msgstr ""
@@ -2130,6 +3189,33 @@ msgstr ""
 #: data/navigation/ports/lunenburg.tres:8
 msgctxt "place"
 msgid "Lunenburg"
+msgstr ""
+
+#: data/navigation/ports/lyo.tres:12
+msgid "Small sheltered harbour on Lyø's north shore, a short walk from a thatched village with a round churchyard."
+msgstr ""
+
+#: data/navigation/ports/lyo.tres:8
+msgctxt "place"
+msgid "Lyø"
+msgstr ""
+
+#: data/navigation/ports/lysekil.tres:12
+msgid "Old spa town at the mouth of Gullmarsfjorden, granite cliffs and wooden villas."
+msgstr ""
+
+#: data/navigation/ports/lysekil.tres:8
+msgctxt "place"
+msgid "Lysekil"
+msgstr ""
+
+#: data/navigation/ports/lyttelton.tres:12
+msgid "A characterful port town inside a drowned volcano, Christchurch's harbour."
+msgstr ""
+
+#: data/navigation/ports/lyttelton.tres:8
+msgctxt "place"
+msgid "Lyttelton"
 msgstr ""
 
 #: data/navigation/ports/malaga.tres:12
@@ -2150,6 +3236,24 @@ msgctxt "place"
 msgid "Malmö"
 msgstr ""
 
+#: data/navigation/ports/mana_marina.tres:12
+msgid "A sheltered marina on Porirua Harbour, close to Mana Island and Cook Strait."
+msgstr ""
+
+#: data/navigation/ports/mana_marina.tres:8
+msgctxt "place"
+msgid "Mana"
+msgstr ""
+
+#: data/navigation/ports/mangonui.tres:12
+msgid "An old whaling port on Doubtless Bay, famous for fish and chips on the wharf."
+msgstr ""
+
+#: data/navigation/ports/mangonui.tres:8
+msgctxt "place"
+msgid "Mangōnui"
+msgstr ""
+
 #: data/navigation/ports/mariehamn.tres:12
 msgid "Mariehamn, an island harbour on the Baltic Sea."
 msgstr ""
@@ -2166,6 +3270,15 @@ msgstr ""
 #: data/navigation/ports/marmaris.tres:8
 msgctxt "place"
 msgid "Marmaris"
+msgstr ""
+
+#: data/navigation/ports/marsden_cove.tres:12
+msgid "A modern canal marina near the mouth of Whangārei Harbour, beneath Bream Head."
+msgstr ""
+
+#: data/navigation/ports/marsden_cove.tres:8
+msgctxt "place"
+msgid "Marsden Cove"
 msgstr ""
 
 #: data/navigation/ports/marseille.tres:12
@@ -2186,6 +3299,24 @@ msgctxt "place"
 msgid "Marstal"
 msgstr ""
 
+#: data/navigation/ports/marstrand.tres:12
+msgid "Sailing town beneath Carlsten fortress, its harbour packed with masts all summer."
+msgstr ""
+
+#: data/navigation/ports/marstrand.tres:8
+msgctxt "place"
+msgid "Marstrand"
+msgstr ""
+
+#: data/navigation/ports/marup.tres:12
+msgid "Small harbour on Samsø's north-west coast, below clay cliffs and heathland."
+msgstr ""
+
+#: data/navigation/ports/marup.tres:8
+msgctxt "place"
+msgid "Mårup"
+msgstr ""
+
 #: data/navigation/ports/messina.tres:12
 msgid "Messina, an island harbour on the Mediterranean."
 msgstr ""
@@ -2204,6 +3335,15 @@ msgctxt "place"
 msgid "Middelfart"
 msgstr ""
 
+#: data/navigation/ports/milford_deepwater_basin.tres:12
+msgid "A sheltered basin at the head of Milford Sound, beneath sheer cliffs and waterfalls."
+msgstr ""
+
+#: data/navigation/ports/milford_deepwater_basin.tres:8
+msgctxt "place"
+msgid "Milford Sound"
+msgstr ""
+
 #: data/navigation/ports/milford_haven.tres:12
 msgid "Milford Haven, a harbour in the British Isles."
 msgstr ""
@@ -2220,6 +3360,33 @@ msgstr ""
 #: data/navigation/ports/mindelo.tres:8
 msgctxt "place"
 msgid "Mindelo"
+msgstr ""
+
+#: data/navigation/ports/moja.tres:12
+msgid "Living archipelago island of red cottages, meadows and a cosy country shop."
+msgstr ""
+
+#: data/navigation/ports/moja.tres:8
+msgctxt "place"
+msgid "Möja"
+msgstr ""
+
+#: data/navigation/ports/molle.tres:12
+msgid "Steep old bathing village beneath the beech-clad Kullaberg headland."
+msgstr ""
+
+#: data/navigation/ports/molle.tres:8
+msgctxt "place"
+msgid "Mölle"
+msgstr ""
+
+#: data/navigation/ports/mollosund.tres:12
+msgid "One of Bohuslän's oldest fishing villages, red boathouses lining a narrow sound."
+msgstr ""
+
+#: data/navigation/ports/mollosund.tres:8
+msgctxt "place"
+msgid "Mollösund"
 msgstr ""
 
 #: data/navigation/ports/mykonos.tres:12
@@ -2247,6 +3414,15 @@ msgstr ""
 #: data/navigation/ports/nafplio.tres:8
 msgctxt "place"
 msgid "Nafplio"
+msgstr ""
+
+#: data/navigation/ports/napier.tres:12
+msgid "An Art Deco city whose Ahuriri inner harbour hosts a friendly sailing club."
+msgstr ""
+
+#: data/navigation/ports/napier.tres:8
+msgctxt "place"
+msgid "Napier"
 msgstr ""
 
 #: data/navigation/ports/naples.tres:12
@@ -2292,6 +3468,15 @@ msgstr ""
 #: data/navigation/ports/nelson.tres:8
 msgctxt "place"
 msgid "Nelson"
+msgstr ""
+
+#: data/navigation/ports/nexo.tres:12
+msgid "Bornholm's working fishing port, a practical stop with full services."
+msgstr ""
+
+#: data/navigation/ports/nexo.tres:8
+msgctxt "place"
+msgid "Nexø"
 msgstr ""
 
 #: data/navigation/ports/nice.tres:12
@@ -2348,13 +3533,17 @@ msgctxt "place"
 msgid "Nysted"
 msgstr ""
 
-#: data/navigation/ports/oban.tres:12
-msgid "Oban, a harbour in the British Isles."
+#: data/navigation/ports/oamaru.tres:12
+msgid "A Victorian stone harbour town where little blue penguins come ashore at dusk."
 msgstr ""
 
-#: data/navigation/ports/oban.tres:8
+#: data/navigation/ports/oamaru.tres:8
 msgctxt "place"
-msgid "Oban"
+msgid "Ōamaru"
+msgstr ""
+
+#: data/navigation/ports/oban.tres:12
+msgid "Oban, a harbour in the British Isles."
 msgstr ""
 
 #: data/navigation/ports/olbia.tres:12
@@ -2364,6 +3553,33 @@ msgstr ""
 #: data/navigation/ports/olbia.tres:8
 msgctxt "place"
 msgid "Olbia"
+msgstr ""
+
+#: data/navigation/ports/omo.tres:12
+msgid "Friendly island harbour on Omø, with a small village and beaches a bike ride away."
+msgstr ""
+
+#: data/navigation/ports/omo.tres:8
+msgctxt "place"
+msgid "Omø"
+msgstr ""
+
+#: data/navigation/ports/opua.tres:12
+msgid "The Bay of Islands Marina, New Zealand's favourite landfall for yachts arriving from the tropics."
+msgstr ""
+
+#: data/navigation/ports/opua.tres:8
+msgctxt "place"
+msgid "Opua"
+msgstr ""
+
+#: data/navigation/ports/osterby.tres:12
+msgid "Fishing and marina harbour on Læsø's north coast, known for its langoustines."
+msgstr ""
+
+#: data/navigation/ports/osterby.tres:8
+msgctxt "place"
+msgid "Østerby"
 msgstr ""
 
 #: data/navigation/ports/oulu.tres:12
@@ -2382,6 +3598,15 @@ msgstr ""
 #: data/navigation/ports/pago_pago.tres:8
 msgctxt "place"
 msgid "Pago Pago"
+msgstr ""
+
+#: data/navigation/ports/paihia.tres:12
+msgid "A lively seaside village whose wharf sends ferries and tour boats across the Bay of Islands."
+msgstr ""
+
+#: data/navigation/ports/paihia.tres:8
+msgctxt "place"
+msgid "Paihia"
 msgstr ""
 
 #: data/navigation/ports/palermo.tres:12
@@ -2465,6 +3690,15 @@ msgctxt "place"
 msgid "Peterhead"
 msgstr ""
 
+#: data/navigation/ports/picton.tres:12
+msgid "A small port town at the head of Queen Charlotte Sound, where the inter-island ferries berth."
+msgstr ""
+
+#: data/navigation/ports/picton.tres:8
+msgctxt "place"
+msgid "Picton"
+msgstr ""
+
 #: data/navigation/ports/piraeus.tres:12
 msgid "Port of Athens on the Saronic Gulf, gateway to the Aegean islands."
 msgstr ""
@@ -2483,6 +3717,24 @@ msgctxt "place"
 msgid "Ponta Delgada"
 msgstr ""
 
+#: data/navigation/ports/port_chalmers.tres:12
+msgid "A hilly historic port halfway up Otago Harbour, near the albatross colony."
+msgstr ""
+
+#: data/navigation/ports/port_chalmers.tres:8
+msgctxt "place"
+msgid "Port Chalmers"
+msgstr ""
+
+#: data/navigation/ports/port_fitzroy.tres:12
+msgid "A tiny wharf settlement deep inside Great Barrier Island's best all-weather harbour."
+msgstr ""
+
+#: data/navigation/ports/port_fitzroy.tres:8
+msgctxt "place"
+msgid "Port Fitzroy"
+msgstr ""
+
 #: data/navigation/ports/port_louis.tres:12
 msgid "Port Louis, Mauritius, a busy harbour town between green mountains and the Indian Ocean."
 msgstr ""
@@ -2490,6 +3742,15 @@ msgstr ""
 #: data/navigation/ports/port_louis.tres:8
 msgctxt "place"
 msgid "Port Louis"
+msgstr ""
+
+#: data/navigation/ports/port_motueka.tres:12
+msgid "A small tidal port and marina, the gateway to Abel Tasman for boaties."
+msgstr ""
+
+#: data/navigation/ports/port_motueka.tres:8
+msgctxt "place"
+msgid "Port Motueka"
 msgstr ""
 
 #: data/navigation/ports/port_of_spain.tres:12
@@ -2555,6 +3816,10 @@ msgctxt "place"
 msgid "Pula"
 msgstr ""
 
+#: data/navigation/ports/raa.tres:12
+msgid "Charming fishing village south of Helsingborg, with low houses and smoked fish."
+msgstr ""
+
 #: data/navigation/ports/raiatea.tres:12
 msgid "Uturoa on Raiatea, in the Society Islands."
 msgstr ""
@@ -2562,6 +3827,15 @@ msgstr ""
 #: data/navigation/ports/raiatea.tres:8
 msgctxt "place"
 msgid "Uturoa"
+msgstr ""
+
+#: data/navigation/ports/reso.tres:12
+msgid "Quiet island village near Kosterhavet national park, run by local volunteers."
+msgstr ""
+
+#: data/navigation/ports/reso.tres:8
+msgctxt "place"
+msgid "Resö"
 msgstr ""
 
 #: data/navigation/ports/reykjavik.tres:12
@@ -2600,6 +3874,15 @@ msgctxt "place"
 msgid "Rødvig"
 msgstr ""
 
+#: data/navigation/ports/ronehamn.tres:12
+msgid "Small working fishing harbour on Gotland's southeast coast."
+msgstr ""
+
+#: data/navigation/ports/ronehamn.tres:8
+msgctxt "place"
+msgid "Ronehamn"
+msgstr ""
+
 #: data/navigation/ports/ronne.tres:12
 msgid "Rønne, the main harbour of Bornholm."
 msgstr ""
@@ -2607,6 +3890,19 @@ msgstr ""
 #: data/navigation/ports/ronne.tres:8
 msgctxt "place"
 msgid "Rønne"
+msgstr ""
+
+#: data/navigation/ports/roro.tres:12
+msgid "Outermost island of the northern Gothenburg archipelago, quiet and wind-swept."
+msgstr ""
+
+#: data/navigation/ports/rorvig.tres:12
+msgid "Popular harbour at the mouth of Isefjord, with fishing sheds and sandy heath nearby."
+msgstr ""
+
+#: data/navigation/ports/rorvig.tres:8
+msgctxt "place"
+msgid "Rørvig"
 msgstr ""
 
 #: data/navigation/ports/rovinj.tres:12
@@ -2625,6 +3921,33 @@ msgstr ""
 #: data/navigation/ports/rudkobing.tres:8
 msgctxt "place"
 msgid "Rudkøbing"
+msgstr ""
+
+#: data/navigation/ports/rungsted.tres:12
+msgid "Large Øresund marina north of Copenhagen, near Karen Blixen's old home."
+msgstr ""
+
+#: data/navigation/ports/rungsted.tres:8
+msgctxt "place"
+msgid "Rungsted"
+msgstr ""
+
+#: data/navigation/ports/russell.tres:12
+msgid "New Zealand's first colonial capital, with a historic waterfront strand and a busy little wharf."
+msgstr ""
+
+#: data/navigation/ports/russell.tres:8
+msgctxt "place"
+msgid "Russell"
+msgstr ""
+
+#: data/navigation/ports/saeby.tres:12
+msgid "Old town harbour in north Jutland, with cobbled lanes and fishing boats."
+msgstr ""
+
+#: data/navigation/ports/saeby.tres:8
+msgctxt "place"
+msgid "Sæby"
 msgstr ""
 
 #: data/navigation/ports/saint_malo.tres:12
@@ -2654,6 +3977,24 @@ msgctxt "place"
 msgid "San Juan"
 msgstr ""
 
+#: data/navigation/ports/sandhamn.tres:12
+msgid "Sailing capital of the outer archipelago, home of the KSSS yacht club."
+msgstr ""
+
+#: data/navigation/ports/sandhamn.tres:8
+msgctxt "place"
+msgid "Sandhamn"
+msgstr ""
+
+#: data/navigation/ports/sandvik_oland.tres:12
+msgid "Small Öland harbour beside a towering Dutch-style windmill."
+msgstr ""
+
+#: data/navigation/ports/sandvik_oland.tres:8
+msgctxt "place"
+msgid "Sandvik"
+msgstr ""
+
 #: data/navigation/ports/santorini.tres:12
 msgid "Santorini, an island harbour on the Aegean Sea."
 msgstr ""
@@ -2661,6 +4002,24 @@ msgstr ""
 #: data/navigation/ports/santorini.tres:8
 msgctxt "place"
 msgid "Santorini"
+msgstr ""
+
+#: data/navigation/ports/seaview_marina.tres:12
+msgid "A tidy marina on the eastern shore of Wellington Harbour."
+msgstr ""
+
+#: data/navigation/ports/seaview_marina.tres:8
+msgctxt "place"
+msgid "Seaview"
+msgstr ""
+
+#: data/navigation/ports/sejero.tres:12
+msgid "Ferry and fishing harbour on the long, quiet island of Sejerø."
+msgstr ""
+
+#: data/navigation/ports/sejero.tres:8
+msgctxt "place"
+msgid "Sejerø"
 msgstr ""
 
 #: data/navigation/ports/sete.tres:12
@@ -2681,6 +4040,15 @@ msgctxt "place"
 msgid "Šibenik"
 msgstr ""
 
+#: data/navigation/ports/simrishamn.tres:12
+msgid "Cobbled Österlen town with hollyhocks, smokehouses and an all-year harbour."
+msgstr ""
+
+#: data/navigation/ports/simrishamn.tres:8
+msgctxt "place"
+msgid "Simrishamn"
+msgstr ""
+
 #: data/navigation/ports/sines.tres:12
 msgid "Sines, a harbour on the Atlantic coast of Iberia."
 msgstr ""
@@ -2688,6 +4056,15 @@ msgstr ""
 #: data/navigation/ports/sines.tres:8
 msgctxt "place"
 msgid "Sines"
+msgstr ""
+
+#: data/navigation/ports/skaelskor.tres:12
+msgid "Old market town harbour at the mouth of the narrow Skælskør Fjord."
+msgstr ""
+
+#: data/navigation/ports/skaelskor.tres:8
+msgctxt "place"
+msgid "Skælskør"
 msgstr ""
 
 #: data/navigation/ports/skagen.tres:12
@@ -2699,6 +4076,33 @@ msgctxt "place"
 msgid "Skagen"
 msgstr ""
 
+#: data/navigation/ports/skanor.tres:12
+msgid "Medieval herring town near the Falsterbo dunes, rich in migrating birds."
+msgstr ""
+
+#: data/navigation/ports/skanor.tres:8
+msgctxt "place"
+msgid "Skanör"
+msgstr ""
+
+#: data/navigation/ports/skarhamn.tres:12
+msgid "Lively Tjörn harbour beside the watercolour museum and smooth bathing rocks."
+msgstr ""
+
+#: data/navigation/ports/skarhamn.tres:8
+msgctxt "place"
+msgid "Skärhamn"
+msgstr ""
+
+#: data/navigation/ports/skaro.tres:12
+msgid "Tiny island harbour near Svendborg, known for its homemade ice cream and calm summer evenings."
+msgstr ""
+
+#: data/navigation/ports/skaro.tres:8
+msgctxt "place"
+msgid "Skarø"
+msgstr ""
+
 #: data/navigation/ports/skiathos.tres:12
 msgid "Skiathos, an island harbour on the Aegean Sea."
 msgstr ""
@@ -2706,6 +4110,42 @@ msgstr ""
 #: data/navigation/ports/skiathos.tres:8
 msgctxt "place"
 msgid "Skiathos"
+msgstr ""
+
+#: data/navigation/ports/skovshoved.tres:12
+msgid "Old fishing village harbour on the Øresund coast just north of Copenhagen."
+msgstr ""
+
+#: data/navigation/ports/skovshoved.tres:8
+msgctxt "place"
+msgid "Skovshoved"
+msgstr ""
+
+#: data/navigation/ports/slite.tres:12
+msgid "Well-sheltered east Gotland harbour behind a chain of low islands."
+msgstr ""
+
+#: data/navigation/ports/slite.tres:8
+msgctxt "place"
+msgid "Slite"
+msgstr ""
+
+#: data/navigation/ports/smogen.tres:12
+msgid "Famous wooden boardwalk lined with colourful boathouses and shrimp boats."
+msgstr ""
+
+#: data/navigation/ports/smogen.tres:8
+msgctxt "place"
+msgid "Smögen"
+msgstr ""
+
+#: data/navigation/ports/soby.tres:12
+msgid "Working harbour at the north tip of Ærø, with a shipyard, ferry and fishing boats."
+msgstr ""
+
+#: data/navigation/ports/soby.tres:8
+msgctxt "place"
+msgid "Søby"
 msgstr ""
 
 #: data/navigation/ports/sonderborg.tres:12
@@ -2724,6 +4164,15 @@ msgstr ""
 #: data/navigation/ports/split.tres:8
 msgctxt "place"
 msgid "Split"
+msgstr ""
+
+#: data/navigation/ports/spodsbjerg.tres:12
+msgid "Ferry and fishing harbour on Langeland's east coast, facing the Great Belt and Lolland."
+msgstr ""
+
+#: data/navigation/ports/spodsbjerg.tres:8
+msgctxt "place"
+msgid "Spodsbjerg"
 msgstr ""
 
 #: data/navigation/ports/st_george_bermuda.tres:12
@@ -2807,6 +4256,15 @@ msgctxt "place"
 msgid "Strömstad"
 msgstr ""
 
+#: data/navigation/ports/stryno.tres:12
+msgid "Small harbour on flat Strynø, surrounded by islets, reed beds and wading birds."
+msgstr ""
+
+#: data/navigation/ports/stryno.tres:8
+msgctxt "place"
+msgid "Strynø"
+msgstr ""
+
 #: data/navigation/ports/sundsvall.tres:12
 msgid "Sundsvall, a harbour on the Baltic Sea."
 msgstr ""
@@ -2823,6 +4281,15 @@ msgstr ""
 #: data/navigation/ports/suva.tres:8
 msgctxt "place"
 msgid "Suva"
+msgstr ""
+
+#: data/navigation/ports/svaneke.tres:12
+msgid "Tidy old harbour town on Bornholm's east coast, built of granite and red tiles."
+msgstr ""
+
+#: data/navigation/ports/svaneke.tres:8
+msgctxt "place"
+msgid "Svaneke"
 msgstr ""
 
 #: data/navigation/ports/svendborg.tres:12
@@ -2897,6 +4364,15 @@ msgctxt "place"
 msgid "Tallinn"
 msgstr ""
 
+#: data/navigation/ports/tarakohe.tres:12
+msgid "A tiny limestone-walled harbour on Golden Bay near Pōhara."
+msgstr ""
+
+#: data/navigation/ports/tarakohe.tres:8
+msgctxt "place"
+msgid "Tarakohe"
+msgstr ""
+
 #: data/navigation/ports/taranto.tres:12
 msgid "Taranto, a harbour on the Ionian Sea."
 msgstr ""
@@ -2906,6 +4382,15 @@ msgctxt "place"
 msgid "Taranto"
 msgstr ""
 
+#: data/navigation/ports/tauranga.tres:12
+msgid "A big, well-serviced marina beside the harbour bridge, with Mauao on the skyline."
+msgstr ""
+
+#: data/navigation/ports/tauranga.tres:8
+msgctxt "place"
+msgid "Tauranga"
+msgstr ""
+
 #: data/navigation/ports/thessaloniki.tres:12
 msgid "Thessaloniki, a harbour on the Aegean Sea."
 msgstr ""
@@ -2913,6 +4398,15 @@ msgstr ""
 #: data/navigation/ports/thessaloniki.tres:8
 msgctxt "place"
 msgid "Thessaloniki"
+msgstr ""
+
+#: data/navigation/ports/thuro.tres:12
+msgid "Marina at Gambøt on Thurø, beside the sheltered water of Thurø Bund."
+msgstr ""
+
+#: data/navigation/ports/thuro.tres:8
+msgctxt "place"
+msgid "Thurø"
 msgstr ""
 
 #: data/navigation/ports/torshavn.tres:12
@@ -2942,6 +4436,15 @@ msgctxt "place"
 msgid "Trapani"
 msgstr ""
 
+#: data/navigation/ports/troense.tres:12
+msgid "Old skipper village on Tåsinge with half-timbered houses, near Valdemars Slot."
+msgstr ""
+
+#: data/navigation/ports/troense.tres:8
+msgctxt "place"
+msgid "Troense"
+msgstr ""
+
 #: data/navigation/ports/tromso.tres:12
 msgid "Tromsø, a harbour on the Norwegian coast."
 msgstr ""
@@ -2960,6 +4463,42 @@ msgctxt "place"
 msgid "Trondheim"
 msgstr ""
 
+#: data/navigation/ports/trosa.tres:12
+msgid "Wooden town with a stream running between red houses, near the sea."
+msgstr ""
+
+#: data/navigation/ports/trosa.tres:8
+msgctxt "place"
+msgid "Trosa"
+msgstr ""
+
+#: data/navigation/ports/tuno.tres:12
+msgid "Car-free island harbour, a short walk from Tunø By and its lighthouse church."
+msgstr ""
+
+#: data/navigation/ports/tuno.tres:8
+msgctxt "place"
+msgid "Tunø"
+msgstr ""
+
+#: data/navigation/ports/tutukaka.tres:12
+msgid "A snug marina harbour and gateway to the Poor Knights Islands dive reserve."
+msgstr ""
+
+#: data/navigation/ports/tutukaka.tres:8
+msgctxt "place"
+msgid "Tutukākā"
+msgstr ""
+
+#: data/navigation/ports/uto.tres:12
+msgid "Southern archipelago island with old iron mines, a windmill and a fine bakery."
+msgstr ""
+
+#: data/navigation/ports/uto.tres:8
+msgctxt "place"
+msgid "Utö"
+msgstr ""
+
 #: data/navigation/ports/vaasa.tres:12
 msgid "Vaasa, a harbour on the Baltic Sea."
 msgstr ""
@@ -2967,6 +4506,15 @@ msgstr ""
 #: data/navigation/ports/vaasa.tres:8
 msgctxt "place"
 msgid "Vaasa"
+msgstr ""
+
+#: data/navigation/ports/vagga.tres:12
+msgid "Fishing harbour just east of Karlshamn, gateway to the Blekinge archipelago."
+msgstr ""
+
+#: data/navigation/ports/vagga.tres:8
+msgctxt "place"
+msgid "Vägga"
 msgstr ""
 
 #: data/navigation/ports/valletta.tres:12
@@ -2978,6 +4526,24 @@ msgctxt "place"
 msgid "Valletta"
 msgstr ""
 
+#: data/navigation/ports/vastervik.tres:12
+msgid "Summer town of narrow lanes, gateway to a vast skerry archipelago."
+msgstr ""
+
+#: data/navigation/ports/vastervik.tres:8
+msgctxt "place"
+msgid "Västervik"
+msgstr ""
+
+#: data/navigation/ports/vaxholm.tres:12
+msgid "Gateway to the archipelago, its fortress guarding the old channel."
+msgstr ""
+
+#: data/navigation/ports/vaxholm.tres:8
+msgctxt "place"
+msgid "Vaxholm"
+msgstr ""
+
 #: data/navigation/ports/venice.tres:12
 msgid "Venice, a harbour on the Adriatic Sea."
 msgstr ""
@@ -2985,6 +4551,15 @@ msgstr ""
 #: data/navigation/ports/venice.tres:8
 msgctxt "place"
 msgid "Venice"
+msgstr ""
+
+#: data/navigation/ports/vestero_havn.tres:12
+msgid "Ferry and fishing harbour on Læsø's west coast, with salt-meadow walks nearby."
+msgstr ""
+
+#: data/navigation/ports/vestero_havn.tres:8
+msgctxt "place"
+msgid "Vesterø Havn"
 msgstr ""
 
 #: data/navigation/ports/visby.tres:12
@@ -3032,6 +4607,24 @@ msgctxt "place"
 msgid "Vordingborg"
 msgstr ""
 
+#: data/navigation/ports/vrango.tres:12
+msgid "Car-free southernmost island of the Gothenburg archipelago, with smooth granite and a snug harbour."
+msgstr ""
+
+#: data/navigation/ports/vrango.tres:8
+msgctxt "place"
+msgid "Vrångö"
+msgstr ""
+
+#: data/navigation/ports/waikawa.tres:12
+msgid "A large, sheltered marina in a bay just around the corner from Picton."
+msgstr ""
+
+#: data/navigation/ports/waikawa.tres:8
+msgctxt "place"
+msgid "Waikawa"
+msgstr ""
+
 #: data/navigation/ports/wellington.tres:12
 msgid "Wellington, New Zealand's capital, on Cook Strait."
 msgstr ""
@@ -3039,6 +4632,15 @@ msgstr ""
 #: data/navigation/ports/wellington.tres:8
 msgctxt "place"
 msgid "Wellington"
+msgstr ""
+
+#: data/navigation/ports/whakatane.tres:12
+msgid "A sunny river-mouth town looking out to Moutohorā and steaming Whakaari."
+msgstr ""
+
+#: data/navigation/ports/whakatane.tres:8
+msgctxt "place"
+msgid "Whakatāne"
 msgstr ""
 
 #: data/navigation/ports/whangarei.tres:12
@@ -3050,6 +4652,15 @@ msgctxt "place"
 msgid "Whangarei"
 msgstr ""
 
+#: data/navigation/ports/whangaroa.tres:12
+msgid "A deep, cliff-ringed harbour and big-game fishing village beneath volcanic domes."
+msgstr ""
+
+#: data/navigation/ports/whangaroa.tres:8
+msgctxt "place"
+msgid "Whangaroa"
+msgstr ""
+
 #: data/navigation/ports/whitby.tres:12
 msgid "Whitby, a harbour on the North Sea."
 msgstr ""
@@ -3057,6 +4668,15 @@ msgstr ""
 #: data/navigation/ports/whitby.tres:8
 msgctxt "place"
 msgid "Whitby"
+msgstr ""
+
+#: data/navigation/ports/whitianga.tres:12
+msgid "A cheerful Mercury Bay town with a marina tucked inside the river mouth."
+msgstr ""
+
+#: data/navigation/ports/whitianga.tres:8
+msgctxt "place"
+msgid "Whitianga"
 msgstr ""
 
 #: data/navigation/ports/wick.tres:12
@@ -3122,6 +4742,22 @@ msgctxt "place"
 msgid "Zeebrugge"
 msgstr ""
 
+#: data/navigation/regions/bohuslan/land.json
+msgid "BOHUSLÄN"
+msgstr ""
+
+#: data/navigation/regions/bohuslan/land.json data/navigation/regions/bohuslan/region.json
+msgid "Bohuslän"
+msgstr ""
+
+#: data/navigation/regions/bohuslan/land.json
+msgid "Gullmarn"
+msgstr ""
+
+#: data/navigation/regions/bohuslan/land.json
+msgid "Orust"
+msgstr ""
+
 #: data/navigation/regions/denmark/land.json
 msgid "Als"
 msgstr ""
@@ -3164,6 +4800,106 @@ msgstr ""
 
 #: data/navigation/regions/denmark/land.json
 msgid "South Funen Archipelago"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Bay of Islands"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Bay of Plenty"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Cook Strait"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Hauraki Gulf"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Hawke Bay"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Marlborough Sounds"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "NORTH ISLAND"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json data/navigation/regions/nz_north/region.json
+msgid "New Zealand: North Island and Cook Strait"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Northland"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json
+msgid "Tasman Bay"
+msgstr ""
+
+#: data/navigation/regions/nz_north/land.json data/weather/weather_events.json
+msgid "Tasman Sea"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "Canterbury Bight"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "Fiordland"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "Foveaux Strait"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json data/navigation/regions/nz_south/region.json
+msgid "New Zealand: South Island"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "Pegasus Bay"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "SOUTH ISLAND"
+msgstr ""
+
+#: data/navigation/regions/nz_south/land.json
+msgid "Stewart Island"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "Gotland"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "St. Anna and Gryt"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "Stockholm Archipelago"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "SÖDERMANLAND"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json data/navigation/regions/swedish_east_coast/region.json
+msgid "The Swedish east coast"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "Åland Sea"
+msgstr ""
+
+#: data/navigation/regions/swedish_east_coast/land.json
+msgid "ÖSTERGÖTLAND"
 msgstr ""
 
 #: data/navigation/world/world.json
@@ -4180,10 +5916,6 @@ msgstr ""
 
 #: data/weather/weather_events.json
 msgid "Southern Ocean, south of Africa and Australia"
-msgstr ""
-
-#: data/weather/weather_events.json
-msgid "Tasman Sea"
 msgstr ""
 
 #: data/weather/weather_events.json
@@ -6963,11 +8695,11 @@ msgstr ""
 msgid "Food and water are already full."
 msgstr ""
 
-#: src/core/game_session.gd:3594
+#: src/core/game_session.gd:3593
 msgid "No game."
 msgstr ""
 
-#: src/core/game_session.gd:3605
+#: src/core/game_session.gd:3604
 msgid "No species."
 msgstr ""
 
@@ -7753,11 +9485,11 @@ msgstr ""
 msgid "%.1f kn  ·  %s"
 msgstr ""
 
-#: src/electronics/instrument_data.gd:126 src/navigation/world_map.gd:859
+#: src/electronics/instrument_data.gd:126 src/navigation/world_map.gd:868
 msgid "under engine"
 msgstr ""
 
-#: src/electronics/instrument_data.gd:126 src/navigation/world_map.gd:859
+#: src/electronics/instrument_data.gd:126 src/navigation/world_map.gd:868
 msgid "under sail"
 msgstr ""
 
@@ -7789,7 +9521,7 @@ msgstr ""
 msgid "%03d°  ·  back to the planned course"
 msgstr ""
 
-#: src/electronics/instrument_data.gd:143 src/navigation/world_map.gd:1002
+#: src/electronics/instrument_data.gd:143 src/navigation/world_map.gd:1011
 msgid "off the bow"
 msgstr ""
 
@@ -8207,7 +9939,7 @@ msgstr ""
 msgid "closed · opens %s %s"
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:104 src/harbour/harbour_dressing.gd:137
+#: src/harbour/harbour_dressing.gd:104 src/harbour/harbour_dressing.gd:141
 msgid "Cleat"
 msgstr ""
 
@@ -8215,7 +9947,7 @@ msgstr ""
 msgid "Plank"
 msgstr ""
 
-#: src/harbour/harbour_dressing.gd:135 src/harbour/harbour_dressing.gd:167
+#: src/harbour/harbour_dressing.gd:139 src/harbour/harbour_dressing.gd:171
 msgid "Line"
 msgstr ""
 
@@ -8375,7 +10107,7 @@ msgstr ""
 msgid "Worth seeing: %s."
 msgstr ""
 
-#: src/harbour/harbour_notes.gd:66 src/navigation/world_map.gd:1218
+#: src/harbour/harbour_notes.gd:66 src/navigation/world_map.gd:1227
 msgid "Now"
 msgstr ""
 
@@ -8767,6 +10499,22 @@ msgstr ""
 msgid "Interact"
 msgstr ""
 
+#: src/navigation/cruising_regions.gd:30
+msgid "Guest harbour"
+msgstr ""
+
+#: src/navigation/cruising_regions.gd:30
+msgid "Harbour"
+msgstr ""
+
+#: src/navigation/cruising_regions.gd:31
+msgid "Fishing village"
+msgstr ""
+
+#: src/navigation/cruising_regions.gd:31
+msgid "Natural anchorage"
+msgstr ""
+
 #: src/navigation/depth_service.gd:142
 msgid "regional depth data (modelled)"
 msgstr ""
@@ -8783,36 +10531,36 @@ msgstr ""
 msgid "about %d m"
 msgstr ""
 
-#: src/navigation/map_view.gd:1076 src/navigation/map_view.gd:686
+#: src/navigation/map_view.gd:1154 src/navigation/map_view.gd:1200 src/navigation/map_view.gd:731
 msgid "Coast"
 msgstr ""
 
-#: src/navigation/map_view.gd:1567
-msgid "BLOCKED (not applied)"
-msgstr ""
-
-#: src/navigation/map_view.gd:1655
-msgid "  (Magic Anchor)"
-msgstr ""
-
-#: src/navigation/map_view.gd:1655
-msgid "%d  Anchorage%s"
-msgstr ""
-
-#: src/navigation/map_view.gd:263
-msgid "%s and %d more"
-msgstr ""
-
-#: src/navigation/map_view.gd:760
-msgid "East"
-msgstr ""
-
-#: src/navigation/map_view.gd:760
+#: src/navigation/map_view.gd:1188 src/navigation/map_view.gd:806
 msgid "Main"
 msgstr ""
 
-#: src/navigation/map_view.gd:760
+#: src/navigation/map_view.gd:1188 src/navigation/map_view.gd:806
 msgid "West"
+msgstr ""
+
+#: src/navigation/map_view.gd:1785
+msgid "BLOCKED (not applied)"
+msgstr ""
+
+#: src/navigation/map_view.gd:1873
+msgid "  (Magic Anchor)"
+msgstr ""
+
+#: src/navigation/map_view.gd:1873
+msgid "%d  Anchorage%s"
+msgstr ""
+
+#: src/navigation/map_view.gd:292
+msgid "%s and %d more"
+msgstr ""
+
+#: src/navigation/map_view.gd:806
+msgid "East"
 msgstr ""
 
 #: src/navigation/passage_plan.gd:128
@@ -9179,376 +10927,392 @@ msgstr ""
 msgid "PAST MODEL SNAPSHOT"
 msgstr ""
 
-#: src/navigation/world_map.gd:1001
+#: src/navigation/world_map.gd:1002
+msgid " (from the %s)"
+msgstr ""
+
+#: src/navigation/world_map.gd:1003
+msgid "\nGusts %d kn  ·  %s  ·  %s"
+msgstr ""
+
+#: src/navigation/world_map.gd:1005
+msgid "\nTropical cyclone season: high risk (%s)"
+msgstr ""
+
+#: src/navigation/world_map.gd:1005
+msgid "\nTropical cyclone season: some risk (%s)"
+msgstr ""
+
+#: src/navigation/world_map.gd:1010
 msgid "%s\nWind %d° %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:1004
+#: src/navigation/world_map.gd:1013
 msgid "In port. The boat chooses sail or engine itself once underway."
 msgstr ""
 
-#: src/navigation/world_map.gd:1044
+#: src/navigation/world_map.gd:1053
 msgid "%s nearby, moving %s."
 msgstr ""
 
-#: src/navigation/world_map.gd:1048
+#: src/navigation/world_map.gd:1057
 msgid "Plot a course to see the weather along it."
 msgstr ""
 
-#: src/navigation/world_map.gd:1052
+#: src/navigation/world_map.gd:1061
 msgid "No hazardous weather expected along the next %d hours of the course."
 msgstr ""
 
-#: src/navigation/world_map.gd:1055
+#: src/navigation/world_map.gd:1064
 msgid "Wind to %d kn, gusts %d kn."
 msgstr ""
 
-#: src/navigation/world_map.gd:1057
+#: src/navigation/world_map.gd:1066
 msgid "Thunderstorms may form there."
 msgstr ""
 
-#: src/navigation/world_map.gd:1058
+#: src/navigation/world_map.gd:1067
 msgid "%s (%s): %s, %d nm ahead. %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:1098 src/navigation/world_map.gd:1114
+#: src/navigation/world_map.gd:1107 src/navigation/world_map.gd:1123
 msgid "Anchorages"
 msgstr ""
 
-#: src/navigation/world_map.gd:1099
+#: src/navigation/world_map.gd:1108
 msgid "Show where you can anchor (zoom in on a coast)"
 msgstr ""
 
-#: src/navigation/world_map.gd:1119
+#: src/navigation/world_map.gd:1128
 msgid "Magic Anchor (deep)"
 msgstr ""
 
-#: src/navigation/world_map.gd:1119
+#: src/navigation/world_map.gd:1128
 msgid "Normal anchor"
 msgstr ""
 
-#: src/navigation/world_map.gd:1166
+#: src/navigation/world_map.gd:1175
 msgid "Depths are GAME ESTIMATES, for play, not navigation. Point at the water to see more."
 msgstr ""
 
-#: src/navigation/world_map.gd:1167
+#: src/navigation/world_map.gd:1176
 msgid "Zoom in on a coast to see where you can anchor."
 msgstr ""
 
-#: src/navigation/world_map.gd:1213
+#: src/navigation/world_map.gd:1222
 msgid "Show the wind an hour earlier (up to six hours)"
 msgstr ""
 
-#: src/navigation/world_map.gd:1219
+#: src/navigation/world_map.gd:1228
 msgid "Show the wind now"
 msgstr ""
 
-#: src/navigation/world_map.gd:1225
+#: src/navigation/world_map.gd:1234
 msgid "Show the forecast an hour later (up to six hours)"
 msgstr ""
 
-#: src/navigation/world_map.gd:1235
+#: src/navigation/world_map.gd:1244
 msgid "Estimated conditions. Actual wind may differ."
 msgstr ""
 
-#: src/navigation/world_map.gd:1241
+#: src/navigation/world_map.gd:1250
 msgid "Zoom in to see wind details."
 msgstr ""
 
-#: src/navigation/world_map.gd:1295
+#: src/navigation/world_map.gd:1342
+msgid "Detailed Cruising Region"
+msgstr ""
+
+#: src/navigation/world_map.gd:1375
+msgid "Click to plan a course to %s, anchoring here on the way."
+msgstr ""
+
+#: src/navigation/world_map.gd:1379
+msgid "Click to sail the chart there."
+msgstr ""
+
+#: src/navigation/world_map.gd:1439
+msgid "%s: course planned to %s, anchoring here on the way. Apply the course to keep it."
+msgstr ""
+
+#: src/navigation/world_map.gd:1447
 msgid "Special harbour: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:142 src/navigation/world_map.tscn:141
+#: src/navigation/world_map.gd:145 src/navigation/world_map.tscn:141
 msgid "Course"
 msgstr ""
 
-#: src/navigation/world_map.gd:144
+#: src/navigation/world_map.gd:147
 msgid "Details"
 msgstr ""
 
-#: src/navigation/world_map.gd:247
+#: src/navigation/world_map.gd:256
 msgid "Find a harbour…"
 msgstr ""
 
-#: src/navigation/world_map.gd:347
+#: src/navigation/world_map.gd:356
 msgid "This course cannot be used: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:351
+#: src/navigation/world_map.gd:360
 msgid "Anchorage %d cannot be used: %s Move it, or unmark it."
 msgstr ""
 
-#: src/navigation/world_map.gd:357
+#: src/navigation/world_map.gd:366
 msgid "Course not changed: %s Your current course is unchanged."
 msgstr ""
 
-#: src/navigation/world_map.gd:360
+#: src/navigation/world_map.gd:369
 msgid "Course set for %s."
 msgstr ""
 
-#: src/navigation/world_map.gd:367
+#: src/navigation/world_map.gd:376
 msgid "Changes discarded."
 msgstr ""
 
-#: src/navigation/world_map.gd:427
+#: src/navigation/world_map.gd:436
 msgid "Dreamer's Map"
 msgstr ""
 
-#: src/navigation/world_map.gd:427 src/ui/captains_log_menu.gd:335 src/ui/simple_panel.gd:25 src/ui/simple_panel.gd:42
+#: src/navigation/world_map.gd:436 src/ui/captains_log_menu.gd:335 src/ui/simple_panel.gd:25 src/ui/simple_panel.gd:42
 msgid "Title"
 msgstr ""
 
-#: src/navigation/world_map.gd:428
+#: src/navigation/world_map.gd:437
 msgid "Back to the cabin (Esc)"
 msgstr ""
 
-#: src/navigation/world_map.gd:430 src/ui/captains_log_menu.gd:165
+#: src/navigation/world_map.gd:439 src/ui/captains_log_menu.gd:165
 msgid "Harbours"
 msgstr ""
 
-#: src/navigation/world_map.gd:431
+#: src/navigation/world_map.gd:440
 msgid "Sep1"
 msgstr ""
 
-#: src/navigation/world_map.gd:434
+#: src/navigation/world_map.gd:443
 msgid "Where shall I dream of?"
 msgstr ""
 
-#: src/navigation/world_map.gd:437
+#: src/navigation/world_map.gd:446
 msgid "Imagine this voyage"
 msgstr ""
 
-#: src/navigation/world_map.gd:448
+#: src/navigation/world_map.gd:457
 msgid "Plan it at the chart table"
 msgstr ""
 
-#: src/navigation/world_map.gd:449
+#: src/navigation/world_map.gd:458
 msgid "Open the navigation station's chart with this harbour selected"
 msgstr ""
 
-#: src/navigation/world_map.gd:489
+#: src/navigation/world_map.gd:498
 msgid "At sea, dreaming of other harbours"
 msgstr ""
 
-#: src/navigation/world_map.gd:491
+#: src/navigation/world_map.gd:500
 msgid "In the cabin at %s, %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:494
+#: src/navigation/world_map.gd:503
 msgid "%d harbour visited so far"
 msgid_plural "%d harbours visited so far"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/navigation/world_map.gd:497
+#: src/navigation/world_map.gd:506
 msgid "No harbour selected"
 msgstr ""
 
-#: src/navigation/world_map.gd:498
+#: src/navigation/world_map.gd:507
 msgid "Click a harbour on the map, or find one by name."
 msgstr ""
 
-#: src/navigation/world_map.gd:504
+#: src/navigation/world_map.gd:513
 msgid "Not visited yet"
 msgstr ""
 
-#: src/navigation/world_map.gd:504
+#: src/navigation/world_map.gd:513
 msgid "Visited"
 msgstr ""
 
-#: src/navigation/world_map.gd:505
+#: src/navigation/world_map.gd:514
 msgid "%s\n%s\n%s  ·  %s  ·  %d nm in a straight line"
 msgstr ""
 
-#: src/navigation/world_map.gd:564
+#: src/navigation/world_map.gd:573
 msgid "Course set…"
 msgstr ""
 
-#: src/navigation/world_map.gd:603
+#: src/navigation/world_map.gd:612
 msgid "Anchorage %d: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:604
+#: src/navigation/world_map.gd:613
 msgid "Anchorage %d is no good here: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:647
+#: src/navigation/world_map.gd:656
 msgid "Waypoint %d was on land: moved to the nearest open water."
 msgstr ""
 
-#: src/navigation/world_map.gd:650
+#: src/navigation/world_map.gd:659
 msgid "That spot is on land, far from open water: no waypoint added there."
 msgstr ""
 
-#: src/navigation/world_map.gd:677
+#: src/navigation/world_map.gd:686
 msgid "Found a sheltered bay? Place a waypoint near the coast and mark it as an anchorage (M). I'll stop there so you can drop the anchor."
 msgstr ""
 
-#: src/navigation/world_map.gd:684 src/navigation/world_map.gd:939
+#: src/navigation/world_map.gd:693 src/navigation/world_map.gd:948
 msgid "Anchorage"
 msgstr ""
 
-#: src/navigation/world_map.gd:685
+#: src/navigation/world_map.gd:694
 msgid "Make the selected waypoint tonight's anchorage (M): the boat stops there and asks you to drop the anchor."
 msgstr ""
 
-#: src/navigation/world_map.gd:693
+#: src/navigation/world_map.gd:702
 msgid "Move it to the nearest good spot"
 msgstr ""
 
-#: src/navigation/world_map.gd:724
+#: src/navigation/world_map.gd:733
 msgid "Waypoint %d is an ordinary waypoint again."
 msgstr ""
 
-#: src/navigation/world_map.gd:731
+#: src/navigation/world_map.gd:740
 msgid " The nearest suitable spot is %.1f nm away."
 msgstr ""
 
-#: src/navigation/world_map.gd:731
+#: src/navigation/world_map.gd:740
 msgid " There is no suitable spot nearby."
 msgstr ""
 
-#: src/navigation/world_map.gd:732
+#: src/navigation/world_map.gd:741
 msgid "Not an anchorage: %s%s"
 msgstr ""
 
-#: src/navigation/world_map.gd:738
+#: src/navigation/world_map.gd:747
 msgid "Waypoint %d is an anchorage. %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:753
+#: src/navigation/world_map.gd:762
 msgid "Waypoint %d moved to a suitable spot and made an anchorage. %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:856
+#: src/navigation/world_map.gd:865
 msgid "At anchor on the way to %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:858
+#: src/navigation/world_map.gd:867
 msgid "Underway to %s  ·  %.1f kn %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:317
+#: src/navigation/world_map.gd:870 src/ui/hud.gd:317
 msgid "Arrived at"
 msgstr ""
 
-#: src/navigation/world_map.gd:861 src/ui/hud.gd:317
+#: src/navigation/world_map.gd:870 src/ui/hud.gd:317
 msgid "Moored at"
 msgstr ""
 
-#: src/navigation/world_map.gd:870
+#: src/navigation/world_map.gd:879
 msgid "No voyage in progress  ·  plan a course on the Course tab"
 msgstr ""
 
-#: src/navigation/world_map.gd:876
+#: src/navigation/world_map.gd:885
 msgid "%d nm to go  ·  ETA about %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:881 src/navigation/world_map.tscn:116
+#: src/navigation/world_map.gd:890 src/navigation/world_map.tscn:116
 msgid "No port selected"
 msgstr ""
 
-#: src/navigation/world_map.gd:882
+#: src/navigation/world_map.gd:891
 msgid "Click a port on the chart to choose a destination."
 msgstr ""
 
-#: src/navigation/world_map.gd:884 src/navigation/world_map.tscn:130
+#: src/navigation/world_map.gd:893 src/navigation/world_map.tscn:130
 msgid "Plot course"
 msgstr ""
 
-#: src/navigation/world_map.gd:890
+#: src/navigation/world_map.gd:899
 msgid "%s\n%s\n%d nm away in a straight line"
 msgstr ""
 
-#: src/navigation/world_map.gd:892
+#: src/navigation/world_map.gd:901
 msgid "%s\n%s  ·  %d nm in a straight line"
 msgstr ""
 
-#: src/navigation/world_map.gd:896
+#: src/navigation/world_map.gd:905
 msgid "Plot course to %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:900 src/navigation/world_map.tscn:146
+#: src/navigation/world_map.gd:909 src/navigation/world_map.tscn:146
 msgid "No course planned."
 msgstr ""
 
-#: src/navigation/world_map.gd:904
+#: src/navigation/world_map.gd:913
 msgid "To %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:907
+#: src/navigation/world_map.gd:916
 msgid "  ·  %d nm course"
 msgstr ""
 
-#: src/navigation/world_map.gd:910
+#: src/navigation/world_map.gd:919
 msgid "\nSteering %03d°  ·  %s in %.1f nm"
 msgstr ""
 
-#: src/navigation/world_map.gd:910
+#: src/navigation/world_map.gd:919
 msgid "next turn to %03d°"
 msgstr ""
 
-#: src/navigation/world_map.gd:913
+#: src/navigation/world_map.gd:922
 msgid "  ·  %d nm  ·  about %s with the expected wind"
 msgstr ""
 
-#: src/navigation/world_map.gd:915
+#: src/navigation/world_map.gd:924
 msgid "%d waypoint"
 msgid_plural "%d waypoints"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/navigation/world_map.gd:922
+#: src/navigation/world_map.gd:931
 msgid "NOT NAVIGABLE: %s"
 msgstr ""
 
-#: src/navigation/world_map.gd:924 src/navigation/world_map.gd:934 src/navigation/world_map.tscn:320
+#: src/navigation/world_map.gd:933 src/navigation/world_map.gd:943 src/navigation/world_map.tscn:320
 msgid "Apply course"
 msgstr ""
 
-#: src/navigation/world_map.gd:924
+#: src/navigation/world_map.gd:933
 msgid "Change course"
 msgstr ""
 
-#: src/navigation/world_map.gd:924
+#: src/navigation/world_map.gd:933
 msgid "Sea route found. Press %s to use it."
 msgstr ""
 
-#: src/navigation/world_map.gd:926
+#: src/navigation/world_map.gd:935
 msgid " (being sailed)"
 msgstr ""
 
-#: src/navigation/world_map.gd:926
+#: src/navigation/world_map.gd:935
 msgid "Current course"
 msgstr ""
 
-#: src/navigation/world_map.gd:944 src/navigation/world_map.tscn:342
+#: src/navigation/world_map.gd:953 src/navigation/world_map.tscn:342
 msgid "Depart on the planned course"
 msgstr ""
 
-#: src/navigation/world_map.gd:948
+#: src/navigation/world_map.gd:957
 msgid "Weather (%d)"
 msgstr ""
 
-#: src/navigation/world_map.gd:969 src/navigation/world_map.gd:970
+#: src/navigation/world_map.gd:978 src/navigation/world_map.gd:979
 msgid "Passage readiness: "
-msgstr ""
-
-#: src/navigation/world_map.gd:993
-msgid " (from the %s)"
-msgstr ""
-
-#: src/navigation/world_map.gd:994
-msgid "\nGusts %d kn  ·  %s  ·  %s"
-msgstr ""
-
-#: src/navigation/world_map.gd:996
-msgid "\nTropical cyclone season: high risk (%s)"
-msgstr ""
-
-#: src/navigation/world_map.gd:996
-msgid "\nTropical cyclone season: some risk (%s)"
 msgstr ""
 
 #: src/navigation/world_map.tscn:111

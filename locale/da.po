@@ -10442,3 +10442,1359 @@ msgstr "I køleboksen nu"
 
 msgid "On record: sold or eaten since"
 msgstr "Noteret: solgt eller spist siden"
+
+msgid "A boaties' cove with a bush bathtub, smokehouse and wash-house built for cruisers."
+msgstr "En sejlervig med et bad i bushen, et røgeri og et vaskehus bygget til langturssejlere."
+
+msgid "A calm bay between Rangitoto's lava fields and green Motutapu Island."
+msgstr "En rolig bugt mellem Rangitotos lavamarker og grønne Motutapu Island."
+
+msgid "A clear-water cove near Cape Brett, start of the lighthouse track."
+msgstr "En klarvandet vig nær Cape Brett, startsted for stien til fyret."
+
+msgid "A crescent of sand and a tidal lagoon in the heart of Abel Tasman."
+msgstr "En halvmåne af sand og en tidevandslagune i hjertet af Abel Tasman."
+
+msgid "A golden-sand bay that is the best all-weather anchorage in Abel Tasman."
+msgstr "En bugt med gyldent sand, der er den bedste ankerplads i alt slags vejr i Abel Tasman."
+
+msgid "A predator-free island sanctuary where saddlebacks and robins greet visitors."
+msgstr "En rovdyrfri naturreservat-ø, hvor sadelfugle og rødbrystede fugle hilser på besøgende."
+
+msgid "A private, farmed island with white beaches off Mercury Bay."
+msgstr "En privat, dyrket ø med hvide strande ud for Mercury Bay."
+
+msgid "A quiet eastern Waiheke bay backed by vineyards."
+msgstr "En stille bugt på det østlige Waiheke med vinmarker bagved."
+
+msgid "A sandy bay below Waiheke's hillside village of cafes and galleries."
+msgstr "En sandet bugt neden for Waihekes bakkeby med caféer og gallerier."
+
+msgid "A tidal lagoon and baches behind a long golden beach."
+msgstr "En tidevandslagune og sommerhuse bag en lang, gylden strand."
+
+msgid "A vast, uninhabited southern harbour of granite domes and still water."
+msgstr "En vidtstrakt, ubeboet havn i syd med granitkupler og stille vand."
+
+msgid "A well-sheltered island bay with a wharf, cafe and walking tracks."
+msgstr "En godt beskyttet ø-bugt med en bro, en café og vandrestier."
+
+msgid "Almost enclosed bay in the Mols hills, quiet and away from the main routes."
+msgstr "Næsten lukket vig i Mols Bjerge, stille og væk fra de store sejlruter."
+
+msgid "Altarholmen"
+msgstr "Altarholmen"
+
+msgid "Anchorage Bay"
+msgstr "Anchorage Bay"
+
+msgid "Anchorage just north-east of Tunø harbour, good in westerly and northerly winds."
+msgstr "Ankerplads lige nordøst for Tunø Havn, god i vestlig og nordlig vind."
+
+msgid "Anchorage off Korshavn and Revkrogen at Avernakø's eastern end, sheltered from the north-west."
+msgstr "Ankerplads ud for Korshavn og Revkrogen yderst mod øst på Avernakø, med læ for nordvestenvind."
+
+msgid "Anchorage west of Femø harbour, sheltered from north and east winds."
+msgstr "Ankerplads vest for Femø Havn med læ for nord- og østenvind."
+
+msgid "Awaroa Bay"
+msgstr "Awaroa Bay"
+
+msgid "Bare granite islets near Mollösund, a classic west-coast natural harbour."
+msgstr "Bare granitholme nær Mollösund, en klassisk naturhavn på vestkysten."
+
+msgid "Bark Bay"
+msgstr "Bark Bay"
+
+msgid "Bathing cove on Gåsö at the mouth of Gullmarsfjorden."
+msgstr "Badevig på Gåsö ved mundingen af Gullmarsfjorden."
+
+msgid "Begtrup Vig"
+msgstr "Begtrup Vig"
+
+msgid "Bokö Hamnvik"
+msgstr "Bokö Hamnvik"
+
+msgid "Bullerö Bodkobbshålet"
+msgstr "Bullerö Bodkobbshålet"
+
+msgid "Calm anchorage inside Samsø's Stavns Fjord, a bird reserve dotted with islets."
+msgstr "Rolig ankerplads inde i Samsøs Stavns Fjord, et fuglereservat med mange holme."
+
+msgid "Deep Water Cove"
+msgstr "Deep Water Cove"
+
+msgid "Femø Anchorage"
+msgstr "Femø Anchorage"
+
+msgid "Fjärdlång Rumpudden"
+msgstr "Fjärdlång Rumpudden"
+
+msgid "Former winter haven for schooners, a snug wooded bay on Thurø."
+msgstr "Tidligere vinterhavn for skonnerter, en lun, skovklædt vig på Thurø."
+
+msgid "Genner Bugt"
+msgstr "Genner Bugt"
+
+msgid "Governor Grey's historic mansion, with peacocks and wallabies around the lawns."
+msgstr "Guvernør Greys historiske herregård, med påfugle og vallabyer på plænerne."
+
+msgid "Granite islet anchorage among the skerries south of Hamburgsund."
+msgstr "Ankerplads ved en granitholm blandt skærene syd for Hamburgsund."
+
+msgid "Great Mercury Island"
+msgstr "Great Mercury Island"
+
+msgid "Grinda Hästholmssundet"
+msgstr "Grinda Hästholmssundet"
+
+msgid "Gällnö Getudden"
+msgstr "Gällnö Getudden"
+
+msgid "Gåsö Badviken"
+msgstr "Gåsö Badviken"
+
+msgid "Harstena Flisfjärden"
+msgstr "Harstena Flisfjärden"
+
+msgid "Helnæs Bugt"
+msgstr "Helnæs Bugt"
+
+msgid "Huvudskär"
+msgstr "Huvudskär"
+
+msgid "Huö"
+msgstr "Huö"
+
+msgid "Island natural harbour just off Hunnebostrand, smooth rocks for bathing."
+msgstr "Naturhavn på en ø lige ud for Hunnebostrand, med glatte klipper til badning."
+
+msgid "Islington Bay"
+msgstr "Islington Bay"
+
+msgid "Kalø Vig"
+msgstr "Kalø Vig"
+
+msgid "Karholmarna"
+msgstr "Karholmarna"
+
+msgid "Knebel Vig"
+msgstr "Knebel Vig"
+
+msgid "Kälkerön"
+msgstr "Kälkerön"
+
+msgid "Kälmö"
+msgstr "Kälmö"
+
+msgid "Lindholmen"
+msgstr "Lindholmen"
+
+msgid "Long wooded inlet on Själbottna, calm in almost any wind."
+msgstr "Lang, skovklædt vig på Själbottna, rolig i næsten al slags vind."
+
+msgid "Lunkebugten"
+msgstr "Lunkebugten"
+
+msgid "Lyø Anchorage"
+msgstr "Lyø Anchorage"
+
+msgid "Man O' War Bay"
+msgstr "Man O' War Bay"
+
+msgid "Mansion House Bay"
+msgstr "Mansion House Bay"
+
+msgid "Munkholmen"
+msgstr "Munkholmen"
+
+msgid "Natural harbour by Harstena, an outer fishing hamlet known for smoked fish."
+msgstr "Naturhavn ved Harstena, et fiskerleje yderst ude, kendt for røget fisk."
+
+msgid "Natural harbour on the long wooded island of Fjärdlång."
+msgstr "Naturhavn på den lange, skovklædte ø Fjärdlång."
+
+msgid "Old fishing skerries at the open-sea edge, with a lonely lighthouse."
+msgstr "Gamle fiskerskær ved kanten af det åbne hav, med et ensomt fyr."
+
+msgid "Oneroa Bay"
+msgstr "Oneroa Bay"
+
+msgid "Otehei Bay"
+msgstr "Otehei Bay"
+
+msgid "Outer granite islets west of Grundsund, best in settled weather."
+msgstr "Granitholme i yderkanten vest for Grundsund, bedst i stabilt vejr."
+
+msgid "Outer skerry anchorage beside a tiny summer village and its little shop."
+msgstr "Ankerplads i yderskærgården ved en lille sommerby og dens lille butik."
+
+msgid "Popular anchorage in a hill-ringed bay between Mols and Helgenæs, behind the Rønnen shoal."
+msgstr "Populær ankerplads i en bakkeomkranset bugt mellem Mols og Helgenæs, bag Rønnen-revlen."
+
+msgid "Popular natural harbour at an old pilot station, clear water and mussels."
+msgstr "Populær naturhavn ved en gammel lodsstation, med klart vand og blåmuslinger."
+
+msgid "Port Pegasus"
+msgstr "Port Pegasus"
+
+msgid "Quiet natural harbour on Gällnö, an island of meadows and old farms."
+msgstr "Stille naturhavn på Gällnö, en ø med enge og gamle gårde."
+
+msgid "Remote low skerries far out to sea; swing at anchor among nesting birds."
+msgstr "Fjerne, lave skær langt ude på havet; læg dig til ankers blandt rugende fugle."
+
+msgid "Revkrogen"
+msgstr "Revkrogen"
+
+msgid "Roberton Island"
+msgstr "Roberton Island"
+
+msgid "Rocky outer-skerry anchorage in the Bullerö reserve, eider ducks all around."
+msgstr "Klippefyldt ankerplads i yderskærgården i Bullerö-reservatet, med ederfugle overalt."
+
+msgid "Roomy anchorage in the bay north-west of Lyø's pier, easy to approach."
+msgstr "Rummelig ankerplads i bugten nordvest for Lyøs bro, let at anløbe."
+
+msgid "Rödlöga"
+msgstr "Rödlöga"
+
+msgid "Seldom-crowded bay on south-west Funen, with Faldsled's inn ashore."
+msgstr "Sjældent overfyldt bugt på det sydvestlige Fyn med Faldsleds kro på land."
+
+msgid "Sheltered anchorage between Nappedam and the medieval Kalø castle ruin."
+msgstr "Læ ankerplads mellem Nappedam og ruinen af middelalderborgen Kalø."
+
+msgid "Sheltered bay on Bokö in the Gryt archipelago."
+msgstr "Lun bugt på Bokö i Gryts skærgård."
+
+msgid "Sheltered skerry anchorage off northern Tjörn."
+msgstr "Lun ankerplads i skærgården ud for det nordlige Tjörn."
+
+msgid "Sheltered sound on Grinda's south side, beloved by families on summer weekends."
+msgstr "Lunt sund på Grindas sydside, elsket af børnefamilier på sommerens weekender."
+
+msgid "Sheltered wooded bay beside Kalvø, good holding except in easterly winds."
+msgstr "Lun, skovklædt bugt ved siden af Kalvø med godt ankerfæste, bortset fra i østenvind."
+
+msgid "Själbottna Långviken"
+msgstr "Själbottna Långviken"
+
+msgid "Skerry anchorage in the outer Västervik archipelago."
+msgstr "Ankerplads i skærgården i den ydre Västervik-skærgård."
+
+msgid "Small granite natural harbour in the northern Gothenburg archipelago."
+msgstr "Lille naturhavn af granit i den nordlige Göteborgs skærgård."
+
+msgid "Smokehouse Bay"
+msgstr "Smokehouse Bay"
+
+msgid "Snug forested bay on Ägnö, an easy first night out from Stockholm."
+msgstr "Lun, skovklædt bugt på Ägnö, en nem første nat ude fra Stockholm."
+
+msgid "Stavns Fjord"
+msgstr "Stavns Fjord"
+
+msgid "Stora Nassa"
+msgstr "Stora Nassa"
+
+msgid "The people's beach, bought by New Zealanders, beside a wide tidal inlet."
+msgstr "Folkets strand, købt af newzealændere, ved siden af et bredt tidevandsindløb."
+
+msgid "Thurø Bund"
+msgstr "Thurø Bund"
+
+msgid "Torrent Bay"
+msgstr "Torrent Bay"
+
+msgid "Tunø Anchorage"
+msgstr "Tunø Anchorage"
+
+msgid "Twin turquoise lagoons and a hilltop lookout where Captain Cook once anchored."
+msgstr "To turkisblå laguner og et udsigtspunkt på toppen, hvor Captain Cook engang lå for anker."
+
+msgid "Ulva Island"
+msgstr "Ulva Island"
+
+msgid "Vasholmarna"
+msgstr "Vasholmarna"
+
+msgid "Wide shallow bay on Tåsinge's east coast, a quiet overnight stop south of Thurø."
+msgstr "Bred, lavvandet bugt på Tåsinges østkyst, et roligt overnatningssted syd for Thurø."
+
+msgid "Ägnö Napoleonviken"
+msgstr "Ägnö Napoleonviken"
+
+msgid "Denmark — Home Waters"
+msgstr "Danmark — Hjemlige farvande"
+
+msgid "Discover a rich network of island harbours, sheltered passages and welcoming coastal communities."
+msgstr "Opdag et rigt net af øhavne, beskyttede farvande og gæstfrie kystsamfund."
+
+msgid "Discover sheltered bays, remote anchorages and memorable coastal passages across New Zealand's two main islands."
+msgstr "Opdag beskyttede bugter, afsides ankerpladser og mindeværdige kystsejladser på New Zealands to hovedøer."
+
+msgid "Explore the world at your own pace. Sail between destinations across the globe, or discover the hidden harbours and anchorages of our Detailed Cruising Regions."
+msgstr "Udforsk verden i dit eget tempo. Sejl mellem mål over hele kloden, eller opdag de skjulte havne og ankerpladser i vores detaljerede sejlområder."
+
+msgid "Explore winding archipelagos, island villages and quiet anchorages along Sweden's remarkable coastline."
+msgstr "Udforsk snoede skærgårde, ølandsbyer og stille ankerpladser langs Sveriges bemærkelsesværdige kyst."
+
+msgid "Home Waters"
+msgstr "Hjemlige farvande"
+
+msgid "New Zealand — The Long White Cloud"
+msgstr "New Zealand — Den lange hvide sky"
+
+msgid "Sweden — The Archipelagos"
+msgstr "Sverige — Skærgårdene"
+
+msgid "The Archipelagos"
+msgstr "Skærgårdene"
+
+msgid "The Long White Cloud"
+msgstr "Den lange hvide sky"
+
+msgid "Marina at the head of Aabenraa Fjord, below an old merchant town."
+msgstr "Lystbådehavn inderst i Aabenraa Fjord, neden for en gammel købmandsby."
+
+msgctxt "place"
+msgid "Aabenraa"
+msgstr "Aabenraa"
+
+msgid "Small fishing harbour on Agersø's east side, across the sound from Stigsnæs."
+msgstr "Lille fiskerihavn på Agersøs østside, på den anden side af sundet fra Stigsnæs."
+
+msgctxt "place"
+msgid "Agersø"
+msgstr "Agersø"
+
+msgid "Old river-mouth town known for smoked eel and long sandy beaches."
+msgstr "Gammel by ved en åmunding, kendt for røget ål og lange sandstrande."
+
+msgctxt "place"
+msgid "Åhus"
+msgstr "Åhus"
+
+msgid "A French-flavoured village on a sheltered volcanic harbour, home to tiny Hector's dolphins."
+msgstr "En fransk-præget landsby ved en beskyttet vulkansk havn, hjem for de små Hectors-delfiner."
+
+msgctxt "place"
+msgid "Akaroa"
+msgstr "Akaroa"
+
+msgid "Small rocky harbour on Bornholm's north coast, near Hammershus castle ruin."
+msgstr "Lille klippehavn på Bornholms nordkyst, nær ruinen af Hammershus."
+
+msgctxt "place"
+msgid "Allinge"
+msgstr "Allinge"
+
+msgid "Remote Kattegat island harbour among dunes, a full day's sail from the mainland."
+msgstr "Afsides havn på Anholt i Kattegat, mellem klitter, en hel dagsrejse fra fastlandet."
+
+msgctxt "place"
+msgid "Anholt"
+msgstr "Anholt"
+
+msgid "Northernmost archipelago island with a white beacon tower and quiet meadows."
+msgstr "Skærgårdens nordligste ø med et hvidt sømærke og stille enge."
+
+msgctxt "place"
+msgid "Arholma"
+msgstr "Arholma"
+
+msgid "Old pilot village at the outer edge of Östergötland's skerries."
+msgstr "Gammel lodsby yderst i Östergötlands skærgård."
+
+msgctxt "place"
+msgid "Arkösund"
+msgstr "Arkösund"
+
+msgid "Little harbour on low, peaceful Askø, a short hop from Bandholm."
+msgstr "Lille havn på lave, fredelige Askø, et kort hop fra Bandholm."
+
+msgctxt "place"
+msgid "Askø"
+msgstr "Askø"
+
+msgid "Town harbour and marina on Funen's west coast, facing the Little Belt."
+msgstr "Byhavn og lystbådehavn på Fyns vestkyst, mod Lillebælt."
+
+msgctxt "place"
+msgid "Assens"
+msgstr "Assens"
+
+msgid "Tiny car-free island where white houses crowd every ledge above the harbour."
+msgstr "Lille bilfri ø, hvor hvide huse trænger sig sammen på hver klippeafsats over havnen."
+
+msgctxt "place"
+msgid "Åstol"
+msgstr "Åstol"
+
+msgid "Quiet ferry and guest harbour on Avernakø, with farm lanes and meadows close by."
+msgstr "Rolig færge- og gæstehavn på Avernakø med markveje og enge tæt på."
+
+msgctxt "place"
+msgid "Avernakø"
+msgstr "Avernakø"
+
+msgid "Fishing harbour near Langeland's southern tip, a good jumping-off point toward Kiel."
+msgstr "Fiskerihavn nær Langelands sydspids, et godt afsæt mod Kiel."
+
+msgctxt "place"
+msgid "Bagenkop"
+msgstr "Bagenkop"
+
+msgid "Lively marina on Samsø's east coast, with a sandy beach and small eateries."
+msgstr "Livlig lystbådehavn på Samsøs østkyst med sandstrand og små spisesteder."
+
+msgctxt "place"
+msgid "Ballen"
+msgstr "Ballen"
+
+msgid "Old estate port on Lolland's north coast, near Knuthenborg park."
+msgstr "Gammel godshavn på Lollands nordkyst, nær Knuthenborg Safaripark."
+
+msgctxt "place"
+msgid "Bandholm"
+msgstr "Bandholm"
+
+msgid "Thatched fishing village harbour on the flat Skåne shore of Öresund."
+msgstr "Fiskerleje med stråtage og havn på den flade skånske kyst ved Øresund."
+
+msgctxt "place"
+msgid "Barsebäckshamn"
+msgstr "Barsebäckshamn"
+
+msgid "Small fishing village harbour on Zealand's south-west coast, among shallow islets."
+msgstr "Lille fiskerlejehavn på Sjællands sydvestkyst, mellem lave holme."
+
+msgctxt "place"
+msgid "Bisserup"
+msgstr "Bisserup"
+
+msgid "New Zealand's southernmost port town, famous for its oysters."
+msgstr "New Zealands sydligste havneby, berømt for sine østers."
+
+msgctxt "place"
+msgid "Bluff"
+msgstr "Bluff"
+
+msgid "Large marina beside a small old market town on Funen's north coast."
+msgstr "Stor lystbådehavn ved en lille, gammel købstad på Fyns nordkyst."
+
+msgctxt "place"
+msgid "Bogense"
+msgstr "Bogense"
+
+msgid "Fishing harbour on Djursland's north coast, open to the Kattegat."
+msgstr "Fiskerihavn på Djurslands nordkyst, åben mod Kattegat."
+
+msgctxt "place"
+msgid "Bønnerup"
+msgstr "Bønnerup"
+
+msgid "Öland's little capital, beneath the dramatic ruins of Borgholm castle."
+msgstr "Ölands lille hovedstad, neden for de dramatiske ruiner af Borgholm Slot."
+
+msgctxt "place"
+msgid "Borgholm"
+msgstr "Borgholm"
+
+msgid "Northern Öland harbour with smoked fish and sunsets over Kalmar Sound."
+msgstr "Havn på det nordlige Öland med røget fisk og solnedgange over Kalmarsund."
+
+msgctxt "place"
+msgid "Byxelkrok"
+msgstr "Byxelkrok"
+
+msgid "Tiny fortress-island harbour between granite islets, home to eiders and old naval buildings."
+msgstr "Lille fæstningsø-havn mellem granitholme, hjem for ederfugle og gamle flådebygninger."
+
+msgctxt "place"
+msgid "Christiansø"
+msgstr "Christiansø"
+
+msgid "Old customs village with yellow wooden houses at the southern fairway."
+msgstr "Gammel toldby med gule træhuse ved det sydlige sejlløb."
+
+msgctxt "place"
+msgid "Dalarö"
+msgstr "Dalarö"
+
+msgid "Little harbour on the south side of Drejø, a low island of salt meadows and birds."
+msgstr "Lille havn på Drejøs sydside, en lav ø med strandenge og fugleliv."
+
+msgctxt "place"
+msgid "Drejø"
+msgstr "Drejø"
+
+msgid "Small fishing hamlet west of Faaborg, tucked below a beech wood."
+msgstr "Lille fiskerleje vest for Faaborg, lunt placeret under en bøgeskov."
+
+msgctxt "place"
+msgid "Dyreborg"
+msgstr "Dyreborg"
+
+msgid "Sheltered Orust village where wooden sailboats were once built by the hundred."
+msgstr "Lun landsby på Orust, hvor der engang blev bygget træsejlbåde i hundredvis."
+
+msgctxt "place"
+msgid "Ellös"
+msgstr "Ellös"
+
+msgid "Harbour at the end of a causeway on quiet Endelave, south of Samsø."
+msgstr "Havn for enden af en dæmning på stille Endelave, syd for Samsø."
+
+msgctxt "place"
+msgid "Endelave"
+msgstr "Endelave"
+
+msgid "Small harbour at the head of Helnæs Bugt, near an old village inn."
+msgstr "Lille havn inderst i Helnæs Bugt, nær et gammelt landsbykro."
+
+msgctxt "place"
+msgid "Faldsled"
+msgstr "Faldsled"
+
+msgid "Ferry village on the sound between Gotland and Fårö's famous sea-stacks."
+msgstr "Færgeby ved sundet mellem Gotland og Fårö med de berømte klippestakke."
+
+msgctxt "place"
+msgid "Fårösund"
+msgstr "Fårösund"
+
+msgid "Small harbour near Østerby on Fejø, an island of orchards and lanes."
+msgstr "Lille havn nær Østerby på Fejø, en ø med frugthaver og små veje."
+
+msgctxt "place"
+msgid "Fejø Dybvig"
+msgstr "Fejø Dybvig"
+
+msgid "Island harbour on Femø's west side, with two small basins and a ferry quay."
+msgstr "Ø-havn på Femøs vestside med to små bassiner og en færgekaj."
+
+msgctxt "place"
+msgid "Femø"
+msgstr "Femø"
+
+msgid "Wooded outer island with a hostel and the sheltered Paradisviken bay."
+msgstr "Skovklædt yderø med et vandrerhjem og den lune bugt Paradisviken."
+
+msgctxt "place"
+msgid "Finnhamn"
+msgstr "Finnhamn"
+
+msgid "Pastel houses huddle beneath the sheer Vetteberget cliff."
+msgstr "Pastelfarvede huse klynger sig under den lodrette klippe Vetteberget."
+
+msgctxt "place"
+msgid "Fjällbacka"
+msgstr "Fjällbacka"
+
+msgid "Old bathing resort beside the narrow sound where big ferries glide past."
+msgstr "Gammelt badested ved det smalle sund, hvor store færger glider forbi."
+
+msgctxt "place"
+msgid "Furusund"
+msgstr "Furusund"
+
+msgid "Mainland harbour at the doorstep of the Gryt archipelago."
+msgstr "Havn på fastlandet lige ved indgangen til Gryts skærgård."
+
+msgctxt "place"
+msgid "Fyrudden"
+msgstr "Fyrudden"
+
+msgid "Denmark's southernmost harbour on Falster, a natural stepping stone toward Germany."
+msgstr "Danmarks sydligste havn på Falster, et naturligt trædesten mod Tyskland."
+
+msgctxt "place"
+msgid "Gedser"
+msgstr "Gedser"
+
+msgid "The first city to see the sun, with a small inner harbour of fishing boats and cafes."
+msgstr "Den første by, der ser solen, med en lille indre havn fuld af fiskerbåde og caféer."
+
+msgctxt "place"
+msgid "Gisborne"
+msgstr "Gisborne"
+
+msgid "Oyster capital of Sweden, with a long sheltered guest harbour."
+msgstr "Sveriges osterhovedstad, med en lang, beskyttet gæstehavn."
+
+msgctxt "place"
+msgid "Grebbestad"
+msgstr "Grebbestad"
+
+msgid "Steep little harbour town of granite and smokehouses, with boats to Christiansø."
+msgstr "Stejl lille havneby af granit og røgerier, med både til Christiansø."
+
+msgctxt "place"
+msgid "Gudhjem"
+msgstr "Gudhjem"
+
+msgid "A large marina at the tip of Whangaparāoa Peninsula, a handy jumping-off point for the Gulf."
+msgstr "En stor lystbådehavn yderst på Whangaparāoa-halvøen, et praktisk afsæt til Gulf."
+
+msgctxt "place"
+msgid "Gulf Harbour"
+msgstr "Gulf Harbour"
+
+msgid "Densely built fishing island linked by footbridge to the Härmanö nature reserve."
+msgstr "Tætbebygget fiskerø, forbundet med en gangbro til naturreservatet Härmanö."
+
+msgctxt "place"
+msgid "Gullholmen"
+msgstr "Gullholmen"
+
+msgid "A sheltered eastern Auckland marina where ferries leave for Waiheke and the islands."
+msgstr "En beskyttet lystbådehavn i det østlige Auckland, hvorfra færger sejler til Waiheke og øerne."
+
+msgctxt "place"
+msgid "Half Moon Bay"
+msgstr "Half Moon Bay"
+
+msgid "Stewart Island's only village, a peaceful bay of fishing boats, kiwi and birdsong."
+msgstr "Stewart Islands eneste landsby, en fredelig bugt med fiskerbåde, kiwier og fuglesang."
+
+msgid "Harbour at the eastern entrance of the Limfjord, with an old ferry crossing."
+msgstr "Havn ved Limfjordens østlige indsejling med en gammel færgeforbindelse."
+
+msgctxt "place"
+msgid "Hals"
+msgstr "Hals"
+
+msgid "Village along a narrow sound, a small cable ferry crossing to Hamburgö."
+msgstr "Landsby langs et smalt sund, med en lille kædefærge over til Hamburgö."
+
+msgctxt "place"
+msgid "Hamburgsund"
+msgstr "Hamburgsund"
+
+msgid "The ferry wharf for Coromandel town, among green hills and mussel farms."
+msgstr "Færgebroen til Coromandel by, mellem grønne bakker og muslingefarme."
+
+msgctxt "place"
+msgid "Coromandel"
+msgstr "Coromandel"
+
+msgid "Lonely island with a lighthouse, fallow deer and an old English naval cemetery."
+msgstr "Ensom ø med et fyrtårn, dådyr og en gammel engelsk flådekirkegård."
+
+msgctxt "place"
+msgid "Hanö"
+msgstr "Hanö"
+
+msgid "The green-lipped mussel capital, at the quiet head of Pelorus Sound."
+msgstr "Grønlæbet-musling-hovedstaden, inderst i det stille Pelorus Sound."
+
+msgctxt "place"
+msgid "Havelock"
+msgstr "Havelock"
+
+msgid "Lively city harbour at the Öresund narrows, facing Helsingør across the strait."
+msgstr "Livlig byhavn ved Øresunds smalleste sted, med udsigt til Helsingør på den anden side af stredet."
+
+msgctxt "place"
+msgid "Helsingborg"
+msgstr "Helsingborg"
+
+msgid "Busy fishing harbour on Hönö, smelling of tar and fresh shrimp."
+msgstr "Travl fiskerihavn på Hönö, der dufter af tjære og friske rejer."
+
+msgctxt "place"
+msgid "Hönö Klåva"
+msgstr "Hönö Klåva"
+
+msgid "Fishing and leisure harbour on Zealand's north coast, beside long sandy beaches."
+msgstr "Fiskeri- og lystbådehavn på Sjællands nordkyst, ved lange sandstrande."
+
+msgctxt "place"
+msgid "Hornbæk"
+msgstr "Hornbæk"
+
+msgid "New Zealand's northernmost commercial wharf, a quiet fishing settlement on Houhora Harbour."
+msgstr "New Zealands nordligste erhvervsbro, et stille fiskerleje ved Houhora Harbour."
+
+msgctxt "place"
+msgid "Houhora"
+msgstr "Houhora"
+
+msgid "Busy fishing and ferry port at the entrance to Isefjord, below high clay cliffs."
+msgstr "Travl fiskeri- og færgehavn ved indsejlingen til Isefjord, under høje lerklinter."
+
+msgctxt "place"
+msgid "Hundested"
+msgstr "Hundested"
+
+msgid "Stone-cutters' village where pink granite meets a friendly guest harbour."
+msgstr "Stenhuggerby, hvor lyserød granit møder en venlig gæstehavn."
+
+msgctxt "place"
+msgid "Hunnebostrand"
+msgstr "Hunnebostrand"
+
+msgid "A small fishing harbour where whales, dolphins and seals share the sea beneath snowy peaks."
+msgstr "En lille fiskerihavn, hvor hvaler, delfiner og sæler deler havet under sneklædte tinder."
+
+msgctxt "place"
+msgid "Kaikōura"
+msgstr "Kaikōura"
+
+msgid "Wooded islet joined to the shore by a causeway, with a small maritime museum."
+msgstr "Skovklædt holm, forbundet med land af en dæmning, med et lille søfartsmuseum."
+
+msgctxt "place"
+msgid "Kalvø"
+msgstr "Kalvø"
+
+msgid "Bare granite island off Orust with a cosy harbour and seafood restaurant."
+msgstr "Bar granitø ud for Orust med en hyggelig havn og en fiskerestaurant."
+
+msgctxt "place"
+msgid "Käringön"
+msgstr "Käringön"
+
+msgid "Harbour on the channel into Karrebæk Fjord, with a lifting bridge and beaches."
+msgstr "Havn ved kanalen ind til Karrebæk Fjord, med klapbro og strande."
+
+msgctxt "place"
+msgid "Karrebæksminde"
+msgstr "Karrebæksminde"
+
+msgid "Quiet fishing harbour on Gotland's east coast, fishermen's huts by the shore."
+msgstr "Stille fiskerihavn på Gotlands østkyst med fiskerhytter ved vandet."
+
+msgctxt "place"
+msgid "Katthammarsvik"
+msgstr "Katthammarsvik"
+
+msgid "A friendly cruising-club marina tucked into the quiet Kerikeri Inlet."
+msgstr "En venlig lystbådehavn med sejlklub, lunt placeret i det stille Kerikeri Inlet."
+
+msgctxt "place"
+msgid "Doves Bay"
+msgstr "Doves Bay"
+
+msgid "Apple-country fishing harbour near a famous Bronze Age cairn."
+msgstr "Fiskerihavn i æbleland, nær en berømt bronzealderhøj."
+
+msgctxt "place"
+msgid "Kivik"
+msgstr "Kivik"
+
+msgid "Old herring island off Tjörn, still famous for its pickled herring."
+msgstr "Gammel sildeø ud for Tjörn, stadig berømt for sin syltede sild."
+
+msgctxt "place"
+msgid "Klädesholmen"
+msgstr "Klädesholmen"
+
+msgid "West Gotland harbour where boats leave for the bird island of Stora Karlsö."
+msgstr "Havn på det vestlige Gotland, hvorfra bådene sejler til fugleøen Stora Karlsö."
+
+msgctxt "place"
+msgid "Klintehamn"
+msgstr "Klintehamn"
+
+msgid "Harbour on Møn's south coast, a short walk from the white chalk cliffs."
+msgstr "Havn på Møns sydkyst, en kort gåtur fra de hvide kridtklinter."
+
+msgctxt "place"
+msgid "Klintholm"
+msgstr "Klintholm"
+
+msgid "Tiny fortified village whose guest harbour lies right inside the old walls."
+msgstr "Lille befæstet landsby, hvis gæstehavn ligger lige inden for de gamle volde."
+
+msgctxt "place"
+msgid "Kristianopel"
+msgstr "Kristianopel"
+
+msgid "Small harbour on Ven's west side, below the church of Sankt Ibb."
+msgstr "Lille havn på Vens vestside, under Sankt Ibbs kirke."
+
+msgctxt "place"
+msgid "Kyrkbacken"
+msgstr "Kyrkbacken"
+
+msgid "Small harbour inside Stavns Fjord on Samsø, a protected bird reserve."
+msgstr "Lille havn inde i Stavns Fjord på Samsø, et fredet fuglereservat."
+
+msgctxt "place"
+msgid "Langør"
+msgstr "Langør"
+
+msgid "Small harbour beneath the Jungfrun sea-stack on Gotland's limestone coast."
+msgstr "Lille havn under klippestakken Jungfrun på Gotlands kalkstenskyst."
+
+msgctxt "place"
+msgid "Lickershamn"
+msgstr "Lickershamn"
+
+msgid "Old bathing village with sea-stacks at Folhammar and sandy beaches."
+msgstr "Gammel badeby med klippestakke ved Folhammar og sandstrande."
+
+msgctxt "place"
+msgid "Ljugarn"
+msgstr "Ljugarn"
+
+msgid "Small harbour on Funen's east coast, with a beach and views across to Langeland."
+msgstr "Lille havn på Fyns østkyst med strand og udsigt over til Langeland."
+
+msgctxt "place"
+msgid "Lundeborg"
+msgstr "Lundeborg"
+
+msgid "Small sheltered harbour on Lyø's north shore, a short walk from a thatched village with a round churchyard."
+msgstr "Lille, læ havn på Lyøs nordkyst, kun et par skridt fra en stråtækt landsby med en rund kirkegård."
+
+msgctxt "place"
+msgid "Lyø"
+msgstr "Lyø"
+
+msgid "Old spa town at the mouth of Gullmarsfjorden, granite cliffs and wooden villas."
+msgstr "Gammel kurby ved mundingen af Gullmarsfjorden, med granitklipper og trævillaer."
+
+msgctxt "place"
+msgid "Lysekil"
+msgstr "Lysekil"
+
+msgid "A characterful port town inside a drowned volcano, Christchurch's harbour."
+msgstr "En havneby med karakter inde i en sunket vulkan, Christchurchs havn."
+
+msgctxt "place"
+msgid "Lyttelton"
+msgstr "Lyttelton"
+
+msgid "A sheltered marina on Porirua Harbour, close to Mana Island and Cook Strait."
+msgstr "En beskyttet lystbådehavn i Porirua Harbour, tæt på Mana Island og Cook Strait."
+
+msgctxt "place"
+msgid "Mana"
+msgstr "Mana"
+
+msgid "An old whaling port on Doubtless Bay, famous for fish and chips on the wharf."
+msgstr "En gammel hvalfangerhavn ved Doubtless Bay, berømt for fish and chips på broen."
+
+msgctxt "place"
+msgid "Mangōnui"
+msgstr "Mangōnui"
+
+msgid "A modern canal marina near the mouth of Whangārei Harbour, beneath Bream Head."
+msgstr "En moderne kanalhavn nær mundingen af Whangārei Harbour, under Bream Head."
+
+msgctxt "place"
+msgid "Marsden Cove"
+msgstr "Marsden Cove"
+
+msgid "Sailing town beneath Carlsten fortress, its harbour packed with masts all summer."
+msgstr "Sejlerby neden for Carlstens fæstning, med en havn fuld af master hele sommeren."
+
+msgctxt "place"
+msgid "Marstrand"
+msgstr "Marstrand"
+
+msgid "Small harbour on Samsø's north-west coast, below clay cliffs and heathland."
+msgstr "Lille havn på Samsøs nordvestkyst, under lerklinter og hede."
+
+msgctxt "place"
+msgid "Mårup"
+msgstr "Mårup"
+
+msgid "A sheltered basin at the head of Milford Sound, beneath sheer cliffs and waterfalls."
+msgstr "Et beskyttet bassin inderst i Milford Sound, under lodrette klipper og vandfald."
+
+msgctxt "place"
+msgid "Milford Sound"
+msgstr "Milford Sound"
+
+msgid "Living archipelago island of red cottages, meadows and a cosy country shop."
+msgstr "Levende skærgårdsø med røde huse, enge og en hyggelig landhandel."
+
+msgctxt "place"
+msgid "Möja"
+msgstr "Möja"
+
+msgid "Steep old bathing village beneath the beech-clad Kullaberg headland."
+msgstr "Stejl, gammel badeby neden for den bøgeklædte Kullaberg-pynt."
+
+msgctxt "place"
+msgid "Mölle"
+msgstr "Mölle"
+
+msgid "One of Bohuslän's oldest fishing villages, red boathouses lining a narrow sound."
+msgstr "En af Bohusläns ældste fiskerbyer, med røde bådhuse langs et smalt sund."
+
+msgctxt "place"
+msgid "Mollösund"
+msgstr "Mollösund"
+
+msgid "An Art Deco city whose Ahuriri inner harbour hosts a friendly sailing club."
+msgstr "En art deco-by, hvis indre havn Ahuriri har en venlig sejlklub."
+
+msgctxt "place"
+msgid "Napier"
+msgstr "Napier"
+
+msgid "Bornholm's working fishing port, a practical stop with full services."
+msgstr "Bornholms travle fiskerihavn, et praktisk stop med alle faciliteter."
+
+msgctxt "place"
+msgid "Nexø"
+msgstr "Nexø"
+
+msgid "A Victorian stone harbour town where little blue penguins come ashore at dusk."
+msgstr "En victoriansk havneby af sten, hvor små blå pingviner kommer i land ved solnedgang."
+
+msgctxt "place"
+msgid "Ōamaru"
+msgstr "Ōamaru"
+
+msgid "Friendly island harbour on Omø, with a small village and beaches a bike ride away."
+msgstr "Venlig ø-havn på Omø med en lille landsby og strande, der er en cykeltur væk."
+
+msgctxt "place"
+msgid "Omø"
+msgstr "Omø"
+
+msgid "The Bay of Islands Marina, New Zealand's favourite landfall for yachts arriving from the tropics."
+msgstr "The Bay of Islands Marina, New Zealands foretrukne landfald for lystbåde, der kommer fra troperne."
+
+msgctxt "place"
+msgid "Opua"
+msgstr "Opua"
+
+msgid "Fishing and marina harbour on Læsø's north coast, known for its langoustines."
+msgstr "Fiskeri- og lystbådehavn på Læsøs nordkyst, kendt for sine jomfruhummere."
+
+msgctxt "place"
+msgid "Østerby"
+msgstr "Østerby"
+
+msgid "A lively seaside village whose wharf sends ferries and tour boats across the Bay of Islands."
+msgstr "En livlig badeby, hvis bro sender færger og turbåde ud over Bay of Islands."
+
+msgctxt "place"
+msgid "Paihia"
+msgstr "Paihia"
+
+msgid "A small port town at the head of Queen Charlotte Sound, where the inter-island ferries berth."
+msgstr "En lille havneby inderst i Queen Charlotte Sound, hvor færgerne mellem øerne lægger til."
+
+msgctxt "place"
+msgid "Picton"
+msgstr "Picton"
+
+msgid "A hilly historic port halfway up Otago Harbour, near the albatross colony."
+msgstr "En bakket, historisk havneby midtvejs op ad Otago Harbour, nær albatroskolonien."
+
+msgctxt "place"
+msgid "Port Chalmers"
+msgstr "Port Chalmers"
+
+msgid "A tiny wharf settlement deep inside Great Barrier Island's best all-weather harbour."
+msgstr "Et lille bryggeleje dybt inde i Great Barrier Islands bedste havn i alt slags vejr."
+
+msgctxt "place"
+msgid "Port Fitzroy"
+msgstr "Port Fitzroy"
+
+msgid "A small tidal port and marina, the gateway to Abel Tasman for boaties."
+msgstr "En lille tidevandshavn og lystbådehavn, sejlernes port til Abel Tasman."
+
+msgctxt "place"
+msgid "Port Motueka"
+msgstr "Port Motueka"
+
+msgid "Charming fishing village south of Helsingborg, with low houses and smoked fish."
+msgstr "Charmerende fiskerleje syd for Helsingborg med lave huse og røget fisk."
+
+msgid "Quiet island village near Kosterhavet national park, run by local volunteers."
+msgstr "Stille ølandsby nær nationalparken Kosterhavet, drevet af frivillige fra egnen."
+
+msgctxt "place"
+msgid "Resö"
+msgstr "Resö"
+
+msgid "Small working fishing harbour on Gotland's southeast coast."
+msgstr "Lille fiskerihavn på Gotlands sydøstkyst."
+
+msgctxt "place"
+msgid "Ronehamn"
+msgstr "Ronehamn"
+
+msgid "Outermost island of the northern Gothenburg archipelago, quiet and wind-swept."
+msgstr "Yderste ø i den nordlige Göteborgs skærgård, stille og vindblæst."
+
+msgid "Popular harbour at the mouth of Isefjord, with fishing sheds and sandy heath nearby."
+msgstr "Populær havn ved Isefjordens munding med fiskerskure og sandet hede i nærheden."
+
+msgctxt "place"
+msgid "Rørvig"
+msgstr "Rørvig"
+
+msgid "Large Øresund marina north of Copenhagen, near Karen Blixen's old home."
+msgstr "Stor lystbådehavn ved Øresund nord for København, nær Karen Blixens gamle hjem."
+
+msgctxt "place"
+msgid "Rungsted"
+msgstr "Rungsted"
+
+msgid "New Zealand's first colonial capital, with a historic waterfront strand and a busy little wharf."
+msgstr "New Zealands første koloni-hovedstad, med en historisk strandpromenade og en travl lille bro."
+
+msgctxt "place"
+msgid "Russell"
+msgstr "Russell"
+
+msgid "Old town harbour in north Jutland, with cobbled lanes and fishing boats."
+msgstr "Gammel byhavn i Nordjylland med brostensgader og fiskekuttere."
+
+msgctxt "place"
+msgid "Sæby"
+msgstr "Sæby"
+
+msgid "Sailing capital of the outer archipelago, home of the KSSS yacht club."
+msgstr "Sejlsportens hovedstad i den ydre skærgård, hjemsted for KSSS-sejlklubben."
+
+msgctxt "place"
+msgid "Sandhamn"
+msgstr "Sandhamn"
+
+msgid "Small Öland harbour beside a towering Dutch-style windmill."
+msgstr "Lille havn på Öland ved siden af en tårnhøj hollandsk mølle."
+
+msgctxt "place"
+msgid "Sandvik"
+msgstr "Sandvik"
+
+msgid "A tidy marina on the eastern shore of Wellington Harbour."
+msgstr "En velholdt lystbådehavn på østsiden af Wellington Harbour."
+
+msgctxt "place"
+msgid "Seaview"
+msgstr "Seaview"
+
+msgid "Ferry and fishing harbour on the long, quiet island of Sejerø."
+msgstr "Færge- og fiskerihavn på den lange, stille ø Sejerø."
+
+msgctxt "place"
+msgid "Sejerø"
+msgstr "Sejerø"
+
+msgid "Cobbled Österlen town with hollyhocks, smokehouses and an all-year harbour."
+msgstr "Brostensby i Österlen med stokroser, røgerier og en havn, der er åben hele året."
+
+msgctxt "place"
+msgid "Simrishamn"
+msgstr "Simrishamn"
+
+msgid "Old market town harbour at the mouth of the narrow Skælskør Fjord."
+msgstr "Havn i en gammel købstad ved mundingen af den smalle Skælskør Fjord."
+
+msgctxt "place"
+msgid "Skælskør"
+msgstr "Skælskør"
+
+msgid "Medieval herring town near the Falsterbo dunes, rich in migrating birds."
+msgstr "Middelalderlig sildeby nær Falsterbo-klitterne, rig på trækfugle."
+
+msgctxt "place"
+msgid "Skanör"
+msgstr "Skanör"
+
+msgid "Lively Tjörn harbour beside the watercolour museum and smooth bathing rocks."
+msgstr "Livlig havn på Tjörn ved siden af akvarelmuseet og glatte badeklipper."
+
+msgctxt "place"
+msgid "Skärhamn"
+msgstr "Skärhamn"
+
+msgid "Tiny island harbour near Svendborg, known for its homemade ice cream and calm summer evenings."
+msgstr "Lille ø-havn nær Svendborg, kendt for hjemmelavet is og rolige sommeraftener."
+
+msgctxt "place"
+msgid "Skarø"
+msgstr "Skarø"
+
+msgid "Old fishing village harbour on the Øresund coast just north of Copenhagen."
+msgstr "Gammel fiskerlejehavn på Øresundskysten lige nord for København."
+
+msgctxt "place"
+msgid "Skovshoved"
+msgstr "Skovshoved"
+
+msgid "Well-sheltered east Gotland harbour behind a chain of low islands."
+msgstr "Velbeskyttet havn på det østlige Gotland, bag en kæde af lave holme."
+
+msgctxt "place"
+msgid "Slite"
+msgstr "Slite"
+
+msgid "Famous wooden boardwalk lined with colourful boathouses and shrimp boats."
+msgstr "Berømt træbrygge med farvestrålende bådhuse og rejekuttere."
+
+msgctxt "place"
+msgid "Smögen"
+msgstr "Smögen"
+
+msgid "Working harbour at the north tip of Ærø, with a shipyard, ferry and fishing boats."
+msgstr "Arbejdshavn yderst på Ærøs nordspids med værft, færge og fiskekuttere."
+
+msgctxt "place"
+msgid "Søby"
+msgstr "Søby"
+
+msgid "Ferry and fishing harbour on Langeland's east coast, facing the Great Belt and Lolland."
+msgstr "Færge- og fiskerihavn på Langelands østkyst, med udsigt til Storebælt og Lolland."
+
+msgctxt "place"
+msgid "Spodsbjerg"
+msgstr "Spodsbjerg"
+
+msgid "Small harbour on flat Strynø, surrounded by islets, reed beds and wading birds."
+msgstr "Lille havn på flade Strynø, omgivet af holme, rørskov og vadefugle."
+
+msgctxt "place"
+msgid "Strynø"
+msgstr "Strynø"
+
+msgid "Tidy old harbour town on Bornholm's east coast, built of granite and red tiles."
+msgstr "Velholdt gammel havneby på Bornholms østkyst, bygget af granit og røde tegl."
+
+msgctxt "place"
+msgid "Svaneke"
+msgstr "Svaneke"
+
+msgid "A tiny limestone-walled harbour on Golden Bay near Pōhara."
+msgstr "En lille havn med kalkstensmoler i Golden Bay nær Pōhara."
+
+msgctxt "place"
+msgid "Tarakohe"
+msgstr "Tarakohe"
+
+msgid "A big, well-serviced marina beside the harbour bridge, with Mauao on the skyline."
+msgstr "En stor, veludstyret lystbådehavn ved havnebroen, med Mauao på horisonten."
+
+msgctxt "place"
+msgid "Tauranga"
+msgstr "Tauranga"
+
+msgid "Marina at Gambøt on Thurø, beside the sheltered water of Thurø Bund."
+msgstr "Lystbådehavn ved Gambøt på Thurø, ved det beskyttede farvand i Thurø Bund."
+
+msgctxt "place"
+msgid "Thurø"
+msgstr "Thurø"
+
+msgid "Old skipper village on Tåsinge with half-timbered houses, near Valdemars Slot."
+msgstr "Gammelt skipperleje på Tåsinge med bindingsværkshuse, tæt på Valdemars Slot."
+
+msgctxt "place"
+msgid "Troense"
+msgstr "Troense"
+
+msgid "Wooden town with a stream running between red houses, near the sea."
+msgstr "Træby med en å, der løber mellem røde huse, tæt på havet."
+
+msgctxt "place"
+msgid "Trosa"
+msgstr "Trosa"
+
+msgid "Car-free island harbour, a short walk from Tunø By and its lighthouse church."
+msgstr "Bilfri ø-havn, kun en kort gåtur fra Tunø By og dens fyrtårnskirke."
+
+msgctxt "place"
+msgid "Tunø"
+msgstr "Tunø"
+
+msgid "A snug marina harbour and gateway to the Poor Knights Islands dive reserve."
+msgstr "En lun lystbådehavn og porten til dykkerreservatet ved Poor Knights Islands."
+
+msgctxt "place"
+msgid "Tutukākā"
+msgstr "Tutukākā"
+
+msgid "Southern archipelago island with old iron mines, a windmill and a fine bakery."
+msgstr "Ø i den sydlige skærgård med gamle jernminer, en mølle og et fint bageri."
+
+msgctxt "place"
+msgid "Utö"
+msgstr "Utö"
+
+msgid "Fishing harbour just east of Karlshamn, gateway to the Blekinge archipelago."
+msgstr "Fiskerihavn lige øst for Karlshamn, porten til Blekinges skærgård."
+
+msgctxt "place"
+msgid "Vägga"
+msgstr "Vägga"
+
+msgid "Summer town of narrow lanes, gateway to a vast skerry archipelago."
+msgstr "Sommerby med smalle gader, porten til en vidtstrakt skærgård."
+
+msgctxt "place"
+msgid "Västervik"
+msgstr "Västervik"
+
+msgid "Gateway to the archipelago, its fortress guarding the old channel."
+msgstr "Porten til skærgården, med en fæstning, der vogter det gamle sejlløb."
+
+msgctxt "place"
+msgid "Vaxholm"
+msgstr "Vaxholm"
+
+msgid "Ferry and fishing harbour on Læsø's west coast, with salt-meadow walks nearby."
+msgstr "Færge- og fiskerihavn på Læsøs vestkyst med gåture over strandenge i nærheden."
+
+msgctxt "place"
+msgid "Vesterø Havn"
+msgstr "Vesterø Havn"
+
+msgid "Car-free southernmost island of the Gothenburg archipelago, with smooth granite and a snug harbour."
+msgstr "Bilfri, sydligste ø i Göteborgs skærgård med glat granit og en lun havn."
+
+msgctxt "place"
+msgid "Vrångö"
+msgstr "Vrångö"
+
+msgid "A large, sheltered marina in a bay just around the corner from Picton."
+msgstr "En stor, beskyttet lystbådehavn i en bugt lige om hjørnet fra Picton."
+
+msgctxt "place"
+msgid "Waikawa"
+msgstr "Waikawa"
+
+msgid "A sunny river-mouth town looking out to Moutohorā and steaming Whakaari."
+msgstr "En solrig by ved en flodmunding med udsigt til Moutohorā og den dampende Whakaari."
+
+msgctxt "place"
+msgid "Whakatāne"
+msgstr "Whakatāne"
+
+msgid "A deep, cliff-ringed harbour and big-game fishing village beneath volcanic domes."
+msgstr "En dyb, klippeomkranset havn og storfiskerleje under vulkanske kupler."
+
+msgctxt "place"
+msgid "Whangaroa"
+msgstr "Whangaroa"
+
+msgid "A cheerful Mercury Bay town with a marina tucked inside the river mouth."
+msgstr "En munter by ved Mercury Bay med en lystbådehavn inde i flodmundingen."
+
+msgctxt "place"
+msgid "Whitianga"
+msgstr "Whitianga"
+
+msgid "BOHUSLÄN"
+msgstr "BOHUSLÄN"
+
+msgid "Bohuslän"
+msgstr "Bohuslän"
+
+msgid "Gullmarn"
+msgstr "Gullmarn"
+
+msgid "Orust"
+msgstr "Orust"
+
+msgid "Bay of Islands"
+msgstr "Bay of Islands"
+
+msgid "Bay of Plenty"
+msgstr "Bay of Plenty"
+
+msgid "Cook Strait"
+msgstr "Cookstrædet"
+
+msgid "Hauraki Gulf"
+msgstr "Haurakibugten"
+
+msgid "Hawke Bay"
+msgstr "Hawke Bay"
+
+msgid "Marlborough Sounds"
+msgstr "Marlborough Sounds"
+
+msgid "NORTH ISLAND"
+msgstr "NORDØEN"
+
+msgid "New Zealand: North Island and Cook Strait"
+msgstr "New Zealand: Nordøen og Cookstrædet"
+
+msgid "Northland"
+msgstr "Northland"
+
+msgid "Tasman Bay"
+msgstr "Tasman Bay"
+
+msgid "Canterbury Bight"
+msgstr "Canterbury Bight"
+
+msgid "Fiordland"
+msgstr "Fiordland"
+
+msgid "Foveaux Strait"
+msgstr "Foveauxstrædet"
+
+msgid "New Zealand: South Island"
+msgstr "New Zealand: Sydøen"
+
+msgid "Pegasus Bay"
+msgstr "Pegasus Bay"
+
+msgid "SOUTH ISLAND"
+msgstr "SYDØEN"
+
+msgid "Stewart Island"
+msgstr "Stewart Island"
+
+msgid "Gotland"
+msgstr "Gotland"
+
+msgid "St. Anna and Gryt"
+msgstr "St. Anna og Gryt"
+
+msgid "Stockholm Archipelago"
+msgstr "Stockholms skærgård"
+
+msgid "SÖDERMANLAND"
+msgstr "SØDERMANLAND"
+
+msgid "The Swedish east coast"
+msgstr "Den svenske østkyst"
+
+msgid "Åland Sea"
+msgstr "Ålandshavet"
+
+msgid "ÖSTERGÖTLAND"
+msgstr "ØSTERGÖTLAND"
+
+msgid "Guest harbour"
+msgstr "Gæstehavn"
+
+msgid "Harbour"
+msgstr "Havn"
+
+msgid "Fishing village"
+msgstr "Fiskerleje"
+
+msgid "Natural anchorage"
+msgstr "Naturlig ankerplads"
+
+msgid "Detailed Cruising Region"
+msgstr "Detaljeret sejlområde"
+
+msgid "Click to plan a course to %s, anchoring here on the way."
+msgstr "Klik for at lægge en kurs til %s med ankring her undervejs."
+
+msgid "Click to sail the chart there."
+msgstr "Klik for at flytte søkortet derhen."
+
+msgid "%s: course planned to %s, anchoring here on the way. Apply the course to keep it."
+msgstr "%s: kurs lagt til %s med ankring her undervejs. Anvend kursen for at beholde den."
+
+msgid "An area with more local harbours, anchorages and coastal destinations to explore."
+msgstr "Et område med flere lokale havne, ankerpladser og kystmål at udforske."
