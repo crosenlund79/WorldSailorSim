@@ -11798,3 +11798,15 @@ msgstr "%s: kurs lagt til %s med ankring her undervejs. Anvend kursen for at beh
 
 msgid "An area with more local harbours, anchorages and coastal destinations to explore."
 msgstr "Et område med flere lokale havne, ankerpladser og kystmål at udforske."
+
+msgid "Your name, Captain (optional)"
+msgstr "Dit navn, kaptajn (valgfrit)"
+
+msgid "Captain's Tools (F10)"
+msgstr "Kaptajnens værktøjer (F10)"
+
+msgid "Captain's name"
+msgstr "Kaptajnens navn"
+
+msgid "Not given"
+msgstr "Ikke angivet"

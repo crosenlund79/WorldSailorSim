@@ -14,6 +14,8 @@ signal difficulty_requested
 signal handbook_requested
 ## Development builds only (DevTools): open the developer test panel.
 signal dev_tests_requested
+## Regions and Harbours 2026: the Captain's name was changed here.
+signal captain_name_entered(captain_name: String)
 
 @onready var _resume: Button = %ResumeButton
 
@@ -40,12 +42,37 @@ func _ready() -> void:
 	difficulty.add_sibling(handbook)
 	# Developer tests: added only where the developer tools are enabled, so
 	# a player's build has no such button at all.
+	_add_captain_name()
 	if DevTools.is_enabled():
 		var dev := Button.new()
 		dev.name = "DevTestsButton"
-		dev.text = "Developer tests (F10)"
+		dev.text = "Developer tests (F10)" if DevTools.is_editor_build() else "Captain's Tools (F10)"
 		dev.pressed.connect(dev_tests_requested.emit)
 		%MainMenuButton.get_parent().add_child(dev)
+
+
+## The Captain's name, editable (Regions and Harbours 2026): kept with this
+## game; applied when confirmed or when the field is left.
+func _add_captain_name() -> void:
+	if not GameSession.is_active():
+		return
+	var row := HBoxContainer.new()
+	row.name = "CaptainNameRow"
+	row.add_theme_constant_override(&"separation", 10)
+	var label := Label.new()
+	label.text = "Captain's name"
+	row.add_child(label)
+	var field := LineEdit.new()
+	field.name = "CaptainName"
+	field.text = GameSession.get_captain_name()
+	field.placeholder_text = "Not given"
+	field.max_length = SessionState.CAPTAIN_NAME_MAX
+	field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	field.text_submitted.connect(func(text: String) -> void: captain_name_entered.emit(text))
+	field.focus_exited.connect(func() -> void: captain_name_entered.emit(field.text))
+	row.add_child(field)
+	%MainMenuButton.get_parent().add_child(row)
+	%MainMenuButton.get_parent().move_child(row, %MainMenuButton.get_index())
 
 
 func focus_default() -> void:

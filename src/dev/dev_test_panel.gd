@@ -29,9 +29,14 @@ func _ready() -> void:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 10)
 	panel.add_child(box)
-	_add_label(box, "DEVELOPER TEST TOOLS", &"HeaderLabel")
-	_add_label(box, "Not part of the game: shown only when running from the Godot editor (debug). Everything here acts " +
-		"on the real simulation. Test weather is never saved and is removed on New Game, Load and Main menu.", &"MutedLabel")
+	if DevTools.is_editor_build():
+		_add_label(box, "DEVELOPER TEST TOOLS", &"HeaderLabel")
+		_add_label(box, "Not part of the game: shown only when running from the Godot editor (debug), or for Captain Haddock. " +
+			"Everything here acts on the real simulation. Test weather is never saved and is removed on New Game, Load and Main menu.", &"MutedLabel")
+	else:
+		# Regions and Harbours 2026: opened by Captain Haddock's name, in any build.
+		_add_label(box, "Captain's Tools", &"HeaderLabel")
+		_add_label(box, "Shortcuts for testing, acting on the real game. Test weather is never saved.", &"MutedLabel")
 	_status = _add_label(box, "", &"")
 	_status.name = "Status"
 	_status.custom_minimum_size = Vector2(920, 0)

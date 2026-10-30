@@ -6,6 +6,8 @@ extends Node
 ## changes with signals. It never loads scenes or touches the UI, so the state
 ## stays valid whichever scene (cabin, deck, map, menu) is currently visible.
 
+## The Captain's name changed (Regions and Harbours 2026).
+signal captain_name_changed(captain_name: String)
 signal session_started
 signal session_ended
 ## Emitted after a loaded state has replaced the current one.
@@ -163,6 +165,24 @@ func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND,
 		_settled = false
 		anchor_life_changed.emit(false)
 	session_started.emit()
+
+
+## The Captain's own name ("" when not given; Regions and Harbours 2026).
+func get_captain_name() -> String:
+	return _state.captain_name if _state else ""
+
+
+## Names the Captain (trimmed; "" clears it). Kept with the game, never a
+## global setting: another save has its own.
+func set_captain_name(captain_name: String) -> void:
+	if _state == null:
+		return
+	var cleaned := SessionState.clean_captain_name(captain_name)
+	if cleaned == _state.captain_name:
+		return
+	_state.captain_name = cleaned
+	_has_unsaved_changes = true
+	captain_name_changed.emit(cleaned)
 
 
 func end_session() -> void:

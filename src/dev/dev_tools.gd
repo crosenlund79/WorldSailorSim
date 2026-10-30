@@ -10,9 +10,16 @@ extends RefCounted
 ## warnings and damage exactly like natural weather), and condition, stores
 ## and time go through GameSession and Simulation.
 ##
-## Enabled only when running the project from the Godot editor binary in a
-## debug build (the editor, or `godot --path .`). Exported games never show
-## it. Start with `-- --no-dev-tools` to hide it while testing like a player.
+## Enabled when running the project from the Godot editor binary in a debug
+## build (the editor, or `godot --path .`), and (Regions and Harbours 2026)
+## in any build, an exported game included, while the game in play belongs
+## to Captain Haddock: a Captain's name that is exactly "Haddock", ignoring
+## case and the spaces around it ("Captain Haddock", "Haddock123" and
+## "Haddocks" are not). The name is the game's own (SessionState
+## .captain_name, given at New Game or changed from the pause menu), so it
+## follows each save: loading another game or renaming the Captain decides
+## again. One rule, here; everything asks is_enabled(). Start with
+## `-- --no-dev-tools` to hide it while testing like a player.
 ##
 ## Test weather is not part of the game state: it is never saved, and it is
 ## removed when a game starts, is loaded or ends, so it cannot leak into a
@@ -32,6 +39,8 @@ const SCENARIO_NAMES := {
 ## Condition presets (percent).
 const CONDITION_PRESETS: Array[float] = [100.0, 75.0, 40.0, 15.0, 1.0]
 
+## The Captain's name that opens the tools in any build (lower case).
+const CAPTAIN_TOOLS_NAME := "haddock"
 ## Tests switch the tools on or off regardless of the build (null = auto).
 static var force_enabled: Variant = null
 ## The active test weather (SCENARIO_*), or SCENARIO_NONE.
@@ -41,7 +50,24 @@ static var scenario: StringName = SCENARIO_NONE
 static func is_enabled() -> bool:
 	if force_enabled != null:
 		return bool(force_enabled)
-	return OS.is_debug_build() and OS.has_feature("editor") and not "--no-dev-tools" in OS.get_cmdline_user_args()
+	if "--no-dev-tools" in OS.get_cmdline_user_args():
+		return false
+	return is_editor_build() or is_captain_unlocked()
+
+
+## A debug run from the Godot editor binary (the developers' own access).
+static func is_editor_build() -> bool:
+	return OS.is_debug_build() and OS.has_feature("editor")
+
+
+## The Captain's Tools: whether `captain_name` opens them ("Haddock", any case, trimmed).
+static func captain_unlocks(captain_name: String) -> bool:
+	return captain_name.strip_edges().to_lower() == CAPTAIN_TOOLS_NAME
+
+
+## True while the game in play is Captain Haddock's.
+static func is_captain_unlocked() -> bool:
+	return GameSession.is_active() and captain_unlocks(GameSession.get_captain_name())
 
 
 static func is_scenario_active() -> bool:

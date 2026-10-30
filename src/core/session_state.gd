@@ -143,6 +143,11 @@ var instruments := InstrumentState.new()
 var fuel := {}
 var ledger := CareerLedger.new()
 var moored_since := 0.0
+## Regions and Harbours 2026: the Captain's own name, given at New Game or
+## changed from the pause menu ("" = not given). Optional in a save (older
+## saves: ""). Trimmed, at most CAPTAIN_NAME_MAX characters.
+var captain_name := ""
+const CAPTAIN_NAME_MAX := 40
 ## I027: the Captain's choice to windward - motor straight up (fuel) rather
 ## than beat under sail. Optional in a save (false: sail when the wind allows).
 var motor_upwind := false
@@ -283,6 +288,7 @@ func duplicate_state() -> SessionState:
 	copy.fuel = fuel.duplicate()
 	copy.ledger = ledger.duplicate_ledger()
 	copy.moored_since = moored_since
+	copy.captain_name = captain_name
 	copy.motor_upwind = motor_upwind
 	copy.dreams = dreams.duplicate(true)
 	return copy
@@ -383,6 +389,7 @@ func _to_dict() -> Dictionary:
 		"fuel": fuel.duplicate(),
 		"ledger": ledger.to_dict(),
 		"moored_since": moored_since,
+		"captain_name": captain_name,
 		"motor_upwind": motor_upwind,
 		"dreams": dreams.duplicate(true),
 		"navigation": {
@@ -396,6 +403,11 @@ func _to_dict() -> Dictionary:
 ## Validates saved data and builds a complete new state from it. Returns null
 ## (and appends human-readable reasons to `errors`) if anything is missing or
 ## invalid; a partially valid state is never returned.
+## A Captain's name as kept: text only, trimmed, at most CAPTAIN_NAME_MAX characters.
+static func clean_captain_name(value: Variant) -> String:
+	return String(value).strip_edges().left(CAPTAIN_NAME_MAX) if value is String or value is StringName else ""
+
+
 static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	if not data is Dictionary:
 		errors.append("session data is not an object")
@@ -567,6 +579,7 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	var moored: Variant = data.get("moored_since", 0.0)
 	state.moored_since = float(moored) if (moored is int or moored is float) and is_finite(float(moored)) else 0.0
 	state.motor_upwind = data.get("motor_upwind", false) is bool and data.get("motor_upwind", false)
+	state.captain_name = clean_captain_name(data.get("captain_name", ""))
 	state.dreams = dreams_from(data.get("dreams"))
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).

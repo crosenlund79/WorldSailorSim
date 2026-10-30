@@ -511,8 +511,9 @@ func open_new_game_menu() -> void:
 		return
 	var menu := new_game_menu_scene.instantiate() as NewGameMenu
 	# I025: a new game begins without a companion (kind "").
-	menu.start_requested.connect(func(level: StringName) -> void:
+	menu.start_requested.connect(func(level: StringName, captain_name: String) -> void:
 		start_new_game(&"", level)
+		GameSession.set_captain_name(captain_name)
 		play_opening())
 	modals.push(menu)
 
@@ -1842,6 +1843,7 @@ func open_pause_menu() -> void:
 	menu.dev_tests_requested.connect(func() -> void:
 		modals.clear()
 		toggle_dev_tests())
+	menu.captain_name_entered.connect(GameSession.set_captain_name)
 	modals.push(menu)
 
 
