@@ -260,11 +260,89 @@ checklist below).
 
 ## Tests
 
-FILLED AFTER THE REGRESSION.
+All runs were on Linux, in a container without a GPU.
+
+| Check | Result |
+|---|---|
+| Full headless regression (96 suites, three parallel shards; shards 1 and 2 repeated on the final code) | **5,932 passed, 12 failed** in the shards. 4 then passed: the 2 pause-menu checks after their fix (209 passed, 0 failed with the related suites) and the 2 load effects run alone. **8 remain, none from this work** (below) |
+| `test_cruising_regions` (new): registry, texts, membership, destinations, charts, voyages, looks, the chart's marks, hint and anchorage planning | 59 passed, 0 failed |
+| `test_captain_tools` (new): the rule's truth table, the name in the save, an older save, rename | 16 passed, 0 failed |
+| `test_harbours`: every new harbour has an approach and a route to its hub | 34 passed, 0 failed |
+| `test_routing`: **all 46,056 European harbour pairs** and the 70 international harbours from Copenhagen | passed (the pairs took 31.8 min, up from about 12, as the European harbours grew from about 180 to about 280) |
+| Exported Linux release build, `tests/haddock_probe.tscn` | **20 of 20** (twice: after the feature and after the pause-menu fix) |
+| `tools/qa/check_destinations.gd` (every destination against the game's charts) | 182 of 182 |
+| Content / localisation / GDScript guides / links | 0 FAIL / 3,593 messages, 0 errors / 392 scripts reviewed / 0 broken |
+
+**The 8 regression failures, all accounted for:**
+- **3 in `test_cozy_patch`** (a pet's reactions when petted): they also fail on
+  the starting commit `ef6aed4`, run alone. They come from the earlier
+  playtest fixes (finding 08, pet boarding), not this update, and remain open.
+- **5 in `test_navigation_views`, `test_settings_and_audio` and
+  `test_chart_and_pause`** (wind arrows, the wind overlay switch, audio buses):
+  - they fail only when `test_route_wrap` runs before them, as it did in the
+    shard;
+  - the same sequence on `ef6aed4` gives the same 5 failures;
+  - run alone or in the runner's normal order, they pass (159 passed, 0
+    failed).
+
+  This is an order dependence between suites, not a defect of this update.
+
+**Found and fixed by the regression:**
+- **The pause menu.** With the Captain's name row it was 18 px too tall at
+  1280×720 with a 130 % interface (`test_steady_hands`). Its middle rows now
+  sit in the project's `FitScroll`; at normal sizes nothing scrolls.
+- **Two existing checks** counted harbours by fixed lists. Each now adds the
+  cruising regions' harbours by rule:
+  - the boatyard list: guest harbours and fishing villages without listed
+    repairs;
+  - the catalogue size: 239 plus the regions' harbours.
+- **Harbour looks.** Every new harbour now has a look in the looks table.
+- **Two place names.** Råå and Rörö now have their Danish catalogue entries.
+
+**Load effects, not failures:** a frame-budget check (`test_anchorage_overlay`,
+3.2 ms against 3 ms) and an audio level check (`test_soundtrack`) missed
+under the three parallel shards. They pass when run alone.
+
+**Not run:**
+- the full rendered regression;
+- a same-session benchmark. Nothing per frame changed except the chart's
+  marks (a few shapes, only in view and only zoomed out) and the anchorage
+  markers (only those in view).
 
 ## Measured time
 
-FILLED AT THE END.
+Every mark is machine-recorded (ISO time and CLOCK_MONOTONIC, one boot), in
+[regions_haddock_timing.jsonl](regions_haddock_timing.jsonl). Where two stages
+were closed by one mark, the boundary between them is the commit that ended
+the first (its time is in Git). Nothing is estimated.
+
+- **Start:** 2026-10-30 07:49:01 UTC, at `ef6aed4`.
+- **To the end of validation:** **141 min 20 s** (07:49:01 to 10:10:20).
+  Commit and handover are the last marks in the record.
+
+| Stage | Measured | Window |
+|---|---|---|
+| Preflight and backup | 0 min 18 s | 07:49:01–07:49:19 |
+| Research (main thread: audit and design) | 4 min 31 s | 07:49:19–07:53:50 |
+| Navigation (Swedish and New Zealand charts, world-level regions) | 17 min 15 s | 07:53:50 to commit `c0a04a9` (08:11:05) |
+| Data import and regional looks (interleaved, not separable) | 9 min 50 s | 08:11:05 to commit `bbe0d9c` (08:20:55) |
+| Chart presentation | 15 min 31 s | 08:20:55–08:36:26 (`170f84a`) |
+| Captain Haddock (including the Linux export) | 15 min 44 s | 08:36:26–08:52:10 (`3b42e2a`) |
+| Validation (regression, fixes, guides, docs, screenshots) | 78 min 10 s | 08:52:10–10:10:20 |
+| Commit and handover | in the record | the last marks |
+
+**Inside validation:**
+- **Waiting on the regression:** about 40 min. The every-pair routing check
+  alone took 31.8 min.
+- **One lost run:** about 30 min. The third shard's process was reaped by the
+  container at 08:53, unnoticed until 09:23, and was then run again.
+- Other validation work went on in parallel with both.
+
+**Parallel work** overlaps the elapsed time and is not added to it:
+- three research agents for Denmark, Sweden and New Zealand: 18 min 30 s
+  (07:52:34–08:11:04), alongside the navigation work;
+- the Danish translation helper: 1 min 9 s;
+- the GDScript guides helper: 6 min 28 s.
 
 ## The Captain's Windows checklist
 

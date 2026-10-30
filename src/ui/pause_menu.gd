@@ -40,15 +40,23 @@ func _ready() -> void:
 	handbook.custom_minimum_size = difficulty.custom_minimum_size
 	handbook.pressed.connect(handbook_requested.emit)
 	difficulty.add_sibling(handbook)
+	_add_captain_name()
 	# Developer tests: added only where the developer tools are enabled, so
 	# a player's build has no such button at all.
-	_add_captain_name()
 	if DevTools.is_enabled():
 		var dev := Button.new()
 		dev.name = "DevTestsButton"
 		dev.text = "Developer tests (F10)" if DevTools.is_editor_build() else "Captain's Tools (F10)"
 		dev.pressed.connect(dev_tests_requested.emit)
 		%MainMenuButton.get_parent().add_child(dev)
+	# Regions and Harbours 2026: with the Captain's name the menu is a row taller;
+	# on a short screen at a large interface size the middle rows scroll (FitScroll),
+	# the title, Resume and Return to Main Menu always in view.
+	var middle: Array[Control] = []
+	var rows := %MainMenuButton.get_parent() as Control
+	for i in range(%LogButton.get_index(), %MainMenuButton.get_index()):
+		middle.append(rows.get_child(i) as Control)
+	FitScroll.wrap(middle, $Center/Panel)
 
 
 ## The Captain's name, editable (Regions and Harbours 2026): kept with this

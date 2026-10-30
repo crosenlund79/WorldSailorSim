@@ -1053,9 +1053,9 @@
    "note": "I026 A World You Can Touch: quay, storefronts, hours, townsfolk, café; marine electronics; cabin objects, focus frames, winch"
   },
   "src/ui/pause_menu.gd": {
-   "sha": "89ed225ed1e94d46",
+   "sha": "d80e0f9baf74046a",
    "reviewed": "2026-10-30",
-   "note": "Regions and Harbours 2026: Captain's name field (captain_name_entered), Captain's Tools (F10) button text outside the editor"
+   "note": "Middle rows wrapped in FitScroll (the Captain's name row made the menu too tall at 1280x720, 130 %)"
   },
   "src/ui/plotter_view.gd": {
    "sha": "23b8dc6767985fda",

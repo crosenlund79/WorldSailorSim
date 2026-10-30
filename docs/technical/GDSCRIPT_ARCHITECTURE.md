@@ -2635,11 +2635,11 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 
 ### `src/ui/pause_menu.gd`
 
-- **Role:** `class_name PauseMenu`, extends `ModalPanel`; in-game pause menu that only emits intents. I022: `difficulty_requested` signal; a code-built `DifficultyButton` after `SettingsButton`. I022: `HandbookButton` built in code after `DifficultyButton`; signal `handbook_requested`. Regions and Harbours 2026: `_add_captain_name()` (only with an active session) adds `CaptainNameRow` (label + `CaptainName` LineEdit, `max_length = SessionState.CAPTAIN_NAME_MAX`) before `%MainMenuButton`; `text_submitted` and `focus_exited` emit `captain_name_entered(text)`; the dev button reads "Captain's Tools (F10)" unless `DevTools.is_editor_build()`.
-- **Depends on:** `pause_menu.tscn`, `DevTools.is_enabled`/`is_editor_build`, `GameSession.is_active`/`get_captain_name`, `SessionState.CAPTAIN_NAME_MAX`.
+- **Role:** `class_name PauseMenu`, extends `ModalPanel`; in-game pause menu that only emits intents. I022: `difficulty_requested` signal; a code-built `DifficultyButton` after `SettingsButton`. I022: `HandbookButton` built in code after `DifficultyButton`; signal `handbook_requested`. Regions and Harbours 2026: `_add_captain_name()` (only with an active session) adds `CaptainNameRow` (label + `CaptainName` LineEdit, `max_length = SessionState.CAPTAIN_NAME_MAX`) before `%MainMenuButton`; `text_submitted` and `focus_exited` emit `captain_name_entered(text)`; the dev button reads "Captain's Tools (F10)" unless `DevTools.is_editor_build()`. The rows from `LogButton` to the name row sit in a `FitScroll`, so the title, Resume and Return to Main Menu stay on screen at a 130 % interface on a 720-line screen.
+- **Depends on:** `pause_menu.tscn`, `FitScroll`, `DevTools.is_enabled`/`is_editor_build`, `GameSession.is_active`/`get_captain_name`, `SessionState.CAPTAIN_NAME_MAX`.
 - **Signals:** declares `save_requested`, `log_requested`, `load_requested`, `settings_requested`, `main_menu_requested`, `dev_tests_requested`; App wires them in `open_pause_menu()`. Regions and Harbours 2026: `captain_name_entered(captain_name)` → `GameSession.set_captain_name` (App).
 - **Lifecycle:** instantiated from `pause_menu_scene` by `App.open_pause_menu()` (Esc or `Hud.menu_requested`).
-- **Tests:** `tests/suites/test_gameplay_flow.gd`, `test_upkeep_ui.gd`; opened via `open_pause_menu` in `test_hat.gd`, `test_captains_log.gd`, `test_localization.gd`, `test_well_run_ship.gd` and others.
+- **Tests:** `tests/suites/test_gameplay_flow.gd`, `test_upkeep_ui.gd`, `test_steady_hands.gd` (fits the screen); opened via `open_pause_menu` in `test_hat.gd`, `test_captains_log.gd`, `test_localization.gd`, `test_well_run_ship.gd` and others.
 - **Change risks:** the dev button is added only when DevTools is enabled.
 
 ### `src/ui/plotter_view.gd`
