@@ -16,3 +16,4 @@
 {"event": "regression_end", "iso": "2026-10-30T10:10:20+00:00", "epoch": 1793355020.932, "monotonic_s": 8546.96, "boot": "a6613b62", "note": "96 suites in 3 shards; shard 2 restarted 09:23 after its process was reaped; test_routing all-pairs 31.8 min"}
 {"event": "validation_end", "iso": "2026-10-30T10:10:20+00:00", "epoch": 1793355020.948, "monotonic_s": 8546.97, "boot": "a6613b62", "note": "pause-menu fit fix, affected suites 209/0, exported Haddock probe 20/20 again"}
 {"event": "commit_handover_begin", "iso": "2026-10-30T10:11:11+00:00", "epoch": 1793355071.054, "monotonic_s": 8597.08, "boot": "a6613b62", "note": "final commit, push, remote verification, handover"}
+{"event": "commit_handover_end", "iso": "2026-10-30T10:11:19+00:00", "epoch": 1793355079.146, "monotonic_s": 8605.17, "boot": "a6613b62", "note": "pushed; handover written"}
