@@ -1,0 +1,2 @@
+{"event": "start", "iso": "2026-11-02T02:46:45+00:00", "epoch": 1793587605.700, "monotonic_s": 657.80, "boot": "082580c0", "note": "I028 begins at ed7601a"}
+{"event": "preflight_begin", "iso": "2026-11-02T02:46:45+00:00", "epoch": 1793587605.714, "monotonic_s": 657.81, "boot": "082580c0", "note": ""}
