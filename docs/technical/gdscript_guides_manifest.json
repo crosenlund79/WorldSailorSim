@@ -1388,9 +1388,9 @@
    "note": "I028: passenger policy takes a last look at requests before boarding"
   },
   "tests/career/world_thresholds.gd": {
-   "sha": "673b43da5d0c74e3",
+   "sha": "6b52dfc8f044e92b",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028: runs as a scene (autoloads)"
   },
   "tests/character_sheet_i027.gd": {
    "sha": "ba697b6d0766586e",

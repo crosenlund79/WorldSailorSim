@@ -1,13 +1,17 @@
-extends SceneTree
+extends Node
 ## I028 career verification: the renown it takes to be #1, #10, #50 and #100
 ## in the world's rankings as the world's own history unfolds (WorldChronicle,
 ## the real rules), sampled every 25 game days for --days (default 1200) on
 ## --seeds. The Captain's renown does not change the world's, so a career's
 ## measured renown curve can be placed against these thresholds afterwards
 ## (tools/qa/summarize_i028_careers.py). Writes CSV to --out.
-##   godot --headless --path . -s res://tests/career/world_thresholds.gd -- --out=FILE [--days=1200] [--seeds=1,2,3]
+##   godot --headless --path . res://tests/career/world_thresholds.tscn -- --out=FILE [--days=1200] [--seeds=1,2,3]
 
-func _initialize() -> void:
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	var out := "user://world_thresholds.csv"
 	var days := 1200
 	var seeds: Array[int] = [1, 2, 3]
@@ -34,4 +38,4 @@ func _initialize() -> void:
 	f.store_string("\n".join(rows) + "\n")
 	f.close()
 	print("WORLD THRESHOLDS DONE: ", out)
-	quit()
+	get_tree().quit()

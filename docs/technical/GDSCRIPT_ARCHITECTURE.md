@@ -3172,7 +3172,7 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Role:** extends SceneTree (run with `-s`); I028 career verification. `_initialize()` parses `--out=` (default `user://world_thresholds.csv`), `--days=` (1200), `--seeds=` (1,2,3); per seed a fresh `WorldState` started at 2026-05-01 (`WorldChronicle.advance(world, start, seed)`), then every 25 days `advance` and `WorldChronicle.rankings(world, now, -1000000)` without the Captain → CSV `seed,day,first,tenth,fiftieth,hundredth,people`; prints "WORLD THRESHOLDS DONE" and quits.
 - **Depends on:** `WorldState`, `WorldChronicle` (`advance`, `rankings`, `CAPTAIN`); output read by `tools/qa/summarize_i028_careers.py`.
 - **State:** none; one CSV file.
-- **Lifecycle:** command line only: `godot --headless --path . -s res://tests/career/world_thresholds.gd -- --out=FILE [--days=1200] [--seeds=1,2,3]`.
+- **Lifecycle:** command line only: `godot --headless --path . res://tests/career/world_thresholds.tscn -- --out=FILE [--days=1200] [--seeds=1,2,3]`.
 - **Tests:** —
 - **Change risks:** assumes at least 100 ranked people (`ranks[99]`); the start date must match the game's first day.
 

@@ -2626,7 +2626,7 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvad det gør:** Lader verdens egen historie udfolde sig efter de rigtige regler (`WorldChronicle`) fra spillets første dag, i 1.200 spildage, hvis intet andet er valgt, og på tre frø, og skriver hver 25. dag ryet for sejler nummer ét, ti, halvtreds og hundrede (Kaptajnen udeladt) i en CSV-fil. Kaptajnens ry ændrer ikke verdens, så en karrieres ry kan bagefter sammenlignes med disse tærskler.
 - **Arbejder sammen med:** `WorldState`, `WorldChronicle`; dens fil læses af `tools/qa/summarize_i028_careers.py`.
 - **Holder styr på:** Intet; den skriver én rapportfil.
-- **Hvornår det kører:** Kun når du starter det: `godot --headless --path . -s res://tests/career/world_thresholds.gd -- --out=FIL [--days=1200] [--seeds=1,2,3]`.
+- **Hvornår det kører:** Kun når du starter det: `godot --headless --path . res://tests/career/world_thresholds.tscn -- --out=FIL [--days=1200] [--seeds=1,2,3]`.
 - **Hvis du ændrer det:** Kun rapporten.
 
 ### `tests/screenshots_horizon.gd`

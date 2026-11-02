@@ -2623,7 +2623,7 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **What it does:** Lets the world's own history unfold under the real rules (`WorldChronicle`) from the game's first day, for 1,200 game days unless told otherwise and on three seeds, and every 25 days writes the renown of the first, tenth, fiftieth and hundredth sailor (the Captain left out) to a CSV file. The Captain's renown does not change the world's, so a career's renown can be compared with these thresholds afterwards.
 - **Works with:** `WorldState`, `WorldChronicle`; its file is read by `tools/qa/summarize_i028_careers.py`.
 - **Keeps:** Nothing; it writes one report file.
-- **When it runs:** Only by hand: `godot --headless --path . -s res://tests/career/world_thresholds.gd -- --out=FILE [--days=1200] [--seeds=1,2,3]`.
+- **When it runs:** Only by hand: `godot --headless --path . res://tests/career/world_thresholds.tscn -- --out=FILE [--days=1200] [--seeds=1,2,3]`.
 - **If you change it:** Only the report.
 
 ### `tests/screenshots_horizon.gd`
