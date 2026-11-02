@@ -3885,7 +3885,7 @@ func _board(booking: Dictionary) -> void:
 	booking.boarded_at = _state.game_time
 	var traveller := _state.passages.get_traveller(String(booking.traveller))
 	GuestReactions.on_board(booking, traveller, _state.vessel_id, _state.game_time)
-	_passenger_line(booking, "boarding", true)
+	_passenger_line(booking, "boarding")
 
 
 ## Leaving harbour with passengers (from depart()). "" or why not yet.

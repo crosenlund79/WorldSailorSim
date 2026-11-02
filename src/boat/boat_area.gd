@@ -267,6 +267,10 @@ func _setup_water_life() -> void:
 	surroundings.move_child(life, water.get_index() + 1)
 	life.setup(self)
 	# I027 playtest: a restrained wake while the boat moves (over the water, under the hull).
+	# I028: the passengers aboard, seen (deck and cabin).
+	var passengers := PassengerLayer.new()
+	passengers.setup(self)
+	add_child(passengers)
 	if area_id == SessionState.AREA_EXTERIOR:
 		var wake := BoatWake.new()
 		surroundings.add_child(wake)
@@ -295,6 +299,10 @@ func _setup_anchor_ambience() -> void:
 
 func get_anchor_ambience() -> AnchorAmbience:
 	return get_node_or_null(^"AnchorAmbience") as AnchorAmbience
+
+
+func get_passenger_layer() -> PassengerLayer:
+	return get_node_or_null(^"Passengers") as PassengerLayer
 
 
 func get_water_life() -> WaterLife:

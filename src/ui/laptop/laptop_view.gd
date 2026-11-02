@@ -30,9 +30,11 @@ const APP_ACHIEVEMENTS := &"achievements"
 const APP_HISTORY := &"history"
 ## I027 Tier 4: Dreams of the Sea, the Captain's own ambitions (Dreams).
 const APP_DREAMS := &"dreams"
-const APPS: Array[StringName] = [APP_HOME, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_DREAMS, APP_HISTORY]
-const APP_TITLES := {APP_HOME: "Home", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements", APP_DREAMS: "Dreams",
-	APP_HISTORY: "Voyage history"}
+## I028: the passage trade (PassagesApp).
+const APP_PASSAGES := &"passages"
+const APPS: Array[StringName] = [APP_HOME, APP_PASSAGES, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_DREAMS, APP_HISTORY]
+const APP_TITLES := {APP_HOME: "Home", APP_PASSAGES: "Passages", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements",
+	APP_DREAMS: "Dreams", APP_HISTORY: "Voyage history"}
 
 ## The laptop's drawing (scene units = pixels of the view).
 const BODY := Color("#2E3539")
@@ -221,6 +223,8 @@ func show_app(id: StringName) -> void:
 	if _content:
 		_content.queue_free()
 	match id:
+		APP_PASSAGES:
+			_content = PassagesApp.build(self)
 		APP_PUBLICATIONS:
 			_content = _build_publications()
 		APP_ACHIEVEMENTS:

@@ -120,6 +120,19 @@ func _run() -> void:
 			GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"from_boatyard")
 			app._show_current_boat_area()
 	await _idle()
+	if args.has("passages"):
+		# I028: a published passage with guests aboard (they board at once).
+		var dest := StringName(args.passages)
+		GameSession.plan_route_to(dest)
+		var stops := GameSession.passage_candidate_stops()
+		var published := GameSession.publish_passage(([stops[0]] if not stops.is_empty() else []) + [dest], GameSession.get_game_time() + 1800.0)
+		if published.ok:
+			var oid := String(published.offer.id)
+			GameSession.answer_passage_request(GameSession.add_passage_request_for_testing(oid, 0, 1, 2, 5, {"pets": "likes"}), true)
+			GameSession.answer_passage_request(GameSession.add_passage_request_for_testing(oid, 0, 2, 1, 9, {"motivation": "photo"}), true)
+			Simulation.advance(600.0)
+		await _idle()
+		await get_tree().create_timer(3.0).timeout
 	if args.has("sail"):
 		# Under way: a course to the harbour named and away (the deck stays shown).
 		GameSession.plan_route_to(StringName(args.sail))
@@ -132,7 +145,10 @@ func _run() -> void:
 		var xy := String(args.at).split(",")
 		player.position = Vector2(float(xy[0]), float(xy[1]))
 	if args.has("open"):
-		app.call(StringName(args.open))  # e.g. open_action_wheel
+		if String(args.open).begins_with("laptop:"):
+			app.open_laptop(StringName(String(args.open).substr(7)))  # e.g. laptop:passages
+		else:
+			app.call(StringName(args.open))  # e.g. open_action_wheel
 		await get_tree().create_timer(0.3).timeout
 	if args.has("chart"):
 		await _chart_views()

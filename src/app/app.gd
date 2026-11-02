@@ -289,6 +289,12 @@ func _ready() -> void:
 	hud.save_requested.connect(open_save_menu)
 	hud.instruments_requested.connect(open_instruments)
 	GameSession.notice.connect(notify)
+	# I028: what passengers say, and how a passage ended for each of them.
+	GameSession.passenger_said.connect(func(given: String, text: String) -> void: notify("%s: “%s”" % [given, text]))
+	GameSession.passenger_settled.connect(func(record: Dictionary) -> void:
+		notify(Loc.t("%s went ashore in %s: %s, %s paid%s.") % [record.name, PortCatalog.get_default().get_display_name(StringName(record.disembark)),
+			"★".repeat(int(record.stars)), GameSession.format_money(int(record.paid)),
+			(Loc.t(", tip %s") % GameSession.format_money(int(record.tip))) if int(record.tip) > 0 else ""]))
 	Simulation.weather_warning.connect(_on_weather_warning)
 	Simulation.traffic_alert.connect(_on_traffic_alert)
 	Simulation.vhf_call.connect(_on_vhf_call)
