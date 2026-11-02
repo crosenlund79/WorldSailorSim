@@ -26,6 +26,10 @@ const STAY_DAYS := [3.0, 9.0]
 const LEG_NM := [40.0, 650.0]
 ## A notable traveller publishes something about this often (days).
 const BOOK_EVERY_DAYS := 150.0
+## The world's renown scale (I028 career calibration): the notable travellers'
+## and the population's renown, and what their voyages, books and small
+## accomplishments add, are on the same scale as the Captain's own renown total.
+const RENOWN_SCALE := 4
 ## Attention fades by half in this many days.
 const ATTENTION_HALF_LIFE := 45.0
 
@@ -81,7 +85,8 @@ static func population() -> Dictionary:
 		for i in int(p.get("count", 0)):
 			var id := "p%d" % i
 			_population[id] = {"id": id, "name": "%s %s" % [given[rng.randi() % given.size()], family[rng.randi() % family.size()]],
-				"role": roles[rng.randi() % roles.size()], "renown": rng.randi_range(int(span[0]), int(span[1]))}
+				"role": roles[rng.randi() % roles.size()],
+				"renown": int(lerpf(float(span[0]), float(span[1]), pow(rng.randf(), float(p.get("renown_skew", 1.0)))))}
 	return _population
 
 
@@ -158,7 +163,7 @@ static func _advance_yacht(world: WorldState, yacht_id: String, until: float, se
 			var nm := GeoMath.distance_nm(_port(String(leg.from)).get_geo_position(), _port(String(leg.to)).get_geo_position())
 			var deltas := {}
 			for id: Variant in crew:
-				deltas[String(id)] = 1 + int(nm / 150.0)
+				deltas[String(id)] = 1 + int(nm / 150.0)  # voyages add a little; a life already lived counts most
 			var expedition := String(st.get("expedition", ""))
 			var arrival := {"t": float(leg.arrive), "kind": "arrive", "who": crew, "yacht": yacht_id, "from": String(leg.from), "port": String(leg.to),
 				"nm": roundi(nm), "renown": deltas, "attention": 4 + int(nm / 100.0), "expedition": expedition}
@@ -263,7 +268,7 @@ static func _books(world: WorldState, from_t: float, to_t: float, seed: int) -> 
 		rng.seed = hash("%d|%s|%d|book" % [seed, t.id, floori(to_t / DAY)])
 		var chance := (to_t - from_t) / DAY / BOOK_EVERY_DAYS * (2.0 if t.role in ["writer", "photographer"] else 0.6)
 		if rng.randf() < chance:
-			added.append(world.add_event({"t": from_t + rng.randf() * (to_t - from_t), "kind": "book", "who": [t.id], "renown": {String(t.id): 12},
+			added.append(world.add_event({"t": from_t + rng.randf() * (to_t - from_t), "kind": "book", "who": [t.id], "renown": {String(t.id): 12 * RENOWN_SCALE},
 				"attention": 10, "title_seed": rng.randi() % 1000, "role": t.role}))
 	return added
 
@@ -281,7 +286,7 @@ static func _population_news(world: WorldState, from_t: float, to_t: float, seed
 		if rng.randf() < 0.45:
 			var id := "p%d" % (rng.randi() % count)
 			added.append(world.add_event({"t": from_t + rng.randf() * (to_t - from_t), "kind": "accomplishment", "who": [id],
-				"renown": {id: rng.randi_range(2, 8)}, "attention": 3, "minor": true}))
+				"renown": {id: rng.randi_range(2, 8) * RENOWN_SCALE}, "attention": 3, "minor": true}))
 	return added
 
 
