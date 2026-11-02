@@ -603,7 +603,27 @@ func _build_dreams() -> Control:
 			var button := _action(row, "PursueButton", "Set aside" if status == GameSession.DREAM_PURSUING else "Pursue this dream",
 				_toggle_dream.bind(id, status != GameSession.DREAM_PURSUING))
 			button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_build_letters(page)
 	return page
+
+
+## I028 Tier 4: what passengers left behind - letters, photographs, gifts -
+## and the dreams the Captain helped come true for them.
+func _build_letters(page: VBoxContainer) -> void:
+	var letters := GameSession.get_passenger_letters()
+	var book := GameSession.get_passage_book()
+	if letters.is_empty() and int(book.totals.dreams) == 0:
+		return
+	_heading(page, "Letters and keepsakes")
+	if int(book.totals.dreams) > 0:
+		_text(page, &"PassengerDreams", Loc.n("You have helped %d passenger fulfil a dream.", "You have helped %d passengers fulfil their dreams.",
+			int(book.totals.dreams)) % int(book.totals.dreams), &"MutedLabel")
+	var recent := letters.slice(maxi(letters.size() - 8, 0))
+	recent.reverse()
+	for letter: Dictionary in recent:
+		var kind := {"letter": Loc.t("Letter"), "photo": Loc.t("Photograph"), "gift": Loc.t("Gift")}.get(String(letter.kind), "")
+		_text(page, StringName("Letter_%s" % letter.id), "%s · %s · %s" % [kind, letter.from, Simulation.format_game_time(float(letter.time), false)], &"HeaderLabel")
+		_text(page, StringName("LetterText_%s" % letter.id), String(letter.text))
 
 
 func _dream_status_text(dream: Dictionary, status: StringName, log: CaptainsLog) -> String:

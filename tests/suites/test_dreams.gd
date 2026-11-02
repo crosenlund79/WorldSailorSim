@@ -33,12 +33,13 @@ func run(runner: Node) -> void:
 func _test_catalogue() -> void:
 	var all := Dreams.all()
 	var later := all.filter(func(d: Dictionary) -> bool: return not Dreams.is_active(d))
-	t.check(all.size() == 8 and later.size() == 2, "[dreams] eight dreams, two of them for later (I028): %d, %d" % [all.size(), later.size()])
+	# I028 activated the two dreams that waited for it and added seven more.
+	t.check(all.size() == 15 and later.is_empty(), "[dreams] fifteen dreams, none waiting for a later system any more (I028): %d, %d" % [all.size(), later.size()])
 	GameSession.start_new_session()
 	var fulfilled := all.filter(func(d: Dictionary) -> bool: return GameSession.get_dream_status(StringName(d.id)) == GameSession.DREAM_FULFILLED)
-	t.check(fulfilled.is_empty() and GameSession.get_dream_status(&"travel_book") == GameSession.DREAM_LATER
+	t.check(fulfilled.is_empty() and GameSession.get_dream_status(&"travel_book") == GameSession.DREAM_OPEN
 		and GameSession.get_dream_status(&"caribbean") == GameSession.DREAM_OPEN,
-		"[dreams] a new game: nothing fulfilled, the Caribbean open, the travel book for later")
+		"[dreams] a new game: nothing fulfilled, the Caribbean and the travel book open")
 
 
 func _test_pursuing() -> void:
@@ -48,7 +49,6 @@ func _test_pursuing() -> void:
 	var fourth := GameSession.set_dream_pursued(&"southern_waters", true)
 	t.check(first == ["", "", ""] and fourth != "" and GameSession.get_pursued_dreams().size() == 3,
 		"[dreams] up to three pursued, in any order; a fourth is refused ('%s')" % fourth)
-	t.check(GameSession.set_dream_pursued(&"world_traveller", true) != "", "[dreams] a dream for later cannot be pursued yet")
 	GameSession.set_dream_pursued(&"ocean_crossing", false)
 	t.check(GameSession.set_dream_pursued(&"southern_waters", true) == "" and GameSession.get_dream_status(&"ocean_crossing") == GameSession.DREAM_OPEN,
 		"[dreams] set one aside and another can be pursued")
@@ -141,7 +141,7 @@ func _test_laptop() -> void:
 		var content := laptop.get_content()
 		var cards := content.find_children("Dream_*", "", true, false)
 		var button := content.find_child("Dream_caribbean", true, false).find_child("PursueButton", true, false) as Button
-		t.check(cards.size() == 8 and button != null, "[laptop %s] eight dreams, each with its card" % language)
+		t.check(cards.size() == Dreams.all().size() and button != null, "[laptop %s] every dream with its card (%d)" % [language, cards.size()])
 		if language == &"en" and button:
 			await t.click(button)
 			await t.frames(2)

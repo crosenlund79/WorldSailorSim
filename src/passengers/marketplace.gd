@@ -262,6 +262,7 @@ static func generate_requests(book: PassageBook, offer: Dictionary, now: float, 
 			to = rng.randi_range(from + 1, stops.size() - 1)
 		var tid := book.new_id("t")
 		var traveller := Travellers.make(rng.randi(), tid, room, String(stops[from]))
+		traveller["dream"] = PassengerDreams.assign(rng, offer, from, to)
 		var private: bool = traveller.privacy == "requires"
 		var budget := fare(offer, from, to, int(traveller.size), float(traveller.budget))
 		var asked := fare(offer, from, to, int(traveller.size))

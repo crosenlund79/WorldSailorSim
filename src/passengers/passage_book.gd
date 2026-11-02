@@ -46,6 +46,9 @@ var totals := {"passengers": 0, "bookings": 0, "nights": 0, "fares": 0, "tips": 
 var rivals := {}
 ## Letters, photographs and gifts from passengers: {"id", "time", "from", "kind", "text", "booking"}.
 var letters: Array = []
+## Delighted passengers who recommend the Captain: the next published passage
+## brings that many referred travellers (I028 Tier 4).
+var referrals := 0
 var next_id := 1
 
 
@@ -109,7 +112,7 @@ func duplicate_book() -> PassageBook:
 func to_dict() -> Dictionary:
 	return {"travellers": travellers.duplicate(true), "offers": offers.duplicate(true), "requests": requests.duplicate(true),
 		"bookings": bookings.duplicate(true), "records": records.duplicate(true), "legs": legs.duplicate(true), "totals": totals.duplicate(),
-		"rivals": rivals.duplicate(true), "letters": letters.duplicate(true), "next_id": next_id}
+		"rivals": rivals.duplicate(true), "letters": letters.duplicate(true), "referrals": referrals, "next_id": next_id}
 
 
 ## Lenient: anything malformed is left out, never fatal.
@@ -136,6 +139,8 @@ static func from_dict(data: Variant) -> PassageBook:
 			book.totals[key] = int(value) if value is int or value is float else 0
 	if d.get("rivals") is Dictionary:
 		book.rivals = (d.rivals as Dictionary).duplicate(true)
+	var referred: Variant = d.get("referrals", 0)
+	book.referrals = clampi(int(referred) if referred is int or referred is float else 0, 0, 20)
 	var next: Variant = d.get("next_id", 1)
 	book.next_id = maxi(int(next) if next is int or next is float else 1, 1)
 	return book

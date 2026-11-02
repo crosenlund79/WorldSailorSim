@@ -1370,6 +1370,7 @@ func complete_voyage() -> void:
 	if not awards.is_empty():
 		renown_awarded.emit(awards)
 	_passages_on_arrival(destination, record)  # I028: passengers ashore, the passage on
+	_note_dream_passages(record)  # I028: crossings for Dreams of the Sea
 	_check_dreams()  # I027 Tier 4
 	voyage_arrived.emit(destination.id)
 
@@ -1983,7 +1984,7 @@ func _check_dreams(announce := true) -> Array[StringName]:
 		var id := String(dream.id)
 		if _state.dreams.fulfilled.has(id) or not Dreams.is_active(dream):
 			continue
-		if Dreams.is_met(dream, _state.captains_log, owned):
+		if Dreams.is_met(dream, _state.captains_log, owned, _dream_facts()):
 			_state.dreams.fulfilled[id] = {"time": _state.game_time, "port": String(_state.location_id), "vessel": String(_state.vessel_id)}
 			(_state.dreams.pursuing as Array).erase(id)
 			done.append(StringName(id))
@@ -1994,6 +1995,36 @@ func _check_dreams(announce := true) -> Array[StringName]:
 		_has_unsaved_changes = _has_unsaved_changes or announce
 		dreams_changed.emit()
 	return done
+
+
+## What Dreams needs beyond the log and the fleet (I028): the passage trade,
+## the progress records (passages and events), publications and renown rank.
+func _dream_facts() -> Dictionary:
+	return {"progress": _state.progress, "book": _state.passages, "published": _published_works(), "rank": _renown_rank()}
+
+
+## Tier 5 replaces this with the travel writing's published works.
+func _published_works() -> int:
+	return 0
+
+
+## Tier 6 replaces this with the Captain's place in the rankings (0: unranked).
+func _renown_rank() -> int:
+	return 0
+
+
+## Marks the dream passages a voyage just completed (I028): from one set of
+## sea areas to another in one passage, of at least a distance.
+func _note_dream_passages(record: Dictionary) -> void:
+	var catalog := PortCatalog.get_default()
+	var a := catalog.get_port(StringName(record.get("from", "")))
+	var b := catalog.get_port(StringName(record.get("to", "")))
+	if a == null or b == null:
+		return
+	for dream in Dreams.all():
+		if String(dream.get("kind", "")) == Dreams.KIND_PASSAGE and a.region in (dream.get("from_regions", []) as Array) \
+				and b.region in (dream.get("to_regions", []) as Array) and float(record.get("nm", 0.0)) >= float(dream.get("min_nm", 0.0)):
+			_state.progress.mark(StringName("dreamfact:" + String(dream.id)), _state.game_time)
 
 
 func get_captains_log() -> CaptainsLog:
@@ -3661,6 +3692,15 @@ func publish_passage(stops: Array, depart_after := -1.0, rate := -1.0) -> Dictio
 			var rival: Dictionary = _state.passages.rivals.get(String(item.request.rival), {"won": 0})
 			rival.won = int(rival.get("won", 0)) + 1
 			_state.passages.rivals[String(item.request.rival)] = rival
+	# I028 Tier 4: delighted passengers recommended the Captain.
+	while _state.passages.referrals > 0:
+		_state.passages.referrals -= 1
+		var rid := add_passage_request_for_testing(String(offer.id), 0, (offer.stops as Array).size() - 1, 1,
+			hash("%s|referral|%d" % [offer.id, _state.passages.referrals]), {"reviews": "generous", "referred": true})
+		var referred := _state.passages.get_request(rid)
+		referred.note = Loc.t("recommended by one of your passengers")
+		referred.appear_at = _state.game_time + 1800.0
+		referred.limit = int(float(referred.asked) * 1.25)
 	offer.requests_made = true
 	_has_unsaved_changes = true
 	passages_changed.emit()
@@ -3728,7 +3768,7 @@ func answer_passage_request(request_id: String, accept: bool, ask := -1) -> Dict
 	booking.merge({"id": _state.passages.new_id("b"), "offer": String(offer.id), "request": request_id, "traveller": String(traveller.id),
 		"size": int(request.size), "from": int(request.from), "to": int(request.to), "private": bool(request.private),
 		"status": PassageBook.BOOKING_CONFIRMED, "booked_at": _state.game_time, "satisfaction": GuestReactions.START, "events": [],
-		"legs_sailed": [], "sailed_nm": 0.0, "diversions": []})
+		"legs_sailed": [], "sailed_nm": 0.0, "diversions": [], "dream": (traveller.get("dream", {}) as Dictionary).duplicate(true)})
 	_state.passages.bookings.append(booking)
 	request.status = PassageBook.REQUEST_ACCEPTED
 	request.booking = booking.id
@@ -3935,6 +3975,13 @@ func _passages_on_depart(location: PortData) -> void:
 	if not offer.is_empty():
 		offer.status = PassageBook.STATUS_SAILING
 		offer.departed = offer.get("departed", []) + [_state.game_time]
+	var aboard_now := 0
+	for booking: Dictionary in _state.passages.aboard():
+		aboard_now += int(booking.size)
+	if aboard_now > 0 and aboard_now >= Accommodation.safe_guest_count(_state.vessel_id):
+		var full := _award_once("passengers:full_boat", Loc.t("Full house: every guest place taken"), 20)
+		if not full.is_empty():
+			renown_awarded.emit([full])
 	if not _state.passages.aboard().is_empty():
 		_state.passages.legs.append({"offer": String(offer.get("id", "")), "from": String(location.id), "to": "", "departed": _state.game_time,
 			"arrived": 0.0, "nm": 0.0, "aboard": _state.passages.aboard().map(func(b: Dictionary) -> String: return String(b.id)), "max_hazard": 0})
@@ -3977,6 +4024,8 @@ func _passages_on_arrival(port: PortData, record: Dictionary) -> void:
 		book.legs.back().nm = snappedf(nm, 0.1)
 	var scenic := not (CruisingRegions.get_default().get_destination(port.id).get("scenic", []) as Array).is_empty() \
 		or HarbourLooks.get_default().is_special(port.id)
+	if not book.aboard().is_empty() and float(record.get("ended", now)) - float(record.get("departed", now)) >= PassengerDreams.NIGHT_LEG_S:
+		_state.progress.mark(&"event:night_with_guests", now)  # I028: a night under sail with guests aboard
 	for booking: Dictionary in book.aboard():
 		booking.legs_sailed = booking.get("legs_sailed", []) + [{"from": String(booking.get("leg_from", "")), "to": String(port.id),
 			"departed": float(booking.get("leg_departed", now)), "arrived": now, "nm": snappedf(nm, 0.1)}]
@@ -4009,6 +4058,14 @@ func _settle(booking: Dictionary, traveller: Dictionary, port: PortData) -> void
 	var book := _state.passages
 	var now := _state.game_time
 	booking.nights_aboard = floori((now - float(booking.get("boarded_at", now))) / 86400.0 + 0.3)
+	# I028 Tier 4: their own dream, judged by the legs they sailed aboard.
+	var dream: Dictionary = booking.get("dream", {})
+	if not dream.is_empty() and PassengerDreams.is_met(dream, booking):
+		dream.met = true
+		dream.at = now
+		booking.dream = dream
+		GuestReactions.note(booking, "dream", 12.0, now, true)
+		_passenger_line(booking, "dream_fulfilled", true)
 	var result := Settlement.settle(booking, traveller, now)
 	if int(result.balance) > 0:
 		_money(int(result.balance), "passenger_fare")
@@ -4033,9 +4090,61 @@ func _settle(booking: Dictionary, traveller: Dictionary, port: PortData) -> void
 	book.totals.refunds = int(book.totals.refunds) + int(result.refund)
 	book.totals.stars = int(book.totals.stars) + int(result.stars)
 	book.totals.reviews = int(book.totals.reviews) + 1
-	_passenger_line(booking, "farewell_happy" if int(result.stars) >= 4 else "farewell_unhappy", true)
+	if not dream.is_empty() and dream.get("met", false):
+		book.totals.dreams = int(book.totals.dreams) + 1
+	_passenger_rewards(booking, traveller, result, record)
+	_passenger_line(booking, "farewell_happy" if int(result.stars) >= 4 else "farewell_unhappy", not booking.get("dream", {}).get("met", false))
 	funds_changed.emit(_state.funds)
 	passenger_settled.emit(record.duplicate(true))
+
+
+## What a passage leaves behind (I028 Tier 4): letters, a photograph, now and
+## then a gift, a recommendation, and the achievements of the trade. Each
+## once, kept in the book (and the achievements' own records).
+func _passenger_rewards(booking: Dictionary, traveller: Dictionary, result: Dictionary, record: Dictionary) -> void:
+	var book := _state.passages
+	var now := _state.game_time
+	var name := Travellers.display_name(traveller)
+	var satisfaction := float(booking.get("satisfaction", GuestReactions.START))
+	var dream: Dictionary = booking.get("dream", {})
+	var met: bool = dream.get("met", false)
+	if met or int(result.stars) == 5:
+		var text := Loc.t("Dear Captain, %s I will never forget it. Thank you.") % (PassengerDreams.title(dream).to_lower() + "!" if met else
+			Loc.t("what a voyage it was."))
+		_letter(name, "letter", text, String(booking.id))
+	if (met and dream.kind == PassengerDreams.KIND_SCENIC) or (traveller.get("motivation", "") == "photo" and int(result.stars) >= 4):
+		_letter(name, "photo", Loc.t("A photograph from the voyage, signed on the back: “For the Captain, with thanks.”"), String(booking.id))
+	if traveller.get("reviews", "") == "generous" and satisfaction >= 88.0:
+		var gifts := ["a jar of island honey", "a small framed chart of your passage", "a brass ship's bell for the cabin", "a hand-made pottery mug"]
+		_letter(name, "gift", Loc.t("A gift: %s.") % Loc.t(String(gifts[absi(hash(String(booking.id))) % gifts.size()])), String(booking.id))
+	if satisfaction >= 85.0:
+		book.referrals = mini(book.referrals + 1, 3)
+	var awards: Array = []
+	for award: Dictionary in [_award_once("passengers:first", Loc.t("Welcome aboard: your first passengers"), 20),
+			_award_once("passengers:caution", Loc.t("Safety first, with guests aboard"), 15) if booking.get("excused", false) else {},
+			_award_once("passengers:dream", Loc.t("Someone else's dream came true"), 30) if met else {},
+			_award_once("passengers:dreams_5", Loc.t("Dream maker: five passengers' dreams"), 60) if int(book.totals.dreams) >= 5 else {},
+			_award_once("passengers:five_star_10", Loc.t("Ten five-star reviews"), 50) if _five_star_count() >= 10 else {}]:
+		if not award.is_empty():
+			awards.append(award)
+	if not awards.is_empty():
+		renown_awarded.emit(awards)
+	record["letters"] = book.letters.filter(func(l: Dictionary) -> bool: return l.booking == String(booking.id)).size()
+
+
+func _letter(from: String, kind: String, text: String, booking_id: String) -> void:
+	var book := _state.passages
+	book.letters.append({"id": book.new_id("l"), "time": _state.game_time, "from": from, "kind": kind, "text": text, "booking": booking_id})
+	while book.letters.size() > PassageBook.MAX_LETTERS:
+		book.letters.pop_front()
+
+
+func _five_star_count() -> int:
+	return _state.passages.records.filter(func(r: Dictionary) -> bool: return int(r.stars) == 5).size()
+
+
+func get_passenger_letters() -> Array:
+	return _state.passages.letters.duplicate(true) if _state else []
 
 
 # --- Developer tools (I027 playtest: F10's further rows) ------------------------------

@@ -205,6 +205,11 @@ static func _build_requests(laptop: LaptopView, page: VBoxContainer, book: Passa
 		laptop._text(box, &"Who", Travellers.display_name(traveller), &"HeaderLabel")
 		laptop._text(box, &"About", "%s, %s." % [Travellers.background_text(traveller), Travellers.motivation_text(traveller)])
 		laptop._text(box, &"Traits", Travellers.describe_traits(traveller), &"MutedLabel")
+		var dream: Dictionary = traveller.get("dream", {})
+		if not dream.is_empty():
+			laptop._text(box, &"Dream", Loc.t("A dream: %s %s.") % [traveller.given, PassengerDreams.describe(dream)])
+		if traveller.get("referred", false):
+			laptop._text(box, &"Referred", "Recommended by one of your passengers.", &"MutedLabel")
 		var legs_text := Loc.t("%s to %s") % [_port(offer.stops[int(request.from)]), _port(offer.stops[int(request.to)])]
 		laptop._text(box, &"Trip", Loc.t("%s · %s · offers %s (your price %s)%s") % [legs_text, Loc.n("%d person", "%d people", int(request.size)) % int(request.size),
 			GameSession.format_money(int(request.offered)), GameSession.format_money(int(request.asked)),

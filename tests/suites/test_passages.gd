@@ -21,6 +21,7 @@ func run(runner: Node) -> void:
 	_test_alternate_harbour()
 	_test_save_mid_passage()
 	_test_personalities()
+	_test_dreams_and_rewards()
 	Simulation.auto_advance = true
 	t.use_calm_wind()
 	GameSession.end_session()
@@ -271,3 +272,53 @@ func _test_personalities() -> void:
 	var aboard := GameSession.get_passengers_aboard()
 	var chat := GameSession.chat_with_passenger(String(aboard[0].booking.id)) if not aboard.is_empty() else ""
 	t.check(chat != "", "[people] a word with a passenger aboard: “%s”" % chat)
+
+
+## Tier 4: passengers' dreams judged by the legs they sailed; the Captain's
+## own dreams from the passage trade; letters, keepsakes, achievements.
+func _test_dreams_and_rewards() -> void:
+	var crossing := {"kind": PassengerDreams.KIND_CROSSING, "met": false}
+	var european_leg := {"legs_sailed": [{"from": "lisbon", "to": "funchal", "departed": 0.0, "arrived": 50.0 * HOUR}]}
+	var whole_way := {"legs_sailed": [{"from": "lisbon", "to": "las_palmas", "departed": 0.0, "arrived": 60.0 * HOUR},
+		{"from": "mindelo", "to": "castries", "departed": 70.0 * HOUR, "arrived": 400.0 * HOUR}]}
+	t.check(not PassengerDreams.is_met(crossing, european_leg) and PassengerDreams.is_met(crossing, whole_way),
+		"[dreams] one leg towards the Caribbean is not an Atlantic crossing; Cape Verde to St Lucia aboard is")
+	var night := {"kind": PassengerDreams.KIND_NIGHT}
+	t.check(not PassengerDreams.is_met(night, {"legs_sailed": [{"departed": 0.0, "arrived": 4.0 * HOUR, "to": "x", "from": "y"}]})
+		and PassengerDreams.is_met(night, {"legs_sailed": [{"departed": 0.0, "arrived": 20.0 * HOUR, "to": "x", "from": "y"}]}),
+		"[dreams] a first night at sea needs a leg sailed through the night")
+	var reach := {"kind": PassengerDreams.KIND_REACH, "port": "aeroskobing"}
+	t.check(PassengerDreams.is_met(reach, {"disembark": "aeroskobing", "legs_sailed": [{"from": "svendborg", "to": "aeroskobing", "departed": 0.0, "arrived": 3.0 * HOUR}]})
+		and not PassengerDreams.is_met(reach, {"disembark": "marstal", "legs_sailed": [{"from": "svendborg", "to": "marstal", "departed": 0.0, "arrived": 3.0 * HOUR}]}),
+		"[dreams] a childhood island means arriving there, not near it")
+	var atlantic := Dreams.get_dream(&"atlantic_crossing")
+	var progress := ObjectiveProgress.new()
+	t.check(not Dreams.is_met(atlantic, null, [], {"progress": progress}), "[dreams] the Captain's Atlantic crossing: not before it is sailed")
+	progress.mark(&"dreamfact:atlantic_crossing", 1.0)
+	t.check(Dreams.is_met(atlantic, null, [], {"progress": progress}), "[dreams] marked when a voyage from Europe or Africa reaches the Caribbean or America")
+	# Real play: a passenger who dreams of a night at sea, on the overnight leg.
+	_new_game()
+	GameSession.set_dream_pursued(&"dream_for_another", true)
+	GameSession.plan_route_to(&"svendborg")
+	var offer: Dictionary = GameSession.publish_passage([&"svendborg"]).offer
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 1, 61,
+		{"dream": {"kind": PassengerDreams.KIND_NIGHT, "met": false}, "reviews": "generous", "weather": "hardy", "comfort": "simple"})
+	GameSession.answer_passage_request(rid, true)
+	Simulation.advance((float(offer.depart_after) - GameSession.get_game_time()) / HOUR * HOUR)
+	GameSession.plan_route_to(&"svendborg")
+	GameSession.depart()
+	_sail_to_harbour()
+	var book := _book()
+	var record: Dictionary = book.records.back() if not book.records.is_empty() else {}
+	t.check(not record.is_empty() and record.dream.get("met", false) and int(book.totals.dreams) == 1,
+		"[dreams] the night at sea came true for the passenger: on the record, counted once")
+	t.check(GameSession.get_objective_progress().is_completed(&"passengers:dream") and GameSession.get_objective_progress().is_completed(&"passengers:first"),
+		"[rewards] achievements: first passengers, someone else's dream")
+	t.check(GameSession.get_dream_status(&"dream_for_another") == GameSession.DREAM_FULFILLED and GameSession.get_dream_status(&"first_guests") == GameSession.DREAM_FULFILLED,
+		"[dreams] the Captain's own dreams of the trade came true with it")
+	t.check(GameSession.get_dream_status(&"night_with_guests") == GameSession.DREAM_FULFILLED, "[dreams] a night under sail with guests: from the sailed leg")
+	var letters := GameSession.get_passenger_letters()
+	t.check(not letters.is_empty() and letters[0].kind == "letter", "[rewards] a thank-you letter: “%s”" % (String(letters[0].text) if not letters.is_empty() else ""))
+	var catalog := AchievementCatalog.get_default()
+	t.check(catalog != null and catalog.get_errors().is_empty() if catalog.has_method(&"get_errors") else catalog != null,
+		"[rewards] the achievement collection loads with the passenger achievements")

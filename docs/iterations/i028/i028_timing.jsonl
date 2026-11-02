@@ -2,3 +2,4 @@
 {"event": "preflight_begin", "iso": "2026-11-02T02:46:45+00:00", "epoch": 1793587605.714, "monotonic_s": 657.81, "boot": "082580c0", "note": ""}
 {"event": "preflight_end", "iso": "2026-11-02T03:03:37+00:00", "epoch": 1793588617.397, "monotonic_s": 1669.49, "boot": "082580c0", "note": "backup + iteration branch at ed7601a, system map"}
 {"event": "core_tiers_1_3_end", "iso": "2026-11-02T03:03:37+00:00", "epoch": 1793588617.409, "monotonic_s": 1669.51, "boot": "082580c0", "note": "passage trade core + test_passages 42/0 (3773aaf)"}
+{"event": "tier3_checkpoint", "iso": "2026-11-02T03:24:02+00:00", "epoch": 1793589842.118, "monotonic_s": 2894.22, "boot": "082580c0", "note": "backup/i028-tier-3 = 6bd4620; focused suites green"}

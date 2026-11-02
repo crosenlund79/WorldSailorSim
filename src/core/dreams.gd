@@ -18,6 +18,21 @@ const KIND_NORTH := "visit_north"
 const KIND_REGION := "visit_region"
 const KIND_OCEAN_BOAT := "own_ocean_boat"
 const KIND_LATER := "later"
+## I028: explicit criteria, each judged from its own authoritative history.
+## arrive (port: moored there), visit_islands (regions, count: island
+## harbours visited there), passage (from_regions, to_regions, min_nm: one
+## voyage from there to there, marked when sailed), hosted (count: passengers
+## carried), passenger_dreams (count: passengers' dreams fulfilled), event
+## (event: a moment marked in the progress records), publish (count: works
+## published), renown_rank (rank: at or above this place in the rankings).
+const KIND_ARRIVE := "arrive"
+const KIND_ISLANDS := "visit_islands"
+const KIND_PASSAGE := "passage"
+const KIND_HOSTED := "hosted"
+const KIND_PASSENGER_DREAMS := "passenger_dreams"
+const KIND_EVENT := "event"
+const KIND_PUBLISH := "publish"
+const KIND_RANK := "renown_rank"
 
 static var _data: Array[Dictionary] = []
 
@@ -44,9 +59,31 @@ static func is_active(dream: Dictionary) -> bool:
 	return String(dream.get("kind", "")) != KIND_LATER
 
 
-## True when `dream` has come true: from the Captain's Log and the boats owned.
-static func is_met(dream: Dictionary, log: CaptainsLog, owned: Array[StringName]) -> bool:
+## True when `dream` has come true: from the Captain's Log, the boats owned
+## and (I028) `facts`: {"progress": ObjectiveProgress, "book": PassageBook,
+## "published": int, "rank": int}.
+static func is_met(dream: Dictionary, log: CaptainsLog, owned: Array[StringName], facts := {}) -> bool:
+	var progress: ObjectiveProgress = facts.get("progress")
+	var book: PassageBook = facts.get("book")
 	match String(dream.get("kind", "")):
+		KIND_ARRIVE:
+			return log != null and StringName(dream.get("port", "")) in log.get_visited_ids()
+		KIND_ISLANDS:
+			var regions: Array = dream.get("regions", [])
+			return _visited_where(log, func(port: PortData) -> bool: return port.island and port.region in regions) >= int(dream.get("count", 1))
+		KIND_PASSAGE:
+			return progress != null and progress.is_completed(StringName("dreamfact:" + String(dream.get("id", ""))))
+		KIND_HOSTED:
+			return book != null and int(book.totals.passengers) >= int(dream.get("count", 1))
+		KIND_PASSENGER_DREAMS:
+			return book != null and int(book.totals.dreams) >= int(dream.get("count", 1))
+		KIND_EVENT:
+			return progress != null and progress.is_completed(StringName("event:" + String(dream.get("event", ""))))
+		KIND_PUBLISH:
+			return int(facts.get("published", 0)) >= int(dream.get("count", 1))
+		KIND_RANK:
+			var rank := int(facts.get("rank", 0))
+			return rank > 0 and rank <= int(dream.get("rank", 1))
 		KIND_LONGEST:
 			return log != null and log.get_longest_nm() >= float(dream.get("nm", 0.0))
 		KIND_NORTH:
