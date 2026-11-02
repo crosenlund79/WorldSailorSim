@@ -95,6 +95,8 @@ static func _pick_group(rng: RandomNumberGenerator, max_size: int) -> Dictionary
 
 ## "Anna Berg", "Anna & Lars Berg", "Anna Berg and 2 friends", "the Berg family".
 static func display_name(traveller: Dictionary) -> String:
+	if String(traveller.get("display", "")) != "":
+		return String(traveller.display)  # well-known travellers, by their own names (I028 Tier 6)
 	var first := String(traveller.get("given", ""))
 	var last := String(traveller.get("family", ""))
 	match String(traveller.get("group", "solo")):

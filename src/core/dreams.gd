@@ -80,7 +80,12 @@ static func is_met(dream: Dictionary, log: CaptainsLog, owned: Array[StringName]
 		KIND_EVENT:
 			return progress != null and progress.is_completed(StringName("event:" + String(dream.get("event", ""))))
 		KIND_PUBLISH:
-			return int(facts.get("published", 0)) >= int(dream.get("count", 1))
+			var published: Dictionary = facts.get("published", {})
+			var forms: Array = dream.get("forms", published.keys())
+			var n := 0
+			for f: Variant in forms:
+				n += int(published.get(String(f), 0))
+			return n >= int(dream.get("count", 1))
 		KIND_RANK:
 			var rank := int(facts.get("rank", 0))
 			return rank > 0 and rank <= int(dream.get("rank", 1))

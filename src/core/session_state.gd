@@ -150,6 +150,9 @@ var captain_name := ""
 ## I028, Passages, People & Reputation: the passage trade (PassageBook).
 ## Optional in a save (older saves: an empty book).
 var passages := PassageBook.new()
+## I028 Tiers 5-6: the world beyond the Captain (WorldState): its event ledger,
+## yachts, renown, the travel writing and the magazine. Optional in a save.
+var world := WorldState.new()
 const CAPTAIN_NAME_MAX := 40
 ## I027: the Captain's choice to windward - motor straight up (fuel) rather
 ## than beat under sail. Optional in a save (false: sail when the wind allows).
@@ -293,6 +296,7 @@ func duplicate_state() -> SessionState:
 	copy.moored_since = moored_since
 	copy.captain_name = captain_name
 	copy.passages = passages.duplicate_book()
+	copy.world = world.duplicate_world()
 	copy.motor_upwind = motor_upwind
 	copy.dreams = dreams.duplicate(true)
 	return copy
@@ -395,6 +399,7 @@ func _to_dict() -> Dictionary:
 		"moored_since": moored_since,
 		"captain_name": captain_name,
 		"passages": passages.to_dict(),
+		"world": world.to_dict(),
 		"motor_upwind": motor_upwind,
 		"dreams": dreams.duplicate(true),
 		"navigation": {
@@ -586,6 +591,7 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	state.motor_upwind = data.get("motor_upwind", false) is bool and data.get("motor_upwind", false)
 	state.captain_name = clean_captain_name(data.get("captain_name", ""))
 	state.passages = PassageBook.from_dict(data.get("passages"))
+	state.world = WorldState.from_dict(data.get("world"))
 	state.dreams = dreams_from(data.get("dreams"))
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).

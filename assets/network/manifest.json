@@ -1,0 +1,149 @@
+{
+	"note": "Traveller Network images (tools/world/paint_network_images.py); 'motif' lets posts pick a fitting picture.",
+	"images": [
+		{
+			"id": "net_01",
+			"scene": "harbour_dawn",
+			"motif": "harbour",
+			"palette": "dawn"
+		},
+		{
+			"id": "net_02",
+			"scene": "harbour_day",
+			"motif": "harbour",
+			"palette": "day"
+		},
+		{
+			"id": "net_03",
+			"scene": "harbour_dusk",
+			"motif": "harbour",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_04",
+			"scene": "marina_night",
+			"motif": "harbour",
+			"palette": "night"
+		},
+		{
+			"id": "net_05",
+			"scene": "sail_dusk",
+			"motif": "sail",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_06",
+			"scene": "sail_day",
+			"motif": "sail",
+			"palette": "day"
+		},
+		{
+			"id": "net_07",
+			"scene": "sail_tropic",
+			"motif": "sail",
+			"palette": "tropic"
+		},
+		{
+			"id": "net_08",
+			"scene": "cafe_morning",
+			"motif": "cafe",
+			"palette": "dawn"
+		},
+		{
+			"id": "net_09",
+			"scene": "cafe_evening",
+			"motif": "cafe",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_10",
+			"scene": "ice_day",
+			"motif": "ice",
+			"palette": "arctic"
+		},
+		{
+			"id": "net_11",
+			"scene": "fjord",
+			"motif": "fjord",
+			"palette": "arctic"
+		},
+		{
+			"id": "net_12",
+			"scene": "whale",
+			"motif": "whale",
+			"palette": "day"
+		},
+		{
+			"id": "net_13",
+			"scene": "aurora",
+			"motif": "aurora",
+			"palette": "night"
+		},
+		{
+			"id": "net_14",
+			"scene": "tropic_anchorage",
+			"motif": "palms",
+			"palette": "tropic"
+		},
+		{
+			"id": "net_15",
+			"scene": "fog_harbour",
+			"motif": "harbour",
+			"palette": "fog"
+		},
+		{
+			"id": "net_16",
+			"scene": "lighthouse_dusk",
+			"motif": "lighthouse",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_17",
+			"scene": "pontoon_people",
+			"motif": "pontoon",
+			"palette": "day"
+		},
+		{
+			"id": "net_18",
+			"scene": "crew_dawn",
+			"motif": "pontoon",
+			"palette": "dawn"
+		},
+		{
+			"id": "net_19",
+			"scene": "volcano_coast",
+			"motif": "fjord",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_20",
+			"scene": "ice_dusk",
+			"motif": "ice",
+			"palette": "dusk"
+		},
+		{
+			"id": "net_21",
+			"scene": "two_sails",
+			"motif": "sails",
+			"palette": "day"
+		},
+		{
+			"id": "net_22",
+			"scene": "night_sail",
+			"motif": "sail",
+			"palette": "night"
+		},
+		{
+			"id": "net_23",
+			"scene": "whale_dawn",
+			"motif": "whale",
+			"palette": "dawn"
+		},
+		{
+			"id": "net_24",
+			"scene": "lighthouse_fog",
+			"motif": "lighthouse",
+			"palette": "fog"
+		}
+	]
+}

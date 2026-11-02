@@ -13,7 +13,9 @@ extends RefCounted
 ## range and bearing from the boat, and the closest point of approach (CPA)
 ## and its time (TCPA) against the boat's own course and speed. Local only:
 ## never more than RANGE_NM, never a worldwide tracker (the searchable yacht
-## directory belongs to I028). Pure and static; nothing is saved.
+## directory, I028, shows only last public reports). I028 adds the world's
+## notable yachts (notable_contacts_at), shown on the radar. Pure and static;
+## nothing is saved.
 
 ## A small yacht's VHF aerial hears AIS this far (nm).
 const RANGE_NM := 20.0
@@ -50,6 +52,42 @@ static func contacts_at(geo: Vector2, time: float, seed: int, own_course: float,
 			"geo": vessel.geo, "cog": float(vessel.course), "sog_kn": float(vessel.speed_kn),
 			"range_nm": offset.length(), "bearing": fposmod(rad_to_deg(atan2(offset.x, offset.y)), 360.0),
 			"cpa_nm": closest.x, "tcpa_min": closest.y})
+	return out
+
+
+## The notable yachts of the world's ledger (I028 Tier 6) within `range_nm`
+## of `geo` at `time`: where each really is now (WorldChronicle.yacht_position:
+## in a harbour, or along its leg), as AIS would list it - class B, a stable
+## MMSI, its skipper, course and speed when under way. This is the only place
+## a notable yacht's live position is shown; the yacht directory keeps to the
+## last public report. Nearest first.
+static func notable_contacts_at(world: WorldState, geo: Vector2, time: float, own_course: float, own_speed_kn: float,
+		range_nm := RANGE_NM) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for yacht_id: String in WorldChronicle._sorted(world.yachts.keys()):
+		var at := WorldChronicle.yacht_position(world, yacht_id, time)
+		if at.is_empty():
+			continue
+		var where: Vector2 = at.geo
+		var distance := GeoMath.distance_nm(geo, where)
+		if distance > minf(range_nm, RANGE_NM):
+			continue
+		var bearing := GeoMath.rhumb_bearing(geo, where)
+		var offset := Vector2(sin(deg_to_rad(bearing)), cos(deg_to_rad(bearing))) * distance
+		var info := WorldChronicle.yacht(yacht_id)
+		var cog := 0.0
+		var sog := 0.0
+		if at.status == "under_way":
+			var a := PortCatalog.get_default().get_port(StringName(at.from))
+			var b := PortCatalog.get_default().get_port(StringName(at.to))
+			cog = GeoMath.rhumb_bearing(a.get_geo_position(), b.get_geo_position()) if a and b else 0.0
+			sog = float(info.get("speed", 6.0))
+		var closest := approach(offset, own_course, own_speed_kn, cog, sog)
+		out.append({"mmsi": mmsi("yacht:" + yacht_id), "name": String(info.get("name", yacht_id)), "kind": "yacht", "class": CLASS_B,
+			"notable": true, "yacht": yacht_id, "skipper": String(WorldChronicle.skipper_of(yacht_id).get("name", "")), "status": String(at.status),
+			"port": String(at.get("port", "")), "geo": where, "cog": cog, "sog_kn": sog, "range_nm": distance, "bearing": bearing,
+			"offset_nm": offset, "cpa_nm": closest.x, "tcpa_min": closest.y})
+	out.sort_custom(func(x: Dictionary, y: Dictionary) -> bool: return float(x.range_nm) < float(y.range_nm))
 	return out
 
 

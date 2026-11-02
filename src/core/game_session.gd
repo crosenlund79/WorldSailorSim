@@ -14,6 +14,12 @@ signal passages_changed
 signal passenger_said(name: String, text: String)
 ## I028: a booking was settled on arrival (the voyage ledger's record).
 signal passenger_settled(record: Dictionary)
+## I028: the world's history moved on (new events in the ledger).
+signal world_changed
+## A line of news from the world for the Captain (I028 Tier 6: the magazine, a meeting, an invitation).
+signal world_news(text: String)
+## I028: travel writing progressed or a work was published.
+signal writing_changed
 signal session_started
 signal session_ended
 ## Emitted after a loaded state has replaced the current one.
@@ -1236,6 +1242,7 @@ func apply_simulation_step(game_time: float, progress_nm: float, cross_track_nm 
 		_update_anchor_life()
 	if not _state.passages.offers.is_empty() and not is_underway():
 		_refresh_passages()  # I028: requests expire, passengers come aboard
+	advance_world()  # I028: the world's history keeps pace (at most hourly)
 
 
 ## The boat onto its course line (I027): at a waypoint it stops at, what is
@@ -1370,7 +1377,12 @@ func complete_voyage() -> void:
 	if not awards.is_empty():
 		renown_awarded.emit(awards)
 	_passages_on_arrival(destination, record)  # I028: passengers ashore, the passage on
+	_meet_yachts_in(String(destination.id))  # I028 Tier 6: a notable yacht in this harbour
 	_note_dream_passages(record)  # I028: crossings for Dreams of the Sea
+	if float(record.get("nm", 0.0)) >= 300.0:  # I028: a notable passage, in the world's history
+		WorldChronicle.add_captain_event(_state.world, "captain_passage", _state.game_time, {"from": String(record.get("from", "")),
+			"port": String(destination.id), "nm": roundi(float(record.nm)), "vessel": String(_state.vessel_id)}, 2 + roundi(float(record.nm) / 200.0),
+			6 + roundi(float(record.nm) / 100.0))
 	_check_dreams()  # I027 Tier 4
 	voyage_arrived.emit(destination.id)
 
@@ -2003,14 +2015,17 @@ func _dream_facts() -> Dictionary:
 	return {"progress": _state.progress, "book": _state.passages, "published": _published_works(), "rank": _renown_rank()}
 
 
-## Tier 5 replaces this with the travel writing's published works.
-func _published_works() -> int:
-	return 0
+## Published works by form (I028 Tier 5): {"essay": 2, "travelogue": 1, ...}.
+func _published_works() -> Dictionary:
+	var by_form := {}
+	for work: Dictionary in _state.world.writing.works:
+		by_form[String(work.form)] = int(by_form.get(String(work.form), 0)) + 1
+	return by_form
 
 
-## Tier 6 replaces this with the Captain's place in the rankings (0: unranked).
+## The Captain's place in Sails & Sights' rankings now (I028 Tier 6).
 func _renown_rank() -> int:
-	return 0
+	return WorldChronicle.rank_of(_state.world, WorldChronicle.CAPTAIN, _state.game_time, _state.progress.lifetime_renown)
 
 
 ## Marks the dream passages a voyage just completed (I028): from one set of
@@ -4092,6 +4107,8 @@ func _settle(booking: Dictionary, traveller: Dictionary, port: PortData) -> void
 	book.totals.reviews = int(book.totals.reviews) + 1
 	if not dream.is_empty() and dream.get("met", false):
 		book.totals.dreams = int(book.totals.dreams) + 1
+		WorldChronicle.add_captain_event(_state.world, "captain_dream", now, {"guest": Travellers.display_name(traveller),
+			"dream": String(dream.kind), "port": String(port.id)}, 5, 10)
 	_passenger_rewards(booking, traveller, result, record)
 	_passenger_line(booking, "farewell_happy" if int(result.stars) >= 4 else "farewell_unhappy", not booking.get("dream", {}).get("met", false))
 	funds_changed.emit(_state.funds)
@@ -4145,6 +4162,447 @@ func _five_star_count() -> int:
 
 func get_passenger_letters() -> Array:
 	return _state.passages.letters.duplicate(true) if _state else []
+
+
+# --- The world, travel writing (I028 Tiers 5-6) ------------------------------------
+
+## The world's ledger is extended at most this often while time passes (game seconds).
+const WORLD_STEP_S := 3600.0
+var _world_checked_at := -INF
+
+
+func get_world() -> WorldState:
+	return _state.world.duplicate_world() if _state else WorldState.new()
+
+
+## Brings the world's history up to now (sparse: a day's events at a time).
+func advance_world(force := false) -> void:
+	if _state == null or (not force and _state.game_time - _world_checked_at < WORLD_STEP_S):
+		return
+	_world_checked_at = _state.game_time
+	var added := WorldChronicle.advance(_state.world, _state.game_time, get_wind_seed())
+	if not added.is_empty():
+		_has_unsaved_changes = true
+		world_changed.emit()
+		_world_news(added)
+
+
+## New world events that touch the Captain: the month's magazine, a place in
+## the rankings, a notable yacht arriving where the Captain is moored, an
+## invitation the Captain has earned (I028 Tier 6).
+func _world_news(added: Array) -> void:
+	_publish_issues()
+	if not is_underway() and get_location() != null:
+		for e: Dictionary in added:
+			if String(e.get("kind", "")) in ["arrive", "expedition_complete"] and String(e.get("port", "")) == String(get_location().id):
+				_meet_yacht(String(e.yacht), String(e.port))
+	elif is_underway():
+		_meet_at_sea()
+	_check_rank_goals()
+	_check_invitations()
+
+
+# Sails & Sights ---------------------------------------------------------------------
+
+func _publish_issues() -> void:
+	for start: Variant in SailsAndSights.due_months(_state.world, _state.game_time):
+		var issue := SailsAndSights.compose(_state.world, float(start), _state.progress.lifetime_renown)
+		_state.world.issues.append(issue)
+		_has_unsaved_changes = true
+		world_news.emit(Loc.t("A new issue of Sails & Sights is out: %s %d.") % [Loc.month(int(issue.month)), int(issue.year)])
+
+
+## The magazine's archive, newest first (each issue as it was published).
+func get_magazine_issues() -> Array:
+	if _state == null:
+		return []
+	advance_world()
+	var issues := _state.world.issues.duplicate(true)
+	issues.reverse()
+	return issues
+
+
+func get_rankings() -> Array:
+	return WorldChronicle.rankings(_state.world, _state.game_time, _state.progress.lifetime_renown) if _state else []
+
+
+func get_yacht_directory(query := "") -> Array:
+	if _state == null:
+		return []
+	advance_world()
+	return YachtDirectory.entries(_state.world, _state.game_time, query)
+
+
+## Renown goals: among the hundred, fifty and ten best-known sailors, and first.
+const RANK_GOALS := [[100, "world:top_100", 40], [50, "world:top_50", 60], [10, "world:top_10", 100], [1, "world:number_1", 200]]
+
+
+func _check_rank_goals() -> void:
+	var rank := int(get_captain_standing().get("rank", 0))
+	if rank <= 0:
+		return
+	var awards: Array = []
+	var titles := {"world:top_100": Loc.t("Among the hundred best-known sailors"), "world:top_50": Loc.t("Among the fifty best-known sailors"),
+		"world:top_10": Loc.t("Among the ten best-known sailors"), "world:number_1": Loc.t("The best-known sailor on the seas")}
+	for goal: Array in RANK_GOALS:
+		if rank <= int(goal[0]):
+			var award := _award_once(String(goal[1]), String(titles[goal[1]]), int(goal[2]))
+			if not award.is_empty():
+				awards.append(award)
+	if not awards.is_empty():
+		renown_awarded.emit(awards)
+
+
+# Notable yachts: AIS and encounters -----------------------------------------------------
+
+## The notable yachts within AIS reach of the boat now (AisReceiver's
+## contact format, marked "notable"): where they really are, unlike the
+## directory's last public report.
+func get_notable_ais_contacts(range_nm := AisReceiver.RANGE_NM) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	if _state == null:
+		return out
+	var own_course := Simulation.get_current_heading() if is_underway() else 0.0
+	var own_speed := get_vessel_speed_kn() if is_underway() else 0.0
+	return AisReceiver.notable_contacts_at(_state.world, _state.vessel_position, _state.game_time, own_course, own_speed, range_nm)
+
+
+## Meeting a notable yacht's crew where the Captain is moored (once a week per yacht at most).
+func _meet_yacht(yacht_id: String, port_id: String) -> void:
+	var last: Dictionary = _state.world.encounters.get(yacht_id, {})
+	if not last.is_empty() and _state.game_time - float(last.get("last", 0.0)) < 7.0 * WorldChronicle.DAY:
+		return
+	var crew: Array = [WorldChronicle.skipper_of(yacht_id).get("id", "")]
+	var leg: Dictionary = (_state.world.yachts.get(yacht_id, {}) as Dictionary).get("leg", {})
+	var expedition := String((_state.world.yachts.get(yacht_id, {}) as Dictionary).get("expedition", ""))
+	if expedition != "":
+		crew = (WorldChronicle.data().get("expeditions", []) as Array).filter(func(e: Dictionary) -> bool: return e.id == expedition)[0].get("crew", crew)
+	elif not leg.is_empty():
+		crew = leg.get("crew", crew)
+	crew = crew.filter(func(id: Variant) -> bool: return String(id) != "")
+	if crew.is_empty():
+		return
+	_state.world.encounters[yacht_id] = {"first": float(last.get("first", _state.game_time)), "last": _state.game_time, "count": int(last.get("count", 0)) + 1,
+		"port": port_id}
+	var who: Array = [WorldChronicle.CAPTAIN]
+	who.append_array(crew)
+	var renown := {}
+	for id: Variant in crew:
+		renown[String(id)] = 1
+	_state.world.add_event({"t": _state.game_time, "kind": "meeting", "who": who, "yacht": yacht_id, "port": port_id, "renown": renown, "attention": 5})
+	var names := PackedStringArray()
+	for id: Variant in crew:
+		names.append(String(WorldChronicle.traveller(String(id)).get("name", "")))
+	var award := _award_once("world:met_notable", Loc.t("Met a well-known traveller"), 15)
+	if not award.is_empty():
+		renown_awarded.emit([award])
+	_has_unsaved_changes = true
+	world_news.emit(Loc.t("%s is moored here. You share a coffee on the quay with %s.") % [String(WorldChronicle.yacht(yacht_id).name), " & ".join(names)])
+	world_changed.emit()
+
+
+## Called on arrival: a notable yacht already in this harbour.
+func _meet_yachts_in(port_id: String) -> void:
+	for yacht_id: String in WorldChronicle._sorted(_state.world.yachts.keys()):
+		var at := WorldChronicle.yacht_position(_state.world, yacht_id, _state.game_time)
+		if String(at.get("status", "")) == "in_port" and String(at.get("port", "")) == port_id:
+			_meet_yacht(yacht_id, port_id)
+
+
+## Passing a notable yacht at sea within hailing distance: a word on the VHF (once a day per yacht).
+func _meet_at_sea() -> void:
+	for contact: Dictionary in get_notable_ais_contacts(3.0):
+		var key := "sea:" + String(contact.yacht)
+		if _state.game_time - float(_state.world.encounters.get(key, -INF)) < WorldChronicle.DAY:
+			continue
+		_state.world.encounters[key] = _state.game_time
+		world_news.emit(Loc.t("%s passes %s nm off. %s calls you on the VHF: “Fair winds, Captain!”") % [String(contact.name),
+			Loc.decimal(float(contact.range_nm)), String(contact.skipper).get_slice(" ", 0)])
+
+
+# Prestigious invitations ----------------------------------------------------------------
+
+const INVITATIONS_PATH := "res://data/world/invitations.json"
+const INVITATION_DAYS := 5.0
+
+
+static func invitation_data() -> Array:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(INVITATIONS_PATH))
+	return (parsed as Dictionary).get("invitations", []) if parsed is Dictionary else []
+
+
+## What the Captain still lacks for an invitation ("" when qualified).
+func invitation_problem(invitation: Dictionary) -> String:
+	var needs: Dictionary = invitation.get("needs", {})
+	var rank := int(get_captain_standing().get("rank", 9999))
+	if rank > int(needs.get("rank", 9999)):
+		return Loc.t("a place among the %d best-known sailors") % int(needs.rank)
+	var rating := _state.passages.rating()
+	if rating.y < float(needs.get("reviews", 0)) or rating.x < float(needs.get("rating", 0.0)):
+		return Loc.t("%d passenger reviews averaging %.1f stars") % [int(needs.get("reviews", 0)), float(needs.get("rating", 0.0))]
+	if _state.captains_log.get_longest_nm() < float(needs.get("longest_nm", 0.0)):
+		return Loc.t("a passage of %d nm behind you") % int(needs.longest_nm)
+	var party := (invitation.get("from", []) as Array).size()
+	if Accommodation.safe_guest_count(_state.vessel_id) < maxi(int(needs.get("berths", party)), party):
+		return Loc.t("berths for %d guests") % maxi(int(needs.get("berths", party)), party)
+	var works := (_state.world.writing.works as Array).filter(func(w: Dictionary) -> bool: return not w.get("legacy", false)).size()
+	if works < int(needs.get("works", 0)):
+		return Loc.t("%d published works") % int(needs.works)
+	return ""
+
+
+func _check_invitations() -> void:
+	if is_underway() or get_location() == null:
+		return
+	var here := get_location()
+	for invitation: Dictionary in _state.world.invitations:
+		if invitation.status == "open" and float(invitation.expires) <= _state.game_time:
+			invitation.status = "expired"
+	for data: Dictionary in invitation_data():
+		if _state.world.invitations.any(func(i: Dictionary) -> bool: return i.id == data.id) or invitation_problem(data) != "":
+			continue
+		var best := ""
+		var best_nm := float(data.get("reach_nm", 400))
+		for to: Variant in data.get("to", []):
+			var port := PortCatalog.get_default().get_port(StringName(to))
+			if port == null or port.id == here.id:
+				continue
+			var nm := GeoMath.distance_nm(here.get_geo_position(), port.get_geo_position())
+			if nm <= best_nm:
+				best = String(to)
+				best_nm = nm
+		if best == "":
+			continue
+		var invitation := {"id": String(data.id), "from": (data.from as Array).duplicate(), "to": best, "port": String(here.id),
+			"issued": _state.game_time, "expires": _state.game_time + INVITATION_DAYS * WorldChronicle.DAY, "status": "open"}
+		_state.world.invitations.append(invitation)
+		_has_unsaved_changes = true
+		world_news.emit(Loc.t(String(data.title)) + ": " + Loc.t(String(data.text)) % PortCatalog.get_default().get_display_name(StringName(best)))
+		world_changed.emit()
+
+
+## Open invitations: [{"id", "from", "to", "port", "issued", "expires", "status", "title", "text"}].
+func get_invitations(include_closed := false) -> Array:
+	if _state == null:
+		return []
+	_check_invitations()
+	var out: Array = []
+	for invitation: Dictionary in _state.world.invitations:
+		if not include_closed and (invitation.status != "open" or float(invitation.expires) <= _state.game_time):
+			continue
+		var copy := invitation.duplicate(true)
+		for data: Dictionary in invitation_data():
+			if data.id == invitation.id:
+				copy.title = Loc.t(String(data.title))
+				copy.text = Loc.t(String(data.text)) % PortCatalog.get_default().get_display_name(StringName(invitation.to))
+		out.append(copy)
+	return out
+
+
+## Accepting: the passage is published from here to the invitation's harbour
+## and the travellers are booked on it through the ordinary trade (capacity,
+## contract, settlement). {"ok", "error", "booking"}.
+func accept_invitation(id: String) -> Dictionary:
+	var invitation := {}
+	for i: Dictionary in _state.world.invitations if _state else []:
+		if i.id == id and i.status == "open" and float(i.expires) > _state.game_time:
+			invitation = i
+	if invitation.is_empty():
+		return {"ok": false, "error": Loc.t("That invitation is no longer open.")}
+	if get_location() == null or String(get_location().id) != String(invitation.port):
+		return {"ok": false, "error": Loc.t("They are waiting for you in %s.") % PortCatalog.get_default().get_display_name(StringName(invitation.port))}
+	var data: Dictionary = invitation_data().filter(func(d: Dictionary) -> bool: return d.id == id)[0]
+	var published := publish_passage([String(invitation.to)])
+	if not published.ok:
+		return {"ok": false, "error": published.error}
+	var offer: Dictionary = published.offer
+	var people: Array = invitation.from
+	var lead := WorldChronicle.traveller(String(people[0]))
+	var given := PackedStringArray()
+	for pid: Variant in people:
+		given.append(String(WorldChronicle.traveller(String(pid)).get("name", "")).get_slice(" ", 0))
+	var full := PackedStringArray()
+	for pid: Variant in people:
+		full.append(String(WorldChronicle.traveller(String(pid)).get("name", "")))
+	var traits := {"given": given[0], "family": String(lead.get("name", "")).get_slice(" ", 1), "names": Array(given), "display": " & ".join(full),
+		"group": "solo" if people.size() == 1 else "friends", "reviews": "generous", "weather": "hardy", "timing": "relaxed", "pets": "likes",
+		"talk": "chatty", "comfort": "simple", "notable": people.duplicate(), "invited": id,
+		"motivation": "photo" if String(lead.get("role", "")) == "photographer" else "see"}
+	var rid := add_passage_request_for_testing(String(offer.id), 0, (offer.stops as Array).size() - 1, people.size(), hash("invite|" + id), traits)
+	var request := _state.passages.get_request(rid)
+	request.offered = int(snappedf(float(request.asked) * float(data.get("fare_factor", 1.2)), 5.0))
+	request.limit = int(request.offered)
+	request.note = Loc.t(String(data.title))
+	var answer := answer_passage_request(rid, true)
+	if String(answer.get("result", "")) != "booked":
+		return {"ok": false, "error": String(answer.get("text", ""))}
+	invitation.status = "accepted"
+	invitation.offer = String(offer.id)
+	invitation.request = rid
+	WorldChronicle.add_captain_event(_state.world, "invitation", _state.game_time, {"who": [WorldChronicle.CAPTAIN] + people, "port": String(invitation.port),
+		"to": String(invitation.to), "invitation": id}, 0, 10)
+	var award := _award_once("world:invitation", Loc.t("Invited aboard by a famous traveller"), 40)
+	if not award.is_empty():
+		renown_awarded.emit([award])
+	_has_unsaved_changes = true
+	world_changed.emit()
+	var booking := {}
+	for b: Dictionary in _state.passages.bookings:
+		if b.get("request", "") == rid:
+			booking = b.duplicate(true)
+	return {"ok": true, "error": "", "booking": booking}
+
+
+func decline_invitation(id: String) -> void:
+	for invitation: Dictionary in _state.world.invitations if _state else []:
+		if invitation.id == id and invitation.status == "open":
+			invitation.status = "declined"
+			_has_unsaved_changes = true
+			world_changed.emit()
+
+
+## The Captain's renown and rank now: {"renown", "rank", "of"}.
+func get_captain_standing() -> Dictionary:
+	if _state == null:
+		return {}
+	var rows := WorldChronicle.rankings(_state.world, _state.game_time, _state.progress.lifetime_renown)
+	for row: Dictionary in rows:
+		if row.id == WorldChronicle.CAPTAIN:
+			return {"renown": int(row.renown), "rank": int(row.rank), "of": rows.size()}
+	return {}
+
+
+## The Traveller Network's posts, newest first (read from the world's ledger).
+func get_network_posts(limit := 30, following_only := false) -> Array:
+	if _state == null:
+		return []
+	advance_world()
+	var only: Array = get_followed_travellers() if following_only else []
+	if following_only and only.is_empty():
+		return []
+	return TravellerNetwork.posts(_state.world, _state.game_time, limit, only)
+
+
+func get_followed_travellers() -> Array:
+	if _state == null:
+		return []
+	var ids: Array = []
+	for id: Variant in _state.world.relations:
+		if String(_state.world.relations[id]) == "following":
+			ids.append(String(id))
+	ids.sort()
+	return ids
+
+
+func set_following(traveller_id: String, follow: bool) -> void:
+	if _state == null or WorldChronicle.traveller(traveller_id).is_empty() or traveller_id == WorldChronicle.CAPTAIN:
+		return
+	if follow:
+		_state.world.relations[traveller_id] = "following"
+	else:
+		_state.world.relations.erase(traveller_id)
+	_has_unsaved_changes = true
+	world_changed.emit()
+
+
+# Travel writing ----------------------------------------------------------------------
+
+## The old little game's progress becomes writing experience, once: its
+## sessions and milestones count, its release is kept in the works' history.
+func _migrate_writing() -> void:
+	var writing: Dictionary = _state.world.writing
+	if writing.get("migrated", false):
+		return
+	writing.migrated = true
+	var game := _state.pastimes.game
+	writing.xp = int(writing.get("xp", 0)) + int(game.sessions) + int(game.milestone) * 2
+	if is_game_released():
+		var released := float((game.log as Array).back().time) if not (game.log as Array).is_empty() else _state.game_time
+		(writing.works as Array).append({"id": "legacy_game", "form": "game", "title": Pastimes.game_title(), "topic": "", "stars": 4,
+			"published_at": released, "euros": int(Pastimes.game_data().get("release_euros", 0)), "renown": 0, "legacy": true})
+
+
+func get_writing() -> Dictionary:
+	if _state == null:
+		return {}
+	_migrate_writing()
+	return _state.world.writing.duplicate(true)
+
+
+func writing_topics() -> Array:
+	return TravelWriting.topics(_state.captains_log, _state.passages, _state.companions) if _state else []
+
+
+## Begins a work: a form the Captain is ready for, about a topic from the records.
+func start_writing(form_id: String, topic_id: String) -> String:
+	if _state == null:
+		return ""
+	_migrate_writing()
+	var f := TravelWriting.form(form_id)
+	if f.is_empty():
+		return Loc.t("Choose what to write.")
+	var works := (_state.world.writing.works as Array).filter(func(w: Dictionary) -> bool: return not w.get("legacy", false)).size()
+	var problem := TravelWriting.form_problem(f, _state.captains_log, works)
+	if problem != "":
+		return Loc.t("Not yet: a %s %s.") % [Loc.t(String(f.title)).to_lower(), problem]
+	var topic := {}
+	for t: Dictionary in writing_topics():
+		if t.id == topic_id:
+			topic = t
+	if topic.is_empty():
+		return Loc.t("Choose something you have lived to write about.")
+	_state.world.writing.project = {"form": form_id, "topic": topic, "sessions": 0, "quality": 0.0, "minutes": 0.0, "started_at": _state.game_time}
+	_has_unsaved_changes = true
+	writing_changed.emit()
+	return ""
+
+
+## A writing session of `minutes` (App spends the time; an interruption counts
+## its share) with the chosen angle. Publishes the work when its last session
+## is done. {"done", "published": work or {}, "award"}.
+func work_on_writing(angle: String, minutes: float) -> Dictionary:
+	var out := {"done": false, "published": {}, "award": {}}
+	if _state == null or (_state.world.writing.project as Dictionary).is_empty():
+		return out
+	var project: Dictionary = _state.world.writing.project
+	var f := TravelWriting.form(String(project.form))
+	var total := TravelWriting.session_hours() * 60.0
+	var worked := minf(float(project.minutes) + maxf(minutes, 0.0), total)
+	project.quality = float(project.quality) + TravelWriting.session_quality(project.topic, angle) * (worked - float(project.minutes)) / total
+	project.minutes = worked
+	if worked >= total - 0.5:
+		project.sessions = int(project.sessions) + 1
+		project.minutes = 0.0
+	_state.world.writing.xp = int(_state.world.writing.get("xp", 0)) + (1 if project.minutes == 0.0 else 0)
+	if int(project.sessions) >= int(f.sessions):
+		out.done = true
+		out.published = _publish_work(project, f)
+		out.award = out.published.get("award", {})
+	_has_unsaved_changes = true
+	writing_changed.emit()
+	return out
+
+
+func _publish_work(project: Dictionary, f: Dictionary) -> Dictionary:
+	var writing: Dictionary = _state.world.writing
+	var result := TravelWriting.reception(f, float(project.quality), int(project.sessions))
+	var id := "w%d" % (writing.works as Array).size()
+	var title := TravelWriting.title_for(project.topic, hash("%s|%s" % [id, project.topic.id]))
+	var work := {"id": id, "form": String(f.id), "title": title, "topic": String(project.topic.id), "stars": int(result.stars),
+		"published_at": _state.game_time, "euros": int(result.euros), "renown": int(result.renown)}
+	(writing.works as Array).append(work)
+	writing.project = {}
+	_money(int(result.euros), "writing")
+	funds_changed.emit(_state.funds)
+	var award := _award_once("writing:%s" % id, Loc.t("Published: %s") % title, int(result.renown))
+	if not award.is_empty():
+		renown_awarded.emit([award])
+	WorldChronicle.add_captain_event(_state.world, "captain_book", _state.game_time, {"title": title, "form": String(f.id), "stars": int(result.stars),
+		"port": String(_state.location_id)}, int(result.renown), 8 + int(result.renown) / 2)
+	world_changed.emit()
+	_check_dreams()
+	work.award = award
+	return work
 
 
 # --- Developer tools (I027 playtest: F10's further rows) ------------------------------

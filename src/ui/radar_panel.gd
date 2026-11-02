@@ -30,6 +30,8 @@ var on_deck := Callable()
 var _scope: Control
 var _info: Label
 var _risks: Array[Dictionary] = []
+## Notable yachts heard on AIS (I028 Tier 6): drawn as open diamonds with their names.
+var _ais: Array[Dictionary] = []
 var _refresh := 0.0
 
 
@@ -109,7 +111,8 @@ func _process(delta: float) -> void:
 		_refresh = REFRESH_SECONDS
 		var looking := GameSession.is_active() and GameSession.is_underway()
 		_risks = Simulation.traffic_risks(get_range_nm()) if looking else ([] as Array[Dictionary])
-		_info.text = describe(_risks)
+		_ais = GameSession.get_notable_ais_contacts(get_range_nm()) if looking else ([] as Array[Dictionary])
+		_info.text = describe(_risks) + describe_ais(_ais)
 		_scope.queue_redraw()
 	visible = should_show()
 
@@ -131,6 +134,20 @@ static func describe(risks: Array[Dictionary]) -> String:
 		Simulation.RISK_CAUTION:
 			lines.append(Loc.t("Keep an eye on it: it will pass close."))
 	return "\n".join(lines)
+
+
+## A line per notable yacht on AIS (at most two): name, skipper, range and bearing.
+static func describe_ais(contacts: Array[Dictionary]) -> String:
+	var lines := PackedStringArray()
+	for contact in contacts.slice(0, 2):
+		lines.append(Loc.t("AIS: %s (%s), %s nm %s") % [contact.name, contact.skipper, Loc.decimal(float(contact.range_nm)),
+			WindField.compass_name(float(contact.bearing))])
+	return ("\n" + "\n".join(lines)) if not lines.is_empty() else ""
+
+
+## The notable AIS contacts shown, for tests.
+func get_ais_contacts() -> Array[Dictionary]:
+	return _ais
 
 
 static func colour_for(risk: int) -> Color:
@@ -174,6 +191,16 @@ func _draw_scope() -> void:
 			_scope.draw_arc(at, 9.0, 0.0, TAU, 20, colour, 1.5, true)
 		if int(info.risk) >= Simulation.RISK_DANGER:
 			_scope.draw_arc(at, 13.0, 0.0, TAU, 24, colour, 1.0, true)
+	var title := UiTheme.color(&"title")
+	for contact in _ais:
+		var offset: Vector2 = contact.offset_nm
+		var at := centre + Vector2(offset.x, -offset.y) / get_range_nm() * half
+		if at.distance_to(centre) > half - 4.0:
+			continue
+		var d := 6.0
+		_scope.draw_polyline(PackedVector2Array([at + Vector2(0, -d), at + Vector2(d, 0), at + Vector2(0, d), at + Vector2(-d, 0), at + Vector2(0, -d)]),
+			title, 1.5, true)
+		_scope.draw_string(font, at + Vector2(9.0, 4.0), String(contact.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 11, title)
 
 
 func _draw_mark(at: Vector2, angle: float, colour: Color, size: float) -> void:

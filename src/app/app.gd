@@ -290,6 +290,7 @@ func _ready() -> void:
 	hud.instruments_requested.connect(open_instruments)
 	GameSession.notice.connect(notify)
 	# I028: what passengers say, and how a passage ended for each of them.
+	GameSession.world_news.connect(notify)  # I028 Tier 6: the magazine, meetings, invitations
 	GameSession.passenger_said.connect(func(given: String, text: String) -> void: notify("%s: “%s”" % [given, text]))
 	GameSession.passenger_settled.connect(func(record: Dictionary) -> void:
 		notify(Loc.t("%s went ashore in %s: %s, %s paid%s.") % [record.name, PortCatalog.get_default().get_display_name(StringName(record.disembark)),
@@ -1461,6 +1462,7 @@ func open_laptop(start_app: StringName = LaptopView.APP_HOME) -> LaptopView:
 	laptop.postcard_requested.connect(func() -> void: make_postcard.call_deferred())
 	laptop.work_requested.connect(func(hours: int) -> void: work_for.call_deferred(hours))
 	laptop.game_work_requested.connect(func(task_id: String, choice: int) -> void: work_on_game.call_deferred(task_id, choice))
+	laptop.writing_requested.connect(func(angle: String) -> void: write_session.call_deferred(angle))
 	laptop.publish_confirmed.connect(publish_travel_update)
 	modals.push(laptop)
 	SessionLog.write("laptop", {"app": String(start_app), "port": String(GameSession.get_location_id())})
@@ -1611,6 +1613,26 @@ func work_on_game(task_id: String, choice: int) -> void:
 		lines.append(Loc.t("The first sales: %s.") % GameSession.format_money(int(outcome.euros)))
 	lines.append(Loc.t("It is %s.") % now)
 	notify(" ".join(lines))
+
+
+## A travel-writing session (I028): two hours aboard on the one clock (an
+## interruption counts its share), then the work's progress or its publication.
+func write_session(angle: String) -> void:
+	var project: Dictionary = GameSession.get_writing().get("project", {})
+	if project.is_empty():
+		return
+	var minutes := TravelWriting.session_hours() * 60.0 - float(project.get("minutes", 0.0))
+	var result: Simulation.AdvanceResult = await pass_time(func() -> Simulation.AdvanceResult: return Simulation.spend_time_aboard(minutes, true))
+	var outcome := GameSession.work_on_writing(angle, result.elapsed_seconds / 60.0)
+	if result.stopped_by == Simulation.STOP_RESCUE:
+		return
+	if outcome.done:
+		var work: Dictionary = outcome.published
+		notify(Loc.t("Published: “%s”. %s, %s earned.") % [work.title, "★".repeat(int(work.stars)), GameSession.format_money(int(work.euros))])
+	elif result.elapsed_seconds / 60.0 < minutes - 0.5:
+		notify(Loc.t("Interrupted after %s: %s. The writing done counts.") % [Simulation.format_duration(result.elapsed_seconds), interruption_reason(result.stopped_by)])
+	else:
+		notify(Loc.t("A good session of writing. It is %s.") % Simulation.format_game_time(GameSession.get_game_time()))
 
 
 func _on_weather_warning(warning: Dictionary) -> void:

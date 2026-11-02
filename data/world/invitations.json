@@ -1,0 +1,35 @@
+{
+	"note": "I028 Tier 6: prestigious invitations. When the Captain meets every qualification ('needs': world rank at most, passenger reviews and average stars at least, longest passage, overnight berths for the party) and is in harbour within 'reach_nm' of one of 'to' (not there already), the travellers ask to be carried there. Accepting publishes the passage and books them through the ordinary passage trade. Each invitation once. Text fields are translated.",
+	"invitations": [
+		{
+			"id": "greenland_scouts",
+			"from": ["freya_voss", "maya_wildshore"],
+			"to": ["lerwick", "torshavn", "reykjavik", "bergen"],
+			"reach_nm": 450,
+			"needs": {"rank": 120, "reviews": 3, "rating": 4.0, "longest_nm": 150, "berths": 2},
+			"fare_factor": 1.4,
+			"title": "An invitation from Freya Voss",
+			"text": "Freya Voss and Maya Wildshore would like to sail with you to %s, to see the northern waters before Northern Promise's expedition."
+		},
+		{
+			"id": "writers_passage",
+			"from": ["ines_moreau"],
+			"to": ["brest", "la_rochelle", "cherbourg", "saint_malo"],
+			"reach_nm": 350,
+			"needs": {"rank": 150, "reviews": 2, "rating": 4.0, "longest_nm": 60, "works": 1},
+			"fare_factor": 1.25,
+			"title": "An invitation from Inès Moreau",
+			"text": "Inès Moreau has read your writing and asks to sail with you to %s, for a chapter of her next book."
+		},
+		{
+			"id": "island_photographs",
+			"from": ["elodie_marchand"],
+			"to": ["bonifacio", "calvi", "ajaccio", "portoferraio", "hvar", "dubrovnik"],
+			"reach_nm": 400,
+			"needs": {"rank": 140, "reviews": 3, "rating": 4.2, "longest_nm": 100},
+			"fare_factor": 1.3,
+			"title": "An invitation from Élodie Marchand",
+			"text": "Élodie Marchand would like to photograph the coast from your deck on a passage to %s."
+		}
+	]
+}

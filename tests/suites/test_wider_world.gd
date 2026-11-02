@@ -64,10 +64,11 @@ func _moor_in(port_id: StringName) -> void:
 func _test_new_harbours() -> void:
 	var catalog := PortCatalog.get_default()
 	var missing := NEW_HARBOURS.filter(func(id: StringName) -> bool: return catalog.get_port(id) == null)
-	# Regions and Harbours 2026 added the Detailed Cruising Regions' harbours after these.
+	# Regions and Harbours 2026 added the Detailed Cruising Regions' harbours after
+	# these, and I028 Nuuk (Greenland, for the expeditions of the world's travellers).
 	var cruising := CruisingRegions.get_default().destinations.values().filter(
 		func(d: Dictionary) -> bool: return d["class"] != CruisingRegions.CLASS_ANCHORAGE).size()
-	t.check(missing.is_empty() and catalog.ports.size() == 239 + cruising, "[harbours] the 16 new harbours are in the catalogue (%d in all, %d of them in the cruising regions; missing %s)" % [catalog.ports.size(), cruising, missing])
+	t.check(missing.is_empty() and catalog.ports.size() == 239 + cruising + 1, "[harbours] the 16 new harbours are in the catalogue (%d in all, %d of them in the cruising regions; missing %s)" % [catalog.ports.size(), cruising, missing])
 	var problems := []
 	for id in NEW_HARBOURS:
 		var port := catalog.get_port(id)

@@ -22,6 +22,8 @@ extends ModalPanel
 signal postcard_requested
 signal work_requested(hours: int)
 signal game_work_requested(task_id: String, choice: int)
+## I028: a travel-writing session with this angle (App spends the time).
+signal writing_requested(angle: String)
 signal publish_confirmed
 
 const APP_HOME := &"home"
@@ -32,8 +34,12 @@ const APP_HISTORY := &"history"
 const APP_DREAMS := &"dreams"
 ## I028: the passage trade (PassagesApp).
 const APP_PASSAGES := &"passages"
-const APPS: Array[StringName] = [APP_HOME, APP_PASSAGES, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_DREAMS, APP_HISTORY]
-const APP_TITLES := {APP_HOME: "Home", APP_PASSAGES: "Passages", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements",
+## I028 Tier 5: the Traveller Network (NetworkApp).
+const APP_NETWORK := &"network"
+## I028 Tier 6: the magazine, rankings, directory and invitations (WorldApp).
+const APP_WORLD := &"world"
+const APPS: Array[StringName] = [APP_HOME, APP_PASSAGES, APP_NETWORK, APP_WORLD, APP_PUBLICATIONS, APP_ACHIEVEMENTS, APP_DREAMS, APP_HISTORY]
+const APP_TITLES := {APP_HOME: "Home", APP_PASSAGES: "Passages", APP_NETWORK: "Network", APP_WORLD: "World", APP_PUBLICATIONS: "Publications", APP_ACHIEVEMENTS: "Achievements",
 	APP_DREAMS: "Dreams", APP_HISTORY: "Voyage history"}
 
 ## The laptop's drawing (scene units = pixels of the view).
@@ -225,6 +231,10 @@ func show_app(id: StringName) -> void:
 	match id:
 		APP_PASSAGES:
 			_content = PassagesApp.build(self)
+		APP_NETWORK:
+			_content = NetworkApp.build(self)
+		APP_WORLD:
+			_content = WorldApp.build(self)
 		APP_PUBLICATIONS:
 			_content = _build_publications()
 		APP_ACHIEVEMENTS:
@@ -331,7 +341,8 @@ func _build_home() -> Control:
 	if not GameSession.can_work_remotely():
 		work.disabled = true
 		work.tooltip_text = Loc.t("Remote work needs a steady connection: moor in a harbour first.")
-	_action(actions, "GameButton", Loc.t("Your little game…"), func() -> void: open_game())
+	# I028: travel writing in place of the little game (kept for its history).
+	_action(actions, "WritingButton", Loc.t("Travel writing…"), func() -> void: open_writing())
 	return page
 
 
@@ -340,6 +351,12 @@ func open_work() -> WorkMenu:
 	menu.work_requested.connect(work_requested.emit)
 	menu.publish_requested.connect(func() -> void: open_publish())
 	return open_task(menu) as WorkMenu
+
+
+func open_writing() -> WritingMenu:
+	var menu := WritingMenu.new()
+	menu.write_requested.connect(writing_requested.emit)
+	return open_task(menu) as WritingMenu
 
 
 func open_game() -> GameDevMenu:

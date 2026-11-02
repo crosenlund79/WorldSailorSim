@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PortData" format=3]
+
+[ext_resource type="Script" path="res://src/navigation/port_data.gd" id="1_port"]
+
+[resource]
+script = ExtResource("1_port")
+id = &"nuuk"
+display_name = "Nuuk"
+country = "Greenland"
+latitude = 64.1750
+longitude = -51.7333
+description = "Nuuk, Greenland's capital, at the mouth of a great fjord on the Labrador Sea."
+importance = 2
+region = "north_atlantic"
+island = false
+source = "UN/LOCODE GL GOH 6411N 05144W (UNECE code list), I028"

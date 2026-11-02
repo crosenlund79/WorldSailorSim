@@ -3,3 +3,5 @@
 {"event": "preflight_end", "iso": "2026-11-02T03:03:37+00:00", "epoch": 1793588617.397, "monotonic_s": 1669.49, "boot": "082580c0", "note": "backup + iteration branch at ed7601a, system map"}
 {"event": "core_tiers_1_3_end", "iso": "2026-11-02T03:03:37+00:00", "epoch": 1793588617.409, "monotonic_s": 1669.51, "boot": "082580c0", "note": "passage trade core + test_passages 42/0 (3773aaf)"}
 {"event": "tier3_checkpoint", "iso": "2026-11-02T03:24:02+00:00", "epoch": 1793589842.118, "monotonic_s": 2894.22, "boot": "082580c0", "note": "backup/i028-tier-3 = 6bd4620; focused suites green"}
+{"event": "tier4_end", "iso": "2026-11-02T03:26:29+00:00", "epoch": 1793589989.892, "monotonic_s": 3041.99, "boot": "082580c0", "note": "dreams criteria, passenger dreams, rewards (abe433d)"}
+{"event": "tier5_6_core_end", "iso": "2026-11-02T03:52:44+00:00", "epoch": 1793591564.108, "monotonic_s": 4616.20, "boot": "082580c0", "note": "Tiers 5-6 core: writing, ledger, network, magazine, directory, AIS, encounters, invitations; 64/0"}

@@ -58,8 +58,13 @@
 			"id": "travel_book",
 			"title": "A book of your travels",
 			"kind": "publish",
-			"text": "Publish a book of your travels, written from your own voyages.",
-			"count": 1
+			"text": "Publish a book of your travels - a travelogue, an adventure book or a novel - written from your own voyages.",
+			"count": 1,
+			"forms": [
+				"travelogue",
+				"adventure",
+				"novel"
+			]
 		},
 		{
 			"id": "world_traveller",
