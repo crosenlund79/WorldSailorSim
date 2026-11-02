@@ -54,7 +54,7 @@ func duplicate_world() -> WorldState:
 ## As the save holds it: numbers as JSON gives them back (so a game's state
 ## reads the same before saving and after loading).
 func to_dict() -> Dictionary:
-	return JSON.parse_string(JSON.stringify(_raw_dict()))
+	return JSON.parse_string(JSON.stringify(_raw_dict(), "", true, true))  # full precision, as SaveManager writes
 
 
 func _raw_dict() -> Dictionary:

@@ -23,7 +23,7 @@ func run(runner: Node) -> void:
 
 ## JSON numbers come back as floats: compare what the save would hold.
 func _norm(value: Variant) -> String:
-	return JSON.stringify(JSON.parse_string(JSON.stringify(value)))
+	return JSON.stringify(JSON.parse_string(JSON.stringify(value, "", true, true)), "", true, true)
 
 
 func _fresh_world(seed: int, days: float) -> WorldState:
@@ -82,7 +82,7 @@ func _test_ledger_rules() -> void:
 	t.check(ordered, "[world] the ledger's sequence only grows")
 	# The past is immutable: a reload and a further advance keep what was written.
 	var before := _norm(a.events)
-	var reloaded := WorldState.from_dict(JSON.parse_string(JSON.stringify(a.to_dict())))
+	var reloaded := WorldState.from_dict(JSON.parse_string(JSON.stringify(a.to_dict(), "", true, true)))  # as SaveManager writes
 	WorldChronicle.advance(reloaded, 1000.0 + 140.0 * DAY, 7)
 	t.check(_norm(reloaded.events.slice(0, a.events.size())) == before and reloaded.events.size() > a.events.size(),
 		"[world] after a reload, history continues and the past is unchanged")
@@ -155,7 +155,7 @@ func _test_network() -> void:
 	t.check(captain.size() == 1, "[network] the Captain's published work is posted")
 	var errors: Array[String] = []
 	var snapshot := GameSession.get_state_snapshot()
-	var reloaded := SessionState.from_dict(JSON.parse_string(JSON.stringify(snapshot.to_dict())), errors)
+	var reloaded := SessionState.from_dict(JSON.parse_string(JSON.stringify(snapshot.to_dict(), "", true, true)), errors)
 	var again := TravellerNetwork.posts(reloaded.world, now, 60)
 	t.check(JSON.stringify(again) == JSON.stringify(posts), "[network] the same posts after a reload")
 	var author := ""

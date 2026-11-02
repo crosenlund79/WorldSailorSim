@@ -1343,9 +1343,9 @@
    "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
   },
   "src/world/world_state.gd": {
-   "sha": "59e5e5e7d21c8fa1",
+   "sha": "16cbd5032774df3b",
    "reviewed": "2026-11-02",
-   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
+   "note": "I028: world state at full JSON precision, as saves are written"
   },
   "src/world/yacht_directory.gd": {
    "sha": "7b4d321ccd6205ff",
@@ -2018,14 +2018,14 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_world_network.gd": {
-   "sha": "499c4fbd1c6235d2",
+   "sha": "626337ac3a14f8b5",
    "reviewed": "2026-11-02",
-   "note": "I028: the world's clock starts with each game (new game, load); regression check; career debug line"
+   "note": "I028: world state at full JSON precision, as saves are written"
   },
   "tests/suites/test_world_renown.gd": {
-   "sha": "4b7ffe11bd2fa5d3",
+   "sha": "1d5cfb819c0ed723",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028: world state at full JSON precision, as saves are written"
   },
   "tests/suites/test_world_voyage.gd": {
    "sha": "bbafe97a3ec72cc7",

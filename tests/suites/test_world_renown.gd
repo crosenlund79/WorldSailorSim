@@ -23,7 +23,7 @@ func run(runner: Node) -> void:
 
 
 func _norm(value: Variant) -> String:
-	return JSON.stringify(JSON.parse_string(JSON.stringify(value)))
+	return JSON.stringify(JSON.parse_string(JSON.stringify(value, "", true, true)), "", true, true)
 
 
 func _moor_at(port_id: StringName) -> void:
@@ -90,9 +90,10 @@ func _test_freya_scenario() -> void:
 	var truth := WorldChronicle.yacht_position(world, "northern_promise", now)
 	t.check(entry.name == "Northern Promise" and entry.skipper == "Freya Voss" and not entry.unknown and float(report.t) <= now,
 		"[directory] Northern Promise is listed with Freya Voss and a public report")
-	var reported_event := world.events.filter(func(e: Dictionary) -> bool: return e.get("yacht", "") == "northern_promise" and float(e.t) == float(report.t))
+	var same_time := world.events.filter(func(e: Dictionary) -> bool: return e.get("yacht", "") == "northern_promise" and float(e.t) == float(report.t))
+	var reported_event := same_time.filter(func(e: Dictionary) -> bool: return e.kind == report.kind and String(e.get("port", "")) == String(report.port))
 	t.check(reported_event.size() >= 1 and not TravellerNetwork.post_for(reported_event[0]).is_empty(),
-		"[directory] the report is the yacht's own latest post on the network")
+		"[directory] the report is the yacht's own latest post on the network (%s)" % str(same_time.map(func(e: Dictionary) -> String: return String(e.kind))))
 	t.check(GameSession.get_yacht_directory("Freya")[0].id == "northern_promise" and GameSession.get_yacht_directory("zzzz").is_empty(),
 		"[directory] searchable by skipper; nothing matches nonsense")
 	var stale_flagged := GameSession.get_yacht_directory().all(func(e: Dictionary) -> bool:
@@ -113,7 +114,7 @@ func _test_freya_scenario() -> void:
 	t.check(all_stories.any(func(s: Dictionary) -> bool: return String(s.kind).begins_with("expedition") and "freya_voss" in (s.who as Array)),
 		"[magazine] the expedition is in the magazine")
 	var errors: Array[String] = []
-	var reloaded := SessionState.from_dict(JSON.parse_string(JSON.stringify(GameSession.get_state_snapshot().to_dict())), errors)
+	var reloaded := SessionState.from_dict(JSON.parse_string(JSON.stringify(GameSession.get_state_snapshot().to_dict(), "", true, true)), errors)
 	var before := _norm(reloaded.world.issues)
 	GameSession.replace_state(reloaded)
 	GameSession.advance_world(true)
@@ -172,7 +173,7 @@ func _test_invitation() -> void:
 	GameSession._check_rank_goals()
 	var renown := GameSession._state.progress.lifetime_renown
 	var errors: Array[String] = []
-	GameSession.replace_state(SessionState.from_dict(JSON.parse_string(JSON.stringify(GameSession.get_state_snapshot().to_dict())), errors))
+	GameSession.replace_state(SessionState.from_dict(JSON.parse_string(JSON.stringify(GameSession.get_state_snapshot().to_dict(), "", true, true)), errors))
 	GameSession._check_rank_goals()
 	t.check(GameSession._state.progress.is_completed(&"world:top_100") and GameSession._state.progress.lifetime_renown == renown,
 		"[rankings] among the hundred, awarded once; nothing again after a reload")
