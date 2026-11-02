@@ -66,7 +66,8 @@ All runs are on Linux, in a container without a GPU.
 |---|---|---|
 | Focused I028 suites during the tiers (`test_passages`, `test_world_network`, `test_world_renown`, saves, dreams, localisation, branding) | during the iteration | green at each step (Tier 3 checkpoint focused suites; 519/0 across 13 suites after Tier 6) |
 | Full regression (headless, all 99 suites), first | `9cb0290` | 6,027 passed, **43 failed** - investigated and fixed (see below) |
-| Full regression (headless, all 99 suites), after the fixes | `8dad67d` | RESULT_FULL_2 |
+| Full regression (headless, all 99 suites), after the fixes | `8dad67d` | 6,064 passed, 6 failed: five pet checks in `test_cozy_patch` (pre-existing, below) and one directory consistency check, fixed in `eeac8f5` (the world's state lost digits of precision) |
+| Essential release suites (headless, 15 suites: passages, world network and renown, saves, voyage persistence, localisation, dreams, objectives, publishing, the UI sweep at all scales, the collection, build label, branding, diagnostics, the gameplay flow) | `eeac8f5` (release candidate) | **842 passed, 0 failed** |
 | Rendered checks (xvfb, OpenGL 3 on llvmpipe, 1600×900) | during Tiers 1-6 | guests boarding over the gangway; the Passages, Network and World apps in English and Danish |
 | Content / localisation / GDScript guides / links | release candidate | 0 FAIL / 4,042 messages, 0 errors / 414 scripts reviewed / 0 broken |
 
@@ -80,9 +81,9 @@ byte-identical (the world's numbers are now held as the save holds them); two
 pre-I028 suites that count renown exactly met the new quay meetings (they now
 run with a quiet world, a test-only switch like the fuel one).
 
-**Known and not I028's:** three pet-petting checks in `test_cozy_patch` fail
-at the I028 starting commit `ed7601a` as well (they broke between
-`release/i027` and the regions work); not changed here.
+**Known and not I028's:** the pet-petting checks in `test_cozy_patch` (three to
+five of them, varying between runs) fail at the I028 starting commit `ed7601a`
+as well; they are timing-sensitive and not changed here.
 
 ## Elapsed time
 
@@ -98,9 +99,9 @@ GDScript guides, about 14 minutes).
 | Tier 3 finish, rendered checks and the checkpoint | 20 min |
 | Tier 4 | 2 min (built alongside Tier 3, committed after the checkpoint) |
 | Tiers 5-6 | 26 min |
-| Career verification (three rounds after two fixes; 3.3 h of CPU on 4 cores), Danish, guides | 133 min |
-| Regression, fixes, report and release | ELAPSED_TAIL |
-| **Total** | TOTAL_ELAPSED |
+| Career verification (three rounds after two fixes; 3.3 h of CPU on 4 cores), Danish, guides | 135 min |
+| Two full regressions, their fixes, the essential suites, report and release | about 101 min |
+| **Total** | **about 5 h 2 min** of wall-clock (02:46 to 07:48 UTC on 2 November 2026) |
 
 ## Known limitations
 

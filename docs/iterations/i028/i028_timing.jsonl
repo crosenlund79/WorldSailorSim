@@ -11,3 +11,4 @@
 {"event": "career_end", "iso": "2026-11-02T06:08:08+00:00", "epoch": 1793599688.017, "monotonic_s": 12740.11, "boot": "082580c0", "note": "24 careers complete; findings"}
 {"event": "regression_begin", "iso": "2026-11-02T06:08:08+00:00", "epoch": 1793599688.030, "monotonic_s": 12740.13, "boot": "082580c0", "note": "full headless runner"}
 {"event": "regression2_begin", "iso": "2026-11-02T06:59:24+00:00", "epoch": 1793602764.059, "monotonic_s": 15816.15, "boot": "082580c0", "note": "full runner after fixes"}
+{"event": "release_candidate", "iso": "2026-11-02T07:48:52+00:00", "epoch": 1793605732.993, "monotonic_s": 18785.09, "boot": "082580c0", "note": "essential suites 842/0 on eeac8f5"}
