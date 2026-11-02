@@ -290,6 +290,9 @@ func _horizon(hours: float, start_time: float, actual: float) -> Dictionary:
 	var ledger := GameSession.get_ledger()
 	var book := GameSession.get_passage_book()
 	var standing := GameSession.get_captain_standing()
+	if OS.get_environment("CAREER_DEBUG") != "":
+		var w := GameSession.get_world()
+		print("HORIZON world started ", w.started_at, " until ", w.generated_until, " now ", GameSession.get_game_time(), " events ", w.events.size(), " renown ", w.renown.size(), " standing ", standing)
 	return {"horizon_h": hours, "human_h": snappedf(actual, 0.1), "game_days": snappedf((GameSession.get_game_time() - start_time) / 86400.0, 0.1),
 		"funds": GameSession.get_funds(), "totals": ledger.totals.duplicate(), "nm": snappedf(ledger.nm_sail + ledger.nm_engine, 1.0),
 		"fuel_l": snappedf(ledger.fuel_burned_l, 1.0), "voyages": GameSession.get_captains_log().voyages_completed,

@@ -343,9 +343,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "dc2083694406c348",
+   "sha": "d79bcb3cb44f349b",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028: the world's clock starts with each game (new game, load); regression check; career debug line"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -1383,9 +1383,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/career/career_sim.gd": {
-   "sha": "157fcf6dfdefef1d",
+   "sha": "8a320258038fb96c",
    "reviewed": "2026-11-02",
-   "note": "I028: passenger policy takes a last look at requests before boarding"
+   "note": "I028: the world's clock starts with each game (new game, load); regression check; career debug line"
   },
   "tests/career/world_thresholds.gd": {
    "sha": "6b52dfc8f044e92b",
@@ -2018,9 +2018,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/suites/test_world_network.gd": {
-   "sha": "7a96ee709ea301f6",
+   "sha": "499c4fbd1c6235d2",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028: the world's clock starts with each game (new game, load); regression check; career debug line"
   },
   "tests/suites/test_world_renown.gd": {
    "sha": "4b7ffe11bd2fa5d3",

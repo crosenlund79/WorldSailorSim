@@ -169,7 +169,9 @@ func _exit_tree() -> void:
 func start_new_session(companion_kind: StringName = CompanionState.DEFAULT_KIND, level: StringName = Difficulty.STANDARD,
 		companion_name := "", companion_gender: StringName = &"") -> void:
 	_state = SessionState.create_new(START_LOCATION, START_AREA, START_SPAWN, companion_kind, level, companion_name, companion_gender)
+	_world_checked_at = -INF  # I028: another game's clock (a new game, a load) starts the world afresh
 	_state.moored_since = _state.game_time  # I027: moored from the start
+	_start_world()
 	_companion_wake_day = -1
 	_has_unsaved_changes = false
 	_asleep = false
@@ -201,6 +203,7 @@ func end_session() -> void:
 	if _state == null:
 		return
 	_state = null
+	_world_checked_at = -INF  # I028: another game's clock (a new game, a load) starts the world afresh
 	_has_unsaved_changes = false
 	_settled = false
 	_asleep = false
@@ -219,6 +222,7 @@ func replace_state(new_state: SessionState) -> void:
 	assert(new_state != null)
 	var was_active := _state != null
 	_state = new_state.duplicate_state()
+	_world_checked_at = -INF  # I028: another game's clock (a new game, a load) starts the world afresh
 	_has_unsaved_changes = false
 	_complete_legacy_route()
 	_recover_location()
@@ -226,6 +230,7 @@ func replace_state(new_state: SessionState) -> void:
 	# I027: a save from before harbour dues starts counting now, never back.
 	if _state.moored_since <= 0.0 and is_moored_in_harbour():
 		_state.moored_since = _state.game_time
+	_start_world()  # I028: an older save's world begins now, never back in time
 	# I027 Tier 4: a loaded game's past fulfils its dreams quietly (no burst
 	# of notices for what happened before dreams existed).
 	_check_dreams(false)
@@ -4173,6 +4178,14 @@ var _world_checked_at := -INF
 
 func get_world() -> WorldState:
 	return _state.world.duplicate_world() if _state else WorldState.new()
+
+
+## The world's history begins with the game (or, for an older save, when it is
+## first loaded): its clock starts here, so its first day is written a day on.
+func _start_world() -> void:
+	if _state.world.started_at <= 0.0:
+		WorldChronicle.advance(_state.world, _state.game_time, get_wind_seed())
+		_world_checked_at = _state.game_time
 
 
 ## Brings the world's history up to now (sparse: a day's events at a time).

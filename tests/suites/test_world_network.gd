@@ -171,3 +171,10 @@ func _test_network() -> void:
 	t.check(GameSession.get_network_posts(60, true).is_empty(), "[network] unfollowed again")
 	var standing := GameSession.get_captain_standing()
 	t.check(int(standing.rank) >= 1 and int(standing.of) >= 200, "[world] the Captain has a place in the rankings: %d of %d" % [int(standing.rank), int(standing.of)])
+	# A new game after a long one: the world keeps its own clock (career finding:
+	# a stale checkpoint from the earlier game froze the new game's world).
+	GameSession.start_new_session(&"")
+	Simulation.advance(3.0 * DAY)
+	var fresh := GameSession.get_world()
+	t.check(fresh.started_at > 0.0 and not fresh.events.is_empty() and int(GameSession.get_captain_standing().rank) > 100,
+		"[world] a new game after a long one starts its own world (%d events, rank %d)" % [fresh.events.size(), int(GameSession.get_captain_standing().get("rank", 0))])
