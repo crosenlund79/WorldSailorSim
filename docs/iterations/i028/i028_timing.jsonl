@@ -7,3 +7,4 @@
 {"event": "tier5_6_core_end", "iso": "2026-11-02T03:52:44+00:00", "epoch": 1793591564.108, "monotonic_s": 4616.20, "boot": "082580c0", "note": "Tiers 5-6 core: writing, ledger, network, magazine, directory, AIS, encounters, invitations; 64/0"}
 {"event": "career_begin", "iso": "2026-11-02T03:54:45+00:00", "epoch": 1793591685.947, "monotonic_s": 4738.04, "boot": "082580c0", "note": "8 archetypes x 3 seeds to 100 est. human hours, 4 processes"}
 {"event": "career_restart", "iso": "2026-11-02T04:21:05+00:00", "epoch": 1793593265.138, "monotonic_s": 6317.24, "boot": "082580c0", "note": "re-run on calibrated world + fixed passenger policy"}
+{"event": "career_rerun_seeds23", "iso": "2026-11-02T05:11:51+00:00", "epoch": 1793596311.421, "monotonic_s": 9363.52, "boot": "082580c0", "note": "seeds 2-3 after the world-clock fix"}

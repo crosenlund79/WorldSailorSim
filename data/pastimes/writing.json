@@ -2,11 +2,11 @@
 	"note": "I028 Tier 5: travel writing, the Captain's pastime in place of the little game (I022, kept for its history). A work is written in sessions of two hours; each session the Captain chooses an angle, and the angle that suits the topic counts more. Topics come from what really happened (TravelWriting.topics). A finished work is published at once: modest income and renown, a world event (the Traveller Network, the magazine). 'needs' gates a form on real experience. Text fields are translated.",
 	"session_hours": 2,
 	"forms": [
-		{"id": "essay", "title": "Voyage essay", "sessions": 2, "euros": 60, "renown": 5, "needs": {}},
-		{"id": "journal", "title": "Nautical journal", "sessions": 3, "euros": 90, "renown": 6, "needs": {"voyages": 3}},
-		{"id": "travelogue", "title": "Travelogue", "sessions": 5, "euros": 200, "renown": 12, "needs": {"harbours": 8}},
-		{"id": "adventure", "title": "Adventure book", "sessions": 8, "euros": 450, "renown": 22, "needs": {"longest_nm": 300, "works": 1}},
-		{"id": "novel", "title": "Sailing novel", "sessions": 12, "euros": 900, "renown": 35, "needs": {"works": 3, "harbours": 15}}
+		{"id": "essay", "title": "Voyage essay", "sessions": 2, "euros": 40, "renown": 3, "needs": {}},
+		{"id": "journal", "title": "Nautical journal", "sessions": 3, "euros": 60, "renown": 4, "needs": {"voyages": 3}},
+		{"id": "travelogue", "title": "Travelogue", "sessions": 5, "euros": 100, "renown": 7, "needs": {"harbours": 8}},
+		{"id": "adventure", "title": "Adventure book", "sessions": 8, "euros": 160, "renown": 11, "needs": {"longest_nm": 300, "works": 1}},
+		{"id": "novel", "title": "Sailing novel", "sessions": 12, "euros": 240, "renown": 16, "needs": {"works": 3, "harbours": 15}}
 	],
 	"angles": [
 		{"id": "people", "text": "Write about the people"},
