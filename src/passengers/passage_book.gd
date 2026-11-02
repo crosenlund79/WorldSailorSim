@@ -133,7 +133,7 @@ static func from_dict(data: Variant) -> PassageBook:
 	if d.get("totals") is Dictionary:
 		for key: String in book.totals:
 			var value: Variant = d.totals.get(key, 0)
-			book.totals[key] = value if value is int or value is float else 0
+			book.totals[key] = int(value) if value is int or value is float else 0
 	if d.get("rivals") is Dictionary:
 		book.rivals = (d.rivals as Dictionary).duplicate(true)
 	var next: Variant = d.get("next_id", 1)
