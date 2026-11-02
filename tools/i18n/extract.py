@@ -34,7 +34,7 @@ LOC_T = re.compile(r'Loc\.t\(\s*"((?:[^"\\]|\\.)*)"(?:\s*,\s*"((?:[^"\\]|\\.)*)"
 LOC_FORMAT = re.compile(r'Loc\.format\(\s*"((?:[^"\\]|\\.)*)"')
 LOC_N = re.compile(r'Loc\.(?:n|format_plural)\(\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"(?:\s*,[^,)]*(?:\([^)]*\))?[^,)]*,\s*"((?:[^"\\]|\\.)*)")?')
 DATA_KEYS = ("name", "game_title", "text", "title", "description", "label", "display_name", "short", "story", "hint", "flavour", "message",
-             "body", "choice", "outcome", "question", "log")
+             "body", "choice", "outcome", "question", "log", "speciality", "rig")
 # Lists of player-facing strings (I022 pastimes), and maps whose values are.
 LIST_KEYS = ("captions", "choices", "done")
 MAP_KEYS = ("weather_names",)

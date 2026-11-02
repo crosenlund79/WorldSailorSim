@@ -72,9 +72,11 @@ static func population() -> Dictionary:
 		var p: Dictionary = data().get("population", {})
 		var rng := RandomNumberGenerator.new()
 		rng.seed = 280028
-		var given: Array = p.get("given", ["Sam"])
-		var family: Array = p.get("family", ["Sailor"])
-		var roles: Array = p.get("roles", ["sailor"])
+		var given: Array = p.get("given", [])
+		var family: Array = p.get("family", [])
+		var roles: Array = p.get("roles", [])
+		if given.is_empty() or family.is_empty() or roles.is_empty():
+			return _population
 		var span: Array = p.get("renown", [20, 300])
 		for i in int(p.get("count", 0)):
 			var id := "p%d" % i

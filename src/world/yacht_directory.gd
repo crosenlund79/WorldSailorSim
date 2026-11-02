@@ -24,7 +24,7 @@ static func entries(world: WorldState, now: float, query := "") -> Array:
 		var id := String(y.id)
 		var skipper := WorldChronicle.skipper_of(id)
 		var report := last_report(world, id, now)
-		var entry := {"id": id, "name": String(y.name), "model": String(y.get("model", "")), "type": Loc.t(String(y.get("type", ""))),
+		var entry := {"id": id, "name": String(y.name), "model": String(y.get("model", "")), "type": Loc.t(String(y.get("rig", ""))),
 			"skipper": String(skipper.get("name", "")), "skipper_id": String(skipper.get("id", "")), "report": report,
 			"unknown": report.is_empty(), "age_days": (now - float(report.t)) / WorldChronicle.DAY if not report.is_empty() else -1.0,
 			"expedition": String((world.yachts.get(id, {}) as Dictionary).get("expedition", ""))}

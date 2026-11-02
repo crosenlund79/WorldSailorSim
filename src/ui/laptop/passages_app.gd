@@ -19,9 +19,9 @@ static func build(laptop: LaptopView) -> Control:
 	var tiles := HBoxContainer.new()
 	tiles.add_theme_constant_override("separation", 16)
 	page.add_child(tiles)
-	laptop._tile(tiles, "Reviews", "%.1f ★" % rating.x if rating.y > 0 else "–", Loc.n("%d review", "%d reviews", int(rating.y)) % int(rating.y))
+	laptop._tile(tiles, Loc.t("Reviews"), "%.1f ★" % rating.x if rating.y > 0 else "–", Loc.n("%d review", "%d reviews", int(rating.y)) % int(rating.y))
 	laptop._tile(tiles, "Passengers", str(int(book.totals.passengers)), Loc.t("carried so far"))
-	laptop._tile(tiles, "Fares", GameSession.format_money(int(book.totals.fares) + int(book.totals.tips)), Loc.t("fares and tips"))
+	laptop._tile(tiles, Loc.t("Fares"), GameSession.format_money(int(book.totals.fares) + int(book.totals.tips)), Loc.t("fares and tips"))
 	_build_offer(laptop, page, book)
 	_build_requests(laptop, page, book)
 	_build_records(laptop, page, book)
@@ -192,7 +192,7 @@ static func _build_requests(laptop: LaptopView, page: VBoxContainer, book: Passa
 	var lost := GameSession.get_passage_requests(true).filter(func(r: Dictionary) -> bool: return r.status == PassageBook.REQUEST_LOST)
 	if open.is_empty() and lost.is_empty():
 		return
-	laptop._heading(page, "Requests")
+	laptop._heading(page, Loc.t("Requests"))
 	for request: Dictionary in open:
 		var traveller := book.get_traveller(String(request.traveller))
 		var offer := book.get_offer(String(request.offer))
@@ -257,6 +257,6 @@ static func _build_rivals(laptop: LaptopView, page: VBoxContainer, book: Passage
 	for skipper: Dictionary in Marketplace.skippers():
 		var won := int((book.rivals.get(String(skipper.id), {}) as Dictionary).get("won", 0))
 		laptop._text(page, StringName("Skipper_%s" % skipper.id), Loc.t("%s · %s (%s) · %.1f ★ · %s%s") % [skipper.name, skipper.yacht, skipper.model,
-			float(skipper.rating), Loc.t({"budget": "good value", "comfort": "comfort", "pets": "animals welcome", "family": "families",
-				"expedition": "expeditions"}.get(String(skipper.speciality), "")),
+			float(skipper.rating), {"budget": Loc.t("good value"), "comfort": Loc.t("comfort"), "pets": Loc.t("animals welcome"), "family": Loc.t("families"),
+				"expedition": Loc.t("expeditions")}.get(String(skipper.speciality), ""),
 			(Loc.t(" · won %d of your travellers") % won) if won > 0 else ""], &"MutedLabel")

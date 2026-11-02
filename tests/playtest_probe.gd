@@ -89,6 +89,8 @@ func _chart_views() -> void:
 
 func _run() -> void:
 	OpeningStory.enabled = false
+	if args.has("lang"):
+		SettingsManager.set_language(StringName(args.lang))  # e.g. --lang=da (the test settings file only)
 	AcademyGuide.enabled = false
 	app = APP_SCENE.instantiate()
 	add_child(app)
@@ -98,6 +100,17 @@ func _run() -> void:
 	await _idle()
 	var port := StringName(args.port)
 	var state := GameSession.get_state_snapshot()
+	if args.has("world_days"):
+		# I028: the world's history written for N days before now (as if the game had run that long).
+		state.world = WorldState.new()
+		WorldChronicle.advance(state.world, state.game_time - float(args.world_days) * 86400.0, state.wind_seed)
+		WorldChronicle.advance(state.world, state.game_time, state.wind_seed)
+		if args.has("near_yacht"):  # moor where a notable yacht is in harbour (its AIS on the radar)
+			for yacht_id: String in WorldChronicle._sorted(state.world.yachts.keys()):
+				var at := WorldChronicle.yacht_position(state.world, yacht_id, state.game_time)
+				if at.get("status", "") == "in_port":
+					port = StringName(String(at.port))
+					break
 	state.location_id = port
 	state.vessel_status = SessionState.STATUS_MOORED
 	state.vessel_position = PortCatalog.get_default().get_port(port).get_geo_position()
@@ -107,6 +120,8 @@ func _run() -> void:
 	var day_start := floorf(state.game_time / 86400.0) * 86400.0
 	state.game_time = day_start + fposmod(float(args.hour) - state.vessel_position.x / 15.0, 24.0) * 3600.0
 	GameSession.replace_state(state)
+	if args.has("world_days"):
+		GameSession.advance_world(true)
 	match String(args.scene):
 		"quay":
 			GameSession.enter_boat_area(SessionState.AREA_EXTERIOR, &"from_boatyard")
@@ -145,6 +160,8 @@ func _run() -> void:
 		var xy := String(args.at).split(",")
 		player.position = Vector2(float(xy[0]), float(xy[1]))
 	if args.has("open"):
+		if args.has("world_section"):
+			WorldApp.section = int(args.world_section)  # I028: 0 magazine, 1 rankings, 2 directory
 		if String(args.open).begins_with("laptop:"):
 			app.open_laptop(StringName(String(args.open).substr(7)))  # e.g. laptop:passages
 		else:

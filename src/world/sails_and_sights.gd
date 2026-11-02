@@ -76,7 +76,11 @@ static func compose(world: WorldState, start: float, captain_lasting: int) -> Di
 		var who := String((e.get("who", [""]) as Array)[0])
 		if seen_people.has(who) and String(e.kind) == "arrive":
 			continue
+		if String(e.kind) == "book" and seen_people.has("#book"):
+			continue  # one new book a month is news; more would read the same
 		seen_people[who] = true
+		if String(e.kind) == "book":
+			seen_people["#book"] = true
 		var story := _story(e)
 		if not story.is_empty():
 			stories.append(story)
@@ -117,7 +121,15 @@ static func _story(e: Dictionary) -> Dictionary:
 			text = Loc.t("%s will sail %s from %s to %s.") % [people, vessel, place, TravellerNetwork._place(String(e.get("to", "")))]
 		"book":
 			headline = Loc.t("New on the shelf from %s") % people
-			text = Loc.t("A new book from one of the sailing world's familiar names, written between harbours.")
+			match String(e.get("role", "")):
+				"photographer":
+					text = Loc.t("A new book of photographs from a season at sea, quiet harbours and wide skies.")
+				"cook":
+					text = Loc.t("A cookbook from a small galley: recipes for calm evenings and rough nights.")
+				"writer":
+					text = Loc.t("New stories from the sea, written in harbours and on night watches.")
+				_:
+					text = Loc.t("A new book from one of the sailing world's familiar names, written between harbours.")
 		"captain_book":
 			headline = Loc.t("“%s”") % String(e.get("title", ""))
 			text = Loc.t("%s publishes a new work, received with %d stars.") % [people, int(e.get("stars", 3))]

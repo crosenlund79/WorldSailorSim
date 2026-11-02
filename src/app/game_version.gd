@@ -11,7 +11,7 @@ extends RefCounted
 ##
 ## The version is independent of the save format (SaveManager.SAVE_VERSION).
 
-const DISPLAY := "0.113a"
+const DISPLAY := "0.114a"
 
 ## The game's public name, in one place (I027): the title screen, the loading
 ## and boot screens, the window title (project.godot's application/config/name,
@@ -27,7 +27,7 @@ const LOGO_PATH := "res://assets/branding/between_horizons_logo.svg"
 const LOGO_SMALL_PATH := "res://assets/branding/png/between_horizons_logo_480.png"
 ## One line under the name (the last line of the opening story).
 const TAGLINE := "The next horizon is yours to discover."
-const MACHINE := "0.113.1"
+const MACHINE := "0.114.1"
 
 ## The development build identity (the label in the window's bottom-right
 ## corner, BuildLabel): which major iteration this checkpoint belongs to, an
@@ -44,8 +44,8 @@ const MACHINE := "0.113.1"
 ## title since I027 (it was "LCH", Little Captain's Hat, until I026; older
 ## release branches keep their own).
 const PROJECT_CODE := "BH"
-const ITERATION := "i027"
-const STAGE := "04"
+const ITERATION := "i028"
+const STAGE := ""
 const CHANNEL := "TEST"
 const CHANNELS: Array[String] = ["DEV", "TEST"]
 ## Project setting that shows or hides the label (true by default). A public

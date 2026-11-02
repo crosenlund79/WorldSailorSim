@@ -20,10 +20,10 @@ static func build(laptop: LaptopView) -> Control:
 	filters.name = "Filters"
 	filters.add_theme_constant_override("separation", 8)
 	page.add_child(filters)
-	for choice: Array in [["Everyone", false], ["Following", true]]:
+	for choice: Array in [[Loc.t("Everyone"), false], [Loc.t("Following"), true]]:
 		var button := Button.new()
-		button.name = "Filter_%s" % choice[0]
-		button.text = Loc.t(String(choice[0]))
+		button.name = "Filter_%s" % ("Following" if bool(choice[1]) else "Everyone")
+		button.text = String(choice[0])
 		button.toggle_mode = true
 		button.set_pressed_no_signal(following_only == bool(choice[1]))
 		var only := bool(choice[1])

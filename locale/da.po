@@ -11818,3 +11818,1395 @@ msgstr "Råå"
 msgctxt "place"
 msgid "Rörö"
 msgstr "Rörö"
+
+msgid "Nuuk, Greenland's capital, at the mouth of a great fjord on the Labrador Sea."
+msgstr "Nuuk, Grønlands hovedstad, ved mundingen af en stor fjord ud mod Labradorhavet."
+
+msgctxt "place"
+msgid "Nuuk"
+msgstr "Nuuk"
+
+msgid "A sensible choice, Captain. I'd rather arrive late than frightened."
+msgstr "Et fornuftigt valg, kaptajn. Jeg vil hellere komme for sent end være bange."
+
+msgid "Are we still on time? I have a connection to make."
+msgstr "Når vi stadig frem til tiden? Jeg skal nå en forbindelse."
+
+msgid "Do you ever get tired of the sea? I can't imagine it."
+msgstr "Bliver du aldrig træt af havet? Det kan jeg ikke forestille mig."
+
+msgid "Don't slow down on my account."
+msgstr "Sæt ikke farten ned for min skyld."
+
+msgid "Hold on, the light is perfect. Just one more photo."
+msgstr "Vent, lyset er perfekt. Bare ét billede mere."
+
+msgid "How long have you been living aboard?"
+msgstr "Hvor længe har du boet om bord?"
+
+msgid "I could watch the water all day."
+msgstr "Jeg kunne se på vandet hele dagen."
+
+msgid "I didn't quite expect to share the saloon with everyone at night."
+msgstr "Jeg havde ikke helt regnet med at dele salonen med alle om natten."
+
+msgid "I'll be printing this one."
+msgstr "Det her billede skal printes."
+
+msgid "I'll remember this for a long time. Fair winds, Captain."
+msgstr "Det her husker jeg længe. God vind, kaptajn."
+
+msgid "I'm a bit worried about my onward journey."
+msgstr "Jeg er lidt bekymret for min videre rejse."
+
+msgid "I'm trying to be brave about the waves."
+msgstr "Jeg prøver at være modig med bølgerne."
+
+msgid "I've wanted this for years. Thank you for making it real."
+msgstr "Det har jeg ønsket mig i årevis. Tak, fordi du gjorde det til virkelighed."
+
+msgid "Is it meant to lean this much? I'll just hold on here."
+msgstr "Skal den krænge så meget? Jeg holder bare fast her."
+
+msgid "Is the coffee always this good, or is it the sea air?"
+msgstr "Er kaffen altid så god, eller er det havluften?"
+
+msgid "It's a little more rustic than I imagined, but never mind."
+msgstr "Det er lidt mere primitivt, end jeg havde forestillet mig, men pyt."
+
+msgid "Late? Who cares. More time at sea."
+msgstr "For sent? Pyt med det. Mere tid på havet."
+
+msgid "May I give them a little treat?"
+msgstr "Må jeg give dem en lille godbid?"
+
+msgid "Now this is sailing! Look at that spray."
+msgstr "Det her er sejlads! Se lige sprøjtet."
+
+msgid "Permission to come aboard? Thank you for having us."
+msgstr "Tilladelse til at komme om bord? Tak, fordi vi må være med."
+
+msgid "So this is home for the next few days. Lovely."
+msgstr "Så her bor vi de næste par dage. Dejligt."
+
+msgid "Tell me about the best harbour you've known."
+msgstr "Fortæl mig om den bedste havn, du har kendt."
+
+msgid "Thank you for everything. I'll tell all my friends."
+msgstr "Tak for alt. Det skal alle mine venner høre om."
+
+msgid "Thank you for waiting out the weather. I feel safer for it."
+msgstr "Tak, fordi du ventede vejret ud. Jeg føler mig mere tryg."
+
+msgid "This is exactly what I hoped for."
+msgstr "Det er præcis, hvad jeg håbede på."
+
+msgid "Well, we got here. Thank you, I suppose."
+msgstr "Nå, vi kom frem. Tak, vel."
+
+msgid "What a place. I'm glad we came this way."
+msgstr "Sikke et sted. Jeg er glad for, at vi tog denne vej."
+
+msgid "Where would you like my bag?"
+msgstr "Hvor vil du have min taske?"
+
+msgid "Your companion just fell asleep on my feet. Best voyage ever."
+msgstr "Din ledsager er lige faldet i søvn på mine fødder. Bedste tur nogensinde."
+
+msgid "Elsa Fjord"
+msgstr "Elsa Fjord"
+
+msgid "Henrik Blå"
+msgstr "Henrik Blå"
+
+msgid "Ingrid Salt"
+msgstr "Ingrid Salt"
+
+msgid "Kofi Mensah"
+msgstr "Kofi Mensah"
+
+msgid "Luca Vento"
+msgstr "Luca Vento"
+
+msgid "Mei Tanaka"
+msgstr "Mei Tanaka"
+
+msgid "Nora Quay"
+msgstr "Nora Quay"
+
+msgid "Rosa Marín"
+msgstr "Rosa Marín"
+
+msgid "Sam Okafor"
+msgstr "Sam Okafor"
+
+msgid "Tui Walker"
+msgstr "Tui Walker"
+
+msgid "A ferry, then onward travel"
+msgstr "En færge og så videre"
+
+msgid "Airport one to three hours away"
+msgstr "Lufthavn en til tre timer væk"
+
+msgid "Airport three hours or more away"
+msgstr "Lufthavn tre timer eller mere væk"
+
+msgid "Airport within the hour"
+msgstr "Lufthavn inden for en time"
+
+msgid "A cook curious about harbour kitchens"
+msgstr "En kok, der er nysgerrig på havnekøkkener"
+
+msgid "A family making a summer adventure of it"
+msgstr "En familie, der gør det til et sommereventyr"
+
+msgid "A landscape photographer chasing good light"
+msgstr "En landskabsfotograf på jagt efter godt lys"
+
+msgid "A marine biologist on her way to fieldwork"
+msgstr "En havbiolog på vej til feltarbejde"
+
+msgid "A musician between tours"
+msgstr "En musiker mellem to turnéer"
+
+msgid "A night-shift nurse finally taking time off"
+msgstr "En nattevagtssygeplejerske, der endelig holder fri"
+
+msgid "A remote worker who brought a laptop and patience"
+msgstr "En fjernarbejder med laptop og tålmodighed"
+
+msgid "A schoolteacher on a long summer break"
+msgstr "En skolelærer på en lang sommerferie"
+
+msgid "A student travelling on a careful budget"
+msgstr "En studerende, der rejser på et stramt budget"
+
+msgid "A writer looking for quiet and new stories"
+msgstr "En forfatter på jagt efter ro og nye historier"
+
+msgid "An engineer who has always wanted to learn to sail"
+msgstr "En ingeniør, der altid har villet lære at sejle"
+
+msgid "Going home to the islands after years away"
+msgstr "På vej hjem til øerne efter mange år væk"
+
+msgid "Newlyweds on an unhurried honeymoon"
+msgstr "Nygifte på en rolig bryllupsrejse"
+
+msgid "Recently retired, with a list of places to see"
+msgstr "Nyligt gået på pension, med en liste over steder at se"
+
+msgid "hopes for a few memorable photographs"
+msgstr "håber på et par mindeværdige billeder"
+
+msgid "hopes to learn a little seamanship"
+msgstr "håber at lære lidt sømandskab"
+
+msgid "simply needs to get there, preferably on time"
+msgstr "skal bare frem, helst til tiden"
+
+msgid "wants a proper adventure under sail"
+msgstr "vil have et rigtigt eventyr for sejl"
+
+msgid "wants time together, away from screens"
+msgstr "vil have tid sammen, væk fra skærme"
+
+msgid "wants to see the coast from the sea"
+msgstr "vil se kysten fra søsiden"
+
+msgid "wants to slow down and watch the water"
+msgstr "vil sætte tempoet ned og se på vandet"
+
+msgid "Adventure book"
+msgstr "Eventyrbog"
+
+msgid "Nautical journal"
+msgstr "Nautisk dagbog"
+
+msgid "Sailing novel"
+msgstr "Sejlerroman"
+
+msgid "Travelogue"
+msgstr "Rejsebog"
+
+msgid "Voyage essay"
+msgstr "Sejladsskildring"
+
+msgid "Write about the people"
+msgstr "Skriv om menneskene"
+
+msgid "Write about the places"
+msgstr "Skriv om stederne"
+
+msgid "Write about the sea and the weather"
+msgstr "Skriv om havet og vejret"
+
+msgid "Accept an invitation from a famous traveller to carry them on a passage."
+msgstr "Tag imod en invitation fra en berømt rejsende og tag dem med på en passage."
+
+msgid "Among the fifty"
+msgstr "Blandt de halvtreds"
+
+msgid "Among the hundred"
+msgstr "Blandt de hundrede"
+
+msgid "Among the ten"
+msgstr "Blandt de ti"
+
+msgid "Become one of the fifty best-known sailors."
+msgstr "Bliv en af de halvtreds mest kendte sejlere."
+
+msgid "Become one of the hundred best-known sailors."
+msgstr "Bliv en af de hundrede mest kendte sejlere."
+
+msgid "Become one of the ten best-known sailors."
+msgstr "Bliv en af de ti mest kendte sejlere."
+
+msgid "Carry your first paying passengers to their harbour."
+msgstr "Sejl dine første betalende passagerer til deres havn."
+
+msgid "Dream maker"
+msgstr "Drømmeskaber"
+
+msgid "Earn ten five-star reviews from your passengers."
+msgstr "Få ti femstjernede anmeldelser fra dine passagerer."
+
+msgid "Five stars, ten times"
+msgstr "Fem stjerner, ti gange"
+
+msgid "Full house"
+msgstr "Fuldt hus"
+
+msgid "Invited aboard"
+msgstr "Inviteret om bord"
+
+msgid "Make a passenger's own dream come true."
+msgstr "Opfyld en passagers egen drøm."
+
+msgid "Make five passengers' dreams come true."
+msgstr "Opfyld fem passagerers drømme."
+
+msgid "Met a well-known traveller"
+msgstr "Mødte en kendt rejsende"
+
+msgid "Put your passengers' safety first: wait out rough weather or turn for shelter with guests aboard."
+msgstr "Sæt dine passagerers sikkerhed først: vent hårdt vejr ud eller søg læ med gæster om bord."
+
+msgid "Reach first place in the renown rankings."
+msgstr "Nå førstepladsen på ranglisten over ry."
+
+msgid "Safety first"
+msgstr "Sikkerhed først"
+
+msgid "Sail a leg with every guest place aboard taken."
+msgstr "Sejl en etape med alle gæstepladser optaget."
+
+msgid "Share a coffee on the quay with the crew of a notable yacht."
+msgstr "Del en kop kaffe på kajen med besætningen fra en kendt båd."
+
+msgid "Someone else's dream"
+msgstr "En andens drøm"
+
+msgid "The best-known sailor on the seas"
+msgstr "Den mest kendte sejler på havene"
+
+msgid "A night under sail with guests"
+msgstr "En nat for sejl med gæster"
+
+msgid "A welcoming boat"
+msgstr "En gæstfri båd"
+
+msgid "Arctic fjords"
+msgstr "Arktiske fjorde"
+
+msgid "Be known among sailors as a true world traveller: reach the top hundred in Sails & Sights."
+msgstr "Bliv kendt blandt sejlere som en ægte verdensrejsende: nå top hundrede i Sails & Sights."
+
+msgid "Carry twenty-five passengers over the years."
+msgstr "Sejl femogtyve passagerer gennem årene."
+
+msgid "Cross the Atlantic under sail in one passage, from the old world to the new."
+msgstr "Kryds Atlanten for sejl i én passage, fra den gamle verden til den nye."
+
+msgid "Help a passenger fulfil a dream of their own."
+msgstr "Hjælp en passager med at opfylde sin egen drøm."
+
+msgid "Hop between islands in the warm south: moor in four Mediterranean island harbours."
+msgstr "Hop mellem øer i det varme syd: fortøj i fire havne på middelhavsøer."
+
+msgid "Mediterranean island hopping"
+msgstr "Øhop i Middelhavet"
+
+msgid "Publish a book of your travels - a travelogue, an adventure book or a novel - written from your own voyages."
+msgstr "Udgiv en bog om dine rejser - en rejsebog, en eventyrbog eller en roman - skrevet ud fra dine egne sejladser."
+
+msgid "Sail north of the Arctic Circle and moor in two harbours there."
+msgstr "Sejl nord for polarcirklen og fortøj i to havne dér."
+
+msgid "Sail through a night at sea with passengers sleeping aboard."
+msgstr "Sejl gennem en nat på havet med passagerer sovende om bord."
+
+msgid "Sharing the sea"
+msgstr "Et hav at dele"
+
+msgid "Welcome your first paying passengers aboard and bring them safely to their harbour."
+msgstr "Byd dine første betalende passagerer velkommen om bord, og bring dem sikkert til deres havn."
+
+msgid "An invitation from Freya Voss"
+msgstr "En invitation fra Freya Voss"
+
+msgid "An invitation from Inès Moreau"
+msgstr "En invitation fra Inès Moreau"
+
+msgid "An invitation from Élodie Marchand"
+msgstr "En invitation fra Élodie Marchand"
+
+msgid "Freya Voss and Maya Wildshore would like to sail with you to %s, to see the northern waters before Northern Promise's expedition."
+msgstr "Freya Voss og Maya Wildshore vil gerne sejle med dig til %s og se de nordlige farvande før Northern Promises ekspedition."
+
+msgid "Inès Moreau has read your writing and asks to sail with you to %s, for a chapter of her next book."
+msgstr "Inès Moreau har læst dine tekster og beder om at sejle med dig til %s, til et kapitel i hendes næste bog."
+
+msgid "Élodie Marchand would like to photograph the coast from your deck on a passage to %s."
+msgstr "Élodie Marchand vil gerne fotografere kysten fra dit dæk på en passage til %s."
+
+msgid "Alba Marina"
+msgstr "Alba Marina"
+
+msgid "Alba Marina across the Atlantic"
+msgstr "Alba Marina over Atlanten"
+
+msgid "Amara Okoye"
+msgstr "Amara Okoye"
+
+msgid "Ana Costa"
+msgstr "Ana Costa"
+
+msgid "Astrid Holm"
+msgstr "Astrid Holm"
+
+msgid "Atlantica"
+msgstr "Atlantica"
+
+msgid "Ben Tamura"
+msgstr "Ben Tamura"
+
+msgid "Claire Dubois"
+msgstr "Claire Dubois"
+
+msgid "Freya Voss"
+msgstr "Freya Voss"
+
+msgid "Galley Queen"
+msgstr "Galley Queen"
+
+msgid "Giulia Conti"
+msgstr "Giulia Conti"
+
+msgid "Hanna Kowalska"
+msgstr "Hanna Kowalska"
+
+msgid "Harmattan Rose"
+msgstr "Harmattan Rose"
+
+msgid "Hemi Walker"
+msgstr "Hemi Walker"
+
+msgid "Inès Moreau"
+msgstr "Inès Moreau"
+
+msgid "Jonas Eriksen"
+msgstr "Jonas Eriksen"
+
+msgid "Kai Nakamura"
+msgstr "Kai Nakamura"
+
+msgid "Lena Brandt"
+msgstr "Lena Brandt"
+
+msgid "Limoncello"
+msgstr "Limoncello"
+
+msgid "Luis Herrera"
+msgstr "Luis Herrera"
+
+msgid "Lumière"
+msgstr "Lumière"
+
+msgid "Manu Iti"
+msgstr "Manu Iti"
+
+msgid "Marco Bellini"
+msgstr "Marco Bellini"
+
+msgid "Maya Wildshore"
+msgstr "Maya Wildshore"
+
+msgid "Meltemi"
+msgstr "Meltemi"
+
+msgid "Monsoon Page"
+msgstr "Monsoon Page"
+
+msgid "Noah Bennett"
+msgstr "Noah Bennett"
+
+msgid "Nordvind"
+msgstr "Nordvind"
+
+msgid "Northern Promise"
+msgstr "Northern Promise"
+
+msgid "Northern Promise to Greenland"
+msgstr "Northern Promise til Grønland"
+
+msgid "Olaf Strand"
+msgstr "Olaf Strand"
+
+msgid "Petite Plume"
+msgstr "Petite Plume"
+
+msgid "Polar Lys"
+msgstr "Polar Lys"
+
+msgid "Priya Raman"
+msgstr "Priya Raman"
+
+msgid "Rory MacLean"
+msgstr "Rory MacLean"
+
+msgid "Sigrid Dahl"
+msgstr "Sigrid Dahl"
+
+msgid "Skärgård"
+msgstr "Skärgård"
+
+msgid "Southern Drift"
+msgstr "Southern Drift"
+
+msgid "Sven Lind"
+msgstr "Sven Lind"
+
+msgid "Taniwha"
+msgstr "Taniwha"
+
+msgid "Tomás Reyes"
+msgstr "Tomás Reyes"
+
+msgid "Trade Wind"
+msgstr "Trade Wind"
+
+msgid "Wild Rover"
+msgstr "Wild Rover"
+
+msgid "an Atlantic crossing to film whales on the way"
+msgstr "en Atlanterhavskrydsning, hvor der filmes hvaler undervejs"
+
+msgid "an expedition to photograph Greenland's ice and wildlife"
+msgstr "en ekspedition for at fotografere Grønlands is og dyreliv"
+
+msgid "Élodie Marchand"
+msgstr "Élodie Marchand"
+
+msgid "Published: “%s”. %s, %s earned."
+msgstr "Udgivet: »%s«. %s, %s tjent."
+
+msgid "Interrupted after %s: %s. The writing done counts."
+msgstr "Afbrudt efter %s: %s. Det skrevne tæller."
+
+msgid "A good session of writing. It is %s."
+msgstr "En god skrivesession. Klokken er %s."
+
+msgid "%s went ashore in %s: %s, %s paid%s."
+msgstr "%s gik i land i %s: %s, %s betalt%s."
+
+msgid ", tip %s"
+msgstr ", drikkepenge %s"
+
+msgid "A passage can only be published in harbour."
+msgstr "En passage kan kun udbydes i havn."
+
+msgid "The vessel is not in a harbour."
+msgstr "Fartøjet er ikke i en havn."
+
+msgid "Finish or withdraw your current passage first."
+msgstr "Afslut eller træk din nuværende passage tilbage først."
+
+msgid "This boat has no room for guests."
+msgstr "Denne båd har ikke plads til gæster."
+
+msgid "A passage has at most %d stops."
+msgstr "En passage har højst %d stop."
+
+msgid "recommended by one of your passengers"
+msgstr "anbefalet af en af dine passagerer"
+
+msgid "That request is no longer open."
+msgstr "Den forespørgsel er ikke længere åben."
+
+msgid "That passage has already left."
+msgstr "Den passage er allerede afgået."
+
+msgid "You thanked %s and declined."
+msgstr "Du takkede %s og sagde nej."
+
+msgid "%s can offer %s, and no more."
+msgstr "%s kan tilbyde %s og ikke mere."
+
+msgid "declined your price"
+msgstr "afslog din pris"
+
+msgid "%s found %s too much and looked elsewhere."
+msgstr "%s syntes, %s var for meget, og kiggede andetsteds."
+
+msgid "%s is allergic to an animal aboard."
+msgstr "%s er allergisk over for et dyr om bord."
+
+msgid "%s booked: %s, deposit %s received."
+msgstr "%s booket: %s, depositum %s modtaget."
+
+msgid "That booking cannot be cancelled now."
+msgstr "Den booking kan ikke annulleres nu."
+
+msgid "Only a passage that has not left can be withdrawn."
+msgstr "Kun en passage, der ikke er afgået, kan trækkes tilbage."
+
+msgid "That cannot be arranged."
+msgstr "Det kan ikke lade sig gøre."
+
+msgid "That is already their harbour."
+msgstr "Det er allerede deres havn."
+
+msgid "%s comes aboard from %s. Wait for your passengers, or cancel the booking."
+msgstr "%s kommer om bord fra %s. Vent på dine passagerer, eller annuller bookingen."
+
+msgid "Full house: every guest place taken"
+msgstr "Fuldt hus: alle gæstepladser optaget"
+
+msgid "Your passage continues to %s. The course is plotted."
+msgstr "Din passage fortsætter til %s. Kursen er lagt."
+
+msgid "Dear Captain, %s I will never forget it. Thank you."
+msgstr "Kære kaptajn, %s Det glemmer jeg aldrig. Tak."
+
+msgid "what a voyage it was."
+msgstr "sikke en rejse det var."
+
+msgid "A photograph from the voyage, signed on the back: “For the Captain, with thanks.”"
+msgstr "Et fotografi fra rejsen, signeret på bagsiden: »Til kaptajnen, med tak.«"
+
+msgid "a brass ship's bell for the cabin"
+msgstr "en skibsklokke i messing til kahytten"
+
+msgid "a hand-made pottery mug"
+msgstr "et håndlavet krus i keramik"
+
+msgid "a jar of island honey"
+msgstr "et glas øhonning"
+
+msgid "a small framed chart of your passage"
+msgstr "et lille indrammet søkort over din passage"
+
+msgid "A gift: %s."
+msgstr "En gave: %s."
+
+msgid "Welcome aboard: your first passengers"
+msgstr "Velkommen om bord: dine første passagerer"
+
+msgid "Safety first, with guests aboard"
+msgstr "Sikkerhed først, med gæster om bord"
+
+msgid "Someone else's dream came true"
+msgstr "En andens drøm gik i opfyldelse"
+
+msgid "Dream maker: five passengers' dreams"
+msgstr "Drømmeskaber: fem passagerers drømme"
+
+msgid "Ten five-star reviews"
+msgstr "Ti femstjernede anmeldelser"
+
+msgid "A new issue of Sails & Sights is out: %s %d."
+msgstr "Et nyt nummer af Sails & Sights er udkommet: %s %d."
+
+msgid "Among the fifty best-known sailors"
+msgstr "Blandt de halvtreds mest kendte sejlere"
+
+msgid "Among the hundred best-known sailors"
+msgstr "Blandt de hundrede mest kendte sejlere"
+
+msgid "Among the ten best-known sailors"
+msgstr "Blandt de ti mest kendte sejlere"
+
+msgid "%s is moored here. You share a coffee on the quay with %s."
+msgstr "%s ligger fortøjet her. Du deler en kop kaffe på kajen med %s."
+
+msgid "%s passes %s nm off. %s calls you on the VHF: “Fair winds, Captain!”"
+msgstr "%s passerer %s sm væk. %s kalder dig på VHF'en: »God vind, kaptajn!«"
+
+msgid "a place among the %d best-known sailors"
+msgstr "en plads blandt de %d mest kendte sejlere"
+
+msgid "%d passenger reviews averaging %.1f stars"
+msgstr "%d anmeldelser fra passagerer, i snit %.1f stjerner"
+
+msgid "a passage of %d nm behind you"
+msgstr "en passage på %d sm bag dig"
+
+msgid "berths for %d guests"
+msgstr "køjer til %d gæster"
+
+msgid "%d published works"
+msgstr "%d udgivne værker"
+
+msgid "That invitation is no longer open."
+msgstr "Den invitation er ikke længere åben."
+
+msgid "They are waiting for you in %s."
+msgstr "De venter på dig i %s."
+
+msgid "Invited aboard by a famous traveller"
+msgstr "Inviteret om bord af en berømt rejsende"
+
+msgid "Choose what to write."
+msgstr "Vælg, hvad du vil skrive."
+
+msgid "Not yet: a %s %s."
+msgstr "Ikke endnu: en %s %s."
+
+msgid "Choose something you have lived to write about."
+msgstr "Vælg noget, du selv har oplevet, at skrive om."
+
+msgid "Published: %s"
+msgstr "Udgivet: %s"
+
+msgid "needs %d voyages behind you"
+msgstr "kræver %d sejladser bag dig"
+
+msgid "needs %d harbours visited"
+msgstr "kræver %d besøgte havne"
+
+msgid "needs a passage of %d nm"
+msgstr "kræver en passage på %d sm"
+
+msgid "needs %d published works first"
+msgstr "kræver først %d udgivne værker"
+
+msgid "The harbour of %s"
+msgstr "Havnen i %s"
+
+msgid "The passage to %s (%.0f nm)"
+msgstr "Passagen til %s (%.0f sm)"
+
+msgid "Rough weather on the way to %s"
+msgstr "Hårdt vejr på vej til %s"
+
+msgid "Sailing with %s"
+msgstr "Sejlads med %s"
+
+msgid "Life aboard with %s"
+msgstr "Livet om bord med %s"
+
+msgid "Choose where the passage goes."
+msgstr "Vælg, hvor passagen skal gå hen."
+
+msgid "A stop is not a harbour."
+msgstr "Et stop er ikke en havn."
+
+msgid "No sea route from %s to %s."
+msgstr "Ingen søvej fra %s til %s."
+
+msgid "The leg from %s to %s is a %s passage, more than this boat is fitted for."
+msgstr "Strækningen fra %s til %s er en passage af typen %s, mere end båden er rustet til."
+
+msgid "No room on the leg to %s: %d of %d places taken."
+msgstr "Ingen plads på etapen til %s: %d af %d pladser optaget."
+
+msgid "No private cabin free on the leg to %s."
+msgstr "Ingen ledig privat kahyt på etapen til %s."
+
+msgid "went with %s on %s: cheaper (%s)"
+msgstr "tog med %s på %s: billigere (%s)"
+
+msgid "went with %s on %s: a private cabin"
+msgstr "tog med %s på %s: en privat kahyt"
+
+msgid "went with %s on %s: a ship's dog aboard"
+msgstr "tog med %s på %s: en skibshund om bord"
+
+msgid "went with %s on %s: better reviews"
+msgstr "tog med %s på %s: bedre anmeldelser"
+
+msgid "has always wanted to spend a night at sea"
+msgstr "har altid ønsket at tilbringe en nat på havet"
+
+msgid "dreams of returning to %s, the island of their childhood"
+msgstr "drømmer om at vende tilbage til %s, barndommens ø"
+
+msgid "hopes to photograph a truly special place"
+msgstr "håber at fotografere et helt særligt sted"
+
+msgid "dreams of hopping between islands by sail"
+msgstr "drømmer om at hoppe mellem øer for sejl"
+
+msgid "has dreamed for years of crossing the Atlantic under sail"
+msgstr "har i årevis drømt om at krydse Atlanten for sejl"
+
+msgid "A first night at sea"
+msgstr "En første nat på havet"
+
+msgid "Back to a childhood island"
+msgstr "Tilbage til barndommens ø"
+
+msgid "A photograph of a lifetime"
+msgstr "Livets fotografi"
+
+msgid "Island hopping"
+msgstr "Øhop"
+
+msgid "An Atlantic crossing"
+msgstr "En Atlanterhavskrydsning"
+
+msgid "Talk with %s"
+msgstr "Tal med %s"
+
+msgid "with the animals"
+msgstr "hos dyrene"
+
+msgid "watching the water"
+msgstr "ser på vandet"
+
+msgid "Passengers"
+msgstr "Passagerer"
+
+msgid "private cabin"
+msgstr "privat kahyt"
+
+msgid "An unforgettable passage. Warm, safe and beautifully sailed."
+msgstr "En uforglemmelig passage. Varm, sikker og smukt sejlet."
+
+msgid "Everything we hoped for and more. Book this Captain."
+msgstr "Alt, hvad vi håbede på, og mere til. Book denne kaptajn."
+
+msgid "A lovely voyage with a kind Captain. Recommended."
+msgstr "En dejlig tur med en venlig kaptajn. Anbefales."
+
+msgid "Comfortable, friendly and well planned."
+msgstr "Behageligt, venligt og godt planlagt."
+
+msgid "A decent passage, with a few rough edges."
+msgstr "En udmærket passage, med et par skønhedsfejl."
+
+msgid "We arrived, and it was mostly pleasant."
+msgstr "Vi kom frem, og det var for det meste hyggeligt."
+
+msgid "Not quite what we were promised."
+msgstr "Ikke helt, hvad vi blev lovet."
+
+msgid "Too late and too uncomfortable for us."
+msgstr "For sent og for ubehageligt for os."
+
+msgid "A difficult journey, from start to finish."
+msgstr "En svær rejse fra start til slut."
+
+msgid "Disappointing. We would not sail again."
+msgstr "Skuffende. Vi sejler ikke igen."
+
+msgid "%s is fine: %s."
+msgstr "%s er tilfreds: %s."
+
+msgid "%s would rather not: %s is too far from onward travel."
+msgstr "%s vil helst ikke: %s er for langt fra videre rejse."
+
+msgid " (estimate)"
+msgstr " (anslået)"
+
+msgid "%s & %s %s"
+msgstr "%s & %s %s"
+
+msgid "%s %s and %d friends"
+msgstr "%s %s og %d venner"
+
+msgid "the %s family"
+msgstr "familien %s"
+
+msgid "happy with simple comforts"
+msgstr "glad for enkel komfort"
+
+msgid "likes a comfortable boat"
+msgstr "kan lide en komfortabel båd"
+
+msgid "expects a spacious yacht"
+msgstr "forventer en rummelig båd"
+
+msgid "needs a private cabin"
+msgstr "har brug for en privat kahyt"
+
+msgid "prefers privacy"
+msgstr "foretrækker privatliv"
+
+msgid "nervous in rough weather"
+msgstr "nervøs i hårdt vejr"
+
+msgid "loves a lively sail"
+msgstr "elsker en frisk sejlads"
+
+msgid "must arrive on time"
+msgstr "skal være fremme til tiden"
+
+msgid "in no hurry"
+msgstr "har god tid"
+
+msgid "loves animals"
+msgstr "elsker dyr"
+
+msgid "allergic to %s"
+msgstr "allergisk over for %s"
+
+msgid "birds"
+msgstr "fugle"
+
+msgid "cats"
+msgstr "katte"
+
+msgid "dogs"
+msgstr "hunde"
+
+msgid "Alex"
+msgstr "Alex"
+
+msgid "Sailor"
+msgstr "Sailor"
+
+msgid "Travel writing…"
+msgstr "Rejseskrivning…"
+
+msgid "Network"
+msgstr "Netværk"
+
+msgid "Letters and keepsakes"
+msgstr "Breve og minder"
+
+msgid "You have helped %d passenger fulfil a dream."
+msgid_plural "You have helped %d passengers fulfil their dreams."
+msgstr[0] "Du har hjulpet %d passager med at opfylde en drøm."
+msgstr[1] "Du har hjulpet %d passagerer med at opfylde deres drømme."
+
+msgid "Gift"
+msgstr "Gave"
+
+msgid "Letter"
+msgstr "Brev"
+
+msgid "Photograph"
+msgstr "Fotografi"
+
+msgid "Everyone"
+msgstr "Alle"
+
+msgid "Following"
+msgstr "Følger"
+
+msgid "Follow a traveller from their posts to see them here."
+msgstr "Følg en rejsende fra deres opslag for at se dem her."
+
+msgid "Quiet on the network for now. Sail on, and the world will have news."
+msgstr "Stille på netværket lige nu. Sejl videre, så har verden nyt."
+
+msgid "You"
+msgstr "Dig"
+
+msgid "Follow %s"
+msgstr "Følg %s"
+
+msgid "Following ✓"
+msgstr "Følger ✓"
+
+msgid "Passage published. Requests will come in over the next hours."
+msgstr "Passagen er udbudt. Forespørgsler kommer ind i løbet af de næste timer."
+
+msgid "Leaves %s between %s and %s; %s per nm and person."
+msgstr "Afgår fra %s mellem %s og %s; %s pr. sm og person."
+
+msgid "%s → %s: %.0f nm, about %s%s · %d/%d aboard%s"
+msgstr "%s → %s: %.0f sm, cirka %s%s · %d/%d om bord%s"
+
+msgid ", overnight"
+msgstr ", natsejlads"
+
+msgid " · sailed"
+msgstr " · sejlet"
+
+msgid "Withdraw this passage"
+msgstr "Træk passagen tilbage"
+
+msgid "Passage withdrawn; deposits returned."
+msgstr "Passagen er trukket tilbage; depositum er betalt tilbage."
+
+msgid "aboard"
+msgstr "om bord"
+
+msgid "booked"
+msgstr "booket"
+
+msgid "ashore, settled"
+msgstr "i land, afregnet"
+
+msgid "%s to %s · fare %s, deposit %s paid · arrival promised by %s"
+msgstr "%s til %s · pris %s, depositum %s betalt · ankomst lovet senest %s"
+
+msgid "Agreed instead of %s."
+msgstr "Aftalt i stedet for %s."
+
+msgid "Cancel booking"
+msgstr "Annuller booking"
+
+msgid "Booking cancelled; the deposit was returned."
+msgstr "Bookingen er annulleret; depositum er betalt tilbage."
+
+msgid "Propose this harbour"
+msgstr "Foreslå denne havn"
+
+msgid "Requests"
+msgstr "Forespørgsler"
+
+msgid "A dream: %s %s."
+msgstr "En drøm: %s %s."
+
+msgid "Recommended by one of your passengers."
+msgstr "Anbefalet af en af dine passagerer."
+
+msgid "%s to %s"
+msgstr "%s til %s"
+
+msgid "%d person"
+msgid_plural "%d people"
+msgstr[0] "%d person"
+msgstr[1] "%d personer"
+
+msgid "%s · %s · offers %s (your price %s)%s"
+msgstr "%s · %s · tilbyder %s (din pris %s)%s"
+
+msgid " · their final offer"
+msgstr " · deres sidste bud"
+
+msgid "%d review"
+msgid_plural "%d reviews"
+msgstr[0] "%d anmeldelse"
+msgstr[1] "%d anmeldelser"
+
+msgid "Accept"
+msgstr "Accepter"
+
+msgid "Decline"
+msgstr "Afslå"
+
+msgid "carried so far"
+msgstr "haft med indtil nu"
+
+msgid "Ask this price"
+msgstr "Bed om denne pris"
+
+msgid "fares and tips"
+msgstr "billetter og drikkepenge"
+
+msgid "Recent passengers"
+msgstr "Seneste passagerer"
+
+msgid "%s · %s to %s · %s · paid %s%s"
+msgstr "%s · %s til %s · %s · betalte %s%s"
+
+msgid "Other skippers"
+msgstr "Andre skippere"
+
+msgid "%s · %s (%s) · %.1f ★ · %s%s"
+msgstr "%s · %s (%s) · %.1f ★ · %s%s"
+
+msgid " · won %d of your travellers"
+msgstr " · vandt %d af dine rejsende"
+
+msgid "Your passage"
+msgstr "Din passage"
+
+msgid "Plan a course at the chart table or the chartplotter while in harbour, then publish it here as a passage."
+msgstr "Læg en kurs ved kortbordet eller på kortplotteren, mens du er i havn, og udbyd den så her som en passage."
+
+msgid "Planned: %s to %s, %.0f nm."
+msgstr "Planlagt: %s til %s, %.0f sm."
+
+msgid "%s: %d places by day, %d overnight, %d private cabins; %s, fitted for %s passages."
+msgstr "%s: %d pladser om dagen, %d om natten, %d private kahytter; %s, rustet til passager af typen %s."
+
+msgid "Stops along the way (passengers may join or leave there):"
+msgstr "Stop undervejs (passagerer kan stige på eller af dér):"
+
+msgid "Leave in %d hours"
+msgstr "Afgang om %d timer"
+
+msgid "€%.2f per nm and person"
+msgstr "%.2f € pr. sm og person"
+
+msgid "Publish passage"
+msgstr "Udbyd passage"
+
+msgid "You need the harbour Wi-Fi to publish."
+msgstr "Du skal bruge havnens wi-fi for at udbyde."
+
+msgid "Sails & Sights"
+msgstr "Sails & Sights"
+
+msgid "No. %d · %s %d"
+msgstr "Nr. %d · %s %d"
+
+msgid "You are no. %d of %d in this month's renown list."
+msgstr "Du er nr. %d af %d på månedens rangliste over ry."
+
+msgid "Rankings"
+msgstr "Rangliste"
+
+msgid "Yacht directory"
+msgstr "Bådregister"
+
+msgid "A quiet month at sea."
+msgstr "En stille måned på havet."
+
+msgid "The month's best-known sailors"
+msgstr "Månedens mest kendte sejlere"
+
+msgid "Older"
+msgstr "Ældre"
+
+msgid "Older issue"
+msgstr "Ældre nummer"
+
+msgid "Newer"
+msgstr "Nyere"
+
+msgid "Newer issue"
+msgstr "Nyere nummer"
+
+msgid "of %d sailors"
+msgstr "af %d sejlere"
+
+msgid "lasting, and the attention of recent news"
+msgstr "varigt ry og opmærksomhed fra nylige nyheder"
+
+msgid "Top"
+msgstr "Top"
+
+msgid "The ten best-known"
+msgstr "De ti mest kendte"
+
+msgid "Near"
+msgstr "Nær"
+
+msgid "Around you"
+msgstr "Omkring dig"
+
+msgid "Memorable"
+msgstr "Mindeværdige"
+
+msgid "Memorable travellers"
+msgstr "Mindeværdige rejsende"
+
+msgid "no. %d"
+msgstr "nr. %d"
+
+msgid " · following"
+msgstr " · følger"
+
+msgid "Search by yacht, skipper, model or harbour"
+msgstr "Søg efter båd, skipper, model eller havn"
+
+msgid "Last public reports from the yachts' own posts. Where a yacht is now, only AIS can tell, within range."
+msgstr "Seneste offentlige meldinger fra bådenes egne opslag. Hvor en båd er nu, kan kun AIS fortælle, inden for rækkevidde."
+
+msgid "No yacht matches."
+msgstr "Ingen både passer."
+
+msgid "Yacht_%s"
+msgstr "Yacht_%s"
+
+msgid "No public report yet."
+msgstr "Ingen offentlig melding endnu."
+
+msgid "Left %s for %s"
+msgstr "Forlod %s mod %s"
+
+msgid "Expedition announced from %s"
+msgstr "Ekspedition annonceret fra %s"
+
+msgid "stale: %d days old"
+msgstr "forældet: %d dage gammel"
+
+msgid "On expedition: %s"
+msgstr "På ekspedition: %s"
+
+msgid "Invitation_%s"
+msgstr "Invitation_%s"
+
+msgid "From %s. The invitation stands until %s."
+msgstr "Fra %s. Invitationen gælder til %s."
+
+msgid "Accept and publish the passage"
+msgstr "Accepter og udbyd passagen"
+
+msgid "Booked: they will be aboard when you sail."
+msgstr "Booket: de er om bord, når du sejler."
+
+msgid "Decline politely"
+msgstr "Sig høfligt nej"
+
+msgid "The first issue of Sails & Sights comes out at the end of the month."
+msgstr "Første nummer af Sails & Sights udkommer sidst på måneden."
+
+msgid "Issue"
+msgstr "Nummer"
+
+msgid "AIS: %s (%s), %s nm %s"
+msgstr "AIS: %s (%s), %s sm %s"
+
+msgid "Travel writing"
+msgstr "Rejseskrivning"
+
+msgid "Writing: %s about %s · session %d of %d"
+msgstr "Skriver: %s om %s · session %d af %d"
+
+msgid "Each session takes two hours. The angle that suits your subject counts more."
+msgstr "Hver session tager to timer. Den vinkel, der passer til dit emne, tæller mere."
+
+msgid "Angle_%s"
+msgstr "Angle_%s"
+
+msgid "Begin a new work"
+msgstr "Begynd et nyt værk"
+
+msgid "%d session"
+msgid_plural "%d sessions"
+msgstr[0] "%d session"
+msgstr[1] "%d sessioner"
+
+msgid "Sail somewhere first: your writing comes from your own voyages."
+msgstr "Sejl et sted hen først: dine tekster kommer fra dine egne sejladser."
+
+msgid "Begin writing"
+msgstr "Begynd at skrive"
+
+msgid "A new work begun. Choose an angle for the first session."
+msgstr "Et nyt værk er begyndt. Vælg en vinkel til første session."
+
+msgid "Published"
+msgstr "Udgivet"
+
+msgid "Works"
+msgstr "Værker"
+
+msgid "Your little game"
+msgstr "Dit lille spil"
+
+msgid "Work_%s"
+msgstr "Work_%s"
+
+msgid "%s reaches %s"
+msgstr "%s når %s"
+
+msgid "%s completed %s, arriving in %s after the last %d nm."
+msgstr "%s fuldførte %s og ankom til %s efter de sidste %d sm."
+
+msgid "New expedition: %s"
+msgstr "Ny ekspedition: %s"
+
+msgid "%s will sail %s from %s to %s."
+msgstr "%s sejler %s fra %s til %s."
+
+msgid "New on the shelf from %s"
+msgstr "Nyt på hylden fra %s"
+
+msgid "A new book from one of the sailing world's familiar names, written between harbours."
+msgstr "En ny bog fra et af sejlerverdenens kendte navne, skrevet mellem havnene."
+
+msgid "%s publishes a new work, received with %d stars."
+msgstr "%s udgiver et nyt værk, modtaget med %d stjerner."
+
+msgid "%d nm to %s"
+msgstr "%d sm til %s"
+
+msgid "%s brought their yacht safely into %s after a passage of %d nm."
+msgstr "%s bragte deres båd sikkert ind til %s efter en passage på %d sm."
+
+msgid "A dream fulfilled at sea"
+msgstr "En drøm opfyldt på havet"
+
+msgid "Aboard with %s, a passenger saw a lifelong dream come true."
+msgstr "Om bord hos %s så en passager en livslang drøm gå i opfyldelse."
+
+msgid "Met in %s"
+msgstr "Mødtes i %s"
+
+msgid "%s shared a table on the quay in %s."
+msgstr "%s delte bord på kajen i %s."
+
+msgid "%s arrived in %s after %d nm."
+msgstr "%s ankom til %s efter %d sm."
+
+msgid "We made it. %s has reached %s, the end of %s. Thank you all for following."
+msgstr "Vi klarede det. %s har nået %s, målet for %s. Tak til alle, der fulgte med."
+
+msgid "My new book is out today. Written in harbours and night watches."
+msgstr "Min nye bog udkommer i dag. Skrevet i havne og på nattevagter."
+
+msgid "A small book of photographs from the last season is published. Thank you, everyone who sailed with me."
+msgstr "En lille fotobog fra sidste sæson er udkommet. Tak til alle, der sejlede med mig."
+
+msgid "Finished at last: a new collection of stories from the sea."
+msgstr "Endelig færdig: en ny samling historier fra havet."
+
+msgid "Published: “%s”."
+msgstr "Udgivet: »%s«."
+
+msgid "Arrived in %s after %d nm."
+msgstr "Ankom til %s efter %d sm."
+
+msgid "A passenger's dream came true aboard today."
+msgstr "En passagers drøm gik i opfyldelse om bord i dag."
+
+msgid "the open sea"
+msgstr "det åbne hav"
+
+msgid "Lines off in %s. Bound for %s on %s."
+msgstr "Kast los i %s. Kurs mod %s med %s."
+
+msgid "Leaving %s with the morning breeze. Next stop %s."
+msgstr "Vi forlader %s med morgenbrisen. Næste stop: %s."
+
+msgid "Provisioned, rested and ready: %s sails for %s today."
+msgstr "Proviant om bord, udhvilet og klar: %s sejler mod %s i dag."
+
+msgid "Safely in %s after %d nm. Coffee first, then sleep."
+msgstr "Sikkert i %s efter %d sm. Først kaffe, så søvn."
+
+msgid "%s is moored in %s. What a passage."
+msgstr "%s ligger fortøjet i %s. Sikken en passage."
+
+msgid "Arrived in %s. The harbour smells of tar and fresh bread."
+msgstr "Ankommet til %s. Havnen dufter af tjære og friskbagt brød."
+
+msgid "%d nm behind us and %s ahead of us for a few days."
+msgstr "%d sm bag os, og nu %s i et par dage."
+
+msgid "Announcing: %s. %s leaves from %s, bound for %s."
+msgstr "Nyhed: %s. %s afgår fra %s med kurs mod %s."
+
+msgid "A new book of photographs from a season at sea, quiet harbours and wide skies."
+msgstr "En ny fotobog fra en sæson på havet: stille havne og vide himle."
+
+msgid "A cookbook from a small galley: recipes for calm evenings and rough nights."
+msgstr "En kogebog fra en lille kabys: opskrifter til stille aftener og hårde nætter."
+
+msgid "New stories from the sea, written in harbours and on night watches."
+msgstr "Nye fortællinger fra havet, skrevet i havne og på nattevagter."
+
+msgid "Aegean racing"
+msgstr "kapsejlads i Ægæerhavet"
+
+msgid "African Atlantic"
+msgstr "Afrikas Atlanterhav"
+
+msgid "Arctic coasts"
+msgstr "arktiske kyster"
+
+msgid "Baltic circumnavigations"
+msgstr "jordomsejlinger af Østersøen"
+
+msgid "Indian Ocean"
+msgstr "Det Indiske Ocean"
+
+msgid "Mediterranean light"
+msgstr "Middelhavets lys"
+
+msgid "Pacific atolls"
+msgstr "Stillehavets atoller"
+
+msgid "Southern Ocean"
+msgstr "Sydhavet"
+
+msgid "archipelago light"
+msgstr "skærgårdens lys"
+
+msgid "bluewater sloop"
+msgstr "oceangående slup"
+
+msgid "children's books of the sea"
+msgstr "børnebøger om havet"
+
+msgid "expedition ketch"
+msgstr "ekspeditionsketch"
+
+msgid "expedition sloop"
+msgstr "ekspeditionsslup"
+
+msgid "fish and foraging"
+msgstr "fisk og sankning"
+
+msgid "gaff cutter"
+msgstr "gaffelkutter"
+
+msgid "harbour kitchens"
+msgstr "havnekøkkener"
+
+msgid "high-latitude expeditions"
+msgstr "ekspeditioner på høje breddegrader"
+
+msgid "island cuisine"
+msgstr "økøkken"
+
+msgid "ocean crossings"
+msgstr "havkrydsninger"
+
+msgid "racing sloop"
+msgstr "kapsejladsslup"
+
+msgid "remote islands"
+msgstr "fjerne øer"
+
+msgid "sea stories"
+msgstr "historier fra havet"
+
+msgid "single-handed passages"
+msgstr "solosejladser"
+
+msgid "steel sloop"
+msgstr "stålslup"
+
+msgid "volcanic coasts"
+msgstr "vulkanske kyster"
+
+msgid "whales and dolphins"
+msgstr "hvaler og delfiner"
+
+msgid "wildlife and ice"
+msgstr "dyreliv og is"
+
+msgid "winter sailing"
+msgstr "vintersejlads"
+
+msgid "Reviews"
+msgstr "Anmeldelser"
+
+msgid "Fares"
+msgstr "Billetter"
+
+msgid "animals welcome"
+msgstr "dyr er velkomne"
+
+msgid "comfort"
+msgstr "komfort"
+
+msgid "families"
+msgstr "familier"
+
+msgid "good value"
+msgstr "god pris"
+
+msgid "expeditions"
+msgstr "ekspeditioner"

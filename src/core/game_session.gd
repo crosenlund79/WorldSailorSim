@@ -4217,6 +4217,7 @@ func get_magazine_issues() -> Array:
 	if _state == null:
 		return []
 	advance_world()
+	_publish_issues()  # a month that ended while nothing else happened
 	var issues := _state.world.issues.duplicate(true)
 	issues.reverse()
 	return issues
