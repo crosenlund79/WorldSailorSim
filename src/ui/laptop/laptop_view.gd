@@ -621,7 +621,7 @@ func _build_letters(page: VBoxContainer) -> void:
 	var recent := letters.slice(maxi(letters.size() - 8, 0))
 	recent.reverse()
 	for letter: Dictionary in recent:
-		var kind := {"letter": Loc.t("Letter"), "photo": Loc.t("Photograph"), "gift": Loc.t("Gift")}.get(String(letter.kind), "")
+		var kind: String = {"letter": Loc.t("Letter"), "photo": Loc.t("Photograph"), "gift": Loc.t("Gift")}.get(String(letter.kind), "")
 		_text(page, StringName("Letter_%s" % letter.id), "%s · %s · %s" % [kind, letter.from, Simulation.format_game_time(float(letter.time), false)], &"HeaderLabel")
 		_text(page, StringName("LetterText_%s" % letter.id), String(letter.text))
 
