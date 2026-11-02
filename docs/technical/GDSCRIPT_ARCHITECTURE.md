@@ -511,6 +511,16 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_simulation.gd`, `tests/suites/test_sailing.gd`, `tests/suites/test_sailing_correctness.gd`, `tests/suites/test_weather.gd`, `tests/suites/test_long_passage.gd`, `tests/suites/test_captains_watch.gd`, `tests/suites/test_hat.gd`, `tests/suites/test_reassessment.gd`, `tests/suites/test_upkeep.gd`. The test runner applies calm wind and sets `sea_encounters` true only for `test_captains_watch.gd` and `test_localization.gd`. I027 Tier 4: `test_passage_plan.gd` (ETA equals `estimate_route_seconds`).
 - **Change risks:** anything that evaluates outside the fixed grid breaks step-size independence; changing check order inside `advance()` changes which event stops a sleep; turning `sea_encounters` on elsewhere shifts voyage timings in older suites.
 
+### `src/core/travel_writing.gd`
+
+- **Role:** `class_name TravelWriting`, extends RefCounted, static (I028 Tier 5); the travel-writing rules replacing the little game. `DATA_PATH` `res://data/pastimes/writing.json` (forms essay/journal/travelogue/adventure/novel with `sessions`, `euros`, `renown`, `needs` {voyages, harbours, longest_nm, works}; angles people/sea/places; `titles` by topic kind), `BEST` 1.5, `PLAIN` 1.0. `data()` (cached), `forms()`, `form(id)`, `angles()`, `session_hours()` (2), `form_problem(f, log, works) -> String` ("" or the missing experience, Loc), `topics(log, book, companions) -> Array` ([{id, kind place/voyage/weather/passenger/pet, label, arg, angle}] from arrived log voyages (voyage ≥ 60 nm, weather `worst_hazard` ≥ 2), `PassageBook.records` with a met dream or 5 stars, companion names; max 14), `title_for(topic, salt)` (deterministic), `session_quality(topic, angle)` (BEST when the angle matches), `reception(f, quality_sum, sessions) -> {stars 3-5, euros, renown}` (0.8–1.2 × the form's figures).
+- **Depends on:** the JSON, `CaptainsLog` (`voyages`, `voyages_completed`, `get_visited_ids`, `get_longest_nm`), `PassageBook.records`, `CompanionState`, `PortCatalog.get_display_name`, `Loc`.
+- **State:** static `_data` cache; the project and works live in `WorldState.writing` (GameSession).
+- **Lifecycle:** used by `GameSession` (`start_writing`, `work_on_writing`, `_publish_work`, `writing_topics`), `WritingMenu`, `App.write_session` (`session_hours`), `tests/career/career_sim.gd` (`_write`).
+- **Invariants:** topics only from recorded history (nothing invented); titles deterministic per (work id, topic id).
+- **Tests:** `tests/suites/test_world_network.gd` (`_test_writing`).
+- **Change risks:** form ids are save data (`works[].form`, the Captain's `publish` dreams' `forms`); new strings need the Danish catalogue.
+
 ### `src/core/vessel_condition.gd`
 
 - **Role:** class_name `VesselCondition`, extends RefCounted; condition bands (sound/worn/damaged/critical) and display (`band_of`, `band_name`, `describe`); `FULL` = 100.
@@ -1460,6 +1470,58 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_lighting.gd`, `tests/suites/test_well_run_ship.gd`.
 - **Change risks:** Affects lighting, UI day/night theme, music and dawn/dusk cards at once; `inside_colour` night luminance tuned (~0.36) to keep corners off black.
 
+### `src/world/sails_and_sights.gd`
+
+- **Role:** `class_name SailsAndSights`, extends RefCounted, static (I028 Tier 6); the monthly magazine composed from the world ledger. `MAX_STORIES` 5, `TOP` 10, `MAX_CATCH_UP` 3. `month_id(time) -> "YYYY-MM"`, `month_start(time)`, `next_month_start(time)`, `due_months(world, now) -> Array` (month starts since `world.started_at` that ended and have no issue; the latest `MAX_CATCH_UP`), `compose(world, start, captain_lasting) -> Dictionary` ({id, year, month, number, published_at, cover, stories, top, captain_rank, of}: non-minor events of the month weighted expedition_complete 100 > expedition_announced 80 > captain_book 70 > book 60 > captain_passage 50+nm/50 > captain_dream 45 > meeting 40 > arrive nm/20, one arrival per person; `WorldChronicle.rankings` at month end − 1 s; cover the first story's image or a seeded `net_NN`); private `_story(e)` ({kind, headline, text, image, who, seq}).
+- **Depends on:** `WorldState` (`events`, `issues`, `started_at`), `WorldChronicle` (`rankings`, `traveller`, `yacht`, `CAPTAIN`), `TravellerNetwork` (`post_for`, `_place`, `_expedition_title`), `Loc`.
+- **State:** none; issues are frozen in `WorldState.issues` by `GameSession._publish_issues`.
+- **Lifecycle:** `GameSession._world_news` → `_publish_issues` (`due_months` → `compose`, `world_news` signal); shown by `WorldApp._build_magazine`.
+- **Invariants:** deterministic for the same ledger; one issue per `month_id` (never recomposed or published twice after a reload).
+- **Tests:** `tests/suites/test_world_renown.gd`.
+- **Change risks:** stories read event fields by kind; an issue's dict is saved as is, so a field rename needs tolerant readers in `WorldApp`.
+
+### `src/world/traveller_network.gd`
+
+- **Role:** `class_name TravellerNetwork`, extends RefCounted, static (I028 Tier 5); the social feed derived from `WorldState.events` (no history of its own). `MANIFEST` `res://assets/network/manifest.json`, `IMAGE_DIR`, `TEXT_ONLY_SHARE` 0.35, `ARCTIC`, `ARCTIC_PORTS`, `WARM` (motif choice). `image_path(id)`, `posts(world, now, limit = 30, only = []) -> Array` (newest first, events with `t ≤ now`, optional author filter), `post_for(e) -> Dictionary` ({seq, t, author, author_name, kind, text, image, port, yacht} or {}: seeded by `"post|seq|kind"`; depart ≤ 40 %, arrive ≤ 70 %, every expedition/book/captain_book/captain_passage/captain_dream; minor events never; expeditions always pictured); helpers used elsewhere `_place(port_id)` ("the open sea" when empty), `_expedition_title(id)`, `_motif_for_port(port_id, rng)`.
+- **Depends on:** `WorldState`, `WorldChronicle` (`yacht`, `traveller`, `data`), `PortCatalog`, the manifest, `Loc`.
+- **State:** static `_by_motif` (manifest by motif, read once).
+- **Lifecycle:** `GameSession.get_network_posts` → `NetworkApp`; `post_for` also by `YachtDirectory.last_report` and `SailsAndSights._story`; `_place` by `WorldApp`, `NetworkApp`, `YachtDirectory`, `SailsAndSights`.
+- **Invariants:** a post is a pure function of its event (the same after a reload; never from the future); people in pictures are blurred silhouettes (art rule).
+- **Tests:** `tests/suites/test_world_network.gd` (`_test_network`), `tests/suites/test_world_renown.gd`.
+- **Change risks:** changing the seeding or the share rules changes which events are "public", and with them the directory's last reports; image ids must exist under `assets/network/`.
+
+### `src/world/world_chronicle.gd`
+
+- **Role:** `class_name WorldChronicle`, extends RefCounted, static (I028 Tier 5); the one world-event ledger and the readers over it. `DATA_PATH` `res://data/world/travellers.json` (travellers, yachts, expeditions, population), `DAY`, `CAPTAIN` "captain", `ROUTE_FACTOR` 1.3, `STAY_DAYS` [3, 9], `LEG_NM` [40, 650], `BOOK_EVERY_DAYS` 150, `ATTENTION_HALF_LIFE` 45 (days). `data()`, `traveller(id)` (the Captain from `GameSession.get_captain_name()` or "You"; notable; population), `yacht(id)`, `skipper_of(yacht_id)`, `population()` (seed 280028; {} when the data lacks names or roles). Writing: `advance(world, now, seed) -> Array` (first call starts the world: base renown, yachts in their home ports; then whole days only from `generated_until`: `_expeditions`, `_advance_yacht` per sorted yacht (arrive/depart events, expedition stops and completion with its renown), `_books`, `_population_news` (minor)), `add_captain_event(world, kind, now, details, renown_delta, attention)`, `leg_seconds(from, to, speed_kn)`. Reading: `yacht_position(world, yacht_id, now)` ({status in_port/under_way, port/from/to, progress, geo}), `renown_of(world, id, now, captain_lasting)`, `rankings(world, now, captain_lasting)` ([{id, name, role, renown, rank}], renown desc, ties by id), `rank_of(...)`; `_sorted(keys)` is used by `AisReceiver` and `GameSession`.
+- **Depends on:** `WorldState` (`add_event`, `yachts`, `renown`, `events`), `PortCatalog`/`PortData`, `GeoMath` (`distance_nm`, `rhumb_interpolate`), `GameSession.get_captain_name`, `Loc`.
+- **State:** static `_data`, `_population` caches.
+- **Lifecycle:** `GameSession.advance_world` (from `apply_simulation_step`, at most every `WORLD_STEP_S` 3600 game s, and the getters); the Captain's events from `complete_voyage` (≥ 300 nm), `_settle` (a passenger's dream), `_publish_work`, `accept_invitation`, `_meet_yacht` (via `add_event`).
+- **Performance:** advancing is per whole day per yacht; `rankings` makes one pass over the ledger for everyone (≤ `WorldState.MAX_EVENTS`).
+- **Invariants:** deterministic in (seed, ledger); extended forward only, never rewritten; a yacht is in one harbour or on one leg; leg time = distance × `ROUTE_FACTOR` / speed (≥ 3 kn); the Captain's lasting renown is the game's `lifetime_renown` (ledger events add only fading attention).
+- **Tests:** `tests/suites/test_world_network.gd` (`_test_ledger_rules`), `tests/suites/test_world_renown.gd`.
+- **Change risks:** any change to the seeding or the daily order rewrites every future history (saved past events stay); traveller and yacht ids are save keys (renown, relations, encounters, invitations).
+
+### `src/world/world_state.gd`
+
+- **Role:** `class_name WorldState`, extends RefCounted (I028 Tiers 5-6); the saved world: `started_at`, `generated_until`, `seq`, `events` (time order, `MAX_EVENTS` 900, oldest dropped), `yachts` {id: {port, leg, next_depart, expedition, stop, started, report}}, `renown` {id: lasting int}, `writing` {project, works, xp, migrated}, `issues`, `encounters`, `relations` {traveller id: "following"}, `invitations`. `next_seq()`, `add_event(event)` (assigns `seq`, adds its `renown` deltas, trims), `duplicate_world()`, `to_dict()`, static lenient `from_dict(data)` (non-dicts dropped; numbers coerced; malformed `writing` reset).
+- **Depends on:** nothing but its own data.
+- **State:** pure data.
+- **Lifecycle:** `SessionState.world` (created empty; `duplicate_state`, `to_dict` "world", `from_dict`); written only by `GameSession` and the static helpers it calls (`WorldChronicle`, `SailsAndSights` via GameSession).
+- **Persistence:** optional top-level `world` (no save-version change; a missing section is a fresh world started on the next advance).
+- **Invariants:** trimming events never changes rankings or the directory (renown totals and yacht reports hold what they changed); `seq` only grows.
+- **Tests:** `tests/suites/test_world_network.gd`, `tests/suites/test_world_renown.gd` (reload checks).
+- **Change risks:** a required field breaks older saves; new fields need defaults in `from_dict` and a copy in `to_dict`.
+
+### `src/world/yacht_directory.gd`
+
+- **Role:** `class_name YachtDirectory`, extends RefCounted, static (I028 Tier 6); the public yacht list (not a live tracker). `STALE_DAYS` 10. `entries(world, now, query = "") -> Array` ([{id, name, model, type, skipper, skipper_id, report, unknown, age_days, stale, expedition}], case-insensitive match over name/model/skipper/type/report port, sorted by name), `last_report(world, yacht_id, now) -> Dictionary` ({t, kind, port, to, status departed/announced/in_port} from the newest depart/arrive/expedition event that `TravellerNetwork.post_for` publishes, or {}).
+- **Depends on:** `WorldState`, `WorldChronicle` (`data`, `skipper_of`, `DAY`), `TravellerNetwork` (`post_for`, `_place`), `Loc`.
+- **State:** none.
+- **Lifecycle:** `GameSession.get_yacht_directory(query)` → `WorldApp._build_directory`.
+- **Invariants:** reports only from posted events; live positions belong to `AisReceiver.notable_contacts_at`.
+- **Tests:** `tests/suites/test_world_renown.gd`.
+- **Change risks:** showing `WorldChronicle.yacht_position` here would break the AIS/directory separation the design and tests require.
+
 ## Life aboard and ashore (companion, fishing, galley, hat, harbour, sailing, boat care, anchor, audio, art, dev)
 
 ### `src/anchor/anchor_site.gd`
@@ -2112,6 +2174,90 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_magic_anchor.gd`, `test_fishing2.gd` (via `ReelTiming`).
 - **Change risks:** `RESULT_LANDED`/`RESULT_ESCAPED` names are shared by both encounters; RNG draw order defines arc placement (seeded tests depend on it).
 
+## Passengers (the passage trade)
+
+### `src/passengers/guest_reactions.gd`
+
+- **Role:** `class_name GuestReactions`, extends RefCounted, static (I028 Tier 2); passengers' reactions through their traits. `LINES_PATH` `res://data/passengers/lines.json` (`events` by kind), `START` 70.0, `KIND_COOLDOWN_S` 6 h. `lines()`, `line(kind, traveller, salt) -> String` (translated, seeded per traveller/kind/salt), `note(booking, kind, delta, now, always = false) -> bool` (appends {t, kind, d} to `booking.events`, clamps `satisfaction` 0–100; once per kind per cooldown unless `always`), `on_board(booking, traveller, vessel_id, now)` (comfort tier vs `Accommodation.comfort_tier`, privacy), `on_weather(booking, traveller, hazard, now) -> String` (anxious/steady/hardy; calm for rest/together/see; tracks `max_hazard`), `on_caution(...)` (sets `excused`), `on_scenic(...)`, `on_pets(...)`, `on_arrival_time(booking, traveller, hours_late, now)` (sets `late_h`; loss per 6 h by timing, max 35, × 0.35 when excused). Each `on_*` returns the dialogue kind or "".
+- **Depends on:** the JSON, `Accommodation` (`COMFORT_ORDER`, `comfort_tier`), `Loc`.
+- **State:** static `_lines`; reactions live in the booking dict (`events`, `satisfaction`, `excused`, `max_hazard`, `late_h`).
+- **Lifecycle:** called by `GameSession` (`_board`, `_passages_weather`, `_passages_caution`, `_passages_on_arrival`, `_passages_on_depart`, `chat_with_passenger`, `propose_alternate_harbour`, `_settle`).
+- **Invariants:** caution never lowers satisfaction; reactions are facts written once (the review and ledger read them, never recompute).
+- **Tests:** `tests/suites/test_passages.gd` (`_test_personalities`).
+- **Change risks:** deltas drive stars, tips and refunds (`Settlement.settle`); line kinds must exist in `lines.json`.
+
+### `src/passengers/marketplace.gd`
+
+- **Role:** `class_name Marketplace`, extends RefCounted, static (I028 Tier 1); the passage trade's pure rules. `SKIPPERS_PATH` `res://data/passengers/skippers.json`, `BASE_RATE` 1.4 €/nm/person, `COMFORT_FACTOR` {simple 1.0, comfortable 1.25, spacious 1.6}, `NIGHT_FEE` 30, `MIN_FARE` 35, `OVERNIGHT_LEG_H` 10, `STOPOVER_H` 14, `WINDOW_H` 24, `STOP_CORRIDOR_NM` 15, `MAX_STOPS` 5, `DEPOSIT_SHARE` 0.3, `REQUEST_HOURS` 24, `COUNTER_LIMIT` 1.15. `skippers()`, `get_skipper(id)`; fares `going_rate(vessel_id)`, `leg_nights(seconds)`, `fare(offer, from, to, size, rate = -1)`, `distance(offer, from, to)`, `nights(offer, from, to)`; offers `candidate_stops(route) -> Array[StringName]` (ports within the corridor of the route path, in order along it), `build_offer(id, stops, vessel_id, depart_after, rate, now)` (each leg `SeaRouter.plan_route` + `PassagePlan.from_route(route, clock, WINDOW_H)`; refuses a leg beyond `Accommodation.suits_passage`; {id, status, vessel, stops, leg_nm, leg_s, kinds, arrive, depart, depart_after, depart_before, rate, published_at, stop_index, departed, arrived, requests_made} or {error}); capacity `occupancy(book, offer_id, leg) -> Vector2i(persons, private)`, `capacity_problem(book, offer, from, to, size, private) -> String` (overnight legs use `overnight_guest_count`); requests `best_rival(...)` (≈ 34 % of skippers per week and route, seeded), `appeal(...)` (budget, comfort, privacy, pets, rating; −10 = impossible), `generate_requests(book, offer, now, seed, pets, rating, region) -> Array` ({request, traveller}; count 1–7 from harbour importance and price ratio; allergic travellers never ask; rival-preferred ones `REQUEST_LOST` with `_lost_reason`), `answer_counter(request, ask)` (accept ≤ limit; one counter ≤ limit × 1.15; else decline), `deposit_for(fare)`.
+- **Depends on:** `SeaRouter`, `PassagePlan`, `PortCatalog`, `GeoMath`, `PlannedRoute`, `Accommodation`, `PassageBook`, `Travellers`, `PassengerDreams` (`assign`), `GameSession.format_money`, `Loc`.
+- **State:** static `_skippers`.
+- **Lifecycle:** `GameSession.publish_passage`, `answer_passage_request`, `passage_candidate_stops`, `add_passage_request_for_testing`; `Settlement.terms`; `PassagesApp`; `career_sim.gd` (`going_rate`).
+- **Invariants:** offers are timed on the authoritative chart (the passage on the laptop is the passage the chart sails); requests deterministic for (offer id, seed); rivals seeded, never simulated.
+- **Tests:** `tests/suites/test_passages.gd` (`_test_rules`, `_test_offer_and_requests`, `_test_multi_leg_passage`).
+- **Change risks:** `build_offer` plans every leg (router cost on publish); offer/request dict keys are save data in `PassageBook`.
+
+### `src/passengers/passage_book.gd`
+
+- **Role:** `class_name PassageBook`, extends RefCounted (I028); the passage trade's saved state, plain JSON-type dicts with string ids (`t`, `o`, `r`, `b`, `l` + n). Status constants `STATUS_PUBLISHED/SAILING/DONE/CANCELLED`, `REQUEST_PENDING/COUNTERED/ACCEPTED/DECLINED/LOST/EXPIRED`, `BOOKING_CONFIRMED/ABOARD/COMPLETED/CANCELLED`; `MAX_RECORDS` 300, `MAX_LETTERS` 60. Fields `travellers` {id: dict}, `offers`, `requests`, `bookings`, `records` (voyage ledger), `legs`, `totals` {passengers, bookings, nights, fares, tips, refunds, dreams, stars, reviews} (kept forever), `rivals` {skipper: {won}}, `letters`, `referrals`, `next_id`. `new_id(prefix)`, `get_offer/get_request/get_booking/get_traveller(id)`, `bookings_for_offer(offer_id, include_closed = false)`, `active_offer()` (the SAILING one), `aboard()`, `rating() -> Vector2(average stars, reviews)`, `duplicate_book()`, `to_dict()`, static lenient `from_dict(data)` (malformed items dropped; totals coerced to int; `referrals` clamped 0–20).
+- **Depends on:** nothing but its data (doc mentions the rule classes).
+- **State:** pure data.
+- **Lifecycle:** `SessionState.passages` (`duplicate_state`, `to_dict` "passages", `from_dict`); mutated only by `GameSession`; read copies via `GameSession.get_passage_book()`.
+- **Persistence:** optional top-level `passages` (no save-version change; missing → empty book).
+- **Invariants:** records are facts written once by `Settlement.make_record` (never derived again); totals survive record roll-over.
+- **Tests:** `tests/suites/test_passages.gd` (`_test_save_mid_passage`: no payment twice after a reload).
+- **Change risks:** totals must stay ints (JSON floats on load are coerced); a new list needs adding to both `to_dict` and `from_dict`.
+
+### `src/passengers/passenger_dreams.gd`
+
+- **Role:** `class_name PassengerDreams`, extends RefCounted, static (I028 Tier 4). Kinds `KIND_NIGHT` "night_at_sea", `KIND_REACH` "reach" (`port`), `KIND_SCENIC`, `KIND_ISLANDS` "island_hopping" (`count`), `KIND_CROSSING`; `ATLANTIC_EAST`/`ATLANTIC_WEST` region lists, `NIGHT_LEG_S` 10 h, `TEXTS`, `TITLES`. `assign(rng, offer, from, to) -> Dictionary` (≈ 45 % get one that suits the booked legs, else {}), `describe(dream)`, `title(dream)`, `is_met(dream, booking) -> bool` (only from `booking.legs_sailed`; REACH also needs `disembark` there).
+- **Depends on:** `PortCatalog`/`PortData` (`region`, `island`), `CruisingRegions` (`scenic`), `HarbourLooks.is_special`, `Loc`.
+- **State:** none; the dream is on the traveller and copied into the booking.
+- **Lifecycle:** `Marketplace.generate_requests` (assign), `GameSession._settle` (is_met → `totals.dreams`, `captain_dream` world event, letters, awards), `PassagesApp` and `GameSession._passenger_rewards` (texts).
+- **Invariants:** judged from legs actually sailed aboard (one leg towards the Caribbean is not a crossing).
+- **Tests:** `tests/suites/test_passages.gd` (`_test_dreams_and_rewards`).
+- **Change risks:** kind strings are save data; region names must match `PortData.region`.
+
+### `src/passengers/passenger_layer.gd`
+
+- **Role:** `class_name PassengerLayer`, extends Node2D (I028 Tier 2); presentation of the people aboard. `WALK_SPEED` 70, `BUBBLE_S` 5, `ACTIVITY_REFRESH_S` 4, `NIGHT_FROM` 22, `NIGHT_TO` 7. `setup(boat_area)` (name "Passengers", z 2), static `passengers_below()` (local night or exposure ≥ `WeatherModel.HAZARD_DANGEROUS`), `_sync()` (one person per booking member, key "booking:index"; `TownsfolkDrawing.make_look` by the harbour archetype; just-boarded people walk up from `BoatArea.get_walkway_return_point()`, staggered; departing ones walk off), `_make_talk` (an `Interactable` "passenger", "Talk with %s", → `GameSession.chat_with_passenger`), `_spot_for` (deck: `DeckCompanionSpots` spots and `nearest_safe`; cabin: `Accommodation.of(vessel).sleeping` places not `FOR_SKIPPER`), `_place_all` (activities: sleeping/resting below; on deck photographing, with the animals, reading, coffee, watching the water, resting, re-seeded every 2 game hours), `_process` (walk with `HumanGait`, bubbles), `_draw` (`TownsfolkDrawing.draw`, "z z", speech bubble), `get_people()` (tests).
+- **Depends on:** `BoatArea` (`area_id`, `get_walkway_return_point`, `Layout/DeckCompanionSpots`), `GameSession` (`get_passengers_aboard`, `get_local_hour`, `get_weather_exposure`, `get_companion_count`, `get_location_id`, `get_vessel_id`, `is_underway`, `get_game_time`, `chat_with_passenger`), `TownsfolkDrawing`, `HumanGait`, `HarbourDressing`, `Accommodation`, `DeckCompanionSpots`, `Interactable`, `WeatherModel`, `SessionState`, `Loc`.
+- **Signals:** connects `GameSession.passages_changed` → `_sync`, `passenger_said` → `_on_said`.
+- **State:** `people`, `_bubbles`, `_refresh`; nothing saved.
+- **Lifecycle:** created by `BoatArea._setup_water_life` on deck and in the cabin (`BoatArea.get_passenger_layer()`).
+- **Performance:** idle when nobody is aboard; redraws only while someone walks or a bubble shows.
+- **Invariants:** presentation only: no collision, no stations; never changes game state (talking goes through GameSession).
+- **Tests:** `tests/playtest_probe.gd` (`--passages=PORT`, by eye); none in the suites.
+- **Change risks:** relies on `DeckCompanionSpots` and the accommodation's node names for berths.
+
+### `src/passengers/settlement.gd`
+
+- **Role:** `class_name Settlement`, extends RefCounted, static (I028 Tier 3); contracts and settlement. `GRACE_MIN_H` 6, `GRACE_SHARE` 0.15, `LATE_REFUND_PER_DAY` 0.05, `LATE_REFUND_MAX` 0.3, `ALTERNATE_DISCOUNT` [0, 0.05, 0.1, 0.15] by transfer rank, `REVIEW_TEXTS` by stars. `terms(offer, request, fare_eur, traveller) -> Dictionary` (fare, deposit, paid, refunded, depart window, `promised` = arrival + grace, embark/disembark/original_disembark, booked_nm, nights, `alternate_rank` by timing and detour), `alternate_acceptance(booking, traveller, port_id) -> {ok, reason, band}`, `alternate_fare(booking, covered_nm, band_rank)`, `settle(booking, traveller, now) -> {balance, refund, tip, stars, review, late_h, excused, owed}` (owed for the share sailed unless an alternate was agreed; late refund unless `excused`; stars = 1 + satisfaction/22 + review tendency; tip from satisfaction ≥ 75), `make_record(booking, traveller, offer, result, vessel_id, now, disembark)` (the voyage ledger record).
+- **Depends on:** `Marketplace` (`deposit_for`, `WINDOW_H`, `distance`, `nights`), `TransferAccess.band`, `GuestReactions.START`, `Travellers.display_name`, `Loc`.
+- **State:** none.
+- **Lifecycle:** `GameSession.answer_passage_request` (terms), `propose_alternate_harbour`, `_settle` (settle, make_record).
+- **Invariants:** the Captain's caution never costs a refund; the deposit is counted in `paid` so a reload never pays it twice.
+- **Tests:** `tests/suites/test_passages.gd` (`_test_delayed_passage`, `_test_alternate_harbour`, `_test_save_mid_passage`).
+- **Change risks:** review texts are msgids translated at display (`PassagesApp`); record keys are save data.
+
+### `src/passengers/transfer_access.gd`
+
+- **Role:** `class_name TransferAccess`, extends RefCounted, static (I028 Tier 3). `DATA_PATH` `res://data/passengers/transfer_access.json` (bands near/regional/far/ferry with rank, curated harbours). `band(port_id) -> {id, label, rank, estimate}` (curated, else an estimate from `PortData.importance`/`island`), `describe(port_id)` (label + " (estimate)").
+- **Depends on:** the JSON, `PortCatalog`, `Loc`.
+- **State:** static `_data`.
+- **Lifecycle:** `Settlement.alternate_acceptance`, `PassagesApp._booking_card`.
+- **Tests:** `tests/suites/test_passages.gd` (`_test_rules`).
+- **Change risks:** band ranks index `Settlement.ALTERNATE_DISCOUNT` and compare with `alternate_rank`.
+
+### `src/passengers/travellers.gd`
+
+- **Role:** `class_name Travellers`, extends RefCounted, static (I028 Tier 2). `DATA_PATH` `res://data/passengers/travellers.json`, `PET_KINDS` (cat, dog, parrot). `data()`, `make(seed, id, max_size = 4, home = "") -> Dictionary` (deterministic: names, group/size, background, motivation, comfort, privacy, weather, timing, detour, pets/allergies, talk, reviews, home, look, budget; photographers get motivation "photo"), `display_name(traveller)` (`display` for well-known travellers, couple/friends/family forms), `background_text`, `motivation_text`, `tolerates_pets(traveller, kinds)`, `describe_traits(traveller)`, `pet_plural(kind)`.
+- **Depends on:** the JSON, `CompanionState` kinds, `Loc`.
+- **State:** static `_data`; travellers are kept in `PassageBook.travellers` as made.
+- **Lifecycle:** `Marketplace.generate_requests`, `GameSession` (`add_passage_request_for_testing`, invitations, answers), `Settlement`, `PassagesApp`.
+- **Invariants:** the same seed gives the same person; a saved traveller is never regenerated.
+- **Tests:** `tests/suites/test_passages.gd`, `tests/suites/test_world_renown.gd` (the invited explorers' display name).
+- **Change risks:** trait value strings are compared across `GuestReactions`, `Marketplace` and `Settlement`.
+
 ## User interface
 
 ### `src/ui/aboard_badge.gd`
@@ -2536,6 +2682,34 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** `tests/suites/test_company_we_keep.gd` (`_test_laptop`), `test_living.gd`, `test_publishing.gd`, `test_captains_other_life.gd`, `test_more_room_aboard.gd` (`_test_laptop_history`), `test_dreams.gd` (`_test_laptop`: the Dreams app in English and Danish).
 - **Change risks:** tests find nodes by name (`WorkButton`, `GameButton`, `PostcardButton`, `ScrapbookButton`, `PublishButton`, `Task`, `Records`, `Recent_<id>`, ...); embedded dialogs must build through `SimplePanel._build` to honour `embedded`; the screen layout must fit at both UI scales and in Danish.
 
+### `src/ui/laptop/network_app.gd`
+
+- **Role:** `class_name NetworkApp`, extends RefCounted, static (I028 Tier 5); builds the laptop's `APP_NETWORK` page. `PAGE_SIZE` 18, `IMAGE_SIZE`, static `following_only`. `build(laptop) -> Control` (page "Network"; `Filters` with `Filter_Everyone`/`Filter_Following`; `Empty` text; one `Post_<seq>` card per post), private `_post_card` (Picture when the image exists, `Author`, `Text`, a flat `Follow` button for notable authors → `GameSession.set_following`, rebuild via `laptop.show_app`).
+- **Depends on:** `LaptopView` (`_page`, `_text`, `show_app`, `APP_NETWORK`), `GameSession` (`get_network_posts`, `get_followed_travellers`, `set_following`), `TravellerNetwork` (`image_path`, `_place`), `WorldChronicle` (`CAPTAIN`, `population`), `Simulation.format_game_time`, `UiTheme`, `Loc`.
+- **State:** static `following_only` (per run).
+- **Lifecycle:** `LaptopView.show_app(APP_NETWORK)`.
+- **Tests:** none direct (the network data in `tests/suites/test_world_network.gd`); probe `--open=laptop:network`.
+- **Change risks:** must fit the laptop screen in both languages; posts load pictures from `res://assets/network/`.
+
+### `src/ui/laptop/passages_app.gd`
+
+- **Role:** `class_name PassagesApp`, extends RefCounted, static (I028 Tiers 1-3); builds the laptop's `APP_PASSAGES` page. `DEPART_CHOICES` [12, 24, 48] h, `PRICE_CHOICES` [0.85, 1.0, 1.15, 1.3] × going rate. `build(laptop)` (tiles Reviews/Passengers/Fares, then `_build_offer`, `_build_requests`, `_build_records`, `_build_rivals`); `_build_offer` (current offer → `_show_offer`; else, moored with a planned route: `Course`, `Boat`, `Stops` check boxes from `GameSession.passage_candidate_stops()` (≤ 8), `Departure`, `Price`, `PublishButton` → `GameSession.publish_passage` (refused without `can_work_remotely()`)); `_show_offer` (`Route`, `Window`, `Legs` with occupancy, `Booking_<id>` cards, `WithdrawButton` → `cancel_passage_offer`); `_booking_card` (`Terms`, `CancelButton` → `cancel_passage_booking`, `AlternatePick` + `AlternateButton` → `propose_alternate_harbour`); `_alternate_choices(offer, booking)` (later stops plus `Marketplace.candidate_stops` of the route, ≤ 6); `_build_requests` (`Request_<id>` cards with `AcceptButton`, `DeclineButton`, `Ask` SpinBox + `AskButton` → `answer_passage_request`; `Lost_<id>` lines); `_build_records` (latest 6 with reviews); `_build_rivals`.
+- **Depends on:** `LaptopView` (`_page`, `_tile`, `_heading`, `_text`, `_action`, `notify`, `show_app`), `GameSession` (passage API, planned route, voyage, vessel), `PassageBook`, `Marketplace`, `Travellers`, `PassengerDreams`, `TransferAccess`, `Accommodation`, `PortCatalog`, `Simulation`, `Loc`.
+- **State:** none.
+- **Lifecycle:** `LaptopView.show_app(APP_PASSAGES)`; every action rebuilds the page.
+- **Tests:** none direct in the suites; `tests/playtest_probe.gd` (`--passages`, `--open=laptop:passages`).
+- **Change risks:** node names are the probe's handles; long Danish lines must wrap on the laptop screen.
+
+### `src/ui/laptop/world_app.gd`
+
+- **Role:** `class_name WorldApp`, extends RefCounted, static (I028 Tier 6); builds the laptop's `APP_WORLD` page. `SECTIONS` ["Sails & Sights", "Rankings", "Yacht directory"]; static `section`, `issue_index`, `query`. `build(laptop)` (`_build_invitations` (`Invitation_<id>` cards: `Accept` → `GameSession.accept_invitation`, `Decline` → `decline_invitation`), section buttons `Section_<i>`, then `_build_magazine` (`Issue` card: `Cover`, `Masthead`, `Number`, `CaptainRank`, stories, `Top`; `Older`/`Newer`), `_build_rankings` (tiles, `Top` ten, `Near` around the Captain when below 10, `Memorable` travellers with "following") or `_build_directory` (`Search` LineEdit on submit, `Yacht_<id>` cards with `Report`, stale/unknown in the caution colour, `Expedition`)).
+- **Depends on:** `LaptopView`, `GameSession` (`get_invitations`, `accept_invitation`, `decline_invitation`, `get_magazine_issues`, `get_rankings`, `get_captain_standing`, `get_followed_travellers`, `get_yacht_directory`), `TravellerNetwork` (`image_path`, `_place`, `_expedition_title`), `WorldChronicle`, `Simulation`, `UiTheme`, `Loc`.
+- **State:** static section/issue/query (per run).
+- **Lifecycle:** `LaptopView.show_app(APP_WORLD)`; `tests/playtest_probe.gd` sets `WorldApp.section` (`--world_section`).
+- **Invariants:** shows the directory's last public reports only (live positions stay on the radar's AIS).
+- **Tests:** none direct; the data in `tests/suites/test_world_renown.gd`.
+- **Change risks:** issue dicts are saved as published (read tolerantly with `get`).
+
 ### `src/ui/loading_screen.gd`
 
 - **Role:** `class_name LoadingScreen`, extends CanvasLayer (layer 100, `PROCESS_MODE_ALWAYS`); start-up splash that warms caches. I022: `_night` is always true; Real Horizon: draws the menu's own title picture (`assets/ui/title_scene.png`) with a slow drift with the main menu's gradient (`SKY_TOP/SKY_LOW/SEA_TOP/SEA_LOW`, horizon `HORIZON` 0.62) and the night logo at 400×188 (I027: `load(GameVersion.LOGO_SMALL_PATH)`; the `LOGO` preload is gone; tagline `GameVersion.TAGLINE`); tagline and status take `ink_soft` night colours. project.godot's boot splash: navy `bg_color`, `stretch_mode=0` (native size), `between_horizons_logo_240.png` (I027).
@@ -2934,6 +3108,16 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Lifecycle:** created by `App.open_work_menu()` (only when `GameSession.can_work_remotely()`), from `BoatArea.work_requested`.
 - **Tests:** `tests/suites/test_publishing.gd`, `test_living.gd`.
 - **Change risks:** displayed pay is computed locally and must match `Simulation.work`'s actual pay.
+
+### `src/ui/writing_menu.gd`
+
+- **Role:** `class_name WritingMenu`, extends `SimplePanel` (I028 Tier 5); the travel-writing task on the laptop (replacing `GameDevMenu` on Home). Signal `write_requested(angle)`. `_ready()` builds "Travel writing": with a project, `Project`, `AngleNote` and one `Angle_<id>` button per `TravelWriting.angles()` (emit, close); without, `Form` (OptionButton with `form_problem` notes), `Topic` (`GameSession.writing_topics()`), `NoTopics`, `BeginButton` → `GameSession.start_writing` (refusal via `notification_requested`); `Works` (latest 8, the legacy game as "Your little game"); `CloseButton`.
+- **Depends on:** `SimplePanel` (`_build`, `_label`, `_button`, `_box`, `close`, `notification_requested`), `GameSession` (`get_writing`, `writing_topics`, `start_writing`, `get_captains_log`), `TravelWriting`, `Simulation.format_game_time`, `Loc`.
+- **Signals:** declares `write_requested(angle)`; `LaptopView.open_writing` relays it as `writing_requested` to `App.write_session`.
+- **State:** `_form`, `_topic`, `_topics` (UI only).
+- **Lifecycle:** `LaptopView.open_writing()` (Home's `WritingButton`), embedded as the laptop's task.
+- **Tests:** `tests/suites/test_world_network.gd` covers the rules through `GameSession`; the menu itself by eye.
+- **Change risks:** the session time is spent by `App.write_session` (`pass_time`), not here.
 
 ## Test suites
 
@@ -3514,6 +3698,15 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Tests:** —
 - **Change risks:** the Pacific case follows the weather model and the Wing 33's stores; the accommodation figures are pinned for the 26 ft.
 
+### `tests/suites/test_passages.gd`
+
+- **Role:** extends RefCounted; I028 Tiers 1-4 suite with `Simulation.auto_advance` off, voyages sailed by `Simulation`: `_test_rules` (skippers, going rates by comfort, fares and nights, deterministic travellers, allergies, transfer bands), `_test_offer_and_requests` (Copenhagen via a stop to Svendborg, legs planned on the chart, one offer at a time, requests over the hours, a counter-offer then a refusal, a booking with its deposit, cancel and withdraw), `_test_multi_leg_passage` (capacity per leg and overnight beds, boarding waits, two board in Copenhagen, one leaves at the stop and one joins, next leg plotted, records per booking, offer done, fares counted once), `_test_delayed_passage` (two days late: refund, a strict traveller unhappy), `_test_alternate_harbour` (Korsør instead of Svendborg, fare by distance, diversion on the record), `_test_save_mid_passage` (save/load with people aboard, settled once, deposit not paid again, `SAVE_VERSION` 12), `_test_personalities` (anxious vs hardy in a gale, caution excused, cooldown, scenic for the photographer, cat allergy, a chat line), `_test_dreams_and_rewards` (passenger dreams by legs sailed, the Captain's `atlantic_crossing`, `first_guests`, `dream_for_another` and `night_with_guests` dreams, letters, achievements).
+- **Depends on:** `GameSession` (passage API, `add_passage_request_for_testing`), `Simulation`, `PassageBook`, `Marketplace`, `Travellers`, `TransferAccess`, `GuestReactions`, `Settlement`, `PassengerDreams`, `SaveManager.SAVE_VERSION`, runner helpers (`use_calm_wind`, `set_wind`).
+- **State:** restores auto-advance and calm wind; ends the session.
+- **Lifecycle:** in `tests/test_runner.gd` `SUITES` after `test_captain_tools`.
+- **Tests:** —
+- **Change risks:** relies on the Copenhagen–Svendborg corridor offering stops and on the scripted passages (a steady 12 kn breeze) arriving within `_sail_to_harbour`'s guard.
+
 ### `tests/suites/test_presentation.gd`
 
 - **Role:** extends RefCounted; test suite (Iteration 17): fenders out in harbour / stowed underway on all four boats (`FenderStowage.find_fenders` on deck art; art file MD5 unchanged; restored after loading slot 3); `SailRig` z-order above player and see-through (`modulate.a`) when `rig.covers()` the player; `HarbourFacilities.describe_services` matches `HarbourFacilities.PREVIEW`/`for_port` data for every port, no "Fuel"; docking arrival from the cabin (deck shown, engine loop, Space skips, one `Simulation.arrived`, log arrival +1, food unchanged).
@@ -3822,6 +4015,24 @@ review. Rules: [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Lifecycle:** test suite in `tests/test_runner.gd`.
 - **Tests:** —
 - **Change risks:** Depends on private `MapView` members and the three-copy world layer approach; screenshot `17_map_australia_regional`.
+
+### `tests/suites/test_world_network.gd`
+
+- **Role:** extends RefCounted; I028 Tier 5 suite: `_test_ledger_rules` (90 days of history; same seed same history, another seed another; small vs large steps equal; one place per yacht at plausible speeds; `seq` only grows; reload continues with an unchanged past; the Greenland expedition announced once and sailed by its crew; rankings ordered and deterministic), `_test_writing` (the little game migrated once; no topics before a voyage; topics from real voyages (`_visit`); a novel refused; an essay on rough weather; an interrupted session's share; every angle right = five stars; modest income; the `captain_book` event; never twice; save round trip), `_test_network` (posts after 40 days, none from the future, pictures exist and some text-only, ≥ 20 pictures, the Captain's work posted, same after a reload, following/unfollowing; the Captain ranked).
+- **Depends on:** `WorldState`, `WorldChronicle`, `TravellerNetwork`, `TravelWriting`, `GameSession`, `Simulation`, `SessionState`, the manifest.
+- **State:** ends the session; restores auto-advance.
+- **Lifecycle:** in `tests/test_runner.gd` `SUITES` after `test_passages`.
+- **Tests:** —
+- **Change risks:** compares JSON-normalised dumps (`_norm`), so any non-deterministic field in events breaks it.
+
+### `tests/suites/test_world_renown.gd`
+
+- **Role:** extends RefCounted; I028 Tier 6 suite: `_test_freya_scenario` (Freya Voss, Maya Wildshore and Northern Promise bound for Greenland: announcement once, stops in order, a meeting on the quay in Lerwick in the ledger, `GameSession.get_notable_ais_contacts` shows the yacht alongside, `AisReceiver.notable_contacts_at` from Copenhagen hears nothing, the directory's report = the yacht's latest post, search, stale/unknown flags, no live position in the directory, the network's announcement with a picture, Sails & Sights issues (one per month, unchanged after a reload), rankings stable), `_test_invitation` (refused without qualifications, offered once when qualified, accepted as a real booking with deposit, display name, not twice, achievement, ranking goal once after a reload, the explorers board, sail and are settled in the ledger).
+- **Depends on:** `GameSession`, `Simulation`, `WorldChronicle`, `TravellerNetwork`, `YachtDirectory`, `AisReceiver`, `Travellers`, `PortCatalog`, `SessionState`.
+- **State:** restores auto-advance and calm wind; ends the session.
+- **Lifecycle:** in `tests/test_runner.gd` `SUITES` after `test_world_network`.
+- **Tests:** —
+- **Change risks:** depends on the authored `greenland_promise` expedition and the `greenland_scouts` invitation data.
 
 ### `tests/suites/test_world_voyage.gd`
 

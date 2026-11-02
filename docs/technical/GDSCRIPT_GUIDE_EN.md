@@ -394,6 +394,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Always (an autoload); it stops while the game is paused.
 - **If you change it:** Sailing speed, arrival times, weather warnings, damage and rescues, hat losses and bites. Very sensitive.
 
+### `src/core/travel_writing.gd`
+
+**Purpose:** Travel writing: the Captain's pastime on the laptop, in place of the little game (I028 Tier 5).
+- **What it does:** Reads the forms of writing from `data/pastimes/writing.json` (a voyage essay, a nautical journal, a travelogue, an adventure book and a sailing novel, each with its number of two-hour sessions, its income, its renown and the experience it needs) and the three angles a session can take (the people, the sea and the weather, the places). It lists what can be written about, only from what really happened: harbours arrived in, passages of 60 miles or more, rough weather sailed through, passengers whose dream came true or who gave five stars, and the companions aboard. It says what a longer form still needs (voyages, harbours, a long passage, earlier works), gives a work its title, weighs each session (the angle that suits the subject counts more) and decides how a finished work is received: three to five stars, a modest income and renown. No prose to compose: a few honest choices.
+- **Works with:** `GameSession` (keeps the work in progress and publishes it), `WritingMenu`, `App` (spends the two hours), `CaptainsLog`, `PassageBook`, `CompanionState`, `PortCatalog`, `Loc`.
+- **Keeps:** Nothing but the file it reads once; the Captain's writing lives in the save (in the world's `writing` part).
+- **When it runs:** When the writing menu opens, a work is begun, a session ends or a work is published.
+- **If you change it:** What can be written, how long it takes and what it earns; the world-and-network test writes a work from start to publication.
+
 ### `src/core/vessel_condition.gd`
 
 **Purpose:** Names for how healthy a boat is (0–100 %).
@@ -1182,6 +1191,51 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Whenever lighting, the interface or music checks the time of day.
 - **If you change it:** When it gets dark and light everywhere in the game, and the colours of every scene.
 
+### `src/world/sails_and_sights.gd`
+
+**Purpose:** Sails & Sights, the sailing world's monthly magazine (I028 Tier 6).
+- **What it does:** When a month is over, it composes that month's issue from the world's history: up to five stories (expeditions announced and completed, books, the Captain's own published works, notable passages and passengers' dreams, meetings on the quay, long arrivals), the ten best-known sailors and the Captain's place as they stood at the month's end, and a cover picture. An issue is then frozen and never written again, so the archive keeps what the magazine said at the time. One issue per calendar month, never twice after a save and load; after a long absence only the latest three months are composed.
+- **Works with:** `WorldState` (the history and the archive), `WorldChronicle` (the rankings), `TravellerNetwork` (the pictures and place names), `GameSession` (publishes the issues and says so), `WorldApp` (shows them).
+- **Keeps:** Nothing of its own; the issues are kept in the world's state.
+- **When it runs:** When the world's history moves on and a month has ended.
+- **If you change it:** What the magazine says and when; the renown test checks one issue per month and an unchanged archive after a reload.
+
+### `src/world/traveller_network.gd`
+
+**Purpose:** The Traveller Network: the sailing world's quiet social feed on the laptop (I028 Tier 5).
+- **What it does:** Turns events from the world's one history into posts: some departures, most arrivals, every expedition and book, and the Captain's own published works, notable passages and passengers' dreams. It keeps no history of its own, so a post can never disagree with the yacht directory, the magazine or the rankings, and no post comes from the future. Which events become posts, their words and their picture are decided by each event's own number, so the feed reads the same after a reload. About a third of posts are text only; the rest use one of the reusable atmospheric pictures in `assets/network` (people only as blurred silhouettes), chosen to suit the place (ice and fjords in the north, palms in warm waters). It can show only the travellers the Captain follows.
+- **Works with:** `WorldState`, `WorldChronicle` (names and yachts), `PortCatalog`, `NetworkApp`, `YachtDirectory` and `SailsAndSights` (which read the same posts), `GameSession`.
+- **Keeps:** Only the picture list it reads once from `assets/network/manifest.json`.
+- **When it runs:** When the laptop's Network, the directory or the magazine is shown.
+- **If you change it:** What the network says and which pictures it shows; the directory's last public reports follow the posts.
+
+### `src/world/world_chronicle.gd`
+
+**Purpose:** The world's shared history: one ledger of what the sailing world's travellers do, and the Captain's place in it (I028 Tier 5).
+- **What it does:** Reads the well-known travellers, their yachts, two authored expeditions and a larger ranked population from `data/world/travellers.json`. It writes the history forward a whole day at a time, from the game's seed and what is already written, and never rewrites it: yachts leave and arrive (one harbour or one leg at a time, at a plausible speed), expeditions are announced and sailed stop by stop, books come out, and the wider population has small accomplishments. It also adds the Captain's own events (a published work, a notable passage, a passenger's dream). From the same ledger it says where a yacht is at a moment, works out each person's renown (lasting renown plus the attention of recent news, fading by half in 45 days) and ranks everyone, ties settled the same way each time.
+- **Works with:** `WorldState` (where it writes), `GameSession` (moves it forward and adds the Captain's events), `PortCatalog`, `GeoMath`, `TravellerNetwork`, `YachtDirectory`, `SailsAndSights`, `AisReceiver`, `WorldApp`, `NetworkApp`.
+- **Keeps:** Only the data file and the generated population, made once.
+- **When it runs:** At most once an hour of game time while time passes, and whenever the laptop or the radar asks about the world.
+- **If you change it:** The whole world's history and the rankings; the world tests check that it is the same for the same seed, the same in small and large steps, and that no yacht is in two places.
+
+### `src/world/world_state.gd`
+
+**Purpose:** The saved record of the world beyond the Captain (I028 Tiers 5-6).
+- **What it does:** Holds the world's event ledger (in time order, never rewritten; the latest 900 kept, while everything they changed stays in the renown totals and the yachts' last reports), where each notable yacht is, each person's lasting renown, the Captain's travel writing (the work in progress, the published works, the experience, whether the little game was carried over), the magazine's issues, and the Captain's place in this world: encounters, the travellers followed and invitations. It turns all of it into save data and back, leaving out anything malformed.
+- **Works with:** `SessionState` (saves it as `world`), `GameSession` (the only writer), `WorldChronicle`, `SailsAndSights`, `TravellerNetwork`, `YachtDirectory`, `AisReceiver`.
+- **Keeps:** All of the above.
+- **When it runs:** Whenever the world's history moves on, and at every save and load.
+- **If you change it:** The "world" part of saves; it is optional, so an older save starts with a fresh, empty world.
+
+### `src/world/yacht_directory.gd`
+
+**Purpose:** The yacht directory: a searchable list of the sailing world's notable yachts as the public knows them (I028 Tier 6).
+- **What it does:** Lists every notable yacht by name with its model, type and skipper, and its last public report: the most recent departure, arrival or expedition its crew posted on the Traveller Network. A yacht that never posted is unknown, and a report older than ten days is marked stale, because the yacht may well have moved on. It searches by yacht, skipper, model, type or harbour. It is not a live tracker: where a yacht really is now is shown only by AIS within range, and the two are kept apart on purpose.
+- **Works with:** `WorldState`, `WorldChronicle`, `TravellerNetwork` (the same posts), `GameSession`, `WorldApp`.
+- **Keeps:** Nothing.
+- **When it runs:** When the World app shows the directory.
+- **If you change it:** What players can learn about other yachts; the renown test checks that reports match the posts and that live positions stay on the radar.
+
 ## Life aboard and ashore: companion, fishing, galley, hat, harbour trades, sailing, care, audio, developer tools
 
 ### `src/anchor/anchor_site.gd`
@@ -1733,6 +1787,80 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** While reeling in a fish or setting the Magic Anchor.
 - **If you change it:** The feel of both fishing and Magic Anchor mini-games.
 
+## Passengers: the passage trade and the people aboard
+
+### `src/passengers/guest_reactions.gd`
+
+**Purpose:** How passengers feel about what really happens aboard (I028 Tier 2).
+- **What it does:** Each passenger reacts through their own traits to the weather they sail in, the Captain's cautious choices in bad weather, scenic harbours, the animals aboard, the boat's comfort and privacy, and arriving on time or late; an anxious passenger and a hardy one feel the same gale differently. A reaction moves the booking's satisfaction a little (0 to 100, starting at 70) and is written down as a fact for the review and the voyage ledger; the same kind of reaction counts at most once in six hours. Caution is never punished: it is noted, and a delay it causes is excused. Now and then a reaction brings a line of dialogue from `data/passengers/lines.json`. No meters and no chores.
+- **Works with:** `GameSession` (calls it as things happen), `Accommodation` (comfort tiers), `Settlement` (reads the satisfaction), `Loc`.
+- **Keeps:** Only the lines it reads once; reactions are kept on the booking.
+- **When it runs:** On boarding, under way when the weather is checked, on caution, on arrival, and when the Captain talks with a passenger.
+- **If you change it:** How happy passengers end up, and so their reviews, tips and refunds.
+
+### `src/passengers/marketplace.gd`
+
+**Purpose:** The rules of the passage trade: offers, fares, room aboard, requests, the competing skippers and bargaining (I028 Tier 1).
+- **What it does:** Builds a passage from the Captain's planned course: the harbours along it within 15 miles can be added as stops (up to five), and each leg is planned on the real chart and timed like a passage plan, with a 14-hour stopover and a 24-hour departure window; a leg the boat is not fitted for is refused. It prices a passage (a going rate per mile and person that rises with the boat's comfort, a fee for each night aboard and a least fare), checks room leg by leg (beds for legs through the night, private cabins), and makes the travellers who answer a published passage: how many depends on the harbours and the price, each appears at its own time and waits a day. A traveller who prefers one of the ten competing skippers (seeded by the week and the route, never simulated) is kept as lost, with the reason. It answers the Captain's price: yes, one counter-offer, or no. A deposit of 30 % is paid on booking.
+- **Works with:** `GameSession` (keeps the result and moves the money), `PassageBook`, `SeaRouter`, `PassagePlan`, `PortCatalog`, `Accommodation`, `Travellers`, `PassengerDreams`, `PassagesApp`, `data/passengers/skippers.json`.
+- **Keeps:** Only the skippers it reads once.
+- **When it runs:** When a passage is published, a request is answered or the laptop shows the Passages app.
+- **If you change it:** How much passages earn and how many people ask; the passages test checks fares, capacity and bargaining.
+
+### `src/passengers/passage_book.gd`
+
+**Purpose:** The saved record of the passage trade (I028).
+- **What it does:** Holds the travellers the Captain has met (each kept exactly as made), the passages published, the requests, the bookings with their contract terms, the voyage ledger of what really happened to each passenger (the latest 300 records, with totals kept forever), the legs sailed with people aboard, the letters, photographs and gifts passengers left (the latest 60), the competing skippers' wins, and how many recommendations wait for the next passage. It finds offers, requests, bookings and travellers by id, says who is aboard and the Captain's average review, and turns everything into save data and back, leaving out anything malformed.
+- **Works with:** `SessionState` (saves it as `passages`), `GameSession` (the only writer), `Marketplace`, `GuestReactions`, `Settlement`, `PassagesApp`, `Dreams`, `TravelWriting`.
+- **Keeps:** All of the above, as plain data.
+- **When it runs:** Throughout the passage trade, and at every save and load.
+- **If you change it:** The "passages" part of saves; it is optional, so an older save starts with an empty book.
+
+### `src/passengers/passenger_dreams.gd`
+
+**Purpose:** Passengers' own dreams (I028 Tier 4).
+- **What it does:** Gives some travellers (fewer than half) a personal ambition that suits the passage they book: a first night at sea, returning to the island of their childhood, photographing a truly special place, hopping between islands, or crossing the Atlantic under sail. A dream is judged only from the legs the passenger really sailed aboard, so someone who sailed one European leg towards the Caribbean has not crossed the Atlantic with the Captain. It also gives each dream its words and title.
+- **Works with:** `Marketplace` (assigns a dream to a new traveller), `GameSession` (judges it on arrival), `PortCatalog`, `CruisingRegions` and `HarbourLooks` (scenic places), `PassagesApp`, `LaptopView` (the letters).
+- **Keeps:** Nothing; a dream is kept on the traveller and the booking.
+- **When it runs:** When requests are made and when a passenger goes ashore.
+- **If you change it:** Which dreams passengers have and when they come true, with the letters, achievements and Captain's dreams that follow.
+
+### `src/passengers/passenger_layer.gd`
+
+**Purpose:** Shows the passengers aboard (I028 Tier 2).
+- **What it does:** Draws every person of every booking aboard in the townsfolk style, walking with the shared gait. By day in fair weather they are on deck (reading, with a coffee, watching the water, taking photographs, with the animals); at night and in rough weather they are below, resting in the guests' berths. They walk aboard up the gangway when they board in harbour and walk off at their harbour. Each carries a "Talk with …" interaction, and a small bubble shows what someone just said.
+- **Works with:** `BoatArea` (adds it to the deck and the cabin), `GameSession` (who is aboard, the hour, the weather, what they say), `TownsfolkDrawing`, `HumanGait`, `HarbourDressing`, `Accommodation` (the berths), `DeckCompanionSpots`, `Interactable`.
+- **Keeps:** Only the people drawn and their speech bubbles; nothing is saved.
+- **When it runs:** On deck and in the cabin whenever passengers are aboard.
+- **If you change it:** Only what passengers look like aboard; it never changes the game.
+
+### `src/passengers/settlement.gd`
+
+**Purpose:** The agreements with passengers and how they are settled (I028 Tier 3).
+- **What it does:** Writes the contract into a new booking: the fare and the deposit, the departure window, the promised arrival (with grace: at least six hours, or 15 % of the booked time) and how far from onward travel the passenger would accept another harbour. On arrival it settles the booking: the rest of the fare for the legs actually sailed, a refund of 5 % a day when late beyond the grace (at most 30 %) unless the delay came from the Captain's caution in bad weather, a tip and a one-to-five-star review that follow the passenger's satisfaction and habits. It decides whether a passenger accepts another harbour and the fare for it (by distance, less a small goodwill discount), and writes the voyage ledger's record of the booking.
+- **Works with:** `GameSession` (moves the money and keeps the records), `Marketplace`, `TransferAccess`, `GuestReactions`, `Travellers`, `Loc`.
+- **Keeps:** Nothing.
+- **When it runs:** When a booking is made, another harbour is proposed or a passenger goes ashore.
+- **If you change it:** What passengers pay and how they review; the passages test checks refunds, an agreed alternative harbour and settling once after a reload.
+
+### `src/passengers/transfer_access.gd`
+
+**Purpose:** How far a harbour is from onward travel (I028 Tier 3).
+- **What it does:** Gives a harbour a band (an airport within the hour, one to three hours away or further, or a ferry first) from `data/passengers/transfer_access.json`, or an estimate from the harbour's importance when it is not listed there, marked "(estimate)". It is used when the Captain proposes another harbour to a passenger. No taxis, trains or flights are simulated.
+- **Works with:** `Settlement`, `PassagesApp`, `PortCatalog`, `Loc`.
+- **Keeps:** Only the file it reads once.
+- **When it runs:** When the Passages app lists other harbours and when a passenger answers.
+- **If you change it:** Which harbours passengers accept instead of their own.
+
+### `src/passengers/travellers.gd`
+
+**Purpose:** The people who travel with the Captain (I028 Tier 2).
+- **What it does:** Makes a traveller once, from `data/passengers/travellers.json` and a seed: names, a group (solo, couple, friends or family), a background and a motivation, a budget, and a small set of traits that matter aboard: comfort, privacy, weather, timing, detours, animals (with allergies), talk and reviews. The traveller is then kept in the save exactly as made, so the same person stays the same after a reload. It writes their name ("Anna & Lars Berg", "the Berg family"; well-known travellers by their own names), their background, motivation and traits in plain words, and says whether they tolerate the animals aboard.
+- **Works with:** `Marketplace` (makes them), `PassageBook` (keeps them), `GameSession`, `Settlement`, `PassagesApp`, `CompanionState`, `Loc`.
+- **Keeps:** Only the file it reads once.
+- **When it runs:** When requests are made and whenever a traveller is shown.
+- **If you change it:** Who asks for passages and how they behave; a traveller already in a save keeps its traits.
+
 ## User interface: menus, panels and the HUD
 
 ### `src/ui/aboard_badge.gd`
@@ -2085,6 +2213,33 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** When you use the work station at the cabin table or choose Laptop on the action wheel.
 - **If you change it:** Where players find their achievements, publications and remote work; tests find its parts by node name.
 
+### `src/ui/laptop/network_app.gd`
+
+**Purpose:** The laptop's Network app: the Traveller Network to read with the morning coffee (I028 Tier 5).
+- **What it does:** Shows the latest posts of the sailing world (up to 18), newest first: each with who wrote it, when and where, its words and, for most, a picture. The Captain's own posts are marked "You". Under a well-known traveller's post a button follows or unfollows them, and two buttons switch between everyone and only the people followed. No likes and no counters.
+- **Works with:** `LaptopView` (its page and tabs), `GameSession` (the posts and following), `TravellerNetwork` (pictures and place names), `WorldChronicle`, `Simulation` (dates), `UiTheme`, `Loc`.
+- **Keeps:** Only whether "Following" is chosen (not saved).
+- **When it runs:** When the Network tab is open on the laptop.
+- **If you change it:** Only how the network looks; its parts have stable node names (`Post_<n>`, `Follow`, `Filter_…`).
+
+### `src/ui/laptop/passages_app.gd`
+
+**Purpose:** The laptop's Passages app: the passage trade on one page (I028 Tiers 1-3).
+- **What it does:** Shows the Captain's reviews, passengers carried and fares earned. In harbour it turns the course planned at the chart table or the chartplotter into a passage: the boat's places by day and overnight, stops along the way to tick, when to leave (in 12, 24 or 48 hours) and the price per mile and person; publishing needs the harbour Wi-Fi. A published passage shows its legs with the people aboard each, a card for each booking (its terms, cancelling, and proposing another harbour with how far it is from onward travel) and a button to withdraw it. Requests show who the travellers are, their traits and any dream, and can be accepted, declined or answered with another price. Lost travellers, the latest passengers with their reviews and the other skippers are listed too. Everything goes through `GameSession`; the app only shows and asks.
+- **Works with:** `LaptopView`, `GameSession`, `PassageBook`, `Marketplace`, `Travellers`, `PassengerDreams`, `TransferAccess`, `Accommodation`, `PortCatalog`, `Simulation`, `Loc`.
+- **Keeps:** Nothing.
+- **When it runs:** When the Passages tab is open on the laptop.
+- **If you change it:** How players run the passage trade; its buttons have stable node names (`PublishButton`, `AcceptButton`, `AskButton`, …).
+
+### `src/ui/laptop/world_app.gd`
+
+**Purpose:** The laptop's World app: the sailing world as the Captain reads it (I028 Tier 6).
+- **What it does:** Shows invitations from well-known travellers at the top, with buttons to accept (the passage is published and they are booked on it) or decline politely. Below, three sections: Sails & Sights (the latest issue with its cover, stories, the Captain's place and the month's best-known sailors, and older issues as they were published), Rankings (the Captain's place and renown, the ten best-known, the sailors around the Captain and the memorable travellers) and the yacht directory (a search box and each yacht's last public report, unknown and stale ones marked; live positions are only on the radar's AIS).
+- **Works with:** `LaptopView`, `GameSession`, `TravellerNetwork`, `WorldChronicle`, `Simulation`, `UiTheme`, `Loc`.
+- **Keeps:** Only the section, the issue shown and the search text (not saved).
+- **When it runs:** When the World tab is open on the laptop.
+- **If you change it:** How players see the wider world; the probe opens a section by number.
+
 ### `src/ui/loading_screen.gd`
 
 **Purpose:** The game's own loading screen with the logo over a calm sea.
@@ -2426,6 +2581,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** The chosen number of hours.
 - **When it runs:** When you use the work station while moored in a harbour.
 - **If you change it:** How players earn money by working.
+
+### `src/ui/writing_menu.gd`
+
+**Purpose:** The travel writing window on the laptop, in place of the little game (I028 Tier 5).
+- **What it does:** With a work in progress, it says what is being written and which session comes next, and offers the three angles; choosing one asks for a two-hour session (an interruption counts its share). Without one, it offers a new work: a form (with what experience is still missing) and a subject from the Captain's own voyages, then "Begin writing". It also lists the latest works published, with their stars and dates.
+- **Works with:** `LaptopView` (opens it and passes the session on), `App` (spends the time), `GameSession` (the writing and the topics), `TravelWriting`, `SimplePanel`, `Simulation`, `Loc`.
+- **Keeps:** Only the choices in its lists while it is open.
+- **When it runs:** When "Travel writing…" is chosen on the laptop's Home page.
+- **If you change it:** Only how writing is started and continued; the rules stay in `TravelWriting` and `GameSession`.
 
 ## Automated test suites
 
@@ -2995,6 +3159,15 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **When it runs:** Only in tests.
 - **If you change it:** Only the safety net changes; if it fails, a plan may misstate a passage, change the course or not survive a hand-over.
 
+### `tests/suites/test_passages.gd`
+
+**Purpose:** Checks the passage trade, played through the real game (I028 Tiers 1-4).
+- **What it does:** Checks fares, the competing skippers, travellers made the same from the same seed, allergies and onward travel; a passage published from Copenhagen via a stop to Svendborg, planned leg by leg on the chart; requests arriving over the hours, bargaining with a counter-offer, a booking with its deposit, cancelling and withdrawing; room leg by leg; passengers boarding, joining and leaving at different stops of one sailed passage, settled once each with a record of the legs they sailed; a late passage refunded, an alternative harbour agreed under way, and save and load with people aboard (nothing paid twice, the save format still 12). It also checks how different traits feel the same gale, that caution is never punished, a cat and an allergic traveller, talking with a passenger, passengers' dreams judged by the legs sailed, the Captain's own dreams of the trade, letters and achievements.
+- **Works with:** `GameSession`, `Simulation`, `PassageBook`, `Marketplace`, `Travellers`, `TransferAccess`, `GuestReactions`, `Settlement`, `PassengerDreams`, `SaveManager`.
+- **Keeps:** Nothing.
+- **When it runs:** Only in tests.
+- **If you change it:** Only the safety net changes; a failure points at the trade's rules, settlement or the save.
+
 ### `tests/suites/test_presentation.gd`
 
 **Purpose:** Checks small presentation touches on deck and on arrival in harbour.
@@ -3300,6 +3473,24 @@ The rules are in [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Keeps:** Nothing of its own.
 - **When it runs:** Only in tests (it saves a screenshot when asked).
 - **If you change it:** Only the safety net changes; if it fails, land may vanish from parts of the world chart or harbours may be hard to click.
+
+### `tests/suites/test_world_network.gd`
+
+**Purpose:** Checks travel writing, the world's history and the Traveller Network (I028 Tier 5).
+- **What it does:** Checks that the world's history is the same for the same seed and different for another, the same in small and large steps, only ever extended, with every yacht in one place at a time at plausible speeds, unchanged after a reload, and that the Greenland expedition is announced once and sailed by its crew. Writing: the little game's progress carried over once, nothing to write before the first voyage, topics from real voyages, a novel needing more experience, an essay written (an interrupted session keeps its share), five stars for the right angles, a modest income, the work in the world's history, never published twice, and saved. Network: posts after 40 days, none from the future, pictures that exist and some text only, the Captain's work posted, the same posts after a reload, and following.
+- **Works with:** `WorldState`, `WorldChronicle`, `TravellerNetwork`, `TravelWriting`, `GameSession`, `Simulation`, `SessionState`.
+- **Keeps:** Nothing.
+- **When it runs:** Only in tests.
+- **If you change it:** Only the safety net changes; a failure points at the world's history, writing or the feed.
+
+### `tests/suites/test_world_renown.gd`
+
+**Purpose:** Checks Sails & Sights, the rankings, the yacht directory, AIS, meetings and invitations (I028 Tier 6).
+- **What it does:** Plays the Greenland story: Freya Voss and Maya Wildshore announce their expedition aboard Northern Promise and sail its stops in order; the Captain shares a coffee with them in Lerwick, and the meeting is in the world's history; AIS shows the yacht alongside there but not from Copenhagen; the directory lists it with its own latest post, searchable, with stale and unknown reports marked and no live position; the network and the magazine tell the same story; the magazine comes out once a month, unchanged after a reload; the rankings are ordered and stable. Then an invitation: refused without the qualifications, offered once when qualified, accepted as a real booking with its deposit, the explorers aboard and the passage settled in the voyage ledger; the ranking achievement is awarded once.
+- **Works with:** `GameSession`, `Simulation`, `WorldChronicle`, `TravellerNetwork`, `YachtDirectory`, `AisReceiver`, `Travellers`, `SessionState`.
+- **Keeps:** Nothing.
+- **When it runs:** Only in tests.
+- **If you change it:** Only the safety net changes; a failure points at the world's views disagreeing, the magazine or the invitations.
 
 ### `tests/suites/test_world_voyage.gd`
 

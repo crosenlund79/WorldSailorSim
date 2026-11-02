@@ -396,6 +396,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Altid (en autoload); det står stille, mens spillet er sat på pause.
 - **Hvis du ændrer det:** Sejlfart, ankomsttider, vejrvarsler, skader og redninger, tabte huer og bid. Meget følsomt.
 
+### `src/core/travel_writing.gd`
+
+**Formål:** Rejseskrivning: Kaptajnens tidsfordriv på laptoppen i stedet for det lille spil (I028 trin 5).
+- **Hvad det gør:** Læser skriveformerne fra `data/pastimes/writing.json` (et rejseessay, en nautisk dagbog, en rejseskildring, en eventyrbog og en sejlerroman, hver med sit antal skrivetimer på to timer, sin indtægt, sit ry og den erfaring, den kræver) og de tre vinkler, en skrivetime kan have (menneskene, havet og vejret, stederne). Den viser, hvad der kan skrives om, kun ud fra det, der virkelig er sket: havne, man er ankommet til, passager på 60 sømil eller mere, hårdt vejr, man har sejlet igennem, passagerer, hvis drøm gik i opfyldelse, eller som gav fem stjerner, og ledsagerne om bord. Den siger, hvad en længere form stadig mangler (sejladser, havne, en lang passage, tidligere værker), giver et værk dets titel, vejer hver skrivetime (den vinkel, der passer til emnet, tæller mere) og afgør, hvordan et færdigt værk bliver modtaget: tre til fem stjerner, en beskeden indtægt og ry. Ingen prosa at skrive: nogle få ærlige valg.
+- **Arbejder sammen med:** `GameSession` (husker værket undervejs og udgiver det), `WritingMenu`, `App` (bruger de to timer), `CaptainsLog`, `PassageBook`, `CompanionState`, `PortCatalog`, `Loc`.
+- **Holder styr på:** Intet andet end filen, den læser én gang; Kaptajnens skrivning ligger i det gemte spil (i verdens `writing`-del).
+- **Hvornår det kører:** Når skrivevinduet åbnes, et værk påbegyndes, en skrivetime slutter, eller et værk udgives.
+- **Hvis du ændrer det:** Hvad der kan skrives, hvor lang tid det tager, og hvad det giver; testen af verden og netværket skriver et værk fra start til udgivelse.
+
 ### `src/core/vessel_condition.gd`
 
 **Formål:** Navne for, hvor sund en båd er (0–100 %).
@@ -1184,6 +1193,51 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når lyset, brugerfladen eller musikken tjekker tiden på dagen.
 - **Hvis du ændrer det:** Hvornår det bliver mørkt og lyst overalt i spillet, og farverne i alle scener.
 
+### `src/world/sails_and_sights.gd`
+
+**Formål:** Sails & Sights, sejlerverdenens månedsmagasin (I028 trin 6).
+- **Hvad det gør:** Når en måned er omme, sætter den månedens nummer sammen ud fra verdens historie: op til fem historier (ekspeditioner, der annonceres og fuldføres, bøger, Kaptajnens egne udgivne værker, bemærkelsesværdige passager og passagerers drømme, møder på kajen, lange ankomster), de ti mest kendte sejlere og Kaptajnens plads, som de stod ved månedens udgang, og et forsidebillede. Et nummer fryses derefter og skrives aldrig igen, så arkivet bevarer, hvad magasinet skrev dengang. Ét nummer pr. kalendermåned, aldrig to gange efter et gemt og indlæst spil; efter et langt fravær sættes kun de seneste tre måneder sammen.
+- **Arbejder sammen med:** `WorldState` (historien og arkivet), `WorldChronicle` (ranglisten), `TravellerNetwork` (billederne og stednavnene), `GameSession` (udgiver numrene og fortæller om dem), `WorldApp` (viser dem).
+- **Holder styr på:** Intet af sit eget; numrene gemmes i verdens tilstand.
+- **Hvornår det kører:** Når verdens historie skrider frem, og en måned er slut.
+- **Hvis du ændrer det:** Hvad magasinet skriver, og hvornår; rytestene tjekker ét nummer pr. måned og et uændret arkiv efter indlæsning.
+
+### `src/world/traveller_network.gd`
+
+**Formål:** Traveller Network: sejlerverdenens stille sociale nyhedsstrøm på laptoppen (I028 trin 5).
+- **Hvad det gør:** Gør begivenheder fra verdens ene historie til opslag: nogle afgange, de fleste ankomster, hver ekspedition og bog og Kaptajnens egne udgivne værker, bemærkelsesværdige passager og passagerers drømme. Den har ingen historie for sig selv, så et opslag kan aldrig være uenigt med bådregistret, magasinet eller ranglisten, og intet opslag kommer fra fremtiden. Hvilke begivenheder der bliver til opslag, deres ord og deres billede afgøres af hver begivenheds eget nummer, så strømmen ser ens ud efter indlæsning. Omkring en tredjedel af opslagene er kun tekst; resten bruger et af de genbrugelige stemningsbilleder i `assets/network` (mennesker kun som slørede silhuetter), valgt så det passer til stedet (is og fjorde mod nord, palmer i varme farvande). Den kan vise kun de rejsende, Kaptajnen følger.
+- **Arbejder sammen med:** `WorldState`, `WorldChronicle` (navne og både), `PortCatalog`, `NetworkApp`, `YachtDirectory` og `SailsAndSights` (som læser de samme opslag), `GameSession`.
+- **Holder styr på:** Kun billedlisten, den læser én gang fra `assets/network/manifest.json`.
+- **Hvornår det kører:** Når laptoppens netværk, bådregistret eller magasinet vises.
+- **Hvis du ændrer det:** Hvad netværket skriver, og hvilke billeder det viser; bådregistrets seneste offentlige meldinger følger opslagene.
+
+### `src/world/world_chronicle.gd`
+
+**Formål:** Verdens fælles historie: én fortegnelse over, hvad sejlerverdenens rejsende gør, og Kaptajnens plads i den (I028 trin 5).
+- **Hvad det gør:** Læser de kendte rejsende, deres både, to forfattede ekspeditioner og en større befolkning på ranglisten fra `data/world/travellers.json`. Den skriver historien fremad et helt døgn ad gangen, ud fra spillets frø og det, der allerede står skrevet, og skriver den aldrig om: både sejler ud og ankommer (én havn eller én strækning ad gangen, med en troværdig fart), ekspeditioner annonceres og sejles stop for stop, bøger udkommer, og den bredere befolkning har små bedrifter. Den tilføjer også Kaptajnens egne begivenheder (et udgivet værk, en bemærkelsesværdig passage, en passagers drøm). Ud fra samme fortegnelse siger den, hvor en båd er på et givet tidspunkt, regner hver persons ry ud (varigt ry plus opmærksomheden fra nylige nyheder, der halveres på 45 dage) og rangerer alle, med uafgjorte afgjort på samme måde hver gang.
+- **Arbejder sammen med:** `WorldState` (hvor den skriver), `GameSession` (fører den frem og tilføjer Kaptajnens begivenheder), `PortCatalog`, `GeoMath`, `TravellerNetwork`, `YachtDirectory`, `SailsAndSights`, `AisReceiver`, `WorldApp`, `NetworkApp`.
+- **Holder styr på:** Kun datafilen og den genererede befolkning, lavet én gang.
+- **Hvornår det kører:** Højst én gang i timen i spiltid, mens tiden går, og når laptoppen eller radaren spørger til verden.
+- **Hvis du ændrer det:** Hele verdens historie og ranglisten; verdenstestene tjekker, at den er ens for samme frø, ens i små og store skridt, og at ingen båd er to steder på én gang.
+
+### `src/world/world_state.gd`
+
+**Formål:** Den gemte fortegnelse over verden uden for Kaptajnen (I028 trin 5-6).
+- **Hvad det gør:** Holder verdens begivenhedsfortegnelse (i tidsorden, aldrig omskrevet; de seneste 900 bevares, mens alt det, de ændrede, bliver i rysummerne og bådenes seneste meldinger), hvor hver kendt båd er, hver persons varige ry, Kaptajnens rejseskrivning (værket undervejs, de udgivne værker, erfaringen, og om det lille spil er overført), magasinets numre og Kaptajnens plads i denne verden: møder, de rejsende, der følges, og invitationer. Den gør det hele til gemte data og tilbage og udelader alt, der er i stykker.
+- **Arbejder sammen med:** `SessionState` (gemmer den som `world`), `GameSession` (den eneste, der skriver), `WorldChronicle`, `SailsAndSights`, `TravellerNetwork`, `YachtDirectory`, `AisReceiver`.
+- **Holder styr på:** Alt ovenstående.
+- **Hvornår det kører:** Når verdens historie skrider frem, og ved hver gemning og indlæsning.
+- **Hvis du ændrer det:** "world"-delen af gemte spil; den er valgfri, så et ældre gemt spil begynder med en frisk, tom verden.
+
+### `src/world/yacht_directory.gd`
+
+**Formål:** Bådregistret: en søgbar liste over sejlerverdenens kendte både, sådan som offentligheden kender dem (I028 trin 6).
+- **Hvad det gør:** Viser hver kendt båd efter navn med model, type og skipper og dens seneste offentlige melding: den nyeste afgang, ankomst eller ekspedition, besætningen har slået op på Traveller Network. En båd, der aldrig har skrevet noget, er ukendt, og en melding, der er mere end ti dage gammel, markeres som forældet, for båden kan sagtens være sejlet videre. Den søger på båd, skipper, model, type eller havn. Den er ikke en sporing i realtid: hvor en båd virkelig er nu, vises kun af AIS inden for rækkevidde, og de to holdes bevidst adskilt.
+- **Arbejder sammen med:** `WorldState`, `WorldChronicle`, `TravellerNetwork` (de samme opslag), `GameSession`, `WorldApp`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Når Verden-appen viser bådregistret.
+- **Hvis du ændrer det:** Hvad spillerne kan få at vide om andre både; rytesten tjekker, at meldingerne svarer til opslagene, og at positioner i realtid bliver på radaren.
+
 ## Livet om bord og i land: ledsager, fiskeri, kabys, hue, havnens handlende, sejlads, pleje, lyd, udviklerværktøjer
 
 ### `src/anchor/anchor_site.gd`
@@ -1735,6 +1789,80 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Mens en fisk hales ind, eller Magic Anchor sættes.
 - **Hvis du ændrer det:** Fornemmelsen i både fiskeriets og Magic Anchors minispil.
 
+## Passagerer: passagehandlen og folk om bord
+
+### `src/passengers/guest_reactions.gd`
+
+**Formål:** Hvad passagererne føler om det, der virkelig sker om bord (I028 trin 2).
+- **Hvad det gør:** Hver passager reagerer gennem sine egne træk på det vejr, de sejler i, Kaptajnens forsigtige valg i dårligt vejr, smukke havne, dyrene om bord, bådens komfort og privatliv og på at ankomme til tiden eller for sent; en nervøs passager og en hårdfør oplever den samme kuling forskelligt. En reaktion flytter bookingens tilfredshed en smule (0 til 100, med start i 70) og skrives ned som en kendsgerning til anmeldelsen og sejladsregnskabet; samme slags reaktion tæller højst én gang på seks timer. Forsigtighed straffes aldrig: den noteres, og en forsinkelse, den giver, er undskyldt. En gang imellem giver en reaktion en replik fra `data/passengers/lines.json`. Ingen målere og ingen pligter.
+- **Arbejder sammen med:** `GameSession` (kalder den, når tingene sker), `Accommodation` (komfortniveauer), `Settlement` (læser tilfredsheden), `Loc`.
+- **Holder styr på:** Kun replikkerne, den læser én gang; reaktionerne gemmes på bookingen.
+- **Hvornår det kører:** Ved påstigning, under sejlads når vejret tjekkes, ved forsigtighed, ved ankomst, og når Kaptajnen taler med en passager.
+- **Hvis du ændrer det:** Hvor tilfredse passagererne ender med at være, og dermed deres anmeldelser, drikkepenge og tilbagebetalinger.
+
+### `src/passengers/marketplace.gd`
+
+**Formål:** Reglerne for passagehandlen: tilbud, billetpriser, plads om bord, forespørgsler, de konkurrerende skippere og forhandling (I028 trin 1).
+- **Hvad det gør:** Bygger en passage ud fra Kaptajnens planlagte kurs: havnene langs den inden for 15 sømil kan føjes til som stop (op til fem), og hver strækning planlægges på det rigtige søkort og tidsberegnes som en passageplan, med et ophold på 14 timer og et afgangsvindue på 24 timer; en strækning, båden ikke er udrustet til, afvises. Den sætter pris på en passage (en gængs takst pr. sømil og person, der stiger med bådens komfort, et gebyr for hver nat om bord og en mindstepris), tjekker pladsen strækning for strækning (køjer til strækninger gennem natten, private kahytter) og laver de rejsende, der svarer på en udbudt passage: hvor mange afhænger af havnene og prisen, hver dukker op på sit eget tidspunkt og venter et døgn. En rejsende, der foretrækker en af de ti konkurrerende skippere (seedet efter ugen og ruten, aldrig simuleret), gemmes som tabt, med grunden. Den svarer på Kaptajnens pris: ja, ét modbud eller nej. Et depositum på 30 % betales ved booking.
+- **Arbejder sammen med:** `GameSession` (husker resultatet og flytter pengene), `PassageBook`, `SeaRouter`, `PassagePlan`, `PortCatalog`, `Accommodation`, `Travellers`, `PassengerDreams`, `PassagesApp`, `data/passengers/skippers.json`.
+- **Holder styr på:** Kun skipperne, den læser én gang.
+- **Hvornår det kører:** Når en passage udbydes, en forespørgsel besvares, eller laptoppen viser Passager-appen.
+- **Hvis du ændrer det:** Hvor meget passager tjener, og hvor mange der spørger; passagetesten tjekker priser, plads og forhandling.
+
+### `src/passengers/passage_book.gd`
+
+**Formål:** Den gemte fortegnelse over passagehandlen (I028).
+- **Hvad det gør:** Holder de rejsende, Kaptajnen har mødt (hver gemt præcis som den blev lavet), de udbudte passager, forespørgslerne, bookingerne med deres kontraktvilkår, sejladsregnskabet over, hvad der virkelig skete for hver passager (de seneste 300 optegnelser, med summer, der gemmes for altid), strækningerne sejlet med folk om bord, de breve, fotografier og gaver, passagererne efterlod (de seneste 60), de konkurrerende skipperes sejre, og hvor mange anbefalinger der venter på næste passage. Den finder tilbud, forespørgsler, bookinger og rejsende efter id, siger, hvem der er om bord, og Kaptajnens gennemsnitlige anmeldelse, og gør det hele til gemte data og tilbage og udelader alt, der er i stykker.
+- **Arbejder sammen med:** `SessionState` (gemmer den som `passages`), `GameSession` (den eneste, der skriver), `Marketplace`, `GuestReactions`, `Settlement`, `PassagesApp`, `Dreams`, `TravelWriting`.
+- **Holder styr på:** Alt ovenstående, som almindelige data.
+- **Hvornår det kører:** Gennem hele passagehandlen og ved hver gemning og indlæsning.
+- **Hvis du ændrer det:** "passages"-delen af gemte spil; den er valgfri, så et ældre gemt spil begynder med en tom bog.
+
+### `src/passengers/passenger_dreams.gd`
+
+**Formål:** Passagerernes egne drømme (I028 trin 4).
+- **Hvad det gør:** Giver nogle rejsende (færre end halvdelen) et personligt ønske, der passer til den passage, de booker: en første nat på havet, at vende tilbage til barndommens ø, at fotografere et helt særligt sted, at sejle fra ø til ø eller at krydse Atlanten for sejl. En drøm bedømmes kun ud fra de strækninger, passageren virkelig sejlede om bord, så den, der sejlede én europæisk strækning mod Caribien, har ikke krydset Atlanten med Kaptajnen. Den giver også hver drøm dens ord og titel.
+- **Arbejder sammen med:** `Marketplace` (giver en ny rejsende en drøm), `GameSession` (bedømmer den ved ankomst), `PortCatalog`, `CruisingRegions` og `HarbourLooks` (smukke steder), `PassagesApp`, `LaptopView` (brevene).
+- **Holder styr på:** Intet; en drøm gemmes på den rejsende og bookingen.
+- **Hvornår det kører:** Når forespørgsler laves, og når en passager går i land.
+- **Hvis du ændrer det:** Hvilke drømme passagererne har, og hvornår de går i opfyldelse, med de breve, bedrifter og drømme for Kaptajnen, der følger.
+
+### `src/passengers/passenger_layer.gd`
+
+**Formål:** Viser passagererne om bord (I028 trin 2).
+- **Hvad det gør:** Tegner hver person i hver booking om bord i byfolkenes stil, gående med den fælles gangart. Om dagen i godt vejr er de på dækket (læser, får en kop kaffe, kigger på vandet, tager billeder, er sammen med dyrene); om natten og i hårdt vejr er de under dæk og hviler i gæsternes køjer. De går om bord ad landgangen, når de stiger på i havn, og går fra borde i deres havn. Hver har et "Tal med …", og en lille taleboble viser, hvad nogen lige har sagt.
+- **Arbejder sammen med:** `BoatArea` (føjer den til dækket og kahytten), `GameSession` (hvem der er om bord, klokken, vejret, hvad de siger), `TownsfolkDrawing`, `HumanGait`, `HarbourDressing`, `Accommodation` (køjerne), `DeckCompanionSpots`, `Interactable`.
+- **Holder styr på:** Kun de tegnede personer og deres talebobler; intet gemmes.
+- **Hvornår det kører:** På dækket og i kahytten, når der er passagerer om bord.
+- **Hvis du ændrer det:** Kun hvordan passagererne ser ud om bord; den ændrer aldrig spillet.
+
+### `src/passengers/settlement.gd`
+
+**Formål:** Aftalerne med passagererne, og hvordan de gøres op (I028 trin 3).
+- **Hvad det gør:** Skriver kontrakten ind i en ny booking: billetprisen og depositummet, afgangsvinduet, den lovede ankomst (med en frist: mindst seks timer eller 15 % af den bookede tid), og hvor langt fra videre transport passageren ville acceptere en anden havn. Ved ankomst gør den bookingen op: resten af billetprisen for de strækninger, der faktisk blev sejlet, en tilbagebetaling på 5 % pr. døgn ved forsinkelse ud over fristen (højst 30 %), medmindre forsinkelsen skyldtes Kaptajnens forsigtighed i dårligt vejr, drikkepenge og en anmeldelse på en til fem stjerner, der følger passagerens tilfredshed og vaner. Den afgør, om en passager accepterer en anden havn, og prisen for den (efter afstand, med en lille rabat i god vilje), og skriver sejladsregnskabets optegnelse over bookingen.
+- **Arbejder sammen med:** `GameSession` (flytter pengene og gemmer optegnelserne), `Marketplace`, `TransferAccess`, `GuestReactions`, `Travellers`, `Loc`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Når en booking laves, en anden havn foreslås, eller en passager går i land.
+- **Hvis du ændrer det:** Hvad passagererne betaler, og hvordan de anmelder; passagetesten tjekker tilbagebetalinger, en aftalt anden havn og at der kun gøres op én gang efter indlæsning.
+
+### `src/passengers/transfer_access.gd`
+
+**Formål:** Hvor langt en havn ligger fra videre transport (I028 trin 3).
+- **Hvad det gør:** Giver en havn en kategori (en lufthavn inden for en time, en til tre timer væk eller længere, eller først en færge) fra `data/passengers/transfer_access.json`, eller et skøn ud fra havnens betydning, når den ikke står der, markeret "(skøn)". Den bruges, når Kaptajnen foreslår en passager en anden havn. Der simuleres ingen taxaer, tog eller fly.
+- **Arbejder sammen med:** `Settlement`, `PassagesApp`, `PortCatalog`, `Loc`.
+- **Holder styr på:** Kun filen, den læser én gang.
+- **Hvornår det kører:** Når Passager-appen viser andre havne, og når en passager svarer.
+- **Hvis du ændrer det:** Hvilke havne passagererne accepterer i stedet for deres egen.
+
+### `src/passengers/travellers.gd`
+
+**Formål:** De mennesker, der rejser med Kaptajnen (I028 trin 2).
+- **Hvad det gør:** Laver en rejsende én gang ud fra `data/passengers/travellers.json` og et frø: navne, en gruppe (alene, par, venner eller familie), en baggrund og en motivation, et budget og nogle få træk, der betyder noget om bord: komfort, privatliv, vejr, tid, omveje, dyr (med allergier), snak og anmeldelser. Den rejsende gemmes derefter præcis som lavet, så den samme person forbliver den samme efter indlæsning. Den skriver deres navn ("Anna & Lars Berg", "familien Berg"; kendte rejsende med deres egne navne), deres baggrund, motivation og træk i almindelige ord og siger, om de kan tåle dyrene om bord.
+- **Arbejder sammen med:** `Marketplace` (laver dem), `PassageBook` (gemmer dem), `GameSession`, `Settlement`, `PassagesApp`, `CompanionState`, `Loc`.
+- **Holder styr på:** Kun filen, den læser én gang.
+- **Hvornår det kører:** Når forespørgsler laves, og når en rejsende vises.
+- **Hvis du ændrer det:** Hvem der spørger efter passager, og hvordan de opfører sig; en rejsende, der allerede ligger i et gemt spil, beholder sine træk.
+
 ## Brugerfladen: menuer, paneler og informationslinjen
 
 ### `src/ui/aboard_badge.gd`
@@ -2087,6 +2215,33 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Når du bruger arbejdspladsen ved kahytsbordet eller vælger Laptop på handlingshjulet.
 - **Hvis du ændrer det:** Hvor spillerne finder deres bedrifter, udgivelser og fjernarbejde; testene finder dens dele ved navn.
 
+### `src/ui/laptop/network_app.gd`
+
+**Formål:** Laptoppens netværksapp: Traveller Network at læse med morgenkaffen (I028 trin 5).
+- **Hvad det gør:** Viser sejlerverdenens seneste opslag (op til 18), de nyeste først: hver med hvem der skrev det, hvornår og hvor, dets ord og for de flestes vedkommende et billede. Kaptajnens egne opslag er markeret "Dig". Under en kendt rejsendes opslag følger eller stopper en knap med at følge dem, og to knapper skifter mellem alle og kun dem, man følger. Ingen likes og ingen tællere.
+- **Arbejder sammen med:** `LaptopView` (dens side og faner), `GameSession` (opslagene og hvem der følges), `TravellerNetwork` (billeder og stednavne), `WorldChronicle`, `Simulation` (datoer), `UiTheme`, `Loc`.
+- **Holder styr på:** Kun om "Følger" er valgt (gemmes ikke).
+- **Hvornår det kører:** Når netværksfanen er åben på laptoppen.
+- **Hvis du ændrer det:** Kun hvordan netværket ser ud; dens dele har faste nodenavne (`Post_<n>`, `Follow`, `Filter_…`).
+
+### `src/ui/laptop/passages_app.gd`
+
+**Formål:** Laptoppens Passager-app: passagehandlen på én side (I028 trin 1-3).
+- **Hvad det gør:** Viser Kaptajnens anmeldelser, passagerer fragtet og indtjente billetpriser. I havn gør den kursen, der er planlagt ved kortbordet eller på kortplotteren, til en passage: bådens pladser om dagen og om natten, stop undervejs at sætte flueben ved, hvornår der sejles (om 12, 24 eller 48 timer) og prisen pr. sømil og person; at udbyde kræver havnens wi-fi. En udbudt passage viser sine strækninger med folkene om bord på hver, et kort for hver booking (vilkårene, aflysning og forslag om en anden havn med, hvor langt den ligger fra videre transport) og en knap til at trække den tilbage. Forespørgsler viser, hvem de rejsende er, deres træk og en eventuel drøm, og kan accepteres, afslås eller besvares med en anden pris. Tabte rejsende, de seneste passagerer med deres anmeldelser og de andre skippere vises også. Alt går gennem `GameSession`; appen viser og spørger kun.
+- **Arbejder sammen med:** `LaptopView`, `GameSession`, `PassageBook`, `Marketplace`, `Travellers`, `PassengerDreams`, `TransferAccess`, `Accommodation`, `PortCatalog`, `Simulation`, `Loc`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Når Passager-fanen er åben på laptoppen.
+- **Hvis du ændrer det:** Hvordan spillerne driver passagehandlen; dens knapper har faste nodenavne (`PublishButton`, `AcceptButton`, `AskButton`, …).
+
+### `src/ui/laptop/world_app.gd`
+
+**Formål:** Laptoppens Verden-app: sejlerverdenen, som Kaptajnen læser om den (I028 trin 6).
+- **Hvad det gør:** Viser invitationer fra kendte rejsende øverst med knapper til at sige ja (passagen udbydes, og de bookes på den) eller høfligt nej. Nedenunder tre afsnit: Sails & Sights (det seneste nummer med forside, historier, Kaptajnens plads og månedens mest kendte sejlere, og ældre numre, som de blev udgivet), Rangliste (Kaptajnens plads og ry, de ti mest kendte, sejlerne omkring Kaptajnen og de mindeværdige rejsende) og bådregistret (et søgefelt og hver båds seneste offentlige melding, ukendte og forældede markeret; positioner i realtid findes kun på radarens AIS).
+- **Arbejder sammen med:** `LaptopView`, `GameSession`, `TravellerNetwork`, `WorldChronicle`, `Simulation`, `UiTheme`, `Loc`.
+- **Holder styr på:** Kun afsnittet, det viste nummer og søgeteksten (gemmes ikke).
+- **Hvornår det kører:** Når Verden-fanen er åben på laptoppen.
+- **Hvis du ændrer det:** Hvordan spillerne ser den store verden; målingen åbner et afsnit efter nummer.
+
 ### `src/ui/loading_screen.gd`
 
 **Formål:** Spillets egen indlæsningsskærm med logoet over et roligt hav.
@@ -2428,6 +2583,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Det valgte antal timer.
 - **Hvornår det kører:** Når du bruger arbejdsstationen, mens båden ligger i havn.
 - **Hvis du ændrer det:** Hvordan spillerne tjener penge ved at arbejde.
+
+### `src/ui/writing_menu.gd`
+
+**Formål:** Rejseskrivningens vindue på laptoppen i stedet for det lille spil (I028 trin 5).
+- **Hvad det gør:** Med et værk undervejs siger det, hvad der skrives på, og hvilken skrivetime der kommer nu, og tilbyder de tre vinkler; vælger man én, bedes der om en skrivetime på to timer (en afbrydelse tæller sin andel). Uden et værk tilbyder det et nyt: en form (med den erfaring, der stadig mangler) og et emne fra Kaptajnens egne sejladser, og så "Begynd at skrive". Det viser også de seneste udgivne værker med stjerner og datoer.
+- **Arbejder sammen med:** `LaptopView` (åbner det og sender skrivetimen videre), `App` (bruger tiden), `GameSession` (skrivningen og emnerne), `TravelWriting`, `SimplePanel`, `Simulation`, `Loc`.
+- **Holder styr på:** Kun valgene i dets lister, mens det er åbent.
+- **Hvornår det kører:** Når "Rejseskrivning…" vælges på laptoppens Hjem-side.
+- **Hvis du ændrer det:** Kun hvordan man begynder og fortsætter med at skrive; reglerne bliver i `TravelWriting` og `GameSession`.
 
 ## Automatiske testsuiter
 
@@ -2997,6 +3161,15 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Hvornår det kører:** Kun i test.
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler den, beskriver en plan måske en passage forkert, ændrer kursen eller kommer ikke gennem en overdragelse.
 
+### `tests/suites/test_passages.gd`
+
+**Formål:** Tjekker passagehandlen, spillet gennem det rigtige spil (I028 trin 1-4).
+- **Hvad det gør:** Tjekker billetpriser, de konkurrerende skippere, at rejsende bliver ens fra samme frø, allergier og videre transport; en passage udbudt fra København via et stop til Svendborg, planlagt strækning for strækning på søkortet; forespørgsler, der kommer over timerne, forhandling med et modbud, en booking med depositum, aflysning og tilbagetrækning; plads strækning for strækning; passagerer, der stiger på, kommer til og går fra borde ved forskellige stop på én sejlet passage, og som hver gøres op én gang med en optegnelse over de strækninger, de sejlede; en forsinket passage med tilbagebetaling, en anden havn aftalt undervejs, og gem og indlæs med folk om bord (intet betalt to gange, gemmeformatet stadig 12). Den tjekker også, hvordan forskellige træk oplever den samme kuling, at forsigtighed aldrig straffes, en kat og en allergisk rejsende, en snak med en passager, passagerers drømme bedømt efter de sejlede strækninger, Kaptajnens egne drømme fra handlen, breve og bedrifter.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `PassageBook`, `Marketplace`, `Travellers`, `TransferAccess`, `GuestReactions`, `Settlement`, `PassengerDreams`, `SaveManager`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; en fejl peger på handlens regler, opgørelsen eller det gemte spil.
+
 ### `tests/suites/test_presentation.gd`
 
 **Formål:** Tjekker små præsentationsdetaljer på dækket og ved ankomst i havn.
@@ -3302,6 +3475,24 @@ Reglerne står i [CAPTAINS_ORDERS.md](../../CAPTAINS_ORDERS.md) (Working rules).
 - **Holder styr på:** Intet selv.
 - **Hvornår det kører:** Kun i test (den gemmer et skærmbillede, når man beder om det).
 - **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; fejler testen, kan land forsvinde fra dele af verdenskortet, eller havne kan være svære at klikke på.
+
+### `tests/suites/test_world_network.gd`
+
+**Formål:** Tjekker rejseskrivning, verdens historie og Traveller Network (I028 trin 5).
+- **Hvad det gør:** Tjekker, at verdens historie er ens for samme frø og anderledes for et andet, ens i små og store skridt, kun bliver forlænget, at hver båd er ét sted ad gangen med troværdig fart, at den er uændret efter indlæsning, og at Grønlandsekspeditionen annonceres én gang og sejles af sin besætning. Skrivning: det lille spils fremskridt overført én gang, intet at skrive om før første sejlads, emner fra rigtige sejladser, at en roman kræver mere erfaring, et essay skrevet (en afbrudt skrivetime beholder sin andel), fem stjerner for de rigtige vinkler, en beskeden indtægt, værket i verdens historie, aldrig udgivet to gange, og gemt. Netværket: opslag efter 40 dage, ingen fra fremtiden, billeder der findes og nogle kun med tekst, Kaptajnens værk slået op, de samme opslag efter indlæsning, og at følge nogen.
+- **Arbejder sammen med:** `WorldState`, `WorldChronicle`, `TravellerNetwork`, `TravelWriting`, `GameSession`, `Simulation`, `SessionState`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; en fejl peger på verdens historie, skrivningen eller nyhedsstrømmen.
+
+### `tests/suites/test_world_renown.gd`
+
+**Formål:** Tjekker Sails & Sights, ranglisten, bådregistret, AIS, møder og invitationer (I028 trin 6).
+- **Hvad det gør:** Spiller Grønlandshistorien: Freya Voss og Maya Wildshore annoncerer deres ekspedition om bord på Northern Promise og sejler dens stop i rækkefølge; Kaptajnen drikker kaffe med dem i Lerwick, og mødet står i verdens historie; AIS viser båden ved siden af der, men ikke fra København; bådregistret viser den med dens eget seneste opslag, søgbart, med forældede og ukendte meldinger markeret og ingen position i realtid; netværket og magasinet fortæller den samme historie; magasinet udkommer én gang om måneden, uændret efter indlæsning; ranglisten er ordnet og stabil. Derefter en invitation: afvist uden kvalifikationerne, givet én gang, når de er i orden, accepteret som en rigtig booking med depositum, opdagelsesrejsende om bord og passagen gjort op i sejladsregnskabet; bedriften for ranglisten gives én gang.
+- **Arbejder sammen med:** `GameSession`, `Simulation`, `WorldChronicle`, `TravellerNetwork`, `YachtDirectory`, `AisReceiver`, `Travellers`, `SessionState`.
+- **Holder styr på:** Intet.
+- **Hvornår det kører:** Kun i test.
+- **Hvis du ændrer det:** Kun sikkerhedsnettet ændres; en fejl peger på, at verdens visninger er uenige, på magasinet eller invitationerne.
 
 ### `tests/suites/test_world_voyage.gd`
 
