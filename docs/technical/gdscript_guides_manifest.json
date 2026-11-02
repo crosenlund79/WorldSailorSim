@@ -1383,9 +1383,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "tests/career/career_sim.gd": {
-   "sha": "c38003e2c5ef5bb6",
+   "sha": "157fcf6dfdefef1d",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028: passenger policy takes a last look at requests before boarding"
   },
   "tests/career/world_thresholds.gd": {
    "sha": "673b43da5d0c74e3",

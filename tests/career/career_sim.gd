@@ -167,6 +167,8 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 			if published.ok:
 				offer_id = String(published.offer.id)
 				extra_minutes += HUMAN_MIN_PER_PASSAGE
+			elif OS.get_environment("CAREER_DEBUG") != "":
+				print("PUBLISH refused: ", published.error)
 		for d in int(policy.stay_days):
 			if bool(policy.get("invitations", false)):
 				for invitation: Dictionary in GameSession.get_invitations():
@@ -206,8 +208,19 @@ func _career(policy_name: String, seed_value: int) -> Dictionary:
 			break
 		if offer_id != "":
 			var offer := GameSession.get_passage_book().get_offer(offer_id)
+			if not offer.is_empty() and GameSession.get_game_time() < float(offer.depart_after):
+				# Last look at the requests before the guests board (as a player would).
+				var last_look := float(offer.depart_after) - GameSession.BOARDING_LEAD_S - 1800.0
+				if GameSession.get_game_time() < last_look:
+					Simulation.advance(last_look - GameSession.get_game_time())
+				for request: Dictionary in GameSession.get_passage_requests():
+					if String(request.offer) == offer_id:
+						var answer := GameSession.answer_passage_request(String(request.id), true)
+						extra_minutes += HUMAN_MIN_PER_ANSWER
+						if OS.get_environment("CAREER_DEBUG") != "":
+							print("ANSWER ", answer.result, " ", answer.text)
 			if not offer.is_empty() and GameSession.get_passage_book().bookings_for_offer(offer_id).is_empty():
-				GameSession.cancel_passage_offer(offer_id)
+				GameSession.cancel_passage_offer(offer_id)  # nobody came: sail on alone
 			elif not offer.is_empty() and GameSession.get_game_time() < float(offer.depart_after):
 				Simulation.advance(float(offer.depart_after) - GameSession.get_game_time() + 60.0)
 		var error := GameSession.plan_route_to(target)
