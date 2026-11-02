@@ -147,6 +147,9 @@ var moored_since := 0.0
 ## changed from the pause menu ("" = not given). Optional in a save (older
 ## saves: ""). Trimmed, at most CAPTAIN_NAME_MAX characters.
 var captain_name := ""
+## I028, Passages, People & Reputation: the passage trade (PassageBook).
+## Optional in a save (older saves: an empty book).
+var passages := PassageBook.new()
 const CAPTAIN_NAME_MAX := 40
 ## I027: the Captain's choice to windward - motor straight up (fuel) rather
 ## than beat under sail. Optional in a save (false: sail when the wind allows).
@@ -289,6 +292,7 @@ func duplicate_state() -> SessionState:
 	copy.ledger = ledger.duplicate_ledger()
 	copy.moored_since = moored_since
 	copy.captain_name = captain_name
+	copy.passages = passages.duplicate_book()
 	copy.motor_upwind = motor_upwind
 	copy.dreams = dreams.duplicate(true)
 	return copy
@@ -390,6 +394,7 @@ func _to_dict() -> Dictionary:
 		"ledger": ledger.to_dict(),
 		"moored_since": moored_since,
 		"captain_name": captain_name,
+		"passages": passages.to_dict(),
 		"motor_upwind": motor_upwind,
 		"dreams": dreams.duplicate(true),
 		"navigation": {
@@ -580,6 +585,7 @@ static func from_dict(data: Variant, errors: Array[String]) -> SessionState:
 	state.moored_since = float(moored) if (moored is int or moored is float) and is_finite(float(moored)) else 0.0
 	state.motor_upwind = data.get("motor_upwind", false) is bool and data.get("motor_upwind", false)
 	state.captain_name = clean_captain_name(data.get("captain_name", ""))
+	state.passages = PassageBook.from_dict(data.get("passages"))
 	state.dreams = dreams_from(data.get("dreams"))
 	# I022, optional: the boats owned (older saves own every boat, as they
 	# could move aboard any of them) and the difficulty (older saves: Standard).

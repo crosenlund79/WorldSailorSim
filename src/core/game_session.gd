@@ -8,6 +8,12 @@ extends Node
 
 ## The Captain's name changed (Regions and Harbours 2026).
 signal captain_name_changed(captain_name: String)
+## I028: the passage trade changed (an offer, a request, a booking, a settlement).
+signal passages_changed
+## I028: a passenger says something (name, line).
+signal passenger_said(name: String, text: String)
+## I028: a booking was settled on arrival (the voyage ledger's record).
+signal passenger_settled(record: Dictionary)
 signal session_started
 signal session_ended
 ## Emitted after a loaded state has replaced the current one.
@@ -1135,6 +1141,9 @@ func depart() -> String:
 	var ashore := companion_departure_refusal()
 	if ashore != "":
 		return ashore
+	var waiting := _passages_departure_refusal(location)  # I028: passengers due aboard
+	if waiting != "":
+		return waiting
 	_end_dock_encounter()  # I025: an animal still waiting stays on its dock
 	_charge_harbour_dues(location)  # I027: the nights moored here, once
 	_state.ledger.open(_state.game_time, String(location.id))
@@ -1149,6 +1158,7 @@ func depart() -> String:
 	_state.location_id = &""
 	_state.vessel_position = _state.voyage.get_position()
 	_has_unsaved_changes = true
+	_passages_on_depart(location)  # I028
 	route_changed.emit(null)
 	voyage_started.emit()
 	_companion_to_cabin_if_needed()  # casting off: the companion goes below
@@ -1176,9 +1186,12 @@ func change_course(destination_id: StringName, waypoints: Array[Vector2], anchor
 	voyage.progress_nm = 0.0
 	voyage.reset_course()  # I027: the new course starts where the boat is
 	voyage.revision += 1
+	var turned_for_shelter := not voyage.warned_conditions.is_empty()
 	voyage.warned_conditions.clear()
 	_state.vessel_position = voyage.get_position()
 	_has_unsaved_changes = true
+	if turned_for_shelter:
+		_passages_caution()  # I028: a new course after a weather warning
 	voyage_course_changed.emit()
 	return ""
 
@@ -1221,6 +1234,8 @@ func apply_simulation_step(game_time: float, progress_nm: float, cross_track_nm 
 	_has_unsaved_changes = true
 	if _state.anchor.active or _settled:
 		_update_anchor_life()
+	if not _state.passages.offers.is_empty() and not is_underway():
+		_refresh_passages()  # I028: requests expire, passengers come aboard
 
 
 ## The boat onto its course line (I027): at a waypoint it stops at, what is
@@ -1354,6 +1369,7 @@ func complete_voyage() -> void:
 	voyage_logged.emit(record, new_harbour)
 	if not awards.is_empty():
 		renown_awarded.emit(awards)
+	_passages_on_arrival(destination, record)  # I028: passengers ashore, the passage on
 	_check_dreams()  # I027 Tier 4
 	voyage_arrived.emit(destination.id)
 
@@ -1365,6 +1381,7 @@ func update_weather_exposure(sample: WeatherSample) -> void:
 	_state.weather_exposure.record(sample, _state.game_time)
 	if _state.voyage:
 		_state.voyage.worst_hazard = maxi(_state.voyage.worst_hazard, sample.hazard)
+		_passages_weather(sample)  # I028
 	_has_unsaved_changes = true
 
 
@@ -2998,6 +3015,7 @@ func _let_go(kind: StringName, scope: int, set_quality: float, perfects: int) ->
 			renown_awarded.emit([award])
 	anchor_changed.emit()
 	propulsion_changed.emit(PropulsionState.MODE_SAIL)
+	_passages_caution()  # I028: anchoring in rough weather
 	return {"error": "", "holding": anchor.holding, "site": site}
 
 
@@ -3574,6 +3592,433 @@ func pay_remote_work(hours: int) -> int:
 	_has_unsaved_changes = true
 	funds_changed.emit(_state.funds)
 	return earned
+
+
+# --- Passages, People & Reputation (I028) ------------------------------------------
+# The passage trade: offers published from the chart's planned route,
+# travellers' requests, bookings with their terms, people aboard and the
+# settlement on arrival. The rules are in src/passengers/ (Marketplace,
+# Travellers, GuestReactions, Settlement); the state is SessionState.passages.
+
+## People come aboard this long before their departure window opens.
+const BOARDING_LEAD_S := 2.0 * 3600.0
+## A passenger says something at most this often (game seconds).
+const PASSENGER_LINE_COOLDOWN_S := 3.0 * 3600.0
+var _last_passenger_line := -INF
+
+
+func get_passage_book() -> PassageBook:
+	return _state.passages.duplicate_book() if _state else PassageBook.new()
+
+
+## Harbours along the planned course that the published passage may stop at.
+func passage_candidate_stops() -> Array[StringName]:
+	return Marketplace.candidate_stops(_state.planned_route if _state else null)
+
+
+func _pet_kinds_aboard() -> Array:
+	var kinds: Array = []
+	if _state:
+		for companion in _state.companions:
+			if not String(companion.kind) in kinds:
+				kinds.append(String(companion.kind))
+	return kinds
+
+
+## Publishes a passage: from this harbour through `stops` (harbour ids after
+## it, the last one the destination), leaving in the window from
+## `depart_after`, at `rate` euros per nautical mile and person (<= 0: the
+## going rate). Requests start arriving at once. {"ok", "error", "offer"}.
+func publish_passage(stops: Array, depart_after := -1.0, rate := -1.0) -> Dictionary:
+	if _state == null or is_underway():
+		return {"ok": false, "error": Loc.t("A passage can only be published in harbour.")}
+	var location := get_location()
+	if location == null:
+		return {"ok": false, "error": Loc.t("The vessel is not in a harbour.")}
+	for offer: Dictionary in _state.passages.offers:
+		if offer.status in [PassageBook.STATUS_PUBLISHED, PassageBook.STATUS_SAILING]:
+			return {"ok": false, "error": Loc.t("Finish or withdraw your current passage first.")}
+	if Accommodation.safe_guest_count(_state.vessel_id) <= 0:
+		return {"ok": false, "error": Loc.t("This boat has no room for guests.")}
+	var all_stops: Array = [String(location.id)]
+	for id: Variant in stops:
+		if String(id) != all_stops.back():
+			all_stops.append(String(id))
+	if all_stops.size() > Marketplace.MAX_STOPS + 1:
+		return {"ok": false, "error": Loc.t("A passage has at most %d stops.") % Marketplace.MAX_STOPS}
+	depart_after = _state.game_time + 12.0 * 3600.0 if depart_after < 0.0 else depart_after
+	rate = Marketplace.going_rate(_state.vessel_id) if rate <= 0.0 else rate
+	var offer := Marketplace.build_offer(_state.passages.new_id("o"), all_stops, _state.vessel_id, depart_after, rate, _state.game_time)
+	if offer.has("error"):
+		return {"ok": false, "error": offer.error}
+	_state.passages.offers.append(offer)
+	var made := Marketplace.generate_requests(_state.passages, offer, _state.game_time, get_wind_seed(), _pet_kinds_aboard(),
+		_state.passages.rating().x, location.region)
+	for item: Dictionary in made:
+		_state.passages.travellers[String(item.traveller.id)] = item.traveller
+		_state.passages.requests.append(item.request)
+		if item.request.status == PassageBook.REQUEST_LOST:
+			var rival: Dictionary = _state.passages.rivals.get(String(item.request.rival), {"won": 0})
+			rival.won = int(rival.get("won", 0)) + 1
+			_state.passages.rivals[String(item.request.rival)] = rival
+	offer.requests_made = true
+	_has_unsaved_changes = true
+	passages_changed.emit()
+	return {"ok": true, "error": "", "offer": offer.duplicate(true)}
+
+
+## The requests the Captain can see now (arrived, newest first), expired ones marked.
+func get_passage_requests(include_closed := false) -> Array:
+	if _state == null:
+		return []
+	_refresh_passages()
+	var shown: Array = []
+	for request: Dictionary in _state.passages.requests:
+		if float(request.appear_at) <= _state.game_time and (include_closed or request.status in [PassageBook.REQUEST_PENDING, PassageBook.REQUEST_COUNTERED]):
+			shown.append(request.duplicate(true))
+	shown.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.appear_at) > float(b.appear_at))
+	return shown
+
+
+## Answers a request: accept it at the traveller's offer, decline it, or ask
+## `ask` euros instead (one round of bargaining). {"result", "text"}:
+## result "booked", "declined", "countered" (their new offer in the request),
+## "refused" (they decline the price) or "error".
+func answer_passage_request(request_id: String, accept: bool, ask := -1) -> Dictionary:
+	if _state == null:
+		return {"result": "error", "text": ""}
+	_refresh_passages()
+	var request := _state.passages.get_request(request_id)
+	if request.is_empty() or not request.status in [PassageBook.REQUEST_PENDING, PassageBook.REQUEST_COUNTERED]:
+		return {"result": "error", "text": Loc.t("That request is no longer open.")}
+	var traveller := _state.passages.get_traveller(String(request.traveller))
+	var offer := _state.passages.get_offer(String(request.offer))
+	if offer.is_empty() or offer.status != PassageBook.STATUS_PUBLISHED and int(request.from) <= int(offer.stop_index):
+		request.status = PassageBook.REQUEST_EXPIRED
+		return {"result": "error", "text": Loc.t("That passage has already left.")}
+	if not accept:
+		request.status = PassageBook.REQUEST_DECLINED
+		_has_unsaved_changes = true
+		passages_changed.emit()
+		return {"result": "declined", "text": Loc.t("You thanked %s and declined.") % Travellers.display_name(traveller)}
+	var price := int(request.offered)
+	if ask > 0 and ask != price:
+		var answer := Marketplace.answer_counter(request, ask)
+		request.round = int(request.round) + 1
+		match String(answer.result):
+			"counter":
+				request.offered = int(answer.fare)
+				request.status = PassageBook.REQUEST_COUNTERED
+				_has_unsaved_changes = true
+				passages_changed.emit()
+				return {"result": "countered", "text": Loc.t("%s can offer %s, and no more.") % [traveller.given, format_money(int(answer.fare))]}
+			"decline":
+				request.status = PassageBook.REQUEST_DECLINED
+				request.note = Loc.t("declined your price")
+				_has_unsaved_changes = true
+				passages_changed.emit()
+				return {"result": "refused", "text": Loc.t("%s found %s too much and looked elsewhere.") % [traveller.given, format_money(ask)]}
+		price = ask
+	var problem := Marketplace.capacity_problem(_state.passages, offer, int(request.from), int(request.to), int(request.size), bool(request.private))
+	if problem != "":
+		return {"result": "error", "text": problem}
+	if not Travellers.tolerates_pets(traveller, _pet_kinds_aboard()):
+		return {"result": "error", "text": Loc.t("%s is allergic to an animal aboard.") % traveller.given}
+	var booking := Settlement.terms(offer, request, price, traveller)
+	booking.merge({"id": _state.passages.new_id("b"), "offer": String(offer.id), "request": request_id, "traveller": String(traveller.id),
+		"size": int(request.size), "from": int(request.from), "to": int(request.to), "private": bool(request.private),
+		"status": PassageBook.BOOKING_CONFIRMED, "booked_at": _state.game_time, "satisfaction": GuestReactions.START, "events": [],
+		"legs_sailed": [], "sailed_nm": 0.0, "diversions": []})
+	_state.passages.bookings.append(booking)
+	request.status = PassageBook.REQUEST_ACCEPTED
+	request.booking = booking.id
+	_money(int(booking.deposit), "passenger_deposit")
+	booking.paid = int(booking.deposit)
+	_has_unsaved_changes = true
+	funds_changed.emit(_state.funds)
+	passages_changed.emit()
+	return {"result": "booked", "text": Loc.t("%s booked: %s, deposit %s received.") % [Travellers.display_name(traveller),
+		format_money(price), format_money(int(booking.deposit))]}
+
+
+## The Captain cancels a booking before the passenger boards: the deposit goes back in full.
+func cancel_passage_booking(booking_id: String) -> String:
+	if _state == null:
+		return ""
+	var booking := _state.passages.get_booking(booking_id)
+	if booking.is_empty() or booking.status != PassageBook.BOOKING_CONFIRMED:
+		return Loc.t("That booking cannot be cancelled now.")
+	var refund := int(booking.get("paid", 0))
+	booking.status = PassageBook.BOOKING_CANCELLED
+	booking.refunded = int(booking.get("refunded", 0)) + refund
+	booking.paid = 0
+	_money(-refund, "passenger_refund")
+	_state.passages.totals.refunds = int(_state.passages.totals.refunds) + refund
+	_has_unsaved_changes = true
+	funds_changed.emit(_state.funds)
+	passages_changed.emit()
+	return ""
+
+
+## Withdraws a published passage that has not left: every booking on it is cancelled (deposits back).
+func cancel_passage_offer(offer_id: String) -> String:
+	if _state == null:
+		return ""
+	var offer := _state.passages.get_offer(offer_id)
+	if offer.is_empty() or offer.status != PassageBook.STATUS_PUBLISHED:
+		return Loc.t("Only a passage that has not left can be withdrawn.")
+	for booking: Dictionary in _state.passages.bookings_for_offer(offer_id):
+		cancel_passage_booking(String(booking.id))
+	for request: Dictionary in _state.passages.requests:
+		if request.offer == offer_id and request.status in [PassageBook.REQUEST_PENDING, PassageBook.REQUEST_COUNTERED]:
+			request.status = PassageBook.REQUEST_EXPIRED
+	offer.status = PassageBook.STATUS_CANCELLED
+	_has_unsaved_changes = true
+	passages_changed.emit()
+	return ""
+
+
+## The people aboard now: [{"booking", "traveller"}] (copies).
+func get_passengers_aboard() -> Array:
+	var list: Array = []
+	if _state:
+		for booking: Dictionary in _state.passages.aboard():
+			list.append({"booking": booking.duplicate(true), "traveller": _state.passages.get_traveller(String(booking.traveller)).duplicate(true)})
+	return list
+
+
+## Proposes another harbour to a passenger aboard (or about to board) instead
+## of theirs. If they agree, the booking ends there, the fare follows the
+## distance it covers, less goodwill. {"ok", "text"}.
+func propose_alternate_harbour(booking_id: String, port_id: StringName) -> Dictionary:
+	if _state == null:
+		return {"ok": false, "text": ""}
+	var booking := _state.passages.get_booking(booking_id)
+	var port := PortCatalog.get_default().get_port(port_id)
+	if booking.is_empty() or port == null or not booking.status in [PassageBook.BOOKING_CONFIRMED, PassageBook.BOOKING_ABOARD]:
+		return {"ok": false, "text": Loc.t("That cannot be arranged.")}
+	if String(port_id) == String(booking.disembark):
+		return {"ok": false, "text": Loc.t("That is already their harbour.")}
+	var traveller := _state.passages.get_traveller(String(booking.traveller))
+	var answer := Settlement.alternate_acceptance(booking, traveller, port_id)
+	booking.diversions = booking.get("diversions", []) + [{"t": _state.game_time, "port": String(port_id), "accepted": answer.ok,
+		"band": String(answer.band.id)}]
+	if answer.ok:
+		var origin := PortCatalog.get_default().get_port(StringName(booking.embark))
+		var original := PortCatalog.get_default().get_port(StringName(booking.original_disembark))
+		var covered := float(booking.booked_nm)
+		if origin and original:
+			var to_original := GeoMath.distance_nm(origin.get_geo_position(), original.get_geo_position())
+			var to_new := GeoMath.distance_nm(origin.get_geo_position(), port.get_geo_position())
+			covered = float(booking.booked_nm) * clampf(to_new / maxf(to_original, 0.1), 0.0, 1.0)
+		booking.fare = Settlement.alternate_fare(booking, covered, int(answer.band.rank))
+		booking.disembark = String(port_id)
+		booking.alternate_agreed = true
+		booking.promised = maxf(float(booking.promised), _state.game_time + 6.0 * 3600.0)
+		GuestReactions.note(booking, "alternate_agreed", -2.0 if traveller.get("detour", "") == "dislikes" else 1.0, _state.game_time, true)
+	else:
+		GuestReactions.note(booking, "alternate_refused", -3.0, _state.game_time, true)
+	_has_unsaved_changes = true
+	passages_changed.emit()
+	return {"ok": answer.ok, "text": answer.reason}
+
+
+## Tests and the career playtests: a request from a new traveller for legs
+## [from, to) of an offer, visible at once (allergies and rivals left out).
+## Returns its id.
+func add_passage_request_for_testing(offer_id: String, from: int, to: int, size := 1, seed := 1, traits := {}) -> String:
+	var offer := _state.passages.get_offer(offer_id)
+	if offer.is_empty():
+		return ""
+	var traveller := Travellers.make(seed, _state.passages.new_id("t"), size, String(offer.stops[from]))
+	traveller.size = size
+	traveller.group = "solo" if size == 1 else ("couple" if size == 2 else "friends")
+	traveller.pets = "neutral"
+	traveller.allergies = []
+	traveller.privacy = "shared_ok"
+	traveller.merge(traits, true)
+	_state.passages.travellers[String(traveller.id)] = traveller
+	var asked := Marketplace.fare(offer, from, to, size)
+	var request := {"id": _state.passages.new_id("r"), "offer": offer_id, "traveller": traveller.id, "size": size, "from": from, "to": to,
+		"private": traveller.privacy == "requires", "asked": asked, "offered": asked, "limit": int(asked * 1.1), "appear_at": _state.game_time,
+		"expires_at": _state.game_time + Marketplace.REQUEST_HOURS * 3600.0, "status": PassageBook.REQUEST_PENDING, "round": 0, "note": ""}
+	_state.passages.requests.append(request)
+	passages_changed.emit()
+	return String(request.id)
+
+
+func _passenger_line(booking: Dictionary, kind: String, force := false) -> void:
+	if kind == "" or (not force and _state.game_time - _last_passenger_line < PASSENGER_LINE_COOLDOWN_S):
+		return
+	var traveller := _state.passages.get_traveller(String(booking.traveller))
+	var text := GuestReactions.line(kind, traveller, floori(_state.game_time / 3600.0))
+	if text == "":
+		return
+	_last_passenger_line = _state.game_time
+	passenger_said.emit(String(traveller.given), text)
+
+
+## Expires requests and brings passengers aboard when their time comes (cheap; often).
+func _refresh_passages() -> void:
+	var book := _state.passages
+	if book.offers.is_empty():
+		return
+	var now := _state.game_time
+	var changed := false
+	for request: Dictionary in book.requests:
+		if request.status in [PassageBook.REQUEST_PENDING, PassageBook.REQUEST_COUNTERED] and now > float(request.expires_at):
+			request.status = PassageBook.REQUEST_EXPIRED
+			changed = true
+	if not is_underway() and _state.location_id != &"":
+		for booking: Dictionary in book.bookings:
+			if booking.status == PassageBook.BOOKING_CONFIRMED and booking.embark == String(_state.location_id) \
+					and now >= float(booking.depart_after) - BOARDING_LEAD_S:
+				_board(booking)
+				changed = true
+	if changed:
+		_has_unsaved_changes = true
+		passages_changed.emit()
+
+
+func _board(booking: Dictionary) -> void:
+	booking.status = PassageBook.BOOKING_ABOARD
+	booking.boarded_at = _state.game_time
+	var traveller := _state.passages.get_traveller(String(booking.traveller))
+	GuestReactions.on_board(booking, traveller, _state.vessel_id, _state.game_time)
+	_passenger_line(booking, "boarding", true)
+
+
+## Leaving harbour with passengers (from depart()). "" or why not yet.
+func _passages_departure_refusal(location: PortData) -> String:
+	for booking: Dictionary in _state.passages.bookings:
+		if booking.status == PassageBook.BOOKING_CONFIRMED and booking.embark == String(location.id):
+			if _state.game_time < float(booking.depart_after) - BOARDING_LEAD_S:
+				var traveller := _state.passages.get_traveller(String(booking.traveller))
+				return Loc.t("%s comes aboard from %s. Wait for your passengers, or cancel the booking.") % [traveller.given,
+					Simulation.format_game_time(float(booking.depart_after) - BOARDING_LEAD_S)]
+	return ""
+
+
+func _passages_on_depart(location: PortData) -> void:
+	_refresh_passages()
+	var offer := {}
+	for o: Dictionary in _state.passages.offers:
+		if o.status in [PassageBook.STATUS_PUBLISHED, PassageBook.STATUS_SAILING] and String(o.stops[int(o.stop_index)]) == String(location.id):
+			offer = o
+	for booking: Dictionary in _state.passages.aboard():
+		booking["leg_from"] = String(location.id)
+		booking["leg_departed"] = _state.game_time
+		if booking.get("departed_late_checked", false) == false and booking.embark == String(location.id):
+			booking.departed_late_checked = true
+			var late_h := (_state.game_time - float(booking.depart_before)) / 3600.0
+			if late_h > 0.0:
+				var traveller := _state.passages.get_traveller(String(booking.traveller))
+				GuestReactions.note(booking, "late_departure", -minf(2.0 * ceilf(late_h / 6.0), 15.0) * (1.5 if traveller.timing == "strict" else 1.0),
+					_state.game_time, true)
+	if not offer.is_empty():
+		offer.status = PassageBook.STATUS_SAILING
+		offer.departed = offer.get("departed", []) + [_state.game_time]
+	if not _state.passages.aboard().is_empty():
+		_state.passages.legs.append({"offer": String(offer.get("id", "")), "from": String(location.id), "to": "", "departed": _state.game_time,
+			"arrived": 0.0, "nm": 0.0, "aboard": _state.passages.aboard().map(func(b: Dictionary) -> String: return String(b.id)), "max_hazard": 0})
+	passages_changed.emit()
+
+
+## Under way: the weather passengers sail in (from update_weather_exposure).
+func _passages_weather(sample: WeatherSample) -> void:
+	var aboard := _state.passages.aboard()
+	if aboard.is_empty():
+		return
+	if not _state.passages.legs.is_empty() and String(_state.passages.legs.back().to) == "":
+		_state.passages.legs.back().max_hazard = maxi(int(_state.passages.legs.back().max_hazard), sample.hazard)
+	var pets := not _state.companions.is_empty()
+	for booking: Dictionary in aboard:
+		var traveller := _state.passages.get_traveller(String(booking.traveller))
+		_passenger_line(booking, GuestReactions.on_weather(booking, traveller, sample.hazard, _state.game_time))
+		if pets:
+			_passenger_line(booking, GuestReactions.on_pets(booking, traveller, _state.game_time))
+
+
+## The Captain chose caution: anchoring, holding or turning for shelter in rough weather.
+func _passages_caution() -> void:
+	if _state.weather_exposure.level < 2 and (_state.voyage == null or _state.voyage.worst_hazard < 2):
+		return
+	for booking: Dictionary in _state.passages.aboard():
+		var traveller := _state.passages.get_traveller(String(booking.traveller))
+		_passenger_line(booking, GuestReactions.on_caution(booking, traveller, _state.game_time))
+
+
+## Arrival at a harbour with people aboard: legs recorded, the passengers whose
+## harbour this is settle and go ashore, the passage moves to its next stop.
+func _passages_on_arrival(port: PortData, record: Dictionary) -> void:
+	var book := _state.passages
+	var now := _state.game_time
+	var nm := float(record.get("nm", 0.0))
+	if not book.legs.is_empty() and String(book.legs.back().to) == "":
+		book.legs.back().to = String(port.id)
+		book.legs.back().arrived = now
+		book.legs.back().nm = snappedf(nm, 0.1)
+	var scenic := not (CruisingRegions.get_default().get_destination(port.id).get("scenic", []) as Array).is_empty() \
+		or HarbourLooks.get_default().is_special(port.id)
+	for booking: Dictionary in book.aboard():
+		booking.legs_sailed = booking.get("legs_sailed", []) + [{"from": String(booking.get("leg_from", "")), "to": String(port.id),
+			"departed": float(booking.get("leg_departed", now)), "arrived": now, "nm": snappedf(nm, 0.1)}]
+		booking.sailed_nm = float(booking.get("sailed_nm", 0.0)) + nm
+		var traveller := book.get_traveller(String(booking.traveller))
+		if scenic:
+			_passenger_line(booking, GuestReactions.on_scenic(booking, traveller, now))
+		if booking.disembark == String(port.id):
+			_passenger_line(booking, GuestReactions.on_arrival_time(booking, traveller, (now - float(booking.promised)) / 3600.0, now))
+			_settle(booking, traveller, port)
+	var offer := book.active_offer()
+	if not offer.is_empty():
+		var next := int(offer.stop_index) + 1
+		if next < (offer.stops as Array).size() and String(offer.stops[next]) == String(port.id):
+			offer.stop_index = next
+			offer.arrived = offer.get("arrived", []) + [now]
+		if int(offer.stop_index) >= (offer.stops as Array).size() - 1 and book.aboard().is_empty() \
+				and book.bookings_for_offer(String(offer.id)).is_empty():
+			offer.status = PassageBook.STATUS_DONE
+		elif int(offer.stop_index) < (offer.stops as Array).size() - 1 and String(offer.stops[offer.stop_index]) == String(port.id):
+			var following := StringName(offer.stops[int(offer.stop_index) + 1])
+			if plan_route_to(following) == "":
+				notice.emit(Loc.t("Your passage continues to %s. The course is plotted.") % PortCatalog.get_default().get_display_name(following))
+	_refresh_passages()  # passengers joining here come aboard when their time comes
+	_has_unsaved_changes = true
+	passages_changed.emit()
+
+
+func _settle(booking: Dictionary, traveller: Dictionary, port: PortData) -> void:
+	var book := _state.passages
+	var now := _state.game_time
+	booking.nights_aboard = floori((now - float(booking.get("boarded_at", now))) / 86400.0 + 0.3)
+	var result := Settlement.settle(booking, traveller, now)
+	if int(result.balance) > 0:
+		_money(int(result.balance), "passenger_fare")
+	elif int(result.balance) < 0:
+		_money(int(result.balance), "passenger_refund")
+	if int(result.tip) > 0:
+		_money(int(result.tip), "passenger_tip")
+	var offer := book.get_offer(String(booking.offer))
+	var record := Settlement.make_record(booking, traveller, offer, result, _state.vessel_id, now, String(port.id))
+	booking.paid = int(booking.get("paid", 0)) + int(result.balance)
+	booking.refunded = int(booking.get("refunded", 0)) + int(result.refund)
+	booking.status = PassageBook.BOOKING_COMPLETED
+	booking.left_at = now
+	book.records.append(record)
+	if book.records.size() > PassageBook.MAX_RECORDS:
+		book.records.pop_front()
+	book.totals.passengers = int(book.totals.passengers) + int(booking.size)
+	book.totals.bookings = int(book.totals.bookings) + 1
+	book.totals.nights = int(book.totals.nights) + int(booking.nights_aboard) * int(booking.size)
+	book.totals.fares = int(book.totals.fares) + int(result.owed) - int(result.refund)
+	book.totals.tips = int(book.totals.tips) + int(result.tip)
+	book.totals.refunds = int(book.totals.refunds) + int(result.refund)
+	book.totals.stars = int(book.totals.stars) + int(result.stars)
+	book.totals.reviews = int(book.totals.reviews) + 1
+	_passenger_line(booking, "farewell_happy" if int(result.stars) >= 4 else "farewell_unhappy", true)
+	funds_changed.emit(_state.funds)
+	passenger_settled.emit(record.duplicate(true))
 
 
 # --- Developer tools (I027 playtest: F10's further rows) ------------------------------

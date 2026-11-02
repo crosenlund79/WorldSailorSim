@@ -1,0 +1,18 @@
+{
+	"note": "I028: how far a harbour is from onward travel, for agreeing another harbour with a passenger. Honest bands, never a precise time: the game does not simulate taxis, trains or flights. A harbour listed here has a curated band; any other gets an estimate from the catalogue (a major harbour: an airport within the hour; a regional harbour: one to three hours; a small harbour: three hours or more; an island: a ferry first) and is shown as an estimate.",
+	"bands": [
+		{"id": "near", "label": "Airport within the hour", "rank": 0},
+		{"id": "regional", "label": "Airport one to three hours away", "rank": 1},
+		{"id": "far", "label": "Airport three hours or more away", "rank": 2},
+		{"id": "ferry", "label": "A ferry, then onward travel", "rank": 3}
+	],
+	"harbours": {
+		"copenhagen": "near", "gothenburg": "near", "kiel": "regional", "aarhus": "regional", "malmo": "near", "helsingor": "near",
+		"dragor": "near", "rungsted": "near", "skovshoved": "near", "helsingborg": "near", "stockholm": "near", "vaxholm": "near",
+		"nynashamn": "regional", "visby": "near", "ronne": "near", "skagen": "regional", "svendborg": "regional", "faaborg": "regional",
+		"bergen": "near", "oslo": "near", "helsinki": "near", "tallinn": "near", "portsmouth": "regional", "dublin": "near",
+		"auckland": "near", "wellington": "near", "picton": "regional", "nelson": "near", "opua": "regional", "russell": "ferry",
+		"whangarei": "near", "tauranga": "near", "lyttelton": "near", "port_chalmers": "near", "halfmoon_bay": "ferry",
+		"marstrand": "regional", "lysekil": "regional", "stromstad": "far", "sandhamn": "ferry", "uto": "ferry", "christianso": "ferry"
+	}
+}

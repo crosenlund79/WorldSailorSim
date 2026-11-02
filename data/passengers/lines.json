@@ -1,0 +1,21 @@
+{
+	"note": "I028: what passengers say, now and then, about what actually happens aboard. Picked by GuestReactions from the event and the traveller's traits; %s is the traveller's first name where a line needs it. Each line is a 'text' (gettext). Kept short and warm: a passenger is a person, not a meter.",
+	"events": {
+		"boarding": [{"text": "Permission to come aboard? Thank you for having us."}, {"text": "So this is home for the next few days. Lovely."}, {"text": "Where would you like my bag?"}],
+		"rough_anxious": [{"text": "Is it meant to lean this much? I'll just hold on here."}, {"text": "I'm trying to be brave about the waves."}],
+		"rough_hardy": [{"text": "Now this is sailing! Look at that spray."}, {"text": "Don't slow down on my account."}],
+		"calm_relaxed": [{"text": "I could watch the water all day."}, {"text": "This is exactly what I hoped for."}],
+		"cautious_thanks": [{"text": "Thank you for waiting out the weather. I feel safer for it."}, {"text": "A sensible choice, Captain. I'd rather arrive late than frightened."}],
+		"scenic_photo": [{"text": "Hold on, the light is perfect. Just one more photo."}, {"text": "I'll be printing this one."}],
+		"scenic_plain": [{"text": "What a place. I'm glad we came this way."}],
+		"privacy_unhappy": [{"text": "I didn't quite expect to share the saloon with everyone at night."}],
+		"comfort_unhappy": [{"text": "It's a little more rustic than I imagined, but never mind."}],
+		"delay_strict": [{"text": "Are we still on time? I have a connection to make."}, {"text": "I'm a bit worried about my onward journey."}],
+		"delay_relaxed": [{"text": "Late? Who cares. More time at sea."}],
+		"pet_lover": [{"text": "Your companion just fell asleep on my feet. Best voyage ever."}, {"text": "May I give them a little treat?"}],
+		"chat": [{"text": "How long have you been living aboard?"}, {"text": "Do you ever get tired of the sea? I can't imagine it."}, {"text": "Tell me about the best harbour you've known."}, {"text": "Is the coffee always this good, or is it the sea air?"}],
+		"farewell_happy": [{"text": "Thank you for everything. I'll tell all my friends."}, {"text": "I'll remember this for a long time. Fair winds, Captain."}],
+		"farewell_unhappy": [{"text": "Well, we got here. Thank you, I suppose."}],
+		"dream_fulfilled": [{"text": "I've wanted this for years. Thank you for making it real."}]
+	}
+}

@@ -1,0 +1,36 @@
+{
+	"note": "I028: who travels with the Captain. Travellers are made from these pools by Travellers.make() on a seed, then kept in the save as they are (a person never changes). Names are not translated; 'text' fields are (gettext). Traits: comfort (simple/comfortable/spacious), privacy (shared_ok/prefers/requires a private cabin), weather (anxious/steady/hardy), timing (strict/normal/relaxed), detour (dislikes/accepts/enjoys), pets (likes/neutral/allergic), talk (chatty/quiet), reviews (generous/fair/critical). Budget is euros a traveller would pay per nautical mile and person, before the comfort of the boat.",
+	"given": ["Anna", "Mikkel", "Freja", "Lars", "Ingrid", "Oskar", "Sofie", "Henrik", "Astrid", "Jonas", "Elin", "Erik", "Maja", "Nils", "Clara", "Tom", "Hannah", "Felix", "Lena", "Paul", "Emma", "Lucas", "Chloé", "Hugo", "Giulia", "Marco", "Lucía", "Diego", "Ruth", "Samuel", "Aroha", "Tama", "Grace", "Liam", "Olivia", "Noah", "Ava", "Leo", "Mia", "Ben", "Isla", "Finn", "Nora", "Theo", "Ida", "Viktor", "Selma", "Rasmus", "Ella", "Kai"],
+	"family": ["Andersen", "Lindqvist", "Berg", "Nielsen", "Holm", "Sørensen", "Eriksson", "Dahl", "Larsen", "Strand", "Meyer", "Fischer", "Weber", "Bauer", "Martin", "Bernard", "Rossi", "Bianchi", "García", "Moreno", "Smith", "Taylor", "Brown", "Walker", "Parata", "Ngata", "Wilson", "O'Brien", "Kelly", "Murphy", "Jansen", "de Vries", "Novak", "Kowalski", "Haugen", "Lund", "Kristensen", "Mortensen", "Aalto", "Virtanen"],
+	"backgrounds": [
+		{"id": "teacher", "text": "A schoolteacher on a long summer break"},
+		{"id": "nurse", "text": "A night-shift nurse finally taking time off"},
+		{"id": "retired", "text": "Recently retired, with a list of places to see"},
+		{"id": "student", "text": "A student travelling on a careful budget"},
+		{"id": "photographer", "text": "A landscape photographer chasing good light"},
+		{"id": "writer", "text": "A writer looking for quiet and new stories"},
+		{"id": "engineer", "text": "An engineer who has always wanted to learn to sail"},
+		{"id": "cook", "text": "A cook curious about harbour kitchens"},
+		{"id": "biologist", "text": "A marine biologist on her way to fieldwork", "pronoun": "her"},
+		{"id": "musician", "text": "A musician between tours"},
+		{"id": "family", "text": "A family making a summer adventure of it"},
+		{"id": "honeymoon", "text": "Newlyweds on an unhurried honeymoon"},
+		{"id": "remote", "text": "A remote worker who brought a laptop and patience"},
+		{"id": "returning", "text": "Going home to the islands after years away"}
+	],
+	"motivations": [
+		{"id": "rest", "text": "wants to slow down and watch the water"},
+		{"id": "see", "text": "wants to see the coast from the sea"},
+		{"id": "learn", "text": "hopes to learn a little seamanship"},
+		{"id": "photo", "text": "hopes for a few memorable photographs"},
+		{"id": "reach", "text": "simply needs to get there, preferably on time"},
+		{"id": "adventure", "text": "wants a proper adventure under sail"},
+		{"id": "together", "text": "wants time together, away from screens"}
+	],
+	"groups": [
+		{"kind": "solo", "size": 1, "weight": 5},
+		{"kind": "couple", "size": 2, "weight": 4},
+		{"kind": "friends", "size": 3, "weight": 1},
+		{"kind": "family", "size": 4, "weight": 1}
+	]
+}

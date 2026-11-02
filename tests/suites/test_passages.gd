@@ -1,0 +1,226 @@
+extends RefCounted
+## I028 (Passages, People & Reputation), Tiers 1-3: the passage trade played
+## through the real game - offers built from the chart's routes, requests and
+## competing skippers, bargaining, capacity leg by leg, passengers boarding
+## and going ashore at different stops of one passage, the weather and the
+## clock they sail in, settlement (deposit, balance, refunds, tips, reviews),
+## a delayed passage, an alternative harbour agreed under way, and save/load
+## with people aboard (no payment twice). Voyages are sailed by Simulation.
+
+var t: Node
+const HOUR := 3600.0
+
+
+func run(runner: Node) -> void:
+	t = runner
+	Simulation.auto_advance = false
+	_test_rules()
+	_test_offer_and_requests()
+	_test_multi_leg_passage()
+	_test_delayed_passage()
+	_test_alternate_harbour()
+	_test_save_mid_passage()
+	Simulation.auto_advance = true
+	t.use_calm_wind()
+	GameSession.end_session()
+
+
+func _new_game() -> void:
+	GameSession.start_new_session(&"")
+	t.set_wind(250.0, 12.0)  # a steady breeze: the boats sail as a player would
+
+
+func _book() -> PassageBook:
+	return GameSession.get_passage_book()
+
+
+## Sails until the boat is in harbour again (calm: under engine).
+func _sail_to_harbour(max_days := 10.0) -> void:
+	var until := GameSession.get_game_time() + max_days * 86400.0
+	while GameSession.is_underway() and GameSession.get_game_time() < until:
+		Simulation.advance(2.0 * HOUR)
+
+
+func _advance_moored(hours: float) -> void:
+	Simulation.advance(hours * HOUR)
+
+
+func _test_rules() -> void:
+	t.check(Marketplace.skippers().size() >= 8, "[market] %d competing skippers" % Marketplace.skippers().size())
+	t.check(Marketplace.going_rate(&"halcyon_40") > Marketplace.going_rate(&"arctic_wanderer_26"), "[market] a spacious yacht asks a higher rate than a simple one")
+	var offer := {"leg_nm": [30.0, 40.0], "leg_s": [6.0 * HOUR, 30.0 * HOUR], "rate": 1.4}
+	t.check(Marketplace.fare(offer, 0, 1, 1) == int(snappedf(maxf(30.0 * 1.4, Marketplace.MIN_FARE), 5.0)), "[market] a day leg: distance times rate (or the least fare)")
+	t.check(Marketplace.fare(offer, 0, 2, 2) > Marketplace.fare(offer, 0, 2, 1) and Marketplace.nights(offer, 1, 2) >= 1,
+		"[market] two people pay more; a 30-hour leg is a night aboard")
+	var a := Travellers.make(42, "t1")
+	var b := Travellers.make(42, "t1")
+	t.check(a == b and a.has("budget") and a.has("weather") and a.has("allergies"), "[travellers] the same seed makes the same person, with traits")
+	var allergic := a.duplicate(true)
+	allergic.allergies = ["cat"]
+	t.check(not Travellers.tolerates_pets(allergic, ["cat"]) and Travellers.tolerates_pets(allergic, ["dog"]), "[travellers] an allergy to cats rules out a boat with a cat")
+	t.check(TransferAccess.band(&"copenhagen").rank == 0 and not TransferAccess.band(&"copenhagen").estimate and TransferAccess.band(&"lyo").estimate,
+		"[transfer] Copenhagen: airport within the hour (curated); a small island harbour: an estimate")
+
+
+func _test_offer_and_requests() -> void:
+	_new_game()
+	var none := GameSession.publish_passage([])
+	t.check(not none.ok, "[offer] a passage needs somewhere to go (%s)" % none.error)
+	GameSession.plan_route_to(&"svendborg")
+	var stops := GameSession.passage_candidate_stops()
+	t.check(not stops.is_empty(), "[offer] harbours along the planned course can be stops (%s)" % [stops.slice(0, 4)])
+	var published := GameSession.publish_passage([stops[0], &"svendborg"])
+	t.check(published.ok, "[offer] a passage from Copenhagen via %s to Svendborg is published (%s)" % [stops[0], published.error])
+	if not published.ok:
+		return
+	var offer: Dictionary = published.offer
+	t.check((offer.leg_nm as Array).size() == 2 and float(offer.leg_nm[0]) > 0.0 and float(offer.arrive[2]) > float(offer.depart[1]),
+		"[offer] each leg is planned and timed on the chart (%.0f + %.0f nm)" % [float(offer.leg_nm[0]), float(offer.leg_nm[1])])
+	t.check(not GameSession.publish_passage([&"svendborg"]).ok, "[offer] one published passage at a time")
+	var made := _book().requests
+	t.check(not made.is_empty(), "[requests] travellers answer the offer (%d)" % made.size())
+	var shown_now := GameSession.get_passage_requests().size()
+	_advance_moored(10.0)
+	t.check(GameSession.get_passage_requests(true).size() >= shown_now, "[requests] requests arrive over the following hours")
+	var lost := made.filter(func(r: Dictionary) -> bool: return r.status == PassageBook.REQUEST_LOST)
+	print("    requests %d, lost to other skippers %d%s" % [made.size(), lost.size(), (": " + String(lost[0].note)) if not lost.is_empty() else ""])
+	# Bargaining.
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 2, 1, 7)
+	var request := _book().get_request(rid)
+	var asked := int(request.asked)
+	var high := GameSession.answer_passage_request(rid, true, int(asked * 1.25))
+	t.check(high.result == "countered", "[bargain] asking 25 %% more brings a counter-offer (%s)" % high.text)
+	var again := GameSession.answer_passage_request(rid, true, int(asked * 1.3))
+	t.check(again.result == "refused", "[bargain] pushing again after the counter-offer: they look elsewhere")
+	var rid2 := GameSession.add_passage_request_for_testing(String(offer.id), 0, 2, 1, 8)
+	var funds := GameSession.get_funds()
+	var fair := GameSession.answer_passage_request(rid2, true, int(_book().get_request(rid2).asked * 1.05))
+	t.check(fair.result == "booked" and GameSession.get_funds() > funds, "[bargain] a fair price within their means is booked, the deposit paid (%s)" % fair.text)
+	var cancel_funds := GameSession.get_funds()
+	var booking_id := String(_book().get_request(rid2).booking)
+	t.check(GameSession.cancel_passage_booking(booking_id) == "" and GameSession.get_funds() < cancel_funds, "[contract] cancelling returns the deposit")
+	t.check(GameSession.cancel_passage_offer(String(offer.id)) == "", "[offer] a passage that has not left can be withdrawn")
+
+
+## Different passengers on different legs of one route: two board in
+## Copenhagen, one leaves at the stop, one joins there; capacity per leg.
+func _test_multi_leg_passage() -> void:
+	_new_game()
+	GameSession.plan_route_to(&"svendborg")
+	var stop: StringName = GameSession.passage_candidate_stops()[0]
+	var published := GameSession.publish_passage([stop, &"svendborg"])
+	var offer: Dictionary = published.offer
+	var oid := String(offer.id)
+	for request: Dictionary in _book().requests:  # only our own passengers in this test
+		if request.status == PassageBook.REQUEST_PENDING:
+			GameSession.answer_passage_request(String(request.id), false)
+	var whole := GameSession.add_passage_request_for_testing(oid, 0, 2, 1, 11)
+	var first_leg := GameSession.add_passage_request_for_testing(oid, 0, 1, 1, 12)
+	var second_leg := GameSession.add_passage_request_for_testing(oid, 1, 2, 1, 13)
+	for rid in [whole, first_leg, second_leg]:
+		GameSession.answer_passage_request(rid, true)
+	var room := Accommodation.safe_guest_count(GameSession.get_vessel_id())
+	var too_many := GameSession.add_passage_request_for_testing(oid, 0, 2, room, 14)
+	var full := GameSession.answer_passage_request(too_many, true)
+	t.check(full.result == "error" and "No room" in String(full.text), "[capacity] the first leg is full: %s" % full.text)
+	# The long second leg is sailed through the night: a bed each (the settees).
+	var beds := Accommodation.overnight_guest_count(GameSession.get_vessel_id())
+	var over := GameSession.add_passage_request_for_testing(oid, 1, 2, 1, 15)
+	var night := GameSession.answer_passage_request(over, true)
+	t.check(night.result == "error" and beds == 2, "[capacity] the overnight leg has %d beds, both taken: %s" % [beds, night.text])
+	var booked := _book().bookings_for_offer(oid).size()
+	t.check(GameSession.depart() != "" or GameSession.get_game_time() >= float(offer.depart_after) - GameSession.BOARDING_LEAD_S,
+		"[boarding] the boat waits for its passengers")
+	_advance_moored((float(offer.depart_after) - GameSession.get_game_time()) / HOUR)
+	t.check(_book().aboard().size() == 2, "[boarding] the two Copenhagen passengers came aboard (%d)" % _book().aboard().size())
+	GameSession.plan_route_to(stop)
+	var left := GameSession.depart()
+	t.check(left == "", "[voyage] cast off with passengers (%s)" % left)
+	_sail_to_harbour()
+	t.check(GameSession.get_location_id() == stop, "[voyage] arrived at the stop, %s" % stop)
+	var after_stop := _book()
+	t.check(after_stop.records.size() == 1 and after_stop.records[0].disembark == String(stop), "[settle] the one-leg passenger went ashore at the stop, with a record")
+	t.check((after_stop.records[0].legs as Array).size() == 1, "[ledger] their record holds the one leg they sailed")
+	t.check(GameSession.get_planned_route() != null and GameSession.get_planned_route().destination_port_id == &"svendborg",
+		"[voyage] the passage's next leg is plotted to Svendborg")
+	var refusal := GameSession.depart()
+	if refusal != "":
+		_advance_moored(maxf((float(after_stop.get_offer(oid).depart[1]) - GameSession.get_game_time()) / HOUR, 0.1))
+		refusal = GameSession.depart()
+	t.check(refusal == "" and GameSession.get_passengers_aboard().size() >= 2, "[boarding] the passengers joining at %s came aboard; on to Svendborg" % stop)
+	_sail_to_harbour()
+	var done := _book()
+	t.check(GameSession.get_location_id() == &"svendborg" and done.records.size() == booked - 0, "[settle] everyone ashore in Svendborg: %d records for %d bookings" % [done.records.size(), booked])
+	var whole_record: Dictionary = done.records.filter(func(r: Dictionary) -> bool: return r.embark == "copenhagen" and r.disembark == "svendborg")[0]
+	t.check((whole_record.legs as Array).size() == 2 and float(whole_record.nm) > float(done.records[0].nm), "[ledger] the whole-route passenger sailed both legs")
+	t.check(done.get_offer(oid).status == PassageBook.STATUS_DONE, "[offer] the passage is done")
+	var paid := 0
+	for r: Dictionary in done.records:
+		paid += int(r.paid)
+	t.check(paid > 0 and int(done.totals.passengers) == booked and int(done.totals.reviews) == booked,
+		"[settle] fares paid (%s in all), every passenger counted and reviewed once" % GameSession.format_money(paid))
+
+
+func _test_delayed_passage() -> void:
+	_new_game()
+	GameSession.plan_route_to(&"helsingor")
+	var offer: Dictionary = GameSession.publish_passage([&"helsingor"]).offer
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 1, 21, {"timing": "strict"})
+	GameSession.answer_passage_request(rid, true)
+	# The Captain lingers two days past the window before leaving.
+	_advance_moored((float(offer.depart_before) - GameSession.get_game_time()) / HOUR + 48.0)
+	GameSession.plan_route_to(&"helsingor")
+	GameSession.depart()
+	_sail_to_harbour()
+	var record: Dictionary = _book().records.back() if not _book().records.is_empty() else {}
+	t.check(not record.is_empty() and float(record.late_h) > 24.0 and int(record.refund) > 0,
+		"[delay] two days late, without a reason of weather: a refund (%s, %.0f h late)" % [GameSession.format_money(int(record.get("refund", 0))), float(record.get("late_h", 0.0))])
+	t.check(int(record.get("satisfaction", 100)) < GuestReactions.START, "[delay] a strict traveller is unhappy (%d)" % int(record.get("satisfaction", 0)))
+
+
+func _test_alternate_harbour() -> void:
+	_new_game()
+	GameSession.plan_route_to(&"svendborg")
+	var offer: Dictionary = GameSession.publish_passage([&"svendborg"]).offer
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 1, 31, {"timing": "relaxed", "detour": "enjoys"})
+	GameSession.answer_passage_request(rid, true)
+	_advance_moored((float(offer.depart_after) - GameSession.get_game_time()) / HOUR)
+	GameSession.plan_route_to(&"svendborg")
+	GameSession.depart()
+	Simulation.advance(2.0 * HOUR)
+	var booking: Dictionary = _book().aboard()[0]
+	var original_fare := int(booking.fare)
+	var answer := GameSession.propose_alternate_harbour(String(booking.id), &"korsor")
+	t.check(answer.ok, "[alternate] a relaxed traveller accepts Korsør instead of Svendborg: %s" % answer.text)
+	GameSession.change_course(&"korsor", [] as Array[Vector2])
+	_sail_to_harbour()
+	var record: Dictionary = _book().records.back() if not _book().records.is_empty() else {}
+	t.check(not record.is_empty() and record.disembark == "korsor" and record.booked_disembark == "svendborg" and int(record.paid) < original_fare,
+		"[alternate] ashore in Korsør, booked for Svendborg: paid %s of %s" % [GameSession.format_money(int(record.get("paid", 0))), GameSession.format_money(original_fare)])
+	t.check((record.diversions as Array).size() == 1 and record.diversions[0].accepted, "[ledger] the agreed diversion is on the record")
+
+
+func _test_save_mid_passage() -> void:
+	_new_game()
+	GameSession.plan_route_to(&"gothenburg")
+	var offer: Dictionary = GameSession.publish_passage([&"gothenburg"]).offer
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 2, 41)
+	GameSession.answer_passage_request(rid, true)
+	_advance_moored((float(offer.depart_after) - GameSession.get_game_time()) / HOUR)
+	GameSession.plan_route_to(&"gothenburg")
+	GameSession.depart()
+	Simulation.advance(4.0 * HOUR)
+	var data := GameSession.get_state_snapshot().to_dict()
+	var errors: Array[String] = []
+	var restored := SessionState.from_dict(JSON.parse_string(JSON.stringify(data)), errors)
+	t.check(errors.is_empty() and restored.passages.aboard().size() == 1 and JSON.stringify(restored.passages.to_dict()) == JSON.stringify(PassageBook.from_dict(JSON.parse_string(JSON.stringify(data.passages))).to_dict()),
+		"[save] the passage trade survives save and load, passengers aboard")
+	GameSession.replace_state(restored)
+	var funds := GameSession.get_funds()
+	_sail_to_harbour()
+	var after := _book()
+	t.check(after.records.size() == 1 and GameSession.get_funds() - funds == int(after.records[0].paid) - int(after.records[0].deposit) + int(after.records[0].tip),
+		"[save] settled once after the reload: balance and tip, the deposit not paid again")
+	var reloaded := SessionState.from_dict(GameSession.get_state_snapshot().to_dict(), errors)
+	t.check(reloaded.passages.records.size() == 1 and int(reloaded.passages.totals.bookings) == 1, "[save] the record is kept, never doubled")
+	t.check(SaveManager.SAVE_VERSION == 12, "[save] the save format is unchanged (12)")
