@@ -57,7 +57,12 @@ def main() -> int:
     for p in policies:
         mine = [c for c in careers if c["policy"] == p]
         for hz in [5.0, 10.0, 20.0, 40.0, 80.0, 100.0]:
-            rows = [h for c in mine for h in c["horizons"] if float(h["horizon_h"]) == hz]
+            rows = []
+            for c in mine:  # the career's state at the horizon (its final state if it ended just past 100 h)
+                exact = [h for h in c["horizons"] if float(h["horizon_h"]) == hz]
+                if not exact and hz == 100.0 and c["horizons"] and float(c["horizons"][-1]["horizon_h"]) >= 100.0:
+                    exact = [c["horizons"][-1]]
+                rows += exact[:1]
             if not rows:
                 continue
             med = lambda k: statistics.median([float(r[k]) for r in rows])

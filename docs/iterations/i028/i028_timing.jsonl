@@ -8,3 +8,5 @@
 {"event": "career_begin", "iso": "2026-11-02T03:54:45+00:00", "epoch": 1793591685.947, "monotonic_s": 4738.04, "boot": "082580c0", "note": "8 archetypes x 3 seeds to 100 est. human hours, 4 processes"}
 {"event": "career_restart", "iso": "2026-11-02T04:21:05+00:00", "epoch": 1793593265.138, "monotonic_s": 6317.24, "boot": "082580c0", "note": "re-run on calibrated world + fixed passenger policy"}
 {"event": "career_rerun_seeds23", "iso": "2026-11-02T05:11:51+00:00", "epoch": 1793596311.421, "monotonic_s": 9363.52, "boot": "082580c0", "note": "seeds 2-3 after the world-clock fix"}
+{"event": "career_end", "iso": "2026-11-02T06:08:08+00:00", "epoch": 1793599688.017, "monotonic_s": 12740.11, "boot": "082580c0", "note": "24 careers complete; findings"}
+{"event": "regression_begin", "iso": "2026-11-02T06:08:08+00:00", "epoch": 1793599688.030, "monotonic_s": 12740.13, "boot": "082580c0", "note": "full headless runner"}

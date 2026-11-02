@@ -12,9 +12,9 @@ entry in [docs/technical/GDSCRIPT_ARCHITECTURE.md](docs/technical/GDSCRIPT_ARCHI
    `crosenlund79/LittleCaptainsHat` is read-only history; never edit it.
 2. **Branch.** Ongoing development and integration: `claude/friendly-fermat-dey23f`.
    Small adjustments, hotfixes and documentation are committed there.
-3. **Latest iteration: I027** (The Cost of the Wind, 0.113a; working title
-   Between Horizons). The next one, I028 (passengers), starts only when the
-   Captain authorises it. History: [docs/DEVELOPMENT_HISTORY.md](docs/DEVELOPMENT_HISTORY.md).
+3. **Latest iteration: I028** (Passages, People & Reputation, 0.114a; working
+   title Between Horizons). The next one, I029, starts only when the Captain
+   authorises it. History: [docs/DEVELOPMENT_HISTORY.md](docs/DEVELOPMENT_HISTORY.md).
 4. **Major iterations** develop on `iteration/iNNN`, created at a recorded,
    remotely verified starting SHA, and end with `release/iNNN` at the final
    tested SHA. Release and backup branches are never moved, rewritten or
