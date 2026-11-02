@@ -3823,6 +3823,23 @@ func propose_alternate_harbour(booking_id: String, port_id: StringName) -> Dicti
 	return {"ok": answer.ok, "text": answer.reason}
 
 
+## A word with a passenger aboard: they answer in character (the animals,
+## the voyage, life aboard); a chatty guest warms to it a little.
+func chat_with_passenger(booking_id: String) -> String:
+	if _state == null:
+		return ""
+	var booking := _state.passages.get_booking(booking_id)
+	if booking.is_empty() or booking.status != PassageBook.BOOKING_ABOARD:
+		return ""
+	var traveller := _state.passages.get_traveller(String(booking.traveller))
+	var kind := "pet_lover" if traveller.get("pets", "") == "likes" and not _state.companions.is_empty() else "chat"
+	GuestReactions.note(booking, "chat", 2.0 if traveller.get("talk", "") == "chatty" else 0.5, _state.game_time)
+	var text := GuestReactions.line(kind, traveller, floori(_state.game_time / 600.0))
+	_has_unsaved_changes = true
+	passenger_said.emit(String(traveller.given), text)
+	return text
+
+
 ## Tests and the career playtests: a request from a new traveller for legs
 ## [from, to) of an offer, visible at once (allergies and rivals left out).
 ## Returns its id.

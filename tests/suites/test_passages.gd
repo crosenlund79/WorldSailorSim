@@ -20,6 +20,7 @@ func run(runner: Node) -> void:
 	_test_delayed_passage()
 	_test_alternate_harbour()
 	_test_save_mid_passage()
+	_test_personalities()
 	Simulation.auto_advance = true
 	t.use_calm_wind()
 	GameSession.end_session()
@@ -224,3 +225,49 @@ func _test_save_mid_passage() -> void:
 	var reloaded := SessionState.from_dict(GameSession.get_state_snapshot().to_dict(), errors)
 	t.check(reloaded.passages.records.size() == 1 and int(reloaded.passages.totals.bookings) == 1, "[save] the record is kept, never doubled")
 	t.check(SaveManager.SAVE_VERSION == 12, "[save] the save format is unchanged (12)")
+
+
+## Tier 2: the same events, felt through different traits; allergies and pets.
+func _test_personalities() -> void:
+	var anxious := {"id": "t1", "weather": "anxious", "motivation": "reach", "pets": "neutral", "timing": "normal"}
+	var hardy := {"id": "t2", "weather": "hardy", "motivation": "adventure", "pets": "likes", "timing": "relaxed"}
+	var a := {"id": "b1", "satisfaction": 70.0, "events": []}
+	var h := {"id": "b2", "satisfaction": 70.0, "events": []}
+	var now := 1000.0
+	GuestReactions.on_weather(a, anxious, 2, now)
+	GuestReactions.on_weather(h, hardy, 2, now)
+	t.check(float(a.satisfaction) < 70.0 and float(h.satisfaction) > 70.0, "[people] a gale: the anxious passenger suffers (%.0f), the hardy one enjoys it (%.0f)" % [float(a.satisfaction), float(h.satisfaction)])
+	var before := float(a.satisfaction)
+	GuestReactions.on_caution(a, anxious, now + 60.0)
+	t.check(float(a.satisfaction) > before and a.get("excused", false), "[people] waiting out the weather: the anxious passenger is grateful, and the delay is excused")
+	GuestReactions.on_weather(a, anxious, 2, now + 120.0)
+	t.check(float(a.satisfaction) == before + 8.0, "[people] the same reaction is not counted twice within hours")
+	var photo := {"id": "t3", "motivation": "photo", "background": "photographer"}
+	var plain := {"id": "t4", "motivation": "reach", "background": "nurse"}
+	var p := {"id": "b3", "satisfaction": 70.0, "events": []}
+	var q := {"id": "b4", "satisfaction": 70.0, "events": []}
+	GuestReactions.on_scenic(p, photo, now)
+	GuestReactions.on_scenic(q, plain, now)
+	t.check(float(p.satisfaction) > float(q.satisfaction), "[people] a scenic harbour means more to the photographer")
+	var late := {"id": "b5", "satisfaction": 70.0, "events": [], "excused": true}
+	var late2 := {"id": "b6", "satisfaction": 70.0, "events": []}
+	GuestReactions.on_arrival_time(late, {"timing": "strict"}, 20.0, now)
+	GuestReactions.on_arrival_time(late2, {"timing": "relaxed"}, 20.0, now)
+	t.check(float(late.satisfaction) > 50.0 and float(late2.satisfaction) > 65.0, "[people] late for good reason, or for a relaxed traveller: little harm")
+	var contract := {"id": "b7", "fare": 300, "paid": 90, "booked_nm": 60.0, "sailed_nm": 60.0, "promised": 0.0, "excused": true, "satisfaction": 80.0}
+	t.check(int(Settlement.settle(contract, {"reviews": "fair"}, 3.0 * 86400.0).refund) == 0, "[contract] safe seamanship is never punished: no refund for an excused delay")
+	_new_game()
+	var state := GameSession.get_state_snapshot()
+	state.companions.append(CompanionState.create(CompanionState.KIND_CAT, state.game_time, "Mosse"))
+	GameSession.replace_state(state)
+	GameSession.plan_route_to(&"helsingor")
+	var offer: Dictionary = GameSession.publish_passage([&"helsingor"]).offer
+	var rid := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 1, 51, {"pets": "allergic", "allergies": ["cat"]})
+	var refused := GameSession.answer_passage_request(rid, true)
+	t.check(refused.result == "error" and "allergic" in String(refused.text), "[pets] a cat aboard: an allergic traveller cannot be booked (%s)" % refused.text)
+	var lover := GameSession.add_passage_request_for_testing(String(offer.id), 0, 1, 1, 52, {"pets": "likes"})
+	GameSession.answer_passage_request(lover, true)
+	Simulation.advance((float(offer.depart_after) - GameSession.get_game_time()) / HOUR * HOUR)
+	var aboard := GameSession.get_passengers_aboard()
+	var chat := GameSession.chat_with_passenger(String(aboard[0].booking.id)) if not aboard.is_empty() else ""
+	t.check(chat != "", "[people] a word with a passenger aboard: “%s”" % chat)

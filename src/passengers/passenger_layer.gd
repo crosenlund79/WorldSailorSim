@@ -70,6 +70,8 @@ func _sync() -> void:
 			wanted[key] = true
 			if not people.has(key):
 				people[key] = _new_person(traveller, i, String(names[i] if i < names.size() else names[0]), slot, total, booking)
+				people[key].booking = String(booking.id)
+				people[key].talk = _make_talk(String(people[key].name), String(booking.id))
 			slot += 1
 	for key: String in people.keys():
 		if not wanted.has(key) and not people[key].leaving:
@@ -94,13 +96,35 @@ func _new_person(traveller: Dictionary, index: int, given: String, slot: int, to
 	return person
 
 
+## The person's "Talk with …" interaction, carried along with them.
+func _make_talk(given: String, booking_id: String) -> Interactable:
+	var talk := Interactable.new()
+	talk.name = "Talk_%s" % given
+	talk.interaction_id = &"passenger"
+	talk.prompt = Loc.t("Talk with %s") % given
+	talk.focus_priority = -1
+	talk.highlight_target = ^""
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = 38.0
+	shape.shape = circle
+	talk.add_child(shape)
+	talk.interacted.connect(func(_i: Interactable, _actor: Node) -> void: GameSession.chat_with_passenger(booking_id))
+	add_child(talk)
+	return talk
+
+
 func _leave(key: String) -> void:
 	var person: Dictionary = people[key]
+	if person.has("talk") and is_instance_valid(person.talk):
+		(person.talk as Interactable).queue_free()
 	if not GameSession.is_underway() and area and area.area_id == SessionState.AREA_EXTERIOR and _here_for_leaving():
 		person.leaving = true
 		person.seated = false
 		person.path = PackedVector2Array([person.pos, area.get_walkway_return_point() + Vector2(0, 60)])
 	else:
+		if person.has("talk") and is_instance_valid(person.talk):
+			(person.talk as Interactable).queue_free()
 		people.erase(key)
 
 
@@ -179,6 +203,9 @@ func _process(delta: float) -> void:
 	for key: String in people.keys():
 		var person: Dictionary = people[key]
 		var path: PackedVector2Array = person.path
+		if person.has("talk") and is_instance_valid(person.talk):
+			(person.talk as Interactable).position = person.pos
+			(person.talk as Interactable).enabled = visible and path.is_empty()
 		if path.is_empty():
 			person.amount = HumanGait.ease_amount(float(person.amount), false, delta)
 			continue
@@ -193,6 +220,8 @@ func _process(delta: float) -> void:
 			person.pos = target
 			person.path = PackedVector2Array()
 			if person.leaving:
+				if person.has("talk") and is_instance_valid(person.talk):
+					(person.talk as Interactable).queue_free()
 				people.erase(key)
 				continue
 		else:
