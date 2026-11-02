@@ -74,6 +74,27 @@
 			"rank": 100
 		},
 		{
+			"id": "renown_top_50",
+			"title": "Among the fifty",
+			"kind": "renown_rank",
+			"text": "Be one of the fifty best-known sailors in Sails & Sights.",
+			"rank": 50
+		},
+		{
+			"id": "renown_top_10",
+			"title": "Among the ten",
+			"kind": "renown_rank",
+			"text": "Be one of the ten best-known sailors in Sails & Sights.",
+			"rank": 10
+		},
+		{
+			"id": "renown_first",
+			"title": "The best-known sailor on the seas",
+			"kind": "renown_rank",
+			"text": "Stand first in Sails & Sights' renown list.",
+			"rank": 1
+		},
+		{
 			"id": "first_guests",
 			"title": "Sharing the sea",
 			"kind": "hosted",

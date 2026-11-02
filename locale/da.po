@@ -13210,3 +13210,12 @@ msgstr "god pris"
 
 msgid "expeditions"
 msgstr "ekspeditioner"
+
+msgid "Be one of the fifty best-known sailors in Sails & Sights."
+msgstr "Bliv en af de halvtreds mest kendte sejlere i Sails & Sights."
+
+msgid "Be one of the ten best-known sailors in Sails & Sights."
+msgstr "Bliv en af de ti mest kendte sejlere i Sails & Sights."
+
+msgid "Stand first in Sails & Sights' renown list."
+msgstr "Stå øverst på Sails & Sights' rangliste over ry."

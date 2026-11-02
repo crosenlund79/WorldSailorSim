@@ -51,7 +51,13 @@ func duplicate_world() -> WorldState:
 	return WorldState.from_dict(to_dict())
 
 
+## As the save holds it: numbers as JSON gives them back (so a game's state
+## reads the same before saving and after loading).
 func to_dict() -> Dictionary:
+	return JSON.parse_string(JSON.stringify(_raw_dict()))
+
+
+func _raw_dict() -> Dictionary:
 	return {"started_at": started_at, "generated_until": generated_until, "seq": seq, "events": events.duplicate(true),
 		"yachts": yachts.duplicate(true), "renown": renown.duplicate(), "writing": writing.duplicate(true), "issues": issues.duplicate(true),
 		"encounters": encounters.duplicate(), "relations": relations.duplicate(), "invitations": invitations.duplicate(true)}

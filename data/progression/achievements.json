@@ -445,28 +445,6 @@
 			"text": "Carry your first paying passengers to their harbour."
 		},
 		{
-			"id": "passengers_full",
-			"category": "reputation",
-			"icon": "two_at_sea",
-			"title": "Full house",
-			"records": [
-				"passengers:full_boat"
-			],
-			"reward": 20,
-			"text": "Sail a leg with every guest place aboard taken."
-		},
-		{
-			"id": "passengers_caution",
-			"category": "seamanship",
-			"icon": "lighthouse",
-			"title": "Safety first",
-			"records": [
-				"passengers:caution"
-			],
-			"reward": 15,
-			"text": "Put your passengers' safety first: wait out rough weather or turn for shelter with guests aboard."
-		},
-		{
 			"id": "passengers_dream",
 			"category": "reputation",
 			"icon": "globe",
@@ -476,28 +454,6 @@
 			],
 			"reward": 30,
 			"text": "Make a passenger's own dream come true."
-		},
-		{
-			"id": "passengers_dreams_5",
-			"category": "reputation",
-			"icon": "southern_cross",
-			"title": "Dream maker",
-			"records": [
-				"passengers:dreams_5"
-			],
-			"reward": 60,
-			"text": "Make five passengers' dreams come true."
-		},
-		{
-			"id": "passengers_five_stars",
-			"category": "reputation",
-			"icon": "renown_250",
-			"title": "Five stars, ten times",
-			"records": [
-				"passengers:five_star_10"
-			],
-			"reward": 50,
-			"text": "Earn ten five-star reviews from your passengers."
 		},
 		{
 			"id": "world_met_notable",
@@ -520,50 +476,6 @@
 			],
 			"reward": 40,
 			"text": "Accept an invitation from a famous traveller to carry them on a passage."
-		},
-		{
-			"id": "world_top_100",
-			"category": "reputation",
-			"icon": "renown_250",
-			"title": "Among the hundred",
-			"records": [
-				"world:top_100"
-			],
-			"reward": 40,
-			"text": "Become one of the hundred best-known sailors."
-		},
-		{
-			"id": "world_top_50",
-			"category": "reputation",
-			"icon": "renown_250",
-			"title": "Among the fifty",
-			"records": [
-				"world:top_50"
-			],
-			"reward": 60,
-			"text": "Become one of the fifty best-known sailors."
-		},
-		{
-			"id": "world_top_10",
-			"category": "reputation",
-			"icon": "renown_250",
-			"title": "Among the ten",
-			"records": [
-				"world:top_10"
-			],
-			"reward": 100,
-			"text": "Become one of the ten best-known sailors."
-		},
-		{
-			"id": "world_number_1",
-			"category": "reputation",
-			"icon": "renown_250",
-			"title": "The best-known sailor on the seas",
-			"records": [
-				"world:number_1"
-			],
-			"reward": 200,
-			"text": "Reach first place in the renown rankings."
 		}
 	]
 }

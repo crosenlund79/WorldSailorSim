@@ -187,7 +187,7 @@ func get_value(key: String) -> String:
 ## "260°  ·  forecast W 12 kn (estimate)": refreshed per leg and half hour.
 static func _next_leg_text(next_turn: Dictionary, speed: float) -> String:
 	var voyage := GameSession.get_voyage()
-	var key := "%d|%s|%d" % [voyage.revision, next_turn.geo, floori(GameSession.get_game_time() / 1800.0)]
+	var key := "%d|%s|%d|%s" % [voyage.revision, next_turn.geo, floori(GameSession.get_game_time() / 1800.0), TranslationServer.get_locale()]
 	if key != _leg_key:
 		_leg_key = key
 		var hours := float(next_turn.nm) / maxf(speed, 1.0)

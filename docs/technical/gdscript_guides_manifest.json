@@ -343,9 +343,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/core/game_session.gd": {
-   "sha": "d79bcb3cb44f349b",
+   "sha": "7108150e662a9f4f",
    "reviewed": "2026-11-02",
-   "note": "I028: the world's clock starts with each game (new game, load); regression check; career debug line"
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "src/core/hat_state.gd": {
    "sha": "5d50d71e51204312",
@@ -443,9 +443,9 @@
    "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
   },
   "src/electronics/instrument_data.gd": {
-   "sha": "f0cd7a299e5c3804",
-   "reviewed": "2026-10-29",
-   "note": "I027 Tier 1: windward sailing, tacking, ETA"
+   "sha": "2f196e9209a2d100",
+   "reviewed": "2026-11-02",
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "src/electronics/instrument_face.gd": {
    "sha": "6c8505830b625b8c",
@@ -1048,9 +1048,9 @@
    "note": "First complete inventory (Engine Room): every entry written from the source and checked against the list"
   },
   "src/ui/laptop/laptop_view.gd": {
-   "sha": "9d97d706af7bbf79",
+   "sha": "43682941e25ccf62",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "src/ui/laptop/network_app.gd": {
    "sha": "0acb230e7243bae1",
@@ -1343,9 +1343,9 @@
    "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
   },
   "src/world/world_state.gd": {
-   "sha": "eca79b78adc5f1e1",
+   "sha": "59e5e5e7d21c8fa1",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "src/world/yacht_directory.gd": {
    "sha": "7b4d321ccd6205ff",
@@ -1713,9 +1713,9 @@
    "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
   },
   "tests/suites/test_dreams.gd": {
-   "sha": "e97839c515826f64",
+   "sha": "0f4946c8cb4ba245",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "tests/suites/test_eight_directions.gd": {
    "sha": "52a098d0ba76c10d",
@@ -2033,9 +2033,9 @@
    "note": "I027 Tier 2 regression fixes: ETA counts fuel, status line unchanged from I026, test fuel fixture, world voyage fills up"
   },
   "tests/test_runner.gd": {
-   "sha": "04bef69430bcc484",
+   "sha": "2ddab3088f57ae32",
    "reviewed": "2026-11-02",
-   "note": "I028: passage trade, passengers, world ledger, network, magazine, rankings, directory, AIS yachts, invitations, travel writing, 0.114a"
+   "note": "I028 regression fixes: world clock, quiet-world suites, leg text per language, laptop status clips, world state as saved, 18 dreams"
   },
   "tools/art/capture_previews.gd": {
    "sha": "5519443f78ad3805",

@@ -125,13 +125,19 @@ func _build_bar() -> Control:
 		tab.pressed.connect(show_app.bind(id))
 		bar.add_child(tab)
 		_tabs[id] = tab
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar.add_child(spacer)
 	_clock = Label.new()
 	_clock.name = "Status"
 	_clock.theme_type_variation = &"MutedLabel"
 	_clock.text = _status_text()
+	# I028: eight tabs; the status takes what room is left and clips (its full
+	# text in the tooltip), so the bar never pushes the screen past the window.
+	_clock.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_clock.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_clock.clip_text = true
+	_clock.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_clock.custom_minimum_size = Vector2(60, 0)
+	_clock.mouse_filter = Control.MOUSE_FILTER_PASS
+	_clock.tooltip_text = _clock.text
 	bar.add_child(_clock)
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
@@ -250,6 +256,7 @@ func show_app(id: StringName) -> void:
 	_scroll.scroll_vertical = 0
 	if _clock:
 		_clock.text = _status_text()
+		_clock.tooltip_text = _clock.text
 
 
 func get_content() -> Control:

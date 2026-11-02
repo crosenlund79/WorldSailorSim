@@ -16,6 +16,10 @@ const FUEL_FREE_SUITES: Array[String] = ["test_simulation.gd", "test_captains_lo
 	"test_publishing.gd", "test_voyage_persistence.gd", "test_weather.gd", "test_harbour_life.gd", "test_golden_harbours.gd",
 	"test_well_run_ship.gd"]
 
+## I028: suites written before the world's history that count renown and
+## notices exactly; the world does not touch the Captain in them.
+const QUIET_WORLD_SUITES: Array[String] = ["test_objectives.gd", "test_publishing.gd"]
+
 const SUITES: Array[Script] = [
 	preload("res://tests/suites/test_data_model.gd"),
 	preload("res://tests/suites/test_routing.gd"),
@@ -180,6 +184,7 @@ func _run() -> void:
 		Simulation.sea_encounters = script.resource_path.get_file() in ["test_captains_watch.gd", "test_localization.gd"]
 		# I027: suites written before fuel that motor far in a flat calm.
 		GameSession.test_fuel_unlimited = script.resource_path.get_file() in FUEL_FREE_SUITES
+		GameSession.test_quiet_world = script.resource_path.get_file() in QUIET_WORLD_SUITES
 		if not SettingsManager.has_chosen_language() or SettingsManager.get_language() != &"en":
 			SettingsManager.set_language(&"en")  # a suite before may have reset the settings
 		var suite: Object = script.new()

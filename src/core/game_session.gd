@@ -1596,6 +1596,11 @@ func get_fuel_tank_l() -> float:
 ## written before I027 that motor long distances in a flat calm. The fuel
 ## suites keep it off.
 var test_fuel_unlimited := false
+## Tests only (the test runner): the world's history goes on, but nothing in
+## it touches the Captain (no meetings, invitations, rank awards or magazine
+## notices), for the suites written before I028 that count renown and notices
+## exactly.
+var test_quiet_world := false
 
 
 ## True while the engine has fuel to run on.
@@ -4204,6 +4209,8 @@ func advance_world(force := false) -> void:
 ## the rankings, a notable yacht arriving where the Captain is moored, an
 ## invitation the Captain has earned (I028 Tier 6).
 func _world_news(added: Array) -> void:
+	if test_quiet_world:
+		return
 	_publish_issues()
 	if not is_underway() and get_location() != null:
 		for e: Dictionary in added:
@@ -4317,6 +4324,8 @@ func _meet_yacht(yacht_id: String, port_id: String) -> void:
 
 ## Called on arrival: a notable yacht already in this harbour.
 func _meet_yachts_in(port_id: String) -> void:
+	if test_quiet_world:
+		return
 	for yacht_id: String in WorldChronicle._sorted(_state.world.yachts.keys()):
 		var at := WorldChronicle.yacht_position(_state.world, yacht_id, _state.game_time)
 		if String(at.get("status", "")) == "in_port" and String(at.get("port", "")) == port_id:

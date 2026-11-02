@@ -34,7 +34,7 @@ func _test_catalogue() -> void:
 	var all := Dreams.all()
 	var later := all.filter(func(d: Dictionary) -> bool: return not Dreams.is_active(d))
 	# I028 activated the two dreams that waited for it and added seven more.
-	t.check(all.size() == 15 and later.is_empty(), "[dreams] fifteen dreams, none waiting for a later system any more (I028): %d, %d" % [all.size(), later.size()])
+	t.check(all.size() == 18 and later.is_empty(), "[dreams] eighteen dreams, none waiting for a later system any more (I028): %d, %d" % [all.size(), later.size()])
 	GameSession.start_new_session()
 	var fulfilled := all.filter(func(d: Dictionary) -> bool: return GameSession.get_dream_status(StringName(d.id)) == GameSession.DREAM_FULFILLED)
 	t.check(fulfilled.is_empty() and GameSession.get_dream_status(&"travel_book") == GameSession.DREAM_OPEN
@@ -143,6 +143,12 @@ func _test_laptop() -> void:
 		var button := content.find_child("Dream_caribbean", true, false).find_child("PursueButton", true, false) as Button
 		t.check(cards.size() == Dreams.all().size() and button != null, "[laptop %s] every dream with its card (%d)" % [language, cards.size()])
 		if language == &"en" and button:
+			var scroll: Node = button.get_parent()
+			while scroll != null and not scroll is ScrollContainer:
+				scroll = scroll.get_parent()
+			if scroll:
+				(scroll as ScrollContainer).ensure_control_visible(button)  # scrolled to it, as a player would (18 dreams)
+				await t.frames(2)
 			await t.click(button)
 			await t.frames(2)
 			var status := laptop.get_content().find_child("Dream_caribbean", true, false).find_child("Status", true, false) as Label
